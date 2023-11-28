@@ -42,7 +42,7 @@ JD-TC-UploadTaskAttachment-1
 
     [Documentation]  UploadTaskAttachment using Task Id.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME55}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -54,8 +54,13 @@ JD-TC-UploadTaskAttachment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -131,7 +136,7 @@ JD-TC-UploadTaskAttachment-1
 
 #     [Documentation]  Upload task Attachment for a consumer
 
-#     ${resp}=   ProviderLogin  ${PUSERNAME90}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -222,7 +227,7 @@ JD-TC-UploadTaskAttachment-3
 
     [Documentation]  png file UploadTaskAttachment using Task Id.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME60}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -234,8 +239,13 @@ JD-TC-UploadTaskAttachment-3
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
       ${resp}=  categorytype  ${p_id}
@@ -308,7 +318,7 @@ JD-TC-UploadTaskAttachment-4
 
     [Documentation]  gif file UploadTaskAttachment using Task Id.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME60}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
      
@@ -347,7 +357,7 @@ JD-TC-UploadTaskAttachment-5
 
     [Documentation]  doc file UploadTaskAttachment using Task Id.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME60}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
      
@@ -440,7 +450,7 @@ JD-TC-UploadTaskAttachment-6
 
     [Documentation]  Upload Multiple Task Attachment 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME55}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -452,8 +462,13 @@ JD-TC-UploadTaskAttachment-6
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -545,7 +560,7 @@ JD-TC-UploadTaskAttachment-7
 
     [Documentation]  Upload same file multiple times to a task.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME55}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -557,8 +572,13 @@ JD-TC-UploadTaskAttachment-7
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
       ${resp}=  categorytype  ${p_id}
@@ -648,7 +668,7 @@ JD-TC-UploadTaskAttachment-8
 
     [Documentation]  Upload a file to a subtask.
 
-    ${resp}=   Provider Login  ${MUSERNAME61}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME61}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -660,8 +680,13 @@ JD-TC-UploadTaskAttachment-8
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -746,22 +771,25 @@ JD-TC-UploadTaskAttachment-9
 
     [Documentation]  Upload a file by branch for a users task.
 
-    ${resp}=   Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -797,7 +825,7 @@ JD-TC-UploadTaskAttachment-9
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=   Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -816,7 +844,7 @@ JD-TC-UploadTaskAttachment-9
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=   Provider Login  ${PUSERNAME_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -828,8 +856,13 @@ JD-TC-UploadTaskAttachment-9
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -897,7 +930,7 @@ JD-TC-UploadTaskAttachment-10
 
     [Documentation]  Upload a file by a user to another users task.
 
-    ${resp}=   Provider Login  ${PUSERNAME_U2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -906,8 +939,13 @@ JD-TC-UploadTaskAttachment-10
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${title}=  FakerLibrary.user name
@@ -960,7 +998,7 @@ JD-TC-UploadTaskAttachment-11
 
     [Documentation]  try to upload a file for a closed task.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME55}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -972,8 +1010,13 @@ JD-TC-UploadTaskAttachment-11
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -1034,7 +1077,7 @@ JD-TC-UploadTaskAttachment-12
 
     [Documentation]  Upload a file by branch after assign it to a user.
 
-    ${resp}=   Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1043,8 +1086,13 @@ JD-TC-UploadTaskAttachment-12
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${title}=  FakerLibrary.user name
@@ -1106,7 +1154,7 @@ JD-TC-UploadTaskAttachment-12
 JD-TC-UploadTaskAttachment-13
     [Documentation]  create a task and then disable task in account settings then try to upload a file to that task.
 
-    ${resp}=   Provider Login  ${MUSERNAME61}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME61}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1118,8 +1166,13 @@ JD-TC-UploadTaskAttachment-13
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}

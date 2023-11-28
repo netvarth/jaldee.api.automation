@@ -33,10 +33,14 @@ Get branch by license
     FOR   ${a}  IN RANGE  ${length}
             
         ${Branch_PH}=  Set Variable  ${MUSERNAME${a}}
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${domain}=   Set Variable    ${resp.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+
         ${resp}=   Get Active License
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}   200
@@ -201,13 +205,10 @@ JD-TC-Consumer Signup-4
 #     ${resp}=  Account Set Credential  ${CUSERPH0}  ${PASSWORD}  0
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${CUSERPH0}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${CUSERPH0}  ${PASSWORD}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${DAY1}=  get_date
-#     Set Suite Variable  ${DAY1}  ${DAY1}
-#     ${list}=  Create List  1  2  3  4  5  6  7
-#     Set Suite Variable  ${list}  ${list}
+
     
 #     ${CUSERPH3}=  Evaluate  ${CUSERPH}+100100204
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
@@ -235,8 +236,12 @@ JD-TC-Consumer Signup-4
 #     Set Suite Variable   ${companySuffix}
 #     ${postcode}=  FakerLibrary.postcode
 #     ${address}=  get_address
-#     ${sTime}=  add_time  0  15
-#     ${eTime}=  add_time   0  30 
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
+#     Set Suite Variable  ${DAY1}  ${DAY1}
+#     ${list}=  Create List  1  2  3  4  5  6  7
+#     Set Suite Variable  ${list}  ${list}
+#     ${sTime}=  add_timezone_time  ${tz}  0  15  
+#     ${eTime}=  add_timezone_time  ${tz}  0  30   
 #     ${desc}=   FakerLibrary.sentence
 #     Set Suite Variable    ${desc}
 #     ${url}=   FakerLibrary.url
@@ -457,7 +462,7 @@ JD-TC-Consumer Signup-6
 JD-TC-Consumer Signup-7
     [Documentation]   sign up a provider consumer as consumer with walkinConsumerBecomesJdCons as false.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -542,7 +547,7 @@ JD-TC-Consumer Signup-7
 JD-TC-Consumer Signup-8
     [Documentation]   sign up a provider consumer with different country code
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -642,7 +647,7 @@ JD-TC-Consumer Signup-8
 JD-TC-Consumer Signup-9
     [Documentation]   sign up a consumer with same country code as that specified when adding the consumer as customer
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -783,15 +788,17 @@ JD-TC-Consumer Signup-10
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
 
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
     
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}  ${DAY1}
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
     @{Views}=  Create List  self  all  customersOnly
@@ -805,19 +812,24 @@ JD-TC-Consumer Signup-10
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  ${DAY1}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
@@ -954,7 +966,7 @@ JD-TC-Consumer Signup-UH4
 JD-TC-Consumer Signup-11
     [Documentation]   sign up a provider consumer as consumer with walkinConsumerBecomesJdCons set as true.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1045,7 +1057,7 @@ JD-TC-Consumer Signup-12
     ${licId}  ${licname}=  get_highest_license_pkg
     ${buser}=   Get branch by license   ${licId}
     
-    ${resp}=  Provider Login  ${buser}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${buser}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1148,7 +1160,7 @@ JD-TC-Consumer Signup-13
     ${licId}  ${licname}=  get_highest_license_pkg
     ${buser}=   Get branch by license   ${licId}
     
-    ${resp}=  Provider Login  ${buser}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${buser}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1269,7 +1281,7 @@ JD-TC-Consumer Signup-13
 # JD-TC-Verify Consumer Signup-3
 #     [Documentation]   Verify Signup an existing consumer to a provider
 
-#     ${resp}=  Provider Login  ${CUSERPH0}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${CUSERPH0}  ${PASSWORD}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 

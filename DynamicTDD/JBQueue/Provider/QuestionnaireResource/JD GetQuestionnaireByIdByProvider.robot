@@ -102,9 +102,19 @@ Check Questions
         # Set Test Variable  ${labelValuesVal${i}}   ${lv} 
         IF  '${type}' == 'list' and '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'
             Set Test Variable  ${labelValuesVal${i}}   ${lv[0]}
+        # ELSE IF  '${type}' == 'list' and '${FieldDTVal${i}}' == '${QnrDatatypes[2]}'
+        #     Set Test Variable  ${labelValuesVal${i}}   ${lv}
         ELSE IF   '${type}' == 'int'
             ${float_lv}=  Convert To Number  ${lv[0]}
             Set Test Variable  ${labelValuesVal${i}}   ${float_lv}
+        ELSE IF   '${type}' == 'float'
+            Set Test Variable  ${labelValuesVal${i}}   ${lv}
+        ELSE IF   '${type}' == 'str'
+            Set Test Variable  ${labelValuesVal${i}}   ${lv}
+        ELSE IF   '${type}' == 'NoneType'
+            Set Test Variable  ${labelValuesVal${i}}   ${lv}
+        ELSE IF   '${type}' == 'list'
+            Set Test Variable  ${labelValuesVal${i}}   ${lv}
         ELSE
             Set Test Variable  ${labelValuesVal${i}}   ${lv[0]}
         END
@@ -184,8 +194,10 @@ Check Questions
 
         ${value2}=    evaluate    False if $labelValuesVal${x} is None else True
         # Run Keyword If   '${resp.json()['questions'][${i}]['fieldDataType']}' not in @{if_dt_list} and '$labelValuesVal${x}' is not ${None}
-        Run Keyword If   '${resp.json()['questions'][${i}]['fieldDataType']}' not in @{if_dt_list} and '${value2}' != 'False'
-        ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['questions'][${i}]['labelValues']}   ${labelValuesVal${x}}
+        IF   '${resp.json()['questions'][${i}]['fieldDataType']}' not in @{if_dt_list} and '${value2}' != 'False'
+            Log  ${labelValuesVal${x}}
+            Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['questions'][${i}]['labelValues']}   ${labelValuesVal${x}}
+        END 
         
         Run Keyword If  '${resp.json()['questions'][${i}]['fieldDataType']}' == '${QnrDatatypes[1]}'
         ...    Run Keywords
@@ -233,7 +245,7 @@ JD-TC-ProviderGetQuestionnaireById-1
     Set Suite Variable   ${colnames}
     ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
     Log   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -292,7 +304,7 @@ JD-TC-ProviderGetQuestionnaireById-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -360,7 +372,7 @@ JD-TC-ProviderGetQuestionnaireById-1
         
     END
 
-*** COMMENT *** 
+# *** COMMENT *** 
 
 JD-TC-ProviderGetQuestionnaireById-2
     [Documentation]  Get questionnaire by id after uploading the same file again
@@ -372,7 +384,7 @@ JD-TC-ProviderGetQuestionnaireById-2
     Set Suite Variable   ${colnames}
     ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
     Log   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -415,6 +427,7 @@ JD-TC-ProviderGetQuestionnaireById-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+
     ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}    ${xlFile} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -431,7 +444,7 @@ JD-TC-ProviderGetQuestionnaireById-2
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -510,7 +523,7 @@ JD-TC-ProviderGetQuestionnaireById-3
     Set Suite Variable   ${colnames}
     ${servicenames}   getColumnValuesByName  ${sheet2}  ${colnames[6]}
     Log   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -569,7 +582,7 @@ JD-TC-ProviderGetQuestionnaireById-3
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -696,7 +709,7 @@ JD-TC-ProviderGetQuestionnaireById-UH4
 
     ${id}=  FakerLibrary.Random Int  min=520  max=530
 
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -41,7 +41,7 @@ JD-TC-GetReimburseReportByInvoiceId-1
     clear_service  ${PUSERNAME1}    
     clear_location  ${PUSERNAME1}   
        
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log   ${resp.json()}
     Set Suite Variable   ${domain}    ${resp.json()['sector']}
     Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
@@ -58,9 +58,9 @@ JD-TC-GetReimburseReportByInvoiceId-1
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -88,7 +88,7 @@ JD-TC-GetReimburseReportByInvoiceId-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
@@ -150,7 +150,6 @@ JD-TC-GetReimburseReportByInvoiceId-1
     ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  ${description}  ${bool[1]}  ${cid}
     Log    ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]} 
     
@@ -207,17 +206,17 @@ JD-TC-GetReimburseReportByInvoiceId-1
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[1]}
     
-    ${start}=  add_time24  0  -5
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     
     change_system_date   4
     
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${cur_date}=  get_date
-    ${end}=  add_time24  0  0
-    # ${start}=  add_time24  0  -5
+    ${cur_date}=  db.get_date_by_timezone  ${tz}
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    # ${start}=  db.add_tz_time24  ${tz}   0  -5
  
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}  
     Log   ${resp.json()} 
@@ -256,7 +255,7 @@ JD-TC-GetReimburseReportByInvoiceId-1
 *** comment ***    
 JD-TC-GetReimburseReportByInvoiceId-UH1
     [Documentation]  Provider get reimburse report of  invalid  invoice_id
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200  
     ${resp}=  Get Reimburse Reports By Provider By InvoiceId  0
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -278,7 +277,7 @@ JD-TC-GetReimburseReportByInvoiceId -UH3
 
 JD-TC-GetReimburseReportByInvoiceId -UH4
     [Documentation]   Another Provider request reimburse payment
-    ${resp}=   ProviderLogin  ${PUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Reimburse Reports By Provider By InvoiceId  ${invoice_id}
     Should Be Equal As Strings    ${resp.status_code}   422
@@ -354,7 +353,7 @@ JD-TC-GetReimburseReportByInvoiceId -UH4
 #     #clear_jaldeecoupon  Coupon03
 #     #clear_jaldeecoupon  Coupon04
 #     #clear_jaldeecoupon  Coupon05         
-#     ${resp}=   ProviderLogin  ${PUSERNAME112}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD} 
 #     Log   ${resp.json()}
 #     Set Suite Variable   ${domain}    ${resp.json()['sector']}
 #     Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
@@ -383,9 +382,9 @@ JD-TC-GetReimburseReportByInvoiceId -UH4
 
 #     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     Set Suite Variable  ${DAY1}  ${DAY1}
-#     ${DAY2}=  add_date  10
+#     ${DAY2}=  db.add_timezone_date  ${tz}  10  
 #     Set Suite Variable  ${DAY2}  ${DAY2}
 
 #     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -412,7 +411,7 @@ JD-TC-GetReimburseReportByInvoiceId -UH4
 
 #     ${resp}=  SuperAdmin Logout 
 #     Should Be Equal As Strings  ${resp.status_code}  200
-#     ${resp}=   ProviderLogin  ${PUSERNAME112}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD} 
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -530,7 +529,7 @@ JD-TC-GetReimburseReportByInvoiceId -UH4
 # JD-TC-GetReimburseReportByInvoiceId-2
 #     [Documentation]  Provider agian apply a same coupon then create report and report by InvoiceId
 #     change_system_time  0  5
-#     ${resp}=   ProviderLogin  ${PUSERNAME112}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD} 
 #     Should Be Equal As Strings    ${resp.status_code}   200  
 #     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
 #     Log   ${resp.json()}

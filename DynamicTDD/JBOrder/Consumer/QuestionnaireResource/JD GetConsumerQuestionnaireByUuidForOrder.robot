@@ -263,13 +263,14 @@ JD-TC-GetConsumerQuestionnaireByUuidForOrder-1
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME168}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
   
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -341,7 +342,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForOrder-1
             Log  ${ttype}
             ${u_ttype}=    Remove Duplicates    ${ttype}
             Log  ${u_ttype}
-            ${catalogid}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}    ${item_id1}   ${item_id2}
+            ${catalogid}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}    ${item_id1}   ${item_id2}
         END
     END
 
@@ -369,7 +370,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForOrder-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME168}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -423,7 +424,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForOrder-1
     Should Be Equal As Strings   ${resp.json()['questionnaireId']}  ${qnrid}
     Should Be Equal As Strings  ${resp.json()['id']}   ${id}
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME31}.${test_mail}
@@ -444,7 +445,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForOrder-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['uid']}      ${orderid1}
 
-    ${resp}=  Provider Login  ${PUSERNAME168}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -477,13 +478,14 @@ JD-TC-GetConsumerQuestionnaireByUuidForOrder-1
 JD-TC-GetConsumerQuestionnaireByUuidForOrder-2
     [Documentation]  Get questionnaire for Order taken from consumer side cancelled order
     
-    ${resp}=  Provider Login  ${PUSERNAME168}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -511,7 +513,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForOrder-2
     Should Be Equal As Strings   ${resp.json()['questionnaireId']}  ${qnrid}
     Should Be Equal As Strings  ${resp.json()['id']}   ${id}
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME31}.${test_mail}
@@ -542,7 +544,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForOrder-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['orderStatus']}   ${orderStatuses[12]}
 
-    ${resp}=  Provider Login  ${PUSERNAME168}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -575,9 +577,13 @@ JD-TC-GetConsumerQuestionnaireByUuidForOrder-2
 JD-TC-GetConsumerQuestionnaireByUuidForOrder-UH1
     [Documentation]  Get questionnaire by Provider login
 
-    ${resp}=    Provider Login    ${PUSERNAME169}    ${PASSWORD}
-    Log    ${resp.content}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME169}  ${PASSWORD}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${resp}=  Encrypted Provider Login    ${PUSERNAME169}    ${PASSWORD}
+    # Log    ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Consumer Get Order Questionnaire By uuid     ${orderid1}  ${account_id}
     Log  ${resp.content}
@@ -596,13 +602,14 @@ JD-TC-GetConsumerQuestionnaireByUuidForOrder-UH2
 JD-TC-GetConsumerQuestionnaireByUuidForOrder-3
     [Documentation]  Get questionnaire by uuid for Order taken from provider side
 
-    ${resp}=  Provider Login  ${PUSERNAME168}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -682,7 +689,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForOrder-3
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME31}.${test_mail}
@@ -755,13 +762,14 @@ JD-TC-GetConsumerQuestionnaireByUuidForOrder-UH3
 JD-TC-GetConsumerQuestionnaireByUuidForOrder-UH4
     [Documentation]  Get questionnaire by another consumer's order id from the same provider
 
-    ${resp}=  Provider Login  ${PUSERNAME168}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME168}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     # ${resp}=   Get jaldeeIntegration Settings
     # Log  ${resp.content}
@@ -836,7 +844,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForOrder-UH4
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME32}.${test_mail}
@@ -874,7 +882,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForOrder-UH4
 JD-TC-GetConsumerQuestionnaireByUuidForOrder-UH5
     [Documentation]  Get questionnaire by another consumer's order id from different provider
 
-    ${resp}=  Provider Login  ${PUSERNAME169}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME169}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -947,7 +955,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForOrder-UH5
             Log  ${ttype}
             ${u_ttype}=    Remove Duplicates    ${ttype}
             Log  ${u_ttype}
-            ${catalogid1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}    ${item_id3}
+            ${catalogid1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}    ${item_id3}
         END
     END
 
@@ -1022,7 +1030,7 @@ JD-TC-GetConsumerQuestionnaireByUuidForOrder-UH5
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}=  String . Split String   ${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME32}.${test_mail}

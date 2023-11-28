@@ -58,7 +58,7 @@ JD-TC-Get Domain Filter -1
 
 JD-TC-Get Domain Filter -2
        [Documentation]   Provider check to Get Domain Filter provider login
-       ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
        Should Be Equal As Strings  ${resp.status_code}  200
        ${resp}=  Get Domain Filters  healthCare 
        Should Be Equal As Strings    ${resp.json()['commonFilters'][0]['name']}  spokenlangs

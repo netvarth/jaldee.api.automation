@@ -25,7 +25,7 @@ JD-TC-Get_Order_Catalog-1
     [Documentation]  Provider Create catalog for shoppingcart and verify
 
     clear_Item  ${PUSERNAME22}
-    ${resp}=  ProviderLogin  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${displayName1}=   FakerLibrary.name 
@@ -92,9 +92,9 @@ JD-TC-Get_Order_Catalog-1
     Verify Response  ${resp}  promotionalPriceType=${promotionalPriceType[1]}   promotionalPrice=${promoPrice1float}    promotionalPrcnt=0.0   showPromotionalPrice=${bool[1]}   itemCode=${itemCode2}   promotionLabelType=${promotionLabelType[3]}   promotionLabel=${promoLabel1}   
 
     
-    ${startDate}=  get_date
+    ${startDate}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${startDate}
-    ${endDate}=  add_date  10      
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${endDate}
 
     # ${noOfOccurance}=  Random Int  min=0   max=10
@@ -102,9 +102,9 @@ JD-TC-Get_Order_Catalog-1
 
     Set Suite Variable  ${noOfOccurance}   0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
 
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -202,7 +202,7 @@ JD-TC-Get_Order_Catalog-1
 JD-TC-Get_Order_Catalog-2
     [Documentation]  Provider Create catalog for shoppinglist and verify 
     clear_Item  ${PUSERNAME108}
-    ${resp}=  ProviderLogin  ${PUSERNAME108}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -247,7 +247,7 @@ JD-TC-Get_Order_Catalog-2
 
 JD-TC-Get_Order_Catalog-UH1
     [Documentation]  Get catalog using invalid id
-    ${resp}=  ProviderLogin  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -282,7 +282,7 @@ JD-TC-Get_Order_Catalog-UH3
 JD-TC-Get_Order_Catalog-UH4
     [Documentation]   A provider try to Get another providers catalog
     clear_Item  ${PUSERNAME200}
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -294,7 +294,7 @@ JD-TC-Get_Order_Catalog-UH4
 
 JD-TC-Get_Order_Catalog-3
     [Documentation]  Change Catalog Status as INACTIVE and verify
-    ${resp}=  ProviderLogin  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Order Catalog    ${CatalogId1}  
@@ -321,7 +321,7 @@ JD-TC-Get_Order_Catalog-3
 
 JD-TC-Get_Order_Catalog-4
     [Documentation]  Change Catalog Status as ACTIVE and verify
-    ${resp}=  ProviderLogin  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Order Catalog    ${CatalogId1}  

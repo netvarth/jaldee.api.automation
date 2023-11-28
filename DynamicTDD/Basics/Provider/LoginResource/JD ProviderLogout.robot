@@ -16,7 +16,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-ProviderLogout-1
     [Documentation]    Logout from a valid user session
 
-    ${resp}=   ProviderLogin      ${PUSERNAME36}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login      ${PUSERNAME36}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -25,7 +25,7 @@ JD-TC-ProviderLogout-1
 JD-TC-ProviderLogout-2
     [Documentation]  Logout and try to call a url
 
-    ${resp}=   ProviderLogin      ${PUSERNAME36}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login      ${PUSERNAME36}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200   
@@ -36,7 +36,7 @@ JD-TC-ProviderLogout-2
 JD-TC-ProviderLogout-UH1
     [Documentation]  Logout without login
 
-    ${resp}=   ProviderLogin      ${PUSERNAME36}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login      ${PUSERNAME36}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -44,9 +44,9 @@ JD-TC-ProviderLogout-UH1
     Should Be Equal As Strings    ${resp.status_code}    200 
 
 ***Comment***
-YNW-TC-ProviderLogout-3
+JD-TC-ProviderLogout-3
     Comment  check Logout after email login
-    ${resp}=   ProviderLogin  ${PUSEREMAIL5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSEREMAIL5}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200

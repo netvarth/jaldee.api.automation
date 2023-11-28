@@ -21,7 +21,7 @@ ${SERVICE1}     Radio Repdca111
 JD-TC-WalkinConsumer1
 
     [Documentation]  Enable walkinConsumer and set a consumer  to jaldee consumer
-    ${resp}=  ProviderLogin  ${PUSERNAME116}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME116}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid}=  get_acc_id  ${PUSERNAME116}
 
@@ -33,15 +33,19 @@ JD-TC-WalkinConsumer1
     clear_queue  ${PUSERNAME116}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
-    ${sTime1}=  subtract_time  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   3  30
+    ${eTime1}=  add_timezone_time  ${tz}  3  30  
     Set Suite Variable   ${eTime1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  70      
+    ${DAY2}=  db.add_timezone_date  ${tz}  70      
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -68,7 +72,6 @@ JD-TC-WalkinConsumer1
     ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${waitlist_id}  ${wid[0]}
 
@@ -80,7 +83,7 @@ JD-TC-WalkinConsumer1
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME116}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME116}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=   GetCustomer    phoneNo-eq=${ph1}  status-eq=ACTIVE 
@@ -98,7 +101,7 @@ JD-TC-WalkinConsumer1
 JD-TC-WalkinConsumer2
 
     [Documentation]  Disable walkinConsumer and set a consumer  to jaldee consumer
-    ${resp}=  ProviderLogin  ${PUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid}=  get_acc_id  ${PUSERNAME16}
 
@@ -110,15 +113,19 @@ JD-TC-WalkinConsumer2
     clear_queue  ${PUSERNAME16}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
-    ${sTime1}=  subtract_time  2  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   3  30
+    ${eTime1}=  add_timezone_time  ${tz}  3  30  
     Set Suite Variable   ${eTime1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  70      
+    ${DAY2}=  db.add_timezone_date  ${tz}  70      
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -145,7 +152,6 @@ JD-TC-WalkinConsumer2
     ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${waitlist_id}  ${wid[0]}
 
@@ -158,7 +164,7 @@ JD-TC-WalkinConsumer2
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME118}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME118}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 

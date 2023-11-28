@@ -34,7 +34,7 @@ JD-TC-Check Notification-1
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-	${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
     clear_queue      ${PUSERNAME1}
@@ -70,23 +70,31 @@ JD-TC-Check Notification-1
     Set Suite Variable  ${list}  ${list}
     # ${cid}=  get_id  ${CUSERNAME5}
     # Set Suite Variable  ${cid}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti}=  get_latitude
+    # Set Suite Variable  ${latti}
+    # ${longi}=  get_longitude
+    # Set Suite Variable  ${longi}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti}=  get_latitude
     Set Suite Variable  ${latti}
-    ${longi}=  get_longitude
     Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${24hours}    Random Element    ['True','False']
     Set Suite Variable  ${24hours}
-    ${sTime}=  add_time  5  15
+    ${sTime}=  add_timezone_time  ${tz}  5  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   6  30
+    ${eTime}=  add_timezone_time  ${tz}  6  30  
     Set Suite Variable   ${eTime}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parkingType[0]}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
@@ -98,9 +106,9 @@ JD-TC-Check Notification-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   subtract_time  1  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  3  00 
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -114,13 +122,12 @@ JD-TC-Check Notification-1
     Set Suite Variable  ${desc}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
    
 JD-TC-Check Notification-2
 	[Documentation]   Check Notification  after start a waitlist
-	${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Waitlist Action  ${waitlist_actions[1]}  ${wid}
     Log  ${resp.json()}
@@ -128,7 +135,7 @@ JD-TC-Check Notification-2
  
 JD-TC-Check Notification-3
 	[Documentation]   Check Notification  after Done a waitlist
-	${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Service By Id  ${s_id1}
     Verify Response  ${resp}  notification=${bool[1]}
@@ -162,7 +169,7 @@ JD-TC-Check Notification-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${cid}=  get_id  ${CUSERNAME1}
     # Set Suite Variable  ${cid}
@@ -175,7 +182,6 @@ JD-TC-Check Notification-4
     Set Suite Variable  ${cid1}  ${resp.json()}
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id1}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
 
@@ -248,7 +254,7 @@ JD-TC-Check Notification-4
 
     Comment   Check Notification  after cancel a waitlist without cancel message
 
-	${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${cid}=  get_id  ${CUSERNAME5}
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME5}
@@ -262,7 +268,6 @@ JD-TC-Check Notification-4
 
     ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
 
@@ -315,7 +320,7 @@ JD-TC-Check Notification-4
     ...    AND  Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}  ${jdconID}
     ...    AND  Should Be Equal As Strings  ${resp.json()[0]['receiver']['name']}  ${consumername}
 
-	${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get provider communications
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -332,7 +337,7 @@ JD-TC-Check Notification-4
 
 JD-TC-Check Notification-5
 	[Documentation]   Check Notification  after add a delay
-	${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200    
     # ${cid}=  get_id  ${CUSERNAME5}
     # Set Suite Variable  ${cid}
@@ -342,7 +347,6 @@ JD-TC-Check Notification-5
     Set Test Variable  ${cid}  ${resp.json()[0]['id']}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
     ${resp}=   Get Waitlist EncodedId    ${wid1}
@@ -393,7 +397,7 @@ JD-TC-Check Notification-5
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}  ${cid}
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['userName']}  ${consumername}
 
-	${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${resp}=  Get provider communications
     Log  ${resp.json()}
@@ -407,7 +411,7 @@ JD-TC-Check Notification-5
 
 JD-TC-Check Notification-6
     [Documentation]  check alerts when waitlist cancled by consumer
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
     clear_queue      ${PUSERNAME5}
@@ -424,23 +428,31 @@ JD-TC-Check Notification-6
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${cid2}  ${resp.json()}
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti}=  get_latitude
+    # Set Suite Variable  ${latti}
+    # ${longi}=  get_longitude
+    # Set Suite Variable  ${longi}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti}=  get_latitude
     Set Suite Variable  ${latti}
-    ${longi}=  get_longitude
     Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet']
     Set Suite Variable  ${parking_type}
     ${24hours}    Random Element    ['True','False']
     Set Suite Variable  ${24hours}
-    ${sTime}=  add_time  5  15
+    ${sTime}=  add_timezone_time  ${tz}  5  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   6  30
+    ${eTime}=  add_timezone_time  ${tz}  6  30  
     Set Suite Variable   ${eTime}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
@@ -450,9 +462,9 @@ JD-TC-Check Notification-6
     Set Suite Variable    ${s_id1}
     ${q_name}=    FakerLibrary.name
     Set Suite Variable    ${q_name}
-    ${strt_time}=   subtract_time  1  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  3  00 
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -480,7 +492,7 @@ JD-TC-Check Notification-6
     Set Suite Variable  ${jdconID}   ${resp.json()['id']}
     Set Test Variable  ${uname}   ${resp.json()['userName']}
     # ${cid}=  get_id  ${CUSERNAME5}
-    ${DAY3}=  add_date  5
+    ${DAY3}=  db.add_timezone_date  ${tz}  5  
     ${resp}=  Add To Waitlist Consumers  ${a_id}  ${q1_l1}  ${DAY3}  ${sId_1}  ${desc}  ${bool[0]}  ${self} 
     Should Be Equal As Strings  ${resp.status_code}  200 
     
@@ -520,7 +532,7 @@ JD-TC-Check Notification-6
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}  ${jdconID} 
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME5}
     Log   ${resp.json()}
@@ -537,7 +549,7 @@ JD-TC-Check Notification-6
 
 JD-TC-Check Notification-7
     [Documentation]  check alerts when agent cancel waitlist
-    ${resp}=  ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${pid}  ${resp.json()['id']}
     clear_queue      ${PUSERNAME7}
@@ -553,23 +565,31 @@ JD-TC-Check Notification-7
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${cid3}  ${resp.json()}
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti}=  get_latitude
+    # Set Suite Variable  ${latti}
+    # ${longi}=  get_longitude
+    # Set Suite Variable  ${longi}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti}=  get_latitude
     Set Suite Variable  ${latti}
-    ${longi}=  get_longitude
     Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet']
     Set Suite Variable  ${parking_type}
     ${24hours}    Random Element    ['True','False']
     Set Suite Variable  ${24hours}
-    ${sTime}=  add_time  5  15
+    ${sTime}=  add_timezone_time  ${tz}  5  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   6  30
+    ${eTime}=  add_timezone_time  ${tz}  6  30  
     Set Suite Variable   ${eTime}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
@@ -584,9 +604,9 @@ JD-TC-Check Notification-7
     Set Suite Variable  ${sId_1}  ${resp.json()}
     ${q_name}=    FakerLibrary.name
     Set Suite Variable    ${q_name}
-    ${strt_time}=   subtract_time  1  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  3  00 
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -670,7 +690,7 @@ JD-TC-Check Notification-7
 *** Comment ***
 JD-TC-Check Notification-8
     [Documentation]  check alerts when bill created
-    ${resp}=  ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${resp}=  Update Tax Percentage  18  13DEFBV1100M2Z6
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -681,7 +701,6 @@ JD-TC-Check Notification-8
     Set Suite Variable  ${cid}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_1}  ${q1_l1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     sleep  02s
@@ -714,13 +733,13 @@ JD-TC-Check Notification-8
 *** Comment ***
 JD-TC-Check Notification-6
 	[Documentation]   Check Notification send to next and next to next person after start a waitlist
-	${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${a_id}=  get_acc_id  ${PUSERNAME2}
     Set Suite Variable  ${a_id}
     ${resp}=  Update Waitlist Settings  ML  30  true  true  true  true  ${EMPTY}  False
     Should Be Equal As Strings  ${resp.status_code}  200  
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List   1  2  3  4  5  6  7
     ${resp}=  Create Location  Thiruth  ${longi}  ${latti}  www.sampleurl.com  680220  Palliyil House  free  True  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${LsTime}  ${LeTime}
@@ -740,25 +759,21 @@ JD-TC-Check Notification-6
     ${cid1}=  get_id  ${CUSERNAME5}
     ${resp}=  Add To Waitlist  ${cid1}  ${s_id11}  ${qid2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
     ${cid2}=  get_id  ${CUSERNAME1}
     ${resp}=  Add To Waitlist  ${cid2}  ${s_id2}  ${qid2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid2}  ${wid[0]}
     ${cid3}=  get_id  ${CUSERNAME2}
     ${resp}=  Add To Waitlist  ${cid3}  ${s_id11}  ${qid2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid3}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid3}  ${wid[0]}
     ${cid4}=  get_id  ${CUSERNAME3}
     ${resp}=  Add To Waitlist  ${cid4}  ${s_id2}  ${qid2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid4}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid4}  ${wid[0]}
     sleep  02s
@@ -770,7 +785,8 @@ JD-TC-Check Notification-6
 
     ${resp}=  Waitlist Action  STARTED  ${wid1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${time}=  db.get_time
+    # ${Time}=  db.get_time_by_timezone  ${tz}
+    ${Time}=  db.get_time_by_timezone  ${tz}
     sleep  02s
     ${resp}=  Get provider communications
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -814,12 +830,13 @@ JD-TC-Check Notification-6
     clear_Consumermsg  ${CUSERNAME2}
     clear_Consumermsg  ${CUSERNAME3}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     change_system_time  0  5
     ${resp}=  Waitlist Action  STARTED  ${wid2}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${time}=  db.get_time
+    # ${Time}=  db.get_time_by_timezone  ${tz}
+    ${Time}=  db.get_time_by_timezone  ${tz}
     sleep  02s
     ${resp}=  Get provider communications
     Should Be Equal As Strings  ${resp.status_code}  200

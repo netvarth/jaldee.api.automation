@@ -21,7 +21,7 @@ JD-TC-RemoveCustomerFromGroup-1
 
     [Documentation]  Remove provider customers from a group.
 
-    ${resp}=  Provider Login  ${PUSERNAME190}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME190}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -112,7 +112,7 @@ JD-TC-RemoveCustomerFromGroup-2
 
     [Documentation]  Remove provider customers from two lists in a group.
 
-    ${resp}=  Provider Login  ${PUSERNAME191}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME191}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -249,7 +249,7 @@ JD-TC-RemoveCustomerFromGroup-3
 
     [Documentation]  Remove provider customers from multiple groups of a provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME192}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME192}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -366,7 +366,7 @@ JD-TC-RemoveCustomerFromGroup-4
 
     [Documentation]  Remove a non jaldee provider customer from a group.
 
-    ${resp}=  Provider Login  ${PUSERNAME193}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME193}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -462,7 +462,7 @@ JD-TC-RemoveCustomerFromGroup-5
 
     [Documentation]  Add customers to group, remove one customer and add him again. 
 
-    ${resp}=  Provider Login  ${PUSERNAME194}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME194}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -579,7 +579,7 @@ JD-TC-RemoveCustomerFromGroup-6
     
     [Documentation]  Remove a customer from group when group is disabled.
 
-    ${resp}=  Provider Login  ${PUSERNAME196}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME196}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -641,7 +641,7 @@ JD-TC-RemoveCustomerFromGroup-UH1
 
     [Documentation]  Remove same customers from same group again. 
 
-    ${resp}=  Provider Login  ${PUSERNAME195}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME195}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -714,7 +714,7 @@ JD-TC-RemoveCustomerFromGroup-UH2
 
     [Documentation]  Remove a customer from group without login. 
 
-    ${resp}=  Provider Login  ${PUSERNAME196}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME196}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -765,7 +765,7 @@ JD-TC-RemoveCustomerFromGroup-UH3
     
     [Documentation]  Remove customer from group by consumer login. 
 
-    ${resp}=  Provider Login  ${PUSERNAME196}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME196}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -804,7 +804,7 @@ JD-TC-RemoveCustomerFromGroup-UH4
     
     [Documentation]  Remove a customer from group without creating a group.
 
-    ${resp}=  Provider Login  ${PUSERNAME196}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME196}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -835,7 +835,7 @@ JD-TC-RemoveCustomerFromGroup-UH5
     
     [Documentation]  Remove a customer from a group after updating the group name.
 
-    ${resp}=  Provider Login  ${PUSERNAME196}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME196}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

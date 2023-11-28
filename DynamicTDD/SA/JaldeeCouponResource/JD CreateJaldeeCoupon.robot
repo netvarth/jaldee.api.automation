@@ -15,6 +15,11 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
+
+*** Variable ***
+${tz}   Asia/Kolkata
+
+
 ***Keywords***
 
 Get Billable Subdomain
@@ -48,9 +53,9 @@ JD-TC-CreateJaldeeCoupon-1
     Set Suite Variable  ${lic1}  ${resp.json()[0]['pkgId']}
     Set Suite Variable  ${lic2}  ${resp.json()[1]['pkgId']}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}  ${lic2} 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp}
@@ -143,13 +148,13 @@ JD-TC-CreateJaldeeCoupon-2
 
 JD-TC-CreateJaldeeCoupon-3
     [Documentation]    Create jaldee coupon for specific providers
-    ${resp}=  ProviderLogin  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log    ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p1}=  get_acc_id  ${PUSERNAME4}
     ${p1}=  Convert To String  ${p1}
     Set Suite Variable  ${p1}
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p2}=  get_acc_id  ${PUSERNAME2}
     ${p2}=  Convert To String  ${p2}
@@ -207,8 +212,8 @@ JD-TC-CreateJaldeeCoupon-4
     ${domains}=  Jaldee Coupon Target Domains  ALL
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ALL
     ${licenses}=  Jaldee Coupon Target License  0
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
     ${resp}=  Create Jaldee Coupon  XMASCoupn2020  Onam1 Coupon  Onam offer  CHILDREN  ${DAY1}  ${DAY2}  AMOUNT  50  100  false  false  100  1000  1000  5  2  false  false  false  false  false  consumer first use  50% offer  ${domains}  ${sub_domains}  ALL  ${licenses}
     Should Be Equal As Strings  ${resp.status_code}  200
     Log   ${resp.json()}
@@ -273,8 +278,8 @@ JD-TC-CreateJaldeeCoupon-5
     ${domains}=  Jaldee Coupon Target Domains  ${d1}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}
     ${licenses}=  Jaldee Coupon Target License  ${licid}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -286,8 +291,8 @@ JD-TC-CreateJaldeeCoupon-5
     ${p_des}=    FakerLibrary.sentence
     ${list}=  Create List  1  2  3  4  5  6  7
     
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   0  45
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  0  45  
     ${time}=  Create Dictionary  sTime=${sTime1}  eTime=${eTime1}
     ${timeslot}=  Create List  ${time}
     ${terminator}=  Create Dictionary  endDate=${DAY2}  noOfOccurance=${EMPTY}
@@ -362,8 +367,8 @@ JD-TC-CreateJaldeeCoupon-6
     ${domains}=  Jaldee Coupon Target Domains  ${d1}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}
     ${licenses}=  Jaldee Coupon Target License  ${licid}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -375,9 +380,9 @@ JD-TC-CreateJaldeeCoupon-6
     ${p_des}=    FakerLibrary.sentence
     ${list}=  Create List  1  2  3  4  5  6  7
     
-    ${END_DAY}=  add_date  11
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   0  45
+    ${END_DAY}=  db.add_timezone_date  ${tz}  11
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  0  45  
     ${time}=  Create Dictionary  sTime=${sTime1}  eTime=${eTime1}
     ${timeslot}=  Create List  ${time}
     ${terminator}=  Create Dictionary  endDate=${END_DAY}  noOfOccurance=${EMPTY}
@@ -450,8 +455,8 @@ JD-TC-CreateJaldeeCoupon-7
     ${domains}=  Jaldee Coupon Target Domains  ${d1}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}
     ${licenses}=  Jaldee Coupon Target License  ${licid}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -463,8 +468,8 @@ JD-TC-CreateJaldeeCoupon-7
     ${p_des}=    FakerLibrary.sentence
     ${list}=  Create List  1  2  3  4  5  6  7
     
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   0  45
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  0  45  
     ${time}=  Create Dictionary  sTime=${sTime1}  eTime=${eTime1}
     ${timeslot}=  Create List  ${time}
     ${terminator}=  Create Dictionary  endDate=${EMPTY}  noOfOccurance=${EMPTY}
@@ -592,8 +597,8 @@ JD-TC-CreateJaldeeCoupon-UH9
     [Documentation]   Check coupon created for valid dates(previous dates)
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY3}=  add_date  -2
-    ${DAY4}=  add_date  -1
+    ${DAY3}=  db.add_timezone_date  ${tz}  -2
+    ${DAY4}=  db.add_timezone_date  ${tz}  -1
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${cupn_code7}=   FakerLibrary.word
     Set Suite Variable   ${cupn_code7}
@@ -605,8 +610,8 @@ JD-TC-CreateJaldeeCoupon-UH10
     [Documentation]   Check coupon created for valid dates(valid to date previous date than valid from date)
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY3}=  get_date
-    ${DAY4}=  add_date  -1
+    ${DAY3}=  db.get_date_by_timezone  ${tz}
+    ${DAY4}=  db.add_timezone_date  ${tz}  -1
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${cupn_code8}=   FakerLibrary.word
     Set Suite Variable   ${cupn_code8}
@@ -798,7 +803,7 @@ JD-TC-CreateJaldeeCoupon -UH21
 
 JD-TC-CreateJaldeeCoupon -UH22
     [Documentation]   Provider create a Jaldee Coupon
-    ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Create Jaldee Coupon  ${cupn_code101}  ${cupn_name}  ${cupn_des}  ${age_group[0]}  ${DAY1}  ${DAY2}  ${discountType[0]}  50  100  ${bool[0]}  ${bool[0]}  200  1000  1000  5  2  ${bool[1]}  ${bool[1]}  ${bool[0]}  ${bool[1]}  ${bool[0]}  ${c_des}  ${p_des}  ${domains}  ${sub_domains}  ALL  ${licenses}
     Should Be Equal As Strings  ${resp.status_code}  419

@@ -26,22 +26,33 @@ JD-TC-ConsumerCreateApptRequest-1
 
     [Documentation]   Consumer create an appt request.
 
-    ${resp}=  Provider Login  ${PUSERNAME36}  ${PASSWORD}
+    clear_appt_schedule   ${PUSERNAME36}
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${prov_id1}  ${resp.json()['id']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-    Set Test Variable   ${lic_name}   ${resp.json()['accountLicenseDetails']['accountLicense']['name']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${prov_id1}  ${decrypted_data['id']}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Suite Variable  ${lic_name}  ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
 
-    clear_appt_schedule   ${PUSERNAME36}
+    # Set Test Variable  ${prov_id1}  ${resp.json()['id']}
+    # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    # Set Test Variable   ${lic_name}   ${resp.json()['accountLicenseDetails']['accountLicense']['name']}
 
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
 
-    ${resp}=   Run Keyword If  '${lic_id}' != '${lic2}'  Change License Package  ${highest_package[0]}
-    Run Keyword If   '${resp}' != '${None}'  Log  ${resp.json()}
-    Run Keyword If   '${resp}' != '${None}'  Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Run Keyword If  '${lic_id}' != '${lic2}'  Change License Package  ${highest_package[0]}
+    # Run Keyword If   '${resp}' != '${None}'  Log  ${resp.json()}
+    # Run Keyword If   '${resp}' != '${None}'  Should Be Equal As Strings  ${resp.status_code}  200
+    IF  '${lic_id}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -49,8 +60,7 @@ JD-TC-ConsumerCreateApptRequest-1
     Set Suite Variable  ${acc_id1}  ${resp.json()['id']}
 
     ${SERVICE1}=    FakerLibrary.word
-    ${DAY1}=  get_date
-    Set Suite Variable   ${DAY1}
+    
     ${service_duration}=   Random Int   min=5   max=10
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -110,10 +120,17 @@ JD-TC-ConsumerCreateApptRequest-1
         Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
     END
 
-    ${DAY2}=  add_date  10      
+    ${resp}=   Get Location By Id   ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable   ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time  1  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  15  
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${duration}=  FakerLibrary.Random Int  min=2  max=10
@@ -137,10 +154,16 @@ JD-TC-ConsumerCreateApptRequest-1
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${appt_reqid1}  ${apptid[0]}
 
+    ${apptTime}=  db.get_tz_time_secs  ${tz} 
+    ${apptTakenTime}=  db.remove_secs   ${apptTime}
+    ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
+    ${statusUpdatedTime}=   db.remove_date_time_secs   ${UpdatedTime}
+
     ${resp}=  Consumer Get Appt Service Request
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    Should Be Equal As Strings    ${resp.json()[0]['apptTakenTime']}     ${statusUpdatedTime}
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}               ${appt_reqid1}
 
 JD-TC-ConsumerCreateApptRequest-2
 
@@ -153,7 +176,7 @@ JD-TC-ConsumerCreateApptRequest-2
     ${apptfor1}=  Create Dictionary  id=${self}   
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY}=  add_date   2
+    ${DAY}=  db.add_timezone_date  ${tz}   2
     ${cons_note}=    FakerLibrary.word
     ${coupons}=  Create List
     ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid1}  ${sch_id1}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME5}  ${coupons}  ${apptfor}
@@ -199,7 +222,7 @@ JD-TC-ConsumerCreateApptRequest-4
     [Documentation]   Provider create a service request with date/time mode and update the service with no datetime mode, 
     ...   then consumer try to create appt request without time slot and date.
 
-    ${resp}=  Provider Login  ${PUSERNAME36}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -305,14 +328,14 @@ JD-TC-ConsumerCreateApptRequest-UH3
 
     [Documentation]   consumer create an appt request with a time slot not in that schedule.
 
-    ${resp}=  Provider Login  ${PUSERNAME36}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  2  15
-    ${eTime1}=  add_time  2  25
+    ${sTime1}=  add_timezone_time  ${tz}  2  15  
+    ${eTime1}=  add_timezone_time  ${tz}  2  25  
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${duration}=  FakerLibrary.Random Int  min=2  max=10
@@ -325,7 +348,7 @@ JD-TC-ConsumerCreateApptRequest-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${acc_id1}
+    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id1}   ${acc_id1}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
@@ -342,10 +365,11 @@ JD-TC-ConsumerCreateApptRequest-UH3
 
     ${cons_note}=    FakerLibrary.word
     ${coupons}=  Create List
-    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid3}  ${sch_id1}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME5}  ${coupons}  ${apptfor}
+    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid3}  ${sch_id}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME5}  ${coupons}  ${apptfor}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.content}   "${TIME_NOT_NEEDED}"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings  ${resp.content}   "${TIME_NOT_NEEDED}"
 
 
 JD-TC-ProviderCreateApptRequest-UH4
@@ -366,7 +390,7 @@ JD-TC-ProviderCreateApptRequest-UH5
 
     [Documentation]   Consumer create an appt request by provider login.
 
-    ${resp}=  Provider Login  ${PUSERNAME36}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

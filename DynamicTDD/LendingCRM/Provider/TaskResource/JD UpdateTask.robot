@@ -24,7 +24,7 @@ JD-TC-UpdateTask-1
 
     [Documentation]  Create a task for a provider and update the task with same details.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME50}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -133,7 +133,7 @@ JD-TC-UpdateTask-2
 
     [Documentation]  Create a task for a provider and update the task with different location.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME50}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -164,7 +164,7 @@ JD-TC-UpdateTask-3
 
     [Documentation]  Create a task for a provider and update the task with another title.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME50}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -195,7 +195,7 @@ JD-TC-UpdateTask-4
 
     [Documentation]  Create a task for a provider and update the task with another description.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME50}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -226,7 +226,7 @@ JD-TC-UpdateTask-5
 
     [Documentation]  Create a task for a provider and update the task with another category.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME50}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -260,7 +260,7 @@ JD-TC-UpdateTask-6
 
     [Documentation]  Create a task for a provider and update the task with another task type.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME50}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -294,7 +294,7 @@ JD-TC-UpdateTask-7
 
     [Documentation]  Create a task for a provider and update the task with another status and priority.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME50}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -339,7 +339,7 @@ JD-TC-UpdateTask-8
 
     [Documentation]    Update task without title.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME50}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -367,7 +367,7 @@ JD-TC-UpdateTask-9
 
     [Documentation]    Update task without description.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME50}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -395,7 +395,7 @@ JD-TC-UpdateTask-UH1
 
     [Documentation]    Update task without location.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME50}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -409,7 +409,7 @@ JD-TC-UpdateTask-UH2
 
     [Documentation]  update task without status.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME88}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -421,8 +421,13 @@ JD-TC-UpdateTask-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id1}
@@ -473,7 +478,7 @@ JD-TC-UpdateTask-UH3
 
     [Documentation]  update task without priority.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME88}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -518,7 +523,7 @@ JD-TC-UpdateTask-UH6
 
     [Documentation]  update task using another providers location id.
     
-    ${resp}=   ProviderLogin  ${PUSERNAME37}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -535,7 +540,7 @@ JD-TC-UpdateTask-UH6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME38}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

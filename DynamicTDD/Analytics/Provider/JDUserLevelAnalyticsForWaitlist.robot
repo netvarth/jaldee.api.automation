@@ -69,14 +69,14 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
     Set Suite Variable  ${MUSERNAME_E}
     ${accid}=   get_acc_id   ${MUSERNAME_E}
     Set Suite Variable  ${accid}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -100,9 +100,9 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -192,7 +192,7 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
@@ -214,15 +214,15 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${u_p_id}  ${resp.json()['profileId']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  db.add_timezone_time  ${tz}   2  30
     Set Suite Variable   ${eTime1}
 
     ${resp}=  Get Locations
@@ -327,7 +327,7 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep  02s
@@ -387,7 +387,7 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
 JD-TC-UserLevelAnalyticsForWaitlist-2
     [Documentation]   take checkins for teleservice for a provider and check user level analytics
 
-    ${resp}=   ProviderLogin  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -445,11 +445,11 @@ JD-TC-UserLevelAnalyticsForWaitlist-2
 
     comment  queue 1 for checkins
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  db.add_timezone_time  ${tz}   1  30
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue For User  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  25  ${lid}  ${u_id}  ${v_s1} 
     Log  ${resp.json()}
@@ -529,7 +529,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-2
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get UserLevel Analytics   metricId=${tokenAnalyticsMetrics['WALK_IN_TOKEN']}    userId=${u_id}      dateFrom=${DAY1}  dateTo=${DAY1}  frequency=${analyticsFrequency[0]}
@@ -597,7 +597,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-2
 
 JD-TC-UserLevelAnalyticsForWaitlist-3
     [Documentation]   take online checkins, for a provider and check user level analytics 
-    ${resp}=   Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -607,11 +607,11 @@ JD-TC-UserLevelAnalyticsForWaitlist-3
     Set Test Variable  ${s_id6}
 
     comment  queue 1 for checkins
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  db.add_timezone_time  ${tz}   1  30
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  15  ${lid}  ${u_id}  ${s_id6} 
     Log  ${resp.json()}
@@ -627,7 +627,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-3
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumer For User  ${accid}  ${q_id3}  ${DAY}  ${s_id6}  ${cnote}  ${bool[0]}  ${u_id}  ${self}
         Log  ${resp.json()}
@@ -658,7 +658,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-3
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${consumerNote1}=   FakerLibrary.word
         ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id0}
         ${resp}=  Consumer Add To WL With Virtual Service For User  ${accid}  ${q_id1}  ${DAY}  ${v_s1}  ${consumerNote1}  ${bool[0]}  ${virtualService}   ${u_id}  0
@@ -706,7 +706,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-3
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get UserLevel Analytics  metricId=${tokenAnalyticsMetrics['ONLINE_TOKEN']}  userId=${u_id}    dateFrom=${DAY1}  dateTo=${DAY1}  frequency=${analyticsFrequency[0]}
@@ -802,7 +802,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-3
 
 JD-TC-UserLevelAnalyticsForWaitlist-4
     [Documentation]   take checkins,for a provider and check user level analytics for waitlist actions
-    ${resp}=   Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -825,11 +825,11 @@ JD-TC-UserLevelAnalyticsForWaitlist-4
     Set Test Variable  ${s_id7}  ${resp.json()}
 
     comment  queue 1 for checkins
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  db.add_timezone_time  ${tz}   1  30
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  20  ${lid}  ${u_id}  ${s_id6}  ${s_id7} 
     Log  ${resp.json()}
@@ -846,7 +846,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-4
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumer For User  ${accid}  ${q_id3}  ${DAY}  ${s_id6}  ${cnote}  ${bool[0]}  ${u_id}  ${self} 
         Log  ${resp.json()}
@@ -890,7 +890,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-4
     ${online_token_len4}=  Evaluate  ${len}+${online_token_len3}
     Set Suite Variable  ${online_token_len4}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get UserLevel Analytics  metricId=${tokenAnalyticsMetrics['CHECKED_IN_TOKEN']}  userId=${u_id}    dateFrom=${DAY1}  dateTo=${DAY1}  frequency=${analyticsFrequency[0]}
@@ -949,7 +949,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-4
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get UserLevel Analytics  metricId=${tokenAnalyticsMetrics['STARTED_TOKEN']}  userId=${u_id}    dateFrom=${DAY1}  dateTo=${DAY1}  frequency=${analyticsFrequency[0]}
@@ -994,7 +994,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-5
     [Documentation]   take checkins,for a provider and check user level analytics for waitlistactions
     # [Setup]  Run Keywords  clear_queue  ${MUSERNAME_E}   AND  clear_service    ${MUSERNAME_E}  AND  clear_appt_schedule   ${MUSERNAME_E}
 
-    ${resp}=   Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1017,11 +1017,11 @@ JD-TC-UserLevelAnalyticsForWaitlist-5
     Set Test Variable  ${s_id7}  ${resp.json()}
 
     comment  queue 1 for checkins
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  db.add_timezone_time  ${tz}   1  30
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  15  ${lid}  ${u_id}  ${s_id6}  ${s_id7} 
     Log  ${resp.json()}
@@ -1036,7 +1036,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-5
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumer For User  ${accid}  ${q_id3}  ${DAY}  ${s_id6}  ${cnote}  ${bool[0]}  ${u_id}  ${self} 
         Log  ${resp.json()}
@@ -1058,7 +1058,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-5
 
     Log List   ${waitlist_id}
 
-    ${resp}=   Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1093,7 +1093,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-5
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get UserLevel Analytics  metricId=${tokenAnalyticsMetrics['STARTED_TOKEN']}  userId=${u_id}    dateFrom=${DAY1}  dateTo=${DAY1}  frequency=${analyticsFrequency[0]}
@@ -1139,7 +1139,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-6
     [Documentation]     take checkins, for a provider from consumer side and check user level analytics after reschedule it
     # [Setup]  Run Keywords  clear_queue  ${MUSERNAME_E}   AND  clear_service    ${MUSERNAME_E}  AND  clear_appt_schedule   ${MUSERNAME_E}
 
-    ${resp}=   Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1162,11 +1162,11 @@ JD-TC-UserLevelAnalyticsForWaitlist-6
     Set Test Variable  ${s_id7}  ${resp.json()}
 
     comment  queue 1 for checkins
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  db.add_timezone_time  ${tz}   1  30
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  15  ${lid}  ${u_id}  ${s_id6}  ${s_id7} 
     Log  ${resp.json()}
@@ -1181,7 +1181,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-6
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumer For User  ${accid}  ${q_id3}  ${DAY}  ${s_id6}  ${cnote}  ${bool[0]}  ${u_id}  ${self} 
         Log  ${resp.json()}
@@ -1202,7 +1202,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-6
     END
 
     Log List   ${waitlist_id}
-    ${DAY3}=  add_date  4
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
 
     Log   ${waitlist_id[0]}
     ${len}=  Get Length  ${waitlist_id}
@@ -1239,7 +1239,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-6
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get UserLevel Analytics  metricId=${tokenAnalyticsMetrics['RESCHEDULED_TOKEN']}  userId=${u_id}    dateFrom=${DAY1}  dateTo=${DAY1}  frequency=${analyticsFrequency[0]}
@@ -1273,14 +1273,14 @@ JD-TC-UserLevelAnalyticsForWaitlist-7
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${accid}=   get_acc_id   ${MUSERNAME_E}
      Set Suite Variable  ${accid}
-     ${DAY1}=  get_date
+     ${DAY1}=  db.get_date_by_timezone  ${tz}
      Set Suite Variable  ${DAY1}  ${DAY1}
      ${list}=  Create List  1  2  3  4  5  6  7
      Set Suite Variable  ${list}  ${list}
@@ -1304,9 +1304,9 @@ JD-TC-UserLevelAnalyticsForWaitlist-7
      ${24hours}    Random Element    ${bool}
      ${desc}=   FakerLibrary.sentence
      ${url}=   FakerLibrary.url
-     ${sTime}=  add_time  0  15
+     ${sTime}=  db.add_timezone_time  ${tz}  0  15
      Set Suite Variable   ${sTime}
-     ${eTime}=  add_time   0  45
+     ${eTime}=  db.add_timezone_time  ${tz}   0  45
      Set Suite Variable   ${eTime}
      ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
      Log  ${resp.json()}
@@ -1396,7 +1396,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-7
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
@@ -1418,15 +1418,15 @@ JD-TC-UserLevelAnalyticsForWaitlist-7
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${u_p_id}  ${resp.json()['profileId']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  db.add_timezone_time  ${tz}   2  30
     Set Suite Variable   ${eTime1}
 
     ${resp}=  Get Locations
@@ -1495,7 +1495,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-7
     Should Be Equal As Strings  ${resp.status_code}  200
     comment  take check-ins
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  AddCustomer  ${PUSERNAME_N}
@@ -1527,7 +1527,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-7
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get UserLevel Analytics  metricId=${tokenAnalyticsMetrics['BRAND_NEW_TOKENS']}  userId=${u_id}    dateFrom=${DAY1}  dateTo=${DAY1}  frequency=${analyticsFrequency[0]}
@@ -1544,7 +1544,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-8
     [Documentation]    take checkins for a provider and check user level analytics for payment matrics
     # [Setup]  Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service    ${PUSERPH0}  AND  clear_appt_schedule   ${PUSERPH0}
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1606,11 +1606,11 @@ JD-TC-UserLevelAnalyticsForWaitlist-8
         # Should Be Equal As Strings  ${resp.status_code}  200
         # Set Test Variable  ${cid${a}}  ${resp.json()}
 
-        ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist By User  ${cid${a}}  ${s_id7}  ${q_id3}  ${DAY}  ${cnote}  ${bool[0]}  ${u_id}  ${cid${a}} 
 
@@ -1712,7 +1712,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-8
     
     END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${billed_wl_len}=  Get Length  ${waitlist_id}
@@ -1759,7 +1759,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-8
        
 JD-TC-UserLevelAnalyticsForWaitlist-4
     [Documentation]   take online checkins for prepayment services and check analytics 
-    ${resp}=   Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1776,11 +1776,11 @@ JD-TC-UserLevelAnalyticsForWaitlist-4
 
     comment  queue 1 for checkins
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  db.add_timezone_time  ${tz}   1  30
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  15  ${lid}  ${u_id}  ${s_id7} 
     Log  ${resp.json()}
@@ -1819,7 +1819,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-4
     ${consumer_count}=  Get length   ${online_checkins}
     Set Suite Variable  ${consumer_count}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep  01s

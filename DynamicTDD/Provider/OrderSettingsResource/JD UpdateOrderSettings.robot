@@ -21,7 +21,7 @@ ${countryCode}   +91
 JD-TC-UpdateOrderSettings-1
     [Documentation]   Enable order settings using Updation
 
-    ${resp}=  ProviderLogin  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${P110_fName}  ${resp.json()['firstName']}
     Set Suite Variable  ${P110_lName}  ${resp.json()['lastName']}
@@ -79,7 +79,7 @@ JD-TC-UpdateOrderSettings-1
 JD-TC-UpdateOrderSettings-2
     [Documentation]   Disable order settings using Updation
 
-    ${resp}=  ProviderLogin  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Order Settings by account id
@@ -141,7 +141,7 @@ JD-TC-UpdateOrderSettings-UH2
 JD-TC-UpdateOrderSettings-UH3
     [Documentation]   Update order settings when firstname is EMPTY
 
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${P120_fName}  ${resp.json()['firstName']}
     Set Suite Variable  ${P120_lName}  ${resp.json()['lastName']}
@@ -171,7 +171,7 @@ JD-TC-UpdateOrderSettings-UH3
 JD-TC-UpdateOrderSettings-UH4
     [Documentation]   Update order settings when lastname is EMPTY
 
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${P120_fName}  ${resp.json()['firstName']}
     Set Suite Variable  ${P120_lName}  ${resp.json()['lastName']}
@@ -200,7 +200,7 @@ JD-TC-UpdateOrderSettings-UH4
 JD-TC-UpdateOrderSettings-UH5
     [Documentation]   Update order settings when Phone number is EMPTY
 
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${P120_fName}  ${resp.json()['firstName']}
     Set Suite Variable  ${P120_lName}  ${resp.json()['lastName']}
@@ -230,7 +230,7 @@ JD-TC-UpdateOrderSettings-UH5
 # JD-TC-UpdateOrderSettings-UH6
 #     [Documentation]   Update order settings when Store_Contact_Info is EMPTY
 
-#     ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Set Suite Variable  ${P120_fName}  ${resp.json()['firstName']}
 #     Set Suite Variable  ${P120_lName}  ${resp.json()['lastName']}
@@ -259,7 +259,7 @@ JD-TC-UpdateOrderSettings-UH5
 JD-TC-UpdateOrderSettings-UH7
     [Documentation]   Update order settings using invalid phone number
 
-    ${resp}=  ProviderLogin  ${PUSERNAME118}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME118}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${P118_fName}  ${resp.json()['firstName']}
     Set Suite Variable  ${P118_lName}  ${resp.json()['lastName']}
@@ -317,7 +317,7 @@ JD-TC-UpdateOrderSettings-UH7
 JD-TC-UpdateOrderSettings-UH8
     [Documentation]   Update order settings using invalid Email_id
 
-    ${resp}=  ProviderLogin  ${PUSERNAME118}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME118}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Order Settings by account id
@@ -353,7 +353,7 @@ JD-TC-UpdateOrderSettings-UH8
 JD-TC-UpdateOrderSettings-UH9
     [Documentation]   Update order settings using invalid Whasapp number
 
-    ${resp}=  ProviderLogin  ${PUSERNAME118}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME118}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Order Settings by account id

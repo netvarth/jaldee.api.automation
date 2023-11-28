@@ -18,7 +18,7 @@ ${discount}  Disc121
 
 JD-TC-Get Discount By Id-1
        [Documentation]   Provider login to Get Discount By Id
-       ${resp}=   ProviderLogin   ${PUSERNAME243}   ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login   ${PUSERNAME243}   ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        clear_Discount  ${PUSERNAME243}
        ${desc}=  FakerLibrary.Sentence   nb_words=2
@@ -47,7 +47,7 @@ JD-TC-Get Discount By Id-UH2
  
 JD-TC-Get Discount By Id-UH3
        [Documentation]   Provider check to get Discount By Id with another provider's discount id
-       ${resp}=   ProviderLogin   ${PUSERNAME244}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login   ${PUSERNAME244}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=   Get Discount By Id  ${id1}
        Should Be Equal As Strings  "${resp.json()}"   "${INCORRECT_DISCOUNT_ID}"    
@@ -55,7 +55,7 @@ JD-TC-Get Discount By Id-UH3
        
 JD-TC-Get Discount By Id-UH4
        [Documentation]    get Discount By Id using invalid discount id
-       ${resp}=   ProviderLogin   ${PUSERNAME245}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login   ${PUSERNAME245}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=   Get Discount By Id  0
        Should Be Equal As Strings  ${resp.status_code}   422     

@@ -35,27 +35,26 @@ JD-TC-Get Appointment history Count-1
     clear_location   ${PUSERNAME167}
     clear_service   ${PUSERNAME167}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME167}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME167}  ${PASSWORD}
 
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
     ${pid}=  get_acc_id  ${PUSERNAME167}
     Set Suite Variable  ${pid} 
    
-    ${DAY}=  get_date  
-    ${DAY1}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}  
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10 
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time  0  30
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  30  
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -64,13 +63,11 @@ JD-TC-Get Appointment history Count-1
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Suite Variable  ${lid}  ${resp.json()} 
 
-    ${sTime1}=  add_time   1  00
-    ${eTime1}=  add_time   3  30
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime1}=  add_timezone_time  ${tz}  1  00  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30  
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -91,7 +88,7 @@ JD-TC-Get Appointment history Count-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -117,7 +114,7 @@ JD-TC-Get Appointment history Count-1
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor2}=   Create List  ${apptfor1} 
 
-    ${sTime2}=  add_time  1  15
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -201,7 +198,7 @@ JD-TC-Get Appointment history Count-1
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  ProviderLogin  ${PUSERNAME167}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME167}  ${PASSWORD}
     Log   ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 

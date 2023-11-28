@@ -61,7 +61,7 @@ JD-TC-LoanApplicationRemark-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -345,7 +345,7 @@ JD-TC-LoanApplicationRemark-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -478,7 +478,7 @@ JD-TC-LoanApplicationRemark-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -606,7 +606,7 @@ JD-TC-LoanApplicationRemark-3
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
     
-#     ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -726,7 +726,7 @@ JD-TC-LoanApplicationRemark-3
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
     
-#     ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -845,7 +845,7 @@ JD-TC-LoanApplicationRemark-6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -972,7 +972,7 @@ JD-TC-LoanApplicationRemark-7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1099,7 +1099,7 @@ JD-TC-LoanApplicationRemark-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1227,7 +1227,7 @@ JD-TC-LoanApplicationRemark-Uh2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME83}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME83}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1385,7 +1385,7 @@ JD-TC-LoanApplicationRemark-UH5
                                   
     [Documentation]               LoanApplication Remark with  another provider login
 
-    ${resp}=   ProviderLogin  ${PUSERNAME93}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME93}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

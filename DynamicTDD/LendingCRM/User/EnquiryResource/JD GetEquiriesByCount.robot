@@ -24,7 +24,7 @@ Multiple Users branches
     &{License_total}=  Create Dictionary
     
     FOR   ${a}  IN RANGE   ${length}   
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         
         ${resp1}=   Get Active License
@@ -67,15 +67,20 @@ JD-TC-Get Enquiries For Branch-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     clear_customer   ${MUSERNAME30}
     ${resp}=    Get Locations
@@ -83,8 +88,13 @@ JD-TC-Get Enquiries For Branch-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${locId1}=  Create Sample Location
@@ -345,7 +355,7 @@ JD-TC-Get Enquiries For Branch-1
 JD-TC-Get Enquiries For Branch-2
     [Documentation]   Get Enquiries for a branch by id filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -399,7 +409,7 @@ JD-TC-Get Enquiries For Branch-2
 JD-TC-Get Enquiries For Branch-3
     [Documentation]   Get Enquiries for a branch by uuid filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -453,7 +463,7 @@ JD-TC-Get Enquiries For Branch-3
 JD-TC-Get Enquiries For Branch-4
     [Documentation]   Get Enquiries for a branch by title filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -507,7 +517,7 @@ JD-TC-Get Enquiries For Branch-4
 JD-TC-Get Enquiries For Branch-5
     [Documentation]   Get Enquiries for a branch by description filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -567,12 +577,14 @@ JD-TC-Get Enquiries For Branch-6
     ${BUSER}=  Random Element    ${multiusers}
     Set Suite Variable  ${BUSER}
 
-    ${resp}=   Provider Login  ${BUSER}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Suite Variable  ${p_fname1}   ${resp.json()['firstName']}
-    Set Suite Variable  ${p_lname1}   ${resp.json()['lastName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Suite Variable  ${p_fname1}   ${decrypted_data['firstName']}
+    Set Suite Variable  ${p_lname1}   ${decrypted_data['lastName']}
 
     ${resp}=   Get Active License
     Log  ${resp.content}
@@ -796,12 +808,14 @@ JD-TC-Get Enquiries For Branch-6
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id2}  ${resp.json()['id']}
-    Set Suite Variable  ${p_fname2}   ${resp.json()['firstName']}
-    Set Suite Variable  ${p_lname2}   ${resp.json()['lastName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id2}  ${decrypted_data['id']}
+    Set Suite Variable  ${p_fname2}   ${decrypted_data['firstName']}
+    Set Suite Variable  ${p_lname2}   ${decrypted_data['lastName']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -850,7 +864,7 @@ JD-TC-Get Enquiries For Branch-6
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Provider Login  ${BUSER}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -906,7 +920,7 @@ JD-TC-Get Enquiries For Branch-6
 JD-TC-Get Enquiries For Branch-7
     [Documentation]   Get Enquiries for a branch by generatedByFirstName filter.
 
-    ${resp}=   Provider Login  ${BUSER}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -962,7 +976,7 @@ JD-TC-Get Enquiries For Branch-7
 JD-TC-Get Enquiries For Branch-8
     [Documentation]   Get Enquiries for a branch by generatedByLastName filter.
 
-    ${resp}=   Provider Login  ${BUSER}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1016,7 +1030,7 @@ JD-TC-Get Enquiries For Branch-8
 JD-TC-Get Enquiries For Branch-9
     [Documentation]   Get Enquiries for a branch by customer filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1070,7 +1084,7 @@ JD-TC-Get Enquiries For Branch-9
 JD-TC-Get Enquiries For Branch-10
     [Documentation]   Get Enquiries for a branch by customerFirstName filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1124,7 +1138,7 @@ JD-TC-Get Enquiries For Branch-10
 JD-TC-Get Enquiries For Branch-11
     [Documentation]   Get Enquiries for a branch by customerLastName filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1178,7 +1192,7 @@ JD-TC-Get Enquiries For Branch-11
 JD-TC-Get Enquiries For Branch-12
     [Documentation]   Get Enquiries for a branch by location filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1232,7 +1246,7 @@ JD-TC-Get Enquiries For Branch-12
 JD-TC-Get Enquiries For Branch-13
     [Documentation]   Get Enquiries for a branch by locationName filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1286,7 +1300,7 @@ JD-TC-Get Enquiries For Branch-13
 JD-TC-Get Enquiries For Branch-14
     [Documentation]   Get Enquiries for a branch by category filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1340,7 +1354,7 @@ JD-TC-Get Enquiries For Branch-14
 JD-TC-Get Enquiries For Branch-15
     [Documentation]   Get Enquiries for a branch by categoryName filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1394,7 +1408,7 @@ JD-TC-Get Enquiries For Branch-15
 JD-TC-Get Enquiries For Branch-16
     [Documentation]   Get Enquiries for a branch by type filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1448,7 +1462,7 @@ JD-TC-Get Enquiries For Branch-16
 JD-TC-Get Enquiries For Branch-17
     [Documentation]   Get Enquiries for a branch by typeName filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1502,7 +1516,7 @@ JD-TC-Get Enquiries For Branch-17
 JD-TC-Get Enquiries For Branch-18
     [Documentation]   Get Enquiries for a branch by priority filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1556,7 +1570,7 @@ JD-TC-Get Enquiries For Branch-18
 JD-TC-Get Enquiries For Branch-19
     [Documentation]   Get Enquiries for a branch by priorityName filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1611,7 +1625,7 @@ JD-TC-Get Enquiries For Branch-19
 JD-TC-Get Enquiries For Branch-20
     [Documentation]   Get Enquiries for a branch by status filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1665,7 +1679,7 @@ JD-TC-Get Enquiries For Branch-20
 JD-TC-Get Enquiries For Branch-21
     [Documentation]   Get Enquiries for a branch by statusName filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1719,7 +1733,7 @@ JD-TC-Get Enquiries For Branch-21
 JD-TC-Get Enquiries For Branch-22
     [Documentation]   Get Enquiries for a branch by originFrom filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1773,7 +1787,7 @@ JD-TC-Get Enquiries For Branch-22
 JD-TC-Get Enquiries For Branch-23
     [Documentation]   Get Enquiries for a branch by originId filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1827,7 +1841,7 @@ JD-TC-Get Enquiries For Branch-23
 JD-TC-Get Enquiries For Branch-24
     [Documentation]   Get Enquiries for a branch by originUid filter.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

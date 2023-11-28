@@ -31,7 +31,7 @@ JD-TC-GetAllBankDetails-1
 
     [Documentation]  Get my own bank details by provider.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -88,7 +88,7 @@ JD-TC-GetAllBankDetails-2
     Set Suite Variable  ${pan_num1}
     Set Suite Variable  ${GST_num1}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -140,7 +140,7 @@ JD-TC-GetAllBankInfo-3
 
     [Documentation]  Get bank details of multiple providers by superadmin.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME153}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME153}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -249,7 +249,7 @@ JD-TC-CreateBankInfo-UH2
 
     [Documentation]  get bank details by provider login.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

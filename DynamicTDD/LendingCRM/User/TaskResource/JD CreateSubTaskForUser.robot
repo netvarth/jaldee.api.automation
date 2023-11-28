@@ -27,7 +27,7 @@ JD-TC-CreatesubTaskForUser-1
     [Documentation]  Create subTask for branch
 
  
-    ${resp}=   Provider Login  ${MUSERNAME58}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -39,8 +39,13 @@ JD-TC-CreatesubTaskForUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -97,7 +102,7 @@ JD-TC-CreatesubTaskForUser-2
 
     [Documentation]  Create multiple  subTask for branch same details
 
-     ${resp}=   Provider Login  ${MUSERNAME59}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${MUSERNAME59}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -109,8 +114,13 @@ JD-TC-CreatesubTaskForUser-2
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id1}
@@ -195,7 +205,7 @@ JD-TC-CreatesubTaskForUser-3
 
     [Documentation]  Create multiple  subTask for branch different details
 
-     ${resp}=   Provider Login  ${MUSERNAME60}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${MUSERNAME60}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -319,7 +329,9 @@ JD-TC-CreatesubTaskForUser-4
 
     [Documentation]   Create  subTask for  user
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
+
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME4} 
@@ -343,12 +355,14 @@ JD-TC-CreatesubTaskForUser-4
     Should Be Equal As Strings    ${resp2.status_code}    200
     
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
@@ -433,7 +447,7 @@ JD-TC-CreatesubTaskForUser-4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -492,7 +506,7 @@ JD-TC-CreatesubTaskForUser-5
 
     [Documentation]  Create    multiple subTask for  user
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -548,7 +562,7 @@ JD-TC-CreatesubTaskForUser-UH6
 
     [Documentation]  Create  task for branch and create   subTask for  user
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME4} 
@@ -571,7 +585,9 @@ JD-TC-CreatesubTaskForUser-UH6
     Should Be Equal As Strings  ${resp.json()['description']}         ${desc}
     Should Be Equal As Strings  ${resp.json()['category']['id']}      ${category_id1}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+   
+
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -589,7 +605,7 @@ JD-TC-CreatesubTaskForUser-UH7
 
     [Documentation]  Create  task for user and create   subTask for  another user
     
-    ${resp}=  Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -628,7 +644,7 @@ JD-TC-CreatesubTaskForUser-UH7
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -650,7 +666,7 @@ JD-TC-CreatesubTaskForUser-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}     200
     
-     ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -669,7 +685,7 @@ JD-TC-CreatesubTaskForUser-9
     
     [Documentation]  Create  task for user and  assignee to another user create   subTask for  another user
     
-    ${resp}=  ProviderLogin  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -681,7 +697,7 @@ JD-TC-CreatesubTaskForUser-9
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -711,7 +727,7 @@ JD-TC-CreatesubTaskForUser-UH1
 
     [Documentation]  create task and clossed task status and create subtask
 
-    ${resp}=  ProviderLogin  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -766,7 +782,7 @@ JD-TC-CreatesubTaskForUser-UH3
 JD-TC-CreatesubTaskForUser-UH4
     [Documentation]    create task by usr and subtask create by another branch
      
-    ${resp}=  ProviderLogin  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -784,7 +800,8 @@ JD-TC-CreatesubTaskForUser-UH4
     Set Test Variable  ${task_id19}  ${task_id[0]}
     Set Suite Variable  ${task_uid19}  ${task_id[1]}
 
-    ${resp}=   Provider Login  ${MUSERNAME58}  ${PASSWORD} 
+
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -805,7 +822,8 @@ JD-TC-CreatesubTaskForUser-UH4
 JD-TC-CreatesubTaskForUser-UH5
     [Documentation]    create task by branch and subtask create by another branch user
    
-    ${resp}=   Provider Login  ${MUSERNAME58}  ${PASSWORD} 
+    
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -823,7 +841,7 @@ JD-TC-CreatesubTaskForUser-UH5
     Set Test Variable  ${task_id20}  ${task_id[0]}
     Set Suite Variable  ${task_uid20}  ${task_id[1]}
 
-    ${resp}=  ProviderLogin  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -844,7 +862,7 @@ JD-TC-CreatesubTaskForUser-10
    
     [Documentation]  Create  task for user and  assignee to another user create   subTask by first user task created user
     
-    ${resp}=  ProviderLogin  ${PUSERPH1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations

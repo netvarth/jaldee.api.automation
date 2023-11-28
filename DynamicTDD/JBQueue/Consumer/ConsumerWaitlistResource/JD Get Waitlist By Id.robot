@@ -24,7 +24,7 @@ JD-TC-Get Waitlist By Id Consumer-1
 	[Documentation]  Add To Waitlist By Consumer valid  provider
     
     [Setup]  Run Keywords  clear_queue  ${PUSERNAME193}  AND  clear_location  ${PUSERNAME193}  AND  clear_service  ${PUSERNAME192}
-    ${resp}=  ProviderLogin  ${PUSERNAME193}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME193}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${pid}=  get_acc_id  ${PUSERNAME193}
@@ -36,16 +36,16 @@ JD-TC-Get Waitlist By Id Consumer-1
     ${resp}=  Update Waitlist Settings  ${calc_mode[0]}   ${duration}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY}=  db.get_date  
+   
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${DAY}=  db.get_date_by_timezone  ${tz}  
     Set Suite Variable  ${DAY} 
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  2  00  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time  2  00
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -57,6 +57,7 @@ JD-TC-Get Waitlist By Id Consumer-1
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${P1SERVICE1}=    FakerLibrary.word
     Set Suite Variable  ${P1SERVICE1}
@@ -78,8 +79,8 @@ JD-TC-Get Waitlist By Id Consumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s2}  ${resp.json()}
 
-    ${sTime1}=  add_time  2  00
-    ${eTime1}=  add_time  2  30
+    ${sTime1}=  add_timezone_time  ${tz}  2  00  
+    ${eTime1}=  add_timezone_time  ${tz}  2  30  
     ${p1queue1}=    FakerLibrary.word
     Set Suite Variable   ${p1queue1}
     ${capacity}=  FakerLibrary.Numerify  %%%
@@ -104,7 +105,6 @@ JD-TC-Get Waitlist By Id Consumer-1
     ${cid}=  get_id  ${CUSERNAME4}   
     Set Suite Variable   ${cid}
 
-
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
     Log  ${resp.json()}
@@ -114,7 +114,7 @@ JD-TC-Get Waitlist By Id Consumer-1
     Set Suite Variable  ${uuid1}  ${wid[0]}
     # sleep  04s   
 
-    ${resp}=  Provider Login  ${PUSERNAME193}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME193}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -165,7 +165,7 @@ JD-TC-Get Waitlist By Id Consumer-UH2
 
 JD-TC-Get Waitlist By Id Consumer-UH3
 	[Documentation]  get waitlist By id  using provider
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${pid}=  get_acc_id  ${PUSERNAME193}

@@ -17,7 +17,7 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 JD-TC-EnableDisableLabel-1
 	[Documentation]  Create a label and check the status for a valid provider.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     clear_Label  ${PUSERNAME15}
@@ -38,7 +38,7 @@ JD-TC-EnableDisableLabel-1
 JD-TC-EnableDisableLabel-2
 	[Documentation]  Disable a label.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  EnableDisable Label   ${label_id}   ${Qstate[1]}
@@ -53,7 +53,7 @@ JD-TC-EnableDisableLabel-2
 JD-TC-EnableDisableLabel-UH1
 	[Documentation]  Try to Disable a disabled label.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  EnableDisable Label   ${label_id}   ${Qstate[1]}
@@ -64,7 +64,7 @@ JD-TC-EnableDisableLabel-UH1
 JD-TC-EnableDisableLabel-UH2
 	[Documentation]  Try to Enable an enabled label.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  EnableDisable Label   ${label_id}   ${Qstate[0]}
@@ -104,7 +104,7 @@ JD-TC-EnableDisableLabel -UH4
 JD-TC-EnableDisableLabel-UH5
 	[Documentation]  Update label staus with another provider's label id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     clear_Label  ${PUSERNAME16}
@@ -123,7 +123,7 @@ JD-TC-EnableDisableLabel-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['status']}  ${Qstate[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  EnableDisable Label   ${label_id1}   ${Qstate[0]}
@@ -134,7 +134,7 @@ JD-TC-EnableDisableLabel-UH5
 JD-TC-EnableDisableLabel-UH6
     [Documentation]  Update label status with invalid label id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${invalid_id}=   Random Int   min=-10   max=0

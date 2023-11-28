@@ -50,7 +50,7 @@ JD-TC-Token_Report-1
     # Verify Consumer Profile  ${resp}  firstName=${firstname}  lastName=${lastname}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid}=  get_acc_id  ${PUSERNAME20}
     Set Suite Variable  ${pid}
@@ -62,6 +62,8 @@ JD-TC-Token_Report-1
     Should Be Equal As Strings  ${resp.status_code}  200
    
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  calculationMode=${calc_mode[1]}  trnArndTime=${duration}  futureDateWaitlist=${bool[1]}  showTokenId=${bool[1]}  onlineCheckIns=${bool[1]}  maxPartySize=1
     
     clear_queue     ${PUSERNAME20}
@@ -69,7 +71,7 @@ JD-TC-Token_Report-1
 
     ${cid}=  get_id  ${CUSERNAME5}
     Set Suite Variable  ${cid}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
     ${DAY1_format} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Suite Variable  ${DAY1_format}
@@ -90,7 +92,7 @@ JD-TC-Token_Report-1
     Set Suite Variable   ${Total}   ${Total1}
     ${amt_float}=  twodigitfloat  ${Total}
     Set Suite Variable  ${amt_float}  ${amt_float}  
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
 
     ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration[1]}  ${status[0]}    ${btype}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[0]}  ${bool[0]}
@@ -114,13 +116,14 @@ JD-TC-Token_Report-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s2}  ${resp.json()}
 
-    ${sTime1}=  add_time  0  00
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
     ${p1queue1}=    FakerLibrary.word
     Set Suite Variable   ${p1queue1}
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1   20   ${p1_l1}  ${p1_s1}  ${p1_s2}
     Log  ${resp.json()} 
@@ -173,7 +176,7 @@ JD-TC-Token_Report-1
     Set Suite Variable  ${cwid4}  ${wid[0]}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -206,7 +209,6 @@ JD-TC-Token_Report-1
     ${resp}=  Add To Waitlist  ${cid10}  ${p1_s1}  ${p1_q1}  ${DAY}  ${desc}  ${bool[1]}  ${cid10} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     
@@ -214,7 +216,6 @@ JD-TC-Token_Report-1
     ${resp}=  Add To Waitlist  ${cid10}  ${p1_s2}  ${p1_q1}  ${DAY}  ${desc}  ${bool[1]}  ${cid10} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
@@ -229,6 +230,8 @@ JD-TC-Token_Report-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  calculationMode=${calc_mode[1]}   futureDateWaitlist=${bool[1]}  showTokenId=${bool[1]}  onlineCheckIns=${bool[1]}  maxPartySize=1
     
     Set Test Variable  ${status-eq}              SUCCESS
@@ -327,13 +330,13 @@ JD-TC-Token_Report-1
     Should Be Equal As Strings  ${paymentStatusReport[0]}  ${resp.json()['reportContent']['data'][1]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id83}      ${resp.json()['reportContent']['data'][1]['7']}  # ConfirmationId
    
-    ${LAST_WEEK_DAY1}=  subtract_date  4
+    ${LAST_WEEK_DAY1}=  db.subtract_timezone_date  ${tz}   4
     Set Suite Variable  ${LAST_WEEK_DAY1} 
-    ${LAST_WEEK_DAY7}=  add_date  2
+    ${LAST_WEEK_DAY7}=  db.add_timezone_date  ${tz}  2  
     Set Suite Variable  ${LAST_WEEK_DAY7} 
     change_system_date   3
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -442,7 +445,7 @@ JD-TC-Token_Report-2
     [Documentation]  Generate Next_Week report of a provider for both online and walk-in checkin for any PHYSICAL SERVICE
     
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -451,7 +454,7 @@ JD-TC-Token_Report-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${Add_DAY1}=  add_date  1
+    ${Add_DAY1}=  db.add_timezone_date  ${tz}  1  
     Set Suite Variable  ${Add_DAY1}
     ${Add_DAY1_format} =	Convert Date	${Add_DAY1}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY1_format}
@@ -463,7 +466,7 @@ JD-TC-Token_Report-2
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${cwid11}  ${wid[0]} 
 
-    ${Add_DAY2}=  add_date  2
+    ${Add_DAY2}=  db.add_timezone_date  ${tz}  2  
     ${Add_DAY2_format} =	Convert Date	${Add_DAY2}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY2_format}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${Add_DAY2}  ${p1_s1}  ${msg}  ${bool[0]}  ${self}
@@ -473,7 +476,7 @@ JD-TC-Token_Report-2
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${cwid12}  ${wid[0]}
 
-    ${Add_DAY3}=  add_date  3
+    ${Add_DAY3}=  db.add_timezone_date  ${tz}  3  
     ${Add_DAY3_format} =	Convert Date	${Add_DAY3}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY3_format}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${Add_DAY3}  ${p1_s1}  ${msg}  ${bool[0]}  ${self}
@@ -483,7 +486,7 @@ JD-TC-Token_Report-2
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${cwid13}  ${wid[0]}
 
-    ${Add_DAY4}=  add_date  4
+    ${Add_DAY4}=  db.add_timezone_date  ${tz}  4  
     ${Add_DAY4_format} =	Convert Date	${Add_DAY4}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY4_format}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${Add_DAY4}  ${p1_s1}  ${msg}  ${bool[0]}  ${self}
@@ -493,7 +496,7 @@ JD-TC-Token_Report-2
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${cwid14}  ${wid[0]}
 
-    ${Add_DAY5}=  add_date  5
+    ${Add_DAY5}=  db.add_timezone_date  ${tz}  5  
     ${Add_DAY5_format} =	Convert Date	${Add_DAY5}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY5_format}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${Add_DAY5}  ${p1_s1}  ${msg}  ${bool[0]}  ${self}
@@ -503,7 +506,7 @@ JD-TC-Token_Report-2
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${cwid15}  ${wid[0]}
 
-    ${Add_DAY6}=  add_date  6
+    ${Add_DAY6}=  db.add_timezone_date  ${tz}  6  
     ${Add_DAY6_format} =	Convert Date	${Add_DAY6}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY6_format}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${Add_DAY6}  ${p1_s1}  ${msg}  ${bool[0]}  ${self}
@@ -513,7 +516,7 @@ JD-TC-Token_Report-2
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${cwid16}  ${wid[0]}
 
-    ${Add_DAY7}=  add_date  7
+    ${Add_DAY7}=  db.add_timezone_date  ${tz}  7  
     Set Suite Variable  ${Add_DAY7}
     ${Add_DAY7_format} =	Convert Date	${Add_DAY7}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY7_format}
@@ -524,7 +527,7 @@ JD-TC-Token_Report-2
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${cwid17}  ${wid[0]}
 
-    ${Add_DAY8}=  add_date  8
+    ${Add_DAY8}=  db.add_timezone_date  ${tz}  8  
     ${Add_DAY8_format} =	Convert Date	${Add_DAY8}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY8_format}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${Add_DAY8}  ${p1_s1}  ${msg}  ${bool[0]}  ${self}
@@ -534,7 +537,7 @@ JD-TC-Token_Report-2
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${cwid18}  ${wid[0]}
 
-    ${TODAY}=  get_date
+    ${TODAY}=  db.get_date_by_timezone  ${tz}
     ${TODAY_format} =	Convert Date	${TODAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${TODAY_format}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${TODAY}  ${p1_s1}  ${msg}  ${bool[0]}  ${self}
@@ -552,7 +555,7 @@ JD-TC-Token_Report-2
     Set Suite Variable  ${cwid20}  ${wid[0]} 
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist By Id  ${cwid11} 
@@ -612,70 +615,60 @@ JD-TC-Token_Report-2
     ${resp}=  Add To Waitlist  ${cid20}  ${p1_s1}  ${p1_q1}  ${Add_DAY1}  ${desc}  ${bool[1]}  ${cid20} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid11}  ${wid[0]}
 
     ${resp}=  Add To Waitlist  ${cid20}  ${p1_s2}  ${p1_q1}  ${Add_DAY2}  ${desc}  ${bool[1]}  ${cid20} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid12}  ${wid[0]}
 
     ${resp}=  Add To Waitlist  ${cid20}  ${p1_s1}  ${p1_q1}  ${Add_DAY3}  ${desc}  ${bool[1]}  ${cid20} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid13}  ${wid[0]}
 
     ${resp}=  Add To Waitlist  ${cid20}  ${p1_s2}  ${p1_q1}  ${Add_DAY4}  ${desc}  ${bool[1]}  ${cid20} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid14}  ${wid[0]}
 
     ${resp}=  Add To Waitlist  ${cid20}  ${p1_s1}  ${p1_q1}  ${Add_DAY5}  ${desc}  ${bool[1]}  ${cid20} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid15}  ${wid[0]}
 
     ${resp}=  Add To Waitlist  ${cid20}  ${p1_s2}  ${p1_q1}  ${Add_DAY6}  ${desc}  ${bool[1]}  ${cid20} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid16}  ${wid[0]}
 
     ${resp}=  Add To Waitlist  ${cid20}  ${p1_s1}  ${p1_q1}  ${Add_DAY7}  ${desc}  ${bool[1]}  ${cid20} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid17}  ${wid[0]}
 
     ${resp}=  Add To Waitlist  ${cid20}  ${p1_s2}  ${p1_q1}  ${Add_DAY8}  ${desc}  ${bool[1]}  ${cid20} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid18}  ${wid[0]}
 
     ${resp}=  Add To Waitlist  ${cid20}  ${p1_s1}  ${p1_q1}  ${TODAY}  ${desc}  ${bool[1]}  ${cid20} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid19}  ${wid[0]}
 
     ${resp}=  Add To Waitlist  ${cid20}  ${p1_s2}  ${p1_q1}  ${TODAY}  ${desc}  ${bool[1]}  ${cid20} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid20}  ${wid[0]}
 
@@ -692,7 +685,7 @@ JD-TC-Token_Report-2
     sleep  02s
 
     change_system_date   8
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     Set Test Variable  ${status-eq}              SUCCESS
@@ -871,7 +864,7 @@ JD-TC-Token_Report-2
 
 JD-TC-Token_Report-3
     [Documentation]  Generate current_day report of a provider for both online and walk-in checkin for any VIRTUAL SERVICE
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -908,8 +901,8 @@ JD-TC-Token_Report-3
     Verify Response  ${resp}  name=${V1SERVICE1}  description=${description}  serviceDuration=5   notification=${bool[1]}   notificationType=${notifytype[2]}   totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}  serviceType=virtualService   virtualServiceType=${vstype}
 
 
-    ${sTime1}=  add_time  0  00
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
     ${p1queue2}=    FakerLibrary.word
     Set Suite Variable   ${p1queue2}
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -947,7 +940,6 @@ JD-TC-Token_Report-3
     ${resp}=  Provider Add To WL With Virtual Service  ${cid33}  ${v1_s1}  ${p1_q2}  ${DAY1}  ${desc}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${cid33}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid_v1}  ${wid[0]}
 
@@ -955,7 +947,6 @@ JD-TC-Token_Report-3
     ${resp}=  Provider Add To WL With Virtual Service  ${cid33}  ${v1_s1}  ${p1_q2}  ${DAY1}  ${desc}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService1}   ${fid23}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid_v2}  ${wid[0]}
 
@@ -1006,19 +997,17 @@ JD-TC-Token_Report-3
     ${resp}=  Consumer Add To WL With Virtual Service  ${pid}  ${p1_q2}  ${DAY1}  ${v1_s1}  ${consumerNote1}  ${bool[0]}  ${virtualService1}   0
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${Cwid_v1}  ${wid[0]}
 
     ${resp}=  Consumer Add To WL With Virtual Service  ${pid}  ${p1_q2}  ${DAY1}  ${v1_s1}  ${consumerNote1}  ${bool[0]}  ${virtualService1}   ${fid25}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${Cwid_v2}  ${wid[0]}
 
     
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist By Id  ${Cwid_v1} 
@@ -1035,14 +1024,14 @@ JD-TC-Token_Report-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${LAST_WEEK3_DAY1}=  subtract_date  5
+    ${LAST_WEEK3_DAY1}=  db.subtract_timezone_date  ${tz}   5
     Set Suite Variable  ${LAST_WEEK3_DAY1} 
-    ${LAST_WEEK3_DAY7}=  add_date  1
+    ${LAST_WEEK3_DAY7}=  db.add_timezone_date  ${tz}  1  
     Set Suite Variable  ${LAST_WEEK3_DAY7} 
     
 
     change_system_date   2
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     Set Test Variable  ${status-eq}              SUCCESS
@@ -1124,7 +1113,7 @@ JD-TC-Token_Report-3
 
 JD-TC-Token_Report-4
     [Documentation]  Generate Next_Week report of a provider for both online and walk-in checkin for any VIRTUAL SERVICE
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1133,7 +1122,7 @@ JD-TC-Token_Report-4
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pcid28}=  get_id  ${CUSERNAME28}
 
-    ${Add_DAY1}=  add_date  1
+    ${Add_DAY1}=  db.add_timezone_date  ${tz}  1  
     ${Add_DAY1_format} =	Convert Date	${Add_DAY1}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY1_format}
     ${consumerNote1}=   FakerLibrary.word
@@ -1144,7 +1133,7 @@ JD-TC-Token_Report-4
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v1}  ${wid[0]}
   
-    ${Add_DAY2}=  add_date  2
+    ${Add_DAY2}=  db.add_timezone_date  ${tz}  2  
     ${Add_DAY2_format} =	Convert Date	${Add_DAY2}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY2_format}
     ${consumerNote1}=   FakerLibrary.word
@@ -1155,7 +1144,7 @@ JD-TC-Token_Report-4
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v2}  ${wid[0]}
 
-    ${Add_DAY3}=  add_date  3
+    ${Add_DAY3}=  db.add_timezone_date  ${tz}  3  
     ${Add_DAY3_format} =	Convert Date	${Add_DAY3}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY3_format}
     ${consumerNote1}=   FakerLibrary.word
@@ -1166,7 +1155,7 @@ JD-TC-Token_Report-4
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v3}  ${wid[0]}
     
-    ${Add_DAY4}=  add_date  4
+    ${Add_DAY4}=  db.add_timezone_date  ${tz}  4  
     ${Add_DAY4_format} =	Convert Date	${Add_DAY4}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY4_format}
     ${consumerNote1}=   FakerLibrary.word
@@ -1177,7 +1166,7 @@ JD-TC-Token_Report-4
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v4}  ${wid[0]}
 
-    ${Add_DAY5}=  add_date  5
+    ${Add_DAY5}=  db.add_timezone_date  ${tz}  5  
     ${Add_DAY5_format} =	Convert Date	${Add_DAY5}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY5_format}
     ${consumerNote1}=   FakerLibrary.word
@@ -1188,7 +1177,7 @@ JD-TC-Token_Report-4
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v5}  ${wid[0]}
    
-    ${Add_DAY6}=  add_date  6
+    ${Add_DAY6}=  db.add_timezone_date  ${tz}  6  
     ${Add_DAY6_format} =	Convert Date	${Add_DAY6}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY6_format}
     ${consumerNote1}=   FakerLibrary.word
@@ -1199,7 +1188,7 @@ JD-TC-Token_Report-4
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v6}  ${wid[0]}
 
-    ${Add_DAY7}=  add_date  7
+    ${Add_DAY7}=  db.add_timezone_date  ${tz}  7  
     ${Add_DAY7_format} =	Convert Date	${Add_DAY7}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY7_format}
     ${consumerNote1}=   FakerLibrary.word
@@ -1210,7 +1199,7 @@ JD-TC-Token_Report-4
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v7}  ${wid[0]}
     
-    ${Add_DAY8}=  add_date  8
+    ${Add_DAY8}=  db.add_timezone_date  ${tz}  8  
     ${Add_DAY8_format} =	Convert Date	${Add_DAY8}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY8_format}
     ${consumerNote1}=   FakerLibrary.word
@@ -1221,7 +1210,7 @@ JD-TC-Token_Report-4
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v8}  ${wid[0]}
 
-    ${TODAY}=  get_date
+    ${TODAY}=  db.get_date_by_timezone  ${tz}
     ${TODAY_format} =	Convert Date	${TODAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${TODAY_format}
     ${consumerNote1}=   FakerLibrary.word
@@ -1233,7 +1222,7 @@ JD-TC-Token_Report-4
     Set Test Variable  ${cwid_v9}  ${wid[0]}
     
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist By Id  ${cwid_v1} 
@@ -1244,7 +1233,7 @@ JD-TC-Token_Report-4
 
     change_system_date   8
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     Set Test Variable  ${status-eq}              SUCCESS
@@ -1333,7 +1322,7 @@ JD-TC-Token_Report-4
 
 JD-TC-Token_Report-5
     [Documentation]  Generate NEXT_THIRTY_DAYS report of a provider for both online and walk-in checkin For any PHYSICAL SERVICE
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1342,7 +1331,7 @@ JD-TC-Token_Report-5
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pcid33}=  get_id  ${CUSERNAME33}
 
-    ${Add_DAY1}=  add_date  1
+    ${Add_DAY1}=  db.add_timezone_date  ${tz}  1  
     Set Suite Variable  ${Add_DAY1}
     ${Add_DAY1_format} =	Convert Date	${Add_DAY1}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY1_format}
@@ -1354,7 +1343,7 @@ JD-TC-Token_Report-5
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p1}  ${wid[0]}
 
-    ${Add_DAY4}=  add_date  4
+    ${Add_DAY4}=  db.add_timezone_date  ${tz}  4  
     Set Suite Variable  ${Add_DAY4}
     ${Add_DAY4_format} =	Convert Date	${Add_DAY4}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY4_format}
@@ -1365,7 +1354,7 @@ JD-TC-Token_Report-5
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p4}  ${wid[0]}
 
-    ${Add_DAY7}=  add_date  7
+    ${Add_DAY7}=  db.add_timezone_date  ${tz}  7  
     Set Suite Variable  ${Add_DAY7}
     ${Add_DAY7_format} =	Convert Date	${Add_DAY7}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY7_format}
@@ -1376,7 +1365,7 @@ JD-TC-Token_Report-5
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p7}  ${wid[0]}
 
-    ${Add_DAY10}=  add_date  10
+    ${Add_DAY10}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${Add_DAY10}
     ${Add_DAY10_format} =	Convert Date	${Add_DAY10}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY10_format}
@@ -1387,7 +1376,7 @@ JD-TC-Token_Report-5
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p10}  ${wid[0]}
   
-    ${Add_DAY14}=  add_date  14
+    ${Add_DAY14}=  db.add_timezone_date  ${tz}  14
     Set Suite Variable  ${Add_DAY14}
     ${Add_DAY14_format} =	Convert Date	${Add_DAY14}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY14_format}
@@ -1398,7 +1387,7 @@ JD-TC-Token_Report-5
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p14}  ${wid[0]}
 
-    ${Add_DAY19}=  add_date  19
+    ${Add_DAY19}=  db.add_timezone_date  ${tz}  19
     Set Suite Variable  ${Add_DAY19}
     ${Add_DAY19_format} =	Convert Date	${Add_DAY19}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY19_format}
@@ -1409,7 +1398,7 @@ JD-TC-Token_Report-5
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p19}  ${wid[0]}
     
-    ${Add_DAY23}=  add_date  23
+    ${Add_DAY23}=  db.add_timezone_date  ${tz}  23
     Set Suite Variable  ${Add_DAY23}
     ${Add_DAY23_format} =	Convert Date	${Add_DAY23}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY23_format}
@@ -1420,7 +1409,7 @@ JD-TC-Token_Report-5
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p23}  ${wid[0]}
 
-    ${Add_DAY27}=  add_date  27
+    ${Add_DAY27}=  db.add_timezone_date  ${tz}  27
     Set Suite Variable  ${Add_DAY27}
     ${Add_DAY27_format} =	Convert Date	${Add_DAY27}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY27_format}
@@ -1431,7 +1420,7 @@ JD-TC-Token_Report-5
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p27}  ${wid[0]}
    
-    ${Add_DAY30}=  add_date  30
+    ${Add_DAY30}=  db.add_timezone_date  ${tz}  30
     Set Suite Variable  ${Add_DAY30}
     ${Add_DAY30_format} =	Convert Date	${Add_DAY30}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY30_format}
@@ -1442,7 +1431,7 @@ JD-TC-Token_Report-5
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p30}  ${wid[0]}
 
-    ${Add_DAY31}=  add_date  31
+    ${Add_DAY31}=  db.add_timezone_date  ${tz}  31
     Set Suite Variable  ${Add_DAY31}
     ${Add_DAY31_format} =	Convert Date	${Add_DAY31}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY31_format}
@@ -1453,7 +1442,7 @@ JD-TC-Token_Report-5
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p31}  ${wid[0]}
     
-    ${Add_DAY36}=  add_date  36
+    ${Add_DAY36}=  db.add_timezone_date  ${tz}  36
     Set Suite Variable  ${Add_DAY36}
     ${Add_DAY36_format} =	Convert Date	${Add_DAY36}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY36_format}
@@ -1464,7 +1453,7 @@ JD-TC-Token_Report-5
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p36}  ${wid[0]}
 
-    ${TODAY}=  get_date
+    ${TODAY}=  db.get_date_by_timezone  ${tz}
     ${TODAY_format} =	Convert Date	${TODAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${TODAY_format}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${TODAY}  ${p1_s1}  ${msg}  ${bool[0]}  ${self}
@@ -1475,7 +1464,7 @@ JD-TC-Token_Report-5
     Set Test Variable  ${cwid_p0}  ${wid[0]}
     
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist By Id  ${cwid_p1} 
@@ -1486,7 +1475,7 @@ JD-TC-Token_Report-5
 
     change_system_date   31
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     Set Test Variable  ${status-eq}               SUCCESS
@@ -1598,7 +1587,7 @@ JD-TC-Token_Report-5
 
 JD-TC-Token_Report-6
     [Documentation]  Generate NEXT_THIRTY_DAYS report of a provider for both online and walk-in checkin For any VIRTUAL SERVICE
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1607,7 +1596,7 @@ JD-TC-Token_Report-6
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pcid30}=  get_id  ${CUSERNAME30}
 
-    ${Add_DAY1}=  add_date  1
+    ${Add_DAY1}=  db.add_timezone_date  ${tz}  1  
     Set Suite Variable  ${Add_DAY1}
     ${Add_DAY1_format} =	Convert Date	${Add_DAY1}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY1_format}
@@ -1619,7 +1608,7 @@ JD-TC-Token_Report-6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v1}  ${wid[0]}
 
-    ${Add_DAY5}=  add_date  5
+    ${Add_DAY5}=  db.add_timezone_date  ${tz}  5  
     Set Suite Variable  ${Add_DAY5}
     ${Add_DAY5_format} =	Convert Date	${Add_DAY5}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY5_format}
@@ -1631,7 +1620,7 @@ JD-TC-Token_Report-6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v5}  ${wid[0]}
 
-    ${Add_DAY8}=  add_date  8
+    ${Add_DAY8}=  db.add_timezone_date  ${tz}  8  
     Set Suite Variable  ${Add_DAY8}
     ${Add_DAY8_format} =	Convert Date	${Add_DAY8}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY8_format}
@@ -1643,7 +1632,7 @@ JD-TC-Token_Report-6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v8}  ${wid[0]}
 
-    ${Add_DAY10}=  add_date  10
+    ${Add_DAY10}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${Add_DAY10}
     ${Add_DAY10_format} =	Convert Date	${Add_DAY10}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY10_format}
@@ -1655,7 +1644,7 @@ JD-TC-Token_Report-6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v10}  ${wid[0]}
   
-    ${Add_DAY15}=  add_date  15
+    ${Add_DAY15}=  db.add_timezone_date  ${tz}  15  
     Set Suite Variable  ${Add_DAY15}
     ${Add_DAY15_format} =	Convert Date	${Add_DAY15}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY15_format}
@@ -1667,7 +1656,7 @@ JD-TC-Token_Report-6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v15}  ${wid[0]}
 
-    ${Add_DAY20}=  add_date  20
+    ${Add_DAY20}=  db.add_timezone_date  ${tz}  20
     Set Suite Variable  ${Add_DAY20}
     ${Add_DAY20_format} =	Convert Date	${Add_DAY20}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY20_format}
@@ -1679,7 +1668,7 @@ JD-TC-Token_Report-6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v20}  ${wid[0]}
     
-    ${Add_DAY24}=  add_date  24
+    ${Add_DAY24}=  db.add_timezone_date  ${tz}  24
     Set Suite Variable  ${Add_DAY24}
     ${Add_DAY24_format} =	Convert Date	${Add_DAY24}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY24_format}
@@ -1691,7 +1680,7 @@ JD-TC-Token_Report-6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v24}  ${wid[0]}
 
-    ${Add_DAY28}=  add_date  28
+    ${Add_DAY28}=  db.add_timezone_date  ${tz}  28
     Set Suite Variable  ${Add_DAY28}
     ${Add_DAY28_format} =	Convert Date	${Add_DAY28}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY28_format}
@@ -1703,7 +1692,7 @@ JD-TC-Token_Report-6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v28}  ${wid[0]}
    
-    ${Add_DAY30}=  add_date  30
+    ${Add_DAY30}=  db.add_timezone_date  ${tz}  30
     Set Suite Variable  ${Add_DAY30}
     ${Add_DAY30_format} =	Convert Date	${Add_DAY30}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY30_format}
@@ -1715,7 +1704,7 @@ JD-TC-Token_Report-6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v30}  ${wid[0]}
 
-    ${Add_DAY31}=  add_date  31
+    ${Add_DAY31}=  db.add_timezone_date  ${tz}  31
     Set Suite Variable  ${Add_DAY31}
     ${Add_DAY31_format} =	Convert Date	${Add_DAY31}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY31_format}
@@ -1727,7 +1716,7 @@ JD-TC-Token_Report-6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v31}  ${wid[0]}
     
-    ${Add_DAY35}=  add_date  35
+    ${Add_DAY35}=  db.add_timezone_date  ${tz}  35
     Set Suite Variable  ${Add_DAY35}
     ${Add_DAY35_format} =	Convert Date	${Add_DAY35}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY35_format}
@@ -1739,7 +1728,7 @@ JD-TC-Token_Report-6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v35}  ${wid[0]}
 
-    ${TODAY}=  get_date
+    ${TODAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${TODAY}
     ${TODAY_format} =	Convert Date	${TODAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${TODAY_format}
@@ -1752,7 +1741,7 @@ JD-TC-Token_Report-6
     Set Test Variable  ${cwid_v0}  ${wid[0]}
     
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist By Id  ${cwid_v1} 
@@ -1762,7 +1751,7 @@ JD-TC-Token_Report-6
 
     change_system_date   31
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     Set Test Variable  ${status-eq}               SUCCESS
@@ -1871,7 +1860,7 @@ JD-TC-Token_Report-6
 
 JD-TC-Token_Report-7
     [Documentation]  Generate NEXT_THIRTY_DAYS report of a provider for both online and walk-in checkin after changing waitlistMgr settings from TOKEN to CHECK-IN
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1879,6 +1868,8 @@ JD-TC-Token_Report-7
     Should Be Equal As Strings  ${resp.status_code}  200
    
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  calculationMode=${calc_mode[1]}  trnArndTime=${duration}  futureDateWaitlist=${bool[1]}  showTokenId=${bool[0]}  onlineCheckIns=${bool[1]}  maxPartySize=1
     
     sleep  02s
@@ -1887,7 +1878,7 @@ JD-TC-Token_Report-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${Add_DAY3}=  add_date  3
+    ${Add_DAY3}=  db.add_timezone_date  ${tz}  3  
     Set Suite Variable  ${Add_DAY3}
     ${Add_DAY3_format} =	Convert Date	${Add_DAY3}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY3_format}
@@ -1903,7 +1894,7 @@ JD-TC-Token_Report-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${Add_DAY6}=  add_date  6
+    ${Add_DAY6}=  db.add_timezone_date  ${tz}  6  
     Set Suite Variable  ${Add_DAY6}
     ${Add_DAY6_format} =	Convert Date	${Add_DAY6}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY6_format}
@@ -1917,7 +1908,7 @@ JD-TC-Token_Report-7
 
     change_system_date   31
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2145,13 +2136,15 @@ JD-TC-Token_Report-7
     Should Be Equal As Strings  ${resp.status_code}  200
    
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  calculationMode=${calc_mode[1]}  trnArndTime=${duration}  futureDateWaitlist=${bool[1]}  showTokenId=${bool[1]}  onlineCheckIns=${bool[1]}  maxPartySize=1
     resetsystem_time
 
 
 JD-TC-Token_Report-8
     [Documentation]  Generate report of a provider after disable Queue
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2166,7 +2159,7 @@ JD-TC-Token_Report-8
     Set Suite Variable   ${Total}   ${Total1}
     ${amt_float}=  twodigitfloat  ${Total}
     Set Suite Variable  ${amt_float}  ${amt_float}  
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
 
     ${resp}=  Create Service  ${P1SERVICE3}  ${desc}   ${service_duration[1]}  ${status[0]}    ${btype}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[0]}  ${bool[0]}
@@ -2197,11 +2190,11 @@ JD-TC-Token_Report-8
     Log  ${resp.json()}
     Verify Response  ${resp}  name=${V1SERVICE3}  description=${description}  serviceDuration=5   notification=${bool[1]}   notificationType=${notifytype[2]}   totalAmount=${Total1}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}  serviceType=virtualService   virtualServiceType=${vstype}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY_format} =	Convert Date	${DAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${DAY_format}
-    ${sTime1}=  add_time  0  00
-    ${eTime1}=  add_time   1  45
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  45  
     ${p1queue3}=    FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
     ${resp}=  Create Queue  ${p1queue3}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1   10  ${p1_l1}  ${p1_s3}  ${v1_s3}
@@ -2224,7 +2217,6 @@ JD-TC-Token_Report-8
     ${resp}=  Add To Waitlist  ${cid35}  ${p1_s3}  ${p1_q3}  ${DAY}  ${desc}  ${bool[1]}  ${cid35} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid_p13}  ${wid[0]}
 
@@ -2234,7 +2226,6 @@ JD-TC-Token_Report-8
     ${resp}=  Provider Add To WL With Virtual Service  ${cid35}  ${v1_s3}  ${p1_q3}  ${DAY}  ${desc}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService2}   ${cid35}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid_v13}  ${wid[0]}
 
@@ -2251,13 +2242,13 @@ JD-TC-Token_Report-8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${LAST_WEEK8_DAY1}=  subtract_date  3
+    ${LAST_WEEK8_DAY1}=  db.subtract_timezone_date  ${tz}   3
     Set Suite Variable  ${LAST_WEEK8_DAY1} 
-    ${LAST_WEEK8_DAY7}=  add_date  3
+    ${LAST_WEEK8_DAY7}=  db.add_timezone_date  ${tz}  3  
     Set Suite Variable  ${LAST_WEEK8_DAY7}
     change_system_date   4
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2330,7 +2321,7 @@ JD-TC-Token_Report-8
 
 JD-TC-Token_Report-9
     [Documentation]  Generate TOKEN report of a provider using provider_Own_ConsumerId and QUEUE_id
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2339,7 +2330,7 @@ JD-TC-Token_Report-9
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pcid38}=  get_id  ${CUSERNAME38}
 
-    ${Add_DAY1}=  add_date  1
+    ${Add_DAY1}=  db.add_timezone_date  ${tz}  1  
     Set Suite Variable  ${Add_DAY1}
     ${Add_DAY1_format} =	Convert Date	${Add_DAY1}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY1_format}
@@ -2351,7 +2342,7 @@ JD-TC-Token_Report-9
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p1}  ${wid[0]}
 
-    ${Add_DAY4}=  add_date  4
+    ${Add_DAY4}=  db.add_timezone_date  ${tz}  4  
     Set Suite Variable  ${Add_DAY4}
     ${Add_DAY4_format} =	Convert Date	${Add_DAY4}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY4_format}
@@ -2362,7 +2353,7 @@ JD-TC-Token_Report-9
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p4}  ${wid[0]}
 
-    ${Add_DAY7}=  add_date  7
+    ${Add_DAY7}=  db.add_timezone_date  ${tz}  7  
     Set Suite Variable  ${Add_DAY7}
     ${Add_DAY7_format} =	Convert Date	${Add_DAY7}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY7_format}
@@ -2373,7 +2364,7 @@ JD-TC-Token_Report-9
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p7}  ${wid[0]}
 
-    ${Add_DAY10}=  add_date  10
+    ${Add_DAY10}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${Add_DAY10}
     ${Add_DAY10_format} =	Convert Date	${Add_DAY10}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY10_format}
@@ -2384,7 +2375,7 @@ JD-TC-Token_Report-9
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p10}  ${wid[0]}
   
-    ${Add_DAY14}=  add_date  14
+    ${Add_DAY14}=  db.add_timezone_date  ${tz}  14
     Set Suite Variable  ${Add_DAY14}
     ${Add_DAY14_format} =	Convert Date	${Add_DAY14}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY14_format}
@@ -2395,7 +2386,7 @@ JD-TC-Token_Report-9
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p14}  ${wid[0]}
 
-    ${Add_DAY19}=  add_date  19
+    ${Add_DAY19}=  db.add_timezone_date  ${tz}  19
     Set Suite Variable  ${Add_DAY19}
     ${Add_DAY19_format} =	Convert Date	${Add_DAY19}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY19_format}
@@ -2406,7 +2397,7 @@ JD-TC-Token_Report-9
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p19}  ${wid[0]}
     
-    ${Add_DAY23}=  add_date  23
+    ${Add_DAY23}=  db.add_timezone_date  ${tz}  23
     Set Suite Variable  ${Add_DAY23}
     ${Add_DAY23_format} =	Convert Date	${Add_DAY23}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY23_format}
@@ -2417,7 +2408,7 @@ JD-TC-Token_Report-9
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p23}  ${wid[0]}
 
-    ${Add_DAY27}=  add_date  27
+    ${Add_DAY27}=  db.add_timezone_date  ${tz}  27
     Set Suite Variable  ${Add_DAY27}
     ${Add_DAY27_format} =	Convert Date	${Add_DAY27}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY27_format}
@@ -2428,7 +2419,7 @@ JD-TC-Token_Report-9
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p27}  ${wid[0]}
    
-    ${Add_DAY30}=  add_date  30
+    ${Add_DAY30}=  db.add_timezone_date  ${tz}  30
     Set Suite Variable  ${Add_DAY30}
     ${Add_DAY30_format} =	Convert Date	${Add_DAY30}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY30_format}
@@ -2439,7 +2430,7 @@ JD-TC-Token_Report-9
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p30}  ${wid[0]}
 
-    ${Add_DAY31}=  add_date  31
+    ${Add_DAY31}=  db.add_timezone_date  ${tz}  31
     Set Suite Variable  ${Add_DAY31}
     ${Add_DAY31_format} =	Convert Date	${Add_DAY31}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY31_format}
@@ -2450,7 +2441,7 @@ JD-TC-Token_Report-9
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p31}  ${wid[0]}
     
-    ${Add_DAY36}=  add_date  36
+    ${Add_DAY36}=  db.add_timezone_date  ${tz}  36
     Set Suite Variable  ${Add_DAY36}
     ${Add_DAY36_format} =	Convert Date	${Add_DAY36}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY36_format}
@@ -2461,7 +2452,7 @@ JD-TC-Token_Report-9
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_p36}  ${wid[0]}
 
-    ${TODAY}=  get_date
+    ${TODAY}=  db.get_date_by_timezone  ${tz}
     ${TODAY_format} =	Convert Date	${TODAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${TODAY_format}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${TODAY}  ${p1_s1}  ${msg}  ${bool[0]}  ${self}
@@ -2472,7 +2463,7 @@ JD-TC-Token_Report-9
     Set Test Variable  ${cwid_p0}  ${wid[0]}
     
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist By Id  ${cwid_p1} 
@@ -2481,7 +2472,7 @@ JD-TC-Token_Report-9
     Set Suite Variable  ${jid_c38}   ${resp.json()['waitlistingFor'][0]['memberJaldeeId']}
 
     change_system_date   31
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     Set Test Variable  ${status-eq}               SUCCESS
@@ -2634,7 +2625,7 @@ JD-TC-Token_Report-10
 
     change_system_date   31
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2789,7 +2780,7 @@ JD-TC-Token_Report-10
 
 JD-TC-Token_Report-11
     [Documentation]  Generate NEXT_THIRTY_DAYS report of a provider for both online and walk-in checkin For any VIRTUAL SERVICE
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2798,7 +2789,7 @@ JD-TC-Token_Report-11
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pcid39}=  get_id  ${CUSERNAME39}
 
-    ${Add_DAY1}=  add_date  1
+    ${Add_DAY1}=  db.add_timezone_date  ${tz}  1  
     Set Suite Variable  ${Add_DAY1}
     ${Add_DAY1_format} =	Convert Date	${Add_DAY1}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY1_format}
@@ -2810,7 +2801,7 @@ JD-TC-Token_Report-11
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v1}  ${wid[0]}
 
-    ${Add_DAY5}=  add_date  5
+    ${Add_DAY5}=  db.add_timezone_date  ${tz}  5  
     Set Suite Variable  ${Add_DAY5}
     ${Add_DAY5_format} =	Convert Date	${Add_DAY5}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY5_format}
@@ -2822,7 +2813,7 @@ JD-TC-Token_Report-11
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v5}  ${wid[0]}
 
-    ${Add_DAY8}=  add_date  8
+    ${Add_DAY8}=  db.add_timezone_date  ${tz}  8  
     Set Suite Variable  ${Add_DAY8}
     ${Add_DAY8_format} =	Convert Date	${Add_DAY8}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY8_format}
@@ -2834,7 +2825,7 @@ JD-TC-Token_Report-11
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v8}  ${wid[0]}
 
-    ${Add_DAY10}=  add_date  10
+    ${Add_DAY10}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${Add_DAY10}
     ${Add_DAY10_format} =	Convert Date	${Add_DAY10}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY10_format}
@@ -2846,7 +2837,7 @@ JD-TC-Token_Report-11
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v10}  ${wid[0]}
   
-    ${Add_DAY15}=  add_date  15
+    ${Add_DAY15}=  db.add_timezone_date  ${tz}  15  
     Set Suite Variable  ${Add_DAY15}
     ${Add_DAY15_format} =	Convert Date	${Add_DAY15}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY15_format}
@@ -2858,7 +2849,7 @@ JD-TC-Token_Report-11
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v15}  ${wid[0]}
 
-    ${Add_DAY20}=  add_date  20
+    ${Add_DAY20}=  db.add_timezone_date  ${tz}  20
     Set Suite Variable  ${Add_DAY20}
     ${Add_DAY20_format} =	Convert Date	${Add_DAY20}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY20_format}
@@ -2870,7 +2861,7 @@ JD-TC-Token_Report-11
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v20}  ${wid[0]}
     
-    ${Add_DAY24}=  add_date  24
+    ${Add_DAY24}=  db.add_timezone_date  ${tz}  24
     Set Suite Variable  ${Add_DAY24}
     ${Add_DAY24_format} =	Convert Date	${Add_DAY24}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY24_format}
@@ -2882,7 +2873,7 @@ JD-TC-Token_Report-11
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v24}  ${wid[0]}
 
-    ${Add_DAY28}=  add_date  28
+    ${Add_DAY28}=  db.add_timezone_date  ${tz}  28
     Set Suite Variable  ${Add_DAY28}
     ${Add_DAY28_format} =	Convert Date	${Add_DAY28}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY28_format}
@@ -2894,7 +2885,7 @@ JD-TC-Token_Report-11
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v28}  ${wid[0]}
    
-    ${Add_DAY30}=  add_date  30
+    ${Add_DAY30}=  db.add_timezone_date  ${tz}  30
     Set Suite Variable  ${Add_DAY30}
     ${Add_DAY30_format} =	Convert Date	${Add_DAY30}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY30_format}
@@ -2906,7 +2897,7 @@ JD-TC-Token_Report-11
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v30}  ${wid[0]}
 
-    ${Add_DAY31}=  add_date  31
+    ${Add_DAY31}=  db.add_timezone_date  ${tz}  31
     Set Suite Variable  ${Add_DAY31}
     ${Add_DAY31_format} =	Convert Date	${Add_DAY31}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY31_format}
@@ -2918,7 +2909,7 @@ JD-TC-Token_Report-11
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v31}  ${wid[0]}
     
-    ${Add_DAY35}=  add_date  35
+    ${Add_DAY35}=  db.add_timezone_date  ${tz}  35
     Set Suite Variable  ${Add_DAY35}
     ${Add_DAY35_format} =	Convert Date	${Add_DAY35}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_DAY35_format}
@@ -2930,7 +2921,7 @@ JD-TC-Token_Report-11
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid_v35}  ${wid[0]}
 
-    ${TODAY}=  get_date
+    ${TODAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${TODAY}
     ${TODAY_format} =	Convert Date	${TODAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${TODAY_format}
@@ -2944,7 +2935,7 @@ JD-TC-Token_Report-11
     
     
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Waitlist By Id  ${cwid_v1} 
@@ -2954,7 +2945,7 @@ JD-TC-Token_Report-11
 
     change_system_date   31
 
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     Set Test Variable  ${status-eq}               SUCCESS
@@ -3065,7 +3056,7 @@ JD-TC-Token_Report-11
 JD-TC-Token_Report-13
     
     [Documentation]  Token report before completing prepayment of a Physical service
-        ${resp}=  Provider Login  ${MUSERNAME28}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
@@ -3171,16 +3162,16 @@ JD-TC-Token_Report-13
         Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
         Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
     
-        ${DAY1}=  get_date
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${DAY1}
-        ${DAY2}=  add_date  10      
+        ${DAY2}=  db.add_timezone_date  ${tz}  10        
         Set Suite Variable  ${DAY2}
         ${list}=  Create List  1  2  3  4  5  6  7
 
         Set Suite Variable  ${list}
-        ${sTime1}=  add_time   0  15
+        ${sTime1}=  add_timezone_time  ${tz}  0  15  
         Set Suite Variable   ${sTime1}
-        ${eTime1}=  add_time   2  00
+        ${eTime1}=  add_timezone_time  ${tz}  2  00  
         Set Suite Variable   ${eTime1}
         ${lid}=  Create Sample Location
         Set Suite Variable  ${lid}
@@ -3229,12 +3220,11 @@ JD-TC-Token_Report-13
 
     
         ${msg}=  FakerLibrary.word
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
         ${resp}=  Add To Waitlist Consumer For User  ${pid_B28}  ${que_id28}  ${CUR_DAY}  ${s_id}  ${msg}  ${bool[0]}  ${p1_id}  0
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid_C17}  ${wid[0]} 
 
@@ -3244,7 +3234,7 @@ JD-TC-Token_Report-13
         Verify Response  ${resp}  paymentStatus=${paymentStatus[0]}   waitlistStatus=${wl_status[3]}
         Set Suite Variable  ${jid_c27}  ${resp.json()['waitlistingFor'][0]['memberJaldeeId']}
     
-        ${resp}=  Provider Login  ${MUSERNAME28}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3270,14 +3260,14 @@ JD-TC-Token_Report-13
         Should Be Equal As Strings  ${CUR_DAY}               ${resp.json()['reportContent']['date']}
         Should Be Equal As Strings  ${EMPTY_List}               ${resp.json()['reportContent']['data']}  # Data
         
-        ${LAST_WEEK13_DAY1}=  subtract_date  2
+        ${LAST_WEEK13_DAY1}=  db.subtract_timezone_date  ${tz}   2
         Set Suite Variable  ${LAST_WEEK13_DAY1} 
-        ${LAST_WEEK13_DAY7}=  add_date  4
+        ${LAST_WEEK13_DAY7}=  db.add_timezone_date  ${tz}  4  
         Set Suite Variable  ${LAST_WEEK13_DAY7}
 
         change_system_date   5
 
-        ${resp}=  Provider Login  ${MUSERNAME28}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3337,7 +3327,7 @@ JD-TC-Verify-1-Token_Report-13
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  uuid=${cwid_C17}  netTotal=${totalamt}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  netRate=${totalamt}  billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${pre_float1}  amountDue=${balamount}
 
-        ${resp}=  Provider Login  ${MUSERNAME28}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3367,7 +3357,7 @@ JD-TC-Verify-1-Token_Report-13
         Set Suite Variable  ${conf_id19-2}     ${resp.json()['reportContent']['data'][0]['7']}  # ConfirmationId
     
         change_system_date   5
-        ${resp}=  Provider Login  ${MUSERNAME28}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3415,7 +3405,7 @@ JD-TC-Verify-2-Token_Report-13
         Should Be Equal As Strings  ${resp.status_code}  200
         sleep   02s
       
-        ${resp}=  Provider Login  ${MUSERNAME28}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3443,7 +3433,7 @@ JD-TC-Verify-2-Token_Report-13
         Set Suite Variable  ${conf_id19-3}     ${resp.json()['reportContent']['data'][0]['7']}  # ConfirmationId
     
         change_system_date   5
-        ${resp}=  Provider Login  ${MUSERNAME28}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3478,7 +3468,7 @@ JD-TC-Verify-2-Token_Report-13
 JD-TC-Token_Report-14
         [Documentation]  Token report before completing prepayment of a Virtual service
         
-        ${resp}=  Provider Login  ${MUSERNAME5}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
@@ -3653,16 +3643,17 @@ JD-TC-Token_Report-14
         Verify Response  ${resp}  name=${SERVICE4}  description=${description}  serviceDuration=5   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre1_V1}  totalAmount=${totalamt_V1}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}  serviceType=virtualService   virtualServiceType=${vstype}
         
 
-        ${DAY1}=  get_date
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${DAY1}
-        ${DAY2}=  add_date  10      
+        ${DAY2}=  db.add_timezone_date  ${tz}  10        
         Set Suite Variable  ${DAY2}
         ${list}=  Create List  1  2  3  4  5  6  7
 
         Set Suite Variable  ${list}
-        ${sTime1}=  db.get_time
+      # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
         Set Suite Variable   ${sTime1}
-        ${eTime1}=  add_time   2  00
+        ${eTime1}=  add_timezone_time  ${tz}  2  00  
         Set Suite Variable   ${eTime1}
         ${lid}=  Create Sample Location
         Set Suite Variable  ${lid}
@@ -3710,7 +3701,7 @@ JD-TC-Token_Report-14
         ${virtualService}=  Create Dictionary  ${CallingModes[0]}=${ZOOM_id}
     
         ${msg}=  FakerLibrary.word
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable   ${CUR_DAY}
         ${resp}=  Consumer Add To WL With Virtual Service For User  ${pid_B5}  ${que_id32}  ${CUR_DAY}  ${VS_id1}  ${msg}  ${bool[0]}  ${virtualService}   ${p1_id32}  0
         Log  ${resp.json()}
@@ -3733,7 +3724,7 @@ JD-TC-Token_Report-14
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  paymentStatus=${paymentStatus[0]}   waitlistStatus=${wl_status[3]}
 
-        ${resp}=  Provider Login  ${MUSERNAME5}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3761,14 +3752,14 @@ JD-TC-Token_Report-14
         Should Be Equal As Strings  ${CUR_DAY}               ${resp.json()['reportContent']['date']}
         Should Be Equal As Strings  ${EMPTY_List}               ${resp.json()['reportContent']['data']}  # Data
         
-        ${LAST_WEEK14_DAY1}=  subtract_date  1
+        ${LAST_WEEK14_DAY1}=  db.subtract_timezone_date  ${tz}   1
         Set Suite Variable  ${LAST_WEEK14_DAY1} 
-        ${LAST_WEEK14_DAY7}=  add_date  5
+        ${LAST_WEEK14_DAY7}=  db.add_timezone_date  ${tz}  5  
         Set Suite Variable  ${LAST_WEEK14_DAY7}
 
         change_system_date   6
 
-        ${resp}=  Provider Login  ${MUSERNAME5}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3833,7 +3824,7 @@ JD-TC-Verify-1-Token_Report-14
         Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}     waitlistStatus=${wl_status[0]}
 
 
-        ${resp}=  Provider Login  ${MUSERNAME5}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3862,7 +3853,7 @@ JD-TC-Verify-1-Token_Report-14
         Set Suite Variable  ${conf_id20-2}     ${resp.json()['reportContent']['data'][0]['7']}  # ConfirmationId
     
         change_system_date   6
-        ${resp}=  Provider Login  ${MUSERNAME5}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3895,7 +3886,7 @@ JD-TC-Verify-1-Token_Report-14
 
 JD-TC-Verify-2-Token_Report-14
         [Documentation]  Token report When cancel waitlist after completing prepayment of a virtual service 
-        ${resp}=  Provider Login  ${MUSERNAME5}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -3935,7 +3926,7 @@ JD-TC-Verify-2-Token_Report-14
         Set Suite Variable  ${conf_id20-3}     ${resp.json()['reportContent']['data'][0]['7']}  # ConfirmationId
         
         change_system_date   1
-        ${resp}=  Provider Login  ${MUSERNAME5}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         

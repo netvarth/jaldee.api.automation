@@ -18,7 +18,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-DisableGroup-1
     [Documentation]  Disable an Enabled group.
 
-    ${resp}=  Provider Login  ${PUSERNAME96}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME96}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -52,7 +52,7 @@ JD-TC-DisableGroup-1
 JD-TC-DisableGroup-UH1
     [Documentation]  Disable an already Disabled group.
 
-    ${resp}=  Provider Login  ${PUSERNAME96}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME96}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -91,7 +91,7 @@ JD-TC-DisableGroup-UH1
 JD-TC-DisableGroup-UH2
     [Documentation]  Disable a group without login
 
-    ${resp}=  Provider Login  ${PUSERNAME96}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME96}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -123,7 +123,7 @@ JD-TC-DisableGroup-UH2
 JD-TC-DisableGroup-UH3
     [Documentation]  Disable a group by consumer login
 
-    ${resp}=  Provider Login  ${PUSERNAME96}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME96}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -156,7 +156,7 @@ JD-TC-DisableGroup-UH3
 JD-TC-DisableGroup-UH4
     [Documentation]  Disable an non existant group
 
-    ${resp}=  Provider Login  ${PUSERNAME96}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME96}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -170,7 +170,7 @@ JD-TC-DisableGroup-UH4
 JD-TC-DisableGroup-UH5
     [Documentation]  Disable another provider's group
 
-    ${resp}=  Provider Login  ${PUSERNAME96}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME96}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -190,7 +190,7 @@ JD-TC-DisableGroup-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME94}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME94}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

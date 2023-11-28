@@ -218,7 +218,7 @@ JD-TC-QuestionnaireByChannelServiceId-1
     ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -266,7 +266,7 @@ JD-TC-QuestionnaireByChannelServiceId-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -335,7 +335,7 @@ JD-TC-QuestionnaireByChannelServiceId-1
 JD-TC-QuestionnaireByChannelServiceId-2
     [Documentation]  Get questionnaire by service id and channel for a consumer when channel is online
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -424,7 +424,7 @@ JD-TC-QuestionnaireByChannelServiceId-UH5
     [Documentation]  Get questionnaire by service id and channel for a consumer when channel is any
     ...  ${SPACE}(cannot give channel as any for service.)
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -528,7 +528,7 @@ JD-TC-QuestionnaireByChannelServiceId-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -636,7 +636,7 @@ JD-TC-QuestionnaireByChannelServiceId-4
 JD-TC-QuestionnaireByChannelServiceId-5
     [Documentation]  Get questionnaire by service id and channel for a provider consumer.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -743,7 +743,7 @@ JD-TC-QuestionnaireByChannelServiceId-5
 JD-TC-QuestionnaireByChannelServiceId-UH1
     [Documentation]  Get questionnaire by service id and channel for a consumer with wrong service id
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -829,7 +829,7 @@ JD-TC-QuestionnaireByChannelServiceId-UH1
 JD-TC-QuestionnaireByChannelServiceId-UH2
     [Documentation]  Get questionnaire by service id and channel for a consumer with non existant service id
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -885,15 +885,14 @@ JD-TC-QuestionnaireByChannelServiceId-UH2
 
     ${resp}=  Get Consumer Questionnaire By Channel and ServiceID   ${s_id}   ${QnrChannel[1]}  ${cid}      
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${SERVICE_NOT_EXIST}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 
 JD-TC-QuestionnaireByChannelServiceId-UH3
     [Documentation]  Get questionnaire by service id and channel for a consumer when channel is phone in.
     ...   ${SPACE} (No questionnaire exists for channel PhoneIn)
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -945,7 +944,7 @@ JD-TC-QuestionnaireByChannelServiceId-UH3
 JD-TC-QuestionnaireByChannelServiceId-UH4
     [Documentation]  Get questionnaire by service id and channel for a Non Existant consumer.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -29,7 +29,7 @@ ${SERVICE1}   SERVICE1
 JD-TC-Delete Service Image-1
 
     [Documentation]  Provider check to  Delete Service Image
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Random Int   min=10   max=50
@@ -149,7 +149,7 @@ JD-TC-Delete Service Image-UH4
 
 *** Keywords ***
 wlsettings
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 	${resp}=  View Waitlist Settings
 	Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable  

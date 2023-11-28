@@ -79,7 +79,7 @@ Account with Multiple Users in NBFC
     ${licid}  ${licname}=  get_highest_license_pkg
     
     FOR   ${a}  IN RANGE   ${length}   
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Test Variable  ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
         Set Test Variable  ${Dom}   ${resp.json()['sector']}
@@ -111,7 +111,7 @@ JD-TC-UpdateFileToTemparyLocation-1
     Log  ${NBFCMUSERNAME2}
     Set Suite Variable  ${NBFCMUSERNAME2}
     
-    ${resp}=  Provider Login  ${NBFCMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${NBFCMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -766,7 +766,7 @@ JD-TC-UpdateFileToTemparyLocation-1
 
 # .....Create Dealer By Sales Officer.......
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -883,7 +883,7 @@ JD-TC-UpdateFileToTemparyLocation-UH1
                                   
     [Documentation]               Update File to Tempary Location where loan action is empty
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -896,7 +896,7 @@ JD-TC-UpdateFileToTemparyLocation-UH2
                                   
     [Documentation]               Update File to Tempary Location with invalid partner id
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -911,7 +911,7 @@ JD-TC-UpdateFileToTemparyLocation-UH3
                                   
     [Documentation]               Update File to Tempary Location with empty partner id
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -924,7 +924,7 @@ JD-TC-UpdateFileToTemparyLocation-UH4
                                   
     [Documentation]               Update File to Tempary Location where file action is remove
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -936,7 +936,7 @@ JD-TC-UpdateFileToTemparyLocation-UH5
                                   
     [Documentation]               Update File to Tempary Location where owner type is provider consmer
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -949,7 +949,7 @@ JD-TC-UpdateFileToTemparyLocation-UH6
                                   
     [Documentation]               Update File to Tempary Location where owner type is empty
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -962,7 +962,7 @@ JD-TC-UpdateFileToTemparyLocation-UH7
                                   
     [Documentation]               Update File to Tempary Location where dealer name is empty
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -975,7 +975,7 @@ JD-TC-UpdateFileToTemparyLocation-UH8
                                   
     [Documentation]               Update File to Tempary Location where file name is empty
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -989,7 +989,7 @@ JD-TC-UpdateFileToTemparyLocation-UH9
                                   
     [Documentation]               Update File to Tempary Location where file size is empty
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1003,7 +1003,7 @@ JD-TC-UpdateFileToTemparyLocation-UH10
                                   
     [Documentation]               Update File to Tempary Location where caption is empty
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1016,7 +1016,7 @@ JD-TC-UpdateFileToTemparyLocation-UH11
                                   
     [Documentation]               Update File to Tempary Location where file type is empty
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1030,7 +1030,7 @@ JD-TC-UpdateFileToTemparyLocation-UH12
                                   
     [Documentation]               Update File to Tempary Location where partner uid is empty
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1043,7 +1043,7 @@ JD-TC-UpdateFileToTemparyLocation-UH13
                                   
     [Documentation]               Update File to Tempary Location where partner uid is invalid
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1058,7 +1058,7 @@ JD-TC-UpdateFileToTemparyLocation-UH14
                                   
     [Documentation]               Update File to Tempary Location where order is empty
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

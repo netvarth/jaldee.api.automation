@@ -28,15 +28,19 @@ JD-TC-Create_Instant_Schedule-1
 
 
     clear_queue      ${PUSERNAME153}
-    clear_location   ${PUSERNAME153}
+    # clear_location   ${PUSERNAME153}
     clear_service    ${PUSERNAME153}
     clear_customer   ${PUSERNAME153}
 
-    ${resp}=  Provider Login  ${PUSERNAME153}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME153}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-    Set Suite Variable    ${user_name}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_name}    ${resp.json()['userName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -50,12 +54,18 @@ JD-TC-Create_Instant_Schedule-1
     ${resp}=   Create Sample Service  ${ser_name}
     Set Suite Variable    ${s_id}    ${resp} 
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  7
     ${list2}=  Create List  
     Set Suite Variable  ${list2}  
-    ${sTime1}=  add_time  0  3
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  3
     Set Suite Variable    ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -81,11 +91,11 @@ JD-TC-Create_Instant_Schedule-UH1
 
     [Documentation]  Create Instant Schedule where schedule name is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME181}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${sTime2}=  add_time  3  5
+    # ${sTime2}=  db.add_timezone_time  ${tz}  3  5
     # ${delta}=  FakerLibrary.Random Int  min=10  max=60
     # ${eTime2}=  add_two   ${sTime2}  ${delta}
 
@@ -99,11 +109,11 @@ JD-TC-Create_Instant_Schedule-UH3
 
     [Documentation]  Create Instant Schedule where list is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME182}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME182}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime4}=  add_time  7  10
+    ${sTime4}=  db.add_timezone_time  ${tz}  7  10
     Set Suite Variable    ${sTime4}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
@@ -121,11 +131,11 @@ JD-TC-Create_Instant_Schedule-UH4
 
     [Documentation]  Create Instant Schedule where start date is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME183}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime4}=  add_time  7  10
+    ${sTime4}=  db.add_timezone_time  ${tz}  7  10
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
@@ -140,15 +150,15 @@ JD-TC-Create_Instant_Schedule-UH5
 
     [Documentation]  Create Instant Schedule where start date is past date
 
-    ${resp}=  Provider Login  ${PUSERNAME184}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME184}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime4}=  add_time  7  10
+    ${sTime4}=  db.add_timezone_time  ${tz}  7  10
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
-    ${DAY11}=  add_date  -10 
+    ${DAY11}=  db.add_timezone_date  ${tz}  -10 
     ${schedule_name}=  FakerLibrary.bs
 
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY11}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}
@@ -161,11 +171,11 @@ JD-TC-Create_Instant_Schedule-UH6
 
     [Documentation]  Create Instant Schedule where end date is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime4}=  add_time  7  10
+    ${sTime4}=  db.add_timezone_time  ${tz}  7  10
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
@@ -180,15 +190,15 @@ JD-TC-Create_Instant_Schedule-UH7
 
     [Documentation]  Create Instant Schedule where end date is past date
 
-    ${resp}=  Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime4}=  add_time  7  10
+    ${sTime4}=  db.add_timezone_time  ${tz}  7  10
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
-    ${DAY22}=  add_date  -10 
+    ${DAY22}=  db.add_timezone_date  ${tz}  -10 
     ${schedule_name}=  FakerLibrary.bs
 
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY1}  ${DAY22}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[0]}  ${user_id}
@@ -200,11 +210,11 @@ JD-TC-Create_Instant_Schedule-UH8
 
     [Documentation]  Create Instant Schedule where start time is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME153}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME153}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime4}=  add_time  7  10
+    ${sTime4}=  db.add_timezone_time  ${tz}  7  10
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
@@ -219,15 +229,15 @@ JD-TC-Create_Instant_Schedule-UH9
 
     [Documentation]  Create Instant Schedule where end time is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME153}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME153}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime4}=  add_time  7  10
+    ${sTime4}=  db.add_timezone_time  ${tz}  7  10
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
-    ${DAY22}=  add_date  -10 
+    ${DAY22}=  db.add_timezone_date  ${tz}  -10 
     ${schedule_name}=  FakerLibrary.bs
 
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime4}  ${empty}  ${JCstatus[0]}  ${user_id}
@@ -239,16 +249,16 @@ JD-TC-Create_Instant_Schedule-UH10
 
     [Documentation]  Create Instant Schedule where Schedule state is disabled
 
-    ${resp}=  Provider Login  ${PUSERNAME187}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME187}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime4}=  add_time  7  10
+    ${sTime4}=  db.add_timezone_time  ${tz}  7  10
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime4}=  add_two   ${sTime4}  ${delta}
     ${list2}=  Create List  
     Set Suite Variable    ${list2}
-    ${DAY22}=  add_date  -10 
+    ${DAY22}=  db.add_timezone_date  ${tz}  -10 
     ${schedule_name}=  FakerLibrary.bs
 
     ${resp}=  Create Provider Schedule  ${schedule_name}  ${recurringtype[4]}  ${list2}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${JCstatus[1]}  ${user_id}
@@ -259,7 +269,7 @@ JD-TC-Create_Instant_Schedule-UH12
 
     [Documentation]  Create Instant Schedule where provider id is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME187}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME187}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -290,7 +300,7 @@ JD-TC-Create_Instant_Schedule-UH11
 
     [Documentation]  Create Instant Schedule where Schedule state is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME153}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME153}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -306,11 +316,11 @@ JD-TC-Create_Instant_Schedule-UH2
 
     [Documentation]  Create Instant Schedule where recurring type is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME153}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME153}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${sTime3}=  add_time  5  7
+    ${sTime3}=  db.add_timezone_time  ${tz}  5  7
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime3}=  add_two   ${sTime3}  ${delta}
     ${schedule_name}=  FakerLibrary.bs

@@ -59,7 +59,7 @@ JD-TC-Get Partner loan Bank Details-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -68,6 +68,7 @@ JD-TC-Get Partner loan Bank Details-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -325,7 +326,7 @@ JD-TC-Get Partner loan Bank Details-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -334,6 +335,7 @@ JD-TC-Get Partner loan Bank Details-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -554,7 +556,7 @@ JD-TC-Get Partner loan Bank Details-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -563,6 +565,7 @@ JD-TC-Get Partner loan Bank Details-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -809,7 +812,7 @@ JD-TC-Get Partner loan Bank Details-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -818,6 +821,7 @@ JD-TC-Get Partner loan Bank Details-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1040,7 +1044,7 @@ JD-TC-Get Partner loan Bank Details-UH2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1049,6 +1053,7 @@ JD-TC-Get Partner loan Bank Details-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1271,7 +1276,7 @@ JD-TC-Get Partner loan Bank Details-UH3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1280,6 +1285,7 @@ JD-TC-Get Partner loan Bank Details-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1502,7 +1508,7 @@ JD-TC-Get Partner loan Bank Details-UH6
                                   
     [Documentation]               Get Partner loan Bank Details - another provider login
 
-    ${resp}=   ProviderLogin  ${PUSERNAME10}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

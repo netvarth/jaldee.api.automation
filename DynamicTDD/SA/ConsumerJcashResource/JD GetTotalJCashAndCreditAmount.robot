@@ -69,6 +69,7 @@ ${jcash_name8}   JCash81118_offer8
 ${jcash_name9}   JCash81118_offer9
 
 ${CUSERPH}      ${CUSERNAME}
+${tz}   Asia/Kolkata
 
 *** Test Cases ***
 JD-TC-GetTotalJCashAndCreditAmount-1
@@ -116,18 +117,18 @@ JD-TC-GetTotalJCashAndCreditAmount-2
 
     ${EMPTY_List}=  Create List
     Set Suite Variable   ${EMPTY_List}
-    ${start_date}=  get_date 
+    ${start_date}=  db.get_date_by_timezone  ${tz} 
     Set Suite Variable   ${start_date}
-    ${end_date}=  add_date   12  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     Set Suite Variable   ${end_date}
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
     Set Suite Variable   ${minOnlinePaymentAmt}
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     Set Suite Variable   ${maxValidUntil}
     ${validForDays}=  Random Int  min=5   max=10 
     Set Suite Variable   ${validForDays}
-    ${ex_date}=    add_date   ${validForDays} 
+    ${ex_date}=    db.add_timezone_date  ${tz}   ${validForDays} 
     Set Suite Variable   ${ex_date}
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit} 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -331,7 +332,7 @@ JD-TC-GetTotalJCashAndCreditAmount-UH1
 
 JD-TC-GetTotalJCashAndCreditAmount-UH2
     [Documentation]    Get Total JCash And Credit Amount by provider login.
-    ${resp}=  ProviderLogin  ${PUSERNAME99}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     

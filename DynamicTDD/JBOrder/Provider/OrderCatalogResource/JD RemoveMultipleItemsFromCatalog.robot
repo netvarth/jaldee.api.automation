@@ -21,9 +21,19 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 *** Test Cases ***
 JD-TC-Remove_Multiple_Items_From_Catalog-1
     [Documentation]  Create order catalog and Remove Items From Catalog after that
-    clear_Item  ${PUSERNAME56}
-    ${resp}=  ProviderLogin  ${PUSERNAME56}  ${PASSWORD}
+    clear_Item  ${PUSERNAME48}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
     ${displayName1}=   FakerLibrary.name 
     Set Suite Variable  ${displayName1}  
@@ -84,14 +94,14 @@ JD-TC-Remove_Multiple_Items_From_Catalog-1
     Verify Response  ${resp}  displayName=${displayName1}  shortDesc=${shortDesc1}   price=${price2float}   taxable=${bool[0]}   status=${status[0]}    itemName=${itemName2}  itemNameInLocal=${itemNameInLocal1}  isShowOnLandingpage=${bool[1]}   isStockAvailable=${bool[1]}   
     Verify Response  ${resp}  promotionalPriceType=${promotionalPriceType[1]}   promotionalPrice=${promoPrice1float}    promotionalPrcnt=0.0   showPromotionalPrice=${bool[1]}   itemCode=${itemCode2}   promotionLabelType=${promotionLabelType[3]}   promotionLabel=${promoLabel1}   
 
-    ${startDate}=  get_date
+    ${startDate}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${startDate}
-    ${endDate}=  add_date  10      
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${endDate}
     Set Suite Variable  ${noOfOccurance}   0
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
@@ -174,7 +184,7 @@ JD-TC-Remove_Multiple_Items_From_Catalog-1
 
 JD-TC-Remove_Multiple_Items_From_Catalog-2
     [Documentation]  Create order catalog using mandatory fields and Remove Items From Catalog after that
-    ${resp}=  ProviderLogin  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName2}=   FakerLibrary.word 
@@ -202,7 +212,7 @@ JD-TC-Remove_Multiple_Items_From_Catalog-3
 
     [Documentation]  Remove multiple items from catalog
 
-    ${resp}=  ProviderLogin  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${itemName3}=   FakerLibrary.lastname 
@@ -278,7 +288,7 @@ JD-TC-Remove_Multiple_Items_From_Catalog-3
 JD-TC-Remove_Multiple_Items_From_Catalog-4
     [Documentation]  Remove items form catalog, when Catalog status is INACTIVE
    
-    ${resp}=  ProviderLogin  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName3}=   FakerLibrary.name 
@@ -313,7 +323,7 @@ JD-TC-Remove_Multiple_Items_From_Catalog-4
 
 JD-TC-Remove_Multiple_Items_From_Catalog-UH1
     [Documentation]  Remove items from catalog using invalid catalog_id
-    ${resp}=  ProviderLogin  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -327,7 +337,7 @@ JD-TC-Remove_Multiple_Items_From_Catalog-UH1
 
 JD-TC-Remove_Multiple_Items_From_Catalog-UH2
     [Documentation]  Remove items from catalog using invalid item_id
-    ${resp}=  ProviderLogin  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -366,7 +376,7 @@ JD-TC-Remove_Multiple_Items_From_Catalog-UH4
 JD-TC-Remove_Multiple_Items_From_Catalog-UH5
     [Documentation]   A provider try to Remove items from catalog of another provider
     clear_Item  ${PUSERNAME200}
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

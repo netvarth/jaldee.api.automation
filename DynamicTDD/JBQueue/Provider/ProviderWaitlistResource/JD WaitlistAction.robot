@@ -25,7 +25,7 @@ JD-TC-WaitlistAction-1
       clear_service    ${PUSERNAME216}
       clear_customer    ${PUSERNAME216}
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
     
       ${highest_package}=  get_highest_license_pkg
@@ -41,11 +41,12 @@ JD-TC-WaitlistAction-1
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${cons_id}  ${resp.json()}
     
-     ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}
-    
       ${resp}=   Create Sample Location
       Set Suite Variable    ${loc_id1}    ${resp}  
+      ${resp}=   Get Location ById  ${loc_id1}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${ser_name1}=   FakerLibrary.word
       Set Suite Variable    ${ser_name1} 
       ${resp}=   Create Sample Service  ${ser_name1}
@@ -54,24 +55,20 @@ JD-TC-WaitlistAction-1
       Set Suite Variable    ${ser_name2} 
       ${resp}=   Create Sample Service  ${ser_name2}
       Set Suite Variable    ${ser_id2}    ${resp}
-
-
-       ${ser_name3}=   FakerLibrary.word
+      ${ser_name3}=   FakerLibrary.word
       Set Suite Variable    ${ser_name3} 
       ${resp}=   Create Sample Service  ${ser_name3}
       Set Suite Variable    ${ser_id3}    ${resp}  
-     
-
-
-
 
       ${q_name}=    FakerLibrary.name
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7
       Set Suite Variable    ${list}
-      ${strt_time}=   subtract_time  3  00
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
+      Set Suite Variable  ${DAY1}
+      ${strt_time}=   db.subtract_timezone_time   ${tz}  3  00
       Set Suite Variable    ${strt_time}
-      ${end_time}=    add_time       0  30 
+      ${end_time}=    db.add_timezone_time  ${tz}  0  30 
       Set Suite Variable    ${end_time}   
       ${parallel}=   Random Int  min=1   max=2
       Set Suite Variable   ${parallel}
@@ -84,7 +81,6 @@ JD-TC-WaitlistAction-1
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cons_id}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cons_id} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${waitlist_id}
@@ -105,7 +101,7 @@ JD-TC-WaitlistAction-1
 JD-TC-WaitlistAction-2
       [Documentation]   Waitlist Action CHECK_IN after  REPORT
 
-     ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
      
       ${resp}=  Waitlist Action  ${waitlist_actions[3]}   ${waitlist_id}
@@ -118,7 +114,7 @@ JD-TC-WaitlistAction-2
 #JD-TC-WaitlistAction-3
  #     [Documentation]   Waitlist CHECK_IN after  REPORT
 
-  #    ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+  #    ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
    #   Should Be Equal As Strings  ${resp.status_code}  200
     #    ${desc}=   FakerLibrary.word
    
@@ -141,7 +137,7 @@ JD-TC-WaitlistAction-2
 JD-TC-WaitlistAction-4
       [Documentation]   Waitlist Action DONE
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action  ${waitlist_actions[1]}   ${waitlist_id}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -154,12 +150,11 @@ JD-TC-WaitlistAction-4
 JD-TC-WaitlistAction-5
       [Documentation]   Waitlist Action CHECK_IN after STARTED
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cons_id}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cons_id}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id1}  ${wid[0]}
       ${resp}=  Waitlist Action  ${waitlist_actions[1]}   ${waitlist_id1}
@@ -176,7 +171,7 @@ JD-TC-WaitlistAction-5
 JD-TC-WaitlistAction-6
       [Documentation]   Waitlist Action STARTED
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Get Waitlist By Id  ${waitlist_id1}
@@ -194,7 +189,7 @@ JD-TC-WaitlistAction-6
 JD-TC-WaitlistAction-7
       [Documentation]   Waitlist Action CANCEL
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action  ${waitlist_actions[3]}   ${waitlist_id1}
       Log  ${resp.json()}
@@ -213,14 +208,13 @@ JD-TC-WaitlistAction-7
 JD-TC-WaitlistAction-8
       [Documentation]   Waitlist Action cancel for a future waitlist
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${DAY2}=  add_date  2
+      ${DAY2}=  db.add_timezone_date  ${tz}  2
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cons_id}  ${ser_id1}  ${que_id1}  ${DAY2}  ${desc}  ${bool[1]}  ${cons_id}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id2}  ${wid[0]}
       ${resp}=  Waitlist Action Cancel  ${waitlist_id2}  ${waitlist_cancl_reasn[3]}  ${desc}
@@ -232,7 +226,7 @@ JD-TC-WaitlistAction-8
 JD-TC-WaitlistAction-9
       [Documentation]   Waitlist Action CHECK_IN for a future waitlist
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action   ${waitlist_actions[3]}  ${waitlist_id2}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -244,7 +238,7 @@ JD-TC-WaitlistAction-9
 JD-TC-WaitlistAction-UH1
       [Documentation]   Waitlist Action Arrived after  Done
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action  ${waitlist_actions[0]}   ${waitlist_id}
       Log   ${resp.json()}
@@ -255,7 +249,7 @@ JD-TC-WaitlistAction-UH1
 JD-TC-WaitlistAction-UH2
       [Documentation]   STARTED after CANCEL
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action   ${waitlist_actions[1]}  ${waitlist_id1}
       Log  ${resp.json()}
@@ -266,7 +260,7 @@ JD-TC-WaitlistAction-UH2
 JD-TC-WaitlistAction-UH3
       [Documentation]   STARTED after DONE
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action   ${waitlist_actions[1]}  ${waitlist_id}
       Should Be Equal As Strings  ${resp.status_code}  422
@@ -280,7 +274,7 @@ JD-TC-WaitlistAction-UH3
 JD-TC-WaitlistAction-UH4
       [Documentation]   Waitlist DONE  after CANCEL
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action   ${waitlist_actions[4]}  ${waitlist_id1}
       Log  ${resp.json()}
@@ -291,7 +285,7 @@ JD-TC-WaitlistAction-UH4
 JD-TC-WaitlistAction-UH5
       [Documentation]   Cancel already cancelled id
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${desc}=   FakerLibrary.word
       ${resp}=  Waitlist Action Cancel  ${waitlist_id1}  ${waitlist_cancl_reasn[3]}  ${desc}
@@ -303,7 +297,7 @@ JD-TC-WaitlistAction-UH5
 JD-TC-WaitlistAction-UH6
       [Documentation]   Waitlist DONE  for a cancell id
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
      
       ${resp}=  Waitlist Action  ${waitlist_actions[4]}  ${waitlist_id1}
@@ -315,7 +309,7 @@ JD-TC-WaitlistAction-UH6
 JD-TC-WaitlistAction-UH7
       [Documentation]   Waitlist Report After Cancell
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       # ${resp}=  Waitlist Action  ${waitlist_actions[0]}  ${waitlist_id1}
       # Log  ${resp.json()}
@@ -328,7 +322,7 @@ JD-TC-WaitlistAction-UH7
 JD-TC-WaitlistAction-UH8
       [Documentation]   cancel a waitlist after DONE
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${desc}=   FakerLibrary.word
       ${resp}=  Waitlist Action Cancel  ${waitlist_id}  ${waitlist_cancl_reasn[3]}  ${desc}
@@ -338,13 +332,12 @@ JD-TC-WaitlistAction-UH8
 JD-TC-WaitlistAction-UH9
       [Documentation]   Waitlist REPORT for already Reported id
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cons_id}  ${ser_id2}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cons_id}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id3}  ${wid[0]}
 
@@ -355,7 +348,7 @@ JD-TC-WaitlistAction-UH9
 JD-TC-WaitlistAction-UH10
       [Documentation]  cancel a waitlist after STARTED
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Waitlist Action  ${waitlist_actions[1]}  ${waitlist_id3}
@@ -370,7 +363,7 @@ JD-TC-WaitlistAction-UH10
 JD-TC-WaitlistAction-UH11
       [Documentation]   Waitlist STARTED for already started id
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       # ${resp}=  Waitlist Action  ${waitlist_actions[1]}  ${waitlist_id3}
       # Log  ${resp.json()}
@@ -382,7 +375,7 @@ JD-TC-WaitlistAction-UH11
 JD-TC-WaitlistAction-UH12
       [Documentation]   Waitlist REPORT after STARTED
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action  ${waitlist_actions[0]}  ${waitlist_id3}
       Should Be Equal As Strings  ${resp.status_code}  422
@@ -392,7 +385,7 @@ JD-TC-WaitlistAction-UH12
 JD-TC-WaitlistAction-UH13
       [Documentation]   Waitlist REPORT after CANCEL
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action   ${waitlist_actions[3]}  ${waitlist_id3}
       Log  ${resp.json()}
@@ -408,7 +401,7 @@ JD-TC-WaitlistAction-UH13
 JD-TC-WaitlistAction-UH14
       [Documentation]   Waitlist REPORT after DONE
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action  ${waitlist_actions[0]}  ${waitlist_id}
       Should Be Equal As Strings  ${resp.status_code}  422
@@ -418,7 +411,7 @@ JD-TC-WaitlistAction-UH14
 JD-TC-WaitlistAction-UH15
       [Documentation]   Waitlist DONE for already DONE id
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action  ${waitlist_actions[4]}  ${waitlist_id}
       Should Be Equal As Strings  ${resp.status_code}  422
@@ -428,7 +421,7 @@ JD-TC-WaitlistAction-UH15
 JD-TC-WaitlistAction-UH16
       [Documentation]   Waitlist Started after DONE
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Waitlist By Id  ${waitlist_id}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -440,7 +433,7 @@ JD-TC-WaitlistAction-UH16
 JD-TC-WaitlistAction-UH17
       [Documentation]   Waitlist Action REPORT for a future waitlist
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action  ${waitlist_actions[0]}  ${waitlist_id2}
       Should Be Equal As Strings  ${resp.status_code}  422
@@ -450,7 +443,7 @@ JD-TC-WaitlistAction-UH17
 JD-TC-WaitlistAction-UH18
       [Documentation]   Waitlist Action STARTED for a future waitlist
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action  ${waitlist_actions[1]}  ${waitlist_id2}
       Should Be Equal As Strings  ${resp.status_code}  422
@@ -460,7 +453,7 @@ JD-TC-WaitlistAction-UH18
 JD-TC-WaitlistAction-UH19
       [Documentation]   Waitlist Action DONE for a future waitlist
 
-      ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action  ${waitlist_actions[4]}  ${waitlist_id2}
       Should Be Equal As Strings  ${resp.status_code}  422
@@ -487,7 +480,7 @@ JD-TC-WaitlistAction-UH21
 JD-TC-WaitlistAction-UH22
       [Documentation]  waitlist Action for another provider's waitlist
 
-      ${resp}=  ProviderLogin   ${PUSERNAME17}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login   ${PUSERNAME17}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action  ${waitlist_actions[3]}  ${waitlist_id1}
       Should Be Equal As Strings  ${resp.status_code}  404
@@ -497,7 +490,7 @@ JD-TC-WaitlistAction-UH22
 JD-TC-WaitlistAction-UH23
       [Documentation]   add to waitlist when capacity is full and checkins are changed to arrived status
 
-      ${resp}=   ProviderLogin  ${PUSERNAME216}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD} 
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}   200
       
@@ -508,18 +501,20 @@ JD-TC-WaitlistAction-UH23
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+      Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
       ${resp}=   Get Service
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable   ${p1_s1}   ${resp.json()[0]['id']}
       
-      ${today}=  get_date
-      Set Suite Variable  ${today}
+      
       ${list}=  Create List  1  2  3  4  5  6  7
       Set Suite Variable  ${list}
-      ${stime1}=  add_time  0  45
-      ${etime1}=  add_time  1  0
+      ${today}=  db.get_date_by_timezone  ${tz}
+      Set Suite Variable  ${today}
+      ${stime1}=  db.add_timezone_time  ${tz}  0  45
+      ${etime1}=  db.add_timezone_time  ${tz}  1  0
       ${p1queue1}=    FakerLibrary.word
       ${capacity}=  Random Int  min=3   max=3
       ${parallel}=  Random Int  min=1   max=1
@@ -545,7 +540,6 @@ JD-TC-WaitlistAction-UH23
             ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q1}  ${today}  ${desc}  ${bool[1]}  ${cid}
             Log   ${resp.json()}
             Should Be Equal As Strings  ${resp.status_code}  200
-            
             ${wid}=  Get Dictionary Values  ${resp.json()}
             Set Test Variable  ${wid${i}}  ${wid[0]}
 

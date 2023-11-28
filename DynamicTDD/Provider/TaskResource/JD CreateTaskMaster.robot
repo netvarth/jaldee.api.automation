@@ -26,7 +26,7 @@ JD-TC-CreateTaskMaster-1
 
     [Documentation]  Create a task master for a branch.
 
-    ${resp}=  Provider Login  ${MUSERNAME36}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME36}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 *** comment ***
@@ -79,7 +79,7 @@ JD-TC-CreateTaskMaster-2
 
     [Documentation]  Create a task master and a task, sub task for a branch.
 
-    ${resp}=  Provider Login  ${MUSERNAME36}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME36}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${p_id}=  get_acc_id  ${MUSERNAME36}
@@ -148,7 +148,7 @@ JD-TC-CreateTaskMaster-3
 
     [Documentation]  Create a task master and task with same details for a branch.
 
-    ${resp}=  Provider Login  ${MUSERNAME36}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME36}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${p_id}=  get_acc_id  ${MUSERNAME36}
@@ -175,7 +175,7 @@ JD-TC-CreateTaskMaster-4
 
     [Documentation]  Create a task master and a task, sub task for a user.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME4} 
@@ -201,12 +201,14 @@ JD-TC-CreateTaskMaster-4
     Should Be Equal As Strings    ${resp2.status_code}    200
     
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
@@ -290,7 +292,7 @@ JD-TC-CreateTaskMaster-4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -359,7 +361,7 @@ JD-TC-CreateTaskMaster-5
 
     [Documentation]  Create a task master and task with same details for a user.
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -389,7 +391,7 @@ JD-TC-CreateTaskMaster-6
     [Documentation]  Create a task master  with   description
   
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${templateName1} =   FakerLibrary.user name
@@ -405,7 +407,7 @@ JD-TC-CreateTaskMaster-7
 
     [Documentation]  Create a task master  with   all field
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${templateName1} =   FakerLibrary.user name
@@ -424,7 +426,7 @@ JD-TC-CreateTaskMaster-8
 
     [Documentation]  Create  multiple task master  with different details
 
-     ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${templateName1} =   FakerLibrary.user name
@@ -488,7 +490,7 @@ JD-TC-CreateTaskMaster-UH4
 
     [Documentation]  Create a task master and then change assignee with task master id.
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -515,7 +517,7 @@ JD-TC-CreateTaskMaster-UH5
 
     [Documentation]   Create a task master without templateName1
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${title4}=  FakerLibrary.user name
@@ -528,7 +530,7 @@ JD-TC-CreateTaskMaster-UH5
 JD-TC-CreateTaskMaster-UH6
 
     [Documentation]   Create a task master without tittle
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${title4}=  FakerLibrary.user name
@@ -546,7 +548,7 @@ JD-TC-CreateTaskMaster-UH6
 JD-TC-CreateTaskMaster-UH7
 
     [Documentation]   Create a task master without categoryID
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -566,7 +568,7 @@ JD-TC-CreateTaskMaster-UH8
 
     [Documentation]  Create a multiple   task master   with same details
 
-     ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${templateName1} =   FakerLibrary.user name

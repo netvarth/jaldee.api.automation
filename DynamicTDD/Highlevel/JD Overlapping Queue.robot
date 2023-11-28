@@ -30,33 +30,34 @@ ${queue5}   Queue5
 ***Test Cases***
 Set Time
     [Documentation]  Create dynamic time variables.
-    ${Time}=  db.get_time
-    ${stime}=  add_time  0  15
+    # ${Time}=  db.get_time_by_timezone   ${tz}
+    ${Time}=  db.get_time_by_timezone  ${tz}
+    ${stime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${stime}  ${stime}
-    ${etime}=  add_time   0  30
+    ${etime}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${etime}  ${etime}
-    ${stime1}=  add_time  0  45
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${stime1}  ${stime1}
-    ${etime1}=  add_time  1  0
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     Set Suite Variable   ${etime1}  ${etime1}
-    ${stime2}=  add_time  1  15
+    ${stime2}=  add_timezone_time  ${tz}  1  15  
     Set Suite Variable   ${stime2}  ${stime2}
-    ${etime2}=  add_time  1  30
+    ${etime2}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${etime2}  ${etime2}
-    ${stime3}=  add_time  1  45
+    ${stime3}=  add_timezone_time  ${tz}  1  45  
     Set Suite Variable   ${stime3}  ${stime3}
-    ${etime3}=  add_time    2  0
+    ${etime3}=  add_timezone_time  ${tz}    2  0
     Set Suite Variable   ${etime3}  ${etime3}
 
 # Populate Provider
 #     [Documentation]  Create location and services for provider
-#     ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
     
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     Set Suite Variable  ${DAY1}
 
-#     ${DAY2}=  add_date  10      
+#     ${DAY2}=  db.add_timezone_date  ${tz}  10        
 #     Set Suite Variable  ${DAY2}  ${DAY2}
 
 #     ${list}=  Create List  1  2  3  4  5  6  7
@@ -82,14 +83,14 @@ Set Time
 
 Jaldee-TC-OverlapQ-1
     [Documentation]    Create 2 queues with same time window but different services.
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_location  ${PUSERNAME8}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
 
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -141,7 +142,7 @@ Jaldee-TC-OverlapQ-1
 
 Jaldee-TC-OverlapQ-2
     [Documentation]    Create 2 instant queues with same time window but different services.
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -190,7 +191,7 @@ Jaldee-TC-OverlapQ-2
 
 Jaldee-TC-OverlapQ-UH-1
     [Documentation]     Update first queue with the service of 2nd queue also.   
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -208,7 +209,7 @@ Jaldee-TC-OverlapQ-UH-1
 
 Jaldee-TC-OverlapQ-UH-2
     [Documentation]     Update first instant queue with the service of 2nd instant queue also.   
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -225,7 +226,7 @@ Jaldee-TC-OverlapQ-UH-2
 
 Jaldee-TC-OverlapQ-UH-3
     [Documentation]     Update first queue with the service of 2nd queue only.   
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -242,7 +243,7 @@ Jaldee-TC-OverlapQ-UH-3
 
 Jaldee-TC-OverlapQ-UH-4
     [Documentation]     Update first instant queue with the service of 2nd instant queue only.   
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

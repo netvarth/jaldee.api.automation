@@ -1,10 +1,23 @@
 #!/bin/bash
 
+# set -vx      # uncomment to enable debugging
+# PS4='\033[0;33m+(${BASH_SOURCE}:${LINENO}):\033[0m ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+# set -x
+
 # MYSQL_HOST='localhost'
-if [[ "$(< /proc/sys/kernel/osrelease)" == *Microsoft ]]; then 
+# uname -r
+# cat /proc/version
+# if grep -qi microsoft /proc/version; then
+#   echo "Ubuntu on Windows"
+# else
+#   echo "native Linux"
+# fi
+# cat /proc/sys/kernel/osrelease
+if [[ "$(< /proc/sys/kernel/osrelease)" == *[Mm]icrosoft* ]]; then 
     echo "Ubuntu on Windows"
-    MYSQL_HOST='127.0.0.1'
-    REDIS_HOST='127.0.0.1'
+	# host_ip=$(cat /etc/resolv.conf| grep nameserver | cut -d " " -f 2)
+    MYSQL_HOST="$(hostname).local"
+    REDIS_HOST="$(cat /etc/resolv.conf| grep nameserver | cut -d " " -f 2)"
     
 else 
     echo "native Linux"
@@ -37,10 +50,6 @@ SECONDS=0
 myversion=$(mysql -h ${MYSQL_HOST} -se "select @@version;")
 
 
-
-# set -vx      # uncomment to enable debugging
-# PS4='\033[0;33m+(${BASH_SOURCE}:${LINENO}):\033[0m ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
-# set -x
 
 usage()
 {

@@ -121,7 +121,7 @@ JD-TC-ProviderResubmitServiceOptionForOrder-1
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -174,7 +174,7 @@ JD-TC-ProviderResubmitServiceOptionForOrder-1
     #     Log  ${ttype}
     #     ${u_ttype}=    Remove Duplicates    ${ttype}
     #     Log  ${u_ttype}
-    #     ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}  ${item_id1}  
+    #     ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}  ${item_id1}  
     # END
     FOR  ${i}  IN RANGE   ${c_len}
         IF   '${resp.json()[${i}]['catalogName']}' in @{unique_cnames} and '${resp.json()[${i}]['orderType']}' == '${OrderTypes[0]}'
@@ -197,7 +197,7 @@ JD-TC-ProviderResubmitServiceOptionForOrder-1
             Log  ${ttype}
             ${u_ttype}=    Remove Duplicates    ${ttype}
             Log  ${u_ttype}
-            ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}    ${item_id1}
+            ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}    ${item_id1}
    
         END
     END
@@ -223,7 +223,7 @@ JD-TC-ProviderResubmitServiceOptionForOrder-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -270,7 +270,7 @@ JD-TC-ProviderResubmitServiceOptionForOrder-1
         Set Suite Variable  ${proconid}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME23}.${test_mail}
@@ -388,7 +388,7 @@ JD-TC-ResubmitServiceoptionsForOrder-2
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -446,7 +446,7 @@ JD-TC-ResubmitServiceoptionsForOrder-2
             Log  ${ttype}
             ${u_ttype}=    Remove Duplicates    ${ttype}
             Log  ${u_ttype}
-            ${CatalogId2}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}    ${item_id1}
+            ${CatalogId2}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}    ${item_id1}
    
         END
     END
@@ -472,7 +472,7 @@ JD-TC-ResubmitServiceoptionsForOrder-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -519,7 +519,7 @@ JD-TC-ResubmitServiceoptionsForOrder-2
         Set Suite Variable  ${proconid}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME26}.${test_mail}
@@ -647,7 +647,7 @@ JD-TC-ResubmitServiceoptionsForOrder-3
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME54}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME54}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -705,7 +705,7 @@ JD-TC-ResubmitServiceoptionsForOrder-3
             Log  ${ttype}
             ${u_ttype}=    Remove Duplicates    ${ttype}
             Log  ${u_ttype}
-            ${CatalogId3}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}    ${item_id1}
+            ${CatalogId3}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}    ${item_id1}
    
         END
     END
@@ -731,7 +731,7 @@ JD-TC-ResubmitServiceoptionsForOrder-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME54}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME54}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -778,7 +778,7 @@ JD-TC-ResubmitServiceoptionsForOrder-3
         Set Suite Variable  ${proconid}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME28}.${test_mail}
@@ -913,7 +913,7 @@ JD-TC-ResubmitServiceoptionsForOrder-UH1
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -971,7 +971,7 @@ JD-TC-ResubmitServiceoptionsForOrder-UH1
             Log  ${ttype}
             ${u_ttype}=    Remove Duplicates    ${ttype}
             Log  ${u_ttype}
-            ${CatalogId4}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}    ${item_id1}
+            ${CatalogId4}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}    ${item_id1}
    
         END
     END
@@ -997,7 +997,7 @@ JD-TC-ResubmitServiceoptionsForOrder-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1044,7 +1044,7 @@ JD-TC-ResubmitServiceoptionsForOrder-UH1
         Set Suite Variable  ${proconid}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME33}.${test_mail}

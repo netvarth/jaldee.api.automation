@@ -32,7 +32,7 @@ ${item7}  item7
 JD-TC-Update Item-1 
 
     [Documentation]  Provider check to update item 
-    ${resp}=  ProviderLogin  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 # JD-TC-Update Item-1 
@@ -42,7 +42,7 @@ JD-TC-Update Item-1
 #     clear_Item   ${PUSERNAME35}
 #     ${des}=  FakerLibrary.Word
 #     ${description}=  FakerLibrary.sentence
-#     ${resp}=  ProviderLogin  ${PUSERNAME21}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${amount1}=   FakerLibrary.pyfloat  left_digits=2   right_digits=2    positive=True
 #     ${resp}=  Create Item   ${item1}  ${des}   ${description}  ${amount1}  ${bool[1]}   
@@ -63,7 +63,7 @@ JD-TC-Update Item-1
 #     [Documentation]  Provider check to update item with same item name 
 #     ${des}=  FakerLibrary.Word
 #     ${description}=  FakerLibrary.sentence
-#     ${resp}=  ProviderLogin  ${PUSERNAME35}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${amount10}=   FakerLibrary.pyfloat  left_digits=2   right_digits=2    positive=True
 #     ${resp}=  Create Item   ${item10}  ${des}   ${description}  ${amount10}   ${bool[1]}   
@@ -104,7 +104,7 @@ JD-TC-Update Item-1
 # JD-TC-Update Item-UH3
 
 #     [Documentation]   Provider check to update an item with invalid item id 
-#     ${resp}=  ProviderLogin   ${PUSERNAME35}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login   ${PUSERNAME35}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}   200
 #     ${item1}=  FakerLibrary.Word
 #     ${des}=  FakerLibrary.Word
@@ -117,7 +117,7 @@ JD-TC-Update Item-1
 # JD-TC-Update Item -UH4
 
 #     [Documentation]  Provider check to update an item with another provider's item id
-#     ${resp}=  ProviderLogin  ${PUSERNAME21}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${amount4}=   FakerLibrary.pyfloat  left_digits=2   right_digits=2    positive=True
 #     ${des}=  FakerLibrary.Word
@@ -125,7 +125,7 @@ JD-TC-Update Item-1
 #     ${resp}=  Create Item   ${item5}  ${des}   ${description}  ${amount4}  ${bool[1]}   
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Set Test Variable  ${id}  ${resp.json()}
-#     ${resp}=  ProviderLogin  ${PUSERNAME29}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${amount6}=   FakerLibrary.pyfloat  left_digits=2   right_digits=2    positive=True
 #     ${resp}=   Update Item    ${id}   ${item5}   ${des}   ${description}    ${amount6}   ${bool[0]}
@@ -138,7 +138,7 @@ JD-TC-Update Item-1
 # JD-TC-Update Item -UH5 
 
 #     [Documentation]   Provider create 2 item and 1st item is updated as 2nd item's  name
-#     ${resp}=  ProviderLogin  ${PUSERNAME21}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
     
 #     ${des}=  FakerLibrary.Word

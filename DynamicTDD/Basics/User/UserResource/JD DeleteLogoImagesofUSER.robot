@@ -39,7 +39,7 @@ JD-TC-Delete Logo Image of USER-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E1}${\n}
@@ -50,12 +50,14 @@ JD-TC-Delete Logo Image of USER-1
      Set Suite Variable  ${bs}
 
      ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
      sleep  2s
      ${resp}=  Get Departments
@@ -157,7 +159,7 @@ JD-TC-Delete Logo Image of USER-1
     ${resp}=  Get User Profile  ${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Not Contain  ${resp.json()}   logo
+    Should Not Contain  ${resp.json()}   ${name}
 
 
     ${resp}=   ProviderLogout
@@ -168,7 +170,7 @@ JD-TC-Delete Logo Image of USER-1
 
 JD-TC-Delete Logo Image of USER-UH1
     [Documentation]   Provider check to  Delete Logo image of USER
-    ${resp}=  ProviderLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p_id}=  get_acc_id  ${MUSERNAME_E1}
   
@@ -210,7 +212,7 @@ JD-TC-Delete Logo Image of USER-UH3
 
 JD-TC-Delete Logo Image of USER-UH4
     [Documentation]   User u_id2 Delete Logo image of another user u_id1, after creating user profile
-    ${resp}=  ProviderLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p_id}=  get_acc_id  ${MUSERNAME_E1}
    
@@ -278,7 +280,7 @@ JD-TC-Delete Logo Image of USER-UH4
 
 JD-TC-Delete Logo Image of USER-UH5
     [Documentation]   User Delete Logo image without creating user profile
-    ${resp}=  ProviderLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p_id}=  get_acc_id  ${MUSERNAME_E1}
     ${resp}=  pyproviderlogin  ${MUSERNAME_E1}  ${PASSWORD}

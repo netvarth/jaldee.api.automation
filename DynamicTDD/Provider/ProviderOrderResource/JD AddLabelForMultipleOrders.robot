@@ -25,7 +25,7 @@ JD-TC-AddLabelForMultipleOrders-1
     clear_service  ${PUSERNAME75}
     clear_customer   ${PUSERNAME75}
     clear_Item   ${PUSERNAME75}
-    ${resp}=  ProviderLogin  ${PUSERNAME75}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME75}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -76,16 +76,16 @@ JD-TC-AddLabelForMultipleOrders-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -191,7 +191,7 @@ JD-TC-AddLabelForMultipleOrders-1
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -227,7 +227,7 @@ JD-TC-AddLabelForMultipleOrders-1
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -252,7 +252,7 @@ JD-TC-AddLabelForMultipleOrders-1
     ${orderid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${orderid2}  ${orderid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME75}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME75}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -299,7 +299,7 @@ JD-TC-AddLabelForMultipleOrders-2
     clear_customer   ${PUSERNAME76}
     clear_Item   ${PUSERNAME76}
     clear_Label  ${PUSERNAME76}
-    ${resp}=  ProviderLogin  ${PUSERNAME76}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -393,17 +393,17 @@ JD-TC-AddLabelForMultipleOrders-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id5}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15  
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15    
 
-    ${startDate2}=  add_date  5
-    ${endDate2}=  add_date  25     
+    ${startDate2}=  db.add_timezone_date  ${tz}  5  
+    ${endDate2}=  db.add_timezone_date  ${tz}  25      
 
-    ${sTime3}=  add_time  0  15
-    ${eTime3}=  add_time   1  00 
+    ${sTime3}=  add_timezone_time  ${tz}  0  15  
+    ${eTime3}=  add_timezone_time  ${tz}  1  00   
 
     ${noOfOccurance}=  Random Int  min=0   max=0
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -525,7 +525,7 @@ JD-TC-AddLabelForMultipleOrders-2
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -580,7 +580,7 @@ JD-TC-AddLabelForMultipleOrders-2
     Should Be Equal As Strings  ${resp.json()['homeDelivery']}            ${bool[0]} 
     Should Be Equal As Strings  ${resp.json()['storePickup']}             ${bool[1]} 
   
-    ${DAY2}=  add_date   10
+    ${DAY2}=  db.add_timezone_date  ${tz}   10
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -659,7 +659,7 @@ JD-TC-AddLabelForMultipleOrders-3
     clear_service  ${PUSERNAME70}
     clear_customer   ${PUSERNAME70}
     clear_Item   ${PUSERNAME70}
-    ${resp}=  ProviderLogin  ${PUSERNAME70}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -706,16 +706,16 @@ JD-TC-AddLabelForMultipleOrders-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -786,7 +786,7 @@ JD-TC-AddLabelForMultipleOrders-3
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -814,7 +814,7 @@ JD-TC-AddLabelForMultipleOrders-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME70}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -903,7 +903,7 @@ JD-TC-AddLabelForMultipleOrders-4
     clear_service  ${PUSERNAME75}
     clear_customer   ${PUSERNAME75}
     clear_Item   ${PUSERNAME75}
-    ${resp}=  ProviderLogin  ${PUSERNAME75}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME75}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -950,16 +950,16 @@ JD-TC-AddLabelForMultipleOrders-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -1030,7 +1030,7 @@ JD-TC-AddLabelForMultipleOrders-4
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -1061,7 +1061,7 @@ JD-TC-AddLabelForMultipleOrders-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME75}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME75}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1140,7 +1140,7 @@ JD-TC-AddLabelForMultipleOrders-4
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -1166,7 +1166,7 @@ JD-TC-AddLabelForMultipleOrders-4
     ${orderid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${orderid2}  ${orderid[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME75}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME75}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1208,7 +1208,7 @@ JD-TC-AddLabelForMultipleOrders-5
     clear_service  ${PUSERNAME79}
     clear_customer   ${PUSERNAME79}
     clear_Item   ${PUSERNAME79}
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -1281,16 +1281,16 @@ JD-TC-AddLabelForMultipleOrders-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id4}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime3}=  add_time  0  15
-    ${eTime3}=  add_time   1  00 
+    ${sTime3}=  add_timezone_time  ${tz}  0  15  
+    ${eTime3}=  add_timezone_time  ${tz}  1  00   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=50   max=100
@@ -1351,7 +1351,7 @@ JD-TC-AddLabelForMultipleOrders-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -1385,7 +1385,7 @@ JD-TC-AddLabelForMultipleOrders-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1408,7 +1408,7 @@ JD-TC-AddLabelForMultipleOrders-5
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['orderStatus']}   Cancelled
 
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1497,7 +1497,7 @@ JD-TC-AddLabelForMultipleOrders-6
     clear_service  ${PUSERNAME82}
     clear_customer   ${PUSERNAME82}
     clear_Item   ${PUSERNAME82}
-    ${resp}=  ProviderLogin  ${PUSERNAME82}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME82}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid1}  ${resp.json()['id']}
@@ -1574,20 +1574,20 @@ JD-TC-AddLabelForMultipleOrders-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id5}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15  
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15    
 
-    ${startDate2}=  add_date  5
-    ${endDate2}=  add_date  25     
+    ${startDate2}=  db.add_timezone_date  ${tz}  5  
+    ${endDate2}=  db.add_timezone_date  ${tz}  25      
    
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime3}=  add_time  0  15
-    ${eTime3}=  add_time   1  00 
+    ${sTime3}=  add_timezone_time  ${tz}  0  15  
+    ${eTime3}=  add_timezone_time  ${tz}  1  00   
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=50   max=100
@@ -1671,7 +1671,7 @@ JD-TC-AddLabelForMultipleOrders-6
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -1806,7 +1806,7 @@ JD-TC-AddLabelForMultipleOrders-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -1852,16 +1852,20 @@ JD-TC-AddLabelForMultipleOrders-7
     Verify Response  ${resp}  id=${label_id}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     clear_appt_schedule   ${PUSERNAME65}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${DAY1}=  get_date      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=20
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1896,7 +1900,7 @@ JD-TC-AddLabelForMultipleOrders-7
 
     FOR   ${a}  IN RANGE   15
     
-        ${DAY}=  add_date  ${a}
+        ${DAY}=  db.add_timezone_date  ${tz}  ${a}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id}  ${sch_id}  ${DAY}  ${cnote}  ${apptfor}
         Log  ${resp.json()}

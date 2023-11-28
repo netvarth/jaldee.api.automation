@@ -33,56 +33,62 @@ JD-TC-GetLocations-1
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
       Set Suite Variable  ${PUSERNAME_D}
-      ${city1}=   get_place
-      Set Suite Variable  ${city1}
-      ${latti1}=  get_latitude
-      Set Suite Variable  ${latti1}
-      ${longi1}=  get_longitude
-      Set Suite Variable  ${longi1}
-      ${postcode1}=  FakerLibrary.postcode
-      Set Suite Variable  ${postcode1}
-      ${address1}=  get_address
-      Set Suite Variable  ${address1}
+      # ${city1}=   get_place
+      # Set Suite Variable  ${city1}
+      # ${latti1}=  get_latitude
+      # Set Suite Variable  ${latti1}
+      # ${longi1}=  get_longitude
+      # Set Suite Variable  ${longi1}
+      # ${postcode1}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode1}
+      # ${address1}=  get_address
+      # Set Suite Variable  ${address1}
+      ${latti1}  ${longi1}  ${postcode1}  ${city1}  ${district}  ${state}  ${address1}=  get_loc_details
+      ${tz}=   db.get_Timezone_by_lat_long   ${latti2}  ${longi2}
+      Set Suite Variable  ${tz}
       ${parking_type1}    Random Element     ['none','free','street','privatelot','valet','paid']
       Set Suite Variable  ${parking_type1}
       ${24hours1}    Random Element    ['True','False']
       Set Suite Variable  ${24hours1}
-      ${sTime1}=  add_time  0  35
+      ${sTime1}=  add_timezone_time  ${tz}  0  35  
       Set Suite Variable   ${sTime1}
-      ${eTime1}=  add_time   0  40
+      ${eTime1}=  add_timezone_time  ${tz}  0  30  
       Set Suite Variable   ${eTime1}
       ${list}=  Create List  1  2  3  4  5  6  7
     	Set Suite Variable  ${list}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
     	Set Suite Variable  ${DAY}
       ${resp}=  Create Location  ${city1}  ${longi1}  ${latti1}  www.${city1}.com  ${postcode1}  ${address1}  ${parking_type1}  ${24hours1}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${city2}=   get_place
-      Set Suite Variable  ${city2}
-      ${latti2}=  get_latitude
-      Set Suite Variable  ${latti2}
-      ${longi2}=  get_longitude
-      Set Suite Variable  ${longi2}
-      ${postcode2}=  FakerLibrary.postcode
-      Set Suite Variable  ${postcode2}
-      ${address2}=  get_address
-      Set Suite Variable  ${address2}
+      # ${city2}=   get_place
+      # Set Suite Variable  ${city2}
+      # ${latti2}=  get_latitude
+      # Set Suite Variable  ${latti2}
+      # ${longi2}=  get_longitude
+      # Set Suite Variable  ${longi2}
+      # ${postcode2}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode2}
+      # ${address2}=  get_address
+      # Set Suite Variable  ${address2}
+      ${latti2}  ${longi2}  ${postcode2}  ${city2}  ${district}  ${state}  ${address2}=  get_loc_details
+      ${tz2}=   db.get_Timezone_by_lat_long   ${latti2}  ${longi2}
+      Set Suite Variable  ${tz2}
       ${parking_type2}    Random Element     ['none','free','street','privatelot','valet','paid']
       Set Suite Variable  ${parking_type2}
       ${24hours2}    Random Element    ['True','False']
       Set Suite Variable   ${24hours2}
-      ${d1}=  get_weekday 
+      ${d1}=  get_timezone_weekday  ${tz} 
       ${d1}=  Create List  ${d1}
       Set Suite Variable  ${d1} 
-      ${sTime2}=  add_time  0  45
+      ${sTime2}=  add_timezone_time  ${tz}  0  45  
       Set Suite Variable   ${sTime2}
-      ${eTime2}=  add_time   0  50
+      ${eTime2}=  add_timezone_time  ${tz}  0  50  
       Set Suite Variable   ${eTime2}
       ${resp}=  Create Location  ${city2}  ${longi2}  ${latti2}  www.${city2}.com  ${postcode2}  ${address2}  ${parking_type2}  ${24hours2}  Once  ${d1}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}
       Log  ${resp.json()}
@@ -104,59 +110,73 @@ JD-TC-GetLocations-2
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
       Set Suite Variable  ${MUSERNAME_E}
       ${uid}=  get_uid  ${MUSERNAME_E}
-      ${city8}=   get_place
+      # ${city8}=   get_place
+      # Set Suite Variable  ${city8}
+      # ${latti8}=  get_latitude
+      # Set Suite Variable  ${latti8}
+      # ${longi8}=  get_longitude
+      # Set Suite Variable  ${longi8}
+      # ${postcode8}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode8}
+      ${latti8}  ${longi8}  ${city8}  ${postcode8}=  get_lat_long_city_pin
+      ${tz8}=   db.get_Timezone_by_lat_long   ${latti8}  ${longi8}
+      Set Suite Variable  ${tz8}
       Set Suite Variable  ${city8}
-      ${latti8}=  get_latitude
       Set Suite Variable  ${latti8}
-      ${longi8}=  get_longitude
       Set Suite Variable  ${longi8}
-      ${postcode8}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode8}
       ${24hours8}    Random Element    ${bool}
       Set Suite Variable  ${24hours8}
       ${parking_type8}    Random Element     ['none','free','street','privatelot','valet','paid']
       Set Suite Variable  ${parking_type8}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
     	Set Suite Variable  ${DAY}
-      ${DAY2}=  add_date  10
+      ${DAY2}=  db.add_timezone_date  ${tz}  10  
     	Set Suite Variable  ${DAY2}
 	${list}=  Create List  1  2  3  4  5  6  7
     	Set Suite Variable  ${list}
-      ${sTime3}=  add_time  0  35
+      ${sTime3}=  add_timezone_time  ${tz}  0  35  
       Set Suite Variable   ${sTime3}
-      ${eTime3}=  add_time   0  60
+      ${eTime3}=  add_timezone_time  ${tz}  0  60  
       Set Suite Variable   ${eTime3}
       ${resp}=  Create Location  ${city8}  ${longi8}  ${latti8}  www.${city8}.com  ${postcode8}  ${address1}  ${parking_type8}  ${24hours8}  Weekly  ${list}  ${DAY}  ${DAY2}  ${EMPTY}  ${sTime3}  ${eTime3}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${lid8}  ${resp.json()}
-      ${city9}=   FakerLibrary.last_name
+      # ${city9}=   FakerLibrary.last_name
+      # Set Suite Variable  ${city9}
+      # ${latti9}=  get_latitude
+      # Set Suite Variable  ${latti9}
+      # ${longi9}=  get_longitude
+      # Set Suite Variable  ${longi9}
+      # ${postcode9}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode9}
+      ${latti9}  ${longi9}  ${city9}  ${postcode9}=  get_lat_long_city_pin
+      ${tz9}=   db.get_Timezone_by_lat_long   ${latti9}  ${longi9}
+      Set Suite Variable  ${tz9}
       Set Suite Variable  ${city9}
-      ${latti9}=  get_latitude
       Set Suite Variable  ${latti9}
-      ${longi9}=  get_longitude
       Set Suite Variable  ${longi9}
-      ${postcode9}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode9}
       ${24hours9}    Random Element    ${bool}
       Set Suite Variable  ${24hours9}
       ${parking_type9}    Random Element     ['none','free','street','privatelot','valet','paid']
       Set Suite Variable  ${parking_type9}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
     	Set Suite Variable  ${DAY}
-      ${DAY2}=  add_date  10
+      ${DAY2}=  db.add_timezone_date  ${tz}  10  
     	Set Suite Variable  ${DAY2}
 	${list}=  Create List  1  2  3  4  5  6  7
     	Set Suite Variable  ${list}
-      ${sTime4}=  add_time  0  35
+      ${sTime4}=  add_timezone_time  ${tz}  0  35  
       Set Suite Variable   ${sTime4}
-      ${eTime4}=  add_time   0  60
+      ${eTime4}=  add_timezone_time  ${tz}  0  60  
       Set Suite Variable   ${eTime4}
       ${resp}=  Create Location  ${city9}  ${longi9}  ${latti9}  www.${city9}.com  ${postcode9}  ${address2}  ${parking_type9}  ${24hours9}  Weekly  ${list}  ${DAY}  ${DAY2}  ${EMPTY}  ${sTime4}  ${eTime4}
       Log  ${resp.json()}
@@ -184,7 +204,7 @@ JD-TC-GetLocations -UH3
       sleep  02s
 JD-TC-VerifyGetLocations-1
 	[Documentation]  Verify location details by provider login ${PUSERNAME_D}
-      ${resp}=  ProviderLogin  ${PUSERNAME_D}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Locations
       Log  ${resp.json()}
@@ -221,7 +241,7 @@ JD-TC-VerifyGetLocations-1
 
 JD-TC-VerifyGetLocations-2
 	[Documentation]  Verify location details by provider login ${PUSERNAME_D}
-      ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Locations
       Log  ${resp.json()}

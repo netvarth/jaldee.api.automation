@@ -40,7 +40,7 @@ JD-TC-UpdateWaitlistQueueSetById-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_M}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_M}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_M}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_M}${\n}
@@ -53,7 +53,7 @@ JD-TC-UpdateWaitlistQueueSetById-1
     ${s_id3}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable  ${s_id3}
     sleep  03s
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     ${resp}=  Toggle Department Enable
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -148,14 +148,14 @@ JD-TC-UpdateWaitlistQueueSetById-1
 
 JD-TC-UpdateWaitlistQueueSetById-2
 	[Documentation]  Update few details of a QueueSet
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME101}
     clear_location  ${PUSERNAME101}
     clear_queue   ${PUSERNAME101}
     clear_Statusboard  ${PUSERNAME101}
     clear_Addon  ${PUSERNAME101}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     ${Addon_id}=  get_statusboard_addonId
     ${resp}=  Add addon  ${Addon_id}
@@ -235,7 +235,7 @@ JD-TC-UpdateWaitlistQueueSetById -UH2
 
 JD-TC-UpdateWaitlistQueueSetById-UH3
     [Documentation]  Upadte a QueueSet which is not exist
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_id}=   Random Int   min=-10   max=0
     ${resp}=  Update QueueSet Waitlist for Provider   ${invalid_id}  ${s_name1[0]}  ${s_name1[1]}  ${s_desc1}  ${fieldList}     ${sid2}     ${que}    ${EMPTY}   ${EMPTY}    ${w_list}    ${statusboard_type[0]}      ${service_list}
@@ -244,7 +244,7 @@ JD-TC-UpdateWaitlistQueueSetById-UH3
 
 JD-TC-UpdateWaitlistQueueSetById-UH4
     [Documentation]  Update a QueueSet by id of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update QueueSet Waitlist for Provider    ${sb_id}  ${s_name1[0]}  ${s_name1[1]}  ${s_desc1}  ${fieldList}    ${sid2}     ${que}    ${EMPTY}   ${EMPTY}    ${w_list}    ${statusboard_type[0]}      ${service_list}
     Should Be Equal As Strings  ${resp.status_code}  422

@@ -16,17 +16,26 @@ ${SERVICE2}  Hair makeup
 
 JD-TC-Get Schedule By Id-1
 	[Documentation]  Get Schedule by Id valid  provider
-    ${resp}=  Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
+
     clear_service   ${PUSERNAME100}
     clear_location  ${PUSERNAME100}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+
+    ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${lid}=  Create Sample Location
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     ${schedule_name}=  FakerLibrary.bs
@@ -66,7 +75,7 @@ JD-TC-Get Schedule By Id-UH2
     
 JD-TC-Get Schedule By Id-UH3
 	[Documentation]  Get Schedule of another  provider
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -74,7 +83,7 @@ JD-TC-Get Schedule By Id-UH3
 
 JD-TC-Get Schedule By Id-UH4
 	[Documentation]  Get Schedule by id using Invalid id
-    ${resp}=  ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${resp}=  Get Appointment Schedule ById  0
     Should Be Equal As Strings  ${resp.status_code}  422   

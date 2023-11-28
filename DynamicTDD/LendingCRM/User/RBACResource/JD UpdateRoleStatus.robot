@@ -20,10 +20,12 @@ JD-TC-UpdateRoleStatus-1
 
     [Documentation]  Create  Roles and  Update role status.
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Default Roles With Capabilities  ${rbac_feature[0]}
     Log  ${resp.json()}
@@ -113,7 +115,7 @@ JD-TC-UpdateRoleStatus-UH3
 
     [Documentation]    Update role status enable two times.
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -135,7 +137,7 @@ JD-TC-UpdateRoleStatus-UH4
 
     [Documentation]    Disable role status which is already disabled.
 
-    ${resp}=  Provider Login  ${MUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME48}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

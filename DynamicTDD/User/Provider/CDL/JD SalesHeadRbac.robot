@@ -91,7 +91,7 @@ JD-TC-SalesHeadWithRBAC-1
                                   
     [Documentation]               createBranch Using Sales Head Role with RBAC
 
-    ${resp}=  Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -368,7 +368,7 @@ JD-TC-SalesHeadWithRBAC-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${SHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -404,7 +404,7 @@ JD-TC-SalesHeadWithRBAC-2
                                   
     [Documentation]               Update Branch Using Sales Head Role with RBAC
 
-    ${resp}=  ProviderLogin  ${SHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -430,7 +430,7 @@ JD-TC-SalesHeadWithRBAC-3
                                   
     [Documentation]               Create location Using Sales Head Role with RBAC
 
-    ${resp}=  Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -461,20 +461,23 @@ JD-TC-SalesHeadWithRBAC-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${SHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Test Variable   ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  30
-    ${eTime1}=  add_time  1  00
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime1}=  add_timezone_time  ${tz}  0  30  
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -486,21 +489,29 @@ JD-TC-SalesHeadWithRBAC-4
                                   
     [Documentation]               Update location Using Sales Head Role with RBAC
 
-    ${resp}=  ProviderLogin  ${SHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  UpdateBaseLocation  ${locId}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${city1}=   get_place
+    # ${city1}=   get_place
+    # Set Suite Variable  ${city1}
+    # ${latti1}=  get_latitude
+    # Set Suite Variable  ${latti1}
+    # ${longi1}=  get_longitude
+    # Set Suite Variable  ${longi1}
+    # ${postcode1}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode1}
+    # ${address1}=  get_address
+    # Set Suite Variable  ${address1}
+    ${latti1}  ${longi1}  ${postcode1}  ${city1}  ${district}  ${state}  ${address1}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti1}  ${longi1}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city1}
-    ${latti1}=  get_latitude
     Set Suite Variable  ${latti1}
-    ${longi1}=  get_longitude
     Set Suite Variable  ${longi1}
-    ${postcode1}=  FakerLibrary.postcode
     Set Suite Variable  ${postcode1}
-    ${address1}=  get_address
     Set Suite Variable  ${address1}
     ${parking_type1}    Random Element     ['none','free','street','privatelot','valet','paid']
     Set Suite Variable  ${parking_type1}
@@ -514,7 +525,7 @@ JD-TC-SalesHeadWithRBAC-5
                                   
     [Documentation]               Update Sales Officer Using Sales Head Role with RBAC
 
-    ${resp}=  Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -647,7 +658,7 @@ JD-TC-SalesHeadWithRBAC-5
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -882,10 +893,10 @@ JD-TC-SalesHeadWithRBAC-5
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    # ${resp}=  ProviderLogin  ${BOHUSERNAME1}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${BOHUSERNAME1}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -898,7 +909,7 @@ JD-TC-SalesHeadWithRBAC-5
 
 # ...... Update sales officer and credit officer for dealer1 by branch operation head....
 
-    ${resp}=  ProviderLogin  ${SHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -908,7 +919,7 @@ JD-TC-SalesHeadWithRBAC-5
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${BOHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BOHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -924,7 +935,7 @@ JD-TC-SalesHeadWithRBAC-6
 
 # ...............activate dealer1 by Sales head................
 
-    ${resp}=  ProviderLogin  ${SHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -940,7 +951,7 @@ JD-TC-SalesHeadWithRBAC-7
                                   
     [Documentation]               Sales head - disablePartner
 
-    ${resp}=  ProviderLogin  ${SHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -956,7 +967,7 @@ JD-TC-SalesHeadWithRBAC-8
                                   
     [Documentation]               Sales head - viewPartner
 
-    ${resp}=  ProviderLogin  ${SHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -968,7 +979,7 @@ JD-TC-SalesHeadWithRBAC-9
                                   
     [Documentation]               Sales head - viewLoanApplication
 
-    ${resp}=  ProviderLogin  ${SHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -978,7 +989,7 @@ JD-TC-SalesHeadWithRBAC-9
 
 # ..... Create Loan application By Sales officer.....
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1059,7 +1070,7 @@ JD-TC-SalesHeadWithRBAC-9
 
 # <----------------------------- KYC Details ------------------------------------------>
 
-    ${resp}=  ProviderLogin  ${SOUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SOUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1187,7 +1198,7 @@ JD-TC-SalesHeadWithRBAC-9
     # Should Be Equal As Strings  ${resp[0].status_code}  200
     # Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${BCHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BCHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1209,7 +1220,7 @@ JD-TC-SalesHeadWithRBAC-9
     Should Be Equal As Strings     ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[4]}
 
-    ${resp}=  ProviderLogin  ${SHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1221,7 +1232,7 @@ JD-TC-SalesHeadWithRBAC-UH1
                                   
     [Documentation]               Sales head - Create LoanApplication.
 
-    ${resp}=  ProviderLogin  ${SHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1240,7 +1251,7 @@ JD-TC-SalesHeadWithRBAC-UH2
                                   
     [Documentation]               Sales head -  create Dealer.
 
-    ${resp}=  ProviderLogin  ${SHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1266,7 +1277,7 @@ JD-TC-SalesHeadWithRBAC-UH3
                                   
     [Documentation]               Sales head -  Update Dealer.
 
-    ${resp}=  ProviderLogin  ${SHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
@@ -1424,7 +1435,7 @@ JD-TC-SalesHeadWithRBAC-UH4
                                   
     [Documentation]               Sales head -  Reject loan Application.
 
-    ${resp}=  ProviderLogin  ${SHUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${SHUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

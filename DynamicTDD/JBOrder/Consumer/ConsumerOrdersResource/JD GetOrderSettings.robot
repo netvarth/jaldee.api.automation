@@ -23,12 +23,16 @@ JD-TC-GetOrderSetings-1
     clear_service  ${PUSERNAME140}
     clear_customer   ${PUSERNAME140}
     clear_Item   ${PUSERNAME140}
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${fname}  ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}  ${resp.json()['lastName']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${fname1}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname1}  ${decrypted_data['lastName']}
     
     ${accId}=  get_acc_id  ${PUSERNAME140}
     Set Suite Variable  ${accId}
@@ -55,8 +59,8 @@ JD-TC-GetOrderSetings-1
     Should Be Equal As Strings    ${resp.status_code}    200
     
     Should Be Equal As Strings  ${resp.json()['enableOrder']}                    ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}  ${fname}
-    Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}   ${lname}
+    Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}  ${fname1}
+    Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}   ${lname1}
     Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}      ${PUSERNAME140}
     Should Be Equal As Strings  ${resp.json()['storeContactInfo']['email']}      ${email_id}
    
@@ -67,12 +71,19 @@ JD-TC-GetOrderSetings-2
     clear_service  ${PUSERNAME141}
     clear_customer   ${PUSERNAME141}
     clear_Item   ${PUSERNAME141}
-    ${resp}=  ProviderLogin  ${PUSERNAME141}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME141}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
-    Set Test Variable  ${fname}  ${resp.json()['firstName']}
-    Set Test Variable  ${lname}  ${resp.json()['lastName']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${fname}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname}  ${decrypted_data['lastName']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
+    # Set Test Variable  ${fname}  ${resp.json()['firstName']}
+    # Set Test Variable  ${lname}  ${resp.json()['lastName']}
     
     ${accId1}=  get_acc_id  ${PUSERNAME141}
 
@@ -96,12 +107,19 @@ JD-TC-GetOrderSetings-3
     clear_service  ${PUSERNAME143}
     clear_customer   ${PUSERNAME143}
     clear_Item   ${PUSERNAME143}
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
-    Set Test Variable  ${fname}  ${resp.json()['firstName']}
-    Set Test Variable  ${lname}  ${resp.json()['lastName']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${fname}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname}  ${decrypted_data['lastName']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
+    # Set Test Variable  ${fname}  ${resp.json()['firstName']}
+    # Set Test Variable  ${lname}  ${resp.json()['lastName']}
     
     ${accId2}=  get_acc_id  ${PUSERNAME143}
 
@@ -136,8 +154,8 @@ JD-TC-GetOrderSetings-4
     Should Be Equal As Strings    ${resp.status_code}    200
 
     Should Be Equal As Strings  ${resp.json()['enableOrder']}                    ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}  ${fname}
-    Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}   ${lname}
+    Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}  ${fname1}
+    Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}   ${lname1}
     Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}      ${PUSERNAME140}
     Should Be Equal As Strings  ${resp.json()['storeContactInfo']['email']}      ${email_id}
    

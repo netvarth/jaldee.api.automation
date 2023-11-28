@@ -38,7 +38,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-1
 
     [Documentation]  Consumer apply a coupon at self payment
 
-    ${resp}=   ProviderLogin  ${PUSERNAME204}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME204}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -65,9 +65,9 @@ JD-TC-ApplyJaldeeCouponByConsumer-1
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -99,7 +99,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME204}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME204}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_code2018}
@@ -144,29 +144,37 @@ JD-TC-ApplyJaldeeCouponByConsumer-1
     ${resp}=  SetMerchantId  ${pid}  ${merchantid}
     ${cid}=  get_id  ${CUSERNAME5}
     Set Suite Variable  ${cid}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
     ${cid}=  get_id  ${CUSERNAME5}
     Set Suite Variable  ${cid}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti}=  get_latitude
+    # Set Suite Variable  ${latti}
+    # ${longi}=  get_longitude
+    # Set Suite Variable  ${longi}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti}=  get_latitude
     Set Suite Variable  ${latti}
-    ${longi}=  get_longitude
     Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${24hours}    Random Element    ['True','False']
     Set Suite Variable  ${24hours}
-    ${sTime}=  add_time  5  15
+    ${sTime}=  add_timezone_time  ${tz}  5  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   6  30
+    ${eTime}=  add_timezone_time  ${tz}  6  30  
     Set Suite Variable   ${eTime}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parkingType[0]}  ${24hours}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
@@ -187,9 +195,9 @@ JD-TC-ApplyJaldeeCouponByConsumer-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   subtract_time  1  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  3  00 
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -206,7 +214,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-1
 JD-TC-ApplyJaldeeCouponByConsumer-UH9
     [Documentation]  Consumer apply a coupon at Checkin time.but coupon apply after validity period
 
-    ${resp}=   ProviderLogin  ${PUSERNAME204}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME204}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${d1}  ${resp.json()['sector']}
     Set Test Variable  ${sd1}  ${resp.json()['subSector']}
@@ -223,9 +231,9 @@ JD-TC-ApplyJaldeeCouponByConsumer-UH9
     ${domains}=  Jaldee Coupon Target Domains  ${d1}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  1
+    ${DAY2}=  db.add_timezone_date  ${tz}  1  
     Set Suite Variable  ${DAY2}  ${DAY2}
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -248,7 +256,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-UH9
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME204}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME204}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code2031}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -293,7 +301,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-UH9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME204}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME204}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Bill By UUId  ${widh9_1}
     Log   ${resp.json()}
@@ -310,7 +318,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-UH9
     Should Be Equal As Strings  ${resp.json()['netRate']}  531.0
     Should Be Equal As Strings  ${resp.json()['amountDue']}  531.0
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cid}=  get_id  ${CUSERNAME4}
     clear_waitlist   ${CUSERNAME4}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id6}  ${qid1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
@@ -361,9 +369,9 @@ JD-TC-ApplyJaldeeCouponByConsumer-UH10
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  1
+    ${DAY2}=  db.add_timezone_date  ${tz}  1  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -384,7 +392,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME204}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME204}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code2032}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -401,7 +409,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-UH10
     ${widh10}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${widh10}  ${widh10[0]}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME204}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME204}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Bill By UUId  ${widh10}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -426,7 +434,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-UH10
     Should Be Equal As Strings  ${resp.json()['providerUsage']['reimbursed']}  0.0 
     change_system_date  2
 
-    ${resp}=   ProviderLogin  ${PUSERNAME204}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME204}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code2032}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -467,7 +475,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-UH10
 
     ${resp}=  Consumer Login  ${CUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200  
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${cid}=  get_id  ${CUSERNAME5}    
     ${coupons}=  Create List  ${cupn_code2032}

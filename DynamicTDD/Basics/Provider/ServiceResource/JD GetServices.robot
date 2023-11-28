@@ -39,7 +39,7 @@ JD-TC-GetServices-1
     ${Total}=  Convert To Number  ${Total}  1
     Set Suite Variable  ${Total}
     Set Suite Variable  ${min_pre}
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service       ${PUSERNAME170}  
 
@@ -75,7 +75,7 @@ JD-TC-GetServices-1
 JD-TC-GetServices-2
 
     [Documentation]   Get  services for a valid provider filter by id
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service  id-eq=${id1}
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -86,7 +86,7 @@ JD-TC-GetServices-2
 JD-TC-GetServices-3
 
     [Documentation]  Get  services for a valid provider filter by  name
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service  name-eq=${SERVICE2}
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -97,7 +97,7 @@ JD-TC-GetServices-3
 JD-TC-GetServices-4
 
     [Documentation]  Get  services for a valid provider filter by status ACTIVE
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service  status-eq=ACTIVE 
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -110,7 +110,7 @@ JD-TC-GetServices-4
 JD-TC-GetServices-5
 
     [Documentation]    Get  services for a valid provider filter by status INACTIVE
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service  status-eq=INACTIVE 
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -123,9 +123,13 @@ JD-TC-GetServices-6
 
 
     [Documentation]   Get  services for a valid provider filter by account number
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${accNo}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${accNo}  ${decrypted_data['id']}
+    
     ${resp}=   Get Service  account-eq=${accNo}
     Should Be Equal As Strings  ${resp.status_code}  200   
 	${count}=  Get Length  ${resp.json()} 
@@ -141,8 +145,8 @@ JD-TC-GetServices-7
 
     [Documentation]  Get  services for a valid provider filter by notification Type
     ${description}=  FakerLibrary.sentence
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Create Service  ${SERVICE6}  ${description}  ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[0]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]}  
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -159,7 +163,7 @@ JD-TC-GetServices-7
 JD-TC-GetServices-8
 
     [Documentation]  Get  services for a valid provider filter by notificationType ,account no and status
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service   account-eq=${accNo}  status-eq=INACTIVE  notificationType-eq=pushMsg
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -171,7 +175,7 @@ JD-TC-GetServices-8
 JD-TC-GetServices-9
 
     [Documentation]  Get  services for a valid provider filter by service id ,account no,status and notificationType
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service  id-eq=${id1}   account-eq=${accNo}  status-eq=ACTIVE  notificationType-eq=${notifytype[2]}
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -184,7 +188,7 @@ JD-TC-GetServices-10
 
 
     [Documentation]  Get  services for a valid provider filter by service id ,account no
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service  id-eq=${id2}   account-eq=${accNo}
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -195,7 +199,7 @@ JD-TC-GetServices-10
 JD-TC-GetServices-11
 
     [Documentation]  Get  services for a valid provider filter by service id ,status
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service  id-eq=${id4}   status-eq=INACTIVE
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -206,7 +210,7 @@ JD-TC-GetServices-11
 JD-TC-GetServices-12
 
     [Documentation]  Get  services for a valid provider filter by service id ,notificationType
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service  id-eq=${id5}   notificationType-eq=pushMsg
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -217,7 +221,7 @@ JD-TC-GetServices-12
 JD-TC-GetServices-13
 
     [Documentation]  Get  services for a valid provider filter by service id ,name
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service  id-eq=${id5}   name-eq=${SERVICE5}
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -228,7 +232,7 @@ JD-TC-GetServices-13
 JD-TC-GetServices-14
 
     [Documentation]  Get  services for a valid provider filter by name and account
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service  name-eq=${SERVICE5}  account-eq=${accNo}
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -239,7 +243,7 @@ JD-TC-GetServices-14
 JD-TC-GetServices-15
 
     [Documentation]  Get  services for a valid provider filter by name and notificationType
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service  name-eq=${SERVICE4}  notificationType-eq=${notifytype[2]}
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -250,7 +254,7 @@ JD-TC-GetServices-15
 JD-TC-GetServices-16
 
     [Documentation]  Get  services for a valid provider filter by name and status
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service  name-eq=${SERVICE4}  status-eq=INACTIVE
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -263,7 +267,7 @@ JD-TC-GetServices-16
 JD-TC-GetServices-17
 
     [Documentation]  Get  services for a valid provider filter by account and notificationType
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service    account-eq=${accNo}  notificationType-eq=${notifytype[2]}
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -277,7 +281,7 @@ JD-TC-GetServices-17
 JD-TC-GetServices-18
 
     [Documentation]  Get  services for a valid provider filter by account and status
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service    account-eq=${accNo}  status-eq=ACTIVE
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -292,7 +296,7 @@ JD-TC-GetServices-18
 JD-TC-GetServices-19
 
     [Documentation]  Get  services for a valid provider filter by notificationType and status
-    ${resp}=  Provider Login  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Service    notificationType-eq=pushMsg  status-eq=ACTIVE
     Should Be Equal As Strings  ${resp.status_code}  200   

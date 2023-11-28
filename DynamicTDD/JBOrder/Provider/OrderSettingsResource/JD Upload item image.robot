@@ -26,7 +26,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-Upload item Image-1
     [Documentation]   Provider check to upload item image when displayImage is true
     clear_Item  ${PUSERNAME12}
-    ${resp}=  ProviderLogin  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${displayName1}=   FakerLibrary.name 
@@ -76,7 +76,7 @@ JD-TC-Upload item Image-1
     ${resp}=   uploadItemImages   ${id}   ${boolean[1]}   ${cookie}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     ${resp}=   Get Item By Id   ${id}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -94,7 +94,7 @@ JD-TC-Upload item Image-2
     ${resp}=   uploadItemImages   ${id}   ${boolean[0]}   ${cookie}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     ${resp}=   Get Item By Id   ${id}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

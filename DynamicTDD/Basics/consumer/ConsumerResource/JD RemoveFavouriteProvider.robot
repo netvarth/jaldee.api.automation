@@ -128,7 +128,7 @@ JD-TC-RemoveFavouriteProvider-UH3
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Consumer Logout
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}   200 
      ${resp}=  Remove Favourite Provider  ${id}
      Log  ${resp.json()}

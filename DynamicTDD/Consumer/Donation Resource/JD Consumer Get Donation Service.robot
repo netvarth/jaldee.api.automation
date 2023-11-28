@@ -92,7 +92,7 @@ JD-TC-ConsumerGetDonationService-UH1
 
 JD-TC-ConsumerGetDonationService-UH2   
         [Documentation]   Get a donation service using provider login
-        ${resp}=  Provider Login  ${PUSERNAME62}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Get Donation Service By Consumer  ${acc_id}
         Log  ${resp.json()}
@@ -122,7 +122,7 @@ Billable Domain Providers
      
     FOR   ${a}  IN RANGE   ${min}   ${max}
             
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${domain}=   Set Variable    ${resp.json()['sector']}
         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
@@ -155,7 +155,7 @@ Non Billable
         ${length}=  Get Length   ${len}
 
         FOR    ${a}   IN RANGE   ${min}   ${max}
-                ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+                ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
                 Should Be Equal As Strings    ${resp.status_code}    200
                 ${domain}=   Set Variable    ${resp.json()['sector']}
                 ${subdomain}=    Set Variable      ${resp.json()['subSector']}

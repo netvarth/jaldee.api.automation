@@ -26,7 +26,7 @@ JD-TC-Add Adwords -1
               ${subdomain_len}=  Evaluate  ${subdomain_len}+${sublen}
        END
        FOR   ${a}  IN RANGE   ${subdomain_len}
-              ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+              ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
               Should Be Equal As Strings    ${resp.status_code}    200  
               ${acid}=   get_acc_id  ${PUSERNAME${a}}   
               clear_Addon  ${PUSERNAME${a}}  
@@ -59,7 +59,7 @@ JD-TC-Add Adwords -2
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
        Should Be Equal As Strings    ${resp.status_code}    200
-       ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}    200
        Set Suite Variable  ${PUSERNAME}
@@ -124,7 +124,7 @@ JD-TC-Add Adwords -3
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
        Should Be Equal As Strings    ${resp.status_code}    200
-       ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}    200
        Set Suite Variable  ${PUSERNAME}
@@ -177,7 +177,7 @@ JD-TC-Add Adwords -UH1
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
        Should Be Equal As Strings    ${resp.status_code}    200
-       ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}    200
        Set Suite Variable  ${PUSERNAME}
@@ -209,7 +209,7 @@ JD-TC-Add Adwords -UH1
        #        ${subdomain_len}=  Evaluate  ${subdomain_len}+${sublen}
        # END
        # FOR   ${a}  IN RANGE    ${subdomain_len}
-       #        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+       #        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
        #        Should Be Equal As Strings    ${resp.status_code}    200
        #        ${acid}=   get_acc_id  ${PUSERNAME${a}} 
        #        clear_Addon  ${PUSERNAME${a}}  

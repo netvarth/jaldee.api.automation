@@ -15,7 +15,7 @@ ${accountType}      INDEPENDENT_SP
 JD-TC-Update Today Appointment Settings -1
     [Documentation]   Update Appointment settings with Today status is Disable
     
-    ${resp}=  Provider Login  ${PUSERNAME187}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME187}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=   get_acc_id  ${PUSERNAME187}
@@ -43,7 +43,7 @@ JD-TC-Update Today Appointment Settings -1
 JD-TC-Update Today Appointment Settings -2
     [Documentation]   Update Appointment settings with Today status is Enable
     
-    ${resp}=  Provider Login  ${PUSERNAME188}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME188}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=   get_acc_id  ${PUSERNAME188}
@@ -75,7 +75,7 @@ JD-TC-Update Today Appointment Settings -2
 JD-TC-Update Today Appointment Settings -UH1
     [Documentation]   Update Appointment settings trying to Today status is Enable
     
-    ${resp}=  Provider Login  ${PUSERNAME188}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME188}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=   get_acc_id  ${PUSERNAME188}
@@ -104,7 +104,7 @@ JD-TC-Update Today Appointment Settings -UH1
 JD-TC-Update Today Appointment Settings -UH2
     [Documentation]   Update Appointment settings trying to Today status is Disable
     
-    ${resp}=  Provider Login  ${PUSERNAME187}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME187}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=   get_acc_id  ${PUSERNAME187}

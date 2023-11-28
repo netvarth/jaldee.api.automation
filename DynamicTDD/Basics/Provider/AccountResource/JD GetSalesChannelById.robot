@@ -100,7 +100,7 @@ JD-TC-Get SalesChannelById1
 
     clear_ssc_code  ${PUSERNAME114}  
 
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Add SalesChannel   ${sc_code}
@@ -117,7 +117,7 @@ JD-TC-Get SalesChannelById1
 JD-TC-Get SalesChannelById1-UH1
 
     [Documentation]  get saleschannelById with invalid id
-    ${resp}=  ProviderLogin  ${PUSERNAME108}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  ProviderKeywords.Get SalesChannelByID   ABHDDFLJ
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -141,7 +141,7 @@ JD-TC-Get SalesChannelById1-UH3
 JD-TC-Get SalesChannelById1-UH4
 
     [Documentation]  check a provider's sales chennel details another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME104}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  ProviderKeywords.Get SalesChannelByID   ABCD 
     Should Be Equal As Strings  ${resp.status_code}  200

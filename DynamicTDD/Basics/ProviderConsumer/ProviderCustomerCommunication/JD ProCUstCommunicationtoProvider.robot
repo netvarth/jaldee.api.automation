@@ -28,7 +28,7 @@ JD-TC-Communication between Provider_consumer and provider-1
 
     [Documentation]    Communication between Provider_consumer and provider without attachment
 
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${pid}    ${resp.json()['id']}
@@ -298,7 +298,7 @@ JD-TC-Communication between Provider_consumer and provider-UH14
 
     [Documentation]    Communication between Provider_consumer and provider where provider send to provider consumer
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 

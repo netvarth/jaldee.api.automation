@@ -36,26 +36,26 @@ Variables         /ebs/TDD/varfiles/musers.py
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
 #     Set Suite Variable  ${PUSERNAME_B}
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     Set Suite Variable  ${DAY1}  ${DAY1}
 #     ${list}=  Create List  1  2  3  4  5  6  7
 #     Set Suite Variable  ${list}  ${list}
 #     ${resp}=  Update Business Profile without details  ${EMPTY}  ${EMPTY}   ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}
 #     Should Be Equal As Strings  ${resp.status_code}  200
     
-YNW-TC-GetBusinessProf-UH1
+JD-TC-GetBusinessProf-UH1
     Comment  Get business profile without login
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
     
 
-YNW-TC-GetBusinessProf-UH2
+JD-TC-GetBusinessProf-UH2
     Comment   Get business profile by  login as consumer
     ${resp}=    ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -65,10 +65,14 @@ YNW-TC-GetBusinessProf-UH2
 
 JD-TC-GetBusinessProf-1
 	[Documentation]  Get business profile of Provider
-    ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${domain}=   Set Variable    ${resp.json()['sector']}
-    ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    ${domain}=   Set Variable    ${decrypted_data['sector']}
+    ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+    # ${domain}=   Set Variable    ${resp.json()['sector']}
+    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
     sleep   02s
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -89,10 +93,14 @@ JD-TC-GetBusinessProf-1
 
 JD-TC-GetBusinessProf-2
 	[Documentation]  Get business profile of Branch
-    ${resp}=  ProviderLogin  ${MUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${domain}=   Set Variable    ${resp.json()['sector']}
-    ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    ${domain}=   Set Variable    ${decrypted_data['sector']}
+    ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+    # ${domain}=   Set Variable    ${resp.json()['sector']}
+    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
     sleep   02s
     ${resp}=  Get Business Profile
     Log   ${resp.json()}

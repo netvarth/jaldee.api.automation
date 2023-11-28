@@ -24,7 +24,7 @@ JD-TC-ProviderCouponBill-1
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -60,7 +60,12 @@ JD-TC-ProviderCouponBill-1
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -82,11 +87,11 @@ JD-TC-ProviderCouponBill-1
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid2}  ${resp.json()}
     
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -100,10 +105,10 @@ JD-TC-ProviderCouponBill-1
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -124,7 +129,6 @@ JD-TC-ProviderCouponBill-1
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -165,7 +169,7 @@ JD-TC-ProviderCouponBill-2
     clear_customer   ${PUSERNAME114}
     clear_Coupon     ${PUSERNAME114}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -201,7 +205,12 @@ JD-TC-ProviderCouponBill-2
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -223,11 +232,11 @@ JD-TC-ProviderCouponBill-2
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid2}  ${resp.json()}
     
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -241,10 +250,10 @@ JD-TC-ProviderCouponBill-2
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -265,7 +274,6 @@ JD-TC-ProviderCouponBill-2
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -326,7 +334,7 @@ JD-TC-ProviderCouponBill-3
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -362,7 +370,12 @@ JD-TC-ProviderCouponBill-3
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -374,11 +387,11 @@ JD-TC-ProviderCouponBill-3
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid1}  ${resp.json()}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -392,10 +405,10 @@ JD-TC-ProviderCouponBill-3
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -417,10 +430,10 @@ JD-TC-ProviderCouponBill-3
     ${amount1}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code1}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -442,7 +455,6 @@ JD-TC-ProviderCouponBill-3
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -495,7 +507,7 @@ JD-TC-ProviderCouponBill-4
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -531,7 +543,12 @@ JD-TC-ProviderCouponBill-4
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -543,11 +560,11 @@ JD-TC-ProviderCouponBill-4
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid1}  ${resp.json()}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -561,10 +578,10 @@ JD-TC-ProviderCouponBill-4
     ${amount}=  Random Int   min=100   max=100
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=50   max=90
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -585,7 +602,6 @@ JD-TC-ProviderCouponBill-4
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -627,7 +643,7 @@ JD-TC-ProviderCouponBill-5
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -663,7 +679,12 @@ JD-TC-ProviderCouponBill-5
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -675,11 +696,11 @@ JD-TC-ProviderCouponBill-5
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid1}  ${resp.json()}
     
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -693,10 +714,10 @@ JD-TC-ProviderCouponBill-5
     ${amount}=  Random Int   min=100   max=100
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=50   max=90
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -717,7 +738,6 @@ JD-TC-ProviderCouponBill-5
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -756,7 +776,7 @@ JD-TC-ProviderCouponBill-6
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -792,7 +812,12 @@ JD-TC-ProviderCouponBill-6
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -804,11 +829,11 @@ JD-TC-ProviderCouponBill-6
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid1}  ${resp.json()}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -822,10 +847,10 @@ JD-TC-ProviderCouponBill-6
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=50   max=100
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -846,7 +871,6 @@ JD-TC-ProviderCouponBill-6
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -889,7 +913,7 @@ JD-TC-ProviderCouponBill-7
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -925,7 +949,12 @@ JD-TC-ProviderCouponBill-7
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -947,11 +976,11 @@ JD-TC-ProviderCouponBill-7
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid2}  ${resp.json()}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -965,10 +994,10 @@ JD-TC-ProviderCouponBill-7
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=50   max=100
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -990,10 +1019,10 @@ JD-TC-ProviderCouponBill-7
     ${amount1}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code1}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=50   max=100
     ${max_disc_val1}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -1014,7 +1043,6 @@ JD-TC-ProviderCouponBill-7
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -1091,7 +1119,7 @@ JD-TC-ProviderCouponBill-8
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -1127,7 +1155,12 @@ JD-TC-ProviderCouponBill-8
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -1149,11 +1182,11 @@ JD-TC-ProviderCouponBill-8
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid2}  ${resp.json()}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -1167,10 +1200,10 @@ JD-TC-ProviderCouponBill-8
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=50   max=100
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -1192,10 +1225,10 @@ JD-TC-ProviderCouponBill-8
     ${amount1}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code1}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=50   max=100
     ${max_disc_val1}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -1216,7 +1249,6 @@ JD-TC-ProviderCouponBill-8
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -1293,7 +1325,7 @@ JD-TC-ProviderCouponBill-9
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -1329,7 +1361,12 @@ JD-TC-ProviderCouponBill-9
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -1351,11 +1388,11 @@ JD-TC-ProviderCouponBill-9
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid2}  ${resp.json()}
     
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -1369,10 +1406,10 @@ JD-TC-ProviderCouponBill-9
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -1393,7 +1430,6 @@ JD-TC-ProviderCouponBill-9
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -1446,7 +1482,7 @@ JD-TC-ProviderCouponBill-10
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200  
     Set Suite Variable   ${PUSERNAME_A}
@@ -1467,20 +1503,21 @@ JD-TC-ProviderCouponBill-10
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL0}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  subtract_time  3  25
-    ${eTime}=  add_time   0  30 
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${sTime}=  db.subtract_timezone_time  ${tz}  3  25
+    ${eTime}=  add_timezone_time  ${tz}  0  30   
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1561,11 +1598,11 @@ JD-TC-ProviderCouponBill-10
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid1}  ${resp.json()}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -1579,10 +1616,10 @@ JD-TC-ProviderCouponBill-10
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=50   max=100
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -1619,7 +1656,6 @@ JD-TC-ProviderCouponBill-10
     ${resp}=  Add To Waitlist  ${id}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${id}  ${mem_id}  ${mem_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wait_id1}  ${wid[0]}
     Set Test Variable  ${wait_id2}  ${wid[1]}
@@ -1703,7 +1739,7 @@ JD-TC-ProviderCouponBill-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1756,6 +1792,11 @@ JD-TC-ProviderCouponBill-11
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME185}
     
     ${description}=  FakerLibrary.sentence
@@ -1768,10 +1809,11 @@ JD-TC-ProviderCouponBill-11
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${s_id}  ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -1821,10 +1863,10 @@ JD-TC-ProviderCouponBill-11
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -1870,7 +1912,7 @@ JD-TC-ProviderCouponBill-12
     [Documentation]  Apply provider coupon to bill for an appointment(phonein).
    
 
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME185}
@@ -1886,6 +1928,11 @@ JD-TC-ProviderCouponBill-12
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME185}
     
     ${description}=  FakerLibrary.sentence
@@ -1898,10 +1945,11 @@ JD-TC-ProviderCouponBill-12
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${s_id}  ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -1955,10 +2003,10 @@ JD-TC-ProviderCouponBill-12
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -2009,7 +2057,7 @@ JD-TC-ProviderCouponBill-UH1
     clear_customer   ${PUSERNAME102}
     clear_Coupon     ${PUSERNAME102}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME102}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2045,7 +2093,12 @@ JD-TC-ProviderCouponBill-UH1
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2067,11 +2120,11 @@ JD-TC-ProviderCouponBill-UH1
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid2}  ${resp.json()}
     
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -2085,10 +2138,10 @@ JD-TC-ProviderCouponBill-UH1
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -2109,7 +2162,6 @@ JD-TC-ProviderCouponBill-UH1
     ${resp}=  Add To Waitlist  ${cid}  ${sid2}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -2140,7 +2192,7 @@ JD-TC-ProviderCouponBill-UH2
     clear_customer   ${PUSERNAME105}
     clear_Coupon     ${PUSERNAME105}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME105}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME105}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2176,7 +2228,12 @@ JD-TC-ProviderCouponBill-UH2
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2188,11 +2245,11 @@ JD-TC-ProviderCouponBill-UH2
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid1}  ${resp.json()}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -2206,10 +2263,10 @@ JD-TC-ProviderCouponBill-UH2
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -2230,7 +2287,6 @@ JD-TC-ProviderCouponBill-UH2
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -2276,7 +2332,7 @@ JD-TC-ProviderCouponBill-UH3
     clear_customer   ${PUSERNAME106}
     clear_Coupon     ${PUSERNAME106}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME106}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME106}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2312,7 +2368,12 @@ JD-TC-ProviderCouponBill-UH3
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2324,11 +2385,11 @@ JD-TC-ProviderCouponBill-UH3
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid1}  ${resp.json()}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -2342,10 +2403,10 @@ JD-TC-ProviderCouponBill-UH3
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  subtract_date   5
-    ${EN_DAY}=  subtract_date  3
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.subtract_timezone_date  ${tz}    5
+    ${EN_DAY}=  db.subtract_timezone_date  ${tz}   3
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -2366,7 +2427,6 @@ JD-TC-ProviderCouponBill-UH3
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -2397,7 +2457,7 @@ JD-TC-ProviderCouponBill-UH4
     clear_customer   ${PUSERNAME107}
     clear_Coupon     ${PUSERNAME107}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME107}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2433,7 +2493,12 @@ JD-TC-ProviderCouponBill-UH4
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2445,11 +2510,11 @@ JD-TC-ProviderCouponBill-UH4
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid1}  ${resp.json()}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -2463,10 +2528,10 @@ JD-TC-ProviderCouponBill-UH4
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -2487,7 +2552,6 @@ JD-TC-ProviderCouponBill-UH4
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -2518,7 +2582,7 @@ JD-TC-ProviderCouponBill-UH5
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2554,7 +2618,12 @@ JD-TC-ProviderCouponBill-UH5
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2566,11 +2635,11 @@ JD-TC-ProviderCouponBill-UH5
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid1}  ${resp.json()}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -2584,10 +2653,10 @@ JD-TC-ProviderCouponBill-UH5
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -2608,7 +2677,6 @@ JD-TC-ProviderCouponBill-UH5
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -2638,7 +2706,7 @@ JD-TC-ProviderCouponBill-UH6
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2674,7 +2742,12 @@ JD-TC-ProviderCouponBill-UH6
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2686,11 +2759,11 @@ JD-TC-ProviderCouponBill-UH6
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid1}  ${resp.json()}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -2704,10 +2777,10 @@ JD-TC-ProviderCouponBill-UH6
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=50   max=150
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -2728,7 +2801,6 @@ JD-TC-ProviderCouponBill-UH6
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -2769,7 +2841,7 @@ JD-TC-ProviderCouponBill-UH7
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2805,7 +2877,12 @@ JD-TC-ProviderCouponBill-UH7
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2817,11 +2894,11 @@ JD-TC-ProviderCouponBill-UH7
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid1}  ${resp.json()}
     
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -2835,10 +2912,10 @@ JD-TC-ProviderCouponBill-UH7
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -2859,7 +2936,6 @@ JD-TC-ProviderCouponBill-UH7
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -2918,7 +2994,7 @@ JD-TC-ProviderCouponBill-UH8
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -2954,7 +3030,12 @@ JD-TC-ProviderCouponBill-UH8
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -2976,11 +3057,11 @@ JD-TC-ProviderCouponBill-UH8
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid2}  ${resp.json()}
     
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -2994,10 +3075,10 @@ JD-TC-ProviderCouponBill-UH8
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -3018,7 +3099,6 @@ JD-TC-ProviderCouponBill-UH8
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -3048,7 +3128,7 @@ JD-TC-ProviderCouponBill-UH9
     [Documentation]  Apply provider coupon to bill for an appointment(phonein).
    
 
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME185}
@@ -3064,6 +3144,11 @@ JD-TC-ProviderCouponBill-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME185}
     
     ${description}=  FakerLibrary.sentence
@@ -3076,10 +3161,11 @@ JD-TC-ProviderCouponBill-UH9
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${s_id}  ${resp.json()}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -3133,10 +3219,10 @@ JD-TC-ProviderCouponBill-UH9
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20

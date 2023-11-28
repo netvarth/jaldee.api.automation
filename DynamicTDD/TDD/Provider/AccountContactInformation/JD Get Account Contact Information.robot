@@ -35,7 +35,7 @@ JD-TC-Get Account Contact information-1
 *** Comment ***
     ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME}
@@ -249,7 +249,7 @@ JD-TC-Get Account Contact information-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME1}
@@ -464,7 +464,7 @@ JD-TC-Get Account Contact information-3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${email}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id2}  ${resp.json()['id']}
@@ -603,7 +603,7 @@ JD-TC-Get Account Contact information-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${email}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id2}  ${resp.json()['id']}
@@ -752,7 +752,7 @@ JD-TC-Get Account Contact information-5
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${email}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id2}  ${resp.json()['id']}
@@ -898,7 +898,7 @@ JD-TC-Get Account Contact information-6
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${BUSERNAME_K}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${BUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id3}  ${resp.json()['id']}
@@ -1094,7 +1094,7 @@ JD-TC-Get Account Contact information-7
     # Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
     # Set Suite Variable  ${sud_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
 
-    # ${resp}=  Provider Login   ${BUSERNAME0}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login   ${BUSERNAME0}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # Set Suite Variable  ${subdomain}  ${resp.json()['subSector']}
@@ -1112,7 +1112,7 @@ JD-TC-Get Account Contact information-7
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${BUSERNAME_L}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${BUSERNAME_L}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSERNAME_L}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${subdomain}  ${resp.json()['subSector']}
@@ -1148,9 +1148,16 @@ JD-TC-Get Account Contact information-7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -1254,7 +1261,7 @@ JD-TC-Get Account Contact information-7
 
 JD-TC-Get Account Contact information-8
     [Documentation]  Get account contact information of a existing provider
-    ${resp}=  Provider Login  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id4}  ${resp.json()['id']}
@@ -1297,7 +1304,7 @@ JD-TC-Get Account Contact information-8
 
 JD-TC-Get Account Contact information-UH1
     [Documentation]  Get account contact information of a existing provider and update provider details with used email
-    ${resp}=  Provider Login  ${PUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id5}  ${resp.json()['id']}

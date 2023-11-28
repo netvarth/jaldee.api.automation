@@ -27,7 +27,7 @@ ${pngfile}     /ebs/TDD/upload.png
 JD-TC-Get Customers-1
     [Documentation]   Get Customers by provider login using account 
     
-    ${resp}=  ProviderLogin  ${PUSERNAME245}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME245}  ${PASSWORD}
     clear_customer   ${PUSERNAME245}
 
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -54,7 +54,7 @@ JD-TC-Get Customers-1
    
 JD-TC-Get Customers-2
     [Documentation]   Get Customers by another provider using phone and status
-    ${resp}=  ProviderLogin  ${PUSERNAME235}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${firstname}=  FakerLibrary.first_name
@@ -75,7 +75,7 @@ JD-TC-Get Customers-2
     
 JD-TC-Get Customers-3
     [Documentation]   Get Customers by another provider using fname and lastname
-    ${resp}=  ProviderLogin  ${PUSERNAME236}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${firstname}=  FakerLibrary.first_name
@@ -95,7 +95,7 @@ JD-TC-Get Customers-3
 
 JD-TC-Get Customers-4
 	[Documentation]   Get Customers by provider login using dob
-    ${resp}=  ProviderLogin  ${PUSERNAME245}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME245}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  GetCustomer   dob-eq=${dob1}     
     Log  ${resp.json()} 
@@ -105,7 +105,7 @@ JD-TC-Get Customers-4
 
 JD-TC-Get Customers-5
 	[Documentation]   Get Customers by provider login using status
-    ${resp}=  ProviderLogin  ${PUSERNAME245}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME245}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  GetCustomer   status-eq=ACTIVE   
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -132,7 +132,7 @@ JD-TC-Get Customers-6
     ...   ${SPACE}check provider consumer data to see if the provider consumer for that consumer is created. 
     ...   ${SPACE}consumer then changes login id to indian number and check if it is reflected in the provider consumer data
 
-    ${resp}=  Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -164,11 +164,16 @@ JD-TC-Get Customers-6
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_queue   ${PUSERNAME53}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -229,7 +234,7 @@ JD-TC-Get Customers-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -262,7 +267,7 @@ JD-TC-Get Customers-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -314,7 +319,7 @@ JD-TC-Get Customers-7
     
 
 
-   ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+   ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -362,7 +367,7 @@ JD-TC-Get Customers-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 

@@ -18,7 +18,7 @@ JD-TC-EnableDisableTaskforUser-1
 
     [Documentation]   Enable Task.
 
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -40,7 +40,7 @@ JD-TC-EnableDisableTaskforUser-2
 
     [Documentation]   Disable Task After Enabling
 
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -70,7 +70,7 @@ JD-TC-EnableDisableTaskforUser-3
 
     [Documentation]   Enable Task which is Disabled
 
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -123,7 +123,7 @@ JD-TC-EnableDisableTaskforUser-UH3
 
     [Documentation]   Enable Task Which is already enabled
 
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -151,7 +151,7 @@ JD-TC-EnableDisableTaskforUser-UH4
 
     [Documentation]   Disable Task Which is already Disabled
 
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

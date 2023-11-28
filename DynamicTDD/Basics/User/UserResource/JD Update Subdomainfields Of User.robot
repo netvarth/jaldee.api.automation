@@ -39,7 +39,7 @@ JD-TC-UpdateSubDomainVirtualFieldOfUser-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -149,7 +149,7 @@ JD-TC-UpdateSubDomainVirtualFieldOfUser-UH2
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${MUSERNAME_R}  ${PASSWORD}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${MUSERNAME_R}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${MUSERNAME_R}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_R}${\n}
@@ -196,7 +196,7 @@ JD-TC-UpdateSubDomainVirtualFieldOfUser-UH2
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     Set Test Variable  ${u_p_id}  ${resp.json()['profileId']}
 
-#     # ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+#     # ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
 #     # Log  ${resp.json()}
 #     # Should Be Equal As Strings  ${resp.status_code}  200
 #     # Set Test Variable   ${d}  ${resp.json()['sector']}
@@ -207,7 +207,7 @@ JD-TC-UpdateSubDomainVirtualFieldOfUser-UH2
 #     Should Be Equal As Strings    ${fields.status_code}   200
 #     ${virtual_fields1}=  get_Subdomainfields_OfUser  ${fields.json()}
 
-#     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Update Sub_Domain_Level Of User  ${virtual_fields1}  ${sub_domain_id}  ${u_id}
@@ -217,7 +217,7 @@ JD-TC-UpdateSubDomainVirtualFieldOfUser-UH2
 
 JD-TC-UpdateSubDomainVirtualFieldOfUser-UH4
     [Documentation]   update Sub-domain  virtual fields  of a valid user with invalid user id
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Update Sub_Domain_Level Of User  ${virtual_fields}  ${sub_domain_id}  000
@@ -227,7 +227,7 @@ JD-TC-UpdateSubDomainVirtualFieldOfUser-UH4
 
 JD-TC-UpdateSubDomainVirtualFieldOfUser-UH5
     [Documentation]   update Sub-domain  virtual fields  of a valid user with invalid sub domain id
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Update Sub_Domain_Level Of User  ${virtual_fields}  000  ${u_id}

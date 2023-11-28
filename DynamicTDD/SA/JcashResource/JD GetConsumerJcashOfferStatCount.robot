@@ -28,6 +28,7 @@ ${self}               0
 ${start}              140
 ${jcoupon1}   CouponMul00
 ${CUSERPH}      ${CUSERNAME}
+${tz}   Asia/Kolkata
 
 *** Test Cases ***
 
@@ -47,11 +48,11 @@ JD-TC-GetConsumerJcashOfferStatCount-1
     ${name}=  FakerLibrary.name
     Set Suite Variable   ${name} 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -90,11 +91,11 @@ JD-TC-GetConsumerJcashOfferStatCount-2
     ${name1}=  FakerLibrary.name
     Set Suite Variable   ${name1} 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -118,7 +119,7 @@ JD-TC-GetConsumerJcashOfferStatCount-2
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH1}${\n}
     
-    ${create_day}=  get_date
+    ${create_day}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${create_day}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+4468
     ${firstname}=  FakerLibrary.first_name
@@ -186,11 +187,11 @@ JD-TC-GetConsumerJcashOfferStatCount-3
     ${name2}=  FakerLibrary.name
     Set Suite Variable   ${name2} 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -212,11 +213,11 @@ JD-TC-GetConsumerJcashOfferStatCount-3
     ${name3}=  FakerLibrary.name
     Set Suite Variable   ${name3} 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -316,11 +317,11 @@ JD-TC-GetConsumerJcashOfferStatCount-4
     ${name4}=  FakerLibrary.name
     Set Suite Variable   ${name4} 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  get_date  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.get_date_by_timezone  ${tz}  
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -344,7 +345,7 @@ JD-TC-GetConsumerJcashOfferStatCount-4
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH3}${\n}
     
-    ${create_day}=  get_date
+    ${create_day}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${create_day}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH3}+4468
     ${firstname2}=  FakerLibrary.first_name
@@ -416,13 +417,13 @@ JD-TC-GetConsumerJcashOfferStatCount-5
     ${name5}=  FakerLibrary.name
     Set Suite Variable   ${name5} 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10
-    ${ex_date}=    add_date   ${validForDays}    
+    ${ex_date}=    db.add_timezone_date  ${tz}   ${validForDays}    
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
     ${max_limit}=   Set Variable If  ${maxSpendLimit} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit}
@@ -446,7 +447,7 @@ JD-TC-GetConsumerJcashOfferStatCount-5
     clear_customer   ${PUSERNAME120}
     clear_Coupon     ${PUSERNAME120}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -530,13 +531,13 @@ JD-TC-GetConsumerJcashOfferStatCount-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_sid2}  ${resp.json()}
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    ${sTime}=  add_time  1   00
-    ${eTime}=  add_time   4   15
+    ${sTime}=  add_timezone_time  ${tz}  1  00  
+    ${eTime}=  add_timezone_time  ${tz}   4   15
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${p1_lid}  ${p1_sid1}  ${p1_sid2}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -720,13 +721,13 @@ JD-TC-GetConsumerJcashOfferStatCount-6
     ${name6}=  FakerLibrary.name
     Set Suite Variable   ${name6} 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10
-    ${ex_date}=    add_date   ${validForDays}    
+    ${ex_date}=    db.add_timezone_date  ${tz}   ${validForDays}    
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
     ${max_limit}=   Set Variable If  ${maxSpendLimit} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit}
@@ -1023,13 +1024,13 @@ JD-TC-GetConsumerJcashOfferStatCount-11
     ${name7}=  FakerLibrary.name
     Set Suite Variable   ${name7} 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10
-    ${ex_date}=    add_date   ${validForDays}    
+    ${ex_date}=    db.add_timezone_date  ${tz}   ${validForDays}    
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
     ${max_limit}=   Set Variable If  ${maxSpendLimit} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit}
@@ -1085,7 +1086,7 @@ JD-TC-GetConsumerJcashOfferStatCount-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date  3
+    ${DAY1}=  db.add_timezone_date  ${tz}  3  
     ${resp}=  Waitlist AdvancePayment Details   ${pid}  ${p1_qid}  ${DAY1}  ${p1_sid1}  ${desc}  ${bool[0]}  ${EMPTY_List}  ${self}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1178,7 +1179,7 @@ JD-TC-GetConsumerJcashOfferStatCount-11
     Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}     waitlistStatus=${wl_status[0]}
     ...                       jCashUsedAmt=${max_limit}             creditUsedAmt=0.0
     
-    ${resp}=  Delete Waitlist Consumer  ${cwid2}  ${pid}
+    ${resp}=  Cancel Waitlist  ${cwid2}  ${pid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1229,13 +1230,13 @@ JD-TC-GetConsumerJcashOfferStatCount-12
     ${name8}=  FakerLibrary.name
     Set Suite Variable   ${name8} 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10
-    ${ex_date}=    add_date   ${validForDays}    
+    ${ex_date}=    db.add_timezone_date  ${tz}   ${validForDays}    
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
     ${max_limit}=   Set Variable If  ${maxSpendLimit} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit}
@@ -1291,7 +1292,7 @@ JD-TC-GetConsumerJcashOfferStatCount-12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date  5
+    ${DAY1}=  db.add_timezone_date  ${tz}  5  
     ${resp}=  Waitlist AdvancePayment Details   ${pid}  ${p1_qid}  ${DAY1}  ${p1_sid1}  ${desc}  ${bool[0]}  ${EMPTY_List}  ${self}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1384,7 +1385,7 @@ JD-TC-GetConsumerJcashOfferStatCount-12
     Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}     waitlistStatus=${wl_status[0]}
     ...                       jCashUsedAmt=${max_limit}             creditUsedAmt=0.0
     
-    ${resp}=  Delete Waitlist Consumer  ${cwid3}  ${pid}
+    ${resp}=  Cancel Waitlist  ${cwid3}  ${pid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

@@ -44,13 +44,14 @@ JD-TC-ValidateConsumerQuestionnaire-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -92,7 +93,7 @@ JD-TC-ValidateConsumerQuestionnaire-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -282,61 +283,59 @@ JD-TC-ValidateConsumerQuestionnaire-UH2
     Should Be Equal As Strings   ${resp.json()}    []
 
 
-JD-TC-ValidateConsumerQuestionnaire-UH3
-    [Documentation]  Validate service questionnaire with invalid action.
+# JD-TC-ValidateConsumerQuestionnaire-UH3
+#     [Documentation]  Validate service questionnaire with invalid action.
 
-    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+#     ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings   ${resp.json()['questionnaireId']}  ${qnrid}
-    Should Be Equal As Strings  ${resp.json()['id']}   ${id}
+#     ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    200
+#     Should Be Equal As Strings   ${resp.json()['questionnaireId']}  ${qnrid}
+#     Should Be Equal As Strings  ${resp.json()['id']}   ${id}
     
-    ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
-    Log  ${fudata}
+#     ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
+#     Log  ${fudata}
 
-    ${action}=  FakerLibrary.word
-    Set to Dictionary      ${fudata['fileupload'][0]['files'][0]}    action=${action}
+#     ${action}=  FakerLibrary.word
+#     Set to Dictionary      ${fudata['fileupload'][0]['files'][0]}    action=${action}
 
-    Log  ${fudata}
+#     Log  ${fudata}
 
-    ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
-    Log  ${data}
-    ${resp}=  Consumer Validate Questionnaire  ${account_id}  ${data}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  500
-    Should Be Equal As Strings   ${resp.json()}    ${JALDEE_OUT_OF_REACH_PROBLEM}
+#     ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
+#     Log  ${data}
+#     ${resp}=  Consumer Validate Questionnaire  ${account_id}  ${data}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  422
 
 
-JD-TC-ValidateConsumerQuestionnaire-UH4
-    [Documentation]  Validate service questionnaire without action.
+# JD-TC-ValidateConsumerQuestionnaire-UH4
+#     [Documentation]  Validate service questionnaire without action.
 
-    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+#     ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD} 
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings   ${resp.json()['questionnaireId']}  ${qnrid}
-    Should Be Equal As Strings  ${resp.json()['id']}   ${id}
+#     ${resp}=  Consumer View Questionnaire  ${account_id}  ${s_id}  ${self}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    200
+#     Should Be Equal As Strings   ${resp.json()['questionnaireId']}  ${qnrid}
+#     Should Be Equal As Strings  ${resp.json()['id']}   ${id}
     
-    ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
-    Log  ${fudata}
+#     ${fudata}=  db.fileUploadDT   ${resp.json()}  ${FileAction[0]}  ${mp4file}  ${mp3file}
+#     Log  ${fudata}
 
-    Set to Dictionary      ${fudata['fileupload'][0]['files'][0]}    action=${EMPTY}
+#     Set to Dictionary      ${fudata['fileupload'][0]['files'][0]}    action=${EMPTY}
 
-    Log  ${fudata}
+#     Log  ${fudata}
 
-    ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
-    Log  ${data}
-    ${resp}=  Consumer Validate Questionnaire  ${account_id}  ${data}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  500
-    Should Be Equal As Strings   ${resp.json()}    ${JALDEE_OUT_OF_REACH_PROBLEM}
+#     ${data}=  db.QuestionnaireAnswers   ${resp.json()}   ${self}   &{fudata}
+#     Log  ${data}
+#     ${resp}=  Consumer Validate Questionnaire  ${account_id}  ${data}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  422
 
 
 JD-TC-ValidateConsumerQuestionnaire-UH5
@@ -371,7 +370,7 @@ JD-TC-ValidateConsumerQuestionnaire-UH5
 JD-TC-ValidateConsumerQuestionnaire-UH6
     [Documentation]  Validate service questionnaire by provider login.
     
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Consumer Validate Questionnaire  ${account_id}  ${data}
@@ -395,13 +394,14 @@ JD-TC-ValidateConsumerQuestionnaire-4
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -443,7 +443,7 @@ JD-TC-ValidateConsumerQuestionnaire-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

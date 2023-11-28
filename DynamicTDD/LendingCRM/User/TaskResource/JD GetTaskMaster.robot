@@ -26,15 +26,18 @@ JD-TC-GetTaskMaster-1
 
     [Documentation]  Create a task master for a branch and verify the details by get task master by id.
 
-    ${resp}=  Provider Login  ${MUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME37}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
      ${p_id}=  get_acc_id  ${MUSERNAME37}
     ${resp}=    Get Locations
@@ -42,8 +45,13 @@ JD-TC-GetTaskMaster-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  categorytype  ${p_id}
@@ -110,7 +118,7 @@ JD-TC-GetTaskMaster-2
 
     [Documentation]  Get task master with tittle 
     
-    ${resp}=  Provider Login  ${MUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME37}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -123,7 +131,7 @@ JD-TC-GetTaskMaster-3
 
     [Documentation]  Get task master with tittle 
 
-    ${resp}=  Provider Login  ${MUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME37}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -137,10 +145,12 @@ JD-TC-GetTaskMaster-4
 
     [Documentation]  Get task master by id for a user.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id2}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id2}  ${decrypted_data['id']}
 
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
@@ -160,12 +170,14 @@ JD-TC-GetTaskMaster-4
     Set Suite Variable  ${account_id2}  ${resp2.json()['id']}
     
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
@@ -254,7 +266,7 @@ JD-TC-GetTaskMaster-4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -283,7 +295,7 @@ JD-TC-GetTaskMaster-5
 
     [Documentation]  Get task master by Category id for a user.
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   

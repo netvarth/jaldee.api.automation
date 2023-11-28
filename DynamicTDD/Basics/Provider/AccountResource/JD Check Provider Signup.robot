@@ -19,19 +19,22 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-Check Provider Signup-1
     [Documentation]    Taking domain and subdomain values ,Then sign up providers in each domain and veryfing all default values
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
     ${recurring_type}    Random Element    ['Weekly','Once']
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${ph1}=  Evaluate  ${PUSERNAME}+10000001
     ${ph2}=  Evaluate  ${PUSERNAME}+20000001
     ${views}=  Evaluate  random.choice($Views)  random
@@ -64,7 +67,7 @@ JD-TC-Check Provider Signup-1
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n}   
@@ -81,10 +84,14 @@ JD-TC-Check Provider Signup-1
     Log  ${PUSERNAME}
     FOR  ${no}  IN RANGE  ${len}
         ${PUSERNAME}=  Evaluate  ${PUSERNAME}+1
-        ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Test Variable  ${domain}  ${resp.json()['sector']}
-        Set Test Variable  ${sub_domain}  ${resp.json()['subSector']}
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${domain}  ${decrypted_data['sector']}
+        Set Test Variable  ${sub_domain}  ${decrypted_data['subSector']}
+        # Set Test Variable  ${domain}  ${resp.json()['sector']}
+        # Set Test Variable  ${sub_domain}  ${resp.json()['subSector']}
         ${is_corp}=  check_is_corp  ${sub_domain}
         ${business_acc_type}=  Set Variable If   '${is_corp}' == 'True'  ${Business_type[0]}   ${Business_type[1]}
         ${uid}=  get_uid  ${PUSERNAME}

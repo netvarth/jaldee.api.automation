@@ -37,17 +37,16 @@ JD-TC-Get Waitlist Service By Location -1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_G}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_G}${\n}
     Set Suite Variable  ${PUSERNAME_G}
 
-    ${resp}=  Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_G}+15566124
     ${ph2}=  Evaluate  ${PUSERNAME_G}+25566128
@@ -60,17 +59,21 @@ JD-TC-Get Waitlist Service By Location -1
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_G}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
     ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -113,18 +116,21 @@ JD-TC-Get Waitlist Service By Location -1
     Set Suite Variable  ${pid}  
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${DAY}=  add_date  0   
+    ${DAY}=  db.add_timezone_date  ${tz}  0   
     Set Suite Variable  ${DAY} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
 
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time  0  30
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  db.add_timezone_time  ${tz}  0  30
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -133,13 +139,16 @@ JD-TC-Get Waitlist Service By Location -1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()}
 
-    ${sTime1}=  add_time  0  30
-    ${eTime1}=  add_time  1  00
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  30
+    ${eTime1}=  db.add_timezone_time  ${tz}  1  00
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -175,8 +184,8 @@ JD-TC-Get Waitlist Service By Location -1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s3}  ${resp.json()}
 
-    ${sTime1}=  add_time  1  00
-    ${eTime1}=  add_time  1  30
+    ${sTime1}=  db.add_timezone_time  ${tz}  1  00
+    ${eTime1}=  db.add_timezone_time  ${tz}  1  30
     ${p1queue1}=    FakerLibrary.word
     Set Suite Variable   ${p1queue1}
     ${capacity}=  FakerLibrary.Numerify  %%%
@@ -185,8 +194,8 @@ JD-TC-Get Waitlist Service By Location -1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_q1}  ${resp.json()}
 
-    ${sTime2}=  add_time  1  30
-    ${eTime2}=  add_time  2  00
+    ${sTime2}=  db.add_timezone_time  ${tz}  1  30
+    ${eTime2}=  db.add_timezone_time  ${tz}  2  00
     ${p1queue2}=    FakerLibrary.word
     Set Suite Variable   ${p1queue2}
     ${capacity}=  FakerLibrary.Numerify  %%%
@@ -214,7 +223,7 @@ JD-TC-Get Waitlist Service By Location -1
 JD-TC-Get Waitlist Service By Location -2
 	[Documentation]  Get service by another location id  
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   ${p1_l2}
@@ -236,7 +245,7 @@ JD-TC-Get Waitlist Service By Location -3
 	[Documentation]  Get service by location id  here disable one service
 
     Comment  service Disable   
-    ${resp}=  ProviderLogin  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Disable service  ${p1_s1} 
@@ -255,7 +264,7 @@ JD-TC-Get Waitlist Service By Location-UH1
 	[Documentation]  Get service  by disabled location id 
 
     Comment  INPUT Disable Location id
-    ${resp}=  ProviderLogin  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Disable Location  ${p1_l2} 
@@ -293,7 +302,7 @@ JD-TC-Get Waitlist Service By Location-UH4
 
     [Documentation]  Trying to provider get Service By LocationId, with an invalid location.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get waitlist Service By Location   0

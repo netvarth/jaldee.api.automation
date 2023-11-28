@@ -15,7 +15,7 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 *** Test Cases ***
 JD-TC-UpdateLabel-1
 	[Documentation]  Update full details of a  label created by a provider
-    ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Label  ${PUSERNAME8}
     ${Values}=  FakerLibrary.Words  	nb=9
@@ -57,7 +57,7 @@ JD-TC-UpdateLabel-1
 
 JD-TC-UpdateLabel-2
 	[Documentation]  Update only few details of a label created by a provider
-    ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Label  ${PUSERNAME8}
     ${Values}=  FakerLibrary.Words  	nb=9
@@ -97,7 +97,7 @@ JD-TC-UpdateLabel-2
 
 JD-TC-UpdateLabel-3
 	[Documentation]  Update  label with integer value set
-    ${resp}=  ProviderLogin  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Label  ${PUSERNAME9}
     ${Values}=  FakerLibrary.Words  	nb=9
@@ -136,7 +136,7 @@ JD-TC-UpdateLabel-3
 
 JD-TC-UpdateLabel-UH1
     [Documentation]  Upadte a Label with integer label name
-    ${resp}=  ProviderLogin  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${integer_id}=   Random Int   min=10   max=20
     ${resp}=  Update Label  ${label_id}  ${integer_id}  ${l_name2[1]}  ${l_desc2}  ${ValueSet}  ${NotificationSet}
@@ -155,7 +155,7 @@ JD-TC-UpdateLabel-UH1
 
 JD-TC-UpdateLabel-UH2
     [Documentation]  Upadte a Label by id with invalid notification set
-    ${resp}=  ProviderLogin  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${Values}=  FakerLibrary.Words  	nb=10
     ${ValueSet}=  Create ValueSet For Label  ${Values[0]}  ${Values[1]}  ${Values[2]}  ${Values[3]}  ${Values[4]}  ${Values[5]}
@@ -180,7 +180,7 @@ JD-TC-UpdateLabel -UH4
 
 JD-TC-UpdateLabel-UH5
     [Documentation]  Upadte a Label which is not exist
-    ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_id}=   Random Int   min=-10   max=0
     ${resp}=  Update Label  ${invalid_id}  ${l_name2[0]}  ${l_name2[1]}  ${l_desc2}  ${ValueSet}  ${NotificationSet}
@@ -189,7 +189,7 @@ JD-TC-UpdateLabel-UH5
 
 JD-TC-UpdateLabel-UH6
     [Documentation]  Upadte a Label by id of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Label  ${label_id}  ${l_name2[0]}  ${l_name2[1]}  ${l_desc2}  ${ValueSet}  ${NotificationSet}
     Should Be Equal As Strings  ${resp.status_code}  422

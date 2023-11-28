@@ -45,7 +45,7 @@ JD-TC-Add Service To Department-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -71,7 +71,7 @@ JD-TC-Add Service To Department-1
 JD-TC-Add Service To Department-2
     [Documentation]  provider adding services to new department from default department
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dep_name1}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name1}
@@ -99,7 +99,7 @@ JD-TC-Add Service To Department-2
 JD-TC-Add Service To Department-3
     [Documentation]  provider creating and adding new services to new department 
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200   
     ${dep_name2}=  FakerLibrary.bs
     Set Suite Variable    ${dep_name2}
@@ -125,7 +125,7 @@ JD-TC-Add Service To Department-3
 JD-TC-Add Service To Department-4
     [Documentation]  provider creating and adding new services to existing department 
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${total_amount}=  Random Int  min=100  max=500
     ${min_prepayment}=  Random Int   min=1   max=50
@@ -141,7 +141,7 @@ JD-TC-Add Service To Department-4
 JD-TC-Add Service To Department-5
     [Documentation]  Provider adding more services to a department
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add Services To Department  ${depid01}  ${sid02}  ${sid03}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -157,7 +157,7 @@ JD-TC-Add Service To Department-5
 JD-TC-Add Service To Department-7
     [Documentation]  Provider adding same service to a another department
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200   
     ${dep_name3}=  FakerLibrary.bs
     ${dep_code3}=   Random Int  min=100   max=999
@@ -197,7 +197,7 @@ JD-TC-Add Service To Department-8
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_F}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_F}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_F}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_F}${\n}
@@ -224,7 +224,7 @@ JD-TC-Add Service To Department-8
 JD-TC-Add Service To Department-UH1
     [Documentation]  Provider adding already added service
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add Services To Department  ${depid01}  ${sid03}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -233,7 +233,7 @@ JD-TC-Add Service To Department-UH1
 JD-TC-Add Service To Department-UH2
     [Documentation]  Provider adding a invalid service
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add Services To Department  ${depid01}  000
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -242,7 +242,7 @@ JD-TC-Add Service To Department-UH2
 JD-TC-Add Service To Department-UH3
     [Documentation]  Provider adding disabled service to department
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Disable service  ${sid04} 
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -253,7 +253,7 @@ JD-TC-Add Service To Department-UH3
 JD-TC-Add Service To Department-UH4
     [Documentation]  Provider adding service to department of another provider
     
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add Services To Department  ${depid04}  ${sid03}
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -278,7 +278,7 @@ JD-TC-Add Service To Department-UH6
 JD-TC-Add Service To Department-UH7
     [Documentation]  Provider using service of another provider
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add Services To Department  ${depid03}  ${sid011}
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -287,7 +287,7 @@ JD-TC-Add Service To Department-UH7
 JD-TC-Add Service To Department-UH8
     [Documentation]  provider created and added a service without specifying department
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200    
     ${total_amount}=  Random Int  min=100  max=500
     ${min_prepayment}=  Random Int   min=1   max=50
@@ -299,7 +299,7 @@ JD-TC-Add Service To Department-UH8
 JD-TC-Add Service To Department-UH9
 	[Documentation]  Provider adding services with same name to different department
 
-	${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200  
     ${total_amount}=  Random Int  min=100  max=500
     ${min_prepayment}=  Random Int   min=1   max=50

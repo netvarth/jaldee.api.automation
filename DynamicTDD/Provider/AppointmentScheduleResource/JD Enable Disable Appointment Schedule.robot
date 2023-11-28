@@ -31,7 +31,7 @@ JD-TC-EnableDisable Appointment Schedule-1
     ${length}=  Get Length   ${len}
     
     FOR   ${a}  IN RANGE   ${length}    
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${domain}=   Set Variable    ${resp.json()['sector']}
@@ -47,7 +47,7 @@ JD-TC-EnableDisable Appointment Schedule-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
-    # ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME${a}}
     # clear_location  ${PUSERNAME${a}}
@@ -55,6 +55,11 @@ JD-TC-EnableDisable Appointment Schedule-1
     clear_location  ${PUSERNAME${a}}
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME${a}}
 
     ${resp}=   Get Service
@@ -65,10 +70,10 @@ JD-TC-EnableDisable Appointment Schedule-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${lid}=  Create Sample Location
@@ -108,7 +113,7 @@ JD-TC-EnableDisable Appointment Schedule-1
 JD-TC-EnableDisable Appointment Schedule-2
     [Documentation]  Disable appointment schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME${a}}
     # clear_location  ${PUSERNAME${a}}
@@ -116,6 +121,11 @@ JD-TC-EnableDisable Appointment Schedule-2
     clear_location  ${PUSERNAME${a}}
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME${a}}
 
     ${resp}=   Get Service
@@ -125,10 +135,10 @@ JD-TC-EnableDisable Appointment Schedule-2
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${lid}=  Create Sample Location
@@ -160,7 +170,7 @@ JD-TC-EnableDisable Appointment Schedule-2
 JD-TC-EnableDisable Appointment Schedule-UH1
     [Documentation]  Enable already enabled appointment schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME${a}}
     # clear_location  ${PUSERNAME${a}}
@@ -168,6 +178,11 @@ JD-TC-EnableDisable Appointment Schedule-UH1
     clear_location  ${PUSERNAME${a}}
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME${a}}
 
     ${resp}=   Get Service
@@ -178,10 +193,10 @@ JD-TC-EnableDisable Appointment Schedule-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${lid}=  Create Sample Location
@@ -209,7 +224,7 @@ JD-TC-EnableDisable Appointment Schedule-UH1
 JD-TC-EnableDisable Appointment Schedule-UH2
     [Documentation]  Disable already disabled appointment schedule
 
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME${a}}
     # clear_location  ${PUSERNAME${a}}
@@ -217,6 +232,11 @@ JD-TC-EnableDisable Appointment Schedule-UH2
     clear_location  ${PUSERNAME${a}}
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME${a}}
 
     ${resp}=   Get Service
@@ -227,10 +247,10 @@ JD-TC-EnableDisable Appointment Schedule-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     # ${lid}=  Create Sample Location

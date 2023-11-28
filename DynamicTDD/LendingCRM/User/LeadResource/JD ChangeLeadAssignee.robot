@@ -28,10 +28,12 @@ JD-TC-ChangeLeadAssignee-1
 
     [Documentation]  Create a lead and verify the default assignee.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME56}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME56}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable   ${p_id}        ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable   ${p_id}        ${decrypted_data['id']}
 
 
 *** comment ***
@@ -44,8 +46,13 @@ JD-TC-ChangeLeadAssignee-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${title}=  FakerLibrary.user name
@@ -77,10 +84,12 @@ JD-TC-ChangeLeadAssignee-2
 
     [Documentation]  Create a lead to a user and change the assignee then verify.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable   ${p_id}        ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable   ${p_id}        ${decrypt_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -93,8 +102,13 @@ JD-TC-ChangeLeadAssignee-2
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     clear_customer   ${HLMUSERNAME5}
@@ -109,9 +123,16 @@ JD-TC-ChangeLeadAssignee-2
     Set Suite Variable  ${pcons_id3}  ${resp.json()[0]['id']}
     Set Test Variable  ${jaldeeId}  ${resp.json()[0]['jaldeeId']}
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -147,7 +168,7 @@ JD-TC-ChangeLeadAssignee-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${PUSERNAME_U2}  ${resp.json()['mobileNo']}
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -158,7 +179,7 @@ JD-TC-ChangeLeadAssignee-2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -199,7 +220,7 @@ JD-TC-ChangeLeadAssignee-3
 
     [Documentation]  Change lead assignee after update the lead with an assignee.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -247,7 +268,7 @@ JD-TC-ChangeLeadAssignee-4
 
     [Documentation]  update the lead with a manger and change the assignee with that manager id.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -294,7 +315,7 @@ JD-TC-ChangeLeadAssignee-UH3
 
     [Documentation]  Change lead assignee with already assigned user id.
 
-    ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -307,7 +328,7 @@ JD-TC-ChangeLeadAssignee-UH4
 
     [Documentation]  Change lead assignee with another branch's user id
 
-    ${resp}=  Provider Login  ${MUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME56}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -321,7 +342,7 @@ JD-TC-ChangeLeadAssignee-
 
     [Documentation]  Change lead assignee after closed the lead.
 
-    ${resp}=  Provider Login  ${MUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME80}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

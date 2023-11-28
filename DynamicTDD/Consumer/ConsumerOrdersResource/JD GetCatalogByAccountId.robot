@@ -27,7 +27,7 @@ JD-TC-GetCatalogByAccId-1
     clear_customer   ${PUSERNAME175}
     clear_Item   ${PUSERNAME175}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -79,16 +79,16 @@ JD-TC-GetCatalogByAccId-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=10   max=100
@@ -136,11 +136,11 @@ JD-TC-GetCatalogByAccId-1
    
     ${far}=  Random Int  min=14  max=14
 
-    ${far_date}=   add_date   15
+    ${far_date}=   db.add_timezone_date  ${tz}   15
    
     ${soon}=  Random Int  min=1   max=1
 
-    ${soon_date}=   add_date   11
+    ${soon_date}=   db.add_timezone_date  ${tz}  11  
    
     Set Test Variable  ${minNumberItem}   1
 
@@ -172,7 +172,7 @@ JD-TC-GetCatalogByAccId-2
     clear_customer   ${PUSERNAME175}
     clear_Item   ${PUSERNAME175}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -224,16 +224,16 @@ JD-TC-GetCatalogByAccId-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -281,11 +281,11 @@ JD-TC-GetCatalogByAccId-2
    
     ${far}=  Random Int  min=14  max=14
 
-    ${far_date}=   add_date   15
+    ${far_date}=   db.add_timezone_date  ${tz}   15
    
     ${soon}=  Random Int  min=1   max=1
 
-    ${soon_date}=   add_date   11
+    ${soon_date}=   db.add_timezone_date  ${tz}  11  
    
     Set Test Variable  ${minNumberItem}   1
 
@@ -325,7 +325,7 @@ JD-TC-GetCatalogByAccId-2
 JD-TC-GetCatalogByAccId-3
     [Documentation]    Get catalog by provider's account id without have a catalog.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME174}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -346,7 +346,7 @@ JD-TC-GetCatalogByAccId-3
 JD-TC-GetCatalogByAccId-4
     [Documentation]    Get catalog by provider's own account.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    

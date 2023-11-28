@@ -31,7 +31,7 @@ ${suffix}                   serving
 JD-TC-Appointment Statuschange By Batch-1
     [Documentation]   Provider change appointment status from arrived to start by BatchId 
     
-    ${resp}=  Provider Login  ${PUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     comment  Dev can not fix this error immediate.
@@ -77,11 +77,12 @@ JD-TC-Appointment Statuschange By Batch-1
     ${s_id2}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable   ${s_id2}
     clear_appt_schedule   ${PUSERNAME33}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -114,11 +115,11 @@ JD-TC-Appointment Statuschange By Batch-1
     Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id}
     Set Suite Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  1   20  
+    ${sTime1}=  add_timezone_time  ${tz}  1   20  
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name2}=  FakerLibrary.bs
@@ -195,7 +196,7 @@ JD-TC-Appointment Statuschange By Batch-1
 JD-TC-Appointment Statuschange By Batch-2
     [Documentation]   Provider change appointment status from Start to Complete by Batch id    
 
-    ${resp}=  Provider Login  ${PUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -220,7 +221,7 @@ JD-TC-Appointment Statuschange By Batch-2
 JD-TC-Appointment Statuschange By Batch-3
     [Documentation]   Provider change Appointment status to Cancelled status By BatchId 
 
-    ${resp}=  Provider Login  ${PUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${PUSERNAME33}
@@ -274,7 +275,7 @@ JD-TC-Appointment Statuschange By Batch-3
 JD-TC-Appointment Statuschange By Batch-4
     [Documentation]   Provider change Appointment status to Reject status By BatchId  
  
-    ${resp}=  Provider Login  ${PUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${PUSERNAME33}
@@ -344,7 +345,7 @@ JD-TC-Appointment Statuschange By Batch-4
 JD-TC-Appointment Statuschange By Batch-5
     [Documentation]   Giving Future date when Provider change Appmt status get cancelled by BatchId
 
-    ${resp}=  Provider Login  ${PUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${PUSERNAME33}
@@ -392,7 +393,7 @@ JD-TC-Appointment Statuschange By Batch-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${batchId}   ${resp.json()[0]['batchId']}
 
-    ${Future_day}=  add_date  10  
+    ${Future_day}=  db.add_timezone_date  ${tz}  10    
     
     ${resp}=    Cancel Appointment by Batch    ${batchId}  ${apptStatus[4]}  ${Future_day}  ${cancelReason[0]}
     Log   ${resp.json()}
@@ -400,7 +401,7 @@ JD-TC-Appointment Statuschange By Batch-5
 
 JD-TC-Appointment Statuschange By Batch-6
     [Documentation]   Giving Future when Provider change apmmt status get Rejected by BatchId
-    ${resp}=  Provider Login  ${PUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${PUSERNAME33}
@@ -449,7 +450,7 @@ JD-TC-Appointment Statuschange By Batch-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${batchId}   ${resp.json()[0]['batchId']}
 
-    ${Future_day}=  add_date  5    
+    ${Future_day}=  db.add_timezone_date  ${tz}  5      
     ${resp}=    Reject Appointment by Batch    ${batchId}  ${apptStatus[5]}   ${Future_day}  ${cancelReason[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -488,7 +489,7 @@ JD-TC-Appointment Statuschange By Batch-UH4
 
 JD-TC-Appointment Statuschange By Batch-UH5
     [Documentation]   Provider change the appmt status to Confirmed using BatchId
-    ${resp}=  Provider Login  ${PUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

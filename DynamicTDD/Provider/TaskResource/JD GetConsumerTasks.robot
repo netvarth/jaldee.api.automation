@@ -25,7 +25,7 @@ JD-TC-GetConsumerTasks-1
 
     [Documentation]  Create a task for a consumer  and get a consumer task.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME90}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -37,8 +37,13 @@ JD-TC-GetConsumerTasks-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -86,7 +91,7 @@ JD-TC-GetConsumerTasks-2
 
     [Documentation]  Create a another task for a consumer and get a consumer tasks
 
-    ${resp}=   ProviderLogin  ${PUSERNAME90}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -143,7 +148,7 @@ JD-TC-GetConsumerTasks-3
 
     [Documentation]  Create a  task for a provider and  check get a consumer tasks
 
-    ${resp}=   ProviderLogin  ${PUSERNAME90}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -229,7 +234,7 @@ JD-TC-GetConsumerTasks-4
 
     [Documentation]   get a consumer tasks  without creating task
 
-    ${resp}=   ProviderLogin  ${PUSERNAME75}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME75}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

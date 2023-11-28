@@ -40,7 +40,7 @@ JD-TC-Update Scheme-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -101,7 +101,7 @@ JD-TC-Update Scheme-UH1
                                   
     [Documentation]               Update Scheme where Scheme id is empty
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -114,7 +114,7 @@ JD-TC-Update Scheme-UH2
                                   
     [Documentation]               Update Scheme where account id is empty
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -128,7 +128,7 @@ JD-TC-Update Scheme-UH3
                                   
     [Documentation]               Update Scheme where scheme name is empty
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -142,7 +142,7 @@ JD-TC-Update Scheme-UH4
                                   
     [Documentation]               Update Scheme where scheme alias name is empty
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -155,7 +155,7 @@ JD-TC-Update Scheme-UH5
                                   
     [Documentation]               Update Scheme where crm scheme type is empty
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -168,7 +168,7 @@ JD-TC-Update Scheme-UH6
                                   
     [Documentation]               Update Scheme where scheme rate is empty
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -182,7 +182,7 @@ JD-TC-Update Scheme-UH7
                                   
     [Documentation]               Update Scheme where number of Repayment is empty
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -195,7 +195,7 @@ JD-TC-Update Scheme-UH8
                                   
     [Documentation]               Update Scheme where number of advance payment is empty
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -208,7 +208,7 @@ JD-TC-Update Scheme-UH9
                                   
     [Documentation]               Update Scheme where number of advance suggested is empty
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -221,7 +221,7 @@ JD-TC-Update Scheme-UH10
                                   
     [Documentation]               Update Scheme where service charge is empty
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -234,7 +234,7 @@ JD-TC-Update Scheme-UH11
                                   
     [Documentation]               Update Scheme where insurence charge is empty
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -247,7 +247,7 @@ JD-TC-Update Scheme-UH12
                                   
     [Documentation]               Update Scheme where minimum amount is empty
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -260,7 +260,7 @@ JD-TC-Update Scheme-UH13
                                   
     [Documentation]               Update Scheme where max amount empty
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -273,7 +273,7 @@ JD-TC-Update Scheme-UH14
                                   
     [Documentation]               Update Scheme where statue is disabled
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -286,7 +286,7 @@ JD-TC-Update Scheme-UH15
                                   
     [Documentation]               Update Scheme where discription is empty
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -318,7 +318,7 @@ JD-TC-Update Scheme-UH17
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME90}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

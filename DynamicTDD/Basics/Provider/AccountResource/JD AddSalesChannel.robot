@@ -110,7 +110,7 @@ JD-TC-Add SalesChannel1
     clear_ssc_code  ${PUSERNAME54}  
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME54}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME54}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Add SalesChannel   ${sc_code}
@@ -144,7 +144,7 @@ JD-TC-Add SalesChannel-UH2
 JD-TC-Add SalesChannel-UH3
 
     [Documentation]   Add sales channel with invalid sales channel Id
-    ${resp}=  ProviderLogin  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add SalesChannel   ${INVALID_id1}-${scDiscCodes}-${sales_channel_repid}-0
     Log  ${resp.json()}
@@ -155,7 +155,7 @@ JD-TC-Add SalesChannel-UH3
 
 JD-TC-Add SalesChannel-UH4
     [Documentation]    Add sales channel with invalid sales channel rep Id
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add SalesChannel   ABCD-${scDiscCodes}-${INVALID_SC_repid}-0
     Log  ${resp.json()}
@@ -166,7 +166,7 @@ JD-TC-Add SalesChannel-UH4
 
 JD-TC-Add SalesChannel-UH5
     [Documentation]   Add sales channel with invalid sales channel discount code
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add SalesChannel   ABCD-${INVALID_scDiscCodes}-${sales_channel_repid}-0
     Log  ${resp.json()}
@@ -177,7 +177,7 @@ JD-TC-Add SalesChannel-UH5
 
 JD-TC-Add SalesChannel-UH6
     [Documentation]   Already given sc code
-    ${resp}=  ProviderLogin  ${PUSERNAME54}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME54}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add SalesChannel   ${sc_code}
     Log  ${resp.json()}
@@ -190,7 +190,7 @@ JD-TC-Add SalesChannel-UH6
 JD-TC-Add SalesChannel-UH7
 
     [Documentation]   Add sales channel without  sales channel Id
-    ${resp}=  ProviderLogin  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add SalesChannel   ${EMPTY}-${scDiscCodes}-${sales_channel_repid}-0
     Log  ${resp.json()}
@@ -201,7 +201,7 @@ JD-TC-Add SalesChannel-UH7
 JD-TC-Add SalesChannel-UH8
 
     [Documentation]    Add sales channel without sales channel rep Id
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add SalesChannel   $ABCD-${scDiscCodes}-${EMPTY}-0
     Log  ${resp.json()}
@@ -211,7 +211,7 @@ JD-TC-Add SalesChannel-UH8
 JD-TC-Add SalesChannel-UH9
 
     [Documentation]   Add sales channel without  discount code
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add SalesChannel   ABCD-${EMPTY}-${sales_channel_repid}-0
     Log  ${resp.json()}

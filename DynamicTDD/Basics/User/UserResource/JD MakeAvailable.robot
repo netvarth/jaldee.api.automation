@@ -28,7 +28,7 @@ ${SERVICE4}  Facial
 JD-TC-MakeAvailable-1
     [Documentation]  set to makeavailable a user giving current time as start time
     
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -40,9 +40,12 @@ JD-TC-MakeAvailable-1
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     
     sleep  2s
     ${resp}=  Get Departments
@@ -65,28 +68,33 @@ JD-TC-MakeAvailable-1
     ${resp}=  Get User
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
-    Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
-    Set Suite Variable  ${DAY2}
+    # Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
+    # Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
+
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
     
-    ${sTime1}=  db.get_time
-    Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   1  00
-    Set Suite Variable   ${eTime1}
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    Set Suite Variable  ${DAY2}
+
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    Set Suite Variable   ${sTime1}
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
+    Set Suite Variable   ${eTime1}
 
     ${resp}=  SendProviderResetMail   ${ph1}
     Should Be Equal As Strings  ${resp.status_code}  200
     @{resp}=  ResetProviderPassword  ${ph1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${ph1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
@@ -127,7 +135,7 @@ JD-TC-MakeAvailable-1
 JD-TC-MakeAvailable-2
     [Documentation]  check Queue AvailableNow and call terminate call then check availability
     
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -154,11 +162,12 @@ JD-TC-MakeAvailable-2
     @{resp}=  ResetProviderPassword  ${ph1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${ph1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${sTime2}=  db.get_time
-    ${eTime2}=  add_time   1  00
+    # ${sTime2}=  db.get_time_by_timezone  ${tz}  
+    ${sTime2}=  db.get_time_by_timezone  ${tz}  
+    ${eTime2}=  add_timezone_time  ${tz}  1  00  
 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
@@ -222,7 +231,7 @@ JD-TC-MakeAvailable-2
 JD-TC-MakeAvailable-3
     [Documentation]  set to makeavailable a user giving future time as start time
     
-    ${resp}=  Provider Login  ${MUSERNAME81}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME81}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -263,13 +272,13 @@ JD-TC-MakeAvailable-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id2}  ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     
-    ${sTime3}=  add_time   0  30
-    ${eTime3}=  add_time   1  00
+    ${sTime3}=  add_timezone_time  ${tz}  0  30  
+    ${eTime3}=  add_timezone_time  ${tz}  1  00  
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -280,7 +289,7 @@ JD-TC-MakeAvailable-3
     @{resp}=  ResetProviderPassword  ${ph1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${ph1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
@@ -318,17 +327,18 @@ JD-TC-MakeAvailable-3
 JD-TC-MakeAvailable-4
     [Documentation]  set to makeavailable a default user (account level)giving current time as start time
     
-    ${resp}=  Provider Login  ${MUSERNAME81}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME81}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${sTime4}=  db.get_time
-    ${eTime4}=  add_time   1  00
+    # ${sTime4}=  db.get_time_by_timezone  ${tz}
+    ${eTime4}=  add_timezone_time  ${tz}  1  00  
    
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
@@ -344,6 +354,7 @@ JD-TC-MakeAvailable-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response    ${resp}   availableNow=${bool[0]}
 
+    ${sTime4}=  db.get_time_by_timezone  ${tz}
     ${list}=  Create List   1  2  3  4  5  6  7
     ${queue}=    FakerLibrary.word
     ${resp}=  Make Available   ${queue}   ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${sTime4}  ${eTime4}  ${lid1}  ${p1_id1}
@@ -361,7 +372,7 @@ JD-TC-MakeAvailable-4
 JD-TC-MakeAvailable-5
     [Documentation]  set to makeavailable giving subtract time
     
-    ${resp}=  Provider Login  ${MUSERNAME82}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME82}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -412,25 +423,26 @@ JD-TC-MakeAvailable-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${u_id6}  ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     
-    ${sTime}=  subtract_time  1  15
-    ${eTime}=  add_time   0  30
+    ${sTime}=  db.subtract_timezone_time  ${tz}  1  15
+    ${eTime}=  add_timezone_time  ${tz}  0  30  
     
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid2}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  SendProviderResetMail   ${ph2}
     Should Be Equal As Strings  ${resp.status_code}  200
     @{resp}=  ResetProviderPassword  ${ph2}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${ph2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
@@ -474,19 +486,19 @@ JD-TC-MakeAvailable-5
 JD-TC-MakeAvailable-6
     [Documentation]  set to makeavailable giving 2 s delay 
     
-    ${resp}=  Provider Login  ${MUSERNAME82}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME82}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     
-    ${sTime}=  add_time   0  02
-    ${eTime}=  add_time   0  30
+    ${sTime}=  add_timezone_time  ${tz}  0  02  
+    ${eTime}=  add_timezone_time  ${tz}  0  30  
 
-    ${resp}=  ProviderLogin  ${ph2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Is Available Queue Now ByProviderId    ${u_id6}
@@ -507,7 +519,7 @@ JD-TC-MakeAvailable-6
     Verify Response    ${resp}   availableNow=${bool[0]}  holiday=${bool[0]}  
 
     # sleep  5s
-    ${sTime0}=  db.get_time
+    ${sTime0}=  db.get_time_by_timezone  ${tz}
     ${resp}=  Is Available Queue Now ByProviderId    ${u_id6}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -542,7 +554,7 @@ JD-TC-MakeAvailable-UH2
 JD-TC-MakeAvailable-UH3
     [Documentation]  set to makeavailable a provider giving current time as start time
 
-    ${resp}=  Provider Login  ${PUSERNAME174}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME174}
     clear_queue  ${PUSERNAME174}
@@ -555,12 +567,12 @@ JD-TC-MakeAvailable-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid2}   ${resp.json()[0]['id']}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
 
-    ${sTime5}=  db.get_time
-    ${eTime5}=  add_time  1   00
+    ${sTime5}=  db.get_time_by_timezone  ${tz}
+    ${eTime5}=  add_timezone_time  ${tz}  1  00  
    
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -611,7 +623,7 @@ JD-TC-MakeAvailable-UH3
     JD-TC-MakeAvailable-3
     [Documentation]  check Queue AvailableNow and try to take waitlist
     
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -633,8 +645,9 @@ JD-TC-MakeAvailable-UH3
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
    
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   3  00
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  3  00  
 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
@@ -688,7 +701,7 @@ JD-TC-MakeAvailable-UH3
 JD-TC-MakeAvailable-UH3
     [Documentation]  check make Availabilty with empty id
 
-    ${resp}=  Provider Login  ${MUSERNAME81}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME81}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

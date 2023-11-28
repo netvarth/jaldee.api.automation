@@ -17,7 +17,7 @@ ${sug}	           An
 
 JD-TC-GetLocationSuggestion-1
     [Documentation]  GetLocationSuggestion by providerlogin
-    ${resp}=  ProviderLogin  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Location Suggestion  ${sug}
     Should Be Equal As Strings  ${resp.status_code}  200

@@ -31,7 +31,7 @@ ${start}              60
 #     ${length}=  Get Length   ${len}
      
 #     FOR   ${a}  IN RANGE   ${min}   ${max}     
-#         ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+#         ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
 #         Should Be Equal As Strings    ${resp.status_code}    200
 #         ${domain}=   Set Variable    ${resp.json()['sector']}
 #         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
@@ -76,7 +76,7 @@ JD-TC-AddWaitlistLabel-1
     # ${pro_len}=  Get Length   ${billable_providers}
     # Log  ${pro_len}
     
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -104,9 +104,13 @@ JD-TC-AddWaitlistLabel-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}   
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${s_id1}
     ${s_id2}=   Create Sample Service  ${SERVICE2}
@@ -115,9 +119,9 @@ JD-TC-AddWaitlistLabel-1
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7
       Set Suite Variable    ${list}
-      ${strt_time}=   add_time  1  00
+      ${strt_time}=   add_timezone_time  ${tz}  1  00  
       Set Suite Variable    ${strt_time}
-      ${end_time}=    add_time  3  00 
+      ${end_time}=    add_timezone_time  ${tz}  3  00   
       Set Suite Variable    ${end_time}   
       ${parallel}=   Random Int  min=1   max=1
       Set Suite Variable   ${parallel}
@@ -139,7 +143,6 @@ JD-TC-AddWaitlistLabel-1
       ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid1}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -211,7 +214,7 @@ JD-TC-AddWaitlistLabel-1
     change_system_date   3
 
 
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -226,16 +229,15 @@ JD-TC-AddWaitlistLabel-1
 JD-TC-AddWaitlistLabel-2
     [Documentation]  Add label to Waitlist to Future day Checkin
     
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${Future_Day}=  add_date  5
+    ${Future_Day}=  db.add_timezone_date  ${tz}  5  
       ${desc}=   FakerLibrary.word
       Set Suite Variable  ${desc}
       ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${que_id1}  ${Future_Day}  ${desc}  ${bool[1]}  ${cid} 
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid_F1}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid_F1} 
@@ -261,7 +263,7 @@ JD-TC-AddWaitlistLabel-2
 
     change_system_date   6
 
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -289,7 +291,7 @@ JD-TC-AddWaitlistLabel-2
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
     
-#     ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -319,17 +321,17 @@ JD-TC-AddWaitlistLabel-2
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}   
     
-#     ${DAY1}=  get_date
-#     ${DAY2}=  add_date  10      
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
+#     ${DAY2}=  db.add_timezone_date  ${tz}  10        
 #     ${lid}=  Create Sample Location
 #     ${s_id3}=  Create Sample Service  ${SERVICE3}
 #       ${q_name}=    FakerLibrary.name
 #       Set Suite Variable    ${q_name}
 #       ${list}=  Create List   1  2  3  4  5  6  7
 #       Set Suite Variable    ${list}
-#       ${strt_time}=   add_time  1  00
+#       ${strt_time}=   add_timezone_time  ${tz}  1  00  
 #       Set Suite Variable    ${strt_time}
-#       ${end_time}=    add_time  3  00 
+#       ${end_time}=    add_timezone_time  ${tz}  3  00   
 #       Set Suite Variable    ${end_time}   
 #       ${parallel}=   Random Int  min=1   max=1
 #       Set Suite Variable   ${parallel}
@@ -424,7 +426,7 @@ JD-TC-AddWaitlistLabel-2
 
 #     change_system_date   6
 
-#     ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -452,7 +454,7 @@ JD-TC-AddWaitlistLabel-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -481,17 +483,21 @@ JD-TC-AddWaitlistLabel-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}   
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id3}=  Create Sample Service  ${SERVICE3}
       ${q_name}=    FakerLibrary.name
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7
       Set Suite Variable    ${list}
-      ${strt_time}=   add_time  1  00
+      ${strt_time}=   add_timezone_time  ${tz}  1  00  
       Set Suite Variable    ${strt_time}
-      ${end_time}=    add_time  3  00 
+      ${end_time}=    add_timezone_time  ${tz}  3  00   
       Set Suite Variable    ${end_time}   
       ${parallel}=   Random Int  min=1   max=1
       Set Suite Variable   ${parallel}
@@ -513,7 +519,6 @@ JD-TC-AddWaitlistLabel-4
       ${resp}=  Add To Waitlist  ${cid}  ${s_id3}  ${que_id2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid3}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid3} 
@@ -579,7 +584,7 @@ JD-TC-AddWaitlistLabel-4
    
    change_system_date   6
 
-   ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+   ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -605,7 +610,7 @@ JD-TC-AddWaitlistLabel-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -637,17 +642,21 @@ JD-TC-AddWaitlistLabel-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}   
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id3}=  Create Sample Service  ${SERVICE3}
       ${q_name}=    FakerLibrary.name
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7
       Set Suite Variable    ${list}
-      ${strt_time}=   add_time  1  00
+      ${strt_time}=   add_timezone_time  ${tz}  1  00  
       Set Suite Variable    ${strt_time}
-      ${end_time}=    add_time  3  00 
+      ${end_time}=    add_timezone_time  ${tz}  3  00   
       Set Suite Variable    ${end_time}   
       ${parallel}=   Random Int  min=1   max=1
       Set Suite Variable   ${parallel}
@@ -669,7 +678,6 @@ JD-TC-AddWaitlistLabel-5
       ${resp}=  Add To Waitlist  ${cid}  ${s_id3}  ${que_id2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid4}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid4} 
@@ -734,7 +742,7 @@ JD-TC-AddWaitlistLabel-5
 
     change_system_date   6
 
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -773,7 +781,7 @@ JD-TC-AddWaitlistLabel-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -803,17 +811,21 @@ JD-TC-AddWaitlistLabel-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}   
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id3}=  Create Sample Service  ${SERVICE3}
       ${q_name}=    FakerLibrary.name
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7
       Set Suite Variable    ${list}
-      ${strt_time}=   add_time  1  00
+      ${strt_time}=   add_timezone_time  ${tz}  1  00  
       Set Suite Variable    ${strt_time}
-      ${end_time}=    add_time  3  00 
+      ${end_time}=    add_timezone_time  ${tz}  3  00   
       Set Suite Variable    ${end_time}   
       ${parallel}=   Random Int  min=1   max=1
       Set Suite Variable   ${parallel}
@@ -835,7 +847,6 @@ JD-TC-AddWaitlistLabel-6
       ${resp}=  Add To Waitlist  ${cid}  ${s_id3}  ${que_id2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid5}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid5} 
@@ -954,7 +965,7 @@ JD-TC-AddWaitlistLabel-6
 
     change_system_date   6
 
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -988,7 +999,7 @@ JD-TC-AddWaitlistLabel-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1017,17 +1028,21 @@ JD-TC-AddWaitlistLabel-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}   
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id3}=  Create Sample Service  ${SERVICE3}
       ${q_name}=    FakerLibrary.name
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7
       Set Suite Variable    ${list}
-      ${strt_time}=   add_time  1  00
+      ${strt_time}=   add_timezone_time  ${tz}  1  00  
       Set Suite Variable    ${strt_time}
-      ${end_time}=    add_time  3  00 
+      ${end_time}=    add_timezone_time  ${tz}  3  00   
       Set Suite Variable    ${end_time}   
       ${parallel}=   Random Int  min=1   max=1
       Set Suite Variable   ${parallel}
@@ -1049,7 +1064,6 @@ JD-TC-AddWaitlistLabel-UH1
       ${resp}=  Add To Waitlist  ${cid}  ${s_id3}  ${que_id2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${wid6}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid6} 
@@ -1076,7 +1090,7 @@ JD-TC-AddWaitlistLabel-UH1
 JD-TC-AddWaitlistLabel-UH2
     [Documentation]  add label with non existant label name
   
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1129,7 +1143,7 @@ JD-TC-AddWaitlistLabel-UH2
 JD-TC-AddWaitlistLabel-UH3
     [Documentation]  add label with non existant label value
     
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1187,7 +1201,7 @@ JD-TC-AddWaitlistLabel-UH4
     [Documentation]  add label with another providers label name and value
     ...              add label to another provider's waitlist id
 
-    ${resp}=  Provider Login  ${PUSERNAME227}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME227}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1240,7 +1254,7 @@ JD-TC-AddWaitlistLabel-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1276,7 +1290,7 @@ JD-TC-AddWaitlistLabel-UH6
 JD-TC-AddWaitlistLabel-UH7
     [Documentation]  add label with empty label name
 
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1293,7 +1307,7 @@ JD-TC-AddWaitlistLabel-UH7
 JD-TC-AddWaitlistLabel-UH8
     [Documentation]  add label with empty label value
     
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1308,7 +1322,7 @@ JD-TC-AddWaitlistLabel-UH8
 
 JD-TC-AddWaitlistLabel-UH9
     [Documentation]  add label with non existant Waitlist id
-    ${resp}=  Provider Login  ${PUSERNAME160}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

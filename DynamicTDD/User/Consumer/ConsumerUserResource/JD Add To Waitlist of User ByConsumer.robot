@@ -47,7 +47,7 @@ ${start}              60
 
 JD-TC-Add To Waitlist of User ByConsumer-1
         [Documentation]  Consumer joins waitlist of a valid provider.    
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
@@ -58,12 +58,12 @@ JD-TC-Add To Waitlist of User ByConsumer-1
         clear_service       ${MUSERNAME29}
         clear_location      ${MUSERNAME29}
 
-        ${DAY1}=  get_date
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${DAY1}  ${DAY1}
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${sTime}=  subtract_time  1  0
+        ${sTime}=  db.subtract_timezone_time  ${tz}  1  0
         Set Suite Variable  ${BsTime30}  ${sTime}
-        ${eTime}=  add_time   4  00
+        ${eTime}=  add_timezone_time  ${tz}  4  00  
         Set Suite Variable  ${BeTime30}  ${eTime}
         Set Suite Variable  ${list}  ${list}
         ${ph1}=  Evaluate  ${PUSERNAME}+1000000000
@@ -76,12 +76,15 @@ JD-TC-Add To Waitlist of User ByConsumer-1
         ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
         ${emails1}=  Emails  ${name3}  Email  ${P_Email}${MUSERNAME29}.${test_mail}  ${views}
         ${bs}=  FakerLibrary.bs
-        ${city}=   get_place
-        ${latti}=  get_latitude
-        ${longi}=  get_longitude
         ${companySuffix}=  FakerLibrary.companySuffix
-        ${postcode}=  FakerLibrary.postcode
-        ${address}=  get_address
+        # ${city}=   get_place
+        # ${latti}=  get_latitude
+        # ${longi}=  get_longitude
+        # ${postcode}=  FakerLibrary.postcode
+        # ${address}=  get_address
+        ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+        ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+        Set Suite Variable  ${tz}
 
         #${resp}=  Create Business Profile  ${bs}  ${bs} Desc   ${companySuffix}  ${city}   ${longi}  ${latti}  www.${companySuffix}.com  free  True  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}
         #Log   ${resp.content}
@@ -218,15 +221,15 @@ JD-TC-Add To Waitlist of User ByConsumer-1
         # Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
         # Set Suite Variable   ${p0_id}   ${resp.json()[1]['id']}
 
-        ${DAY1}=  get_date
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${DAY1}
-        ${DAY2}=  add_date  10      
+        ${DAY2}=  db.add_timezone_date  ${tz}  10        
         Set Suite Variable  ${DAY2}
         ${list}=  Create List  1  2  3  4  5  6  7
         Set Suite Variable  ${list}
-        ${sTime1}=  add_time   0  15
+        ${sTime1}=  add_timezone_time  ${tz}  0  15  
         Set Suite Variable   ${sTime1}
-        ${eTime1}=  add_time   2  00
+        ${eTime1}=  add_timezone_time  ${tz}  2  00  
         Set Suite Variable   ${eTime1}
         # ${lid}=  Create Sample Location
         # Set Suite Variable  ${lid}
@@ -276,15 +279,14 @@ JD-TC-Add To Waitlist of User ByConsumer-1
         ${cid}=  get_id  ${CUSERNAME1}
     
         ${msg}=  FakerLibrary.word
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${CUR_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid}  ${wid[0]} 
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -311,7 +313,7 @@ JD-TC-Add To Waitlist of User ByConsumer-1
 JD-TC-Add To Waitlist of User ByConsumer-2
 	[Documentation]  Provider removes consumer waitlisted for a service and consumer joins the waitlist of the same service and another service of same queue
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${p_id}=  get_acc_id  ${MUSERNAME29}
@@ -327,22 +329,20 @@ JD-TC-Add To Waitlist of User ByConsumer-2
         ${cid}=  get_id  ${CUSERNAME1}
     
         ${msg}=  FakerLibrary.word
-        # ${CUR_DAY}=  get_date
-        ${DAY4}=  add_date  2
+        # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+        ${DAY4}=  db.add_timezone_date  ${tz}  2  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${DAY4}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
 
         ${msg}=  FakerLibrary.word
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${DAY4}  ${s_id2}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid2}  ${wid[0]} 
 
@@ -385,12 +385,11 @@ JD-TC-Add To Waitlist of User ByConsumer-3
         sleep   02s
     
         ${msg}=  FakerLibrary.word
-        # ${CUR_DAY}=  get_date
-        ${DAY4}=  add_date  2
+        # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+        ${DAY4}=  db.add_timezone_date  ${tz}  2  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${DAY4}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid3}  ${wid[0]} 
 
@@ -419,7 +418,7 @@ JD-TC-Add To Waitlist of User ByConsumer-3
 JD-TC-Add To Waitlist of User ByConsumer-4
 	[Documentation]  A Consumer Added To Waitlist for same service in diffrent queues of Different USERS
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${p_id}=  get_acc_id  ${MUSERNAME29}
@@ -480,19 +479,17 @@ JD-TC-Add To Waitlist of User ByConsumer-4
         ${cid}=  get_id  ${CUSERNAME1}
     
         ${msg}=  FakerLibrary.word
-        # ${CUR_DAY}=  get_date
-        ${DAY1}=  add_date  1
+        # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+        ${DAY1}=  db.add_timezone_date  ${tz}  1  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${DAY1}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id2}  ${DAY1}  ${s_id3}  ${msg}  ${bool[0]}  ${p2_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid2}  ${wid[0]} 
 
@@ -529,7 +526,7 @@ JD-TC-Add To Waitlist of User ByConsumer-4
 JD-TC-Add To Waitlist of User ByConsumer-5
 	[Documentation]  Consumer Added To Waitlist for diffrent services of diffrent Queue 
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${p_id}=  get_acc_id  ${MUSERNAME29}
@@ -566,19 +563,17 @@ JD-TC-Add To Waitlist of User ByConsumer-5
         ${cid}=  get_id  ${CUSERNAME1}
     
         ${msg}=  FakerLibrary.word
-        # ${CUR_DAY}=  get_date
-        ${DAY1}=  add_date  1
+        # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+        ${DAY1}=  db.add_timezone_date  ${tz}  1  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${DAY1}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id3}  ${DAY1}  ${s_id5}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid2}  ${wid[0]} 
 
@@ -622,11 +617,10 @@ JD-TC-Add To Waitlist of User ByConsumer-6
         ${p_id}=  get_acc_id  ${MUSERNAME29}
     
         ${msg}=  FakerLibrary.word
-        ${FUTURE_DAY}=  add_date  3
+        ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  3  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${FUTURE_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
@@ -656,19 +650,17 @@ JD-TC-Add To Waitlist of User ByConsumer-7
         ${p_id}=  get_acc_id  ${MUSERNAME29}
 
         ${msg}=  FakerLibrary.word
-        # ${CUR_DAY}=  get_date
-        ${DAY1}=  add_date  1
+        # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+        ${DAY1}=  db.add_timezone_date  ${tz}  1  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${DAY1}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${DAY1}  ${s_id2}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid2}  ${wid[0]} 
 
@@ -714,18 +706,16 @@ JD-TC-Add To Waitlist of User ByConsumer-8
         ${p_id}=  get_acc_id  ${MUSERNAME29}
     
         ${msg}=  FakerLibrary.word
-        ${FUTURE_DAY}=  add_date  3
+        ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  3  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${FUTURE_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id2}  ${FUTURE_DAY}  ${s_id3}  ${msg}  ${bool[0]}  ${p2_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid2}  ${wid[0]} 
 
@@ -772,18 +762,16 @@ JD-TC-Add To Waitlist of User ByConsumer-9
         ${p_id}=  get_acc_id  ${MUSERNAME29}
     
         ${msg}=  FakerLibrary.word
-        ${FUTURE_DAY}=  add_date  3
+        ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  3  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${FUTURE_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id2}  ${FUTURE_DAY}  ${s_id4}  ${msg}  ${bool[0]}  ${p2_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid2}  ${wid[0]} 
 
@@ -842,18 +830,16 @@ JD-TC-Add To Waitlist of User ByConsumer-10
         Set Suite Variable  ${cidfor}   ${resp.json()}
     
         ${msg}=  FakerLibrary.word
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${CUR_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${cidfor}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${CUR_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid2}  ${wid[0]} 
 
@@ -891,7 +877,7 @@ JD-TC-Add To Waitlist of User ByConsumer-10
         Should Be Equal As Strings  ${resp.status_code}  200
         sleep   02s
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
@@ -919,18 +905,16 @@ JD-TC-Add To Waitlist of User ByConsumer-11
 
     
         ${msg}=  FakerLibrary.word
-        ${FUTURE_DAY}=  add_date  3
+        ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  3  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${FUTURE_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${cidfor}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${FUTURE_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid2}  ${wid[0]} 
 
@@ -966,7 +950,7 @@ JD-TC-Add To Waitlist of User ByConsumer-11
         Should Be Equal As Strings  ${resp.status_code}  200
         sleep   02s
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
@@ -1007,23 +991,21 @@ JD-TC-Add To Waitlist of User ByConsumer-12
         Set Suite Variable  ${cidfor1}   ${resp.json()}
 
         ${msg}=  FakerLibrary.word
-        # ${CUR_DAY}=  get_date
-        ${DAY1}=  add_date  1
+        # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+        ${DAY1}=  db.add_timezone_date  ${tz}  1  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${DAY1}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${cidfor1}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${DAY1}  ${s_id2}  ${msg}  ${bool[0]}  ${p1_id}  ${cidfor1}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid2}  ${wid[0]} 
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1067,7 +1049,7 @@ JD-TC-Add To Waitlist of User ByConsumer-12
         Should Be Equal As Strings  ${resp.status_code}  200
         sleep   02s
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME3}
@@ -1094,19 +1076,17 @@ JD-TC-Add To Waitlist of User ByConsumer-13
         ${p_id}=  get_acc_id  ${MUSERNAME29}
     
         ${msg}=  FakerLibrary.word
-        # ${CUR_DAY}=  get_date
-        ${DAY1}=  add_date  1
+        # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+        ${DAY1}=  db.add_timezone_date  ${tz}  1  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${DAY1}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${cidfor1}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id2}  ${DAY1}  ${s_id3}  ${msg}  ${bool[0]}  ${p2_id}  ${cidfor1}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid2}  ${wid[0]} 
 
@@ -1141,7 +1121,7 @@ JD-TC-Add To Waitlist of User ByConsumer-13
         Should Be Equal As Strings  ${resp.status_code}  200
         sleep   02s
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME3}
@@ -1167,12 +1147,11 @@ JD-TC-Add To Waitlist of User ByConsumer-14
         ${p_id}=  get_acc_id  ${MUSERNAME29}
     
         ${msg}=  FakerLibrary.word
-        # ${CUR_DAY}=  get_date
-        ${FUTURE_DAY}=  add_date  3
+        # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+        ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  3  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${FUTURE_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]}
 
@@ -1187,14 +1166,13 @@ JD-TC-Add To Waitlist of User ByConsumer-14
         Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${que_id} 
 
 
-        ${resp}=  Delete Waitlist Consumer  ${cwid1}  ${p_id}
+        ${resp}=  Cancel Waitlist  ${cwid1}  ${p_id}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${FUTURE_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid2}  ${wid[0]} 
 
@@ -1235,11 +1213,10 @@ JD-TC-Add To Waitlist of User ByConsumer-15
         ${p_id}=  get_acc_id  ${MUSERNAME29}
     
         ${msg}=  FakerLibrary.word
-        ${FUTURE_DAY}=  add_date  4
+        ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  4  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${FUTURE_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
@@ -1255,7 +1232,7 @@ JD-TC-Add To Waitlist of User ByConsumer-15
         Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${que_id}
 
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1274,7 +1251,6 @@ JD-TC-Add To Waitlist of User ByConsumer-15
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${FUTURE_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid2}  ${wid[0]} 
 
@@ -1314,17 +1290,16 @@ JD-TC-Add To Waitlist of User ByConsumer-UH1
         ${p_id}=  get_acc_id  ${MUSERNAME29}
     
         ${msg}=  FakerLibrary.word
-        # ${CUR_DAY}=  get_date
-        ${DAY1}=  add_date  1
+        # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+        ${DAY1}=  db.add_timezone_date  ${tz}  1  
         # SELF
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${DAY1}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1367,7 +1342,6 @@ JD-TC-Add To Waitlist of User ByConsumer-UH1
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${DAY1}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${mem_id}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid2}  ${wid[0]} 
 
@@ -1399,7 +1373,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH1
         Should Be Equal As Strings  ${resp.status_code}  200
         sleep   02s
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME4}
@@ -1417,7 +1391,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH1
 
 JD-TC-Add To Waitlist of User ByConsumer-UH2
         [Documentation]  Reaches waitlist maximum capacity and check
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${p_id}=  get_acc_id  ${MUSERNAME29}
@@ -1441,12 +1415,11 @@ JD-TC-Add To Waitlist of User ByConsumer-UH2
         ${cid}=  get_id  ${CUSERNAME1}
     
         ${msg}=  FakerLibrary.word
-        # ${CUR_DAY}=  get_date
-        ${DAY1}=  add_date  1
+        # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+        ${DAY1}=  db.add_timezone_date  ${tz}  1  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${MAX_qid}  ${DAY1}  ${MAX_sid}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
@@ -1473,7 +1446,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH2
        
 JD-TC-Add To Waitlist of User ByConsumer-UH3
 	[Documentation]  Add To Waitlist By Consumer, when Queue Disabled  
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${p_id}=  get_acc_id  ${MUSERNAME29}
@@ -1495,15 +1468,15 @@ JD-TC-Add To Waitlist of User ByConsumer-UH3
         ${cid}=  get_id  ${CUSERNAME1}
     
         ${msg}=  FakerLibrary.word
-        # ${CUR_DAY}=  get_date
-        ${DAY1}=  add_date  1
+        # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+        ${DAY1}=  db.add_timezone_date  ${tz}  1  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${MAX_qid}  ${DAY1}  ${MAX_sid}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  422
         Should Be Equal As Strings  "${resp.json()}"   "${QUEUE_DISABLED}" 
     
         Comment  AGAIN ENABLE QUEUE
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1518,12 +1491,11 @@ JD-TC-Add To Waitlist of User ByConsumer-UH3
         ${cid}=  get_id  ${CUSERNAME1}
     
         ${msg}=  FakerLibrary.word
-        # ${CUR_DAY}=  get_date
-        ${DAY1}=  add_date  1
+        # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+        ${DAY1}=  db.add_timezone_date  ${tz}  1  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${MAX_qid}  ${DAY1}  ${MAX_sid}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
@@ -1544,7 +1516,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH3
 
 JD-TC-Add To Waitlist of User ByConsumer-UH4
 	[Documentation]  Add To Waitlist By Consumer ,provider disable online Checkin  
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${p_id}=  get_acc_id  ${MUSERNAME29}
@@ -1564,14 +1536,14 @@ JD-TC-Add To Waitlist of User ByConsumer-UH4
         ${cid}=  get_id  ${CUSERNAME1}
     
         ${msg}=  FakerLibrary.word
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${MAX_qid}  ${CUR_DAY}  ${MAX_sid}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  422
         Should Be Equal As Strings  "${resp.json()}"   "${ONLINE_CHECKIN_OFF}" 
     
         Comment  AGAIN ENABLE ONLINE_CHECKIN
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1586,11 +1558,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH4
         ${cid}=  get_id  ${CUSERNAME1}
     
         ${msg}=  FakerLibrary.word
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${MAX_qid}  ${CUR_DAY}  ${MAX_sid}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
@@ -1612,7 +1583,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH4
 
 JD-TC-Add To Waitlist of User ByConsumer-UH5 
     [Documentation]  Add To Waitlist By Consumer ,provider  disable Waitlist
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${p_id}=  get_acc_id  ${MUSERNAME29}
@@ -1636,15 +1607,15 @@ JD-TC-Add To Waitlist of User ByConsumer-UH5
         ${cid}=  get_id  ${CUSERNAME1}
     
         ${msg}=  FakerLibrary.word
-        # ${CUR_DAY}=  get_date
-        ${DAY1}=  add_date  1
+        # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+        ${DAY1}=  db.add_timezone_date  ${tz}  1  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${MAX_qid}  ${DAY1}  ${MAX_sid}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  422
         Should Be Equal As Strings  "${resp.json()}"   "${WAITLIST_NOT_ENABLED}" 
     
         Comment  AGAIN ENABLE WAITLIST
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1659,12 +1630,11 @@ JD-TC-Add To Waitlist of User ByConsumer-UH5
         ${cid}=  get_id  ${CUSERNAME1}
     
         ${msg}=  FakerLibrary.word
-        # ${CUR_DAY}=  get_date
-        ${DAY1}=  add_date  1
+        # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+        ${DAY1}=  db.add_timezone_date  ${tz}  1  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${MAX_qid}  ${DAY1}  ${MAX_sid}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
@@ -1685,7 +1655,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH5
     
 JD-TC-Add To Waitlist of User ByConsumer-UH6
 	[Documentation]  Add To Waitlist By Consumer ,provider Disable Future Checkin
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${p_id}=  get_acc_id  ${MUSERNAME29}
@@ -1705,14 +1675,14 @@ JD-TC-Add To Waitlist of User ByConsumer-UH6
         ${cid}=  get_id  ${CUSERNAME1}
     
         ${msg}=  FakerLibrary.word
-        ${FUTURE_DAY}=  add_date  3
+        ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  3  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${MAX_qid}  ${FUTURE_DAY}  ${MAX_sid}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  422
         Should Be Equal As Strings  "${resp.json()}"   "${FUTURE_CHECKIN_DISABLED}"
     
         Comment  AGAIN ENABLE FUTURE_CHECKIN
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1727,11 +1697,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH6
         ${cid}=  get_id  ${CUSERNAME1}
     
         ${msg}=  FakerLibrary.word
-        ${FUTURE_DAY}=  get_date
+        ${FUTURE_DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${MAX_qid}  ${FUTURE_DAY}  ${MAX_sid}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
@@ -1761,7 +1730,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH7
         ${cid}=  get_id  ${CUSERNAME1}
         ${p_id}=  get_acc_id  ${MUSERNAME29}
         ${msg}=  FakerLibrary.word
-        ${FUTURE_DAY}=  add_date  3
+        ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  3  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${MAX_qid}  ${FUTURE_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  422
@@ -1770,7 +1739,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH7
 
 JD-TC-Add To Waitlist of User ByConsumer-UH8
 	[Documentation]  Add To Waitlist By Consumer ,provider in holiday
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${p_id}=  get_acc_id  ${MUSERNAME29}
@@ -1781,7 +1750,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH8
         # Log   ${resp.content}
         # Should Be Equal As Strings  ${resp.status_code}  200
         # Set Test Variable  ${hId}  ${resp.json()}
-        ${FUTURE_DAY}=  add_date  5
+        ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  5  
         ${desc}=    FakerLibrary.name
         ${list}=  Create List   1  2  3  4  5  6  7
         ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${FUTURE_DAY}  ${FUTURE_DAY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${desc}
@@ -1807,7 +1776,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH8
         Should Be Equal As Strings  "${resp.json()}"   "${HOLIDAY_NON_WORKING_DAY}" 
     
         Comment  DELETE HOLIDAY
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1822,11 +1791,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH8
         ${cid}=  get_id  ${CUSERNAME1}
     
         ${msg}=  FakerLibrary.word
-        ${FUTURE_DAY}=  get_date
+        ${FUTURE_DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${MAX_qid}  ${FUTURE_DAY}  ${MAX_sid}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
@@ -1847,7 +1815,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH8
    
 JD-TC-Add To Waitlist of User ByConsumer-UH9
 	[Documentation]  Add To Waitlist By Consumer, service DISABLED 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${p_id}=  get_acc_id  ${MUSERNAME29}
@@ -1866,7 +1834,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH9
         Should Be Equal As Strings  ${resp.status_code}  200
         ${cid}=  get_id  ${CUSERNAME1}
         
-        ${FUTURE_DAY}=  add_date  5
+        ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  5  
         ${msg}=  FakerLibrary.word
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${MAX_qid}  ${FUTURE_DAY}  ${MAX_sid}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
@@ -1874,7 +1842,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH9
         Should Be Equal As Strings  "${resp.json()}"   "${INVALID_SERVICE}"
     
         Comment  AGAIN ENABLE SERVICE
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1889,11 +1857,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH9
         ${cid}=  get_id  ${CUSERNAME1}
     
         ${msg}=  FakerLibrary.word
-        ${FUTURE_DAY}=  get_date
+        ${FUTURE_DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${MAX_qid}  ${FUTURE_DAY}  ${MAX_sid}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
@@ -1922,7 +1889,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH10
         ${cid}=  get_id  ${CUSERNAME1}
         ${INVALID_id}=  get_acc_id  ${Invalid_CUSER}
         
-        ${FUTURE_DAY}=  add_date  5
+        ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  5  
         ${msg}=  FakerLibrary.word
         ${resp}=  Add To Waitlist Consumer For User  ${INVALID_id}  ${MAX_qid}  ${FUTURE_DAY}  ${MAX_sid}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
@@ -1935,7 +1902,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH11
         ${cid}=  get_id  ${CUSERNAME1}
         ${p_id}=  get_acc_id  ${MUSERNAME29}
         
-        ${FUTURE_DAY}=  add_date  5
+        ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  5  
         ${msg}=  FakerLibrary.word
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${MAX_qid}  ${FUTURE_DAY}  ${MAX_sid}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
@@ -1946,7 +1913,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH11
 JD-TC-Add To Waitlist of User ByConsumer-UH12
      [Documentation]   Add to waitlist on a non scheduled day
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${p_id}=  get_acc_id  ${MUSERNAME29}
@@ -1957,9 +1924,9 @@ JD-TC-Add To Waitlist of User ByConsumer-UH12
         Set Suite Variable  ${BRANCH_sid}  ${resp.json()}
 
         ${list}=  Create List  1  2  3  4  5  6
-        ${date}=  get_weekday
+        ${date}=  get_timezone_weekday  ${tz}
         ${list1}=  Create List  ${date}
-        ${CUR_DAY}=  add_date  1
+        ${CUR_DAY}=  db.add_timezone_date  ${tz}  1  
         ${BRANCH_QUEUE}=  FakerLibrary.name
         ${resp}=  Create Queue For User  ${BRANCH_QUEUE}  ${recurringtype[1]}  ${list1}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  10  ${lid}  ${u_id}  ${BRANCH_sid}
         Log   ${resp.content}
@@ -1982,7 +1949,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH12
 JD-TC-Add To Waitlist of User ByConsumer-UH13   
     [Documentation]   Add to waitlist After Business time
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${p_id}=  get_acc_id  ${MUSERNAME29}
@@ -1999,10 +1966,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH13
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${BRANCH_sid2}  ${resp.json()}
 
-        ${psTime}=  subtract_time  0  45
-        ${peTime}=  subtract_time   0  10
+        ${psTime}=  db.subtract_timezone_time  ${tz}  0  45
+        ${peTime}=  db.subtract_timezone_time  ${tz}   0  10
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         ${BRANCH_QUEUE2}=  FakerLibrary.name
         ${resp}=  Create Queue For User  ${BRANCH_QUEUE2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${psTime}  ${peTime}  1  10  ${lid}  ${u_id}  ${BRANCH_sid2}
         Log   ${resp.content}
@@ -2024,7 +1991,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH13
 
 JD-TC-Add To Waitlist of User ByConsumer-UH14
     [Documentation]  Add consumer to waitlist when service time exceeds queue time.
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${p_id}=  get_acc_id  ${MUSERNAME29}
@@ -2039,10 +2006,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH14
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${BRANCH_sid4}  ${resp.json()}
 
-        ${psTime}=  add_time  0  15
-        ${peTime}=  add_time  0  20
+        ${psTime}=  add_timezone_time  ${tz}  0  15  
+        ${peTime}=  add_timezone_time  ${tz}  0  20
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         ${BRANCH_QUEUE3}=  FakerLibrary.name
         ${resp}=  Create Queue For User  ${BRANCH_QUEUE3}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${psTime}  ${peTime}  1  10  ${lid}  ${u_id}  ${BRANCH_sid3}   ${BRANCH_sid4}
         Log   ${resp.content}
@@ -2086,7 +2053,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH15
 
         # FOR    ${a}   IN RANGE    ${length}
         #         clear_service       ${MUSERNAME${a}}
-        #         ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        #         ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         #         Should Be Equal As Strings    ${resp.status_code}    200
         #         ${domain}=   Set Variable    ${resp.json()['sector']}
         #         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
@@ -2098,11 +2065,11 @@ JD-TC-Add To Waitlist of User ByConsumer-UH15
 
         # Set Suite Variable  ${a}
 
-        ${resp}=  Provider Login  ${MUSERNAME10}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
-        # ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        # ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         # Log   ${resp.content}
         # Should Be Equal As Strings    ${resp.status_code}    200
         Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
@@ -2221,16 +2188,17 @@ JD-TC-Add To Waitlist of User ByConsumer-UH15
                 END
         END
 
-        ${DAY1}=  get_date
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${DAY1}
-        ${DAY2}=  add_date  10      
+        ${DAY2}=  db.add_timezone_date  ${tz}  10        
         Set Suite Variable  ${DAY2}
         ${list}=  Create List  1  2  3  4  5  6  7
 
         Set Suite Variable  ${list}
-        ${sTime1}=  db.get_time
+      # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
         Set Suite Variable   ${sTime1}
-        ${eTime1}=  add_time   2  00
+        ${eTime1}=  add_timezone_time  ${tz}  2  00  
         Set Suite Variable   ${eTime1}
         ${lid}=  Create Sample Location
         Set Suite Variable  ${lid}
@@ -2269,12 +2237,11 @@ JD-TC-Add To Waitlist of User ByConsumer-UH15
         Should Be Equal As Strings  ${resp.status_code}  200
         
         ${msg}=  FakerLibrary.word
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         
         ${resp}=  Add To Waitlist Consumer For User  ${p_id31}  ${que_id31}  ${CUR_DAY}  ${s_id15}  ${msg}  ${bool[0]}  ${u_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid15_1}  ${wid[0]} 
 
@@ -2287,7 +2254,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH15
         # Log   ${resp.content}
         # Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${resp}=  ProviderLogin  ${MUSERNAME10}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=  Waitlist Action  ${waitlist_actions[3]}  ${cwid15_1}
@@ -2312,15 +2279,14 @@ JD-TC-Add To Waitlist of User ByConsumer-UH16
         ${p_id31}=  get_acc_id  ${MUSERNAME${a}}
         
         ${msg}=  FakerLibrary.word
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Add To Waitlist Consumer For User  ${p_id31}  ${que_id31}  ${CUR_DAY}  ${s_id15}  ${msg}  ${bool[0]}  ${p1_id}  0
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid}  ${wid[0]} 
 
-        ${resp}=  ProviderLogin  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=  Waitlist Action   ${waitlist_actions[1]}  ${cwid}
@@ -2345,15 +2311,14 @@ JD-TC-Add To Waitlist of User ByConsumer-16
         ${p_id31}=  get_acc_id  ${MUSERNAME${a}}
         
         ${msg}=  FakerLibrary.word
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Add To Waitlist Consumer For User  ${p_id31}  ${que_id31}  ${CUR_DAY}  ${s_id15}  ${msg}  ${bool[0]}  ${p1_id}  0
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid}  ${wid[0]} 
 
-        ${resp}=  ProviderLogin  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=  Waitlist Action   ${waitlist_actions[3]}  ${cwid}
@@ -2376,12 +2341,11 @@ JD-TC-Add To Waitlist of User ByConsumer-17
         ${p_id31}=  get_acc_id  ${MUSERNAME${a}}
         
         ${msg}=  FakerLibrary.word
-        # ${CUR_DAY}=  get_date
-        ${DAY1}=  add_date  1
+        # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+        ${DAY1}=  db.add_timezone_date  ${tz}  1  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id31}  ${que_id31}  ${DAY1}  ${s_id15}  ${msg}  ${bool[0]}  ${p1_id}  0
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid}  ${wid[0]} 
 
@@ -2405,15 +2369,14 @@ JD-TC-Add To Waitlist of User ByConsumer-18
         ${p_id31}=  get_acc_id  ${MUSERNAME${a}}
         
         ${msg}=  FakerLibrary.word
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Add To Waitlist Consumer For User  ${p_id31}  ${que_id31}  ${CUR_DAY}  ${s_id15}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid}  ${wid[0]}
 
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2436,7 +2399,7 @@ JD-TC-Add To Waitlist of User ByConsumer-18
         Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${cid4}
         Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${que_id31}
 
-        ${resp}=  ProviderLogin  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         
@@ -2449,7 +2412,7 @@ JD-TC-Add To Waitlist of User ByConsumer-19
     
     [Documentation]  Add to waitlist a consumer and completes prepayment
 
-        ${resp}=  Provider Login  ${MUSERNAME28}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
@@ -2551,16 +2514,16 @@ JD-TC-Add To Waitlist of User ByConsumer-19
                 END
         END
     
-        ${DAY1}=  get_date
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${DAY1}
-        ${DAY2}=  add_date  10      
+        ${DAY2}=  db.add_timezone_date  ${tz}  10        
         Set Suite Variable  ${DAY2}
         ${list}=  Create List  1  2  3  4  5  6  7
 
         Set Suite Variable  ${list}
-        ${sTime1}=  add_time   0  15
+        ${sTime1}=  add_timezone_time  ${tz}  0  15  
         Set Suite Variable   ${sTime1}
-        ${eTime1}=  add_time   2  00
+        ${eTime1}=  add_timezone_time  ${tz}  2  00  
         Set Suite Variable   ${eTime1}
         ${lid}=  Create Sample Location
         Set Suite Variable  ${lid}
@@ -2605,12 +2568,11 @@ JD-TC-Add To Waitlist of User ByConsumer-19
         Set Suite Variable  ${Pcid17}  ${resp.json()['id']}
     
         ${msg}=  FakerLibrary.word
-        # ${CUR_DAY}=  get_date
-        ${DAY1}=  add_date  1
+        # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+        ${DAY1}=  db.add_timezone_date  ${tz}  1  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id28}  ${DAY1}  ${s_id15}  ${msg}  ${bool[0]}  ${p1_id}  0
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid}  ${wid[0]} 
 
@@ -2661,7 +2623,7 @@ JD-TC-Add To Waitlist of User ByConsumer-20
     
         [Documentation]  Add consumer to waitlist for Virtual service and completes prepayment
         
-        ${resp}=  Provider Login  ${MUSERNAME5}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
@@ -2832,16 +2794,17 @@ JD-TC-Add To Waitlist of User ByConsumer-20
         Verify Response  ${resp}  name=${SERVICE4}  description=${description}  serviceDuration=5   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre1}  totalAmount=${totalamt}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}  serviceType=virtualService   virtualServiceType=${vstype}
         
 
-        ${DAY1}=  get_date
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${DAY1}
-        ${DAY2}=  add_date  10      
+        ${DAY2}=  db.add_timezone_date  ${tz}  10        
         Set Suite Variable  ${DAY2}
         ${list}=  Create List  1  2  3  4  5  6  7
 
         Set Suite Variable  ${list}
-        ${sTime1}=  db.get_time
+      # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
         Set Suite Variable   ${sTime1}
-        ${eTime1}=  add_time   2  00
+        ${eTime1}=  add_timezone_time  ${tz}  2  00  
         Set Suite Variable   ${eTime1}
         ${lid}=  Create Sample Location
         Set Suite Variable  ${lid}
@@ -2882,7 +2845,7 @@ JD-TC-Add To Waitlist of User ByConsumer-20
         ${virtualService}=  Create Dictionary  ${CallingModes[0]}=${ZOOM_id}
     
         ${msg}=  FakerLibrary.word
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Consumer Add To WL With Virtual Service For User  ${p_id32}  ${que_id32}  ${CUR_DAY}  ${VS_id1}  ${msg}  ${bool[0]}  ${virtualService}   ${p1_id32}  0
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200    
@@ -2890,7 +2853,7 @@ JD-TC-Add To Waitlist of User ByConsumer-20
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${cwid}  ${wid[0]}
 
-        ${resp}=  Provider Login  ${MUSERNAME5}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2948,7 +2911,7 @@ JD-TC-Add To Waitlist of User ByConsumer-20
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}     waitlistStatus=${wl_status[0]}
 
-        ${resp}=  Provider Login  ${MUSERNAME5}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2967,7 +2930,7 @@ JD-TC-Add To Waitlist of User ByConsumer-20
 
 JD-TC-Add To Waitlist of User ByConsumer-UH17
     [Documentation]  add to waitlist, then cancel the waitlist and try to change cancelled waitlit to CHECKIN
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${p_id30}=  get_acc_id  ${MUSERNAME29}
@@ -3000,11 +2963,10 @@ JD-TC-Add To Waitlist of User ByConsumer-UH17
         
     
         ${msg}=  FakerLibrary.word
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Add To Waitlist Consumer For User  ${p_id30}  ${que_id}  ${CUR_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id30}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
@@ -3019,14 +2981,13 @@ JD-TC-Add To Waitlist of User ByConsumer-UH17
         Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${cid3}  
         Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${que_id}
 
-        ${resp}=  Delete Waitlist Consumer  ${cwid1}  ${p_id30}
+        ${resp}=  Cancel Waitlist  ${cwid1}  ${p_id30}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=  Add To Waitlist Consumer For User  ${p_id30}  ${que_id}  ${CUR_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id30}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid2}  ${wid[0]} 
 
@@ -3041,7 +3002,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH17
         Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${que_id}
 
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3060,7 +3021,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH17
 JD-TC-Add To Waitlist of User ByConsumer-UH18
     
     [Documentation]  Add to waitlist a another USER (Another USER_id is used to "Add To Waitlist Consumer For User")
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${p_id30}=  get_acc_id  ${MUSERNAME29}
@@ -3092,7 +3053,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH18
         ${cid}=  get_id  ${CUSERNAME1}
     
         ${msg}=  FakerLibrary.word
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Add To Waitlist Consumer For User  ${p_id30}  ${que_id}  ${CUR_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p2_id30}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  422
@@ -3108,15 +3069,14 @@ JD-TC-Add To Waitlist of User ByConsumer-UH19
         ${p_id30}=  get_acc_id  ${MUSERNAME29}
     
         ${msg}=  FakerLibrary.word
-        ${FUTURE_DAY}=  add_date  4
+        ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  4  
         ${resp}=  Add To Waitlist Consumer For User  ${p_id30}  ${que_id}  ${FUTURE_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id30}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid1}  ${wid[0]} 
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3140,14 +3100,13 @@ JD-TC-Add To Waitlist of User ByConsumer-UH19
         Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${que_id}
 
 
-        ${resp}=  Delete Waitlist Consumer  ${cwid1}  ${p_id30}
+        ${resp}=  Cancel Waitlist  ${cwid1}  ${p_id30}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=  Add To Waitlist Consumer For User  ${p_id30}  ${que_id}  ${FUTURE_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id30}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid2}  ${wid[0]} 
 
@@ -3162,7 +3121,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH19
         Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${que_id}
 
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3179,7 +3138,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH19
 
 JD-TC-Add To Waitlist of User ByConsumer-UH20
     [Documentation]  add to waitlist using Disabled USER_id
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${p_id30}=  get_acc_id  ${MUSERNAME29}
@@ -3199,13 +3158,13 @@ JD-TC-Add To Waitlist of User ByConsumer-UH20
         
     
         ${msg}=  FakerLibrary.word
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Add To Waitlist Consumer For User  ${p_id30}  ${que_id}  ${CUR_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${u_id1}  ${self}
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  422
         Should Be Equal As Strings  "${resp.json()}"   "${PROVIDER_NOT_ACTIVE}"
 
-        ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -3220,7 +3179,7 @@ JD-TC-Add To Waitlist of User ByConsumer-UH21
         # ${INVALID_id}=  get_acc_id  ${Invalid_CUSER}
         ${INVALID_id}=   Random Int  min=10000   max=20000
         
-        ${FUTURE_DAY}=  add_date  5
+        ${FUTURE_DAY}=  db.add_timezone_date  ${tz}  5  
         ${msg}=  FakerLibrary.word
         ${resp}=  Add To Waitlist Consumer For User  ${p_id30}  ${que_id}  ${FUTURE_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${INVALID_id}  ${self}
         Log   ${resp.content}

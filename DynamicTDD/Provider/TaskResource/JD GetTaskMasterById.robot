@@ -26,7 +26,7 @@ JD-TC-GetTaskMasterByid-1
 
     [Documentation]  Create a task master for a branch and get by id
 
-    ${resp}=  Provider Login  ${MUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME46}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 *** comment ***
@@ -85,7 +85,7 @@ JD-TC-GetTaskMasterByid-2
 
     [Documentation]  Create a task master for a user and get by id
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME4} 
@@ -110,12 +110,14 @@ JD-TC-GetTaskMasterByid-2
     Log  ${resp2.json()}
     Should Be Equal As Strings    ${resp2.status_code}    200
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
@@ -199,7 +201,7 @@ JD-TC-GetTaskMasterByid-2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -229,7 +231,7 @@ JD-TC-GetTaskMasterByid-3
 
     [Documentation]  Create another  task master for a user and get by id
    
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -272,7 +274,7 @@ JD-TC-GetTaskMasterByid-4
 
     [Documentation]  Create  task master for a user and  assignee to another user and get by id by another user
    
-    ${resp}=  Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -284,9 +286,12 @@ JD-TC-GetTaskMasterByid-4
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
@@ -314,7 +319,7 @@ JD-TC-GetTaskMasterByid-4
     ${templateName1}=   FakerLibrary.user name
    
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Create Task Master  ${templateName1}    ${title4}     ${category_id1}   ${type_id1}    ${Priority_id}
@@ -361,7 +366,7 @@ JD-TC-GetTaskMasterByid-UH3
     [Documentation]  Create  task master for a user and get by id by another branch user
     
      
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -378,7 +383,7 @@ JD-TC-GetTaskMasterByid-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  ProviderLogin   ${HLMUSERNAME5}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login   ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Business Profile
@@ -389,9 +394,12 @@ JD-TC-GetTaskMasterByid-UH3
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
@@ -419,7 +427,7 @@ JD-TC-GetTaskMasterByid-UH3
     ${templateName1}=   FakerLibrary.user name
    
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -432,7 +440,7 @@ JD-TC-GetTaskMasterByid-5(UH)
     
      
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -450,7 +458,7 @@ JD-TC-GetTaskMasterByid-5(UH)
 
     
 
-    ${resp}=  ProviderLogin   ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    

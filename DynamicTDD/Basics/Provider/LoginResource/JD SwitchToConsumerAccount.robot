@@ -16,7 +16,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-SwitchToConsumer-1
     [Documentation]    Provider Login as a valid number and password
-    ${resp}=   ProviderLogin  ${PUSERNAME22}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${id}=  get_id  ${PUSERNAME22}
     Log  ${resp.json()}
@@ -35,7 +35,7 @@ JD-TC-SwitchToConsumer-1
 
 JD-TC-SwitchToConsumer-UH2
     [Documentation]    Consumer login as provider
-    ${resp}=   ProviderLogin  ${CUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${CUSERNAME5}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings  "${resp.json()}"  "${NOT_REGISTERED_PROVIDER}"
 
@@ -53,7 +53,7 @@ JD-TC-SwitchToConsumer-UH2
     # Verify Response  ${resp}  id=${id1}  userName=${c_username}  userType=0  accStatus=${status[0]}  firstName=${c_firstname}  lastName=${c_lastname}  primaryPhoneNumber=${PUSERNAME22}  isProvider=${bool[1]}
     # ${resp}=  Consumer Logout
     # Should Be Equal As Strings    ${resp.status_code}    200
-    # ${resp}=   ProviderLogin  ${PUSERNAME22}  ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD} 
     # Should Be Equal As Strings    ${resp.status_code}   200
     
     

@@ -45,7 +45,7 @@ JD-TC-DeleteVacation-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E1}${\n}
@@ -53,10 +53,7 @@ JD-TC-DeleteVacation-1
     ${id}=  get_id  ${MUSERNAME_E1}
     ${bs}=  FakerLibrary.bs
 
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}  ${DAY1}
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list}  ${list}
+    
     ${ph1}=  Evaluate  ${MUSERNAME_E1}+1099880000
     ${ph2}=  Evaluate  ${MUSERNAME_E1}+2099880000
     ${views}=  Random Element    ${Views}
@@ -67,20 +64,28 @@ JD-TC-DeleteVacation-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-
-    ${sTime}=  subtract_time  3  00
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  ${DAY1}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    Set Suite Variable  ${list}  ${list}
+    
+    ${sTime}=  db.subtract_timezone_time  ${tz}  3  00
     Set Suite Variable  ${BsTime30}  ${sTime}
-    ${eTime}=  add_time   4  30
+    ${eTime}=  add_timezone_time  ${tz}  4  30  
     Set Suite Variable  ${BeTime30}  ${eTime}
     ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -115,12 +120,14 @@ JD-TC-DeleteVacation-1
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[0]}
-    ${resp}=  Enable Waitlist
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}
+        ${resp}=  Enable Waitlist
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     sleep   01s
 
     ${resp}=  Get jaldeeIntegration Settings
@@ -136,9 +143,16 @@ JD-TC-DeleteVacation-1
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -164,11 +178,11 @@ JD-TC-DeleteVacation-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_id}   ${resp.json()[0]['id']}
     Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time   0  15
-    ${eTime1}=  add_time   4  00
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  4  00  
 
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
@@ -199,11 +213,11 @@ JD-TC-DeleteVacation-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}    appointment=${bool[1]}
 
-    ${start_time}=  add_time   0  20
+    ${start_time}=  add_timezone_time  ${tz}  0  20  
     Set Suite Variable   ${start_time}
-    ${end_time}=    add_time   1  45 
+    ${end_time}=    add_timezone_time  ${tz}  0  45   
     Set Suite Variable    ${end_time}
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${CUR_DAY}
     ${desc}=    FakerLibrary.name
     # ${resp}=  Create Vacation  ${start_time}  ${end_time}  ${CUR_day}  ${desc}  ${p1_id}
@@ -223,7 +237,7 @@ JD-TC-DeleteVacation-1
 JD-TC-DeleteVacation-3
     [Documentation]   Delete current day and future day Vacation after created vacation and Verifying
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -252,11 +266,11 @@ JD-TC-DeleteVacation-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p4_id}   ${resp.json()[0]['id']}
     # Set Suite Variable   ${p2_id}   ${resp.json()[1]['id']}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time   0  15
-    ${eTime1}=  add_time   4  00
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  4  00  
    
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
@@ -267,7 +281,7 @@ JD-TC-DeleteVacation-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
   
-    ${sTime1}=  add_time  1  15
+    ${sTime1}=  add_timezone_time  ${tz}  1  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
@@ -289,9 +303,9 @@ JD-TC-DeleteVacation-3
     Verify Response   ${resp}    appointment=${bool[1]}    waitlist=${bool[1]}
 
 
-    ${start_time1}=  add_time   0  25
-    ${end_time1}=    add_time   0  50 
-    ${CUR_DAY1}=  get_date
+    ${start_time1}=  add_timezone_time  ${tz}  0  25  
+    ${end_time1}=    add_timezone_time  ${tz}  0  50   
+    ${CUR_DAY1}=  db.get_date_by_timezone  ${tz}
     ${desc1}=    FakerLibrary.name
     # ${resp}=  Create Vacation  ${start_time1}   ${end_time1}  ${CUR_day1}  ${desc1}  ${p1_id}
     ${resp}=  Create Vacation   ${desc1}  ${p4_id}  ${recurringtype[1]}  ${list}  ${CUR_day1}  ${CUR_day1}  ${EMPTY}  ${start_time1}  ${end_time1}  
@@ -311,9 +325,9 @@ JD-TC-DeleteVacation-3
     Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['timeSlots'][0]['eTime']}             ${end_time1}
 
 
-    ${start_time}=  add_time   2  00
-    ${end_time}=    add_time   3  00 
-    ${f_DAY}=  add_date  2
+    ${start_time}=  add_timezone_time  ${tz}  2  00  
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
+    ${f_DAY}=  db.add_timezone_date  ${tz}  2  
     ${desc}=    FakerLibrary.name
     ${resp}=  Create Vacation   ${desc}  ${p4_id}  ${recurringtype[1]}  ${list}  ${f_DAY}  ${f_DAY}  ${EMPTY}  ${start_time}  ${end_time}   
     Log  ${resp.json()}
@@ -332,7 +346,7 @@ JD-TC-DeleteVacation-3
 JD-TC-DeleteVacation-5
     [Documentation]   Create and Delete Vacation after Created two users when Appointment is Enable
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -368,11 +382,11 @@ JD-TC-DeleteVacation-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time   0  15
-    ${eTime1}=  add_time   3  00
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  00  
    
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
@@ -391,7 +405,7 @@ JD-TC-DeleteVacation-5
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Verify Response   ${resp}    appointment=${bool[1]}   waitlist=${bool[0]}
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=120  max=180
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
@@ -430,11 +444,11 @@ JD-TC-DeleteVacation-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time   0  20
-    ${eTime1}=  add_time   4  00
+    ${sTime1}=  add_timezone_time  ${tz}  0  20  
+    ${eTime1}=  add_timezone_time  ${tz}  4  00  
   
     ${description}=  FakerLibrary.sentence
     ${dur}=  FakerLibrary.Random Int  min=10  max=20
@@ -446,7 +460,7 @@ JD-TC-DeleteVacation-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id01}  ${resp.json()}
     
-    ${sTime1}=  add_time  0  30
+    ${sTime1}=  add_timezone_time  ${tz}  0  30  
     ${delta}=  FakerLibrary.Random Int  min=120  max=180
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
@@ -467,9 +481,9 @@ JD-TC-DeleteVacation-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appointment=${bool[1]}    waitlist=${bool[0]}
 
-    ${start_time1}=  add_time   0  25
-    ${end_time1}=    add_time   0  50 
-    ${CUR_DAY1}=  get_date
+    ${start_time1}=  add_timezone_time  ${tz}  0  25  
+    ${end_time1}=    add_timezone_time  ${tz}  0  50   
+    ${CUR_DAY1}=  db.get_date_by_timezone  ${tz}
     ${desc1}=    FakerLibrary.name
     # ${resp}=  Create Vacation  ${start_time1}   ${end_time1}  ${CUR_day1}  ${desc1}  ${p1_id}
     ${resp}=  Create Vacation   ${desc1}  ${u_id5}  ${recurringtype[1]}  ${list}  ${CUR_day1}  ${CUR_day1}  ${EMPTY}  ${start_time1}  ${end_time1} 
@@ -489,9 +503,9 @@ JD-TC-DeleteVacation-5
     Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['timeSlots'][0]['sTime']}             ${start_time1}  
     Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['timeSlots'][0]['eTime']}             ${end_time1}
 
-    ${start_time2}=  add_time   0  55
-    ${end_time2}=    add_time   1  10 
-    ${CUR_DAY2}=  get_date
+    ${start_time2}=  add_timezone_time  ${tz}   0  55
+    ${end_time2}=    add_timezone_time  ${tz}   1  10 
+    ${CUR_DAY2}=  db.get_date_by_timezone  ${tz}
     ${desc2}=    FakerLibrary.name
     # ${resp}=  Create Vacation  ${start_time2}  ${end_time2}  ${CUR_day2}  ${desc2}  ${u_id01}
     ${resp}=  Create Vacation   ${desc2}  ${u_id01}  ${recurringtype[1]}  ${list}  ${CUR_day2}  ${CUR_day2}  ${EMPTY}  ${start_time2}  ${end_time2}  
@@ -510,7 +524,7 @@ JD-TC-DeleteVacation-5
 
 JD-TC-DeleteVacation-UH1
     [Documentation]	   Delete Vacation ID, Login one branch and another branch User  
-    ${resp}=  Provider Login      ${MUSERNAME13}     ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${MUSERNAME13}     ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp} =   Delete Vacation   ${v_id_A}
@@ -521,7 +535,7 @@ JD-TC-DeleteVacation-UH1
 
 JD-TC-DeleteVacation-UH2
     [Documentation]	  Delete Vacation ID, Login one branch and another branch User 
-    ${resp}=  Provider Login      ${MUSERNAME13}     ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${MUSERNAME13}     ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp} =   Delete Vacation   ${v_id_Q}
@@ -531,7 +545,7 @@ JD-TC-DeleteVacation-UH2
 
 JD-TC-DeleteVacation-UH3
     [Documentation]	Verifying vacation Details after Deleted
-    ${resp}=  Provider Login   ${MUSERNAME_E1}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${MUSERNAME_E1}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp} =   Get Vacation     ${v_id_Q}
@@ -556,7 +570,7 @@ JD-TC-DeleteVacation-UH4
 
 JD-TC-DeleteVacation-UH5
     [Documentation]	  Checking Delete Vacation from another Branch
-    ${resp}=  Provider Login      ${MUSERNAME_E1}     ${PASSWORD}
+    ${resp}=  Encrypted Provider Login      ${MUSERNAME_E1}     ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp} =   Delete Vacation   ${v_id}
@@ -567,7 +581,7 @@ JD-TC-DeleteVacation-UH5
 
 JD-TC-DeleteVacation-UH6
     [Documentation]	   Trying to Delete Vacation using Invalid ID
-    ${resp} =   Provider Login   ${MUSERNAME_E1}    ${PASSWORD}
+    ${resp} =   Encrypted Provider Login   ${MUSERNAME_E1}    ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp} =    Delete Vacation    0

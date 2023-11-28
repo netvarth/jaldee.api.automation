@@ -56,10 +56,12 @@ JD-TC-GetLeadWithFilter-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
 
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
     Set Suite Variable  ${MUSERNAME_E}
@@ -89,16 +91,28 @@ JD-TC-GetLeadWithFilter-1
     END
 
     ${lid1}=  Create Sample Location
-    Set Suite Variable  ${lid1} 
+    Set Suite Variable  ${lid1}
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
 
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lidname1}  ${resp.json()['place']}
     
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -149,7 +163,7 @@ JD-TC-GetLeadWithFilter-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -181,7 +195,7 @@ JD-TC-GetLeadWithFilter-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p_id}=  get_acc_id  ${PUSERNAME_U1}
@@ -246,7 +260,7 @@ JD-TC-GetLeadWithFilter-1
     Set Suite Variable   ${leid}        ${resp.json()['id']}
     Set Suite Variable   ${leUid}        ${resp.json()['uid']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p_id1}=  get_acc_id  ${PUSERNAME_U2}
@@ -317,7 +331,7 @@ JD-TC-GetLeadWithFilter-1
 
 JD-TC-GetLeadWithFilter-2
     [Documentation]   Create Lead to a valid provider Filter by id.
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -329,7 +343,7 @@ JD-TC-GetLeadWithFilter-2
 
 JD-TC-GetLeadWithFilter-3
     [Documentation]   Create Lead to a valid provider Filter by uid.
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -340,7 +354,7 @@ JD-TC-GetLeadWithFilter-3
 
 JD-TC-GetLeadWithFilter-4
     [Documentation]   Create Lead to a valid provider Filter by title.
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -351,7 +365,7 @@ JD-TC-GetLeadWithFilter-4
 
 JD-TC-GetLeadWithFilter-5
     [Documentation]   Create Lead to a valid provider Filter by description.
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -362,7 +376,7 @@ JD-TC-GetLeadWithFilter-5
 
 JD-TC-GetLeadWithFilter-6
     [Documentation]   Create Lead to a valid provider Filter by assignee.
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -381,7 +395,7 @@ JD-TC-GetLeadWithFilter-6
 
 JD-TC-GetLeadWithFilter-7
     [Documentation]   Create Lead to a valid provider Filter by targetPotential.
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -393,7 +407,7 @@ JD-TC-GetLeadWithFilter-7
 
 JD-TC-GetLeadWithFilter-8
     [Documentation]   Create Lead to a valid provider Filter by category And categoryName.
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -407,7 +421,7 @@ JD-TC-GetLeadWithFilter-8
 
 JD-TC-GetLeadWithFilter-9
     [Documentation]   Create Lead to a valid provider Filter by manager.
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -419,7 +433,7 @@ JD-TC-GetLeadWithFilter-9
 
 JD-TC-GetLeadWithFilter-10
     [Documentation]   Create Lead to a valid provider Filter by managerFirstName.
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -431,7 +445,7 @@ JD-TC-GetLeadWithFilter-10
 
 JD-TC-GetLeadWithFilter-11
     [Documentation]   Create Lead to a valid provider Filter by managerLastName.
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -445,7 +459,7 @@ JD-TC-GetLeadWithFilter-11
 
 JD-TC-GetLeadWithFilter-15
     [Documentation]   Create Lead to a valid provider Filter by customer.
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -457,7 +471,7 @@ JD-TC-GetLeadWithFilter-15
 
 JD-TC-GetLeadWithFilter-16
     [Documentation]   Create Lead to a valid provider Filter by customerFirstName.
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -469,7 +483,7 @@ JD-TC-GetLeadWithFilter-16
 
 JD-TC-GetLeadWithFilter-17
     [Documentation]   Create Lead to a valid provider Filter by customerLastName.
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -481,7 +495,7 @@ JD-TC-GetLeadWithFilter-17
 
 JD-TC-GetLeadWithFilter-18
     [Documentation]   Create Lead to a valid provider Filter by assigneeFirstName.
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -494,7 +508,7 @@ JD-TC-GetLeadWithFilter-18
 
 JD-TC-GetLeadWithFilter-19
     [Documentation]   Create Lead to a valid provider Filter by location.
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -505,7 +519,7 @@ JD-TC-GetLeadWithFilter-19
 
 JD-TC-GetLeadWithFilter-20
     [Documentation]   Create Lead to a valid provider Filter by locationName.
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -521,7 +535,7 @@ JD-TC-GetLeadWithFilter-20
 
 JD-TC-GetLeadWithFilter-21
     [Documentation]   Create Lead to a valid provider Filter by type.
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -534,7 +548,7 @@ JD-TC-GetLeadWithFilter-21
 
 JD-TC-GetLeadWithFilter-22
     [Documentation]   Create Lead to a valid provider Filter by typeName.
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -546,7 +560,7 @@ JD-TC-GetLeadWithFilter-22
 
 JD-TC-GetLeadWithFilter-23
     [Documentation]   Create Lead to a valid provider Filter by priority.
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -558,7 +572,7 @@ JD-TC-GetLeadWithFilter-23
 
 JD-TC-GetLeadWithFilter-24
     [Documentation]   Create Lead to a valid provider Filter by priorityName.
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -569,7 +583,7 @@ JD-TC-GetLeadWithFilter-24
 
 JD-TC-GetLeadWithFilter-25
     [Documentation]   Create Lead to a valid provider Filter by status.
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -580,7 +594,7 @@ JD-TC-GetLeadWithFilter-25
     # Verify Response List    ${resp}    0   uid=${leUid} 
 JD-TC-GetLeadWithFilter-26
     [Documentation]   Create Lead to a valid provider Filter by categoryName.
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Leads With Filter    categoryName-eq=${category_name1}
@@ -591,7 +605,7 @@ JD-TC-GetLeadWithFilter-26
 *** comment ***
 JD-TC-GetLeadWithFilter-12
     [Documentation]   Create Lead to a valid provider Filter by generatedBy.
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -603,7 +617,7 @@ JD-TC-GetLeadWithFilter-12
 
 JD-TC-GetLeadWithFilter-13
     [Documentation]   Create Lead to a valid provider Filter by generatedByFirstName.
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -615,7 +629,7 @@ JD-TC-GetLeadWithFilter-13
 
 JD-TC-GetLeadWithFilter-14
     [Documentation]   Create Lead to a valid provider Filter by generatedByLastName.
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

@@ -39,21 +39,23 @@ JD-TC-Get Queue By Location and Service-1
     ${resp}=  Account Set Credential  ${PUSERNAME_G}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME_G}  ${PASSWORD}
-    Log  ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_G}${\n}
     Set Suite Variable  ${PUSERNAME_G}
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    
 
-    # ${resp}=  Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${accId}=  get_acc_id  ${PUSERNAME_G}
     Set Suite Variable  ${accId}  ${accId}
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_G}+15566124
     ${ph2}=  Evaluate  ${PUSERNAME_G}+25566128
@@ -65,18 +67,23 @@ JD-TC-Get Queue By Location and Service-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_G}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Update Business Profile with Schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -124,7 +131,7 @@ JD-TC-Get Queue By Location and Service-1
 
 
     # [Setup]  Run Keywords  clear_queue  ${PUSERNAME_G}  AND  clear_location  ${PUSERNAME_G}  AND   clear_service  ${PUSERNAME_G}
-    # ${resp}=  ProviderLogin  ${PUSERNAME_G}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Get Business Profile
@@ -135,18 +142,22 @@ JD-TC-Get Queue By Location and Service-1
     # ${resp}=  Change License Package  ${pkgid[0]}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
 
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time  0  30
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz1}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz1}
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz1}
+    ${eTime}=  add_timezone_time  ${tz1}  0  30
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -156,13 +167,17 @@ JD-TC-Get Queue By Location and Service-1
     ${loc_result} = 	Convert To Integer 	 ${resp.json()}
     Set Suite Variable  ${p1_l1}   ${loc_result}
 
-    ${sTime1}=  add_time  0  30
-    ${eTime1}=  add_time  1  00
-    ${city1}=   db.get_place
-    ${latti1}=  get_latitude
-    ${longi1}=  get_longitude
-    ${postcode1}=  FakerLibrary.postcode
-    ${address1}=  get_address
+    
+    # ${city1}=   db.get_place
+    # ${latti1}=  get_latitude
+    # ${longi1}=  get_longitude
+    # ${postcode1}=  FakerLibrary.postcode
+    # ${address1}=  get_address
+    ${latti1}  ${longi1}  ${postcode1}  ${city1}  ${district}  ${state}  ${address1}=  get_loc_details
+    ${tz2}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz2}
+    ${sTime1}=  add_timezone_time  ${tz2}  0  30
+    ${eTime1}=  add_timezone_time  ${tz2}  1  00
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -200,8 +215,8 @@ JD-TC-Get Queue By Location and Service-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s3}  ${resp.json()}
 
-    ${sTime1}=  add_time  1  00
-    ${eTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz1}  1  00
+    ${eTime1}=  add_timezone_time  ${tz1}  1  30
     ${p1queue1}=    FakerLibrary.word
     Set Suite Variable   ${p1queue1}
     ${capacity}=  FakerLibrary.Numerify  %%%
@@ -211,8 +226,8 @@ JD-TC-Get Queue By Location and Service-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_q1}  ${resp.json()}
 
-    ${sTime2}=  add_time  1  30
-    ${eTime2}=  add_time  2  00
+    ${sTime2}=  add_timezone_time  ${tz1}  1  30
+    ${eTime2}=  add_timezone_time   ${tz1}  2  00  
     ${p1queue2}=    FakerLibrary.word
     Set Suite Variable   ${p1queue2}
     ${capacity}=  FakerLibrary.Numerify  %%%
@@ -222,8 +237,8 @@ JD-TC-Get Queue By Location and Service-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_q2}  ${resp.json()} 
 
-    ${sTime2}=  add_time  2  00
-    ${eTime2}=  add_time  2  30
+    ${sTime2}=  add_timezone_time  ${tz2}  2  00
+    ${eTime2}=  add_timezone_time  ${tz2}  2  30
     ${p1queue3}=    FakerLibrary.word
     Set Suite Variable   ${p1queue3}
     ${capacity}=  FakerLibrary.Numerify  %%%
@@ -270,7 +285,7 @@ JD-TC-Get Queue By Location and Service-3
 JD-TC-Get Queue By Location and Service-UH1
 	[Documentation]  get queue by service id and location id 
     Comment  INPUT Disable SERVICE id
-    ${resp}=  ProviderLogin  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${RESP}=  Disable service  ${p1_s2} 
@@ -286,7 +301,7 @@ JD-TC-Get Queue By Location and Service-UH1
     Should Be Equal As Strings  ${resp.status_code}  422  
     Should Be Equal As Strings  "${resp.json()}"  "${INVALID_SERVICE}"    
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Enable service  ${p1_s2} 
@@ -298,7 +313,7 @@ JD-TC-Get Queue By Location and Service-UH1
 JD-TC-Get Queue By Location and Service-UH2
 	[Documentation]  get queue by service id and location id 
     Comment  INPUT Disable queue
-    ${resp}=  ProviderLogin  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${RESP}=  Disable Queue  ${p1_q3} 
@@ -314,7 +329,7 @@ JD-TC-Get Queue By Location and Service-UH2
     Should Be Equal As Strings  ${resp.status_code}  200   
     Should Be Equal As Strings  ${resp.json()}  []  
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Disable service  ${p1_s2} 
@@ -326,7 +341,7 @@ JD-TC-Get Queue By Location and Service-UH2
 JD-TC-Get Queue By Location and Service-UH3
 	[Documentation]  get queue by service id and location id 
     Comment  INPUT Disable Location id
-    ${resp}=  ProviderLogin  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${RESP}=  Disable Location  ${p1_l2} 
@@ -343,7 +358,7 @@ JD-TC-Get Queue By Location and Service-UH3
     Should Be Equal As Strings  ${resp.status_code}  422   
     Should Be Equal As Strings  "${resp.json()}"  "${LOCATION_DISABLED}"  
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${RESP}=  Enable Location  ${p1_l2} 

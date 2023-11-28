@@ -27,11 +27,16 @@ ${pngfile}     /ebs/TDD/upload.png
 JD-TC-Get Customers-1
     [Documentation]   Get Customers by provider login using account 
     
-    ${resp}=  ProviderLogin  ${PUSERNAME245}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME245}  ${PASSWORD}
     clear_customer   ${PUSERNAME245}
 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+    
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${firstname1}=  FakerLibrary.first_name 
     Set Suite Variable  ${firstname1}
     ${lastname1}=  FakerLibrary.last_name
@@ -54,9 +59,14 @@ JD-TC-Get Customers-1
    
 JD-TC-Get Customers-2
     [Documentation]   Get Customers by another provider using phone and status
-    ${resp}=  ProviderLogin  ${PUSERNAME235}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -75,9 +85,14 @@ JD-TC-Get Customers-2
     
 JD-TC-Get Customers-3
     [Documentation]   Get Customers by another provider using fname and lastname
-    ${resp}=  ProviderLogin  ${PUSERNAME236}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -95,7 +110,7 @@ JD-TC-Get Customers-3
 
 JD-TC-Get Customers-4
 	[Documentation]   Get Customers by provider login using dob
-    ${resp}=  ProviderLogin  ${PUSERNAME245}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME245}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  GetCustomer   dob-eq=${dob1}     
     Log  ${resp.json()} 
@@ -105,7 +120,7 @@ JD-TC-Get Customers-4
 
 JD-TC-Get Customers-5
 	[Documentation]   Get Customers by provider login using status
-    ${resp}=  ProviderLogin  ${PUSERNAME245}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME245}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  GetCustomer   status-eq=ACTIVE   
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -132,7 +147,7 @@ JD-TC-Get Customers-6
     ...   ${SPACE}check provider consumer data to see if the provider consumer for that consumer is created. 
     ...   ${SPACE}consumer then changes login id to indian number and check if it is reflected in the provider consumer data
 
-    ${resp}=  Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -164,11 +179,16 @@ JD-TC-Get Customers-6
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_queue   ${PUSERNAME53}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -229,7 +249,7 @@ JD-TC-Get Customers-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -262,7 +282,7 @@ JD-TC-Get Customers-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -314,10 +334,15 @@ JD-TC-Get Customers-7
     
 
 
-   ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+   ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${acc_id}=  get_acc_id  ${PUSERNAME214}
     Set Suite Variable   ${acc_id} 
     ${resp}=   ProviderLogout
@@ -362,7 +387,7 @@ JD-TC-Get Customers-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -388,8 +413,8 @@ JD-TC-Get Customers-7
     Verify Response List  ${resp}  0  firstName=${firstname}  lastName=${lastname}   phoneNo=${CUSERPH75}     email=${CUSERMAIL2}    email_verified=${bool[0]}   phone_verified=${bool[0]}     favourite=${bool[0]}
 
 JD-TC-Get Customers-8
-    [Documentation]  Add a new valid customer and get that customer using secondary phone number filter
-     ${resp}=  ProviderLogin  ${PUSERNAME230}  ${PASSWORD}
+    [Documentation]  Add a new valid customer ang get that customer using secondary phone number filter
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${p_id}  ${resp.json()['id']}
      ${firstname}=  FakerLibrary.first_name
@@ -397,8 +422,6 @@ JD-TC-Get Customers-8
      ${ph2}=  Evaluate  ${PUSERNAME23}+73009
      ${dob}=  FakerLibrary.Date
      ${gender}=  Random Element    ${Genderlist}
-     ${phone1}=  Evaluate  ${PUSERNAME162}+72004
-     Set Suite Variable    ${phone1} 
      ${resp}=  AddCustomer  ${phone1}   firstName=${firstname}   lastName=${lastname}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}
      Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}

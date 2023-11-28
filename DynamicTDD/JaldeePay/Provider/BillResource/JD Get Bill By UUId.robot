@@ -57,7 +57,7 @@ JD-TC-Get Bill By UUId -1
         ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Suite Variable  ${PUSERNAME_Z}
-        ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -87,18 +87,22 @@ JD-TC-Get Bill By UUId -1
         ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
         ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
         ${bs}=  FakerLibrary.bs
-        ${city}=   get_place
-        ${latti}=  get_latitude
-        ${longi}=  get_longitude
         ${companySuffix}=  FakerLibrary.companySuffix
-        ${postcode}=  FakerLibrary.postcode
-        ${address}=  get_address
-        ${sTime}=  db.get_time
-        ${eTime}=  add_time   0  15
+        # ${city}=   get_place
+        # ${latti}=  get_latitude
+        # ${longi}=  get_longitude
+        # ${postcode}=  FakerLibrary.postcode
+        # ${address}=  get_address
+        ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+        ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+        Set Suite Variable  ${tz}
+        # ${sTime}=  db.get_time_by_timezone   ${tz}
+        ${sTime}=  db.get_time_by_timezone  ${tz}
+        ${eTime}=  add_timezone_time  ${tz}  0  15  
         ${desc}=   FakerLibrary.sentence  nb_words=2  variable_nb_words=False
         ${url}=   FakerLibrary.url
         ${parking}   Random Element   ${parkingType}
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable   ${DAY}
         ${resp}=  Update Business Profile with schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
         Should Be Equal As Strings    ${resp.status_code}    200
@@ -125,8 +129,8 @@ JD-TC-Get Bill By UUId -1
         Should Be Equal As Strings    ${resp.status_code}   200
         ${capacity}=   Random Int   min=20   max=100
         ${parallel}=   Random Int   min=1   max=2
-        ${sTime}=  add_time  1  30
-        ${eTime}=  add_time   3  00
+        ${sTime}=  add_timezone_time  ${tz}  1  30  
+        ${eTime}=  add_timezone_time  ${tz}  3  00  
         ${queue1}=   FakerLibrary.word
         ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${sid1}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -169,10 +173,10 @@ JD-TC-Get Bill By UUId -1
         ${cou_amount}=   Convert To Number   ${cou_amount}
         ${cupn_code}=   FakerLibrary.word
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${sTime}=  subtract_time  0  15
-        ${eTime}=  add_time   0  45
-        ${ST_DAY}=  get_date
-        ${EN_DAY}=  add_date   10
+        ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+        ${eTime}=  add_timezone_time  ${tz}  0  45  
+        ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+        ${EN_DAY}=  db.add_timezone_date  ${tz}   10
         ${min_bill_amount}=   Random Int   min=10   max=100
         ${max_disc_val}=   Random Int   min=100   max=500
         ${max_prov_use}=   Random Int   min=10   max=20
@@ -203,6 +207,9 @@ JD-TC-Get Bill By UUId -1
         ${disc1}=  Bill Discount Input  ${discountId}  ${des}  ${desc}
         ${bdisc}=  Bill Discount  ${bid}  ${disc1}   
         
+        ${bill_time}=  db.get_date_time_by_timezone  ${tz}
+        ${bill_createdtime}=   db.remove_date_time_secs   ${bill_time}
+
         ${resp}=  Update Bill   ${wid}  addBillLevelDiscount  ${bdisc}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${netTotal}=  Evaluate  ${ser_amount}+${it_amount}
@@ -236,7 +243,7 @@ JD-TC-Get Bill By UUId -1
         Should Be Equal As Strings  ${resp.json()['discount'][0]['privateNote']}  ${des}  
         Should Be Equal As Strings  ${resp.json()['discount'][0]['calculationType']}  ${calctype[1]}
         Should Be Equal As Strings  ${resp.json()['providerCoupon']['${cupn_code}']['value']}  ${cou_amount}  
-
+        Should Be Equal As Strings  ${resp.json()['createdDate']}  ${bill_createdtime}
         # Should Be Equal As Strings  ${resp.json()['providerCoupon'][0]['id']}  ${couponId}  
         # Should Be Equal As Strings  ${resp.json()['providerCoupon'][0]['couponValue']}  ${cou_amount} 
         # Should Be Equal As Strings  ${resp.json()['providerCoupon'][0]['name']}  ${coupon1}
@@ -245,7 +252,7 @@ JD-TC-Get Bill By UUId -1
 JD-TC-Get Bill By UUId -UH1
 
         [Documentation]    Get bill Bill by UUId  using another provider's uuid
-        ${resp}=  ProviderLogin  ${PUSERNAME4}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=  Get Bill By UUId  ${wid}
         Should Be Equal As Strings  ${resp.status_code}  401
@@ -293,10 +300,16 @@ JD-TC-Get Bill By UUId -2
         Set Test Variable  ${sd1}  ${max_party['subdomain']}
         
         FOR   ${a}  IN RANGE    ${length}    
-                ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+                ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
                 Should Be Equal As Strings    ${resp.status_code}    200
-                ${domain}=   Set Variable    ${resp.json()['sector']}
-                ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+
+                ${decrypted_data}=  db.decrypt_data  ${resp.content}
+                Log  ${decrypted_data}
+                ${domain}=   Set Variable    ${decrypted_data['sector']}
+                ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+
+                # ${domain}=   Set Variable    ${resp.json()['sector']}
+                # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
                 ${resp}=  View Waitlist Settings
                 Log   ${resp.json()}
                 Should Be Equal As Strings    ${resp.status_code}    200
@@ -307,7 +320,7 @@ JD-TC-Get Bill By UUId -2
         END
         Set Suite Variable  ${a}
         Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
-        # ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        # ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         # Log  ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -332,7 +345,7 @@ JD-TC-Get Bill By UUId -2
         Set Suite Variable  ${cid}  ${resp.json()}   
         # Set Test Variable  ${firstName}  ${resp.json()[0]['firstName']}
 
-        ${resp}=  Create Sample Queue  
+        ${resp}=  Create Sample Queue
         Set Test Variable  ${qid1}   ${resp['queue_id']}
         Set Test Variable  ${sid1}   ${resp['service_id']}
         Set Test Variable  ${lid}   ${resp['location_id']}
@@ -583,7 +596,7 @@ JD-TC-Get Bill By UUId -3
         # Log   ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200
 
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
 
         ${resp}=  Get Consumer By Id  ${CUSERNAME9}
@@ -607,13 +620,18 @@ JD-TC-Get Bill By UUId -3
         ${lid}=  Create Sample Location
         Set Test Variable   ${lid}
 
-        ${DAY1}=  get_date
+        ${resp}=   Get Location By Id  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${DAY1} 
-        ${DAY2}=  add_date  10      
+        ${DAY2}=  db.add_timezone_date  ${tz}  10        
         Set Suite Variable  ${DAY2} 
         ${list}=  Create List  1  2  3  4  5  6  7
         Set Suite Variable  ${list} 
-        ${sTime1}=  add_time  0  15
+        ${sTime1}=  add_timezone_time  ${tz}  0  15  
         Set Suite Variable   ${sTime1}
         ${delta}=  FakerLibrary.Random Int  min=10  max=60
         Set Suite Variable  ${delta}
@@ -798,7 +816,7 @@ JD-TC-Get Bill By UUId -4
         # Log   ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200
 
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
 
         ${resp}=  Get Consumer By Id  ${CUSERNAME9}
@@ -829,10 +847,10 @@ JD-TC-Get Bill By UUId -4
         Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
 
         ${lid}=  Create Sample Location
-        ${DAY1}=  get_date
-        ${DAY2}=  add_date  10      
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
+        ${DAY2}=  db.add_timezone_date  ${tz}  10        
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${sTime1}=  add_time  0  15
+        ${sTime1}=  add_timezone_time  ${tz}  0  15  
         ${delta}=  FakerLibrary.Random Int  min=10  max=60
         ${eTime1}=  add_two   ${sTime1}  ${delta}
         ${s_name}=  FakerLibrary.name

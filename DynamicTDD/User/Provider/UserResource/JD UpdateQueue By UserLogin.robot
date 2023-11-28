@@ -28,7 +28,7 @@ JD-TC-UpdateQueueByUserLogin-1
 
      [Documentation]  Create a queue for user and Update that queue
 
-     ${resp}=   ProviderLogin  ${HLMUSERNAME3}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -41,8 +41,13 @@ JD-TC-UpdateQueueByUserLogin-1
     IF   '${resp.content}' == '${emptylist}'
         ${locId1}=  Create Sample Location
         Set Suite Variable  ${locId1}
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=   Get Business Profile
@@ -53,9 +58,12 @@ JD-TC-UpdateQueueByUserLogin-1
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
@@ -80,18 +88,18 @@ JD-TC-UpdateQueueByUserLogin-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${DAY1}=  get_date
+     ${DAY1}=  db.get_date_by_timezone  ${tz}
      Set Suite Variable  ${DAY1}
-     ${DAY2}=  add_date  10      
+     ${DAY2}=  db.add_timezone_date  ${tz}  10        
      Set Suite Variable  ${DAY2}
      ${list}=  Create List  1  2  3  4  5  6  7
      Set Suite Variable  ${list}
-     ${sTime1}=  add_time  0  15
+     ${sTime1}=  add_timezone_time  ${tz}  0  15  
      Set Suite Variable   ${sTime1}
-     ${eTime1}=  add_time   0  30
+     ${eTime1}=  add_timezone_time  ${tz}  0  30  
      Set Suite Variable   ${eTime1}
 
      ${resp}=    Get Locations
@@ -154,7 +162,7 @@ JD-TC-UpdateQueueByUserLogin-1
 
 JD-TC-UpdateQueueByUserLogin-2
      [Documentation]  Update  a  user queue with more service
-     ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Create Service For User  ${SERVICE5}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  ${EMPTY}  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id}
@@ -165,8 +173,8 @@ JD-TC-UpdateQueueByUserLogin-2
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${s_id6}  ${resp.json()}
-     ${sTime3}=  add_time  0  50
-     ${eTime3}=  add_time   1  15
+     ${sTime3}=  add_timezone_time  ${tz}  0  50
+     ${eTime3}=  add_timezone_time  ${tz}  1  15  
      ${queue_name}=  FakerLibrary.bs
      ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime3}  ${eTime3}  1  5  ${lid}  ${u_id}  ${s_id5}
      Log  ${resp.json()}
@@ -205,7 +213,7 @@ JD-TC-UpdateQueueByUserLogin-2
 JD-TC-UpdateQueueByUserLogin-UH1
     [Documentation]    Create a queue and update that queue with  same details of another user queue
 
-    ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${u_id1}=  Create Sample User
@@ -223,7 +231,7 @@ JD-TC-UpdateQueueByUserLogin-UH1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Create Service For User  ${SERVICE2}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  ${EMPTY}  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id1}
@@ -256,7 +264,7 @@ JD-TC-UpdateQueueByUserLogin-UH2
 
      [Documentation]  Create a queue for a user with branch's service id
 
-     ${resp}=  Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${desc}=   FakerLibrary.sentence
@@ -290,7 +298,7 @@ JD-TC-UpdateQueueByUserLogin-UH2
      Should Be Equal As Strings  ${resp[0].status_code}  200
      Should Be Equal As Strings  ${resp[1].status_code}  200
 
-     ${resp}=  ProviderLogin  ${PUSERNAME_U4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=  Create Service For User  ${SERVICE4}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  ${EMPTY}  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id4}

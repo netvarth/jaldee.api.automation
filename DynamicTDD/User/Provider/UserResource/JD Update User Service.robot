@@ -46,7 +46,7 @@ JD-TC-Update UserService-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -110,7 +110,7 @@ JD-TC-Update UserService-1
 
 JD-TC-Update UserService-2
      [Documentation]  Create  a service for a valid user and update service with service name same as another user
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+668447
@@ -149,7 +149,7 @@ JD-TC-Update UserService-2
 
 JD-TC-Update UserService-UH1
      [Documentation]  create a user service and update that service with new department id
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U3}=  Evaluate  ${PUSERNAME}+55773
@@ -189,7 +189,7 @@ JD-TC-Update UserService-UH1
 JD-TC-Update UserService-UH2
 
      [Documentation]  Update a user service name to  an already existing name
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -233,7 +233,7 @@ JD-TC-Update UserService-UH4
 JD-TC-Update UserService-UH5
 
      [Documentation]  Update a user service using invalid userid
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     

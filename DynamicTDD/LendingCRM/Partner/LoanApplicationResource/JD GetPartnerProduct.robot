@@ -52,22 +52,31 @@ JD-TC-GetPartnerProduct-1
     ${resp}=  Consumer Login  ${CUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+
+*** comment ***
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${fname}   ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname}   ${decrypted_data['lastName']}
 
     ${resp}=  Consumer Logout
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -210,10 +219,12 @@ JD-TC-GetPartnerProduct-UH3
                                   
     [Documentation]               Get Partner Product with  provider login login.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
 
     ${resp}=     Get Partner Loan Application Product

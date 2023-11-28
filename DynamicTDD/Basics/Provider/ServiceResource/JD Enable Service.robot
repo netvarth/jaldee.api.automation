@@ -29,7 +29,7 @@ JD-TC-Enable Service-1
         ${Total}=   Random Int   min=100   max=500
         ${min_pre}=  Convert To Number  ${min_pre}  1
         ${Total}=  Convert To Number  ${Total}  1
-        ${resp}=  Provider Login  ${PUSERNAME90}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         clear_service       ${PUSERNAME90}
         ${resp}=  Create Service   ${SERVICE1}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]} 
@@ -53,7 +53,7 @@ JD-TC-Enable Service-1
 JD-TC-Enable Service-UH1
 
         [Documentation]  Enable Service of another provider
-        ${resp}=  Provider Login  ${PUSERNAME150}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Enable service  ${id}  
         Should Be Equal As Strings  ${resp.status_code}  401
@@ -62,7 +62,7 @@ JD-TC-Enable Service-UH1
 JD-TC-Enable Service-UH2
 
         [Documentation]  Enable  Invalid service id
-        ${resp}=  Provider Login  ${PUSERNAME90}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Enable service  0  
         Should Be Equal As Strings  ${resp.status_code}  404
@@ -71,7 +71,7 @@ JD-TC-Enable Service-UH2
 JD-TC-Enable Service-UH3
 
         [Documentation]   Enable  a already enabled service
-        ${resp}=  Provider Login  ${PUSERNAME90}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Enable service  ${id}  
         Should Be Equal As Strings  ${resp.status_code}  422

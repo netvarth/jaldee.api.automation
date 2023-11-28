@@ -60,7 +60,7 @@ JD-TC-ChangeQuestionnaireStatus-1
     # Set Suite Variable   ${colnames}
     # ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
     # Log   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -106,7 +106,7 @@ JD-TC-ChangeQuestionnaireStatus-1
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}  
+    # ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${xlFile}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -161,7 +161,7 @@ JD-TC-ChangeQuestionnaireStatus-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}  
+    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${xlFile}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -208,7 +208,7 @@ JD-TC-ChangeQuestionnaireStatus-UH1
     Set Suite Variable   ${colnames}
     ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[7]}
     Log   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -254,7 +254,7 @@ JD-TC-ChangeQuestionnaireStatus-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}  
+    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${xlFile}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -407,8 +407,13 @@ JD-TC-ChangeQuestionnaireStatus-UH5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
+    ${qnr_id_list}=  Create List
+    FOR  ${i}  IN RANGE   ${len}
+        Append To List   ${qnr_id_list}  ${resp.json()[${i}]['id']}
+    END
 
-    ${j}=    Evaluate    random.randint(1, ${len})    random
+    # ${j}=    Evaluate    random.randint(1, ${len})    random
+    ${j}=    Evaluate    random.choice($qnr_id_list)  random
 
     ${invalid_account_id}=  FakerLibrary.Numerify  %%%%%%%%
 
@@ -431,8 +436,13 @@ JD-TC-ChangeQuestionnaireStatus-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
+    # ${qnr_id_list}=  Create List
+    # FOR  ${i}  IN RANGE   ${len}
+    #     Append To List   ${qnr_id_list}  ${resp.json()[${i}]['id']}
+    # END
 
     ${j}=    Evaluate    random.randint(1, 5)    random
+    # ${j}=    Evaluate    random.sample(${qnr_id_list},1)   random
 
     ${resp}=  Change Status of Questionnaire   ${account_id}  ${status[1]}  ${j}
     Log  ${resp.json()}
@@ -458,7 +468,7 @@ JD-TC-ChangeQuestionnaireStatus-UH8
 
     ${account_id}=  db.get_acc_id  ${PUSERNAME4}
 
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -116,13 +116,14 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -164,7 +165,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -200,6 +201,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -213,7 +215,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-1
 
     clear_appt_schedule   ${PUSERNAME164}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -348,7 +350,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-2
 
     clear_customer   ${PUSERNAME164}
 
-    ${resp}=  Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -378,6 +380,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -391,7 +394,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-2
 
     clear_appt_schedule   ${PUSERNAME164}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -503,7 +506,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-3
 
     clear_customer   ${PUSERNAME164}
 
-    ${resp}=  Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -511,6 +514,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -524,7 +528,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-3
 
     clear_appt_schedule   ${PUSERNAME164}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -609,7 +613,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-3
     Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[2]}
 
 
-    ${resp}=  Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -652,7 +656,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
 
     clear_customer   ${PUSERNAME164}
 
-    ${resp}=  Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -674,6 +678,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -687,7 +692,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
 
     clear_queue   ${PUSERNAME164}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -834,7 +839,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
 
     clear_customer   ${PUSERNAME164}
 
-    ${resp}=  Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -856,6 +861,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -869,7 +875,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
 
     clear_queue   ${PUSERNAME164}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -950,7 +956,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
     Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[2]}
 
 
-    ${resp}=  Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1019,7 +1025,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
 
     clear_customer   ${PUSERNAME164}
 
-    ${resp}=  Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1041,6 +1047,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1054,7 +1061,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
 
     clear_appt_schedule   ${PUSERNAME164}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
@@ -1149,7 +1156,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
     Verify Response  ${resp}    apptStatus=${apptStatus[4]}
     Should Be Equal As Strings   ${resp.json()['releasedQnr'][0]['status']}   ${QnrReleaseStatus[2]}
 
-    ${resp}=  Provider Login  ${PUSERNAME164}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME164}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

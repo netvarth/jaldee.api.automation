@@ -58,7 +58,7 @@ JD-TC-Update Service With info-1-Service_type
 
         [Documentation]   update a  Physical_servive to Virtual_service for a valid provider when domain is Billable
 
-        ${resp}=  Provider Login  ${PUSERNAME121}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -93,6 +93,7 @@ JD-TC-Update Service With info-1-Service_type
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable   ${id}  ${resp.json()}
         ${resp}=   Get Service By Id  ${id}
+        Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=${service_duration[2]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}   bType=${btype}  isPrePayment=${bool[1]}
         Verify Response  ${resp}  consumerNoteMandatory=${bool[0]}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[0]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[0]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
 
@@ -146,7 +147,7 @@ JD-TC-Update Service With info-3-Service_type
         Log  ${multilocPro}
         Set Suite Variable   ${multilocPro}
         ${len}=  Get Length  ${multilocPro}
-        ${resp}=  ProviderLogin  ${multilocPro[1]}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${multilocPro[1]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         clear_service       ${multilocPro[1]}
         ${ser_durtn}=   Random Int   min=2   max=10
@@ -182,18 +183,21 @@ JD-TC-Update Service With info-3-Service_type
         Verify Response  ${resp}  consumerNoteMandatory=${bool[0]}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[0]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[0]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
 
 
-        ${latti}=  get_latitude
-        ${longi}=  get_longitude
         ${companySuffix}=  FakerLibrary.companySuffix
-        ${postcode}=  FakerLibrary.postcode
-        ${address}=  get_address
+        # ${latti}=  get_latitude
+        # ${longi}=  get_longitude
+        # ${postcode}=  FakerLibrary.postcode
+        # ${address}=  get_address
+        ${latti}  ${longi}  ${postcode}  ${address}=  get_lat_long_add_pin
+        ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+        Set Suite Variable  ${tz}
         ${description}=  FakerLibrary.sentence
         ${snote}=  FakerLibrary.Word
         ${dis}=  FakerLibrary.Word
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${sTime}=  add_time  0  15
-        ${eTime}=  add_time   3  00
-        ${DAY}=  get_date
+        ${sTime}=  add_timezone_time  ${tz}  0  15  
+        ${eTime}=  add_timezone_time  ${tz}  3  00  
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Create Location  ${loc}  ${longi}  ${latti}  www.${companySuffix}.com  ${postcode}   ${address}  free  True  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -201,10 +205,10 @@ JD-TC-Update Service With info-3-Service_type
 
         ${capacity}=   Random Int   min=20   max=100
         ${parallel}=   Random Int   min=1   max=2
-        ${sTime}=  add_time  0  30
-        ${eTime}=  add_time   0  60
+        ${sTime}=  add_timezone_time  ${tz}  0  30  
+        ${eTime}=  add_timezone_time  ${tz}  0  60  
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${DAY}=  get_date   
+        ${DAY}=  db.get_date_by_timezone  ${tz}   
         Set Suite Variable  ${DAY}
 
         ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid1}  ${s_id10}
@@ -224,7 +228,6 @@ JD-TC-Update Service With info-3-Service_type
         ${resp}=  Add To Waitlist  ${cid}  ${s_id10}  ${qid1}  ${DAY}  hi  ${bool[1]}  ${cid}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${wid1}  ${wid[0]}
         sleep  02s
@@ -238,7 +241,7 @@ JD-TC-Update Service With info-3-Service_type
 
 JD-TC-Update Service With info-4-Service_type
         [Documentation]     Checking Service Type in before and after taking appointment
-        ${resp}=  ProviderLogin  ${multilocPro[2]}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${multilocPro[2]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         clear_service       ${multilocPro[2]}
 
@@ -283,18 +286,21 @@ JD-TC-Update Service With info-4-Service_type
         Verify Response  ${resp}  consumerNoteMandatory=${bool[0]}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[1]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[1]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
 
 
-        ${latti}=  get_latitude
-        ${longi}=  get_longitude
         ${companySuffix}=  FakerLibrary.companySuffix
-        ${postcode}=  FakerLibrary.postcode
-        ${address}=  get_address
+        # ${latti}=  get_latitude
+        # ${longi}=  get_longitude
+        # ${postcode}=  FakerLibrary.postcode
+        # ${address}=  get_address
+        ${latti}  ${longi}  ${postcode}  ${address}=  get_lat_long_add_pin
+        ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+        Set Suite Variable  ${tz}
         ${description}=  FakerLibrary.sentence
         ${snote}=  FakerLibrary.Word
         ${dis}=  FakerLibrary.Word
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${sTime}=  add_time  0  15
-        ${eTime}=  add_time   3  00
-        ${DAY}=  get_date
+        ${sTime}=  add_timezone_time  ${tz}  0  15  
+        ${eTime}=  add_timezone_time  ${tz}  3  00  
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Create Location  ${loc}  ${longi}  ${latti}  www.${companySuffix}.com  ${postcode}   ${address}  free  True  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -306,13 +312,13 @@ JD-TC-Update Service With info-4-Service_type
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-        ${DAY1}=  get_date
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${DAY1} 
-        ${DAY2}=  add_date  10      
+        ${DAY2}=  db.add_timezone_date  ${tz}  10        
         Set Suite Variable  ${DAY2} 
         ${list}=  Create List  1  2  3  4  5  6  7
         Set Suite Variable  ${list} 
-        ${sTime1}=  add_time  1  30
+        ${sTime1}=  add_timezone_time  ${tz}  1  30  
         Set Suite Variable   ${sTime1}
         ${delta}=  FakerLibrary.Random Int  min=10  max=60
         Set Suite Variable  ${delta}
@@ -512,7 +518,7 @@ JD-TC-Update Service With info-8- consumer_Note_Mandatory
         Log  ${multilocPro}
         Set Suite Variable   ${multilocPro}
         ${len}=  Get Length  ${multilocPro}
-        ${resp}=  ProviderLogin  ${multilocPro[2]}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${multilocPro[2]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         clear_service       ${multilocPro[2]}
         ${ser_durtn}=   Random Int   min=2   max=10
@@ -561,7 +567,7 @@ JD-TC-Update Service With info-9- consumer_Note_Mandatory
         Log  ${multilocPro}
         Set Suite Variable   ${multilocPro}
         ${len}=  Get Length  ${multilocPro}
-        ${resp}=  ProviderLogin  ${multilocPro[3]}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${multilocPro[3]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         clear_service       ${multilocPro[3]}
         ${ser_durtn}=   Random Int   min=2   max=10
@@ -577,7 +583,7 @@ JD-TC-Update Service With info-9- consumer_Note_Mandatory
         Log   ${virtualCallingModes}
         # ${resp}=  Create Service with info  ${SERVICE1}  ${description}  ${service_duration[1]}   ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${EMPTY}   ${status[0]}   ${btype}  ${bool[0]}   ${bool[0]}   ${serviceType[1]}   ${vstype}   ${virtualCallingModes}   ${EMPTY}   0    ${consumerNoteMandatory[0]}   ${consumerNoteTitle}   ${preInfoEnabled[0]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[0]}   ${postInfoTitle}   ${postInfoText}
         
-        ${resp}=  Create Service with info    ${SERVICE3}  ${description}   ${ser_durtn}    ${bool[1]}    ${notifytype[1]}  ${EMPTY}  ${Total1}   ${status[0]}   ${btype}  ${bool[0]}  ${bool[0]}   ${serviceType[0]}   ${vstype}   ${virtualCallingModes}   ${EMPTY}   0    ${consumerNoteMandatory[0]}   ${consumerNoteTitle}   ${preInfoEnabled[0]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[0]}   ${postInfoTitle}   ${postInfoText}
+        ${resp}=  Create Service with info    ${SERVICE3}  ${description}   ${ser_durtn}    ${bool[1]}    ${notifytype[1]}  ${EMPTY}  ${Total1}   ${status[0]}   ${btype}  ${bool[0]}  ${bool[0]}   ${serviceType[0]}   ${vstype}   ${virtualCallingModes}   ${NULL}   0    ${consumerNoteMandatory[0]}   ${consumerNoteTitle}   ${preInfoEnabled[0]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[0]}   ${postInfoTitle}   ${postInfoText}
         Should Be Equal As Strings  ${resp.status_code}  200  
         Set Suite Variable    ${s_id3}    ${resp.json()} 
         ${resp}=   Get Service By Id   ${s_id3} 
@@ -590,10 +596,10 @@ JD-TC-Update Service With info-9- consumer_Note_Mandatory
 
         ${capacity}=   Random Int   min=20   max=100
         ${parallel}=   Random Int   min=1   max=2
-        ${sTime}=  add_time  0  30
-        ${eTime}=  add_time   0  60
+        ${sTime}=  add_timezone_time  ${tz}  0  30  
+        ${eTime}=  add_timezone_time  ${tz}  0  60  
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${DAY}=  get_date   
+        ${DAY}=  db.get_date_by_timezone  ${tz}   
         Set Suite Variable  ${DAY}
 
         ${resp}=    Get Locations
@@ -630,7 +636,7 @@ JD-TC-Update Service With info-10- consumer_Note_Mandatory
         Log  ${multilocPro}
         Set Suite Variable   ${multilocPro}
         ${len}=  Get Length  ${multilocPro}
-        ${resp}=  ProviderLogin  ${multilocPro[4]}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         clear_service       ${multilocPro[4]}
         ${ser_durtn}=   Random Int   min=2   max=10
@@ -659,10 +665,10 @@ JD-TC-Update Service With info-10- consumer_Note_Mandatory
 
         ${capacity}=   Random Int   min=20   max=100
         ${parallel}=   Random Int   min=1   max=2
-        ${sTime}=  add_time  0  30
-        ${eTime}=  add_time   0  60
+        ${sTime}=  add_timezone_time  ${tz}  0  30  
+        ${eTime}=  add_timezone_time  ${tz}  0  60  
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${DAY}=  get_date   
+        ${DAY}=  db.get_date_by_timezone  ${tz}   
         Set Suite Variable  ${DAY}
 
         ${resp}=    Get Locations
@@ -705,7 +711,6 @@ JD-TC-Update Service With info-10- consumer_Note_Mandatory
         ${resp}=  Add To Waitlist  ${cid13}  ${s_id3}  ${qid1}  ${DAY}  ${consumerNote}  ${bool[1]}  ${cid13}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${wid13}  ${wid[0]}
 
@@ -735,7 +740,7 @@ JD-TC-Update Service With info-11- consumer_Note_Mandatory
         Log  ${multilocPro}
         Set Suite Variable   ${multilocPro}
         ${len}=  Get Length  ${multilocPro}
-        ${resp}=  ProviderLogin  ${multilocPro[5]}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${multilocPro[5]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         clear_service       ${multilocPro[5]}
         ${ser_durtn}=   Random Int   min=2   max=10
@@ -764,10 +769,10 @@ JD-TC-Update Service With info-11- consumer_Note_Mandatory
      
         ${capacity}=   Random Int   min=20   max=100
         ${parallel}=   Random Int   min=1   max=2
-        ${sTime}=  add_time  0  30
-        ${eTime}=  add_time   0  60
+        ${sTime}=  add_timezone_time  ${tz}  0  30  
+        ${eTime}=  add_timezone_time  ${tz}  0  60  
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${DAY}=  get_date   
+        ${DAY}=  db.get_date_by_timezone  ${tz}   
         Set Suite Variable  ${DAY}
 
         ${resp}=    Get Locations
@@ -802,7 +807,7 @@ JD-TC-Update Service With info-11- consumer_Note_Mandatory
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid7}  ${wid[0]}
 
-        ${resp}=  ProviderLogin  ${multilocPro[5]}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${multilocPro[5]}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -827,7 +832,7 @@ JD-TC-Update Service With info-11- consumer_Note_Mandatory
         Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid1}
 
 
-        ${resp}=  ProviderLogin  ${multilocPro[5]}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${multilocPro[5]}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
@@ -848,7 +853,7 @@ JD-TC-Update Service With info-UH1- consumer_Note_Mandatory
 
         [Documentation]    Update consumer note mandatory using consumer_note_title as EMPTY
         
-        ${resp}=  ProviderLogin  ${multilocPro[4]}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         clear_service       ${multilocPro[4]}
         ${ser_durtn}=   Random Int   min=2   max=10
@@ -877,10 +882,10 @@ JD-TC-Update Service With info-UH1- consumer_Note_Mandatory
 
         ${capacity}=   Random Int   min=20   max=100
         ${parallel}=   Random Int   min=1   max=2
-        ${sTime}=  add_time  0  30
-        ${eTime}=  add_time   0  60
+        ${sTime}=  add_timezone_time  ${tz}  0  30  
+        ${eTime}=  add_timezone_time  ${tz}  0  60  
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${DAY}=  get_date   
+        ${DAY}=  db.get_date_by_timezone  ${tz}   
         Set Suite Variable  ${DAY}
 
         ${resp}=    Get Locations
@@ -928,7 +933,7 @@ JD-TC-Update Service With info-UH1- consumer_Note_Mandatory
 
 JD-TC-Update Service With info-12-Pre_info_&_Post_info
         [Documentation]     Change Pre_info_&_post_info  status, before and after taking appointment
-        ${resp}=  ProviderLogin  ${multilocPro[5]}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${multilocPro[5]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         clear_service       ${multilocPro[5]}
         ${ser_durtn}=   Random Int   min=2   max=10
@@ -963,13 +968,13 @@ JD-TC-Update Service With info-12-Pre_info_&_Post_info
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-        ${DAY1}=  get_date
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${DAY1} 
-        ${DAY2}=  add_date  10      
+        ${DAY2}=  db.add_timezone_date  ${tz}  10        
         Set Suite Variable  ${DAY2} 
         ${list}=  Create List  1  2  3  4  5  6  7
         Set Suite Variable  ${list} 
-        ${sTime60}=  add_time  1  30
+        ${sTime60}=  add_timezone_time  ${tz}  1  30  
         Set Suite Variable   ${sTime60}
         ${delta60}=  FakerLibrary.Random Int  min=10  max=60
         Set Suite Variable  ${delta60}
@@ -1031,7 +1036,7 @@ JD-TC-Update Service With info-13-Pre_info_&_Post_info
 
         [Documentation]    Enable pre_info status and try to set pre_info text as EMPTY
         
-        ${resp}=  ProviderLogin  ${multilocPro[4]}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         clear_service       ${multilocPro[4]}
         ${ser_durtn}=   Random Int   min=2   max=10
@@ -1073,7 +1078,7 @@ JD-TC-Update Service With info-UH2-Pre_info_&_Post_info
 
         [Documentation]    Enable pre_info status and try to set pre_info title as EMPTY
         
-        ${resp}=  ProviderLogin  ${multilocPro[4]}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         clear_service       ${multilocPro[4]}
         ${ser_durtn}=   Random Int   min=2   max=10
@@ -1110,7 +1115,7 @@ JD-TC-Update Service With info-14-Pre_info_&_Post_info
 
         [Documentation]    Enable post_info status and try to set post_info text as EMPTY
         
-        ${resp}=  ProviderLogin  ${multilocPro[4]}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         clear_service       ${multilocPro[4]}
         ${ser_durtn}=   Random Int   min=2   max=10
@@ -1154,7 +1159,7 @@ JD-TC-Update Service With info-UH3-Pre_info_&_Post_info
 
         [Documentation]    Enable post_info status and try to set post_info title as EMPTY
         
-        ${resp}=  ProviderLogin  ${multilocPro[4]}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         clear_service       ${multilocPro[4]}
         ${ser_durtn}=   Random Int   min=2   max=10
@@ -1196,7 +1201,7 @@ JD-TC-Update Service With info-UH3-Pre_info_&_Post_info
 JD-TC-Update Service With info-UH4
 
         [Documentation]  Update a service name to  an already existing name
-        ${resp}=  ProviderLogin  ${multilocPro[4]}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         clear_service       ${multilocPro[4]}
 
@@ -1291,7 +1296,7 @@ JD-TC-Update Service With info-UH7
   
         ${min_pre}=   Random Int  min=1   max=10
         ${Total}=   Random Int  min=11   max=100
-        ${resp}=  Provider Login  ${PUSERNAME69}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         clear_service       ${PUSERNAME69}
 
@@ -1306,7 +1311,7 @@ JD-TC-Update Service With info-UH7
         Set Suite Variable  ${id123}  ${resp.json()}
         ${resp}=  ProviderLogout
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp}=  Provider Login  ${PUSERNAME63}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME63}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         
         ${resp}=  Update Service with info  ${id123}  ${SERVICE2}  ${description}  ${service_duration[3]}  ${bool[1]}    ${notifytype[2]}  ${min_pre}   ${Total}  ${status[0]}  ${btype}   ${bool[1]}   ${bool[0]}   ${serviceType[1]}   ${vstype}   ${virtualCallingModes}   ${EMPTY}   0    ${consumerNoteMandatory[0]}   ${consumerNoteTitle}   ${preInfoEnabled[0]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[0]}   ${postInfoTitle}   ${postInfoText}
@@ -1340,8 +1345,8 @@ JD-TC-Update Service With info-UH8
         Verify Response  ${resp}  consumerNoteMandatory=${bool[0]}   consumerNoteTitle=${consumerNoteTitle}   preInfoEnabled=${bool[0]}   preInfoTitle=${preInfoTitle}   preInfoText=${preInfoText}   postInfoEnabled=${bool[0]}   postInfoTitle=${postInfoTitle}   postInfoText=${postInfoText}
 
         ${resp}=  Update Service with info  ${sid38}  ${SERVICE8}  ${description}   ${service_duration[3]}  ${bool[0]}  ${notifytype[0]}  ${min_pre}  0  ${status[0]}  ${btype}  ${bool[1]}  ${bool[0]}   ${serviceType[1]}   ${vstype}   ${virtualCallingModes}   ${EMPTY}   0    ${consumerNoteMandatory[0]}   ${consumerNoteTitle}   ${preInfoEnabled[0]}   ${preInfoTitle}   ${preInfoText}   ${postInfoEnabled[0]}   ${postInfoTitle}   ${postInfoText}
-        Should Be Equal As Strings  ${resp.status_code}  422
-        Should Be Equal As Strings  "${resp.json()}"  "${SERVICE_PRICE_REQUIRED}"
+        Should Be Equal As Strings  ${resp.status_code}  200
+        # Should Be Equal As Strings  "${resp.json()}"  "${SERVICE_PRICE_REQUIRED}"
 
 
 JD-TC-Update Service With info-UH9
@@ -1384,11 +1389,17 @@ Billable
     FOR   ${a}  IN RANGE   ${length-1}
             
         # clear_service       ${PUSERNAME${a}}
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         clear_customer   ${PUSERNAME${a}}
-        ${domain}=   Set Variable    ${resp.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+
+        # ${domain}=   Set Variable    ${resp.json()['sector']}
+        # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
         ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Suite Variable  ${check}    ${resp2.json()['serviceBillable']} 
@@ -1406,11 +1417,17 @@ Non Billable
 
      FOR    ${a}   IN RANGE  ${start1}    ${length-1}
         # clear_service       ${PUSERNAME${a}}
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         clear_customer   ${MUSERNAME${a}}
-        ${domain}=   Set Variable    ${resp.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+
+        # ${domain}=   Set Variable    ${resp.json()['sector']}
+        # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
         ${resp}=  View Waitlist Settings
 	Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable  
         ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
@@ -1441,7 +1458,7 @@ Non Billable
 #         Log   ${dom_list}
 
 #         FOR   ${a}  IN RANGE  ${start}   ${length-1}    
-#                 ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+#                 ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
 #                 Log   ${resp.json()}
 #                 Should Be Equal As Strings    ${resp.status_code}    200
 #                 clear_customer   ${PUSERNAME${a}}

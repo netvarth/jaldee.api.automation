@@ -12,6 +12,7 @@ import csv
 import random
 import json
 import string
+import inspect
 import collections as col
 from collections import defaultdict
 from faker import Faker
@@ -28,11 +29,25 @@ from phonenumbers.phonenumberutil import (
     region_code_for_country_code,
     region_code_for_number,
 )
+
+# from timezonefinder import TimezoneFinder
+from robot.api import logger
+
 from base64 import b64encode, b64decode
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
+import socket
+from Keywordspy import create_tz
 
-db_host = "127.0.0.1"
+
+if os.environ['SYSTEM_ENV'] == 'Microsoft WSL':
+    # db_host = "host.docker.internal"
+    db_host = subprocess.getoutput("cat /etc/resolv.conf | grep nameserver | cut -d' ' -f 2 | tr -d '\n'")
+else:
+    db_host = "127.0.0.1"
+    
+
+# db_host = "127.0.0.1"
 db_user = "root"
 db_passwd = "netvarth"
 db = "ynw"
@@ -57,6 +72,51 @@ def connect_db(host, user, passwd, db):
     except MySQLdb.Error as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
+
+
+def get_Host_name_IP():
+    try:
+        host_name = socket.gethostname()
+        host_ip = socket.gethostbyname(host_name)
+        print("Hostname :  ", host_name)
+        print("IP : ", host_ip)
+        print(socket.gethostbyaddr(socket.gethostname())[0])
+    except:
+        print("Unable to get Hostname and IP")
+
+
+def log_response(response):
+    logger.info("%s Response : url=%s \n " % (response.request.method.upper(),
+                                              response.url) +
+                "status=%s, reason=%s \n " % (response.status_code,
+                                              response.reason) +
+                "headers=%s \n " % response.headers +
+                "body=%s \n " % (response.text))
+
+
+def log_request(response):
+    request = response.request
+    if response.history:
+        original_request = response.history[0].request
+        redirected = '(redirected) '
+    else:
+        original_request = request
+        redirected = ''
+    logger.info("%s Request : " % original_request.method.upper() +
+                "url=%s %s\n " % (original_request.url, redirected) +
+                "path_url=%s \n " % original_request.path_url +
+                "headers=%s \n " % original_request.headers +
+                "body=%s \n " % (original_request.body))
+
+# def connect_db(host, user, passwd, db):
+#     try:
+#         return pymysql.connect(host=host,
+#                                user=user,
+#                                passwd=passwd,
+#                                db=db)
+#     except Exception as e:
+#         print ("Exception:", e)
+#         print ("Exception at line no:", e.__traceback__.tb_lineno)
 
 # def connect_db(host, user, passwd, db):
 #     try:
@@ -107,6 +167,7 @@ def verify_accnt(email,purpose):
 
 
 def get_id(email):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -129,6 +190,7 @@ def get_id(email):
 
 
 def get_aid(number):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -147,6 +209,7 @@ def get_aid(number):
 
 
 def get_acc_id(email):
+    print("In function: ", inspect.stack()[0].function)
     uid= get_id(email)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -165,6 +228,7 @@ def get_acc_id(email):
             dbconn.close()
 
 def get_uid(ph):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(ph) 
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -184,6 +248,7 @@ def get_uid(ph):
             dbconn.close()
 
 def get_debit(ph):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(ph) 
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -204,7 +269,7 @@ def get_debit(ph):
 
 
 def get_ser_id(email):
-    
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -340,13 +405,14 @@ def update_entry(table,field,value,wfield,wid,cur):
 def update_entry_2Fields(table,wfield,wid,field1,value1,field2,value2,cur):
     try:
         cur.execute("UPDATE %s SET %s=%s WHERE %s='%s' and %s ='%s';" % (table,wfield,wid,field1,value1,field2,value2))
-        print(field, 'updated with ', value, ' in', table)
+        print(wfield, 'updated with ', wid, ' in', table)
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
 
 
 def delete_queue_service(aid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -367,6 +433,7 @@ def delete_queue_service(aid):
 
 
 def delete_sequence_generator(aid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -387,6 +454,7 @@ def delete_sequence_generator(aid):
 
 
 def delete_ML_table(aid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -407,6 +475,7 @@ def delete_ML_table(aid):
 
 
 def delete_queue_stats_table(aid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -427,6 +496,7 @@ def delete_queue_stats_table(aid):
 
 
 def clear_queue (usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)    
     uid = get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -459,6 +529,7 @@ def clear_queue (usrid):
     
     
 def clear_waitlist(email):
+    print("In function: ", inspect.stack()[0].function)
     uid = get_id(email)
     aid = get_acc_id(email)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -487,6 +558,7 @@ def clear_waitlist(email):
 
 
 def delete_schedule_service(aid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -507,6 +579,7 @@ def delete_schedule_service(aid):
 
 
 def delete_donation_service(usrid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     aid=get_acc_id(usrid)
     try:
@@ -529,6 +602,7 @@ def delete_donation_service(usrid):
 
 
 def delete_virtual_service(usrid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     aid=get_acc_id(usrid)
     try:
@@ -550,6 +624,7 @@ def delete_virtual_service(usrid):
 
 
 def clear_service (usrid):
+    print("In function: ", inspect.stack()[0].function)
     # clear_appt_service(usrid)
     # print  ("In clear_service")
     clear_waitlist(usrid)
@@ -607,6 +682,7 @@ def clear_service (usrid):
 
 
 def reset_metric_usage(aid) :
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     # cur = dbconn.cursor()
     try :
@@ -633,6 +709,7 @@ def reset_metric_usage(aid) :
 
 
 def clear_provider_msgs (usrid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     aid=get_acc_id(usrid)
     try:
@@ -652,6 +729,7 @@ def clear_provider_msgs (usrid):
 
 
 def clear_consumer_msgs (usrid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     aid=get_id(usrid)
     try:
@@ -670,33 +748,21 @@ def clear_consumer_msgs (usrid):
             dbconn.close()       
      
 def clear_location (usrid):
-    
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)
     clear_queue(usrid)
     clear_Rating(usrid)
+    clear_appt_schedule(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try :
         # cur = dbconn.cursor()
         with dbconn.cursor() as cur:
-            # print('account_info_tbl')
             update_entry('account_info_tbl','base_location','NULL','id',aid,cur)
-            # print('search_data_tbl')
             delete_search(aid)
-            # print('schedule_service_tbl')
             delete_schedule_service(aid)
-            # print('transaction_payment_tbl')
             delete_entry('transaction_payment_tbl','account',aid,cur)
-            # print('donation_tbl')
             delete_entry('donation_tbl','account',aid,cur)
-            # print('wl_cache_tbl')
-            delete_entry('wl_cache_tbl','account',aid,cur)
-            # print('appmnt_archive_tbl')
-            delete_entry('appmnt_archive_tbl','account',aid,cur)
-            # print('appt_schedule_tbl')
-            delete_entry('appt_schedule_tbl','account',aid,cur)
-            # print('appt_tbl')
-            delete_entry('appt_tbl','account',aid,cur)
-            # print('location_tbl')
+            
             # cur.execute("SELECT id FROM location_tbl WHERE account='%s'" % aid)
             # row = cur.fetchall()
             # print (row) 
@@ -716,6 +782,7 @@ def clear_location (usrid):
     
     
 def clear_Consumermsg(usrid):
+    print("In function: ", inspect.stack()[0].function)
     cid=get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -731,6 +798,7 @@ def clear_Consumermsg(usrid):
             dbconn.close()
 
 def clear_Providermsg(usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -746,6 +814,7 @@ def clear_Providermsg(usrid):
             dbconn.close()
 
 def clear_Item(usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)
     id=get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -764,6 +833,7 @@ def clear_Item(usrid):
    
 
 def clear_Catalog(usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)
     id=get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -785,6 +855,7 @@ def clear_Catalog(usrid):
     
     
 def clear_Coupon(usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)
     id=get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -801,6 +872,7 @@ def clear_Coupon(usrid):
             dbconn.close()  
 
 def clear_Discount(usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)
     id=get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -817,6 +889,7 @@ def clear_Discount(usrid):
             dbconn.close()   
       
 def clear_Bill(usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=  get_acc_id(usrid)
     uid=  get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -833,6 +906,7 @@ def clear_Bill(usrid):
             dbconn.close()
 
 def clear_invoice(usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)
     uid=get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -852,6 +926,7 @@ def clear_invoice(usrid):
 
 
 def clear_Rating(usrid):
+    print("In function: ", inspect.stack()[0].function)
     uid=get_id(usrid)
     aid=get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -872,6 +947,7 @@ def clear_Rating(usrid):
             dbconn.close()  
 
 def clear_Family(uid): 
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -888,6 +964,7 @@ def clear_Family(uid):
             dbconn.close() 
 
 def clear_FamilyMember(consumer_id):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -903,6 +980,7 @@ def clear_FamilyMember(consumer_id):
             dbconn.close() 
 
 def clear_Alert (aid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -918,6 +996,7 @@ def clear_Alert (aid):
             dbconn.close() 
 
 def clear_favorite_provider (usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -938,6 +1017,7 @@ def clear_favorite_provider (usrid):
             dbconn.close()
 
 def clear_Auditlog (usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -953,6 +1033,7 @@ def clear_Auditlog (usrid):
             dbconn.close()
     
 def clear_licence (aid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -967,6 +1048,7 @@ def clear_licence (aid):
             dbconn.close()
    
 def clear_Addon (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid) 
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -985,6 +1067,7 @@ def clear_Addon (usrid):
 
 
 def clear_Adword (acid):
+    print("In function: ", inspect.stack()[0].function)
     # delete_entry('adword_tbl','account',acid,cur)
     # delete_entry('account_matrix_usage_tbl','id',acid,cur)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -1007,6 +1090,7 @@ def clear_Adword (acid):
 
 
 def get_claim_id(name):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -1028,6 +1112,7 @@ def get_claim_id(name):
 
 
 def clear_claims(name):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -1058,6 +1143,7 @@ def clear_claim():
 
 
 def clear_jaldeecoupon (code):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -1077,6 +1163,7 @@ def clear_jaldeecoupon (code):
 
 
 def clear_tax_gstNum (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -1094,6 +1181,7 @@ def clear_tax_gstNum (usrid):
 
 
 def clear_corporate (uid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -1108,6 +1196,7 @@ def clear_corporate (uid):
             dbconn.close()
 
 def clear_branch (code):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -1122,6 +1211,7 @@ def clear_branch (code):
             dbconn.close()
 
 def clear_JaldeeAlerts (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -1138,6 +1228,7 @@ def clear_JaldeeAlerts (usrid):
             dbconn.close()
 
 def clear_Department (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -1156,6 +1247,8 @@ def get_time():
     BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
     URL = BASE_URL + '/provider/server/date'
     r = requests.get(url = URL)
+    log_request(r)
+    log_response(r)
     data = r.json()
     date,time= data.split()
     try:
@@ -1201,6 +1294,8 @@ def get_date():
     BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
     URL = BASE_URL + '/provider/server/date'
     r = requests.get(url = URL)
+    log_request(r)
+    log_response(r)
     data = r.json()
     date,time= data.split()
     try:
@@ -1248,7 +1343,7 @@ def subtract_date(days):
 #     userpass=os.environ['SSHPASS']
 #     try:
 #         command1= "date +%u"
-#         command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S "+command1
+#         command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S "+command1
 #         proc=subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
 #         out, err= proc.communicate()
 #         print out
@@ -1292,11 +1387,12 @@ def get_weekday_by_date(date):
 
 
 def SetMerchantId(accNo,mid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
         with dbconn.cursor() as cur:
-            uu=cur.execute("update account_payment_settings_tbl set payu_merchant_id='%s'  where id ='%s'  "% (mid,accNo))
+            uu=cur.execute("update account_payment_settings_tbl set payu_merchant_id='%s' where id ='%s'  "% (mid,accNo))
             dbconn.commit()
             # dbconn.close()
             return uu
@@ -1314,12 +1410,12 @@ def change_system_time(h,m):
     hostip=os.environ['IP_ADDRESS']
     userpass=os.environ['SSHPASS']
     try:
-        command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S timedatectl set-ntp 0"
+        command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S timedatectl set-ntp 0"
         subprocess.call(command2, shell=True)
         t = datetime.datetime.now()
         t += datetime.timedelta(hours=int(h),minutes=int(m))
         str=t.strftime("%m%d%H%M%y.%S")
-        command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S date "+str
+        command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S date "+str
         # os.system(command)
         subprocess.call(command, shell=True)
     except Exception as e:
@@ -1332,10 +1428,10 @@ def resetsystem_time():
     hostip=os.environ['IP_ADDRESS']
     userpass=os.environ['SSHPASS']
     try:
-        command1="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S hwclock --hctosys"
+        command1="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S hwclock --hctosys"
         a=subprocess.call(command1,shell=True)
         if a==1:
-            command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S timedatectl set-ntp 1"
+            command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S timedatectl set-ntp 1"
             subprocess.call(command2, shell=True)    
     except Exception as e:
         print ("Exception:", e)
@@ -1344,15 +1440,18 @@ def resetsystem_time():
 
 def change_system_date(d):
     user=os.environ['USERNAME']
+    print ("USERNAME:", user)
     hostip=os.environ['IP_ADDRESS']
+    print ("hostip:", hostip)
     userpass=os.environ['SSHPASS']
+    print ("userpass:", userpass)
     try:
-        command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S timedatectl set-ntp 0"
+        command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S timedatectl set-ntp 0"
         subprocess.call(command2, shell=True)
         t = datetime.datetime.now()
         t += datetime.timedelta(days=int(d))
         str=t.strftime("%m%d%H%M%y.%S")
-        command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S date "+str+" |sleep 2"
+        command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S date "+str+" |sleep 2"
         subprocess.call(command, shell=True)
     #   os.system(command)
     except Exception as e:
@@ -1392,9 +1491,9 @@ def change_date(date):
     hostip=os.environ['IP_ADDRESS']
     userpass=os.environ['SSHPASS']
     # os.system("sudo date '%s'" %str)
-    command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S timedatectl set-ntp 0"
+    command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S timedatectl set-ntp 0"
     subprocess.call(command2, shell=True)
-    command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -t "+user+"@"+hostip+" sudo -S date "+str
+    command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S date "+str
     subprocess.call(command, shell=True)
 
 def bill_cycle_annual():
@@ -1414,11 +1513,12 @@ def bill_cycle_annual():
 
     
 def payuVerify(accNo):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
         with dbconn.cursor() as cur:
-            cur.execute("update account_payment_settings_tbl set payu_verified=true  where account ='%s'" % accNo)
+            cur.execute("update account_payment_settings_tbl set payu_verified=true where account ='%s'" % accNo)
             # cur.execute("update account_payment_settings_tbl set is_default_account=false  where id ='%s'" % accNo)
             dbconn.commit()
             # dbconn.close()
@@ -1437,6 +1537,7 @@ def get_days(sdate,edate):
     return  (edate-sdate).days
 
 def pay_invoice(uid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -1454,6 +1555,7 @@ def pay_invoice(uid):
 
 
 def delete_search(aid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         with dbconn.cursor() as cur:
@@ -1487,6 +1589,7 @@ def delete_search(aid):
         #return 0  
 
 def clear_payment_invoice (usrid):
+    print("In function: ", inspect.stack()[0].function)
     aid=  get_acc_id(usrid)
     uid=  get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -1512,6 +1615,8 @@ def add_time24(h,m):
     BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
     URL = BASE_URL + '/provider/server/date'
     r = requests.get(url = URL)
+    log_request(r)
+    log_response(r)
     data = r.json()
     # print data
     try:
@@ -1663,6 +1768,18 @@ def get_pin_loc() :
         state = random_row['State']
     return pin,place,district,state
 
+def get_lat_long_add_pin() :
+    # with open(pfile,'r', encoding="utf-8") as data:
+    with open(addressfile,'r', encoding="utf-8") as data:
+        csv_reader=csv.DictReader(data)
+        k=list(csv_reader)
+        random_row = random.choice(k)
+        lat = random_row['Latitude']
+        lon = random_row['Longitude']
+        pin = random_row['Pincode']
+        add = random_row['Place'] + ',' + random_row['District'] + ',' + random_row['State']+ '-' + str(random_row['Pincode'])
+    return lat,lon,str(pin),add.strip()
+
 def get_Subdomainfields(datas) :
     fake = Faker()
     # data= json.loads(datas)
@@ -1672,14 +1789,16 @@ def get_Subdomainfields(datas) :
     virtual_fields= {}
     for i in range(len(data)):
             name = data[i]['name']
+            print ('name: ', name)
             if data[i]['mandatory'] == True:
                 if 'Columns' in data[i]:
                     c= len(data[i]['Columns'])
                     for j in range(c):                           
                             key_name =  data[i]['Columns'][j]['key']
                             if  data[i]['Columns'][j]['type'] == 'Enum':
-                                e= len(data[i]['Columns'][j]['enumeratedConstants'])
-                                key_value = data[i]['Columns'][j]['enumeratedConstants'][0]['name']
+                                index_len= len(data[i]['Columns'][j]['enumeratedConstants'])
+                                rand_idx = random.randrange(index_len)
+                                key_value = data[i]['Columns'][j]['enumeratedConstants'][rand_idx]['name']
                                 fields[key_name]=key_value
                             elif  data[i]['Columns'][j]['type'] == 'TEXT':
                                 key_value = Generate_random_value(3,string.ascii_uppercase)
@@ -1696,7 +1815,51 @@ def get_Subdomainfields(datas) :
                     if data[i]['dataType'] == 'TEXT':
                         virtual_fields[name] =fake.name()
                     elif data[i]['dataType'] == 'Gender':
-                        virtual_fields[name] = data[i]['enumeratedConstants'][0]['name']
+                        index_len= len(data[i]['enumeratedConstants'])
+                        rand_idx = random.randrange(index_len)
+                        virtual_fields[name] = data[i]['enumeratedConstants'][rand_idx]['name']
+                    elif data[i]['dataType'] == 'EnumList':
+                        index_len= len(data[i]['enumeratedConstants'])
+                        rand_idx = random.randrange(index_len)
+                        virtual_fields[name] = data[i]['enumeratedConstants'][rand_idx]['name']
+
+                # return virtual_fields
+            # else:
+            #     if 'Columns' in data[i]:
+            #         c= len(data[i]['Columns'])
+            #         for j in range(c):                           
+            #                 key_name =  data[i]['Columns'][j]['key']
+            #                 if  data[i]['Columns'][j]['type'] == 'Enum':
+            #                     index_len= len(data[i]['Columns'][j]['enumeratedConstants'])
+            #                     rand_idx = random.randrange(index_len)
+            #                     key_value = data[i]['Columns'][j]['enumeratedConstants'][rand_idx]['name']
+            #                     fields[key_name]=key_value
+            #                 elif  data[i]['Columns'][j]['type'] == 'TEXT':
+            #                     key_value = Generate_random_value(3,string.ascii_uppercase)
+            #                     fields[key_name]=key_value
+            #                 elif  data[i]['Columns'][j]['type'] == 'DT_Month':
+            #                     key_value = fake.month_name()
+            #                     fields[key_name]=key_value
+            #                 elif  data[i]['Columns'][j]['type'] == 'DT_Year':
+            #                     key_value = fake.year()
+            #                     fields[key_name]=key_value 
+            #         fields_list.append(fields)
+            #         virtual_fields[name] = fields_list
+            #     elif 'Columns' not in data[i]:
+            #         if data[i]['dataType'] == 'TEXT':
+            #             virtual_fields[name] =fake.name()
+            #         elif data[i]['dataType'] == 'Gender':
+            #             index_len= len(data[i]['enumeratedConstants'])
+            #             rand_idx = random.randrange(index_len)
+            #             virtual_fields[name] = data[i]['enumeratedConstants'][rand_idx]['name']
+            #         elif data[i]['dataType'] == 'EnumList':
+            #             index_len= len(data[i]['enumeratedConstants'])
+            #             rand_idx = random.randrange(index_len)
+            #             virtual_fields[name] = data[i]['enumeratedConstants'][rand_idx]['name']
+
+                # return virtual_fields
+                # return random.choice((virtual_fields,{}))
+
 
     return virtual_fields
 
@@ -1825,6 +1988,7 @@ def Parking_Types(datas):
 
 
 def clear_Provider_Notification_Settings (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -1899,7 +2063,7 @@ def Generate_random_value(size=1, chars=string.ascii_uppercase + string.digits) 
 def Compare_data_from_file(val,fname) :
     # Compare passed data with contents of file.
     try:
-        f=open(fname,'r')
+        f=open(fname,"a+")
         contents=f.readline()
     except Exception as e:
         print ("Exception:", e)
@@ -1929,7 +2093,7 @@ def Generate_pan_number() :
         else:
             val_exists= True
         if val_exists:
-                f=open(fname,'a')
+                f=open(fname,'a+')
                 f.write(pan+"\n")
                 f.close
                 return (pan)
@@ -1952,6 +2116,7 @@ def Generate_ifsc_code() :
 
 
 def get_metric_license(metric):
+    print("In function: ", inspect.stack()[0].function)
     #find the license package id where the the given metric has the given value
     metric_id=0
     with open(licjson, 'r', encoding="utf-8") as f:
@@ -2076,6 +2241,7 @@ def sub_two(h,m):
         return 0
 
 def clear_Label (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -2091,6 +2257,7 @@ def clear_Label (usrid):
             dbconn.close()
 
 def clear_Statusboard (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -2109,6 +2276,7 @@ def clear_Statusboard (usrid):
     
 
 def get_jaldeekeyword_pkg():
+    print("In function: ", inspect.stack()[0].function)
     #get Jaldee-Keyword addon Id from licconfig gile
     try:
         with open(licjson,'r', encoding="utf-8") as datas:
@@ -2130,6 +2298,7 @@ def get_jaldeekeyword_pkg():
         return 0
 
 def get_statusboard_addonId():
+    print("In function: ", inspect.stack()[0].function)
     #get Jaldee-Keyword addon Id from licconfig gile
     try:
         with open(licjson,'r', encoding="utf-8") as datas:
@@ -2152,6 +2321,7 @@ def get_statusboard_addonId():
             
 
 def clear_jdn (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -2168,6 +2338,7 @@ def clear_jdn (usrid):
 
 
 def clear_corporate (cname):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -2195,6 +2366,7 @@ def clear_corporate (cname):
             dbconn.close()
 
 def clear_consumer_notification_settings (usrid):
+    print("In function: ", inspect.stack()[0].function)
     acid =  get_acc_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
@@ -2227,6 +2399,8 @@ def get_time_secs():
     BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
     URL = BASE_URL + '/provider/server/date'
     r = requests.get(url = URL)
+    log_request(r)
+    log_response(r)
     data = r.json()
     date,time= data.split()
     try:
@@ -2256,6 +2430,7 @@ def add_time_sec(h,m,s):
 
 
 def clear_ScTable(phno):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -2271,6 +2446,7 @@ def clear_ScTable(phno):
 
 
 def clear_ScRepTable(sc_id):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -2291,6 +2467,7 @@ def clear_ScRepTable(sc_id):
 
 
 def clear_ssc_code(phone):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     id =  get_acc_id(phone)
     try:
@@ -2330,6 +2507,7 @@ def check_is_corp(subdomain):
 
 
 def get_iscorp_subdomains(flag):
+    print("In function: ", inspect.stack()[0].function)
     # print (flag)
     try:
         with open(bizjson,'r', encoding="utf-8") as f:
@@ -2353,6 +2531,7 @@ def get_iscorp_subdomains(flag):
 
 
 def get_iscorp_subdomains_with_maxpartysize(flag):
+    print("In function: ", inspect.stack()[0].function)
     try:
         with open(bizjson,'r',encoding="utf-8") as f:
             data=json.load(f)
@@ -2373,6 +2552,7 @@ def get_iscorp_subdomains_with_maxpartysize(flag):
     return domlist
 
 def get_notiscorp_subdomains_with_no_multilocation(flag):
+    print("In function: ", inspect.stack()[0].function)
     try:
         with open(bizjson,'r',encoding="utf-8") as f:
             data=json.load(f)
@@ -2411,34 +2591,24 @@ def get_notiscorp_subdomains_with_no_multilocation(flag):
 #             dbconn.close()
 
 def clear_users(ph_no):
+    print("In function: ", inspect.stack()[0].function)
     uid=  get_id(ph_no)
-    print ("1:", uid, "ph no:", ph_no)
+    print ("uid:", uid, "ph no:", ph_no)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     # print ("2:", dbconn)
     try:
         # cur = dbconn.cursor()
         with dbconn.cursor() as cur:
-            print ("3:", cur)
             delete_entry('login_tbl','id',uid,cur) 
-            print ("4: login_tbl")
-            delete_entry('wl_history_tbl','provider',uid,cur)  
-            print ("5: wl_history_tbl")
+            delete_entry('wl_history_tbl','provider',uid,cur)    
+            delete_entry('appmnt_archive_tbl','provider',uid,cur)
             delete_entry('service_tbl','provider',uid,cur)  
-            print ("6: service_tbl")   
             delete_entry('user_team_tbl','local_user_id',uid,cur)  
-            print ("7: user_team_tbl") 
             delete_entry('schedule_service_tbl','service_id',uid,cur)  
-            print ("8: schedule_service_tbl")  
-            delete_entry('service_tbl','provider',uid,cur)  
-            print ("9: service_tbl")           
             delete_entry('local_user_tbl','id',uid,cur)  
-            print ("10: local_user_tbl")
             delete_entry('login_history_tbl','user_id',uid,cur)
-            print ("11: login_history_tbl")
             delete_entry('crm_lead_tbl','generated_by_id',uid,cur)
-            print ("12: crm_lead_tbl")
             delete_entry('user_tbl','id',uid,cur)
-            print ("13: user_tbl")  
             dbconn.commit()
     except Exception as e:
         print ("Exception:", e)
@@ -2473,6 +2643,7 @@ def get_slot_length(timedur, apptdur) :
         return  int(timedur/apptdur)
 
 def get_item_metrics_value(metric,pkgId):
+    print("In function: ", inspect.stack()[0].function)
     #get license packag id from licconfig file
     metric_id=0
     with open(licjson, 'r', encoding="utf-8") as f:
@@ -2558,7 +2729,7 @@ def twodigitfloat(x):
 
 
 def clear_appt_schedule(usrid):
-    
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try :
         # cur = dbconn.cursor()
@@ -2577,28 +2748,17 @@ def clear_appt_schedule(usrid):
             
             for index in range(len(apptid)):
                 delete_entry('appt_livetrack_tbl','uuid',apptid[index][0],cur) 
-                # print('appt_livetrack_tbl cleared')
                 delete_entry('appt_tbl','uid',apptid[index][0],cur)
-                # print('appt_tbl cleared')
             for index in range(len(apptschid)):
                 delete_entry('schedule_service_tbl','schedule_id',int(apptschid[index][0]),cur)
-                # print('schedule_service_tbl cleared')
                 delete_entry('transaction_payment_tbl','schedule_id',int(apptschid[index][0]),cur)
-                # print('transaction_payment_tbl cleared')
             delete_entry('appmnt_archive_tbl','account',aid,cur)
-            # print('appmnt_archive_tbl cleared')
             delete_entry('appt_daily_schedule_tbl','account',aid,cur)
-            # print('appt_daily_schedule_tbl cleared')
             delete_entry('appt_queueset_tbl','account_id',aid,cur)
-            # print('appt_queueset_tbl cleared')
             delete_entry('appt_tbl','account',aid,cur)
-            # print('appt_tbl cleared')
             delete_entry('appt_schedule_tbl','account',aid,cur)
-            # print('appt_schedule_tbl cleared')
             delete_entry('appt_state_tbl','account',aid,cur)
-            # print('appt_state_tbl cleared')
             delete_entry('holidays_tbl','account',aid,cur)
-            # print('holidays_tbl cleared')
             reset_metric_usage(aid)
             dbconn.commit()
                     # dbconn.close()
@@ -2611,7 +2771,7 @@ def clear_appt_schedule(usrid):
             dbconn.close()
 
 def clear_appt_schedule_user(user_num, branch_num):
-    
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try :
         # cur = dbconn.cursor()
@@ -2632,28 +2792,17 @@ def clear_appt_schedule_user(user_num, branch_num):
             
             for index in range(len(apptid)):
                 delete_entry('appt_livetrack_tbl','uuid',apptid[index][0],cur) 
-                # print('appt_livetrack_tbl cleared')
                 delete_entry('appt_tbl','uid',apptid[index][0],cur)
-                # print('appt_tbl cleared')
             for index in range(len(apptschid)):
                 delete_entry('schedule_service_tbl','schedule_id',int(apptschid[index][0]),cur)
-                # print('schedule_service_tbl cleared')
                 delete_entry('transaction_payment_tbl','schedule_id',int(apptschid[index][0]),cur)
-                # print('transaction_payment_tbl cleared')
             delete_entry_2Fields('appmnt_archive_tbl','account',aid,'provider',uid,cur)
-            # print('appmnt_archive_tbl cleared')
             delete_entry('appt_daily_schedule_tbl','account',aid,cur)
-            # print('appt_daily_schedule_tbl cleared')
             delete_entry('appt_queueset_tbl','account_id',aid,cur)
-            # print('appt_queueset_tbl cleared')
             delete_entry_2Fields('appt_tbl','account',aid,'provider',uid,cur)
-            # print('appt_tbl cleared')
             delete_entry_2Fields('appt_schedule_tbl','account',aid,'provider',uid,cur)
-            # print('appt_schedule_tbl cleared')
             delete_entry('appt_state_tbl','account',aid,cur)
-            # print('appt_state_tbl cleared')
             delete_entry_2Fields('holidays_tbl','account',aid,'provider',uid,cur)
-            # print('holidays_tbl cleared')
             reset_metric_usage(aid)
             dbconn.commit()
                     # dbconn.close()
@@ -2666,6 +2815,7 @@ def clear_appt_schedule_user(user_num, branch_num):
             dbconn.close()
 
 def addons_all_license_applicable(addonlist):
+    print("In function: ", inspect.stack()[0].function)
     # data= json.loads(addonlist)
     data= addonlist
     alist=[]
@@ -2681,6 +2831,7 @@ def addons_all_license_applicable(addonlist):
     return alist
     
 def all_license_applicable_addonids(addonlist):
+    print("In function: ", inspect.stack()[0].function)
     # data= json.loads(addonlist)
     data= addonlist
     alist=[]
@@ -2693,6 +2844,7 @@ def all_license_applicable_addonids(addonlist):
     return alist
 
 def apptfor(*argv):
+    print("In function: ", inspect.stack()[0].function)
     apptfor_dict = {}
     apptfor_list = []
     for arg in argv:
@@ -2746,13 +2898,7 @@ def mins_diff(stime,etime):
     try:
         
         time1= datetime.datetime.strptime(stime, '%I:%M %p')
-        # print (time1)
-        # time1_delta = datetime.timedelta(hours=time1.hour, minutes=time1.minute, seconds=time1.second)
-        # print time1_delta
         time2= datetime.datetime.strptime(etime, '%I:%M %p')
-        # print (time2)
-        # time2_delta = datetime.timedelta(hours=time2.hour, minutes=time2.minute, seconds=time2.second)
-        # print time2_delta
         time_delta = (time2 - time1)
         # print (time_delta)
         total_seconds = time_delta.total_seconds()
@@ -2812,6 +2958,7 @@ def rounded(val):
     return value
 
 def get_subdomains(domain):
+    print("In function: ", inspect.stack()[0].function)
     try:
         with open(bizjson,'r', encoding="utf-8") as f:
             data=json.load(f)
@@ -2830,6 +2977,7 @@ def get_subdomains(domain):
 
 
 def clear_customer(phno):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -2921,6 +3069,7 @@ def clear_customer(phno):
             
 
 def clear_customer_fam(phno):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -2958,6 +3107,8 @@ def get_date_time():
     BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
     URL = BASE_URL + '/provider/server/date'
     r = requests.get(url = URL)
+    log_request(r)
+    log_response(r)
     data = r.json()
     date,time= data.split()
     try:
@@ -2982,7 +3133,10 @@ def remove_secs(time):
 
 def remove_date_time_secs(time):
     try:
-        time1= datetime.datetime.strptime(time, '%Y-%m-%d %I:%M:%S %p')
+        if time.endswith(("AM", "PM", "am", "pm")):
+            time1= datetime.datetime.strptime(time, '%Y-%m-%d %I:%M:%S %p')
+        else:
+            time1= datetime.datetime.strptime(time, '%Y-%m-%d %H:%M:%S')
         t= time1.strftime("%Y-%m-%d %I:%M %p")
         return t
     except Exception as e:
@@ -3033,6 +3187,7 @@ def convert_hour_minutes(time):
 
     
 def clear_customer_groups(phno):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -3057,6 +3212,7 @@ def clear_customer_groups(phno):
 
 
 def get_customers_from_group(grpid):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -3081,6 +3237,7 @@ def get_customers_from_group(grpid):
 
 
 def get_procon_id(pronum,custnum):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -3108,6 +3265,7 @@ def get_procon_id(pronum,custnum):
             dbconn.close()
 
 def getType(*files):
+    print("In function: ", inspect.stack()[0].function)
     filetype={}
     for file in files:
         mimetype, encoding = mimetypes.guess_type(file)
@@ -3120,6 +3278,7 @@ def getType(*files):
 
 
 def addons_high_license_applicable(addonlist):
+    print("In function: ", inspect.stack()[0].function)
     # data= json.loads(addonlist)
     data= addonlist
     alist=[]
@@ -3136,6 +3295,7 @@ def addons_high_license_applicable(addonlist):
 
 
 def QuestionnaireAnswers(qnrdata, proConId, **kwargs):
+    print("In function: ", inspect.stack()[0].function)
     faker = Faker()      
     try:
         id = qnrdata['id']
@@ -3770,6 +3930,7 @@ def QuestionnaireAnswers(qnrdata, proConId, **kwargs):
 
 
 def setPrice(questions, answers):
+    print("In function: ", inspect.stack()[0].function)
     try:
         # print(answers)
         answers = json.loads(answers)
@@ -3852,6 +4013,7 @@ def setPrice(questions, answers):
 
 
 def createFUDict(data, actionval, uid):
+    print("In function: ", inspect.stack()[0].function)
     supported_filetypes= ['png', 'jpg', 'pdf', 'jpeg', 'bmp', 'flw', 'docx', 'txt']
     supported_videotypes= ['mp4', 'mov', 'flv', 'mkv', 'avi', 'webm'] 
     supported_audiotypes= ['mp3', 'wav', 'pcm']
@@ -4035,7 +4197,7 @@ def createFUDict(data, actionval, uid):
 
 
 def fileUploadDT(qnrdata, actionval, uid, *files):     
-    
+    print("In function: ", inspect.stack()[0].function)
     fileUploadDT.fileslist= list(files)
     supported_filetypes= ['png', 'jpg', 'pdf', 'jpeg', 'bmp', 'flw', 'docx', 'txt']
     supported_videotypes= ['mp4', 'mov', 'flv', 'mkv', 'avi', 'webm']
@@ -4088,6 +4250,7 @@ def fileUploadDT(qnrdata, actionval, uid, *files):
 
                       
 def clear_jcashoffer (name):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         with dbconn.cursor() as cur:
@@ -4428,6 +4591,7 @@ def tasktype(account):
             dbconn.close()
 
 def clear_category(account):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         # cur = dbconn.cursor()
@@ -4444,6 +4608,7 @@ def clear_category(account):
 
 
 def clear_drive(account):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(account)    
    # uid = get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -4544,23 +4709,6 @@ def taskTemplate(account_id, task_temp_name,status_id,origin_from=3,origin_id=0,
 #         if dbconn is not None:
 #             dbconn.close()
 
-def selectQuery(table,field,value):
-    dbconn = connect_db(db_host, db_user, db_passwd, db)
-    try:
-        with dbconn.cursor() as cur:
-            cur.execute("SELECT * from %s where %s ='%s';" % (table,field,value))
-            # print('Everything selected from ', field, 'for value', value,' in', table)
-            row = cur.fetchall()
-            print(row)          
-            dbconn.commit()
-         
-    except Exception as e:
-        print ("Exception:", e)
-        print ("Exception at line no:", e.__traceback__.tb_lineno)
-        pass
-    finally:
-        if dbconn is not None:
-            dbconn.close()
 
 def leadQnr(account):
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -4592,6 +4740,7 @@ def leadQnr(account):
 
 
 def reset_user_metric(aid) :
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     # cur = dbconn.cursor()
     try :
@@ -4645,7 +4794,7 @@ def CrifScore(account):
             dbconn.close()
 
 def fileUploadDTlead(qnrdata, actionval, *files):     
-    
+    print("In function: ", inspect.stack()[0].function)
     fileUploadDT.fileslist= list(files)
     supported_filetypes= ['png', 'jpg', 'pdf', 'jpeg', 'bmp', 'flw', 'docx', 'txt']
     supported_videotypes= ['mp4', 'mov', 'flv', 'mkv', 'avi', 'webm']
@@ -4698,6 +4847,7 @@ def fileUploadDTlead(qnrdata, actionval, *files):
 
 
 def QuestionnaireAnswerslead(qnrdata, proConId, **kwargs):
+    print("In function: ", inspect.stack()[0].function)
     faker = Faker()      
     try:
         id = qnrdata['questionnaireId']
@@ -5360,6 +5510,7 @@ def enquiryStatus(account):
             dbconn.close()
 
 def updateEnquiryStatus(account):
+    print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     try:
         with dbconn.cursor() as cur:
@@ -5380,7 +5531,7 @@ def updateEnquiryStatus(account):
 
 
 def fileUploadDTProcon(qnrdata, actionval, *files):     
-    
+    print("In function: ", inspect.stack()[0].function)
     fileUploadDT.fileslist= list(files)
     supported_filetypes= ['png', 'jpg', 'pdf', 'jpeg', 'bmp', 'flw', 'docx', 'txt']
     supported_videotypes= ['mp4', 'mov', 'flv', 'mkv', 'avi', 'webm']
@@ -5666,6 +5817,7 @@ def loanProducts(account):
             dbconn.close()
 
 def clear_enquiry(number):
+    print("In function: ", inspect.stack()[0].function)
     aid=get_acc_id(number)    
    # uid = get_id(usrid)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
@@ -5833,6 +5985,257 @@ def time_difference(start_time, end_time):
     return f"{hours:02}:{minutes:02}:{seconds:02}"
 
 
+def get_Timezone_by_lat_long(latitude, longitude):
+    # tf = TimezoneFinder()
+    # print (type(latitude), float(latitude))
+    # print (type(longitude), float(longitude))
+    # tz = tf.timezone_at(lng=float(longitude), lat=float(latitude))
+    BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
+    URL = BASE_URL + '/provider/location/timezone/'+ str(latitude) +'/'+ str(longitude)
+    # URL = BASE_URL + '/provider/location/timezone/'+ latitude +'/'+ longitude
+    print (URL)
+    r = requests.get(url = URL)
+    print (r)
+    log_request(r)
+    log_response(r)
+    data = r.json()
+    print (data)
+    data =  create_tz(data)
+    return  data
+
+def get_time_by_timezone(tz):
+    BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
+    zone, *loc = tz.split('/')
+    print("zone: ", zone)
+    print("loc: ", loc)
+    loc = random.choice(loc)
+    print("loc after random choice: ", loc)
+    URL = BASE_URL + '/provider/location/date/'+ zone +'/'+ loc
+    # URL = BASE_URL + '/provider/location/date/'+ tz
+    try:
+        r = requests.get(url = URL)
+        log_request(r)
+        log_response(r)
+        print(r.status_code)
+        # r.raise_for_status()
+        data = r.json()
+        date,time= data.split()
+        time1= datetime.datetime.strptime(time, '%H:%M:%S').time()
+        t= time1.strftime("%I:%M %p")
+        return t
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+    
+
+def get_date_by_timezone(tz):
+    BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
+    zone, *loc = tz.split('/')
+    loc = random.choice(loc)
+    URL = BASE_URL + '/provider/location/date/'+ zone +'/'+ loc
+    # URL = BASE_URL + '/provider/location/date/'+ tz
+    r = requests.get(url = URL)
+    log_request(r)
+    log_response(r)
+    data = r.json()
+    date,time= data.split()
+    try:
+        b= datetime.datetime.strptime(date, '%Y-%m-%d').date()
+        date = b.strftime("%Y-%m-%d")
+        return date
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+
+def get_date_time_by_timezone(tz):
+    BASE_URL = __import__(os.environ['VARFILE']).BASE_URL
+    zone, *loc = tz.split('/')
+    loc = random.choice(loc)
+    URL = BASE_URL + '/provider/location/date/'+ zone +'/'+ loc
+    # URL = BASE_URL + '/provider/location/date/'+ tz
+    r = requests.get(url = URL)
+    log_request(r)
+    log_response(r)
+    data = r.json()
+    return data
+    # date,time= data.split()
+    # try:
+    #     b= datetime.datetime.strptime(data, '%Y-%m-%d %H:%M:%S')
+    #     date = b.strftime("%Y-%m-%d %I:%M %p")
+    #     return date
+    # except Exception as e:
+    #     print ("Exception:", e)
+    #     print ("Exception at line no:", e.__traceback__.tb_lineno)
+    #     return 0
+
+def add_timezone_time(tz,h,m):
+    try:
+        current_dt= get_date_time_by_timezone(tz)
+        date_time1= datetime.datetime.strptime(current_dt, '%Y-%m-%d %H:%M:%S')
+        b= date_time1 + datetime.timedelta(hours=int(h),minutes=int(m))
+        newtime = b.strftime("%I:%M %p")
+        return newtime
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+
+def subtract_timezone_time(tz,h,m):
+    try:
+        current_dt= get_date_time_by_timezone(tz)
+        date_time2= datetime.datetime.strptime(current_dt, '%Y-%m-%d %H:%M:%S')
+        b= date_time2- datetime.timedelta(hours=int(h),minutes=int(m))
+        newtime = b.strftime("%I:%M %p")
+        return newtime
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+       
+def add_timezone_date(tz, days):
+    try:
+        current_dt= get_date_time_by_timezone(tz)
+        date_time2= datetime.datetime.strptime(current_dt, '%Y-%m-%d %H:%M:%S')
+        b= date_time2 + datetime.timedelta(days=int(days))
+        newdate = b.strftime("%Y-%m-%d")
+        return newdate
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+
+def subtract_timezone_date(tz,days):
+    try:
+        current_dt= get_date_time_by_timezone(tz)
+        date_time2= datetime.datetime.strptime(current_dt, '%Y-%m-%d %H:%M:%S')
+        b= date_time2 - datetime.timedelta(days=int(days))
+        newdate = b.strftime("%Y-%m-%d")
+        return newdate
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+
+
+def get_timezone_weekday(tz):   
+    try:
+        current_dt= get_date_time_by_timezone(tz)
+        d1= datetime.datetime.strptime(current_dt, '%Y-%m-%d %H:%M:%S').isoweekday()
+        day=int(d1)
+        if day==7:
+            return 1
+        else:
+            return day+1
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+
+# def get_weekday_by_date(date):
+#     try:
+#         d= datetime.datetime.strptime(date, '%Y-%m-%d').isoweekday()
+#         day=int(d)
+#         if day==7:
+#             return 1
+#         else:
+#             return day+1
+#     except Exception as e:
+#         print ("Exception:", e)
+#         print ("Exception at line no:", e.__traceback__.tb_lineno)
+#         return 0
+
+
+def timezone_bill_cycle(tz):
+    # date = datetime.date.today()
+    current_date= get_date_by_timezone(tz)
+    date= datetime.datetime.strptime(current_date, '%Y-%m-%d').date()
+    mo= date.month
+    ye= date.year
+    try:
+        if (mo==12):
+            d= date.replace(year=ye+1,month=1)
+        else :
+            d= date.replace(month=mo+1)
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        a= calendar.monthrange(ye,mo+1)
+        d= date.replace(month=mo+1,day=a[1])
+    return str(d)
+
+def timezone_bill_cycle_annual(tz):
+    current_date= get_date_by_timezone(tz)
+    # date = datetime.date.today()
+    date= datetime.datetime.strptime(current_date, '%Y-%m-%d').date()
+    mo= date.month
+    ye= date.year
+    try:
+        d= date.replace(year=ye+1)
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        a= calendar.monthrange(ye+1,mo)
+        d=date.replace(year=ye+1,day=a[1])
+    return str(d)
+
+
+def add_tz_time24(tz,h,m):
+    current_dt= get_date_time_by_timezone(tz)
+    # print data
+    try:
+        a= datetime.datetime.strptime(current_dt, '%Y-%m-%d %H:%M:%S')        
+        b= a + datetime.timedelta(hours=int(h),minutes=int(m))
+        t = b.strftime("%Y-%m-%d %H:%M:%S")
+        return t
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0  
+    
+
+def get_tz_time_secs(tz):
+    current_dt= get_date_time_by_timezone(tz)
+    date,time= current_dt.split()
+    try:
+        time1= datetime.datetime.strptime(time, '%H:%M:%S').time()
+        t= time1.strftime("%I:%M:%S %p")
+        return t
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+
+
+def add_tz_time_sec(tz,h,m,s):
+    try:
+        current_dt= get_date_time_by_timezone(tz)
+        date_time2= datetime.datetime.strptime(current_dt, '%Y-%m-%d %H:%M:%S')
+        b= date_time2 + datetime.timedelta(hours=int(h),minutes=int(m),seconds=int(s))
+        t = b.strftime("%I:%M:%S %p")
+        return t
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+
+def change_date_with_tz(tz,date):
+    # date= datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    y,m,d=date.split("-")
+    # t = datetime.datetime.now()
+    current_time= get_time_by_timezone(tz)
+    t= datetime.datetime.strptime(current_time, '%I:%M %p').time()
+    t = datetime.datetime(year=int(y),month=int(m),day=int(d),hour=t.hour,minute=t.minute)
+    str=t.strftime("%m%d%H%M%y.%S")
+    user=os.environ['USERNAME']
+    hostip=os.environ['IP_ADDRESS']
+    userpass=os.environ['SSHPASS']
+    # os.system("sudo date '%s'" %str)
+    command2="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S timedatectl set-ntp 0"
+    subprocess.call(command2, shell=True)
+    command="echo "+userpass+" |sshpass  -p "+userpass+" ssh -tt "+user+"@"+hostip+" sudo -S date "+str
+    subprocess.call(command, shell=True)
 def getMimetype(*files):
     filetype={}
     for file in files:
@@ -5867,6 +6270,8 @@ cbc_iv_key="RW5jRGVjSmFsZGVlMDYyMw=="
 def ecrypt_data(data):
 
     try:
+        # cbc_key= load_property('aes.cbc.secret')
+        # iv_key= load_property('aes.cbc.iv')
         dec_secret = b64decode(cbc_secret_key)
         dec_iv = b64decode(cbc_iv_key)
         data = bytes(data, 'utf-8')
@@ -5882,6 +6287,8 @@ def ecrypt_data(data):
         # print("b64 encoded data: ",b64_encoded_data)
         string_data = b64_encoded_data.decode()
         print(string_data)
+        # json_object = json.loads(string_data)
+        # return  b64_encoded_data
         return  string_data
     except Exception as e:
         print ("Exception:", e)
@@ -5890,6 +6297,8 @@ def ecrypt_data(data):
     
 def decrypt_data(data):
     try:
+        # cbc_key= load_property('aes.cbc.secret')
+        # iv_key= load_property('aes.cbc.iv')
         dec_secret = b64decode(cbc_secret_key)
         dec_iv = b64decode(cbc_iv_key)
         b64_decoded_data=  b64decode(data)
@@ -5910,3 +6319,153 @@ def decrypt_data(data):
             print ("Exception:", e)
             print ("Exception at line no:", e.__traceback__.tb_lineno)
 
+
+def Set_TZ_Header(**kwargs):
+    tzheaders= {} 
+    locparam= {}
+    rem_list= []
+    print("kwargs: ",kwargs)
+    print("kwargs key: ",kwargs.get("timeZone"))
+    print("location key: ",kwargs.get("location"))
+    if kwargs=={} or (kwargs.get("timeZone")== None and kwargs.get("location") == None) :
+        tzheaders.update({'timeZone':'Asia/Kolkata'})
+        print("default time zone set: ",tzheaders)
+    else:
+        for key, value in kwargs.items():
+            if key == 'timeZone':
+                tzheaders.update({'timeZone':value})
+                rem_list.append(key)
+                # removed_value = kwargs.pop(key, 'No Key found')
+                # print(key," Removed from kwargs -", removed_value)
+                # print(tzheaders)
+                print("user provided time zone set: ",tzheaders)
+            elif key == 'location':
+                locparam.update({key:value})
+                # removed_value = kwargs.pop(key, 'No Key found')
+                rem_list.append(key)
+                # print(key," Removed from kwargs -", removed_value)
+                # print(locparam)
+                print("user provided location param set: ",locparam)
+    [kwargs.pop(key) for key in rem_list]
+    print("Final kwargs: ",kwargs)
+    return  tzheaders, kwargs, locparam
+
+
+def CDLcategorytype(account):
+    dbconn = connect_db(db_host, db_user, db_passwd, db)
+    try:
+        with dbconn.cursor() as cur:
+            date= get_date()
+            mySql_insert_query = """INSERT INTO ynw.crm_category_tbl(account,type_enum,name,alias_name,conversion_value,status,created_by,created_date,modified_by)
+                           VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) """
+
+            records_to_insert = [(account,4,'CDL','CDL','1.0',0,1,date,0)]
+            cur.executemany(mySql_insert_query, records_to_insert)            
+            dbconn.commit()
+         
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        pass
+    finally:
+        if dbconn is not None:
+            dbconn.close()
+
+
+def CDLtype(account):
+    dbconn = connect_db(db_host, db_user, db_passwd, db)
+    try:
+        with dbconn.cursor() as cur:
+            date= get_date()
+            mySql_insert_query = """INSERT INTO ynw.crm_type_tbl(account,type_enum,name,status,created_by,created_date,modified_by)
+                           VALUES (%s, %s, %s, %s, %s, %s, %s) """
+
+            records_to_insert = [(account,4,'Direct walkin',0,1,date,0),
+                                 (account,4,'Referral',0,1,date,0),
+                                 (account,4,'Social Media',0,1,date,0),
+                                 (account,4,'Dealer Point',0,1,date,0),
+                                 (account,4,'Business Associate',0,1,date,0),
+                                 (account,4,'MAFIL Branch',0,1,date,0)]
+            cur.executemany(mySql_insert_query, records_to_insert)            
+            dbconn.commit()
+         
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        pass
+    finally:
+        if dbconn is not None:
+            dbconn.close()
+
+
+def CDLEnqStatus(account):
+    dbconn = connect_db(db_host, db_user, db_passwd, db)
+    try:
+        with dbconn.cursor() as cur:
+            date= get_date()
+            mySql_insert_query = """INSERT INTO ynw.crm_status_tbl(account,type_enum,name,alias_name,status,created_by,created_date,modified_by,is_blocked,is_canceled,is_closed,is_default,is_editable,is_verified,is_done,is_rejected,is_pending)
+                           VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) """
+
+            records_to_insert = [(account,3,'Follow Up','Follow Up',0,1,date,0, 0, 0, 0, 1, 1, 0, 0, 0, 0),
+                 (account,3,'Completed','Completed',0,1,date,0, 0, 0, 1, 0, 0, 0, 0, 0, 0)]
+                                 
+            cur.executemany(mySql_insert_query, records_to_insert)  
+            dbconn.commit()
+         
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        pass
+    finally:
+        if dbconn is not None:
+            dbconn.close()
+
+
+def timestamp_conversion(timestamp):
+    try:
+        date_time1= datetime.datetime.fromtimestamp(int(timestamp)/1000)
+        return date_time1
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+
+def clear_multilocation (usrid):
+    print("In function: ", inspect.stack()[0].function)
+    aid=get_acc_id(usrid)
+    clear_queue(usrid)
+    clear_Rating(usrid)
+    clear_appt_schedule(usrid)
+    dbconn = connect_db(db_host, db_user, db_passwd, db)
+    try :
+        with dbconn.cursor() as cursor:
+            print('fetching base location id')
+            cursor.execute("SELECT base_location FROM account_info_tbl WHERE id='%s'" % aid)
+            row = cursor.fetchone()
+            baseloc_id = row[0]
+            delete_search(aid)
+            delete_schedule_service(aid)
+            delete_entry('transaction_payment_tbl','account',aid,cursor)
+            delete_entry('donation_tbl','account',aid,cursor)
+            cursor.execute("SELECT id FROM location_tbl WHERE account='%s'" % aid)
+            row = cursor.fetchall()
+            print (row) 
+            for index in range(len(row)):
+                if row[index][0]!= baseloc_id:
+                    delete_entry_2Fields('location_tbl','id',int(row[index][0]),'account',aid,cursor)
+            dbconn.commit()
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+    finally:
+        if dbconn is not None:
+            dbconn.close()
+
+
+def endtime_conversion(time1,time2):     
+    if time2[-2:] == "AM" and time1[-2:] == "PM": 
+        time2 = "11:59 PM" + time2[2:2] 
+        return str(time1), str(time2)
+    else:
+        return str(time1), str(time2)

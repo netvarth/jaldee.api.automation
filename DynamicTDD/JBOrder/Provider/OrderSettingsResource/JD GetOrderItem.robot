@@ -25,7 +25,7 @@ JD-TC-Get_Item_By_Id-1
     [Documentation]  Provider Create item taxable is true and false
     clear_Item  ${PUSERNAME30}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${displayName1}=   FakerLibrary.name 
@@ -96,7 +96,7 @@ JD-TC-Get_Item_By_Id-1
 JD-TC-Get_Item_By_Id-2
     [Documentation]  Provider Create item taxable is true and false
     clear_Item  ${PUSERNAME30}
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=   Get Item By Criteria   
@@ -123,7 +123,7 @@ JD-TC-Get_Item_By_Id-3
     [Documentation]  Provider Create item, another provider also uses same details to create item
     clear_Item  ${PUSERNAME30}
     clear_Item  ${PUSERNAME35}
-    ${resp}=  ProviderLogin  ${PUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=   Get Item By Criteria  
@@ -139,7 +139,7 @@ JD-TC-Get_Item_By_Id-3
     Should Be Equal As Strings  ${resp.status_code}  200
     
     sleep   2s
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=   Get Item By Criteria  
@@ -161,7 +161,7 @@ JD-TC-Get_Item_By_Id-4
 
     [Documentation]  Provider Create item using Promotional_Price_Type as FIXED
     clear_Item  ${PUSERNAME30}
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Create Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price2float}    ${bool[1]}    ${itemName1}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1float}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode1}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}      
@@ -180,7 +180,7 @@ JD-TC-Get_Item_By_Id-5
 
     [Documentation]  Provider Create item using Promotional_Price_Type as PERCENTAGE
     clear_Item  ${PUSERNAME30}
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Create Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName1}    ${itemNameInLocal1}    ${promotionalPriceType[2]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode1}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}      
@@ -206,7 +206,7 @@ JD-TC-Get_Item_By_Id-6
 
     [Documentation]  Provider Create item Promotional_Label_Type as NONE
     clear_Item  ${PUSERNAME30}
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Create Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName1}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode1}    ${bool[1]}    ${promotionLabelType[0]}    ${promoLabel1}      
@@ -226,7 +226,7 @@ JD-TC-Get_Item_By_Id-7
 
     [Documentation]  Provider Create item Promotional_Label_Type as CLEARANCE
     clear_Item  ${PUSERNAME30}
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Create Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName1}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode1}    ${bool[1]}    ${promotionLabelType[1]}    ${promoLabel1}      
@@ -245,7 +245,7 @@ JD-TC-Get_Item_By_Id-8
 
     [Documentation]  Provider Create item Promotional_Label_Type as ONSALE
     clear_Item  ${PUSERNAME30}
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Create Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName1}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode1}    ${bool[1]}    ${promotionLabelType[2]}    ${promoLabel1}      
@@ -264,7 +264,7 @@ JD-TC-Get_Item_By_Id-9
 
     [Documentation]  Provider Create item Promotional_Label_Type as CUSTOM
     clear_Item  ${PUSERNAME30}
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Create Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName1}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode1}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}      
@@ -283,7 +283,7 @@ JD-TC-Get_Item_By_Id-10
     [Documentation]  Update all item details, and create another item using previously created item details
     
     clear_Item  ${PUSERNAME30}
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
@@ -330,7 +330,7 @@ JD-TC-Get_Item_By_Id-11
     [Documentation]  Create item with using ITEM_NAME_IN_LOCAL as EMPTY
     
     clear_Item  ${PUSERNAME30}
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Create Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[0]}    ${itemName5}    ${EMPTY}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode5}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}      
@@ -350,7 +350,7 @@ JD-TC-Get_Item_By_Id-12
     [Documentation]  Diable item and Get item
     
     clear_Item  ${PUSERNAME30}
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Create Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName1}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode1}    ${bool[0]}    ${promotionLabelType[3]}    ${promoLabel1}      
@@ -372,7 +372,7 @@ JD-TC-Get_Item_By_Id-13
     [Documentation]  Update item details and get item
     
     clear_Item  ${PUSERNAME30}
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${itemNameInLocal5}=  FakerLibrary.Sentence   nb_words=2 
@@ -408,7 +408,7 @@ JD-TC-Get_Item_By_Id-UH1
 
     [Documentation]  Get item using invalid id
     clear_Item  ${PUSERNAME30}
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -447,7 +447,7 @@ JD-TC-Get_Item_By_Id-UH3
 JD-TC-Get_Item_By_Id-UH4
     [Documentation]   A provider try to Get another providers item
     clear_Item  ${PUSERNAME30}
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Create Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName1}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode1}    ${bool[0]}    ${promotionLabelType[3]}    ${promoLabel1}      
@@ -455,7 +455,7 @@ JD-TC-Get_Item_By_Id-UH4
     Set Suite Variable  ${Item_id30}  ${resp.json()}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -470,7 +470,7 @@ JD-TC-Get_Item_By_Id-UH4
 #     [Documentation]  Create item with using DISPLAY_NAME as EMPTY
     
 #     clear_Item  ${PUSERNAME30}
-#     ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
 #     ${resp}=  Create Order Item    ${EMPTY}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[0]}    ${itemName5}    ${itemNameInLocal5}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode5}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}      

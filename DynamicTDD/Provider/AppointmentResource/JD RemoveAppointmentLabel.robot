@@ -32,7 +32,7 @@ JD-TC-RemoveAppointmentLabel-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME257}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -65,10 +65,11 @@ JD-TC-RemoveAppointmentLabel-1
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
@@ -212,7 +213,7 @@ JD-TC-RemoveAppointmentLabel-UH3
 
     [Documentation]  Remove a label from a non existant appointment 
 
-    ${resp}=  Provider Login  ${PUSERNAME257}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Remove Appointment Label   abcdefg  ${labelname[0]}
@@ -224,7 +225,7 @@ JD-TC-RemoveAppointmentLabel-UH4
 
     [Documentation]  Remove a non existant label from an appointment 
 
-    ${resp}=  Provider Login  ${PUSERNAME257}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${labelname}=  FakerLibrary.Word
@@ -237,7 +238,7 @@ JD-TC-RemoveAppointmentLabel-UH5
 
     [Documentation]  Remove an already removed label from an appointment 
 
-    ${resp}=  Provider Login  ${PUSERNAME257}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Remove Appointment Label   ${apptid1}  ${labelname[0]}

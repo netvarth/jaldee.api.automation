@@ -67,7 +67,7 @@ JD-TC-GetProviderNotificationSettings-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -126,10 +126,13 @@ JD-TC-GetProviderNotificationSettings-1
 JD-TC-GetProviderNotificationSettings-2
     [Documentation]  Verify Updated Provider Notification  Settings For WAITLISTADD using SMS number as EMPTY 
    
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -174,10 +177,13 @@ JD-TC-GetProviderNotificationSettings-2
 JD-TC-GetProviderNotificationSettings-3
      
     [Documentation]  Verify Updated Provider Notification  Settings For WAITLISTADD using Email id as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -204,10 +210,13 @@ JD-TC-GetProviderNotificationSettings-3
 
 JD-TC-GetProviderNotificationSettings-4
     [Documentation]  Verify Updated Provider Notification  Settings For WAITLISTADD using PushMsg number as EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -236,10 +245,13 @@ JD-TC-GetProviderNotificationSettings-4
 
 JD-TC-GetProviderNotificationSettings-5
     [Documentation]  Verify Updated Provider Notification  Settings For WAITLISTADD  using SMS,Email,PushMsg details as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -265,10 +277,13 @@ JD-TC-GetProviderNotificationSettings-5
 
 JD-TC-GetProviderNotificationSettings-6
     [Documentation]  Verify Updated Provider Notification  Settings For WAITLISTADD when previous "SMS,EMAIL and PushMsg" details were EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -300,10 +315,13 @@ JD-TC-GetProviderNotificationSettings-6
 JD-TC-GetProviderNotificationSettings-7
     [Documentation]  Verify Updated Provider Notification  Settings For WAITLISTCANCEL using SMS number as EMPTY 
    
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -346,10 +364,13 @@ JD-TC-GetProviderNotificationSettings-7
 JD-TC-GetProviderNotificationSettings-8
      
     [Documentation]  Verify Updated Provider Notification  Settings For WAITLISTCANCEL using Email id as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -386,10 +407,13 @@ JD-TC-GetProviderNotificationSettings-8
 
 JD-TC-GetProviderNotificationSettings-9
     [Documentation]  Verify Updated Provider Notification  Settings For WAITLISTCANCEL using PushMsg number as EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -428,10 +452,13 @@ JD-TC-GetProviderNotificationSettings-9
 
 JD-TC-GetProviderNotificationSettings-10
     [Documentation]  Verify Updated Provider Notification  Settings For WAITLISTCANCEL  using SMS,Email,PushMsg details as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -465,10 +492,13 @@ JD-TC-GetProviderNotificationSettings-10
 
 JD-TC-GetProviderNotificationSettings-11
     [Documentation]  Verify Updated Provider Notification  Settings For WAITLISTCANCEL when previous "SMS,EMAIL and PushMsg" details were EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -507,10 +537,13 @@ JD-TC-GetProviderNotificationSettings-11
 JD-TC-GetProviderNotificationSettings-12
     [Documentation]  Verify Updated Provider Notification  Settings For APPOINTMENTADD using SMS number as EMPTY  
    
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -549,10 +582,13 @@ JD-TC-GetProviderNotificationSettings-12
 JD-TC-GetProviderNotificationSettings-13
      
     [Documentation]  Verify Updated Provider Notification  Settings For APPOINTMENTADD using Email id as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -588,10 +624,13 @@ JD-TC-GetProviderNotificationSettings-13
 
 JD-TC-GetProviderNotificationSettings-14
     [Documentation]  Verify Updated Provider Notification  Settings For APPOINTMENTADD using PushMsg number as EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -630,10 +669,13 @@ JD-TC-GetProviderNotificationSettings-14
 
 JD-TC-GetProviderNotificationSettings-15
     [Documentation]  Verify Updated Provider Notification  Settings For APPOINTMENTADD  using SMS,Email,PushMsg details as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -665,10 +707,13 @@ JD-TC-GetProviderNotificationSettings-15
 
 JD-TC-GetProviderNotificationSettings-16
     [Documentation]  Verify Updated Provider Notification  Settings For APPOINTMENTADD when previous "SMS,EMAIL and PushMsg" details were EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -708,10 +753,13 @@ JD-TC-GetProviderNotificationSettings-16
 JD-TC-GetProviderNotificationSettings-17
     [Documentation]  Verify Updated Provider Notification  Settings For APPOINTMENTCANCEL using SMS number as EMPTY  
    
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -750,10 +798,13 @@ JD-TC-GetProviderNotificationSettings-17
 JD-TC-GetProviderNotificationSettings-18
      
     [Documentation]  Verify Updated Provider Notification  Settings For APPOINTMENTCANCEL using Email id as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -790,10 +841,13 @@ JD-TC-GetProviderNotificationSettings-18
 
 JD-TC-GetProviderNotificationSettings-19
     [Documentation]  Verify Updated Provider Notification  Settings For APPOINTMENTCANCEL using PushMsg number as EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -831,10 +885,13 @@ JD-TC-GetProviderNotificationSettings-19
 
 JD-TC-GetProviderNotificationSettings-20
     [Documentation]  Verify Updated Provider Notification  Settings For APPOINTMENTCANCEL  using SMS,Email,PushMsg details as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -866,10 +923,13 @@ JD-TC-GetProviderNotificationSettings-20
 
 JD-TC-GetProviderNotificationSettings-21
     [Documentation]  Verify Updated Provider Notification  Settings For APPOINTMENTCANCEL when previous "SMS,EMAIL and PushMsg" details were EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -906,7 +966,7 @@ JD-TC-GetProviderNotificationSettings-21
 
 JD-TC-GetProviderNotificationSettings-22
     [Documentation]  Verify Updated Provider Notification  Settings For 'WAITLISTADD', when we have TWO 'SMS' Numbers and REMOVE ONE Number 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
   
@@ -987,7 +1047,7 @@ JD-TC-GetProviderNotificationSettings-22
 
 JD-TC-GetProviderNotificationSettings-23
     [Documentation]  Verify Updated Provider Notification  Settings For 'WAITLISTCANCEL', when we have TWO 'SMS' Numbers and REMOVE ONE Number 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
   
@@ -1036,7 +1096,7 @@ JD-TC-GetProviderNotificationSettings-23
 
 JD-TC-GetProviderNotificationSettings-24
     [Documentation]  Verify Updated Provider Notification  Settings For 'APPOINTMENTADD', when we have TWO 'SMS' Numbers and REMOVE ONE Number 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
   
@@ -1083,7 +1143,7 @@ JD-TC-GetProviderNotificationSettings-24
 
 JD-TC-GetProviderNotificationSettings-25
     [Documentation]  Verify Updated Provider Notification  Settings For 'APPOINTMENTCANCEL', when we have TWO 'SMS' Numbers and REMOVE ONE Number 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
   
@@ -1138,10 +1198,13 @@ JD-TC-GetProviderNotificationSettings-25
 JD-TC-GetProviderNotificationSettings-26
     [Documentation]  Update Provider LICENSE Related Notification  Settings using SMS number as EMPTY 
    
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -1178,10 +1241,13 @@ JD-TC-GetProviderNotificationSettings-26
 JD-TC-GetProviderNotificationSettings-27
      
     [Documentation]  Update Provider LICENSE Related Notification  Settings using Email id as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -1217,10 +1283,13 @@ JD-TC-GetProviderNotificationSettings-27
 
 JD-TC-GetProviderNotificationSettings-28
     [Documentation]  Update Provider LICENSE Related Notification  Settings using PushMsg number as EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -1256,10 +1325,13 @@ JD-TC-GetProviderNotificationSettings-28
 
 JD-TC-GetProviderNotificationSettings-29
     [Documentation]  Update Provider LICENSE Related Notification  Settings using SMS,Email,PushMsg details as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -1289,10 +1361,13 @@ JD-TC-GetProviderNotificationSettings-29
 
 JD-TC-GetProviderNotificationSettings-30
     [Documentation]  Update Provider LICENSE Related Notification  Settings when previous "SMS,EMAIL and PushMsg" details were EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -1323,7 +1398,7 @@ JD-TC-GetProviderNotificationSettings-30
 
 JD-TC-GetProviderNotificationSettings-31
     [Documentation]  Update Provider LICENSE Related Notification  Settings, when we have TWO 'SMS' Numbers and REMOVE ONE Number 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
   
@@ -1390,10 +1465,13 @@ JD-TC-GetProviderNotificationSettings-31
 JD-TC-GetProviderNotificationSettings-32
     [Documentation]  Update Provider DONATION Related Notification  Settings using SMS number as EMPTY 
    
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -1430,10 +1508,13 @@ JD-TC-GetProviderNotificationSettings-32
 JD-TC-GetProviderNotificationSettings-33
      
     [Documentation]  Update Provider DONATION Related Notification  Settings using Email id as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -1469,10 +1550,13 @@ JD-TC-GetProviderNotificationSettings-33
 
 JD-TC-GetProviderNotificationSettings-34
     [Documentation]  Update Provider DONATION Related Notification  Settings using PushMsg number as EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -1508,10 +1592,13 @@ JD-TC-GetProviderNotificationSettings-34
 
 JD-TC-GetProviderNotificationSettings-35
     [Documentation]  Update Provider DONATION Related Notification  Settings using SMS,Email,PushMsg details as EMPTY
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}
@@ -1541,10 +1628,13 @@ JD-TC-GetProviderNotificationSettings-35
 
 JD-TC-GetProviderNotificationSettings-36
     [Documentation]  Update Provider DONATION Related Notification  Settings when previous "SMS,EMAIL and PushMsg" details were EMPTY 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     Set Suite Variable  ${pid0}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid0}  ${resp.json()['id']}
 
     ${resp}=  Get Provider Notification Settings
     Log  ${resp.json()}

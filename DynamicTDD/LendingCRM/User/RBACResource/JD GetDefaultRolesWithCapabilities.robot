@@ -24,7 +24,7 @@ JD-TC-GetDefaultRolesWithCapabilities-1
 
     [Documentation]  Get default roles with capabilities of an existing provider.
 
-    ${resp}=  Provider Login  ${MUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME31}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -88,7 +88,7 @@ JD-TC-GetDefaultRolesWithCapabilities-2
     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}

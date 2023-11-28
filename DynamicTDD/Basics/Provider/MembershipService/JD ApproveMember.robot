@@ -27,18 +27,30 @@ JD-TC-Approve_Member-1
 
     [Documentation]  Approve Member
 
-    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     ${accountId}=    get_acc_id       ${PUSERNAME40}
     Set Suite Variable    ${accountId}
 
+    ${lid}=  Create Sample Location
+    Set Suite Variable   ${lid}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${description}=    FakerLibrary.bs
     ${name}=           FakerLibrary.firstName
     ${displayname}=    FakerLibrary.firstName
-    ${effectiveFrom}=  get_date
-    ${effectiveTo}=      add_date  10 
+    ${effectiveFrom}=  db.get_date_by_timezone  ${tz}
+    ${effectiveTo}=      db.add_timezone_date  ${tz}  10  
     Set Suite Variable    ${description}
     Set Suite Variable    ${name}
     Set Suite Variable    ${displayname}
@@ -96,7 +108,7 @@ JD-TC-Approve_Member-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -121,7 +133,7 @@ JD-TC-Approve_Member-UH1
 
     [Documentation]  Approve Member which is already approved
 
-    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -133,7 +145,7 @@ JD-TC-Approve_Member-UH2
 
     [Documentation]  Approve Member where member id is invalid
 
-    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -148,7 +160,7 @@ JD-TC-Approve_Member-UH3
 
     [Documentation]  Approve Member where remark is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -160,7 +172,7 @@ JD-TC-Approve_Member-UH4
 
     [Documentation]  Approve Member where approval status is inactive
 
-    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -172,7 +184,7 @@ JD-TC-Approve_Member-UH5
 
     [Documentation]  Approve Member where approval status is passed
 
-    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -184,7 +196,7 @@ JD-TC-Approve_Member-UH6
 
     [Documentation]  Approve Member where approval status is Rejected
 
-    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -46,18 +46,30 @@ JD-TC-Get_Before_Member_QNR-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     ${accountId}=    get_acc_id       ${PUSERNAME47}
     Set Suite Variable                ${accountId}
 
+    ${lid}=  Create Sample Location
+    Set Suite Variable   ${lid}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${description}=    FakerLibrary.bs
     ${name}=           FakerLibrary.firstName
     ${displayname}=    FakerLibrary.firstName
-    ${effectiveFrom}=  get_date
-    ${effectiveTo}=    add_date  10 
+    ${effectiveFrom}=  db.get_date_by_timezone  ${tz}
+    ${effectiveTo}=      db.add_timezone_date  ${tz}  10  
     Set Suite Variable    ${description}
     Set Suite Variable    ${name}
     Set Suite Variable    ${displayname}
@@ -119,7 +131,7 @@ JD-TC-Get_Before_Member_QNR-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -275,7 +287,7 @@ JD-TC-Get_Before_Member_QNR-UH7
 
     [Documentation]  Get Before Member QNR with provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME48}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

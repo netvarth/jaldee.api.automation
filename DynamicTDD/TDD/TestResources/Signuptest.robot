@@ -73,13 +73,13 @@ Provider_Signup
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  ProviderLogin  ${ph}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 Multiuser_Signup
 
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
 
     ${ph}=  Evaluate  ${PUSERNAME}+5666258
     Log   ${ph}
@@ -135,7 +135,7 @@ Multiuser_Signup
     Should Be Equal As Strings    ${resp.status_code}    200
     sleep  03s
 
-    ${resp}=  Provider Login  ${ph}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     # Log to Console   ${resp.content}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

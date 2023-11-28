@@ -43,7 +43,7 @@ JD-TC-ChangeUploadStatus-1
 
     [Documentation]     file upload to private folder and change it status.
 
-    ${resp}=  Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${acc_id}=  get_acc_id  ${PUSERNAME111}
     Set Test Variable     ${acc_id}
@@ -86,7 +86,7 @@ JD-TC-ChangeUploadStatus-2
    
     [Documentation]    Change upload status by user
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME4}
@@ -103,9 +103,12 @@ JD-TC-ChangeUploadStatus-2
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     
 
      ${resp}=  Get Departments
@@ -158,7 +161,7 @@ JD-TC-ChangeUploadStatus-2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -204,7 +207,7 @@ JD-TC-ChangeUploadStatus-3
     [Documentation]   upload file by branch and  Change upload status by user login
 
    
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME4}
@@ -235,7 +238,7 @@ JD-TC-ChangeUploadStatus-3
     Should Be Equal As Strings                 ${resp.json()['${id}']['files'][0]['uploadStatus']}    ${QnrStatus[0]}
     Set Suite Variable                         ${fileid3}                           ${resp.json()['${id}']['files'][0]['id']} 
   
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -253,11 +256,11 @@ JD-TC-ChangeUploadStatus-4
    
     [Documentation]   upload file by user and  Change upload status by branch login
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
-    # ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # ${pid}=  get_acc_id  ${HLMUSERNAME4}
@@ -287,7 +290,7 @@ JD-TC-ChangeUploadStatus-4
     Should Be Equal As Strings                 ${resp.json()['${u_id1}']['files'][0]['uploadStatus']}    ${QnrStatus[0]}
     Set Suite Variable                         ${fileid33}                          ${resp.json()['${u_id1}']['files'][0]['id']} 
   
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME4}
@@ -333,7 +336,7 @@ JD-TC-ChangeUploadStatus-5
   
     [Documentation]    status change complete to complete
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${p_id12}=  get_acc_id  ${PUSERNAME120}
@@ -389,7 +392,7 @@ JD-TC-ChangeUploadStatus-UH3
   
     [Documentation]    status change complete to incomplete
 
-    ${resp}=  Provider Login  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${p_id22}=  get_acc_id  ${PUSERNAME122}
@@ -450,7 +453,7 @@ JD-TC-ChangeUploadStatus-UH4
   
     [Documentation]    status change another provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME128}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME128}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${p_id44}=  get_acc_id  ${PUSERNAME128}
@@ -482,7 +485,7 @@ JD-TC-ChangeUploadStatus-UH4
     Should Be Equal As Strings     ${resp.json()['${id44}']['files'][0]['uploadStatus']}  ${QnrStatus[0]}
      
    
-    ${resp}=  Provider Login            ${PUSERNAME167}        ${PASSWORD}
+    ${resp}=  Encrypted Provider Login            ${PUSERNAME167}        ${PASSWORD}
     Log                                 ${resp.content}
     Should Be Equal As Strings          ${resp.status_code}    200
     
@@ -495,7 +498,7 @@ JD-TC-ChangeUploadStatus-6
 
     [Documentation]   upload file by user  status change another user login (same branch)
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME4}
@@ -510,7 +513,7 @@ JD-TC-ChangeUploadStatus-6
 
  
      
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 
     ${usr_id}=  Create List
@@ -542,7 +545,7 @@ JD-TC-ChangeUploadStatus-6
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[0]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[0]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idA}     ${resp.json()['id']}
@@ -586,7 +589,7 @@ JD-TC-ChangeUploadStatus-6
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUsrNm[1]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUsrNm[1]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${u_idB}     ${resp.json()['id']}

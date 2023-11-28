@@ -61,7 +61,8 @@ ${bType}                  Waitlist
 @{jdn_type}               Percent  Label
 @{action}                 addService  adjustService  removeService  addItem   adjustItem   removeItem   addServiceLevelDiscount   removeServiceLevelDiscount   addItemLevelDiscount   removeItemLevelDiscount   addBillLevelDiscount   removeBillLevelDiscount   addProviderCoupons   removeProviderCoupons  addJaldeeCoupons   removeJaldeeCoupons   addDisplayNotes   addPrivateNotes  updateDeliveryCharges
 @{NotificationResourceType}  CHECKIN  APPOINTMENT  ACCOUNT   DONATION   ORDER
-@{EventType}                WAITLISTADD  WAITLISTCANCEL  WAITLISTDONE  WAITLISTARRIVED  EARLY  PREFINAL  FINAL  APPOINTMENTADD  APPOINTMENTCANCEL  LICENSE  DONATIONSERVICE  FIRSTNOTIFICATION  SECONDNOTIFICATION  THIRDNOTIFICATION  FORTHNOTIFICATION  APPOINTMENTRESCHEDULE  ORDERCONFIRM  ORDERCANCEL  ORDERSTATUSCHANGE
+@{EventType}                WAITLISTADD  WAITLISTCANCEL  WAITLISTDONE  WAITLISTARRIVED  EARLY  PREFINAL  FINAL  APPOINTMENTADD  APPOINTMENTCANCEL  LICENSE  DONATIONSERVICE  
+                            ...   FIRSTNOTIFICATION  SECONDNOTIFICATION  THIRDNOTIFICATION  FORTHNOTIFICATION  APPOINTMENTRESCHEDULE  ORDERCONFIRM  ORDERCANCEL  ORDERSTATUSCHANGE
 @{travelMode}               DRIVING  WALKING  BICYCLING  TRANSIT  UNKNOWN
 @{startTimeMode}            ONEHOUR   TWOHOUR   AFTERSTART
 @{unit}                     METER  KILOMETER  MILE
@@ -235,14 +236,19 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{categoryType}                     Vendor  Expense  PaymentsInOut  Invoice
 @{MembershipApprovalType}           Manual  Automatic
 @{MembershipServiceStatus}          Enabled  Disabled
+@{emptylist}
 @{MemberApprovalStatus}             Hold  Approved  Inactive  Passed  Rejected
 @{finance_payment_modes}            Cash   CC    EMI    Offline    PAYLATER    Mock    UPI    Other    NB    STORE_CREDIT    WALLET    JCASH    DC    PayLater    PAYTM_PostPaid    BANK_TRANSFER
+@{CDLRelationType}                  CareOf  DaughterOf  SonOf  HusbandOf  WifeOf
+@{CDLTypeCibil}                     cibil
 @{toothType}                        ADULT  CHILD
 @{toothSurfaces}                    BUCCAL   LINGUAL  PALATAL
-@{PRStatus}                         OPEN  CLOSED  COMPLETED
+@{PRStatus}                         OPEN  CLOSED  COMPLETED 
+@{RateType}                         Diminishing  Flat
 @{WorkStatus}                       OPEN  CANCELED  COMPLETE
 @{subcategory}                      ADD_PAYMENT_IN(AuditCategory.PAYMENT)   UPDATE_PAYMENT_IN(AuditCategory.PAYMENT)   UPDATE_PAYMENT_IN_STATUS(AuditCategory.PAYMENT)     ADD_PAYMENT_OUT(AuditCategory.PAYMENT)      UPDATE_PAYMENT_OUT(AuditCategory.PAYMENT)   UPDATE_PAYMENT_OUT_STATUS(AuditCategory.PAYMENT)      ADD_FINANCE_INVOICE(AuditCategory.FINANCE_INVOICE)    UPDATE_FINANCE_INVOICE(AuditCategory.FINANCE_INVOICE)        UPDATE_FINANCE_INVOICE_STATUS(AuditCategory.FINANCE_INVOICE)      ADD_EXPENSE(AuditCategory.EXPENSE)    UPDATE_EXPENSE(AuditCategory.EXPENSE)    UPDATE_EXPENSE_STATUS(AuditCategory.EXPENSE)
 @{paymentGateway}                   PAYTM  PAYUMONEY  RAZORPAY
+
 
 *** Keywords ***
 Login
@@ -272,7 +278,7 @@ Verify Response
     [Arguments]  ${resp}  &{kwargs}
     ${items}=  Get Dictionary items  ${kwargs}
     FOR  ${key}  ${value}  IN  @{items}
-        Should Be Equal As Strings  ${resp.json()['${key}']}  ${value}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['${key}']}  ${value}
     END
 
 Get Slot
@@ -285,14 +291,14 @@ Verify Response List
     [Arguments]  ${resp}  ${no}   &{kwargs}
     ${items}=  Get Dictionary items  ${kwargs}
     FOR  ${key}  ${value}  IN  @{items}
-        Should Be Equal As Strings  ${resp.json()[${no}]['${key}']}  ${value}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[${no}]['${key}']}  ${value}
     END
 
 Verify Response CloudSearch
     [Arguments]  ${resp}   &{kwargs}
     ${items}=  Get Dictionary items  ${kwargs}
     FOR  ${key}  ${value}  IN  @{items}
-        Should Be Equal As Strings  ${resp.json()['hits']['hit'][0]['fields']['${key}']}  ${value}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['hits']['hit'][0]['fields']['${key}']}  ${value}
     END
 
 Cloud Search
@@ -352,5 +358,33 @@ Generate Random Phone Number
             Return From Keyword  ${PH_Number}
         END
     END
+
+
+# Set TZ Header
+#     [Arguments]  &{kwargs}
+#     ${tzheaders}=    Create Dictionary  
+#     ${locparam}=    Create Dictionary 
+#     Log  ${kwargs}
+#     ${x} =    Get Variable Value    ${kwargs}  
+#     IF  ${x}=={} or '${kwargs.get("timeZone")}'=='${None}' or '${kwargs.get("location")}'=='${None}'
+#         Set To Dictionary 	${tzheaders} 	timeZone=Asia/Kolkata
+#         Log  ${tzheaders}
+#     ELSE
+#         FOR    ${key}    ${value}    IN    &{kwargs}
+#             IF  "${key}".lower()=="timezone"
+#                 Set To Dictionary 	${tzheaders} 	timeZone=${value}
+#                 Remove From Dictionary 	&{kwargs} 	${key}
+#                 Log  ${tzheaders}
+#             ELSE IF  '${key}' == 'location'
+#                 Set To Dictionary 	${locparam}   ${key}=${value}
+#                 Remove From Dictionary 	&{kwargs} 	${key}
+#                 Log  ${locparam}
+#             END
+#         END
+#     END
+#     # Log  ${params}
+#     # Log  ${cons_headers}
+#     Log  ${kwargs}
+#     [Return]  ${tzheaders}  ${kwargs}  ${locparam}
     
     

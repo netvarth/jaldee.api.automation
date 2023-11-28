@@ -17,9 +17,14 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-JaldeeIDformat-1
     [Documentation]   Jaldeeidformat By AUTO
 
-    ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${resp}=  JaldeeId Format   ${customerseries[0]}   ${EMPTY}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -30,13 +35,13 @@ JD-TC-JaldeeIDformat-1
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${ph2}  ${EMPTY}
-    Set Test Variable  ${cid}  ${resp.json()}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}  ${resp.json()}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
     ${resp}=  GetCustomer ById  ${cid}
-    Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${j_id}  ${resp.json()['jaldeeId']}
     Should Be Equal As Strings  ${resp.json()['firstName']}  ${firstname}
     Should Be Equal As Strings  ${resp.json()['lastName']}  ${lastname}
@@ -52,9 +57,14 @@ JD-TC-JaldeeIDformat-1
 JD-TC-JaldeeIDformat-2
     [Documentation]   Jaldeeidformat By MANUAL
 
-    ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${resp}=  JaldeeId Format   ${customerseries[1]}   ${EMPTY}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -71,8 +81,8 @@ JD-TC-JaldeeIDformat-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
     ${resp}=  GetCustomer ById  ${cid}
-    Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${j_id}  ${resp.json()['jaldeeId']}
     Should Be Equal As Strings  ${resp.json()['firstName']}  ${firstname}
     Should Be Equal As Strings  ${resp.json()['lastName']}  ${lastname}
@@ -88,9 +98,14 @@ JD-TC-JaldeeIDformat-2
 JD-TC-JaldeeIDformat-3
     [Documentation]   Jaldeeidformat By PATTERN
 
-    ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${prefix}=  FakerLibrary.name
     Set Suite Variable  ${prefix}
     ${suffix}=  FakerLibrary.name
@@ -127,9 +142,14 @@ JD-TC-JaldeeIDformat-3
 JD-TC-JaldeeIDformat-4
     [Documentation]   Jaldeeidformat By Same PATTERN with different provider
 
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${resp}=  JaldeeId Format   ${customerseries[2]}   ${prefix}   ${suffix}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

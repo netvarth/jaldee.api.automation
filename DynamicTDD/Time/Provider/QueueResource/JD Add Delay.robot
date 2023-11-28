@@ -20,7 +20,7 @@ ${SERVICE1}     Radio Repdca111
 JD-TC-AddDelay-1
       [Documentation]   Add delay by enabling sendMessage and verifying notification sent to consumer
       
-      ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       
       ${pid}=  get_acc_id  ${PUSERNAME160}
@@ -29,37 +29,45 @@ JD-TC-AddDelay-1
       clear_queue  ${PUSERNAME160}
       ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  0  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${DAY1}=  get_date
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${DAY1}  ${DAY1}
-      ${DAY2}=  add_date  70      
+      ${DAY2}=  db.add_timezone_date  ${tz}  70      
       Set Suite Variable  ${DAY2}  ${DAY2}
       ${list}=  Create List  1  2  3  4  5  6  7
       Set Suite Variable  ${list}  ${list}
-      ${city}=   get_place
+      # ${city}=   get_place
+      # Set Suite Variable  ${city}
+      # ${latti}=  get_latitude
+      # Set Suite Variable  ${latti}
+      # ${longi}=  get_longitude
+      # Set Suite Variable  ${longi}
+      # ${postcode}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode}
+      # ${address}=  get_address
+      # Set Suite Variable  ${address}
+      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+      ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+      Set Suite Variable  ${tz}
       Set Suite Variable  ${city}
-      ${latti}=  get_latitude
       Set Suite Variable  ${latti}
-      ${longi}=  get_longitude
       Set Suite Variable  ${longi}
-      ${postcode}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode}
-      ${address}=  get_address
       Set Suite Variable  ${address}
       ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
       Set Suite Variable  ${parking_type}
       ${24hours}    Random Element    ['True','False']
       Set Suite Variable  ${24hours}
-      ${sTime}=  add_time  5  15
+      ${sTime}=  add_timezone_time  ${tz}  5  15  
       Set Suite Variable   ${sTime}
-      ${eTime}=  add_time   6  30
+      ${eTime}=  add_timezone_time  ${tz}  6  30  
       Set Suite Variable   ${eTime}
       ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${lid}  ${resp.json()}
-      ${sTime1}=  subtract_time  2  00
+      ${sTime1}=  db.subtract_timezone_time  ${tz}  2  00
       Set Suite Variable   ${sTime1}
-      ${eTime1}=  add_time   3  30
+      ${eTime1}=  add_timezone_time  ${tz}  3  30  
       Set Suite Variable   ${eTime1}
       ${s_id1}=  Create Sample Service  ${SERVICE1}
       Set Suite Variable  ${s_id1}
@@ -83,7 +91,6 @@ JD-TC-AddDelay-1
       ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id}  ${wid[0]}
 
@@ -95,7 +102,6 @@ JD-TC-AddDelay-1
       # ${cid2}=  get_id  ${CUSERNAME2}
       ${resp}=  Add To Waitlist  ${cid2}  ${s_id1}  ${qid}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id2}  ${wid[0]}
       ${resp}=  Get Waitlist Today  queue-eq=${qid}
@@ -120,7 +126,6 @@ JD-TC-AddDelay-1
 
       ${resp}=  Add To Waitlist  ${cid3}  ${s_id1}  ${qid}  ${DAY1}  ${desc}  ${bool[1]}  ${cid3}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id3}  ${wid[0]}
 
@@ -181,7 +186,7 @@ JD-TC-AddDelay-1
       ${resp}=  Consumer Logout
       Should Be Equal As Strings    ${resp.status_code}    200
 
-      ${resp}=  ProviderLogin  ${PUSERNAME160}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       change_system_time  0  5
       ${new_delay_time}=  Evaluate  ${delay_time}-5
@@ -216,7 +221,6 @@ JD-TC-AddDelay-1
 
       ${resp}=  Add To Waitlist  ${cid4}  ${s_id1}  ${qid}  ${DAY1}  ${desc}  ${bool[1]}  ${cid4}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id4}  ${wid[0]}
 

@@ -31,7 +31,7 @@ Billable Domain Providers
     ${length}=  Get Length   ${len}
      
     FOR   ${a}  IN RANGE   ${min}   ${max}    
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${domain}=   Set Variable    ${resp.json()['sector']}
         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
@@ -84,11 +84,11 @@ JD-TC-Payment_Report-1
     ${pid}=  get_acc_id  ${billable_providers[4]}
     Set Suite Variable  ${pid}
 
-    ${resp}=  Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
    
@@ -155,10 +155,10 @@ JD-TC-Payment_Report-1
 
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    # ${sTime}=  add_time  2   00
-    # ${eTime}=  add_time   2   15
-    ${sTime}=  add_time  0   10
-    ${eTime}=  add_time   1   10
+    # ${sTime}=  add_timezone_time  ${tz}  2  00  
+    # ${eTime}=  add_timezone_time  ${tz}  2  15  
+    ${sTime}=  add_timezone_time  ${tz}  0   10
+    ${eTime}=  add_timezone_time  ${tz}   1   10
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${p1_lid}  ${p1_sid1}  ${p1_sid2}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -235,10 +235,11 @@ JD-TC-Payment_Report-1
     Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}     waitlistStatus=${wl_status[0]}
 
     #  ##################################################################################
-    ${resp}=   ProviderLogin   ${billable_providers[4]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${billable_providers[4]}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone  ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -297,7 +298,7 @@ JD-TC-Payment_Report-1
     Should Be Equal As Strings  ${resp.json()[1]['paymentPurpose']}   ${purpose[0]}
 
 
-    ${resp}=   ProviderLogin   ${billable_providers[4]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${billable_providers[4]}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     sleep   01s
     ${resp}=  Get Waitlist By Id  ${cwid}
@@ -368,15 +369,15 @@ JD-TC-Payment_Report-1
     END
 
 
-    ${LAST_WEEK_DAY1}=  get_date
+    ${LAST_WEEK_DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${LAST_WEEK_DAY1} 
-    ${LAST_WEEK_DAY7}=  add_date  6
+    ${LAST_WEEK_DAY7}=  db.add_timezone_date  ${tz}  6  
     Set Suite Variable  ${LAST_WEEK_DAY7}
 
     change_system_date   7
 
 
-    ${resp}=   ProviderLogin   ${billable_providers[4]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${billable_providers[4]}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     sleep   01s
     
@@ -473,10 +474,10 @@ JD-TC-Payment_Report-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERPH3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+305
@@ -492,15 +493,17 @@ JD-TC-Payment_Report-2
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   1  00
-    # ${eTime}=  add_time   0  30
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  1  00  
+    # ${eTime}=  add_timezone_time  ${tz}  0  30  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -587,10 +590,10 @@ JD-TC-Payment_Report-2
 
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    # ${sTime}=  add_time  2   00
-    # ${eTime}=  add_time   2   15
-    ${sTime}=  add_time  0   10
-    ${eTime}=  add_time   0   50
+    # ${sTime}=  add_timezone_time  ${tz}  2  00  
+    # ${eTime}=  add_timezone_time  ${tz}  2  15  
+    ${sTime}=  add_timezone_time  ${tz}  0   10
+    ${eTime}=  add_timezone_time  ${tz}   0   50
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${p4_lid}  ${p4_sid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -663,11 +666,12 @@ JD-TC-Payment_Report-2
     
     
 
-    ${resp}=   ProviderLogin  ${PUSERPH3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone  ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${paymentPurpose-eq2}      billPayment
@@ -713,7 +717,7 @@ JD-TC-Payment_Report-2
     Verify Response  ${resp}  paymentStatus=${paymentStatus[2]}
 
 
-    ${resp}=   ProviderLogin  ${PUSERPH3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Waitlist By Id  ${cwid}
@@ -760,10 +764,10 @@ JD-TC-Payment_Report-3
     ${pid}=  get_acc_id  ${billable_providers[4]}
     Set Suite Variable  ${pid}
 
-    ${resp}=  Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     
@@ -839,10 +843,10 @@ JD-TC-Payment_Report-3
 
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    # ${sTime}=  add_time  2   00
-    # ${eTime}=  add_time   2   15
-    ${sTime}=  add_time  0   10
-    ${eTime}=  add_time   0   55
+    # ${sTime}=  add_timezone_time  ${tz}  2  00  
+    # ${eTime}=  add_timezone_time  ${tz}  2  15  
+    ${sTime}=  add_timezone_time  ${tz}  0   10
+    ${eTime}=  add_timezone_time  ${tz}   0   55
 
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${p2_lid}  ${p2_sid1}  ${p2_sid2}  ${p2_sid3}
     Log  ${resp.json()}
@@ -917,7 +921,7 @@ JD-TC-Payment_Report-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  paymentStatus=${paymentStatus[2]}    waitlistStatus=${wl_status[0]}
 
-    ${resp}=   ProviderLogin  ${billable_providers[4]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
    
     ${resp}=  Get Waitlist By Id  ${cwid3}
@@ -925,7 +929,8 @@ JD-TC-Payment_Report-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  waitlistStatus=${wl_status[0]}
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone  ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${paymentPurpose-eq2}      billPayment

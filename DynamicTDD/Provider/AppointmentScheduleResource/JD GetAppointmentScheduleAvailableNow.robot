@@ -23,7 +23,7 @@ ${suffix}       serving
 JD-TC-Appointment Schedule AvailableNow-1
     [Documentation]    Appointment Schedule is Available with a valid Provider
     
-    ${resp}=  Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -35,12 +35,13 @@ JD-TC-Appointment Schedule AvailableNow-1
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
     clear_appt_schedule   ${PUSERNAME39}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  60
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  60  
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable   ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -76,7 +77,7 @@ JD-TC-Appointment Schedule AvailableNow-1
 JD-TC-Appointment Schedule AvailableNow-2
     [Documentation]    AvailableNow is False, when Appointment Schedule is Future timeslot
     
-    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -87,11 +88,11 @@ JD-TC-Appointment Schedule AvailableNow-2
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id1}
     clear_appt_schedule   ${PUSERNAME40}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -127,7 +128,7 @@ JD-TC-Appointment Schedule AvailableNow-2
 JD-TC-Appointment Schedule AvailableNow-3
     [Documentation]    AvailableNow is False, when Appointment Schedule is a Non working day
     
-    ${resp}=  Provider Login  ${PUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -140,12 +141,13 @@ JD-TC-Appointment Schedule AvailableNow-3
     clear_appt_schedule   ${PUSERNAME41}     
     ${list}=  Create List    1  2  3  4  5  6
 
-    ${curr_weekday}=  get_weekday
+    ${curr_weekday}=  get_timezone_weekday  ${tz}
     ${daygap}=  Evaluate  7-${curr_weekday}
-    ${DAY1}=  add_date  ${daygap}
+    ${DAY1}=  db.add_timezone_date  ${tz}  ${daygap}
 
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  60
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  60  
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable   ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -178,7 +180,7 @@ JD-TC-Appointment Schedule AvailableNow-3
 JD-TC-Appointment Schedule AvailableNow-4
     [Documentation]    AvailableNow is False, when Appointment Schedule is Holiday
     
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -189,11 +191,12 @@ JD-TC-Appointment Schedule AvailableNow-4
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id1}
     clear_appt_schedule   ${PUSERNAME42}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1} 
     ${list}=  Create List    1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  60
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  60  
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable   ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10

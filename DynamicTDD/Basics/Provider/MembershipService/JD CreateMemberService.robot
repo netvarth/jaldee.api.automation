@@ -26,15 +26,23 @@ JD-TC-Create_Member_Service-1
 
     [Documentation]  Create Member Service
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-     
+
+    ${lid}=  Create Sample Location
+    Set Suite Variable   ${lid}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${description}=    FakerLibrary.bs
     ${name}=           FakerLibrary.firstName
     ${displayname}=    FakerLibrary.firstName
-    ${effectiveFrom}=  get_date
-    ${effectiveTo}=    add_date  10 
+    ${effectiveFrom}=  db.get_date_by_timezone  ${tz}
+    ${effectiveTo}=      db.add_timezone_date  ${tz}  10   
     Set Suite Variable    ${description}
     Set Suite Variable    ${name}
     Set Suite Variable    ${displayname}
@@ -49,7 +57,7 @@ JD-TC-Create_Member_Service-UH1
 
     [Documentation]  Create Member Service where description is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -62,7 +70,7 @@ JD-TC-Create_Member_Service-UH2
 
     [Documentation]  Create Member Service where name is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -75,7 +83,7 @@ JD-TC-Create_Member_Service-UH3
 
     [Documentation]  Create Member Service where display name is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -88,7 +96,7 @@ JD-TC-Create_Member_Service-UH4
 
     [Documentation]  Create Member Service where effective From is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -101,7 +109,7 @@ JD-TC-Create_Member_Service-UH5
 
     [Documentation]  Create Member Service where effective To is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -114,7 +122,7 @@ JD-TC-Create_Member_Service-UH6
 
     [Documentation]  Create Member Service where MembershipApprovalType is automatic
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -128,7 +136,7 @@ JD-TC-Create_Member_Service-UH7
 
     [Documentation]  Create Member Service where allow login is false
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -142,7 +150,7 @@ JD-TC-Create_Member_Service-UH8
 
     [Documentation]  Create Member Service where MembershipServiceStatus is disabled
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -178,11 +186,11 @@ JD-TC-Create_Member_Service-UH11
 
     [Documentation]  Create Member Service where effective from is past date
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${effectiveFrompast}=    add_date  -10
+    ${effectiveFrompast}=    db.add_timezone_date  ${tz}  -10
 
     ${resp}=    Create Membership Service     ${description}    ${name}    ${displayname}    ${effectiveFrompast}    ${effectiveTo}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}
     Log  ${resp.content}
@@ -193,11 +201,11 @@ JD-TC-Create_Member_Service-UH12
 
     [Documentation]  Create Member Service where effective to is past date
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${effectiveTopast}=    add_date  -10
+    ${effectiveTopast}=    db.add_timezone_date  ${tz}  -10
 
     ${resp}=    Create Membership Service     ${description}    ${name}    ${displayname}    ${effectiveFrom}    ${effectiveTopast}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}
     Log  ${resp.content}
@@ -208,7 +216,7 @@ JD-TC-Create_Member_Service-UH13
 
     [Documentation]  Create Member Service where Membership Approval Type is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -222,7 +230,7 @@ JD-TC-Create_Member_Service-UH14
 
     [Documentation]  Create Member Service where Membership Allow login is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -236,7 +244,7 @@ JD-TC-Create_Member_Service-UH15
 
     [Documentation]  Create Member Service where Membership Membership Service Status is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

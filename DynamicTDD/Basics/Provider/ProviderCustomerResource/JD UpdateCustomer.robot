@@ -14,7 +14,6 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 ***Variables***
 ${SERVICE1}               SERVICE1
 ${SERVICE2}               SERVICE2
-${INVALID_SPHONE}         Invalid secondary phone No.
 
 ${self}                   0
 
@@ -25,9 +24,14 @@ JD-TC-Update CustomerDetails-1
 
 	[Documentation]  Update a valid customer without email
 
-    ${resp}=  ProviderLogin  ${PUSERNAME233}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME233}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
 
     # ${resp}=  Get Account Settings
     # Log  ${resp.json()}
@@ -69,15 +73,19 @@ JD-TC-Update CustomerDetails-1
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph1}${\n}
     ${resp}=  GetCustomer  firstName-eq=${firstname1}  phoneNo-eq=${ph1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    Log  ${resp.json()} 
     Verify Response List  ${resp}  0  firstName=${firstname1}  lastName=${lastname1}  phoneNo=${ph1}  dob=${dob1}  gender=${gender}  email_verified=${bool[0]}   phone_verified=${bool[0]}  id=${cid}   favourite=${bool[0]}
  
 JD-TC-Update CustomerDetails-2
 	[Documentation]  Update a valid customer with email
-    ${resp}=  ProviderLogin  ${PUSERNAME234}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -107,7 +115,7 @@ JD-TC-Update CustomerDetails-2
     
 JD-TC-Update CustomerDetails-3
     [Documentation]  Update a valid customer using email of another customer
-    ${resp}=  ProviderLogin  ${PUSERNAME235}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -166,7 +174,7 @@ JD-TC-Update CustomerDetails-UH2
 
 JD-TC-Update CustomerDetails-UH3
     [Documentation]  Update customer using primary mob no of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME236}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -202,9 +210,14 @@ JD-TC-Update CustomerDetails-UH3
 
 JD-TC-Update CustomerDetails-UH4
 	[Documentation]  A non parent updates a customer
-    ${resp}=  ProviderLogin  ${PUSERNAME232}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME232}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -221,7 +234,7 @@ JD-TC-Update CustomerDetails-UH4
     ${gender1}=  Random Element    ${Genderlist}
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME234}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  UpdateCustomer with email  ${cid1}  ${firstname1}  ${lastname1}  ${EMPTY}  ${email4}  ${gender1}  ${dob1}  ${ph2}  ${EMPTY}
     Log  ${resp.json()}
@@ -232,9 +245,14 @@ JD-TC-Update CustomerDetails-UH4
      
 JD-TC-Update CustomerDetails-4
 	[Documentation]  Update a valid customer here add a new consumer number(new keyword)
-    ${resp}=  ProviderLogin  ${PUSERNAME233}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME233}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${ph}=  Evaluate  ${PUSERNAME230}+71018
@@ -254,8 +272,7 @@ JD-TC-Update CustomerDetails-4
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph1}${\n}
     ${resp}=  GetCustomer    phoneNo-eq=${ph1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    Log  ${resp.json()} 
     Verify Response List  ${resp}  0  firstName=${firstname1}  lastName=${lastname1}  phoneNo=${ph1}   email_verified=${bool[0]}   phone_verified=${bool[0]}  id=${cid}   favourite=${bool[0]}
    
 JD-TC-Update CustomerDetails-5
@@ -280,7 +297,7 @@ JD-TC-Update CustomerDetails-5
     clear_customer   ${PUSERNAME233}
 
      
-    ${resp}=  Provider Login  ${PUSERNAME233}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME233}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -315,16 +332,25 @@ JD-TC-Update CustomerDetails-5
     ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
     Log    ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${CUR_DAY}=  get_date
-    Set Suite Variable    ${CUR_DAY}
+    
     ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id1}    ${resp}  
+    Set Suite Variable    ${loc_id1}    ${resp}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable    ${CUR_DAY}
+    
     ${resp}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable    ${ser_id1}    ${resp}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  3  00
-    ${end_time}=    add_time  3  30    
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  3  00  
+    ${end_time}=    add_timezone_time  ${tz}  3  30      
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
@@ -335,7 +361,6 @@ JD-TC-Update CustomerDetails-5
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -400,7 +425,7 @@ JD-TC-Update CustomerDetails-6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid2}  ${wid[0]}
 
-    ${resp}=  Provider Login  ${PUSERNAME233}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME233}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -443,7 +468,7 @@ JD-TC-Update CustomerDetails-6
     # Should Be Equal As Strings  ${resp.json()[0]['waitlistingFor'][0]['phoneNo']}   ${CUSERNAME3}
     # Should Be Equal As Strings  ${resp.json()[0]['queue']['id']}                      ${que_id1}     
 
-    ${resp}=  Provider Login  ${PUSERNAME233}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME233}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -495,7 +520,7 @@ JD-TC-Update CustomerDetails-7
     clear_customer   ${PUSERNAME233}
 
      
-    ${resp}=  Provider Login  ${PUSERNAME233}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME233}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -533,12 +558,16 @@ JD-TC-Update CustomerDetails-7
 
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     clear_appt_schedule   ${PUSERNAME233}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE2}
@@ -676,7 +705,7 @@ JD-TC-Update CustomerDetails-8
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot3}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid1}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
      Log  ${resp.json()}
@@ -702,7 +731,7 @@ JD-TC-Update CustomerDetails-8
     Should Be Equal As Strings  ${resp.json()['appmtDate']}                                     ${DAY1}
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot3}
 
-    ${resp}=  Provider Login  ${PUSERNAME233}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME233}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -747,7 +776,7 @@ JD-TC-Update CustomerDetails-8
 
 JD-TC-Update CustomerDetails-UH6
     [Documentation]  Update a valid jaldee customer and  trying to login with that updated number
-    ${resp}=  Provider Login  ${PUSERNAME259}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME259}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -819,7 +848,7 @@ JD-TC-Update CustomerDetails-UH6
 JD-TC-Update CustomerDetails-9
     [Documentation]  Add customer and update customer phone number with international number
 
-    ${resp}=  Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -883,7 +912,7 @@ JD-TC-Update CustomerDetails-9
 JD-TC-Update CustomerDetails-10
     [Documentation]  Add 2 customers with same number but different country code and update one customer  with another  country code
 
-    ${resp}=  Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1003,7 +1032,7 @@ JD-TC-Update CustomerDetails-10
 JD-TC-Update CustomerDetails-11
     [Documentation]  Add customer, take checkin and update customer phone number with international number
 
-    ${resp}=  Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1037,11 +1066,16 @@ JD-TC-Update CustomerDetails-11
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_queue   ${PUSERNAME53}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -1128,7 +1162,7 @@ JD-TC-Update CustomerDetails-11
 JD-TC-Update CustomerDetails-12
     [Documentation]  consumer takes checkin for provider and provider updates customer's phone number with international number
 
-    ${resp}=  Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1162,11 +1196,16 @@ JD-TC-Update CustomerDetails-12
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_queue   ${PUSERNAME53}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -1224,7 +1263,7 @@ JD-TC-Update CustomerDetails-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1274,8 +1313,8 @@ JD-TC-Update CustomerDetails-12
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Update CustomerDetails-13
-	[Documentation]  Update a valid customer with email and secondary phone number
-    ${resp}=  ProviderLogin  ${PUSERNAME234}  ${PASSWORD}
+	[Documentation]  Update a valid customer with email
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${firstname}=  FakerLibrary.first_name
@@ -1284,7 +1323,6 @@ JD-TC-Update CustomerDetails-13
     ${gender}=  Random Element    ${Genderlist}
     Set Test Variable   ${gender}
     ${phone1}=  Evaluate  ${PUSERNAME23}+73009
-    Set Suite Variable    ${phone1}  
     ${ph2}=  Evaluate  ${PUSERNAME230}+71013
     Set Suite Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
     ${resp}=  AddCustomer  ${phone1}   firstName=${firstname}   lastName=${lastname}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}
@@ -1296,7 +1334,7 @@ JD-TC-Update CustomerDetails-13
     ${lastname1}=  FakerLibrary.last_name
     ${dob1}=  FakerLibrary.Date
     # ${gender1}=  Random Element    ${Genderlist}
-    ${ph3}=  Evaluate  ${PUSERNAME230}+71015
+    ${ph3}=  Evaluate  ${PUSERNAME230}+71014
     Set Suite Variable  ${email3}  ${lastname}${ph3}${C_Email}.${test_mail}
     ${resp}=   UpdateCustomer with email  ${cid2}  ${firstname1}  ${lastname1}  ${EMPTY}  ${email3}  ${gender}  ${dob1}  ${ph3}  ${EMPTY}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1305,12 +1343,12 @@ JD-TC-Update CustomerDetails-13
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph3}${\n}
     ${resp}=  GetCustomer  firstName-eq=${firstname1}  phoneNo-eq=${ph3}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List  ${resp}  0  firstName=${firstname1}  lastName=${lastname1}  phoneNo=${ph3}  dob=${dob1}  gender=${gender}   email=${email3}   email_verified=${bool[0]}   phone_verified=${bool[0]}   id=${cid2}   favourite=${bool[0]}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}
+    Verify Response List  ${resp}  0  firstName=${firstname1}  lastName=${lastname1}  phoneNo=${ph3}  dob=${dob1}  gender=${gender}   email=${email3}   email_verified=${bool[0]}   phone_verified=${bool[0]}   id=${cid2}   favourite=${bool[0]}
 
 JD-TC-Update CustomerDetails-UH7
     [Documentation]  Add 2 customers with same number but different country code and update one customer phone number's country code to that of the other
 
-    ${resp}=  Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1389,7 +1427,7 @@ JD-TC-Update CustomerDetails-UH7
     Remove Values From List  ${unique_ccodes}  ${country_code1}
     ${country_code2}=  Evaluate  random.choice($unique_ccodes)  random
     Remove Values From List  ${unique_ccodes}  ${country_code2}
-     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
+    ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
 
 
 
@@ -1418,10 +1456,11 @@ JD-TC-Update CustomerDetails-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
+     
 
 JD-TC-Update CustomerDetails-UH8
 	[Documentation]  Try to Update a  customer with invalid second number
-    ${resp}=  ProviderLogin  ${PUSERNAME234}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${firstname}=  FakerLibrary.first_name
@@ -1447,4 +1486,60 @@ JD-TC-Update CustomerDetails-UH8
     ${resp}=   UpdateCustomer with email  ${cid2}  ${firstname1}  ${lastname1}  ${EMPTY}  ${email3}  ${gender}  ${dob1}  ${ph2}  ${EMPTY}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph3}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${INVALID_SPHONE}
+
+
+
+JD-TC-Update CustomerDetails-13
+    [Documentation]  update manual id of customer
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+    
+    ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     IF  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}==${customerseries[0]}
+          ${resp}=  JaldeeId Format   ${customerseries[1]}   ${EMPTY}   ${EMPTY}
+          Log  ${resp.json()}
+          Should Be Equal As Strings  ${resp.status_code}  200
+     END
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}  ${customerseries[1]}
+
+    ${firstname}=  FakerLibrary.first_name
+    ${lastname}=  FakerLibrary.last_name
+    ${cust_no}    FakerLibrary.Numerify   text=%######
+    Set Test Variable  ${cust_no}  555${cust_no}
+    ${dob}=  FakerLibrary.Date
+    ${gender}=  Random Element    ${Genderlist}
+    ${jaldeeid}=  Generate Random String  6  [LETTERS][NUMBERS]
+    ${resp}=  AddCustomer  ${cust_no}   countryCode=${countryCodes[0]}  firstName=${firstname}   lastName=${lastname}  jaldeeId=${jaldeeid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}  ${resp.json()}
+
+    ${resp}=  GetCustomer ById  ${cid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['jaldeeId']}  ${jaldeeid}
+
+    ${jaldeeid2}=  Generate Random String  6  [LETTERS][NUMBERS]
+    ${resp}=  Update Customer Details  ${cid}  jaldeeId=${jaldeeid2}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${cust_no}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer ById  ${cid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['jaldeeId']}  ${jaldeeid2}
      

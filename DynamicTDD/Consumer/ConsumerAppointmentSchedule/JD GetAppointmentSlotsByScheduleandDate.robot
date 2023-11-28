@@ -29,7 +29,7 @@ JD-TC-GetAppointmentSlotsByScheduleandDate-1
 
     [Documentation]  Get next available appointment slots for today
 
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     ${accId}=  get_acc_id  ${PUSERNAME117}
     # Set Suite Variable  ${accId}
@@ -39,14 +39,19 @@ JD-TC-GetAppointmentSlotsByScheduleandDate-1
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  
-    
-    ${DAY1}=  get_date
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     # Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     # Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     # Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     # Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     # Set Suite Variable  ${delta}
@@ -113,7 +118,7 @@ JD-TC-GetAppointmentSlotsByScheduleandDate-1
 JD-TC-GetAppointmentSlotsByScheduleandDate-2
 
     [Documentation]  Get next available appointment slots for future date
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     ${accId}=  get_acc_id  ${PUSERNAME120}
     Set Suite Variable  ${accId}
@@ -123,14 +128,19 @@ JD-TC-GetAppointmentSlotsByScheduleandDate-2
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     # Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  
-    
-    ${DAY1}=  get_date
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     # Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     # Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     # Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     # Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     # Set Suite Variable  ${delta}
@@ -155,7 +165,7 @@ JD-TC-GetAppointmentSlotsByScheduleandDate-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY3}=  add_date  3
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
 
     ${resp}=  Get Appointment Slots By Schedule and Date    ${sch_id}    ${DAY3}   ${accId}    
     Log   ${resp.json()}
@@ -199,11 +209,11 @@ JD-TC-GetAppointmentSlotsByScheduleandDate-2
 JD-TC-GetAppointmentSlotsByScheduleandDate-UH1
 
     [Documentation]   Provider try to Get Appointment Slots By Schedule and Date
-    ${resp}=  ProviderLogin  ${PUSERNAME138}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     ${accId}=  get_acc_id  ${PUSERNAME138}
     # Set Test Variable   ${accId}  
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Get Appointment Slots By Schedule and Date    ${sch_id}  ${DAY1}   ${accId} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}  401
@@ -212,7 +222,7 @@ JD-TC-GetAppointmentSlotsByScheduleandDate-UH1
 JD-TC-GetAppointmentSlotsByScheduleandDate-UH2
 
     [Documentation]  Get Appointment Slots By Schedule and Date without login
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Get Appointment Slots By Schedule and Date    ${sch_id}    ${DAY1}   ${accId} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}  419
@@ -225,7 +235,7 @@ JD-TC-GetAppointmentSlotsByScheduleandDate-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Get Appointment Slots By Schedule and Date    0000   ${DAY1}   ${accId} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}  422
@@ -235,11 +245,11 @@ JD-TC-GetAppointmentSlotsByScheduleandDate-UH3
 JD-TC-GetAppointmentSlotsByScheduleandDate-UH4
 
     [Documentation]  Get Appointment Slots By Schedule and Date with date after schedule end date
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     ${accId}=  get_acc_id  ${PUSERNAME120}
 
-    ${DAY3}=  add_date  13
+    ${DAY3}=  db.add_timezone_date  ${tz}  13
     ${resp}=  Get Appointment Slots By Schedule and Date    ${sch_id}   ${DAY3}   ${accId} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}  200
@@ -249,7 +259,7 @@ JD-TC-GetAppointmentSlotsByScheduleandDate-UH4
 JD-TC-GetAppointmentSlotsByScheduleandDate-3
     [Documentation]  Get next available appointment slots for today with consumerParallelServing
 
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     clear_service   ${PUSERNAME120}
@@ -264,11 +274,16 @@ JD-TC-GetAppointmentSlotsByScheduleandDate-3
     # ${leadTime}=   Random Int   min=1   max=5
     ${s_id1}=  Create Sample Service  ${SERVICE1}  #leadTime=${leadTime}
     ${lid1}=  Create Sample Location  
-    
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -320,7 +335,7 @@ JD-TC-GetAppointmentSlotsByScheduleandDate-3
 JD-TC-GetAppointmentSlotsByScheduleandDate-4
     [Documentation]  Get next available appointment slots for today with lead time
 
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     clear_service   ${PUSERNAME120}
@@ -335,11 +350,16 @@ JD-TC-GetAppointmentSlotsByScheduleandDate-4
     ${leadTime}=   Random Int   min=25   max=30
     ${s_id1}=  Create Sample Service  ${SERVICE1}  leadTime=${leadTime}
     ${lid1}=  Create Sample Location  
-    
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     ${delta}=  FakerLibrary.Random Int  min=30  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs

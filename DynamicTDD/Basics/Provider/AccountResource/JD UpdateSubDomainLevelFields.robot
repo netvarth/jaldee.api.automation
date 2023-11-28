@@ -26,10 +26,14 @@ JD-TC-UpdateSubDomainFields-1
         ${subdomain_len}=  Evaluate  ${subdomain_len}+${sublen}
     END
     FOR   ${a}  IN RANGE   ${subdomain_len}
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Test Variable   ${d}  ${resp.json()['sector']}
-        Set Suite Variable   ${sd}  ${resp.json()['subSector']}
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable   ${d}  ${decrypted_data['sector']}
+        Set Suite Variable   ${sd}  ${decrypted_data['subSector']}
+
         ${fields}=   Get subDomain level Fields  ${d}  ${sd}
         Log  ${fields.json()}
         Should Be Equal As Strings    ${fields.status_code}   200
@@ -49,16 +53,22 @@ JD-TC-UpdateSubDomainFields-1
 
 JD-TC-UpdateSubDomainFields-UH1
     [Documentation]   update Sub-domain virtual fields  of a  provider with invalid sub sector
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${d}  ${resp.json()['sector']}
-    Set Suite Variable   ${sd}  ${resp.json()['subSector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable   ${d}  ${decrypted_data['sector']}
+    Set Suite Variable   ${sd}  ${decrypted_data['subSector']}
+    
+    # Set Test Variable   ${d}  ${resp.json()['sector']}
+    # Set Suite Variable   ${sd}  ${resp.json()['subSector']}
     ${fields}=   Get subDomain level Fields  ${d}  ${sd}
     Log  ${fields.json()}
     Should Be Equal As Strings    ${fields.status_code}   200
     ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
     Set Suite Variable  ${virtual_fields}
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sd}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -66,11 +76,16 @@ JD-TC-UpdateSubDomainFields-UH1
      
 JD-TC-UpdateSubDomainFields-UH2
     [Documentation]   update Sub-domain virtual fields  of a  provider with invalid sub domain virtual fields
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${sd}  ${resp.json()['subSector']}
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable   ${sd}  ${decrypted_data['subSector']}
+    
+    # Set Suite Variable   ${sd}  ${resp.json()['subSector']}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sd}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -78,7 +93,7 @@ JD-TC-UpdateSubDomainFields-UH2
 
 JD-TC-UpdateSubDomainFields-UH3
     [Documentation]   update Sub-domain virtual fields  of a  provider with invalid sub sector
-    ${resp}=  ProviderLogin  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${invalid_domain}
     Should Be Equal As Strings  ${resp.status_code}  422

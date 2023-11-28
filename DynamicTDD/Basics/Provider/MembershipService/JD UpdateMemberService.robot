@@ -26,16 +26,28 @@ JD-TC-Update_Member_Service-1
 
     [Documentation]  Update Member Service with description
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
-     
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
+
+    ${lid}=  Create Sample Location
+    Set Suite Variable   ${lid}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${description}=    FakerLibrary.bs
     ${name}=           FakerLibrary.firstName
     ${displayname}=    FakerLibrary.firstName
-    ${effectiveFrom}=  get_date
-    ${effectiveTo}=    add_date  10 
+    ${effectiveFrom}=  db.get_date_by_timezone  ${tz}
+    ${effectiveTo}=      db.add_timezone_date  ${tz}  10   
     Set Suite Variable    ${description}
     Set Suite Variable    ${name}
     Set Suite Variable    ${displayname}
@@ -86,7 +98,7 @@ JD-TC-Update_Member_Service-2
 
     [Documentation]  Update Member Service name
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -115,7 +127,7 @@ JD-TC-Update_Member_Service-3
 
     [Documentation]  Update Member Service display name
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -144,11 +156,11 @@ JD-TC-Update_Member_Service-4
 
     [Documentation]  Update Member Service effective from
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${effectiveFrom2}=    add_date  2
+    ${effectiveFrom2}=    db.add_timezone_date  ${tz}  2
     Set Suite Variable    ${effectiveFrom2}
 
     ${resp}=    Update Membership Service     ${memberid}    ${description2}    ${name2}    ${displayname2}    ${effectiveFrom2}    ${effectiveTo}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}
@@ -173,11 +185,11 @@ JD-TC-Update_Member_Service-5
 
     [Documentation]  Update Member Service effective To
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${effectiveTo2}=    add_date  2
+    ${effectiveTo2}=    db.add_timezone_date  ${tz}  2
     Set Suite Variable    ${effectiveTo2}
 
     ${resp}=    Update Membership Service     ${memberid}    ${description2}    ${name2}    ${displayname2}    ${effectiveFrom2}    ${effectiveTo2}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}
@@ -202,7 +214,7 @@ JD-TC-Update_Member_Service-6
 
     [Documentation]  Update Member Service Membership Approval Type to Automatic
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -228,7 +240,7 @@ JD-TC-Update_Member_Service-7
 
     [Documentation]  Update Member Service allow login is false
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -254,7 +266,7 @@ JD-TC-Update_Member_Service-8
 
     [Documentation]  Update Member Service Membership Service Status Enabled
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -280,7 +292,7 @@ JD-TC-Update_Member_Service-9
 
     [Documentation]  Update Member Service where Membership Allow login is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -292,7 +304,7 @@ JD-TC-Update_Member_Service-UH1
 
     [Documentation]  Update Member Service description is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -305,7 +317,7 @@ JD-TC-Update_Member_Service-UH2
 
     [Documentation]  Update Member Service where name is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -318,7 +330,7 @@ JD-TC-Update_Member_Service-UH3
 
     [Documentation]  Update Member Service where display name is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -331,7 +343,7 @@ JD-TC-Update_Member_Service-UH4
 
     [Documentation]  Update Member Service effective from is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -344,7 +356,7 @@ JD-TC-Update_Member_Service-UH5
 
     [Documentation]  Update Member Service where effective to is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -357,7 +369,7 @@ JD-TC-Update_Member_Service-UH6
 
     [Documentation]  Update Member Service where Membership Approval Type is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -369,7 +381,7 @@ JD-TC-Update_Member_Service-UH7
 
     [Documentation]  Update Member Service where Membership Membership Service Status is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -381,7 +393,7 @@ JD-TC-Update_Member_Service-UH8
 
     [Documentation]  Update Member Service where member id is invalid
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -409,7 +421,7 @@ JD-TC-Update_Member_Service-UH10
 
     [Documentation]  Update Member Service with another provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME65}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -431,11 +443,11 @@ JD-TC-Update_Member_Service-UH12
 
     [Documentation]  Update Member Service where effective from date is past date
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${effectiveFrom3}=    add_date  -5
+    ${effectiveFrom3}=    db.add_timezone_date  ${tz}  -5
     Set Suite Variable    ${effectiveFrom3}
 
     ${resp}=    Update Membership Service     ${memberid}    ${description2}    ${name2}    ${displayname2}    ${effectiveFrom3}    ${effectiveTo2}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}
@@ -444,12 +456,12 @@ JD-TC-Update_Member_Service-UH12
 
     ${resp}=    Get Membership Service by id    ${memberid}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    60000
+    Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['id']}    ${memberid}
     Should Be Equal As Strings    ${resp.json()['name']}    ${name2}
     Should Be Equal As Strings    ${resp.json()['displayName']}    ${displayname2}
     Should Be Equal As Strings    ${resp.json()['description']}    ${description2}
-    Should Be Equal As Strings    ${resp.json()['effectiveFrom']}    ${effectiveFrom2}
+    Should Be Equal As Strings    ${resp.json()['effectiveFrom']}    ${effectiveFrom3}
     Should Be Equal As Strings    ${resp.json()['effectiveTo']}    ${effectiveTo2}
     Should Be Equal As Strings    ${resp.json()['approvalType']}    ${MembershipApprovalType[0]}
     Should Be Equal As Strings    ${resp.json()['allowLogin']}    ${bool[1]}
@@ -460,11 +472,11 @@ JD-TC-Update_Member_Service-UH13
 
     [Documentation]  Update Member Service where effectibe To date is past date
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${effectiveTo3}=    add_date  -5
+    ${effectiveTo3}=    db.add_timezone_date  ${tz}  -5
     Set Suite Variable    ${effectiveTo3}
 
     ${resp}=    Update Membership Service     ${memberid}    ${description2}    ${name2}    ${displayname2}    ${effectiveFrom2}    ${effectiveTo3}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}

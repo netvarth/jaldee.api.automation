@@ -15,7 +15,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-Get Adwords -1
        [Documentation]    Provider check to Get Adwords of an account  
-       ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
        Log  ${resp.json()}
        Should Be Equal As Strings    ${resp.status_code}   200    
        ${resp}=   Get License UsageInfo 

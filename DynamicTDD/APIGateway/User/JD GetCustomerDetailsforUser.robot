@@ -30,7 +30,7 @@ JD-TC-GetCustomerDetailsForUser-1
 
     [Documentation]   Get customer details for a branch having one lead.
 
-    ${resp}=  Provider Login  ${MUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
@@ -62,8 +62,13 @@ JD-TC-GetCustomerDetailsForUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${title}=  FakerLibrary.user name
@@ -95,7 +100,7 @@ JD-TC-GetCustomerDetailsForUser-2
 
     [Documentation]   Get customer details for a user having one lead(with admin previlage).
 
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${prov_id}  ${resp.json()['id']}
@@ -179,19 +184,28 @@ JD-TC-GetCustomerDetailsForUser-2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
-    Log  ${resp.content}
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
+    # Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${user_id}  ${resp.json()['id']}
-    Set Suite Variable  ${user_fname}  ${resp.json()['firstName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_fname}  ${decrypted_data['firstName']}
+    # Set Suite Variable  ${user_id}  ${resp.json()['id']}
+    # Set Suite Variable  ${user_fname}  ${resp.json()['firstName']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${title}=  FakerLibrary.user name
@@ -229,7 +243,7 @@ JD-TC-GetCustomerDetailsForUser-3
 
     [Documentation]   Get customer details for a branch without add customer.
 
-    ${resp}=  Provider Login  ${MUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -262,7 +276,7 @@ JD-TC-GetCustomerDetailsForUser-4
 
     [Documentation]   Get customer details for a branch without create a lead.
 
-    ${resp}=  Provider Login  ${MUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -286,7 +300,7 @@ JD-TC-GetCustomerDetailsForUser-5
 
     [Documentation]   Get customer details for a branch having multiple customers.
 
-    ${resp}=  Provider Login  ${MUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -313,7 +327,7 @@ JD-TC-GetCustomerDetailsForUser-6
 
     [Documentation]   Get customer details for a branch having customers and family members.
 
-    ${resp}=  Provider Login  ${MUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -341,7 +355,7 @@ JD-TC-GetCustomerDetailsForUser-7
 
     [Documentation]   Get customer details for a user without create a lead.
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -385,7 +399,7 @@ JD-TC-GetCustomerDetailsForUser-UH1
 
     [Documentation]   Get lead details with invalid user token.
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -398,7 +412,7 @@ JD-TC-GetCustomerDetailsForUser-UH2
 
     [Documentation]   Get lead details with sp token.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

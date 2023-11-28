@@ -34,7 +34,7 @@ JD-TC-Addaddon-PRE
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
        Should Be Equal As Strings    ${resp.status_code}    200
-       ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
        Log  ${resp.json()}
        Should Be Equal As Strings    ${resp.status_code}    200
        Set Suite Variable  ${PUSERNAME}
@@ -50,7 +50,7 @@ JD-TC-Addaddon-PRE
 
 JD-TC-Addaddon -1
        [Documentation]    Provider Add a addon from first metric and verify addon details
-       ${resp}=   ProviderLogin  ${PUSERNAME}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 
        Log  ${resp.json()}
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=  Add addon  ${addon_list[0][0]['addon_id']}
@@ -70,7 +70,7 @@ JD-TC-Addaddon -1
 
 JD-TC-Addaddon -2
        [Documentation]    Provider Add a addon from another metric
-       ${resp}=   ProviderLogin  ${PUSERNAME}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=   Add addon  ${addon_list[1][0]['addon_id']}
        Log   ${resp.json()}
@@ -96,7 +96,7 @@ JD-TC-Addaddon -2
        
 JD-TC-Addaddon -3
        [Documentation]   upgrade addon
-       ${resp}=   ProviderLogin  ${PUSERNAME}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=  Add addon  ${addon_list[0][1]['addon_id']}
        Log  ${resp.json()}
@@ -130,7 +130,7 @@ JD-TC-Addaddon -3
 
 JD-TC-Addaddon -UH1
        [Documentation]   downgrade addon 
-       ${resp}=   ProviderLogin  ${PUSERNAME}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=  Add addon  ${addon_list[0][0]['addon_id']}
        Log  ${resp.json()}
@@ -164,7 +164,7 @@ JD-TC-Addaddon -UH1
                                  
 JD-TC-Addaddon -UH2
        [Documentation]   Provider check to add invalid addon to an account
-       ${resp}=   ProviderLogin  ${PUSERNAME}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=  Add addon   0
        Should Be Equal As Strings    ${resp.status_code}   422
@@ -187,7 +187,7 @@ JD-TC-Addaddon -UH4
 
 JD-TC-Addaddon -UH5
        [Documentation]   Provider adding already added addon
-       ${resp}=   ProviderLogin  ${PUSERNAME}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=  Add addon   ${addon_list[1][0]['addon_id']}
        Should Be Equal As Strings    ${resp.status_code}   422
@@ -195,7 +195,7 @@ JD-TC-Addaddon -UH5
 
 JD-TC-Addaddon -UH6
        [Documentation]   Provider adding expired  addon
-       ${resp}=   ProviderLogin  ${PUSERNAME}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=  Add addon   ${addon_list[0][0]['addon_id']}
        Should Be Equal As Strings    ${resp.status_code}   422
@@ -204,7 +204,7 @@ JD-TC-Addaddon -UH6
 *** Comment ***
 JD-TC-Addaddon -4
        [Documentation]   Provider upgrade license package to highest package then check already added addon expired
-       ${resp}=   ProviderLogin  ${PUSERNAME}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200    
        clear_Addon  ${PUSERNAME}   
        ${highest_package}=  get_highest_license_pkg

@@ -36,8 +36,18 @@ ${itemCode4}   item4Code104
 JD-TC-Update_Catalog_For_ShoppingCart-1
     [Documentation]  Provider Create catalog for ShoppingCart and Update it
     clear_Item  ${PUSERNAME130}
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
     ${displayName1}=   FakerLibrary.name 
     Set Suite Variable  ${displayName1}  
@@ -119,18 +129,18 @@ JD-TC-Update_Catalog_For_ShoppingCart-1
     # Verify Response  ${resp}  displayName=${displayName1}  shortDesc=${shortDesc1}   price=${price2float}   taxable=${bool[0]}   status=${status[0]}    itemName=${itemName2}  itemNameInLocal=${itemNameInLocal1}  isShowOnLandingpage=${bool[1]}   isStockAvailable=${bool[1]}   
     # Verify Response  ${resp}  promotionalPriceType=${promotionalPriceType[1]}   promotionalPrice=${promoPrice1float}    promotionalPrcnt=0.0   showPromotionalPrice=${bool[1]}   itemCode=${itemCode2}   promotionLabelType=${promotionLabelType[3]}   promotionLabel=${promoLabel1}   
 
-    ${startDate}=  get_date
+    ${startDate}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${startDate}
-    ${endDate}=  add_date  10      
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${endDate}
 
     # ${noOfOccurance}=  Random Int  min=0   max=10
     # Set Suite Variable  ${noOfOccurance}
 
     Set Suite Variable  ${noOfOccurance}   0
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  45
+    ${eTime1}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
@@ -218,13 +228,13 @@ JD-TC-Update_Catalog_For_ShoppingCart-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${startDate2}=  add_date  2
+    ${startDate2}=  db.add_timezone_date  ${tz}  2  
     Set Suite Variable  ${startDate2}
-    ${endDate2}=  add_date  45      
+    ${endDate2}=  db.add_timezone_date  ${tz}  45      
     Set Suite Variable  ${endDate2}
-    ${sTime2}=  add_time  0  10
+    ${sTime2}=  add_timezone_time  ${tz}  0  10  
     Set Suite Variable   ${sTime2}
-    ${eTime2}=  add_time   0  50
+    ${eTime2}=  add_timezone_time  ${tz}  0  50  
     Set Suite Variable   ${eTime2}
     ${list2}=  Create List  1  2  3  4  5  6  
     Set Suite Variable  ${list2}
@@ -298,9 +308,13 @@ JD-TC-Update_Catalog_For_ShoppingCart-1
 
 JD-TC-Update_Catalog_For_ShoppingCart-2
     [Documentation]  Consumer place order for Home_Delivery after that Provider Update catalog
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     ${accId}=  get_acc_id  ${PUSERNAME130}
 
     ${resp}=  Get Order Settings by account id
@@ -326,7 +340,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   10
+    ${DAY1}=  db.add_timezone_date  ${tz}   10
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -339,7 +353,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-2
     ${address}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
     Set Test Variable  ${address}
     
-    # ${sTime1}=  add_time  0  15
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
     # ${delta}=  FakerLibrary.Random Int  min=10  max=90
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
@@ -363,7 +377,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -389,7 +403,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -406,9 +420,13 @@ JD-TC-Update_Catalog_For_ShoppingCart-2
 JD-TC-Update_Catalog_For_ShoppingCart-3
     [Documentation]  Consumer place order for Home_Delivery after that Provider Update catalog and provider try to update existing order details.
     # clear_Catalog   ${PUSERNAME130}
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     ${accId}=  get_acc_id  ${PUSERNAME130}
 
     ${resp}=  Get Order Settings by account id
@@ -418,10 +436,10 @@ JD-TC-Update_Catalog_For_ShoppingCart-3
 
     Set Test Variable  ${HowSoon}    0
     Set Test Variable  ${HowFar}     20
-    ${startDate4}=  get_date
-    ${endDate4}=  add_date  45    
-    ${sTime4}=  add_time  0  10
-    ${eTime4}=  add_time   0  40
+    ${startDate4}=  db.get_date_by_timezone  ${tz}
+    ${endDate4}=  db.add_timezone_date  ${tz}  45    
+    ${sTime4}=  add_timezone_time  ${tz}  0  10  
+    ${eTime4}=  add_timezone_time  ${tz}  0  30  
     ${terminator4}=  Create Dictionary  endDate=${endDate4}  noOfOccurance=${noOfOccurance}
     ${timeSlot4}=  Create Dictionary  sTime=${sTime4}   eTime=${eTime4}
     ${timeSlots4}=  Create List  ${timeSlot4}
@@ -444,7 +462,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date      10
+    ${DAY1}=  db.add_timezone_date  ${tz}      10
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -457,7 +475,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-3
     ${address}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
     Set Test Variable  ${address}
     
-    # ${sTime1}=  add_time  0  15
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
     # ${delta}=  FakerLibrary.Random Int  min=10  max=90
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
@@ -465,14 +483,14 @@ JD-TC-Update_Catalog_For_ShoppingCart-3
     Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Test Variable  ${EMPTY_List}
-    ${O_sTime1}=  add_time   0  25
-    ${O_eTime1}=  add_time   0  35
+    ${O_sTime1}=  add_timezone_time  ${tz}  0  25  
+    ${O_eTime1}=  add_timezone_time  ${tz}   0  35
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME20}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${resp}=   Create Order For HomeDelivery    ${cookie}  ${accId}    ${self}    ${CatalogId3}   ${bool[1]}    ${address}    ${O_sTime1}    ${O_eTime1}   ${DAY1}    ${CUSERNAME20}    ${email}  ${countryCodes[1]}  ${EMPTY_List}  ${item_id1}    ${item_quantity1} 
+    ${resp}=   Create Order For HomeDelivery    ${cookie}  ${accId}    ${self}    ${CatalogId3}   ${bool[1]}    ${address}    ${sTime4}    ${eTime4}   ${DAY1}    ${CUSERNAME20}    ${email}  ${countryCodes[1]}  ${EMPTY_List}  ${item_id1}    ${item_quantity1} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -483,7 +501,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -491,10 +509,10 @@ JD-TC-Update_Catalog_For_ShoppingCart-3
     ${far_update}=  Random Int  min=${soon+1}   max=8
   
 
-    ${startDate5}=  add_date  1
-    ${endDate5}=  add_date  45    
-    ${sTime5}=  add_time   0  20
-    ${eTime5}=  add_time   0  50
+    ${startDate5}=  db.add_timezone_date  ${tz}  1  
+    ${endDate5}=  db.add_timezone_date  ${tz}  45    
+    ${sTime5}=  add_timezone_time  ${tz}  0  20  
+    ${eTime5}=  add_timezone_time  ${tz}  0  50  
     ${terminator5}=  Create Dictionary  endDate=${endDate5}  noOfOccurance=${noOfOccurance}
     ${timeSlot5}=  Create Dictionary  sTime=${sTime4}   eTime=${eTime4}
     ${timeSlots5}=  Create List  ${timeSlot5}
@@ -521,14 +539,14 @@ JD-TC-Update_Catalog_For_ShoppingCart-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${Contact_Number}=  Evaluate  ${CUSERNAME20}+11111111
     Set Test Variable  ${NEW_email}  ${firstname}${Contact_Number}.${test_mail}
 
-    ${resp}=   Update Order For HomeDelivery   ${orderid1}  ${bool[1]}    ${address}    ${O_sTime1}    ${O_eTime1}   ${DAY1}    ${Contact_Number}    ${NEW_email}   ${countryCodes[1]}  
+    ${resp}=   Update Order For HomeDelivery   ${orderid1}  ${bool[1]}    ${address}    ${sTime5}    ${eTime5}   ${DAY1}    ${Contact_Number}    ${NEW_email}   ${countryCodes[1]}  
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -536,9 +554,13 @@ JD-TC-Update_Catalog_For_ShoppingCart-3
 JD-TC-Update_Catalog_For_ShoppingCart-4
     [Documentation]  Consumer place order for Store_pickup after that Provider Update catalog and provider try to update existing order details.
     # clear_Catalog   ${PUSERNAME130}
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     ${accId}=  get_acc_id  ${PUSERNAME130}
 
     ${resp}=  Get Order Settings by account id
@@ -548,10 +570,10 @@ JD-TC-Update_Catalog_For_ShoppingCart-4
 
     Set Test Variable  ${HowSoon}    0
     Set Test Variable  ${HowFar}     20
-    ${startDate4}=  get_date
-    ${endDate4}=  add_date  45    
-    ${sTime4}=  add_time   0  10
-    ${eTime4}=  add_time   0  50
+    ${startDate4}=  db.get_date_by_timezone  ${tz}
+    ${endDate4}=  db.add_timezone_date  ${tz}  45    
+    ${sTime4}=  add_timezone_time  ${tz}   0  10
+    ${eTime4}=  add_timezone_time  ${tz}  0  50  
     ${terminator4}=  Create Dictionary  endDate=${endDate4}  noOfOccurance=${noOfOccurance}
     ${timeSlot4}=  Create Dictionary  sTime=${sTime4}   eTime=${eTime4}
     ${timeSlots4}=  Create List  ${timeSlot4}
@@ -559,7 +581,9 @@ JD-TC-Update_Catalog_For_ShoppingCart-4
     ${pickUp4}=  Create Dictionary  orderPickUp=${boolean[1]}   pickUpSchedule=${catalogSchedule4}   pickUpOtpVerification=${boolean[1]}   pickUpScheduledAllowed=${boolean[1]}   pickUpAsapAllowed=${boolean[1]}
     ${homeDelivery4}=  Create Dictionary  homeDelivery=${boolean[1]}   deliverySchedule=${catalogSchedule4}   deliveryOtpVerification=${boolean[1]}   deliveryRadius=10   scheduledHomeDeliveryAllowed=${boolean[1]}   asapHomeDeliveryAllowed=${boolean[1]}   deliveryCharge=${deliveryCharge2}
 
-    ${resp}=  Create Catalog For ShoppingCart   ${catalogName3}  ${catalogDesc}   ${catalogSchedule4}   ${orderType1}   ${paymentType}   ${Statuses_list1}   ${catalogItem}   ${minNumberItem}   ${maxNumberItem}    ${cancelationPolicy}   catalogStatus=${catalogStatus}   pickUp=${pickUp4}   homeDelivery=${homeDelivery4}   showPrice=${boolean[1]}   advanceAmount=${advanceAmount}   showContactInfo=${boolean[1]}   howFar=${HowFar}   howSoon=${HowSoon}   preInfo=${preInfo}   postInfo=${postInfo}    
+    ${catalogName}=   FakerLibrary.name 
+
+    ${resp}=  Create Catalog For ShoppingCart   ${catalogName}  ${catalogDesc}   ${catalogSchedule4}   ${orderType1}   ${paymentType}   ${Statuses_list1}   ${catalogItem}   ${minNumberItem}   ${maxNumberItem}    ${cancelationPolicy}   catalogStatus=${catalogStatus}   pickUp=${pickUp4}   homeDelivery=${homeDelivery4}   showPrice=${boolean[1]}   advanceAmount=${advanceAmount}   showContactInfo=${boolean[1]}   howFar=${HowFar}   howSoon=${HowSoon}   preInfo=${preInfo}   postInfo=${postInfo}    
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${CatalogId3}   ${resp.json()}
@@ -575,7 +599,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date  10
+    ${DAY1}=  db.add_timezone_date  ${tz}  10  
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -588,7 +612,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-4
     ${address}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
     Set Test Variable  ${address}
     
-    # ${sTime1}=  add_time  0  15
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
     # ${delta}=  FakerLibrary.Random Int  min=10  max=90
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
@@ -596,8 +620,8 @@ JD-TC-Update_Catalog_For_ShoppingCart-4
     Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${EMPTY_List}=  Create List
     Set Test Variable  ${EMPTY_List}
-    ${O_sTime1}=  add_time   0  20
-    ${O_eTime1}=  add_time   0  30
+    ${O_sTime1}=  add_timezone_time  ${tz}  0  20  
+    ${O_eTime1}=  add_timezone_time  ${tz}  0  30  
 
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME20}   ${PASSWORD}
     Log   ${resp.json()}
@@ -615,7 +639,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -623,10 +647,10 @@ JD-TC-Update_Catalog_For_ShoppingCart-4
     ${far_update}=  Random Int  min=${soon+1}   max=8
   
 
-    ${startDate5}=  add_date  1
-    ${endDate5}=  add_date  45    
-    ${sTime5}=  add_time   0  10
-    ${eTime5}=  add_time   0  50
+    ${startDate5}=  db.add_timezone_date  ${tz}  1  
+    ${endDate5}=  db.add_timezone_date  ${tz}  45    
+    ${sTime5}=  add_timezone_time  ${tz}   0  10
+    ${eTime5}=  add_timezone_time  ${tz}  0  50  
     ${terminator5}=  Create Dictionary  endDate=${endDate5}  noOfOccurance=${noOfOccurance}
     ${timeSlot5}=  Create Dictionary  sTime=${sTime4}   eTime=${eTime4}
     ${timeSlots5}=  Create List  ${timeSlot5}
@@ -653,7 +677,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -673,7 +697,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-4
 
 JD-TC-Update_Catalog_For_ShoppingCart-5
     [Documentation]  Provider Update catalog without change in Item_List
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName6}=   FakerLibrary.word 
@@ -691,7 +715,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-5
     Set Suite Variable  ${Cid3_item_id2}  ${resp.json()['catalogItem'][1]['id']} 
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -710,7 +734,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-5
 
 JD-TC-Update_Catalog_For_ShoppingCart-UH1
     [Documentation]  Provider Update catalog without change in Item_List
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName7}=   FakerLibrary.name 
@@ -741,7 +765,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-UH1
 
 JD-TC-Update_Catalog_For_ShoppingCart-UH2
     [Documentation]  Provider Update catalog using already existing items
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Order Catalog    ${CatalogId7}  
@@ -765,7 +789,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-UH2
 
 JD-TC-Update_Catalog_For_ShoppingCart-UH3
     [Documentation]  Provider Create catalog for ShoppingCart and Another provider try to Update catalog
-    ${resp}=  ProviderLogin  ${PUSERNAME148}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME148}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -797,7 +821,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-UH5
 
 JD-TC-Update_Catalog_For_ShoppingCart-6
     [Documentation]  Provider Create catalog for ShoppingCart and Update order_type as SHOPPING_LIST
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Get Order Catalog    ${CatalogId1}  
@@ -820,7 +844,7 @@ JD-TC-Update_Catalog_For_ShoppingCart-6
 
 JD-TC-Update_Catalog_For_ShoppingCart-7
     [Documentation]  Update order_type from SHOPPING_LIST to SHOPPING_CART 
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     # ${resp}=  Update Catalog For ShoppingList   ${CatalogId1}   ${catalogName1}  ${EMPTY}   ${catalogSchedule2}   ${orderType2}   ${paymentType}   ${Statuses_list2}   ${minNumberItem}   ${maxNumberItem}    ${cancelationPolicy2}   pickUp=${pickUp2}   homeDelivery=${homeDelivery2}   showPrice=${boolean[1]}   advanceAmount=${advanceAmount2}   showContactInfo=${boolean[1]}   howFar=${far}   howSoon=${soon}   preInfo=${preInfo2}   postInfo=${postInfo2}      

@@ -28,7 +28,7 @@ JD-TC-DeleteItemGroupByIdforUser-1
 
     [Documentation]  Create Item Group for an existing provider and get the details then delete item group.
 
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -76,7 +76,7 @@ JD-TC-DeleteItemGroupByIdforUser-2
 
     [Documentation]  Create multiple Item Group for an existing provider then delete one group.
 
-    ${resp}=  Provider Login  ${MUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -148,7 +148,7 @@ JD-TC-DeleteItemGroupByIdforUser-3
 
     [Documentation]  create an item group by user , then delete it.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -229,7 +229,7 @@ JD-TC-DeleteItemGroupByIdforUser-3
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -261,7 +261,7 @@ JD-TC-DeleteItemGroupByIdforUser-4
 
     [Documentation]  create an item group by user (admin), then delete it.
 
-    ${resp}=  Provider Login  ${MUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME14}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -342,7 +342,7 @@ JD-TC-DeleteItemGroupByIdforUser-4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -373,7 +373,7 @@ JD-TC-DeleteItemGroupByIdforUser-5
 
     [Documentation]  create an item group by a user , then try to delete it by account level.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -462,7 +462,7 @@ JD-TC-DeleteItemGroupByIdforUser-5
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -483,7 +483,7 @@ JD-TC-DeleteItemGroupByIdforUser-5
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -500,7 +500,7 @@ JD-TC-DeleteItemGroupByIdforUser-UH1
 
     [Documentation]  Get Item Group with invalid item group id.
 
-    ${resp}=  Provider Login  ${MUSERNAME27}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -537,7 +537,7 @@ JD-TC-DeleteItemGroupByIdforUser-UH4
 
     [Documentation]  create an item group by a user , then try to delete it by another user.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -626,7 +626,7 @@ JD-TC-DeleteItemGroupByIdforUser-UH4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -654,7 +654,7 @@ JD-TC-DeleteItemGroupByIdforUser-UH4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

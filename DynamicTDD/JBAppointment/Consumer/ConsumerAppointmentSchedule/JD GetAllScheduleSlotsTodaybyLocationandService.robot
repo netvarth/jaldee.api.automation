@@ -26,31 +26,33 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-1
     ${providers}=   Get File    /ebs/TDD/varfiles/providers.py
     ${pro_list}=   Split to lines  ${providers}
     ${length}=  Get Length   ${pro_list}
+    ${providers1}=   Create List
 
     FOR  ${pro}  IN  @{pro_list}
         ${pro}=  Remove String    ${pro}    ${SPACE}
         ${pro} 	${pro_num}=   Split String    ${pro}  =
-        ${resp}=  Provider Login  ${pro_num}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${pro_num}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}    200
         ${licid}  ${licname}=  get_highest_license_pkg
         ${resp3}=  Get Business Profile
-        Log   ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+        Log   ${resp3.json()}
+        Should Be Equal As Strings  ${resp3.status_code}  200
         IF  '${resp3.json()['licensePkgID']}' == '${licid}'   
-            Append To List   ${providers}   ${pro_num}
+            Append To List   ${providers1}   ${pro_num}
         END
     END
-
-    ${pro_len}=  Get Length   ${providers}
+    
+    Log   ${providers1} 
+    ${pro_len}=  Get Length   ${providers1}
+    ${pro_len}=    Evaluate  ${pro_len}-1
     ${index}=   Random Int  min=0  max=${pro_len}
-    Set Suite Variable  ${ProviderPH}  ${providers[${index}]}
+    Set Suite Variable  ${ProviderPH}  ${providers1[${index}]}
 
-    ${resp}=  Provider Login  ${ProviderPH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ProviderPH}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    
-    # ${resp}=  Provider Login  ${ProviderPH}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${ProviderPH}  ${PASSWORD}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get License UsageInfo 
@@ -60,6 +62,9 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-1
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    clear_appt_schedule   ${ProviderPH}
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -88,10 +93,10 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${l_id}   ${resp.json()[0]['id']}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7 
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -145,13 +150,13 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-1
 JD-TC-GetScheduleSlotsTodayByLocationandService-2
     [Documentation]  Get slots today when provider has 2 schedules with same location and service
 
-    ${resp}=  Provider Login  ${ProviderPH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ProviderPH}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7 
-    ${sTime1}=  add_time  3  30
+    ${sTime1}=  add_timezone_time  ${tz}  3  30  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.name
@@ -207,15 +212,15 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-2
 JD-TC-GetScheduleSlotsTodayByLocationandService-3
     [Documentation]  Get slots today when provider has 2 schedules with different location and same service
 
-    ${resp}=  Provider Login  ${ProviderPH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ProviderPH}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${l_id1}=  Create Sample Location
     Set Suite Variable  ${l_id1}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7 
-    ${sTime1}=  add_time  3  30
+    ${sTime1}=  add_timezone_time  ${tz}  3  30  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.name
@@ -275,17 +280,17 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-3
 JD-TC-GetScheduleSlotsTodayByLocationandService-4
     [Documentation]  Get slots today when provider has multiple schedules with same location and different services
 
-    ${resp}=  Provider Login  ${ProviderPH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ProviderPH}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${SERVICE1}=   FakerLibrary.name
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id1}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7 
-    ${sTime1}=  add_time  3  30
+    ${sTime1}=  add_timezone_time  ${tz}  3  30  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.name
@@ -337,7 +342,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-4
 JD-TC-GetScheduleSlotsTodayByLocationandService-5
     [Documentation]  Get slots today when provider has single schedule with different services
 
-    ${resp}=  Provider Login  ${ProviderPH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ProviderPH}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${l_id2}=  Create Sample Location
@@ -349,10 +354,10 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-5
     ${s_id3}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable   ${s_id3}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7 
-    ${sTime1}=  add_time  3  30
+    ${sTime1}=  add_timezone_time  ${tz}  3  30  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable   ${delta}
     ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -407,7 +412,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-5
 JD-TC-GetScheduleSlotsTodayByLocationandService-UH1
     [Documentation]  Get slots today when provider has schedule disabled
 
-    ${resp}=  Provider Login  ${ProviderPH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ProviderPH}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id4}
@@ -454,7 +459,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH1
 JD-TC-GetScheduleSlotsTodayByLocationandService-UH2
     [Documentation]  Get slots today when provider has service disabled
 
-    ${resp}=  Provider Login  ${ProviderPH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ProviderPH}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${RESP}=  Disable service  ${s_id2} 
@@ -490,7 +495,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH2
 JD-TC-GetScheduleSlotsTodayByLocationandService-UH3
     [Documentation]  Get slots today when provider has location disabled
 
-    ${resp}=  Provider Login  ${ProviderPH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ProviderPH}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Disable Location  ${l_id2}   
@@ -527,7 +532,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH3
 JD-TC-GetScheduleSlotsTodayByLocationandService-UH4
     [Documentation]  Get slots today when provider doesn't have a schedule for today
 
-    ${resp}=  Provider Login  ${ProviderPH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ProviderPH}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${l_id3}=  Create Sample Location
@@ -537,10 +542,10 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH4
     Set Suite Variable   ${s_id4}
  
 
-    ${DAY1}=  add_date  1
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.add_timezone_date  ${tz}  1  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7 
-    ${sTime1}=  add_time  3  30
+    ${sTime1}=  add_timezone_time  ${tz}  3  30  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.name
@@ -596,13 +601,13 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH4
 JD-TC-GetScheduleSlotsTodayByLocationandService-UH5
     [Documentation]  Get slots today when provider has a holiday
 
-    ${resp}=  Provider Login  ${ProviderPH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ProviderPH}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7 
-    ${sTime1}=  add_time  3  30
+    ${sTime1}=  add_timezone_time  ${tz}  3  30  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.name
@@ -695,7 +700,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH7
 JD-TC-GetScheduleSlotsTodayByLocationandService-UH8
     [Documentation]  Get slots today with location id of a different provider
 
-    ${resp}=  Provider Login  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${l_id4}=  Create Sample Location
@@ -715,7 +720,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH8
 JD-TC-GetScheduleSlotsTodayByLocationandService-UH9
     [Documentation]  Get slots today with service id of a different provider
 
-    ${resp}=  Provider Login  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     # ${l_id4}=  Create Sample Location
@@ -735,7 +740,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH9
 JD-TC-GetScheduleSlotsTodayByLocationandService-UH10
     [Documentation]  Get slots today with Provider login 
 
-    ${resp}=  Provider Login  ${ProviderPH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ProviderPH}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get All Schedule Slots Today By Location and Service    ${account_id}    ${l_id3}     ${s_id5}
@@ -754,7 +759,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH11
 JD-TC-GetScheduleSlotsTodayByLocationandService-6
     [Documentation]  Get slots today when service has consumer parallel serving set
 
-    ${resp}=  Provider Login  ${ProviderPH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ProviderPH}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${l_id4}=  Create Sample Location
@@ -764,10 +769,10 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-6
     Set Suite Variable   ${s_id5}
  
 
-    ${DAY1}=  get_date  
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7 
-    ${sTime1}=  add_time  3  30
+    ${sTime1}=  add_timezone_time  ${tz}  3  30  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.name
@@ -820,7 +825,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-6
 JD-TC-GetScheduleSlotsTodayByLocationandService-7
     [Documentation]  Get slots today when service has lead time set
 
-    ${resp}=  Provider Login  ${ProviderPH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ProviderPH}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${l_id5}=  Create Sample Location
@@ -838,10 +843,10 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-7
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id6}  ${resp.json()}
 
-    ${DAY1}=  get_date  
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7 
-    ${sTime1}=  add_time  3  30
+    ${sTime1}=  add_timezone_time  ${tz}  3  30  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.name
@@ -879,7 +884,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-7
 JD-TC-GetScheduleSlotsTodayByLocationandService-8
     [Documentation]  Get slots today when service has channel based label set
 
-    ${resp}=  Provider Login  ${ProviderPH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ProviderPH}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -929,7 +934,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${ProviderPH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ProviderPH}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Labels
@@ -973,10 +978,10 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-8
     Should Be Equal As Strings  ${resp.json()['channelRestricted']}      ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['leadTime']}               0
 
-    ${DAY1}=  get_date  
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7 
-    ${sTime1}=  add_time  3  30
+    ${sTime1}=  add_timezone_time  ${tz}  3  30  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.name

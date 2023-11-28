@@ -37,7 +37,7 @@ JD-TC-GetAppointmentServicesByLocation-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_R}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_R}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_R}${\n}
@@ -52,18 +52,22 @@ JD-TC-GetAppointmentServicesByLocation-1
     clear_location  ${PUSERNAME_R}
     ${pid}=  get_acc_id  ${PUSERNAME_R}
 
-    ${DAY}=  add_date  0   
+    ${DAY}=  db.get_date_by_timezone  ${tz}   
     Set Suite Variable  ${DAY} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
 
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time  0  30
-    ${city}=   fakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  30  
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -72,13 +76,11 @@ JD-TC-GetAppointmentServicesByLocation-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()}
     
-    ${sTime1}=  add_time  1  30
-    ${eTime1}=  add_time  3  00
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
+    ${eTime1}=  add_timezone_time  ${tz}  3  00  
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -87,8 +89,8 @@ JD-TC-GetAppointmentServicesByLocation-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l2}  ${resp.json()}
 
-    ${sTime1}=  add_time  0  30
-    ${eTime1}=  add_time  1  00
+    ${sTime1}=  add_timezone_time  ${tz}  0  30  
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${city}=   FakerLibrary.word
     ${latti}=  get_latitude
     ${longi}=  get_longitude
@@ -146,10 +148,10 @@ JD-TC-GetAppointmentServicesByLocation-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s4}  ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
-    ${sTime1}=  add_time  0  15
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=30
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -167,10 +169,10 @@ JD-TC-GetAppointmentServicesByLocation-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
-    ${sTime1}=  add_time  0  35
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${sTime1}=  add_timezone_time  ${tz}  0  35  
     ${delta}=  FakerLibrary.Random Int  min=10  max=25
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -198,7 +200,7 @@ JD-TC-GetAppointmentServicesByLocation-2
 
     [Documentation]  provider get Service By another LocationId of the same provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME_R}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -212,7 +214,7 @@ JD-TC-GetAppointmentServicesByLocation-3
 
     [Documentation]  provider get Service By LocationId which is not added in the appointment schedule.
 
-    ${resp}=  Provider Login  ${PUSERNAME_R}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -234,7 +236,7 @@ JD-TC-GetAppointmentServicesByLocation-4
 
     [Documentation]  provider get Service By LocationId, When  One Service is disabled.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_R}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${RESP}=  Disable service  ${p1_s1} 
@@ -254,7 +256,7 @@ JD-TC-GetAppointmentServicesByLocation-5
 
     [Documentation]  provider get Service By LocationId, When  All Services in this location are disabled
     
-    ${resp}=  ProviderLogin  ${PUSERNAME_R}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${RESP}=  Disable service  ${p1_s1} 
@@ -278,7 +280,7 @@ JD-TC-GetAppointmentServicesByLocation-6
 
     [Documentation]  Another provider get Service By LocationId, When Services are disabled
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_R}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${RESP}=  Disable service  ${p1_s2} 
@@ -302,7 +304,7 @@ JD-TC-GetAppointmentServicesByLocation-7
 
     [Documentation]  provider get Service By LocationId, which doesn't contain any service. 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_R}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Appoinment Service By Location   ${p1_l3}
@@ -323,7 +325,7 @@ JD-TC-GetAppointmentServicesByLocation-UH2
 
     [Documentation]  Trying to provider get Service By LocationId, with an invalid location.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME_R}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Appoinment Service By Location   0
@@ -335,7 +337,7 @@ JD-TC-GetAppointmentServicesByLocation-UH3
 
     [Documentation]  Trying to provider get Service By LocationId, When Location is disabled 
     
-    ${resp}=  ProviderLogin  ${PUSERNAME_R}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Disable Location  ${p1_l2} 

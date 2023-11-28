@@ -15,6 +15,11 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
+
+*** Variables ***
+${tz}   Asia/Kolkata
+
+
 *** Test Cases ***
 
 JD-TC-IssueJcashToConsumer-1
@@ -40,11 +45,11 @@ JD-TC-IssueJcashToConsumer-1
     ${global_max_limit}=  Convert To Number  ${resp.content}  1
     Set Suite Variable   ${global_max_limit}
     
-    ${start_date}=  get_date 
+    ${start_date}=  db.get_date_by_timezone  ${tz} 
     Set Suite Variable   ${start_date}
     ${name}=  FakerLibrary.name
     Set Suite Variable   ${name}  
-    ${end_date}=  add_date   12  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${maxSpendLimit}=  Random Int  min=100   max=150 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
     ${max_limit}=   Set Variable If  ${maxSpendLimit} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit}
@@ -126,7 +131,7 @@ JD-TC-IssueJcashToConsumer-2
     
     ${name1}=  FakerLibrary.name
     Set Suite Variable   ${name1}  
-    ${end_date}=  add_date   11  
+    ${end_date}=  db.add_timezone_date  ${tz}  11    
     ${maxSpendLimit}=  Random Int  min=100   max=150 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
     ${max_limit}=   Set Variable If  ${maxSpendLimit} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit}
@@ -232,7 +237,7 @@ JD-TC-IssueJcashToConsumer-3
     
     ${name2}=  FakerLibrary.name
     Set Suite Variable   ${name2}  
-    ${end_date}=  add_date   12  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${maxSpendLimit}=  Random Int  min=100   max=150 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
     ${max_limit}=   Set Variable If  ${maxSpendLimit} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit}
@@ -268,7 +273,7 @@ JD-TC-IssueJcashToConsumer-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${end_date}=  add_date   12  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${maxSpendLimit}=  Random Int  min=30   max=150 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
     ${max_limit}=   Set Variable If  ${maxSpendLimit} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit}
@@ -297,7 +302,7 @@ JD-TC-IssueJcashToConsumer-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${end_date}=  add_date   12  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
     ${max_limit}=   Set Variable If  ${maxSpendLimit} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit}
@@ -344,11 +349,11 @@ JD-TC-IssueJcashToConsumer-6
     ${global_max_limit}=  Convert To Number  ${resp.content}  1
     Set Suite Variable   ${global_max_limit}
     
-    ${start_date}=  get_date 
+    ${start_date}=  db.get_date_by_timezone  ${tz} 
     Set Suite Variable   ${start_date}
     ${name}=  FakerLibrary.name
     Set Suite Variable   ${name}  
-    ${end_date}=  add_date   12  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${maxSpendLimit}=  Random Int  min=30   max=150 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
     ${max_limit}=   Set Variable If  ${maxSpendLimit} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit}
@@ -426,7 +431,7 @@ JD-TC-IssueJcashToConsumer-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${name1}=  FakerLibrary.name
-    ${end_date}=  add_date   12  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${maxSpendLimit}=  Random Int  min=30   max=150 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
     ${max_limit}=   Set Variable If  ${maxSpendLimit} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit}
@@ -451,7 +456,7 @@ JD-TC-IssueJcashToConsumer-UH2
     
     ${name}=  FakerLibrary.name
     Set Suite Variable   ${name}  
-    ${end_date}=  add_date   12  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${maxSpendLimit}=  Random Int  min=30   max=150 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
     ${max_limit}=   Set Variable If  ${maxSpendLimit} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit}
@@ -476,7 +481,7 @@ JD-TC-IssueJcashToConsumer-UH3
     
     ${name4}=  FakerLibrary.name
     Set Suite Variable   ${name4}  
-    ${end_date}=  subtract_date   2  
+    ${end_date}=  db.subtract_timezone_date  ${tz}    2  
     ${maxSpendLimit}=  Random Int  min=30   max=150 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
     ${max_limit}=   Set Variable If  ${maxSpendLimit} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit}
@@ -507,7 +512,7 @@ JD-TC-IssueJcashToConsumer-UH4
  
     ${name6}=  FakerLibrary.name
     Set Suite Variable   ${name6}  
-    ${end_date}=  add_date   12  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${maxSpendLimit}=  Random Int  min=100  max=150 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
     ${max_limit}=   Set Variable If  ${maxSpendLimit} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit}
@@ -526,7 +531,7 @@ JD-TC-IssueJcashToConsumer-UH5
     [Documentation]   Issue a jaldee cash to a consumer without login.  
     
     ${name1}=  FakerLibrary.name
-    ${end_date}=  add_date   12  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${maxSpendLimit}=  Random Int  min=100   max=150 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
     ${max_limit}=   Set Variable If  ${maxSpendLimit} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit}
@@ -548,7 +553,7 @@ JD-TC-IssueJcashToConsumer-UH6
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${name1}=  FakerLibrary.name 
-    ${end_date}=  add_date   12  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${maxSpendLimit}=  Random Int  min=100   max=150 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
     ${max_limit}=   Set Variable If  ${maxSpendLimit} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit}
@@ -565,12 +570,12 @@ JD-TC-IssueJcashToConsumer-UH7
 
     [Documentation]    Get jaldee cash offer stat count today by provider login.  
     
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${name1}=  FakerLibrary.name  
-    ${end_date}=  add_date   12  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${maxSpendLimit}=  Random Int  min=100   max=150 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
     ${max_limit}=   Set Variable If  ${maxSpendLimit} > ${global_max_limit}   ${global_max_limit}   ${maxSpendLimit}

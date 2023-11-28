@@ -32,6 +32,11 @@ JD-TC-DonationPayment-1
         ${resp}=   Billable
         ${resp}=   Create Sample Location
         Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
         ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -56,7 +61,7 @@ JD-TC-DonationPayment-1
 
         ${con_id}=  get_id  ${CUSERNAME8}
         Set Suite Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
         ${don_amt}=   Random Int   min=1000   max=4000
         ${mod}=  Evaluate  ${don_amt}%${multiples[0]}
@@ -89,7 +94,7 @@ JD-TC-DonationPayment-1
 
         Log  ${PUSERNAME}
 
-        ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -133,7 +138,7 @@ JD-TC-DonationPayment-1
 
 JD-TC-DonationPayment-UH1
         [Documentation]  Provider trying to accept payment of donation amount
-        ${resp}=  Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_PH}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200  
         ${resp}=  Accept Payment  ${don_id}  ${payment_modes[0]}  ${don_amt}  
@@ -151,9 +156,12 @@ Billable
      
     FOR   ${a}  IN RANGE  ${start}   ${length}
             
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Suite Variable  ${PUSERNAME_PH}  ${resp.json()['primaryPhoneNumber']}
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Suite Variable  ${PUSERNAME_PH}  ${decrypted_data['primaryPhoneNumber']}
+        # Set Suite Variable  ${PUSERNAME_PH}  ${resp.json()['primaryPhoneNumber']}
         clear_location   ${PUSERNAME${a}}
         clear_service    ${PUSERNAME${a}}
         ${acc_id}=  get_acc_id  ${PUSERNAME${a}}

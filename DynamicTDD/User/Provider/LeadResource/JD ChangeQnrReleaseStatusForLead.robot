@@ -119,13 +119,14 @@ JD-TC-ChangeQnrReleaseStatusForLead-1
     Log  ${unique_lnames}
     Set Suite Variable   ${unique_lnames}
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 # *** comment ***
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=  categorytype  ${account_id}
@@ -146,8 +147,13 @@ JD-TC-ChangeQnrReleaseStatusForLead-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  Provider Logout
@@ -162,7 +168,7 @@ JD-TC-ChangeQnrReleaseStatusForLead-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -199,12 +205,14 @@ JD-TC-ChangeQnrReleaseStatusForLead-1
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -239,7 +247,7 @@ JD-TC-ChangeQnrReleaseStatusForLead-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -311,7 +319,7 @@ JD-TC-ChangeQnrReleaseStatusForLead-1
 JD-TC-ChangeQnrReleaseStatusForLead-UH1
     [Documentation]  change questinare release status for a canceled Lead.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -321,6 +329,7 @@ JD-TC-ChangeQnrReleaseStatusForLead-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${locId}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  categorytype  ${p_id}
     ${resp}=  tasktype      ${p_id}

@@ -36,7 +36,7 @@ JD-TC-GetBillFromConsumer-1
     clear_queue      ${PUSERNAME110}
     clear_customer   ${PUSERNAME110}
 
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -80,8 +80,8 @@ JD-TC-GetBillFromConsumer-1
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
     
     ${min_pre1}=   Random Int   min=50   max=100
@@ -104,7 +104,7 @@ JD-TC-GetBillFromConsumer-1
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
@@ -210,7 +210,7 @@ JD-TC-GetBillFromConsumer-1
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${DAY2}=  get_date
+    ${DAY2}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${account_id1}  ${ser_id1}  ${sch_id1}  ${DAY2}  ${cnote}   ${apptfor}
     Log  ${resp.content}
@@ -238,7 +238,7 @@ JD-TC-GetBillFromConsumer-1
 
     change_system_date  7
 
-    ${resp}=  Provider Login  ${PUSERNAME110}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME110}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -263,7 +263,7 @@ JD-TC-GetBillFromConsumer-2
     clear_queue      ${PUSERNAME111}
     clear_customer   ${PUSERNAME111}
 
-    ${resp}=  Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -307,8 +307,8 @@ JD-TC-GetBillFromConsumer-2
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
     
     ${min_pre1}=   Random Int   min=50   max=100
@@ -331,7 +331,7 @@ JD-TC-GetBillFromConsumer-2
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
@@ -374,8 +374,8 @@ JD-TC-GetBillFromConsumer-2
 
     change_system_date  7
 
-    ${day3}=   get_date
-    ${resp}=  Provider Login  ${PUSERNAME111}  ${PASSWORD}
+    ${day3}=   db.get_date_by_timezone  ${tz}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -393,7 +393,7 @@ JD-TC-GetBillFromConsumer-3
     clear_queue      ${PUSERNAME151}
     clear_customer   ${PUSERNAME151}
 
-    ${resp}=  Provider Login  ${PUSERNAME151}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -437,7 +437,7 @@ JD-TC-GetBillFromConsumer-3
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
     END
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     
     ${min_pre1}=   Random Int   min=50   max=100
@@ -458,8 +458,8 @@ JD-TC-GetBillFromConsumer-3
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
     ${parallel}=   Random Int  min=1   max=1
-    ${sTime}=  add_time  2   00
-    ${eTime}=  add_time   2   15
+    ${sTime}=  add_timezone_time  ${tz}  2  00  
+    ${eTime}=  add_timezone_time  ${tz}  2  15  
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${locId1}  ${ser_id1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -471,10 +471,10 @@ JD-TC-GetBillFromConsumer-3
     ${pc_amount}=  Convert To Number  ${pc_amount}  1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=90   max=100
     ${max_disc_val}=   Random Int   min=90  max=100
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -498,7 +498,7 @@ JD-TC-GetBillFromConsumer-3
 
     ${consid}=  get_id  ${CUSERNAME10}
     
-    ${DAY3}=   add_date  1
+    ${DAY3}=   db.add_timezone_date  ${tz}  1  
     ${msg}=  FakerLibrary.word
     ${coupons}=  Create List  ${cupn_code}  
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${account_id1}  ${que_id1}  ${DAY3}  ${ser_id1}  ${msg}  ${bool[0]}  ${coupons}  ${self}

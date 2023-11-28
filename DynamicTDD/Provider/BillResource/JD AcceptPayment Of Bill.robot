@@ -36,7 +36,7 @@ JD-TC-Accept payment of bill -1
     ${resp}=  Enable Tax
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME166}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME166}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -49,7 +49,7 @@ JD-TC-Accept payment of bill -1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${notifytype}    Random Element     ['none','pushMsg','email']
     ${notify}    Random Element     ['True','False'] 
@@ -70,9 +70,13 @@ JD-TC-Accept payment of bill -1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${sTime}=  add_time  1  30
-    ${eTime}=  add_time   3  00
+    ${sTime}=  add_timezone_time  ${tz}  1  30  
+    ${eTime}=  add_timezone_time  ${tz}  3  00  
     ${queue1}=    FakerLibrary.name
     Set Suite Variable    ${queue1}
     ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  100  ${lid}  ${sid1}  ${sid2}  ${sid3}
@@ -89,7 +93,6 @@ JD-TC-Accept payment of bill -1
 
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${qid1}  ${DAY1}  hi  True  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Bill By UUId  ${wid}
@@ -111,12 +114,11 @@ JD-TC-Accept payment of bill -1
 JD-TC-Accept payment of bill -2    
 
     [Documentation]   payment for Bill multiple time
-    ${resp}=  ProviderLogin   ${PUSERNAME_PH}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_PH}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Add To Waitlist  ${cid}  ${sid2}  ${qid1}  ${DAY1}  hi  True  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Bill By UUId  ${wid}
@@ -152,12 +154,11 @@ JD-TC-Accept payment of bill -2
 JD-TC-Accept payment of bill -3
 
     [Documentation]  self pay
-    ${resp}=  ProviderLogin   ${PUSERNAME_PH}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_PH}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Add To Waitlist  ${cid}  ${sid3}  ${qid1}  ${DAY1}  hi  True  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Bill By UUId  ${wid}
@@ -175,7 +176,7 @@ JD-TC-Accept payment of bill -3
 JD-TC-Accept payment of bill -UH1
 
     [Documentation]  payment  amount greater than bill amount
-    ${resp}=  ProviderLogin   ${PUSERNAME_PH}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_PH}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME6}
     # Log   ${resp.json()}
@@ -189,7 +190,6 @@ JD-TC-Accept payment of bill -UH1
     ${resp}=  Add To Waitlist  ${cid}  ${sid3}  ${qid1}  ${DAY1}  hi  True  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Bill By UUId  ${wid}
@@ -202,7 +202,7 @@ JD-TC-Accept payment of bill -UH1
 JD-TC-Accept payment of bill -UH2
     
     [Documentation]   payment for Bill multiple time
-    ${resp}=  ProviderLogin   ${PUSERNAME_PH}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_PH}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME9}
     # Log   ${resp.json()}
@@ -216,7 +216,6 @@ JD-TC-Accept payment of bill -UH2
     ${resp}=  Add To Waitlist  ${cid}  ${sid3}  ${qid1}  ${DAY1}  hi  True  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Bill By UUId  ${wid}
@@ -255,7 +254,7 @@ JD-TC-Accept payment of bill -UH5
 JD-TC-Accept payment of bill -UH6
 
     [Documentation]   payment for already settled Bill 
-    ${resp}=  ProviderLogin   ${PUSERNAME_PH}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_PH}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME7}
     # Log   ${resp.json()}
@@ -268,7 +267,6 @@ JD-TC-Accept payment of bill -UH6
 
     ${resp}=  Add To Waitlist  ${cid}  ${s_id3}  ${qid1}  ${DAY1}  hi  True  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Bill By UUId  ${wid}
@@ -285,18 +283,17 @@ JD-TC-Accept payment of bill -UH6
 JD-TC-Accept payment of bill -UH7
 
     [Documentation]  Provider accept payment for future
-    ${resp}=  ProviderLogin   ${PUSERNAME_PH}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_PH}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME9}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()[0]['id']}
     
-    ${DAY2}=  add_date  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  2  
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${qid1}  ${DAY2}  hi  True  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Bill By UUId  ${wid}
@@ -320,7 +317,7 @@ JD-TC-Accept payment of bill -UH7
 JD-TC-Accept payment of bill -UH8
 
     [Documentation]   provider pays prepay amount
-    ${resp}=  Provider Login  ${PUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_queue      ${PUSERNAME25}
@@ -328,7 +325,7 @@ JD-TC-Accept payment of bill -UH8
     clear_service    ${PUSERNAME25}
     clear waitlist   ${PUSERNAME25}
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     #${resp}=   Disable Search Data
     #Should Be Equal As Strings    ${resp.status_code}    200
     #clear_queue  ${lic_1_0_PUSERNAME8}
@@ -341,8 +338,8 @@ JD-TC-Accept payment of bill -UH8
     ${resp}=   Create Sample Location
     Set Suite Variable  ${lid}  ${resp}
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${sTime}=  add_time  1  30
-    ${eTime}=  add_time   4  00
+    ${sTime}=  add_timezone_time  ${tz}  1  30  
+    ${eTime}=  add_timezone_time  ${tz}  4  00  
     ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  100  ${lid}    ${sid4}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid1}  ${resp.json()}
@@ -367,7 +364,7 @@ JD-TC-Accept payment of bill -UH8
     sleep  02s
     ${resp}=  Consumer Logout       
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Provider Login    ${PUSERNAME25}    ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME25}    ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get Bill By UUId  ${wid1}
@@ -387,9 +384,12 @@ Billable
      
     FOR   ${a}  IN RANGE  ${start}   ${length}
             
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Suite Variable  ${PUSERNAME_PH}  ${resp.json()['primaryPhoneNumber']}
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Suite Variable  ${PUSERNAME_PH}  ${decrypted_data['primaryPhoneNumber']}
+        # Set Suite Variable  ${PUSERNAME_PH}  ${resp.json()['primaryPhoneNumber']}
         clear_location   ${PUSERNAME${a}}
         ${acc_id}=  get_acc_id  ${PUSERNAME${a}}
         Set Suite Variable   ${acc_id}

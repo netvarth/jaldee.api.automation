@@ -756,7 +756,7 @@ JD-TC-Update consumer number-UH6
 JD-TC-Update consumer number-5
     [Documentation]     consumer takes checkin and then consumer updates login id.
 
-    ${resp}=  Provider Login  ${PUSERNAME38}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -801,11 +801,16 @@ JD-TC-Update consumer number-5
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_queue   ${PUSERNAME38}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -936,7 +941,7 @@ JD-TC-Update consumer number-6
     Should Be Equal As Strings    ${resp.status_code}    200
     
     
-    ${resp}=  Provider Login  ${PUSERNAME38}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -981,11 +986,16 @@ JD-TC-Update consumer number-6
     ${s_id}=  Create Sample Service  ${SERVICE1}
     
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_queue   ${PUSERNAME38}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -1012,7 +1022,7 @@ JD-TC-Update consumer number-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
     Log  ${resp.content}

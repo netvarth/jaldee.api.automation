@@ -9,6 +9,9 @@ Resource          Keywords.robot
 Library	          Imageupload.py
 Library           FakerLibrary
 
+# *** Variables ***
+# @{emptylist}
+
 
 *** Keywords ***
 
@@ -177,7 +180,7 @@ Update Business Profile with location only
 
 
 Business Profile with schedule
-    [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}
+    [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}   &{kwargs}
     ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
     ${bs}=  Create List  ${bs}
     ${bs}=  Create Dictionary  timespec=${bs}
@@ -185,12 +188,15 @@ Business Profile with schedule
     ${ph_nos}=  Create List  ${ph1}  ${ph2}
     ${emails}=  Create List  ${email1}
     ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}  phoneNumbers=${ph_nos}  emails=${emails}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     [Return]  ${data}
 
 Update Business Profile with schedule
-    [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}
-    ${data}=  Business Profile with schedule  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}
+    [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
+    ${data}=  Business Profile with schedule  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
     [Return]  ${resp}
@@ -237,24 +243,20 @@ Update Domain And SubDomain
     [Return]  ${resp}    
 
 Create Location
-    [Arguments]  ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
+    [Arguments]  ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  &{kwargs}
     ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
     ${bs}=  Create List  ${bs}
     ${bs}=  Create Dictionary  timespec=${bs}
     ${data}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  pinCode=${pin}  address=${add}  parkingType=${pt}  open24hours=${oh}  bSchedule=${bs}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/locations  data=${data}  expected_status=any
     [Return]  ${resp} 
 
 Create Sample Location
-    ${parking_type}    Random Element  ${parkingType}
-    ${24hours}    Random Element  ${bool}
-    ${DAY}=  get_date
-	${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  30
-    ${eTime}=  add_time   0  45
-    ${url}=   FakerLibrary.url
     FOR   ${i}  IN RANGE   5
         ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
         ${check}=  Check Location Exists  ${city}
@@ -264,6 +266,15 @@ Create Sample Location
             Exit For Loop
         END
     END
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${parking_type}    Random Element  ${parkingType}
+    ${24hours}    Random Element  ${bool}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${DAY}=  get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  30  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${url}=   FakerLibrary.url
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking_type}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -466,14 +477,44 @@ Create Queue For User
 
    
 Create Sample Queue
+    
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${lid}=  Create Sample Location
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ELSE
+        Set Test Variable  ${lid}  ${resp.json()[0]['id']}
+        Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    END
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${SERVICE1}=    FakerLibrary.Word
+        ${s_id}=  Create Sample Service  ${SERVICE1}
+    ELSE
+        Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
+        ${SERVICE1}=  Set Variable  ${resp.json()[0]['name']}
+    END
+    
+
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY}=  get_date
-    ${Time}=  db.get_time
-    ${sTime}=  add_time  0  45
-    ${eTime}=  add_time   1  00
-    ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${lid}=  Create Sample Location 
+    # ${DAY}=  get_date
+    # ${Time}=  db.get_time_by_timezone   ${tz}
+    # ${sTime}=  add_time  0  45
+    # ${eTime}=  add_time   1  00
+    # ${SERVICE1}=    FakerLibrary.Word
+    # ${s_id}=  Create Sample Service  ${SERVICE1}
+    # ${lid}=  Create Sample Location 
+    ${DAY}=  get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  45  
+    ${eTime}=  add_timezone_time  ${tz}  2  00  
     ${queue1}=    FakerLibrary.Word
     ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  5  ${lid}  ${s_id}
     Log  ${resp.content}
@@ -484,12 +525,21 @@ Create Sample Queue
 
 
 Sample Queue 
-    [Arguments]  ${lid}   @{vargs}  
+    [Arguments]  ${lid}   @{vargs} 
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${Time}=  db.get_time
+    # ${DAY1}=  get_date
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10 
+    # ${Time}=  db.get_time_by_timezone   ${tz}
+    ${DAY1}=  get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10
     ${delta}=  FakerLibrary.Random Int  min=20  max=60
+    ${Time}=  db.get_time_by_timezone  ${tz}
     ${sTime}=  add_two   ${Time}  ${delta}
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -883,10 +933,10 @@ UpdateCustomer with email
     Check And Create YNW Session
     ${items}=  Get Dictionary items  ${kwargs}
     ${data}=  Create Dictionary  id=${c_id}  firstName=${firstname}  lastName=${lastname}  address=${address}  email=${yemail}  gender=${ygender}  dob=${ydob}  phoneNo=${primaryNo}  countryCode=${countryCode}  jaldeeId=${jid}
-    FOR  ${key}  ${value}  IN  @{items}
-       Set To Dictionary  ${data}   ${key}=${value}
-    END
     ${data}=  json.dumps  ${data}
+    FOR  ${key}  ${value}  IN  @{items}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
     ${resp}=  PUT On Session  ynw  /provider/customers  data=${data}  expected_status=any
     [Return]  ${resp}
 
@@ -1692,7 +1742,9 @@ Disable Waitlist
     [Return]  ${resp}
 
 Add To Waitlist
-    [Arguments]   ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}  @{fids}    &{kwargs}
+    [Arguments]   ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}  @{fids}  &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
     ${cid}=  Create Dictionary  id=${consid}
     ${sid}=  Create Dictionary  id=${service_id}
     ${qid}=  Create Dictionary  id=${qid}
@@ -1705,16 +1757,24 @@ Add To Waitlist
     END
     
     ${data}=    Create Dictionary    consumer=${cid}  service=${sid}  queue=${qid}  date=${date}  consumerNote=${consumerNote}  waitlistingFor=${fid}  ignorePrePayment=${ignorePrePayment}
+
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
+
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  provider/waitlist  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  provider/waitlist  params=${pro_params}  data=${data}  expected_status=any   headers=${headers}  
     [Return]  ${resp}
 
 Add To Waitlist with mode
-    [Arguments]   ${waitlistMode}  ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}   @{fids}
+    [Arguments]   ${waitlistMode}  ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}   @{fids}  &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
     ${cid}=  Create Dictionary  id=${consid}
     ${sid}=  Create Dictionary  id=${service_id}
     ${qid}=  Create Dictionary  id=${qid}
@@ -1725,14 +1785,21 @@ Add To Waitlist with mode
         ${ap}=  Create Dictionary  id=${fids[${index}]}
         Append To List  ${fid} 	${ap}
     END
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
+
     ${data}=    Create Dictionary    consumer=${cid}  service=${sid}  queue=${qid}  date=${date}  consumerNote=${consumerNote}  waitlistingFor=${fid}  ignorePrePayment=${ignorePrePayment}  waitlistMode=${waitlistMode}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  provider/waitlist  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  provider/waitlist  params=${pro_params}  data=${data}  expected_status=any  headers=${headers}
     [Return]  ${resp}
 
 Add To Waitlist with PhoneNo
-    [Arguments]   ${consid}  ${service_id}  ${qid}  ${date}  ${waitlistPhoneNumber}  ${country_code}  @{fids}
+    [Arguments]   ${consid}  ${service_id}  ${qid}  ${date}  ${waitlistPhoneNumber}  ${country_code}  @{fids}   &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
     ${cid}=  Create Dictionary  id=${consid}
     ${sid}=  Create Dictionary  id=${service_id}
     ${qid}=  Create Dictionary  id=${qid}
@@ -1743,14 +1810,22 @@ Add To Waitlist with PhoneNo
         ${ap}=  Create Dictionary  id=${fids[${index}]}
         Append To List  ${fid} 	${ap}
     END
+
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
+
     ${data}=    Create Dictionary    consumer=${cid}  service=${sid}  queue=${qid}  date=${date}  waitlistPhoneNumber=${waitlistPhoneNumber}  countryCode=${country_code}  waitlistingFor=${fid}  
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  provider/waitlist  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  provider/waitlist  params=${pro_params}  data=${data}  expected_status=any  headers=${headers}
     [Return]  ${resp}
 
 Add To Waitlist By User
     [Arguments]   ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}  ${user_id}  @{fids}    &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
     ${cid}=  Create Dictionary  id=${consid}
     ${sid}=  Create Dictionary  id=${service_id}
     ${qid}=  Create Dictionary  id=${qid}
@@ -1763,42 +1838,73 @@ Add To Waitlist By User
         Append To List  ${fid} 	${ap}
     END
     ${data}=    Create Dictionary    consumer=${cid}  service=${sid}  queue=${qid}  date=${date}  consumerNote=${consumerNote}  waitlistingFor=${fid}  ignorePrePayment=${ignorePrePayment}  provider=${uid}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
+
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  provider/waitlist  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  provider/waitlist  params=${pro_params}  data=${data}  expected_status=any  headers=${headers}
     [Return]  ${resp}
 
 Add To Waitlist Block
-    [Arguments]    ${qid}   ${service_id}  ${serviceType}   ${date}  ${consumerNote}   ${ignorePrePayment}  ${waitlistingFor}  
+    [Arguments]    ${qid}   ${service_id}  ${serviceType}   ${date}  ${consumerNote}   ${ignorePrePayment}  ${waitlistingFor}  &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
     ${qid}=  Create Dictionary  id=${qid}
     ${sid}=  Create Dictionary  id=${service_id}  serviceType=${serviceType}
     ${data}=    Create Dictionary   queue=${qid}   date=${date}   service=${sid}    consumerNote=${consumerNote}    waitlistingFor=${waitlistingFor}    ignorePrePayment=${ignorePrePayment}
     ${data}=  json.dumps  ${data}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  provider/waitlist/block  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  provider/waitlist/block  params=${pro_params}  data=${data}  expected_status=any  headers=${headers}
     [Return]  ${resp}
 
 Confirm Wailtlist Block
-    [Arguments]   ${cons_id}  ${wid}   ${waitlistingFor}
+    [Arguments]   ${cons_id}  ${wid}   ${waitlistingFor}  &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
     ${consumer}=  Create Dictionary  id=${cons_id} 
     ${data}=    Create Dictionary   waitlistingFor=${waitlistingFor}  ynwUuid=${wid}  consumer=${consumer}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  provider/waitlist/confirm  data=${data}  expected_status=any
+    ${resp}=  PUT On Session  ynw  provider/waitlist/confirm  params=${pro_params}  data=${data}  expected_status=any
     [Return]  ${resp}
 
 Waitlist Unblock
-    [Arguments]    ${wid}  
+    [Arguments]    ${wid}  &{kwargs} 
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  provider/waitlist/unblock/${wid}  expected_status=any
+    ${resp}=  PUT On Session  ynw  provider/waitlist/unblock/${wid}  params=${pro_params}  expected_status=any
     [Return]  ${resp}
 
 
 Provider Add To WL With Virtual Service
-    [Arguments]   ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}  ${waitlistMode}   ${virtualService}  @{fids}
+    [Arguments]   ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}  ${waitlistMode}   ${virtualService}  @{fids}  &{kwargs}
+    
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
+    
     ${cid}=  Create Dictionary  id=${consid}
     ${sid}=  Create Dictionary  id=${service_id}
     ${qid}=  Create Dictionary  id=${qid}
@@ -1812,64 +1918,110 @@ Provider Add To WL With Virtual Service
     ${data}=    Create Dictionary    consumer=${cid}  service=${sid}  queue=${qid}  date=${date}  consumerNote=${consumerNote}  waitlistingFor=${fid}  ignorePrePayment=${ignorePrePayment}    waitlistMode=${waitlistMode}  virtualService=${virtualService}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  provider/waitlist  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  provider/waitlist  params=${pro_params}  data=${data}  expected_status=any
     [Return]  ${resp}
 
 
 Get Waitlist By Id
-    [Arguments]  ${wid}
+    [Arguments]  ${wid}  &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/waitlist/${wid}  expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/waitlist/${wid}  params=${pro_params}  expected_status=any
     [Return]  ${resp}
 
 	     
 Get Waitlist Today
     [Arguments]    &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/today  params=${kwargs}  expected_status=any
     [Return]  ${resp}
 
 Get Waitlist Count Today
     [Arguments]    &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/today/count  params=${kwargs}  expected_status=any
     [Return]  ${resp}
 
 Get Waitlist Future
     [Arguments]     &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/future/  params=${kwargs}  expected_status=any
     [Return]  ${resp}
 
 Get Waitlist Count Future
     [Arguments]     &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/future/count  params=${kwargs}  expected_status=any
     [Return]  ${resp}
     
 Get Waitlist History
     [Arguments]    &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/history  params=${kwargs}  expected_status=any
     [Return]  ${resp}
 
 Get Waitlist Count History
     [Arguments]    &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/history/count  params=${kwargs}  expected_status=any
     [Return]  ${resp}    
-    
-Get Waitlisted Consumers
-    [Arguments]    &{kwargs}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /provider/waitlist/consumers  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
 
-Get Waitlisted Consumers Count
-    [Arguments]    &{kwargs}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /provider/waitlist/consumers/count  params=${kwargs}  expected_status=any
-    [Return]  ${resp}    
+# Get Waitlisted Consumers and Get Waitlisted Consumers Count Urls commented from rest side     
+# Respective suites commented and moved to tdd.
+# Get Waitlisted Consumers
+#     [Arguments]    &{kwargs}
+#     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+#     Log  ${kwargs}
+#     Set To Dictionary  ${pro_headers}   &{tzheaders}
+#     Set To Dictionary  ${kwargs}   &{locparam}
+#     Check And Create YNW Session
+#     ${resp}=    GET On Session    ynw  /provider/waitlist/consumers  params=${kwargs}  expected_status=any
+#     [Return]  ${resp}
+
+# Get Waitlisted Consumers Count
+#     [Arguments]    &{kwargs}
+#     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+#     Log  ${kwargs}
+#     Set To Dictionary  ${pro_headers}   &{tzheaders}
+#     Set To Dictionary  ${kwargs}   &{locparam}
+#     Check And Create YNW Session
+#     ${resp}=    GET On Session    ynw  /provider/waitlist/consumers/count  params=${kwargs}  expected_status=any
+#     [Return]  ${resp}    
 
 Waitlist Action
     [Arguments]  ${action}  ${id} 
@@ -2110,6 +2262,14 @@ Get Bill By UUId
    ${resp}=    GET On Session    ynw  /provider/bill/${uuid}   expected_status=any
    [Return]  ${resp} 
 
+
+Get Bill Count
+
+    [Arguments]      &{param}
+    Check And Create YNW Session
+    ${resp}=    Get On Session    ynw    /provider/bill/count      params=${param}   expected_status=any  
+    [Return]  ${resp}
+
 Update Bill  
    [Arguments]  ${uuid}  ${action}  ${data}
     ${data}=  json.dumps  ${data}
@@ -2207,14 +2367,14 @@ Get Adword Count
     [Return]  ${resp}     
 
 Get Spoke Languages
-     Check And Create YNW Session
-     ${resp}=  GET On Session  ynw  ynwConf/spokenLangs  expected_status=any
-     [Return]  ${resp}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  ynwConf/spokenLangs  expected_status=any
+    [Return]  ${resp}    
 
 Get Jaldee Coupons By Provider
-     Check And Create YNW Session
-     ${resp}=  GET On Session  ynw  /provider/jaldee/coupons  expected_status=any
-     [Return]  ${resp}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jaldee/coupons  expected_status=any
+    [Return]  ${resp}  
 
 Enable Jaldee Coupon By Provider
     [Arguments]  ${coupon_code}
@@ -2229,65 +2389,65 @@ Disable Jaldee Coupon By Provider
     [Return]  ${resp}
 
 Get Jaldee Coupons By Coupon_code
-     [Arguments]  ${coupon_code}  
-     Check And Create YNW Session
-     ${resp}=  GET On Session  ynw  /provider/jaldee/coupons/${coupon_code}  expected_status=any
-     [Return]  ${resp}
+    [Arguments]  ${coupon_code}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jaldee/coupons/${coupon_code}  expected_status=any
+    [Return]  ${resp}
 
 Get Jaldee Coupon Stats By Coupon_code
-     [Arguments]  ${coupon_code}  
-     Check And Create YNW Session
-     ${resp}=  GET On Session  ynw  /provider/jaldee/coupons/${coupon_code}/stats  expected_status=any
-     [Return]  ${resp}
+    [Arguments]  ${coupon_code}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jaldee/coupons/${coupon_code}/stats  expected_status=any
+    [Return]  ${resp}
 
 Apply Jaldee Coupon By Provider
-     [Arguments]  ${coupon_code}  ${wid}
-     ${coupon_code}=  json.dumps  ${coupon_code}
-     Check And Create YNW Session
-     ${resp}=  PUT On Session  ynw  /provider/bill/addJaldeeCoupons/${wid}   data=${coupon_code}  expected_status=any
-     [Return]  ${resp}
+    [Arguments]  ${coupon_code}  ${wid}
+    ${coupon_code}=  json.dumps  ${coupon_code}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/bill/addJaldeeCoupons/${wid}   data=${coupon_code}  expected_status=any
+    [Return]  ${resp}
 
 Create Reimburse Reports By Provider
-     [Arguments]  ${Day1}  ${Day2}   
-     Check And Create YNW Session
-     ${resp}=  POST On Session  ynw  /provider/jaldee/coupons/jcreports/reimburse/${Day1}/${Day2}  expected_status=any
-     [Return]  ${resp}
+    [Arguments]  ${Day1}  ${Day2}   
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/jaldee/coupons/jcreports/reimburse/${Day1}/${Day2}  expected_status=any
+    [Return]  ${resp}
 
 Get Reimburse Reports By Provider
-     [Arguments]    &{kwargs}
-     Check And Create YNW Session
-     ${resp}=  GET On Session  ynw  /provider/jaldee/coupons/jcreports/reimburse  params=${kwargs}  expected_status=any
-     [Return]  ${resp}
+    [Arguments]    &{kwargs}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jaldee/coupons/jcreports/reimburse  params=${kwargs}  expected_status=any
+    [Return]  ${resp}
 
 Get Reimburse Reports By Provider By InvoiceId
-     [Arguments]  ${invoice_id} 
-     Check And Create YNW Session
-     ${resp}=  GET On Session  ynw  /provider/jaldee/coupons/jcreports/reimburse/${invoice_id}   expected_status=any
-     [Return]  ${resp}
+    [Arguments]  ${invoice_id} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jaldee/coupons/jcreports/reimburse/${invoice_id}   expected_status=any
+    [Return]  ${resp}
 
 Request For Payment of Jaldeecoupon
-     [Arguments]  ${invoice_id}
-     Check And Create YNW Session
-     ${resp}=  PUT On Session  ynw  /provider/jaldee/coupons/jcreports/reimburse/${invoice_id}/requestPayment  expected_status=any
-     [Return]  ${resp}
+    [Arguments]  ${invoice_id}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/jaldee/coupons/jcreports/reimburse/${invoice_id}/requestPayment  expected_status=any
+    [Return]  ${resp}
 
 Set Fixed Waiting Time
-     [Arguments]  ${uuid}  ${waiting_time}
-     Check And Create YNW Session
-     ${resp}=  PUT On Session  ynw  /provider/waitlist/${uuid}/${waiting_time}/waitingTime  expected_status=any
-     [Return]  ${resp}
+    [Arguments]  ${uuid}  ${waiting_time}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/waitlist/${uuid}/${waiting_time}/waitingTime  expected_status=any
+    [Return]  ${resp}
 
 Update Subdomain Level Field For Doctor 
-     [Arguments]  ${subdomain}
-     ${qfn}=  Create Dictionary  qualificationName=MBBS  qualifiedyear=2000  qualifiedMonth=July  qualifiedFrom=AIIMS
-     ${qfn}=  Create List  ${qfn}
-     ${memb}=  Create Dictionary  nameofassociation=IMA   membersince=2001 
-     ${memb}=  Create List  ${memb}
-     ${data}=  Create Dictionary    doceducationalqualification=${qfn}   docmemberships=${memb}  docgender=male  
-     ${data}=  json.dumps  ${data}
-     Check And Create YNW Session
-     ${resp}=  PUT On Session  ynw  /provider/bProfile/${subdomain}  data=${data}  expected_status=any
-     [Return]  ${resp}
+    [Arguments]  ${subdomain}
+    ${qfn}=  Create Dictionary  qualificationName=MBBS  qualifiedyear=2000  qualifiedMonth=July  qualifiedFrom=AIIMS
+    ${qfn}=  Create List  ${qfn}
+    ${memb}=  Create Dictionary  nameofassociation=IMA   membersince=2001 
+    ${memb}=  Create List  ${memb}
+    ${data}=  Create Dictionary    doceducationalqualification=${qfn}   docmemberships=${memb}  docgender=male  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/bProfile/${subdomain}  data=${data}  expected_status=any
+    [Return]  ${resp}
 
 Update Mandatory Fields BeautyCare
     [Arguments]  ${subdomain}
@@ -2306,9 +2466,9 @@ Update Mandatory Fields BeautyCare
     Should Be Equal As Strings  ${resp.status_code}  200 
 
 Is Available Queue Now
-     Check And Create YNW Session
-     ${resp}=  GET On Session  ynw   /provider/waitlist/queues/isAvailableNow/today  expected_status=any
-     [Return]  ${resp}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /provider/waitlist/queues/isAvailableNow/today  expected_status=any
+    [Return]  ${resp}
 
 Instant Queue
     [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}  @{vargs}
@@ -2503,25 +2663,25 @@ Branch_Profile
 Branch Business Profile
     [Arguments]   ${acct_id}  ${bName}  ${bDesc}  ${shname}   ${place}   ${longi}  ${latti}  ${g_url}  ${pin}  ${adds}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${ph1}  ${ph2}  ${email1}
     ${data}=  Branch_Profile  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${adds}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${ph1}  ${ph2}  ${email1}
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${pro_params}=  Create Dictionary  account=${acct_id}
     Check And Create YNW Session
-    ${resp}=  PATCH On Session  ynw  /sa/bProfile  data=${data}    params=${params}  expected_status=any
+    ${resp}=  PATCH On Session  ynw  /sa/bProfile  data=${data}    params=${pro_params}  expected_status=any
     [Return]  ${resp}
 
 Enable/Disable Branch Search Data
     [Arguments]   ${acct_id}  ${status}
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${pro_params}=  Create Dictionary  account=${acct_id}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw   /sa/search/${status}    params=${params}  expected_status=any
+    ${resp}=  PUT On Session  ynw   /sa/search/${status}    params=${pro_params}  expected_status=any
     [Return]  ${resp}
 
 Create Department For Branch
     [Arguments]  ${acct_id}  ${dep_name}  ${dep_code}  ${dep_desc}  ${status}  @{vargs}
     ${data}=  Create Dictionary  departmentName=${dep_name}  departmentCode=${dep_code}  departmentDescription=${dep_desc}  serviceIds=${vargs}  departmentStatus=${status} 
     ${data}=  json.dumps  ${data}
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${pro_params}=  Create Dictionary  account=${acct_id}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /sa/branch/department  data=${data}   params=${params}  expected_status=any
+    ${resp}=  POST On Session  ynw  /sa/branch/department  data=${data}   params=${pro_params}  expected_status=any
     [Return]  ${resp}
 
 Branch SP Creation
@@ -2536,9 +2696,9 @@ Branch SP Creation
 Branch SP Business Profile
     [Arguments]   ${acct_id}  ${bName}  ${bDesc}  ${shname}   ${place}   ${longi}  ${latti}  ${g_url}  ${pin}  ${adds}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${ph1}  ${ph2}  ${email1}
     ${data}=  Branch_Profile  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${adds}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${ph1}  ${ph2}  ${email1}
-    ${params}=  Create Dictionary  account=${acct_id}
+    ${pro_params}=  Create Dictionary  account=${acct_id}
     Check And Create YNW Session
-    ${resp}=  PATCH On Session  ynw  /sa/bProfile  data=${data}    params=${params}  expected_status=any
+    ${resp}=  PATCH On Session  ynw  /sa/bProfile  data=${data}    params=${pro_params}  expected_status=any
     [Return]  ${resp}
 
 Branch Level Update Subdomain Level Field For Doctor 
@@ -2549,9 +2709,9 @@ Branch Level Update Subdomain Level Field For Doctor
      ${memb}=  Create List  ${memb}
      ${data}=  Create Dictionary    doceducationalqualification=${qfn}   docmemberships=${memb}  docgender=male  
      ${data}=  json.dumps  ${data}
-     ${params}=  Create Dictionary  account=${acct_id}
+     ${pro_params}=  Create Dictionary  account=${acct_id}
      Check And Create YNW Session
-     ${resp}=  PUT On Session  ynw  /sa/branch/provider/bProfile/${subdomain}  data=${data}  params=${params}  expected_status=any
+     ${resp}=  PUT On Session  ynw  /sa/branch/provider/bProfile/${subdomain}  data=${data}  params=${pro_params}  expected_status=any
      [Return]  ${resp}
 
 Get Server Time
@@ -2721,7 +2881,13 @@ Create Fieldlist For QueueSet
 
 
 Create Appointment QueueSet for Branch
-    [Arguments]   ${s_name}  ${display_name}  ${desc}  ${field_list}   ${dept}   ${service}     ${label1}   ${label2}   ${apptSchdl}   ${appt_status}    @{queueSetFor}
+    [Arguments]   ${s_name}  ${display_name}  ${desc}  ${field_list}   ${dept}   ${service}     ${label1}   ${label2}   ${apptSchdl}   ${appt_status}    @{queueSetFor}  &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
     ${len}=  Get Length  ${queueSetFor}
     ${len}=  Evaluate  ${len}-1
     ${list}=  Create List
@@ -2733,17 +2899,24 @@ Create Appointment QueueSet for Branch
 
     ${label}=   Create Dictionary   ${label1}=${label2}
 
-    
     ${dic}=   Create Dictionary      departments=${dept}    services=${service}     labels=${label}    apptSchedule=${apptSchdl}    apptStatus=${appt_status}
 
     ${data}=  Create Dictionary  name=${s_name}  displayName=${display_name}  description=${desc}  fieldList=${field_list}   qBoardConditions=${dic}        queueSetFor=${list}   
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment/statusBoard/queueSet   data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/appointment/statusBoard/queueSet  params=${pro_params}  data=${data}  expected_status=any
     [Return]  ${resp}
 
 Create Appointment QueueSet for Provider
-    [Arguments]   ${s_name}  ${display_name}  ${desc}  ${field_list}   ${service}   ${label1}   ${label2}   ${apptSchdl}   ${appt_status}    @{queueSetFor}
+    [Arguments]   ${s_name}  ${display_name}  ${desc}  ${field_list}   ${service}   ${label1}   ${label2}   ${apptSchdl}   ${appt_status}    @{queueSetFor}  &{kwargs}
+    
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
+
     ${len}=  Get Length  ${queueSetFor}
     ${len}=  Evaluate  ${len}-1
     ${list}=  Create List
@@ -2761,7 +2934,7 @@ Create Appointment QueueSet for Provider
     ${data}=  Create Dictionary  name=${s_name}  displayName=${display_name}  description=${desc}  fieldList=${field_list}   qBoardConditions=${dic}        queueSetFor=${list}   
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment/statusBoard/queueSet   data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/appointment/statusBoard/queueSet   params=${pro_params}  data=${data}  expected_status=any
     [Return]  ${resp}
 
 
@@ -2934,7 +3107,7 @@ Update QueueSet Waitlist for Provider
     [Return]  ${resp}   
 
 
-Create Matric For Status Board
+Create Metric For Status Board
     [Arguments]  @{matrics}
     ${len}=  Get Length  ${matrics}
     ${len}=  Evaluate  ${len}-1
@@ -3114,8 +3287,11 @@ Manage Branch SP
     [Return]  ${resp}
 
 Create Consumer Notification Settings
-    [Arguments]  ${resource_type}  ${event_type}  ${email}  ${sms}  ${push_notf}  ${common_msg}  ${persons_ahead}
+    [Arguments]  ${resource_type}  ${event_type}  ${email}  ${sms}  ${push_notf}  ${common_msg}  ${persons_ahead}  &{kwargs}
     ${data}=  Create Dictionary  resourceType=${resource_type}  eventType=${event_type}  email=${email}  sms=${sms}  pushNotification=${push_notf}  commonMessage=${common_msg}  personsAhead=${persons_ahead}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
     ${data}=   json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /provider/consumerNotification/settings   data=${data}  expected_status=any
@@ -3246,7 +3422,6 @@ Create StatusBoard Container
 
 
 Get SatusBoard Container
-
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/statusBoard/container   expected_status=any
     [Return]  ${resp}
@@ -3291,9 +3466,10 @@ Queue TimeInterval
    ${len}=  Get Length  ${vargs}
    ${service}=  Create Dictionary  id=${vargs[0]}
    ${services}=  Create List  ${service}
-   :FOR    ${index}    IN RANGE  1  ${len}
-    \	${service}=  Create Dictionary  id=${vargs[${index}]} 
-    \   Append To List  ${services}  ${service}
+   FOR    ${index}    IN RANGE  1  ${len}
+        ${service}=  Create Dictionary  id=${vargs[${index}]} 
+        Append To List  ${services}  ${service}
+   END
    ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}   parallelServing=${parallel}  capacity=${capacity}  location=${location}  timeInterval=${timeinterval}  appointment=${appointment}  services=${services}
    [Return]  ${data}
 
@@ -3488,7 +3664,19 @@ Create educational qualification
     ${resp}=    PUT On Session     ynw    /provider/user/providerBprofile/${sts}/${u_id}     data=${data}   expected_status=any
     [Return]  ${resp}
     
-   
+
+Get Locations By UserId
+
+    [Arguments]    ${userid}   &{kwargs}
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
+    Check And Create YNW Session
+    ${resp}=    Get On Session    ynw    provider/user/${userid}/location       params=${pro_params}   expected_status=any  
+    [Return]  ${resp}   
 
 
 Update User Search Status
@@ -4107,7 +4295,15 @@ Get jaldeeIntegration Settings
     
 
 User Take Appointment For Consumer 
-    [Arguments]   ${userid}  ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}
+    [Arguments]   ${userid}  ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}
+    
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
+
     ${user_id}=  Create Dictionary  id=${userid}
     ${cid}=  Create Dictionary  id=${consid}
     ${sid}=  Create Dictionary  id=${service_id}
@@ -4116,12 +4312,20 @@ User Take Appointment For Consumer
     # ${data}=    Create Dictionary   appointmentMode=WALK_IN_APPOINTMENT  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/appointment  params=${pro_params}  data=${data}  expected_status=any
     [Return]  ${resp}
 
 
 Take Appointment For Consumer 
-    [Arguments]   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}
+    [Arguments]   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}
+    
+    ${pro_headers}=  Create Dictionary  &{headers}
+    ${pro_params}=   Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${pro_headers}   &{tzheaders}
+    Set To Dictionary  ${pro_params}   &{locparam}
+    
     ${cid}=  Create Dictionary  id=${consid}
     ${sid}=  Create Dictionary  id=${service_id}
     ${schedule}=  Create Dictionary  id=${schedule}
@@ -4563,7 +4767,6 @@ Reject Appointment by Batch
     [Return]  ${resp}
 
 
-
 Change multiple Appmt Status
     [Arguments]  ${statuschange}     @{vargs}
     ${data}=    json.dumps     ${vargs}
@@ -4579,7 +4782,6 @@ Waitlist Action multiple account
     ${resp}=    PUT On Session    ynw   /provider/waitlist/multiStatusChange/${waitlist_actions[4]}   data=${data}  expected_status=any
     Log  ${resp}
     [Return]  ${resp}
-
 
 
 Get Appmt Schedule AvailableNow
@@ -4704,12 +4906,15 @@ Update Account contact information
 
 Create Sample Schedule
     [Arguments]   ${lid}   @{vargs}
-    ${DAY1}=  db.get_date
-    ${DAY2}=  db.add_date  10      
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${DAY1}=  db.get_date
+    # ${DAY2}=  db.db.add_timezone_date  ${tz}  10      
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  db.add_two   ${sTime1}  ${delta}
+    ${list}=  Create List  1  2  3  4  5  6  7
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${consumerParallelServing}=  FakerLibrary.Random Int  min=1  max=1
@@ -5058,10 +5263,12 @@ uploadClinicalnotesImage
 #    ${resp}=  POST On Session  ynw  /provider/mr/patient/${patientId}  data=${data}  expected_status=any
 #    [Return]  ${resp}
 
+
 Create MR with patientId
     [Arguments]  ${patientId}  ${bookingType}  ${consultationMode}  ${complaints}  ${symptoms}  ${allergies}  ${vaccinationHistory}  ${observations}  ${diagnosis}  ${misc_notes}   ${notes}  ${mrConsultationDate}  ${state}   @{vargs}
     ${clinicalNotes}=  Create Dictionary  complaints=${complaints}  symptoms=${symptoms}  allergies=${allergies}  vaccinationHistory=${vaccinationHistory}  observations=${observations}  diagnosis=${diagnosis}  misc_notes=${misc_notes} 
-    
+    ${clinicalNotes}=  Create List  ${clinicalNotes}
+
     ${len}=  Get Length  ${vargs}
     ${prescriptionsList}=  Create List  
 
@@ -5078,6 +5285,7 @@ Create MR with patientId
    ${resp}=  POST On Session  ynw  /provider/mr/patient/${patientId}  data=${data}  expected_status=any
    [Return]  ${resp}
 
+
 Billable Domain Providers
     [Arguments]  ${min}=0   ${max}=260
     ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
@@ -5086,10 +5294,12 @@ Billable Domain Providers
     ${provider_list}=  Create List
     
     FOR   ${a}  IN RANGE   ${min}   ${max}    
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${domain}=   Set Variable    ${resp.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
         ${resp}=  View Waitlist Settings
 	    Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable  
         ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
@@ -5121,10 +5331,12 @@ Multiloc and Billable Providers
     Log   ${dom_list}
      
     FOR   ${a}  IN RANGE   ${min}   ${max}   
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${domain}=   Set Variable    ${resp.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
         Log  ${dom_list}
         ${status} 	${value} = 	Run Keyword And Ignore Error  List Should Contain Value  ${dom_list}  ${domain}
         Log Many  ${status} 	${value}
@@ -5859,11 +6071,15 @@ MultiLocation Domain Providers
     Log   ${dom_list}
    
     FOR   ${a}  IN RANGE   ${min}   ${max}    
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${domain}=   Set Variable    ${resp.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+        # ${domain}=   Set Variable    ${resp.json()['sector']}
+        # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
         Log  ${dom_list}
         ${status} 	${value} = 	Run Keyword And Ignore Error  List Should Contain Value  ${dom_list}  ${domain}
         Log Many  ${status} 	${value}
@@ -6297,7 +6513,7 @@ Get LocByPincode
 Get LocationsByPincode
     [Arguments]  ${pincode}  
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw  /provider/account/settings/locations/${pincode}  #expected_status=any     
+    ${resp}=    GET On Session    ynw  /provider/account/settings/locations/${pincode}   expected_status=any     
     [Return]  ${resp}
 
 Is Available Queue Now ByProviderId
@@ -6588,13 +6804,13 @@ Create Sample Donation For User
 
 Get Account Level Analytics
     [Arguments]   ${metricId}  ${dateFrom}  ${dateTo}  ${frequency}  &{kwargs}
-    ${param}=  Create Dictionary  metricId=${metricId}  dateFrom=${dateFrom}  dateTo=${dateTo}  frequency=${frequency}
+    ${pro_params}=  Create Dictionary  metricId=${metricId}  dateFrom=${dateFrom}  dateTo=${dateTo}  frequency=${frequency}
     Check And Create YNW Session
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${param} 	${key}=${value}
     END
     # ${resp}=    GET On Session    ynw   /provider/analytics/account  params=${kwargs}  expected_status=any
-    ${resp}=    GET On Session    ynw   /provider/analytics/account       params=${param}  expected_status=any
+    ${resp}=    GET On Session    ynw   /provider/analytics/account  params=${pro_params}  expected_status=any
     [Return]  ${resp}
 
 Get Account Level Analytics Acc To config
@@ -6882,10 +7098,14 @@ Multiloc and Billable highest license Providers
     Log   ${dom_list}
      
     FOR   ${a}  IN RANGE   ${min}   ${max}   
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${domain}=   Set Variable    ${resp.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+        # ${domain}=   Set Variable    ${resp.json()['sector']}
+        # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
         Log  ${dom_list}
         ${pkg_id}=   get_highest_license_pkg
         Log   ${pkg_id}
@@ -6910,12 +7130,16 @@ Multiloc and Billable highest license Providers
     [Return]  ${provider_list}  ${multiloc_providers}
 
 Create Sample Catalog
-    [Arguments]    ${catalogName}  @{vargs} 
+    [Arguments]    ${catalogName}  ${timezone}  @{vargs} 
     ${catalogDesc}=   FakerLibrary.name
-    ${startDate}=  get_date
-    ${endDate}=  add_date  12       
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   2  30
+    # ${startDate}=  get_date
+    # ${endDate}=  db.add_timezone_date  ${tz}  12       
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    # ${eTime1}=  add_timezone_time  ${tz}  2  30  
+    ${startDate}=  get_date_by_timezone  ${timezone}
+    ${endDate}=  db.add_timezone_date  ${timezone}  12  
+    ${sTime1}=  add_timezone_time  ${timezone}  0  15  
+    ${eTime1}=  add_timezone_time  ${timezone}  2  30  
     ${deliveryCharge}=   Evaluate    random.uniform(1.0,50)
     ${noOfOccurance}=  Random Int  min=0   max=0
     ${Title}=  FakerLibrary.Sentence   nb_words=2 
@@ -8505,13 +8729,11 @@ Verify Phone Otp and Create Loan Application
 
 Verify Phone and Create Loan Application with customer details
 
-    [Arguments]    ${loginId}   ${purpose}  ${id}  ${locid}    ${CustomerPhoto}   @{vargs}  &{custDetailskwargs}
+    [Arguments]    ${loginId}   ${purpose}  ${id}  ${locid}   @{vargs}  &{custDetailskwargs}
 
-    # ${customer}=  Create Dictionary      id=${id}  firstName=${firstName}  lastName=${lastName}  phoneNo=${phoneNo}  countryCode=${countryCode}
     ${location}=  Create Dictionary      id=${locid}
    
     ${otp}=   verify accnt  ${loginId}  ${purpose}
-    # ${otp}=  Set Variable  55555
 
     ${len}=  Get Length  ${vargs}
     ${LoanApplicationKycList}=  Create List
@@ -8525,14 +8747,12 @@ Verify Phone and Create Loan Application with customer details
 
     Log Many  @{custDetailskwargs}
     FOR  ${key}  IN  @{custDetailskwargs}
-        # Log  Key is "${key}" and value is "${custDetailskwargs}[${key}]".
         IF  '${key}' in @{custdeets}
             Set to Dictionary  ${customer}  ${key}=${custDetailskwargs}[${key}]
         END
     END
-    ${CustomerPhoto}=  Create List    ${CustomerPhoto}
 
-    ${loan}=  Create Dictionary   customer=${customer}  location=${location}   loanApplicationKycList=${LoanApplicationKycList}    consumerPhoto=${CustomerPhoto}
+    ${loan}=  Create Dictionary   customer=${customer}  location=${location}   loanApplicationKycList=${LoanApplicationKycList}
     ${loan}=  json.dumps  ${loan}  
     Log  ${loan}
 
@@ -8608,7 +8828,7 @@ Requst For Pan Validation
 
 Add loan Bank Details
 
-    [Arguments]      ${originFrom}  ${originUid}  ${loanApplicationUid}  ${bankName}  ${bankAccountNo}  ${bankIfsc}  ${bankAddress1}  ${bankAddress2}  ${bankCity}  ${bankState}  ${bankPin}  @{vargs}
+    [Arguments]      ${originUid}  ${loanApplicationUid}  ${bankName}  ${bankAccountNo}  ${bankIfsc}  ${branchname}  @{vargs}
     
 
     ${len}=  Get Length  ${vargs}
@@ -8619,11 +8839,11 @@ Add loan Bank Details
         Append To List  ${bankStatementAttachments}  ${vargs[${index}]}
     END
 
-    ${loan}=  Create Dictionary   originFrom=${originFrom}  originUid=${originUid}  loanApplicationUid=${loanApplicationUid}  bankName=${bankName}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  bankAddress1=${bankAddress1}  bankAddress2=${bankAddress2}  bankCity=${bankCity}  bankState=${bankState}  bankPin=${bankPin}    bankStatementAttachments=${bankStatementAttachments}
+    ${loan}=  Create Dictionary   originUid=${originUid}  loanApplicationUid=${loanApplicationUid}  bankName=${bankName}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  bankBranchName=${branchname}    bankStatementAttachments=${bankStatementAttachments}
     ${loan}=  json.dumps  ${loan}
 
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/loanapplication/bank  data=${loan}  expected_status=any
+    ${resp}=  PUT On Session  ynw  /provider/loanapplication/bank  data=${loan}  expected_status=any
     [Return]  ${resp}
 
 Update loan Bank Details
@@ -8660,9 +8880,9 @@ Verify loan Bank
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/verify/bank  data=${data}  expected_status=any
     [Return]  ${resp}
 
-Verify loan Bank Details
+Verify loan Details
 
-    [Arguments]      ${id}  ${loanProduct}  ${category}  ${type}  ${loanScheme}  ${invoiceAmount}  ${downpaymentAmount}  ${requestedAmount}  ${montlyIncome}  ${emiPaidAmountMonthly}    @{vargs}    &{kwargs}
+    [Arguments]      ${id}  ${loanProduct}  ${type}  ${invoiceAmount}  ${employee}  ${downpaymentAmount}  ${requestedAmount}  ${productCategoryId}   ${productSubCategoryId}   ${referralEmployeeCode}  ${subventionLoan}  ${montlyIncome}  ${emiPaidAmountMonthly}    @{vargs}    &{kwargs}
 
     ${len}=  Get Length  ${vargs}
     ${LoanApplicationKycList}=  Create List
@@ -8672,7 +8892,7 @@ Verify loan Bank Details
         Append To List  ${LoanApplicationKycList}  ${vargs[${index}]}
     END
 
-    ${loan}=  Create Dictionary  id=${id}   loanProducts=${loanProduct}  category=${category}  type=${type}   loanScheme=${loanScheme}  invoiceAmount=${invoiceAmount}  downpaymentAmount=${downpaymentAmount}  requestedAmount=${requestedAmount}  montlyIncome=${montlyIncome}  emiPaidAmountMonthly=${emiPaidAmountMonthly}   loanApplicationKycList=${LoanApplicationKycList}
+    ${loan}=  Create Dictionary  id=${id}   loanProducts=${loanProduct}  type=${type}  invoiceAmount=${invoiceAmount}  employee=${employee}  downpaymentAmount=${downpaymentAmount}  requestedAmount=${requestedAmount}   productCategoryId=${productCategoryId}   productSubCategoryId=${productSubCategoryId}   referralEmployeeCode=${referralEmployeeCode}  subventionLoan=${subventionLoan}  montlyIncome=${montlyIncome}  emiPaidAmountMonthly=${emiPaidAmountMonthly}   loanApplicationKycList=${LoanApplicationKycList}
 
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${loan} 	${key}=${value}
@@ -8742,7 +8962,7 @@ Verify Otp for Consumer Acceptance Email
     ${resp}=  POST On Session  ynw  /provider/loanapplication/verify/${uid}/acceptance/${otp}/email  expected_status=any
     [Return]  ${resp}
 
-Get loan Bank Details Aadhaar
+Refresh loan Bank Details Aadhaar
     
     [Arguments]    ${uid}
     
@@ -8771,18 +8991,10 @@ Loan Application Action Completed
     [Return]  ${resp}
 
 Update loan Application Kyc Details
-    [Arguments]      ${id}  ${loanApplicationUid}  ${customerPhone}  ${aadhaar}   ${pan}   @{vargs}    &{kwargs}
     
+    [Arguments]      ${id}  ${loanApplicationUid}  ${customerPhone}    &{kwargs}
 
-    ${len}=  Get Length  ${vargs}
-    ${aadhaarAttachmentsList}=  Create List
-
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${aadhaarAttachmentsList}  ${vargs[${index}]}
-    END
-
-    ${loan}=  Create Dictionary    id=${id}   loanApplicationUid=${loanApplicationUid}  customerPhone=${customerPhone}  aadhaar=${aadhaar}  pan= ${pan}  aadhaarAttachments=${aadhaarAttachmentsList}
+    ${loan}=  Create Dictionary    id=${id}   loanApplicationUid=${loanApplicationUid}  customerPhone=${customerPhone}  
 
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${loan} 	${key}=${value}
@@ -8818,6 +9030,33 @@ Loan Approval
     ${resp}=  PUT On Session  ynw  /provider/loanapplication/${loanApplicationUid}/approval  data=${data}  expected_status=any
     [Return]  ${resp}
 
+Delete Loan Attachment
+    [Arguments]    ${Uid}   ${customerPhone}    ${ownerid}        ${fileName}      ${fileSize}        ${caption}    ${fileType}    ${action}       ${type}   ${order}  &{kwargs}
+    
+
+    ${aadhaarAttachments}=  Create Dictionary   owner=${ownerid}   fileName=${fileName}    fileSize=${fileSize}    caption=${caption}    fileType=${fileType}    action=${action}    type=${type}    order=${order}   
+    ${aadhaarAttachments}=    Create List   ${aadhaarAttachments}
+
+    ${panAttachments}=  Create Dictionary   owner=${ownerid}   fileName=${fileName}    fileSize=${fileSize}    caption=${caption}    fileType=${fileType}    action=${action}    type=${type}    order=${order}   
+    ${panAttachments}=    Create List   ${panAttachments}
+
+    ${loanApplicationKycList}=    Create Dictionary    uid=${Uid}    customerPhone=${customerPhone}    aadhaarAttachments=${aadhaarAttachments}    panAttachments=${panAttachments}
+
+    # ${pan}=  Create Dictionary     owner=${owner}        fileName=${fileName}        fileSize=${fileSize}        caption=${caption}        fileType=${fileType}        order=${order}
+    # ${panAttachments}=    Create List    ${pan}
+
+    ${data}=  Create List    ${loanApplicationKycList}    
+    ${data}=  Create Dictionary    loanApplicationKycList=${data}      
+    Log  ${data}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /provider/loanapplication/attachments  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
 Get User Available
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/user/available   expected_status=any
@@ -8842,11 +9081,11 @@ Update Reminder
     ...   ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
     ${schedule}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
     ${remindersource}=  Create Dictionary    Sms=${sms}   Email=${email}  PushNotification=${pushnotification} 
-    ${data}=  Create Dictionary  id=${reminder_id}  schedule=${schedule}  provider=${prov_id}  
+    ${data}=  Create Dictionary    schedule=${schedule}  provider=${prov_id}  
     ...   providerConsumer=${provcons_id}  message=${msg}  reminderSource=${remindersource}
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
-    ${resp}=  PUT On Session  ynw  /provider/mr/reminder  data=${data}  expected_status=any
+    ${resp}=  PUT On Session  ynw  /provider/mr/reminder/${reminder_id}  data=${data}  expected_status=any
     [Return]  ${resp}
 
 Get Reminders
@@ -8854,6 +9093,13 @@ Get Reminders
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/mr/reminder  params=${param}  expected_status=any
     [Return]  ${resp}
+
+Get Reminders With Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/mr/reminders  params=${param}  expected_status=any
+    [Return]  ${resp}
+
 
 Delete Reminder
    [Arguments]   ${reminder_id}
@@ -8962,9 +9208,10 @@ Partner Approved
 
 Create Scheme
 
-    [Arguments]   ${account}  ${schemeName}  ${schemeAliasName}  ${schemeType}  ${schemeRate}  ${noOfRepayment}  ${noOfAdvancePayment}  ${noOfAdvanceSuggested}  ${serviceCharge}  ${insuranceCharge}  ${minAmount}  ${maxAmount}  ${status}  ${description}
+    [Arguments]   ${account}  ${schemeName}  ${schemeAliasName}  ${integrationId}  ${schemeType}  ${rateType}  ${schemeRate}  ${displayRate}  ${noOfAdvancePayment}  ${noOfAdvanceSuggested}  ${minDuration}  ${maxDuration}  ${minAmount}  ${maxAmount}  ${minAge}  ${maxAge}  ${loanToValue}  ${employeeScheme}  ${subventionScheme}  ${subventionRate}  ${bureauScores}  ${processingFeeRate}    ${processingFeeAmount}  ${overdueChargeRate}    ${foreClosureCharge}    ${foirOnDeclaredIncome}  ${foirOnAssesedIncome}     ${noOfCoApplicatRequired}  ${noOfSpdcRequired}  ${noOfPdcRequired}  ${multiItem}  ${defaultScheme}  ${status}
 
-    ${data}=  Create Dictionary    account=${account}  schemeName=${schemeName}  schemeAliasName=${schemeAliasName}  schemeType=${schemeType}  schemeRate=${schemeRate}  noOfRepayment=${noOfRepayment}  noOfAdvancePayment=${noOfAdvancePayment}  noOfAdvanceSuggested=${noOfAdvanceSuggested}  serviceCharge=${serviceCharge}  insuranceCharge=${insuranceCharge}  minAmount=${minAmount}  maxAmount=${maxAmount}  status=${status}  description=${description}
+    ${data}=  Create Dictionary    account=${account}  schemeName=${schemeName}  schemeAliasName=${schemeAliasName}  integrationId=${integrationId}  schemeType=${schemeType}  rateType=${rateType}  schemeRate=${schemeRate}  displayRate=${displayRate}  noOfAdvancePayment=${noOfAdvancePayment}  noOfAdvanceSuggested=${noOfAdvanceSuggested}  minDuration=${minDuration}  maxDuration=${maxDuration}  minAmount=${minAmount}  maxAmount=${maxAmount}  minAge=${minAge}  maxAge=${maxAge}  loanToValue=${loanToValue}  employeeScheme=${employeeScheme}  subventionScheme=${subventionScheme}  subventionRate=${subventionRate}  bureauScores=${bureauScores}  processingFeeRate=${processingFeeRate}    processingFeeAmount=${processingFeeAmount}  overdueChargeRate=${overdueChargeRate}    foreClosureCharge=${foreClosureCharge}    foirOnDeclaredIncome=${foirOnDeclaredIncome}  foirOnAssesedIncome=${foirOnAssesedIncome}     noOfCoApplicatRequired=${noOfCoApplicatRequired}  noOfSpdcRequired=${noOfSpdcRequired}  noOfPdcRequired=${noOfPdcRequired}  multiItem=${multiItem}  defaultScheme=${defaultScheme}  status=${status}
+
     ${data}=  json.dumps  ${data}
 
     Check And Create YNW Session
@@ -8980,13 +9227,6 @@ Update Scheme
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/loan/scheme/${id}   data=${data}   expected_status=any 
-    [Return]  ${resp}
-
-Change Sp Internal Status
-
-    [Arguments]    ${loanApplicationUid}   ${internalStatus}  
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/loanapplication/${loanApplicationUid}/spinternalstatus/${internalStatus}    expected_status=any
     [Return]  ${resp}
 
 Get Loan Application By uid
@@ -9212,10 +9452,10 @@ Enable Disable CDL RBAC
 
 Create and Update Account level cdl setting
 
-    [Arguments]    ${autoApproval}    ${autoApprovalUptoAmount}    ${districtWiseRestriction}    ${status}    ${downpaymentRequired}    ${downpaymentRate}
-    ...    ${salesOfficerVerificationRequired}    ${branchManagerverificationRequired}     &{kwargs}
+    [Arguments]    ${autoApproval}    ${autoApprovalUptoAmount}    ${districtWiseRestriction}    ${status}    ${downpaymentRequired}
+    ...    ${salesOfficerVerificationRequired}    ${branchManagerVerificationRequired}     &{kwargs}
     ${data}=  Create Dictionary    autoApproval=${autoApproval}    autoApprovalUptoAmount=${autoApprovalUptoAmount}    districtWiseRestriction=${districtWiseRestriction}    status=${status}
-    ...    downpaymentRequired=${downpaymentRequired}    downpaymentRate=${downpaymentRate}    salesOfficerVerificationRequired=${salesOfficerVerificationRequired}    branchManagerverificationRequired=${branchManagerverificationRequired}   
+    ...    downpaymentRequired=${downpaymentRequired}    salesOfficerVerificationRequired=${salesOfficerVerificationRequired}    branchManagerVerificationRequired=${branchManagerVerificationRequired}   
     FOR  ${key}  ${value}  IN  &{kwargs}
             Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -9399,10 +9639,10 @@ salesofficer Approval
 
 Partner Accepted
 
-    [Arguments]    ${loanApplicationUid}    ${owner}    ${fileName}    ${fileSize}    ${caption}    ${fileType}    ${action}    ${file}    ${type}    ${order}
+    [Arguments]    ${loanApplicationUid}    ${owner}    ${fileName}    ${fileSize}    ${caption}    ${fileType}    ${action}    ${type}    ${order}
 
     ${partnerAcceptanceAttachments}=  Create List
-    ${Attachment}=    Create Dictionary    owner=${owner}    fileName=${fileName}    fileSize=${fileSize}    caption=${caption}    fileType=${fileType}    action=${action}    file=${file}    type=${type}    order=${order}
+    ${Attachment}=    Create Dictionary    owner=${owner}    fileName=${fileName}    fileSize=${fileSize}    caption=${caption}    fileType=${fileType}    action=${action}    type=${type}    order=${order}
     Append To List  ${partnerAcceptanceAttachments}  ${Attachment}
     
     ${data}=    Create Dictionary   uid=${loanApplicationUid}   partnerAcceptanceAttachments=${partnerAcceptanceAttachments}
@@ -9461,11 +9701,28 @@ Account Aggregation
     ${resp}=  POST On Session  ynw   /provider/loanapplication/accountaggregate/${loanApplicationUid}/${kycId}  expected_status=any
     [Return]  ${resp}
 
+Get Account Aggregation
+    
+    [Arguments]    ${loanApplicationUid}    ${kycId}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /provider/loanapplication/accountaggregatestatus/${loanApplicationUid}/${kycId}  expected_status=any
+    [Return]  ${resp}
+
 Generate CDL Dropdowns
     
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/csms/settings  expected_status=any
     [Return]  ${resp}
+
+Cancel Loan Application
+
+    [Arguments]    ${loanApplicationUid}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/cancel    expected_status=any
+    [Return]  ${resp}
+
 
 Generate Credit Score-MAFIL Score
 
@@ -9486,14 +9743,6 @@ Add General Notes/Remarks
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/note    data=${data}  expected_status=any
-    [Return]  ${resp}
-
-Change Loan Application Scheme
-
-    [Arguments]    ${loanApplicationUid}   ${schemeId}
-
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/scheme/${schemeId}    expected_status=any
     [Return]  ${resp}
 
 
@@ -9533,12 +9782,12 @@ Change Read Status
 
     [Arguments]    ${user}  ${sender_id}  ${senderUserType}  ${receiver_id}  ${receiverUserType}  ${message_ids}   ${accid}=0 
     
-    ${params}=  Create Dictionary  account=${accid}
+    ${pro_params}=  Create Dictionary  account=${accid}
     ${data}=  Create Dictionary     sender=${sender_id}  senderUserType=${senderUserType}
     ...    receiver=${receiver_id}   receiverUserType=${receiverUserType}  messageIds=${message_ids}  
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw     /${user}/communicate/communicationDetailToRead   data=${data}   params=${params}  expected_status=any 
+    ${resp}=    PUT On Session    ynw     /${user}/communicate/communicationDetailToRead   data=${data}   params=${pro_params}  expected_status=any 
     [Return]  ${resp}
 
 
@@ -10360,6 +10609,25 @@ Get MemberService by Consumer
     ${resp}=    GET On Session  ynw  url=/consumer/membership/services?account=${accountId}       expected_status=any
     [Return]  ${resp}
 
+Member Creation From Provider Dashboard
+
+    [Arguments]     ${memberServiceId}    ${firstName}    ${lastName}   ${phoneNo}   ${countryCode}
+
+    ${data}=  Create Dictionary    memberServiceId=${memberServiceId}    firstName=${firstName}    lastName=${lastName}    phoneNo=${phoneNo}    countryCode=${countryCode}
+    ${data}=    json.dumps    ${data} 
+
+    Check And Create YNW Session
+    ${resp}=    POST On Session  ynw  /provider/membership/member   data=${data}    expected_status=any
+    [Return]  ${resp}
+
+Submit Provider Member Qnr
+
+    [Arguments]    ${memberId}  ${data}
+
+    Check And Create YNW Session
+    ${resp}=    POST On Session  ynw  /provider/membership/questionnaire/submit/${memberId}    data=${data}       expected_status=any
+    [Return]  ${resp}
+
 # ........Finance Manager.............
 
 
@@ -10686,6 +10954,25 @@ Get Invoice By Id
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/${uid}    expected_status=any
     [Return]  ${resp}
+    
+
+Get Date Time by Timezone
+    [Arguments]  ${timezone}
+    ${zone}  @{loc}=  Split String    ${timezone}  /
+    ${loc}=  Random Element    ${loc}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/location/date/${zone}/${loc}  expected_status=any
+    [Return]  ${resp}
+
+
+Encrypted Provider Login
+    [Arguments]    ${usname}  ${passwrd}   ${countryCode}=91
+    ${data}=  Login  ${usname}  ${passwrd}   countryCode=${countryCode}
+    ${encrypted_data}=  db.ecrypt_data  ${data}
+    ${data}=    json.dumps    ${encrypted_data}
+    ${resp}=    POST On Session    ynw    /provider/login/encrypt    data=${data}  expected_status=any
+    [Return]  ${resp}
+
 
 Get Invoice With Filter
 
@@ -10732,6 +11019,7 @@ Upload Finance Invoice Attachment
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/invoice/${invoiceUid}/attachments  data=${data}  expected_status=any
    [Return]  ${resp}
+
 
 Create PaymentsOut
 
@@ -10813,6 +11101,134 @@ Update PaymentsOut Status
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsOut/${payableUid}/${status}     expected_status=any    headers=${headers}
     [Return]  ${resp}
+
+
+Create CDL Enquiry
+    [Arguments]  ${category}  ${customer_id}  ${customerCity}  ${aadhaar}  ${pan}  ${customerState}  ${customerPin}  ${location}  ${enquireMasterId}  ${targetPotential}
+
+    ${location}=   Create Dictionary   id=${location}
+    ${customerid}=    Create Dictionary    id=${customer_id}
+
+    ${data}=  Create Dictionary  category=${category}  customer=${customerid}  customerCity=${customerCity}  aadhaar=${aadhaar}  pan=${pan}  customerState=${customerState}  customerPin=${customerPin}  location=${location}  enquireMasterId=${enquireMasterId}  targetPotential=${targetPotential}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw   /provider/enquire  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Draft Loan Application
+
+    [Arguments]  ${loanuid}   ${firstName}   ${lastName}   ${phoneNo}   ${email}   ${dob}   ${gender}   ${countryCode}   ${id}   ${locationArea}   ${invoiceAmount}   ${downpaymentAmount}   ${requestedAmount}   ${remarks}   ${emiPaidAmountMonthly}   ${employee}   ${referralEmployeeCode}   ${subventionLoan}   ${loanApplicationKycList}   ${type}   ${loanProducts}   ${productCategoryId}   ${productSubCategoryId}   ${location}   ${partner}
+
+    ${LoanApplicationKycList}=  Create List     ${loanApplicationKycList}
+    ${customer}=    Create Dictionary   firstName=${firstName}   lastName=${lastName}   phoneNo=${phoneNo}   email=${email}   dob=${dob}   gender=${gender}   countryCode=${countryCode}   id=${id}
+    ${data}=  Create Dictionary  customer=${customer}   locationArea=${locationArea}   invoiceAmount=${invoiceAmount}   downpaymentAmount=${downpaymentAmount}   requestedAmount=${requestedAmount}   remarks=${remarks}   emiPaidAmountMonthly=${emiPaidAmountMonthly}   employee=${employee}   referralEmployeeCode=${referralEmployeeCode}   subventionLoan=${subventionLoan}   loanApplicationKycList=${loanApplicationKycList}   type=${type}   loanProducts=${loanProducts}   productCategoryId=${productCategoryId}   productSubCategoryId=${productSubCategoryId}   location=${location}   partner=${partner}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanuid}   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+    
+Save Customer Details 
+
+    [Arguments]  ${loanuid}   ${firstName}   ${lastName}   ${email}   ${dob}   ${gender}   ${id}   ${loanApplicationKycList}   ${location}   ${consumerPhoto}
+
+    ${LoanApplicationKycList}=  Create List     ${loanApplicationKycList}
+    ${consumerPhoto}=   Create List    ${consumerPhoto}
+    ${customer}=    Create Dictionary   firstName=${firstName}   lastName=${lastName}   email=${email}   dob=${dob}   gender=${gender}   id=${id}
+    ${data}=  Create Dictionary  customer=${customer}   consumerPhoto=${consumerPhoto}   loanApplicationKycList=${loanApplicationKycList}   location=${location}   
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanuid}   data=${data}  expected_status=any
+    [Return]  ${resp}  
+
+Equifax Report 
+
+    [Arguments]   ${loanuid}   ${phone}   ${kycid}
+
+    ${data}=  Create Dictionary   loanApplicationUid=${loanuid}   customerPhone=${phone}   id=${kycid}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw   /provider/loanapplication/equifaxreport   data=${data}  expected_status=any
+    [Return]  ${resp}  
+
+MAFIL Score
+
+    [Arguments]   ${loanuid}   ${kycid}
+
+    ${data}=  Create Dictionary   loanApplicationUid=${loanuid}   id=${kycid}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /provider/loanapplication/csms/generatescore   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Cibil Score
+
+    [Arguments]   ${kycid}   ${cibilscore}   ${cibilreport}
+
+    ${cibilreport}=  Create List   ${cibilreport}
+    ${data}=  Create Dictionary   id=${kycid}   cibilScore=${cibilscore}   cibilReport=${cibilreport}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /provider/loanapplication/cibilscore   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Retainrejected Loan Application
+
+    [Arguments]    ${loanApplicationUid}  ${note}
+
+    ${data}=  Create Dictionary    note=${note}
+    ${data}=  json.dumps  ${data}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/retainrejected  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+Perfios Score
+
+    [Arguments]  ${loanuid}   ${kycid}   ${phone}
+
+    ${data}=  Create Dictionary   loanApplicationUid=${loanuid}   id=${kycid}   customerPhone=${phone}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw   /provider/provider/loanapplication/perfios   data=${data}  expected_status=any
+    [Return]  ${resp} 
+
+Account with Multiple Users in NBFC
+
+
+    ${resp}=   Get File    /ebs/TDD/varfiles/musers.py
+    ${len}=   Split to lines  ${resp}
+    ${length}=  Get Length   ${len}
+    ${multiuser_list}=  Create List
+    &{License_total}=  Create Dictionary
+    ${licid}  ${licname}=  get_highest_license_pkg
+    
+    FOR   ${a}    IN RANGE   ${length}   
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        Should Be Equal As Strings    ${resp.status_code}    200
+
+        ${decrypted_data}=  db.decrypt_data   ${resp.content}
+        Log  ${decrypted_data}
+
+        Set Test Variable  ${pkgId}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+        Set Test Variable  ${Dom}   ${decrypted_data['sector']}
+        Set Test Variable  ${SubDom}   ${decrypted_data['subSector']}
+        ${name}=  Set Variable  ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
+
+        Continue For Loop If  '${Dom}' != "finance"
+        Continue For Loop If  '${SubDom}' != "nbfc"
+        Continue For Loop If  '${pkgId}' == '${licId}'
+
+        ${resp}=   Get License UsageInfo 
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        IF  ${resp.json()['metricUsageInfo'][8]['total']} > 2 and ${resp.json()['metricUsageInfo'][8]['used']} < ${resp.json()['metricUsageInfo'][8]['total']}
+    Exit For Loop
+        END
+    END
+   
+    [Return]  ${MUSERNAME${a}}
 
 Get default status by type
 
@@ -11168,13 +11584,7 @@ Delete Treatment Plan Work By id
     ${resp}=   DELETE On Session  ynw  /provider/medicalrecord/treatment/work/${id}  expected_status=any
     [Return]  ${resp}
 
-Encrypted Provider Login
-    [Arguments]    ${usname}  ${passwrd}   ${countryCode}=91
-    ${data}=  Login  ${usname}  ${passwrd}   countryCode=${countryCode}
-    ${encrypted_data}=  db.ecrypt_data  ${data}
-    ${data}=    json.dumps    ${encrypted_data}
-    ${resp}=    POST On Session    ynw    /provider/login/encrypt    data=${data}  expected_status=any
-    [Return]  ${resp}
+
 
 Create MedicalRecordPrescription Template
     [Arguments]    ${templateName}    @{vargs}
@@ -12001,4 +12411,13 @@ Make Payment By Cash For Invoice
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/pay/acceptPayment    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Create Appointment Reminder Settings
+    [Arguments]  ${resource_type}  ${event_type}  ${email}  ${sms}  ${push_notf}  ${common_msg}  ${reminder_time}
+    ${data}=  Create Dictionary  resourceType=${resource_type}  eventType=${event_type}  email=${email}  sms=${sms}  
+                ...    pushNotification=${push_notf}  commonMessage=${common_msg}  time=${reminder_time}
+    ${data}=   json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=    POST On Session   ynw    /provider/consumerNotification/settings   data=${data}  expected_status=any
     [Return]  ${resp}

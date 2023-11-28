@@ -23,7 +23,7 @@ ${suffix}       serving
 JD-TC-Add Appointment Batch Name-1
     [Documentation]   Adding Appointment Batch Name
     
-    ${resp}=  Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -34,11 +34,11 @@ JD-TC-Add Appointment Batch Name-1
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
     clear_appt_schedule   ${PUSERNAME39}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -73,7 +73,7 @@ JD-TC-Add Appointment Batch Name-1
 JD-TC-Add Appointment Batch Name-2
     [Documentation]   Prefix is Empty when Adding Appointment Batch Name
     
-    ${resp}=  Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -92,7 +92,7 @@ JD-TC-Add Appointment Batch Name-2
 JD-TC-Add Appointment Batch Name-3
     [Documentation]   Suffix is Empty when Adding Appointment Batch Name
     
-    ${resp}=  Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -111,7 +111,7 @@ JD-TC-Add Appointment Batch Name-3
 JD-TC-Add Appointment Batch Name-UH1
     [Documentation]   SchedulId is Zero when Adding Appointment Batch Name
     
-    ${resp}=  Provider Login  ${PUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -123,7 +123,7 @@ JD-TC-Add Appointment Batch Name-UH1
 JD-TC-Add Appointment Batch Name-UH2
     [Documentation]   Adding Appointment Batch Name with another Provider login
     
-    ${resp}=  Provider Login  ${PUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

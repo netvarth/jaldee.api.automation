@@ -21,24 +21,30 @@ ${SERVICE2}  Hair makeup
 
 JD-TC-Get Queue By Id-1
 	[Documentation]  Get Queues by Id valid  provider
-    ${resp}=  Provider Login  ${PUSERNAME145}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME145}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME145}
     clear_location  ${PUSERNAME145}
     clear_queue  ${PUSERNAME145}
-    ${DAY1}=  get_date
+
+    ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -61,16 +67,20 @@ JD-TC-Get Queue By Id-1
 
 JD-TC-Get Queue By Id-2
     [Documentation]    Create a queue with field tokenStart in a location of a valid provider and get queue by id
-    ${resp}=  Provider Login  ${PUSERNAME139}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME139}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME139}
     clear_location  ${PUSERNAME139}
     clear_queue  ${PUSERNAME139}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     ${queue_name}=  FakerLibrary.bs
@@ -113,7 +123,7 @@ JD-TC-Get Queue By Id-UH2
     
 JD-TC-Get Queue By Id-UH3
 	[Documentation]  Get Queues by id using another  provider's id
-    ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     clear_queue  ${PUSERNAME126}
     ${resp}=  Get Queue ById  ${q_id}
@@ -123,7 +133,7 @@ JD-TC-Get Queue By Id-UH3
 
 JD-TC-Get Queue By Id-UH4
 	[Documentation]  Get Queues by id using Invalid id
-    ${resp}=  ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${resp}=  Get Queue ById  0
     Should Be Equal As Strings  ${resp.status_code}  422   

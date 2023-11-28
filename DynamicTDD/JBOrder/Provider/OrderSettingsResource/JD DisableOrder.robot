@@ -22,12 +22,15 @@ ${countryCode}   +91
 JD-TC-DisableOrderSettings-1
     [Documentation]   Disable Order Settings and verify
 
-    ${resp}=  ProviderLogin  ${PUSERNAME235}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid235}  ${resp.json()['id']}
-    Set Suite Variable  ${P235_fName}  ${resp.json()['firstName']}
-    Set Suite Variable  ${P235_lName}  ${resp.json()['lastName']}
-    Set Suite Variable  ${Ph235}  ${resp.json()['primaryPhoneNumber']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid235}  ${decrypted_data['id']}
+    Set Suite Variable  ${P235_fName}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${P235_lName}  ${decrypted_data['lastName']}
+    Set Suite Variable  ${Ph235}  ${decrypted_data['primaryPhoneNumber']}
 
     ${accId235}=  get_acc_id  ${PUSERNAME235}
     Set Suite Variable  ${accId235}
@@ -85,11 +88,14 @@ JD-TC-DisableOrderSettings-1
 JD-TC-DisableOrderSettings-2
     [Documentation]   Enable order settings using Updation, after that Disable Order Settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME28}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${P28_fName}  ${resp.json()['firstName']}
-    Set Suite Variable  ${P28_lName}  ${resp.json()['lastName']}
-    Set Suite Variable  ${Ph28}  ${resp.json()['primaryPhoneNumber']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${P28_fName}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${P28_lName}  ${decrypted_data['lastName']}
+    Set Suite Variable  ${Ph28}  ${decrypted_data['primaryPhoneNumber']}
 
     ${accId28}=  get_acc_id  ${PUSERNAME28}
     Set Suite Variable  ${accId28}
@@ -174,12 +180,15 @@ JD-TC-DisableOrderSettings-UH2
 JD-TC-DisableOrderSettings-UH3
     [Documentation]   Disable Order Settings again
 
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${P117_fName}  ${resp.json()['firstName']}
-    Set Suite Variable  ${P117_lName}  ${resp.json()['lastName']}
-    Set Suite Variable  ${Ph117}  ${resp.json()['primaryPhoneNumber']}
 
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${P117_fName}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${P117_lName}  ${decrypted_data['lastName']}
+    Set Suite Variable  ${Ph117}  ${decrypted_data['primaryPhoneNumber']}
+    
     ${accId117}=  get_acc_id  ${PUSERNAME117}
     Set Suite Variable  ${accId117}
 

@@ -27,7 +27,7 @@ ${suffix}       serving
 JD-TC-Appointment Schedule TodayAppmt Status-1
     [Documentation]   Today Appointment Schedule status is True
     
-    ${resp}=  Provider Login  ${PUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -47,11 +47,11 @@ JD-TC-Appointment Schedule TodayAppmt Status-1
     Set Suite Variable   ${s_id1}
     
     clear_appt_schedule   ${PUSERNAME50}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -83,7 +83,7 @@ JD-TC-Appointment Schedule TodayAppmt Status-1
 JD-TC-Appointment Schedule TodayAppmt Status-2
     [Documentation]   Set Today Appointment Schedule status is False
     
-    ${resp}=  Provider Login  ${PUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -100,7 +100,7 @@ JD-TC-Appointment Schedule TodayAppmt Status-2
 JD-TC-Appointment Schedule TodayAppmt Status-UH1
     [Documentation]   Today Appmt is Disable and trying Today Appointment Schedule status is False,
     
-    ${resp}=  Provider Login  ${PUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -123,7 +123,7 @@ JD-TC-Appointment Schedule TodayAppmt Status-UH1
 JD-TC-Appointment Schedule TodayAppmt Status-UH2
     [Documentation]   Another Provider Login and Another Schedule
     
-    ${resp}=  Provider Login  ${PUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -135,7 +135,7 @@ JD-TC-Appointment Schedule TodayAppmt Status-UH2
 JD-TC-Appointment Schedule TodayAppmt Status-UH3
     [Documentation]   With Provider Another Login
     
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -168,7 +168,7 @@ JD-TC-Appointment Schedule TodayAppmt Status-UH5
 JD-TC-Appointment Schedule TodayAppmt Status-3
     [Documentation]   Today appointment is Enable and set Today Appointment Schedule status is False,
     
-    ${resp}=  Provider Login  ${PUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -180,11 +180,11 @@ JD-TC-Appointment Schedule TodayAppmt Status-3
     Set Suite Variable   ${s_id}
     
     clear_appt_schedule   ${PUSERNAME50}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs

@@ -51,7 +51,7 @@ JD-TC-GetNextAvailability-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E1}${\n}
@@ -62,7 +62,7 @@ JD-TC-GetNextAvailability-1
     ${pid}=  get_acc_id  ${MUSERNAME_E1}
     Set Suite Variable  ${pid} 
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -76,20 +76,23 @@ JD-TC-GetNextAvailability-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
 
-    ${sTime}=  subtract_time  3  00
+    ${sTime}=  db.subtract_timezone_time  ${tz}  3  00
     Set Suite Variable  ${BsTime30}  ${sTime}
-    ${eTime}=  add_time   4  30
+    ${eTime}=  add_timezone_time  ${tz}  4  30  
     Set Suite Variable  ${BeTime30}  ${eTime}
     ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -119,12 +122,14 @@ JD-TC-GetNextAvailability-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[0]}
-    ${resp}=  Enable Waitlist
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}
+        ${resp}=  Enable Waitlist
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     sleep   01s
 
     ${resp}=  Get jaldeeIntegration Settings
@@ -140,9 +145,16 @@ JD-TC-GetNextAvailability-1
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -171,9 +183,9 @@ JD-TC-GetNextAvailability-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_id04}   ${resp.json()[0]['id']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}   
-    ${DAY2}=  add_date  10 
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
     Set Suite Variable   ${DAY2}     
     ${list}=  Create List  1  2  3  4  5  6  7
     
@@ -200,9 +212,9 @@ JD-TC-GetNextAvailability-1
     # Verify Response   ${resp}    waitlist=${bool[0]}   appointment=${bool[1]}
 
     ${schedule_name1}=  FakerLibrary.bs
-    ${sTime11}=  add_time   0  20
+    ${sTime11}=  add_timezone_time  ${tz}  0  20  
     Set Suite Variable  ${sTime11}
-    ${eTime11}=    add_time   5  40 
+    ${eTime11}=    add_timezone_time  ${tz}   5  40 
     Set Suite Variable  ${eTime11}
     ${delta}=  FakerLibrary.Random Int  min=10  max=45
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -238,7 +250,7 @@ JD-TC-GetNextAvailability-1
     ${p}=  Random Int  max=${num_slots-1}
     Set Suite Variable   ${slot1}   ${slots[${p}]}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${CUR_DAY}
 
     ${pcid1}=  get_id  ${CUSERNAME7}
@@ -252,15 +264,15 @@ JD-TC-GetNextAvailability-1
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid02}  ${apptid[0]}
 
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${CUR_DAY}   
     ${desc}=    FakerLibrary.name
 
-    ${Last_Day}=  add_date   3
+    ${Last_Day}=  db.add_timezone_date  ${tz}   3
     Set Suite Variable  ${Last_Day}
     ${resp}=  Create Vacation   ${desc}  ${p1_id04}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${Last_Day}  ${EMPTY}  ${sTime11}  ${eTime11}  
     Log  ${resp.json()}
@@ -299,7 +311,7 @@ JD-TC-GetNextAvailability-1
 
     # ${q}=  Random Int  max=${num_slots-2}
     # Set Test Variable   ${slot2}   ${slots[${q}]}
-    ${availableDate}=  add_date   4
+    ${availableDate}=  db.add_timezone_date  ${tz}   4
     ${resp}=  Get Vacation Next Availability   ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime11}  ${eTime11}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${Last_Day}  ${EMPTY}  ${sTime11}  ${eTime11}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

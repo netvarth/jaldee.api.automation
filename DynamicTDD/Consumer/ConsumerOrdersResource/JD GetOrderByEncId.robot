@@ -25,7 +25,7 @@ JD-TC-GetOrderByEncId-1
     clear_service  ${PUSERNAME217}
     clear_customer   ${PUSERNAME217}
     clear_Item   ${PUSERNAME217}
-    ${resp}=  ProviderLogin  ${PUSERNAME217}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME217}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -72,16 +72,16 @@ JD-TC-GetOrderByEncId-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -129,11 +129,11 @@ JD-TC-GetOrderByEncId-1
     
     ${far}=  Random Int  min=14  max=14
 
-    ${far_date}=   add_date   15
+    ${far_date}=   db.add_timezone_date  ${tz}   15
    
     ${soon}=  Random Int  min=1   max=1
 
-    ${soon_date}=   add_date   11
+    ${soon_date}=   db.add_timezone_date  ${tz}  11  
    
     Set Test Variable  ${minNumberItem}   1
 
@@ -160,7 +160,7 @@ JD-TC-GetOrderByEncId-1
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -190,7 +190,7 @@ JD-TC-GetOrderByEncId-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${encId1}   ${resp.json()['orderNumber']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME217}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME217}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

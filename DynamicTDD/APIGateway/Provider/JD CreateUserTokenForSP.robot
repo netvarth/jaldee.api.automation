@@ -28,7 +28,7 @@ JD-TC-CreateUserToken-1
 
     [Documentation]   Create User Token For a service Provider with his own number.
 
-    ${resp}=  Provider Login  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -54,7 +54,7 @@ JD-TC-CreateUserToken-UH1
 
     [Documentation]   Create User Token For a service Provider with another providers number.
 
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -138,7 +138,7 @@ JD-TC-CreateUserToken-UH8
 
     [Documentation]   Create User Token For a service Provider without enable API Gateway.
 
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

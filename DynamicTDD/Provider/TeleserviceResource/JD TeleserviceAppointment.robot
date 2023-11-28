@@ -104,7 +104,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -123,7 +123,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-1
     ${accId}=  get_acc_id  ${PUSERPH0}
     Set Suite Variable  ${accId}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -137,19 +137,23 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -200,6 +204,8 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-1
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=${bool[1]}
 
     # ${resp}=  Enable Disable Virtual Service  Enable
@@ -288,11 +294,11 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-1
     Set Suite Variable   ${p1_l1}   ${resp.json()[0]['id']}
     ${pid}=  get_acc_id  ${PUSERPH0}
     Set Suite Variable   ${pid}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     clear_appt_schedule   ${PUSERPH0}
@@ -370,7 +376,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-1
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${p1_l1}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -400,7 +406,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-2
     Should Be Equal As Strings  ${resp.status_code}  200
     ${cid}=  get_id  ${CUSERNAME6}    
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Virtual Service Appointment For Provider   ${pid}  ${p1_s2}  ${sch_id}  ${DAY1}  ${cnote}  ${CallingModes[0]}  ${ZOOM_id2}   ${apptfor}
     Log  ${resp.json()}
@@ -427,7 +433,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-2
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${p1_l1}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -458,7 +464,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${cid}=  get_id  ${CUSERNAME6}    
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Virtual Service Appointment For Provider   ${pid}  ${p1_s1}  ${sch_id}  ${DAY1}  ${cnote}  ${CallingModes[1]}   ${WHATSAPP_id2}   ${apptfor}
     Log  ${resp.json()}
@@ -485,7 +491,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-UH1
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${p1_l1}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -529,7 +535,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-3
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_customer   ${PUSERPH0}
@@ -562,7 +568,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-3
     ${apptfor}=   Create List  ${apptfor1}
     Set Suite Variable   ${apptfor}    
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Take Virtual Service Appointment For Consumer  ${pcid6}  ${p1_s2}  ${sch_id}  ${DAY1}  ${cnote}  ${CallingModes[0]}   ${ZOOM_id2}  ${apptfor}
     Log  ${resp.json()}
@@ -611,7 +617,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-3
 JD-TC-TeleserviceAppointment-(Billable Subdomain)-4
     [Documentation]  Create Teleservice meeting request for Appointment in WhatsApp (WALK-IN CHECKIN)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -626,7 +632,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-4
     Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
     Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Take Virtual Service Appointment For Consumer  ${pcid6}  ${p1_s1}  ${sch_id}  ${DAY1}  ${cnote}  ${CallingModes[1]}  ${WHATSAPP_id2}  ${apptfor}
     Log  ${resp.json()}
@@ -675,7 +681,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-4
 JD-TC-TeleserviceAppointment-(Billable Subdomain)-UH2
     [Documentation]  Create Teleservice meeting request for Appointment in Zoom and WhatsApp (WALK-IN CHECKIN)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -691,7 +697,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-UH2
     Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
     Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Take Virtual Service Appointment For Consumer  ${pcid6}  ${p1_s2}  ${sch_id}  ${DAY1}  ${cnote}  ${CallingModes[0]}  ${ZOOM_id2}  ${apptfor}
     Log  ${resp.json()}
@@ -751,7 +757,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-UH2
 JD-TC-TeleserviceAppointment-(Billable Subdomain)-5
 
     [Documentation]   Create Appointment teleservice Zoom meeting request Which  is already created
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -766,7 +772,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-5
     Set Test Variable   ${p1_s3}   ${resp.json()[2]['id']}
     Set Test Variable   ${P1SERVICE3}   ${resp.json()[2]['name']} 
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Take Virtual Service Appointment For Consumer  ${pcid6}  ${p1_s2}  ${sch_id}  ${DAY1}  ${cnote}  ${CallingModes[0]}  ${ZOOM_id2}  ${apptfor}
     Log  ${resp.json()}
@@ -826,7 +832,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-6
 
     [Documentation]   Create Appointment teleservice Whatsapp meeting request Which  is already created
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -846,7 +852,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-6
     Set Test Variable  ${ph_no}  ${resp.json()['primaryPhoneNumber']}
     ${cid}=  get_id  ${CUSERNAME7}   
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Virtual Service Appointment For Provider   ${pid}  ${p1_s1}  ${sch_id}  ${DAY1}  ${cnote}  ${CallingModes[1]}   ${WHATSAPP_id2}   ${apptfor}
     Log  ${resp.json()}
@@ -873,7 +879,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-6
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${p1_l1}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -928,7 +934,7 @@ JD-TC-TeleserviceAppointment-UH4
 
 JD-TC-TeleserviceAppointment-UH5
     [Documentation]    Create Appointment teleservice meeting request  with invalid  Appointment id 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -942,7 +948,7 @@ JD-TC-TeleserviceAppointment-UH5
 
 # JD-TC-TeleserviceAppointment-UH4
 #     [Documentation]    Create Appointment teleservice meeting request  with invalid  Calling mode 
-#     ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -954,7 +960,7 @@ JD-TC-TeleserviceAppointment-UH5
 
 JD-TC-TeleserviceAppointment-UH6
     [Documentation]    Create Appointment teleservice meeting request  for a cancelled Appointment 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1020,7 +1026,7 @@ JD-TC-TeleserviceAppointment-(Non billable Subdomain)-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1037,7 +1043,7 @@ JD-TC-TeleserviceAppointment-(Non billable Subdomain)-7
     
 
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -1051,19 +1057,23 @@ JD-TC-TeleserviceAppointment-(Non billable Subdomain)-7
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -1196,11 +1206,11 @@ JD-TC-TeleserviceAppointment-(Non billable Subdomain)-7
     Set Suite Variable   ${p2_l1}   ${resp.json()[0]['id']}
     ${pid}=  get_acc_id  ${PUSERPH2}
     Set Suite Variable   ${pid}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     clear_appt_schedule   ${PUSERPH2}
@@ -1249,7 +1259,7 @@ JD-TC-TeleserviceAppointment-(Non billable Subdomain)-7
     ${apptfor}=   Create List  ${apptfor1}
     Set Suite Variable   ${apptfor}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Take Virtual Service Appointment For Consumer  ${pcid0}  ${p2_s1}  ${sch_id2}  ${DAY1}  ${cnote}  ${CallingModes[0]}  ${ZOOM_Pid2}  ${apptfor}
     Log  ${resp.json()}
@@ -1310,11 +1320,11 @@ JD-TC-TeleserviceAppointment-(Non billable Subdomain)-7
 JD-TC-TeleserviceAppointment-(Non billable Subdomain)-UH7
     [Documentation]  Create Teleservice meeting request for Appointment  in Zoom and WhatsApp (Non billable Subdomain)
     
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${jdconID0}=  get_id  ${CUSERNAME0}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Take Virtual Service Appointment For Consumer  ${pcid0}  ${p2_s0}  ${sch_id2}  ${DAY1}  ${cnote}  ${CallingModes[1]}  ${WHATSAPP_id2}  ${apptfor}
     Log  ${resp.json()}

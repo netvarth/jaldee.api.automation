@@ -24,15 +24,18 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 JD-TC-GetLeadTemplates-1
     [Documentation]    Create a lead to a branch and get the lead template.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 # *** comment ***
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=    Get Locations
@@ -40,8 +43,13 @@ JD-TC-GetLeadTemplates-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME13}  
@@ -159,17 +167,19 @@ JD-TC-GetLeadTemplates-1
 JD-TC-GetLeadTemplates-2
     [Documentation]    Create a lead for a user and get the lead template.
 
-    ${resp}=    ProviderLogin    ${MUSERNAME1}    ${PASSWORD}    
+    ${resp}=    Encrypted Provider Login    ${MUSERNAME1}    ${PASSWORD}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     sleep  2s
     ${resp}=  Get Departments
@@ -205,10 +215,12 @@ JD-TC-GetLeadTemplates-2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=    ProviderLogin    ${PUSERNAME_U1}    ${PASSWORD}    
+    ${resp}=    Encrypted Provider Login    ${PUSERNAME_U1}    ${PASSWORD}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id1}  ${decrypted_data['id']}
 
     ${resp}=    AddCustomer    ${CUSERNAME8}
     Log   ${resp.json()}
@@ -254,7 +266,7 @@ JD-TC-GetLeadTemplates-2
 JD-TC-GetLeadTemplates-3
     [Documentation]    Create a lead for a user and get the lead template Filter by category.
 
-    ${resp}=    ProviderLogin    ${PUSERNAME_U1}    ${PASSWORD}    
+    ${resp}=    Encrypted Provider Login    ${PUSERNAME_U1}    ${PASSWORD}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -289,7 +301,7 @@ JD-TC-GetLeadTemplates-3
 JD-TC-GetLeadTemplates-4
     [Documentation]    Create a lead for a user and get the lead template Filter by categoryName.
 
-    ${resp}=    ProviderLogin    ${PUSERNAME_U1}    ${PASSWORD}    
+    ${resp}=    Encrypted Provider Login    ${PUSERNAME_U1}    ${PASSWORD}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -325,7 +337,7 @@ JD-TC-GetLeadTemplates-4
 JD-TC-GetLeadTemplates-5
     [Documentation]    Create a lead for a user and get the lead template Filter by type.
 
-    ${resp}=    ProviderLogin    ${PUSERNAME_U1}    ${PASSWORD}    
+    ${resp}=    Encrypted Provider Login    ${PUSERNAME_U1}    ${PASSWORD}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -361,7 +373,7 @@ JD-TC-GetLeadTemplates-5
 JD-TC-GetLeadTemplates-6
     [Documentation]    Create a lead for a user and get the lead template Filter by typeName.
 
-    ${resp}=    ProviderLogin    ${PUSERNAME_U1}    ${PASSWORD}    
+    ${resp}=    Encrypted Provider Login    ${PUSERNAME_U1}    ${PASSWORD}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -397,7 +409,7 @@ JD-TC-GetLeadTemplates-6
 JD-TC-GetLeadTemplates-7
     [Documentation]    Create a lead for a user and get the lead template Filter by priority.
 
-    ${resp}=    ProviderLogin    ${PUSERNAME_U1}    ${PASSWORD}    
+    ${resp}=    Encrypted Provider Login    ${PUSERNAME_U1}    ${PASSWORD}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -421,7 +433,7 @@ JD-TC-GetLeadTemplates-7
 JD-TC-GetLeadTemplates-8
     [Documentation]    Create a lead for a user and get the lead template Filter by priorityName.
 
-    ${resp}=    ProviderLogin    ${PUSERNAME_U1}    ${PASSWORD}    
+    ${resp}=    Encrypted Provider Login    ${PUSERNAME_U1}    ${PASSWORD}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -445,7 +457,7 @@ JD-TC-GetLeadTemplates-8
 JD-TC-GetLeadTemplates-9
     [Documentation]    Create a lead for a user and get the lead template Filter by isSubTask.
 
-    ${resp}=    ProviderLogin    ${PUSERNAME_U1}    ${PASSWORD}    
+    ${resp}=    Encrypted Provider Login    ${PUSERNAME_U1}    ${PASSWORD}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -472,23 +484,31 @@ JD-TC-GetLeadTemplates-9
 JD-TC-AddLeadToken-UH4
     [Documentation]  GetLeadToken with consumer login.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypt_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME13}  

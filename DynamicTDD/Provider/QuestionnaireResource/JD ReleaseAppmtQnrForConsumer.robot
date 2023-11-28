@@ -79,13 +79,14 @@ JD-TC-ReleaseAppmtQnrForConsumer-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -127,7 +128,7 @@ JD-TC-ReleaseAppmtQnrForConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -187,7 +188,7 @@ JD-TC-ReleaseAppmtQnrForConsumer-1
 
     clear_appt_schedule   ${PUSERNAME4}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -282,7 +283,7 @@ JD-TC-ReleaseAppmtQnrForConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -315,7 +316,7 @@ JD-TC-ReleaseAppmtQnrForConsumer-1
 JD-TC-ReleaseAppmtQnrForConsumer-2
     [Documentation]  Release Appointment for Consumer where release status is unreleased
 
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -346,7 +347,7 @@ JD-TC-ReleaseAppmtQnrForConsumer-2
 
 JD-TC-ReleaseAppmtQnrForConsumer-3
     [Documentation]  Release Appointment for Consumer to the same status again
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -366,7 +367,7 @@ JD-TC-ReleaseAppmtQnrForConsumer-3
 JD-TC-ReleaseAppmtQnrForConsumer-UH1
     [Documentation]  Release Appointment for Consumer where release status is released and check with another consumer
 
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -399,7 +400,7 @@ JD-TC-ReleaseAppmtQnrForConsumer-UH1
 JD-TC-ReleaseAppmtQnrForConsumer-UH2
     [Documentation]  Release Appointment for Consumer with empty questionnaire id
 
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -415,7 +416,7 @@ JD-TC-ReleaseAppmtQnrForConsumer-UH2
 JD-TC-ReleaseAppmtQnrForConsumer-UH3
     [Documentation]  Release Appointment for Consumer with empty Apptid
 
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -431,7 +432,7 @@ JD-TC-ReleaseAppmtQnrForConsumer-UH3
 JD-TC-ReleaseAppmtQnrForConsumer-UH4
     [Documentation]  Release Appointment for Consumer with empty relese status
 
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -447,7 +448,7 @@ JD-TC-ReleaseAppmtQnrForConsumer-UH4
 JD-TC-ReleaseAppmtQnrForConsumer-UH5
     [Documentation]  Release Appointment for Consumer with invalid questionnaire id
 
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -465,7 +466,7 @@ JD-TC-ReleaseAppmtQnrForConsumer-UH5
 
 JD-TC-ReleaseAppmtQnrForConsumer-UH6
     [Documentation]  Release Appointment for Consumer with invalid Appmt Id
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -484,7 +485,7 @@ JD-TC-ReleaseAppmtQnrForConsumer-UH6
 JD-TC-ReleaseAppmtQnrForConsumer-4
     [Documentation]  Release Appointment for Provider Consumer where release status is released
 
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -543,7 +544,7 @@ JD-TC-ReleaseAppmtQnrForConsumer-4
 JD-TC-ReleaseAppmtQnrForConsumer-5
     [Documentation]  Release Appointment for Provider Consumer where release status is unreleased
 
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

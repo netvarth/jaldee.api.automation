@@ -16,6 +16,7 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
+${tz}   Asia/Kolkata
 
 
 *** Test Cases ***
@@ -40,13 +41,13 @@ JD-TC-UpdateJaldeeCoupon-1
     Set Suite Variable  ${lic2}  ${resp.json()[1]['pkgId']}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}  ${lic2} 
     Set Suite Variable  ${licenses}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
-    ${DAY3}=  get_date
+    ${DAY3}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY3}  ${DAY3}
-    ${DAY4}=  add_date  10
+    ${DAY4}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY4}  ${DAY4}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -127,11 +128,11 @@ JD-TC-UpdateJaldeeCoupon-2
     Set Suite Variable  ${lic1}  ${resp.json()[0]['pkgId']}
     Set Suite Variable  ${lic2}  ${resp.json()[1]['pkgId']}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}  ${lic2} 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
-    ${DAY4}=  add_date  15
+    ${DAY4}=  db.add_timezone_date  ${tz}  15  
     Set Suite Variable  ${DAY4}  ${DAY4}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -180,12 +181,12 @@ JD-TC-UpdateJaldeeCoupon-2
 
 JD-TC-UpdateJaldeeCoupon-3
     [Documentation]    Create jaldee coupon for specific providers and update its values before push operations
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p1}=  get_acc_id  ${PUSERNAME1}
     ${p1}=  Convert To String  ${p1}
     Set Suite Variable  ${p1}
-    ${resp}=  ProviderLogin  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p2}=  get_acc_id  ${PUSERNAME3}
     ${p2}=  Convert To String  ${p2}
@@ -202,12 +203,12 @@ JD-TC-UpdateJaldeeCoupon-3
     ${resp}=  Create Jaldee Coupon For Providers  ${cupn_code1}  ${cupn_name}  ${cupn_des}   ${age_group[1]}  ${DAY1}  ${DAY2}  ${discountType[1]}  50  100  ${bool[0]}  ${bool[0]}  100  250  1000  5  2  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${c_des}  ${p_des}  ${pro_ids}
     Log    ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p1}=  get_acc_id  ${PUSERNAME2}
     ${p1}=  Convert To String  ${p1}
     Set Suite Variable  ${p1}
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p2}=  get_acc_id  ${PUSERNAME5}
     ${p2}=  Convert To String  ${p2}
@@ -249,13 +250,13 @@ JD-TC-UpdateJaldeeCoupon-3
 
 JD-TC-UpdateJaldeeCoupon-4
     [Documentation]    Create jaldee coupon for specific providers and update its values after push operations
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log    ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p1}=  get_acc_id  ${PUSERNAME1}
     ${p1}=  Convert To String  ${p1}
     Set Suite Variable  ${p1}
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p2}=  get_acc_id  ${PUSERNAME6}
     ${p2}=  Convert To String  ${p2}
@@ -362,8 +363,8 @@ JD-TC-UpdateJaldeeCoupon-UH9
     [Documentation]   Check coupon updated for valid dates(valid from,to)
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY3}=  add_date  -2
-    ${DAY4}=  add_date  -1
+    ${DAY3}=  db.add_timezone_date  ${tz}  -2
+    ${DAY4}=  db.add_timezone_date  ${tz}  -1
     ${resp}=  Update Jaldee Coupon  ${cupn_code012}   ${cupn_code012}   ${cupn_name}  ${cupn_des}  ${age_group[2]}  ${DAY3}  ${DAY4}  ${discountType[1]}  50  100  ${bool[1]}  ${bool[1]}  100  100  100  5  2  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${c_des}  ${p_des}  ${domains}  ${sub_domains}  ALL  ${licenses}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${JALDEE_COUPON_DATES_INVALID}"
@@ -372,8 +373,8 @@ JD-TC-UpdateJaldeeCoupon-UH10
     [Documentation]   Check coupon created for valid dates(valid to date previous date than valid from date)
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY3}=  get_date
-    ${DAY4}=  add_date  -1
+    ${DAY3}=  db.get_date_by_timezone  ${tz}
+    ${DAY4}=  db.add_timezone_date  ${tz}  -1
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  Update Jaldee Coupon  ${cupn_code012}   ${cupn_code012}   ${cupn_name}  ${cupn_des}  ${age_group[2]}  ${DAY3}  ${DAY4}  ${discountType[1]}  50  100  ${bool[1]}  ${bool[1]}  100  100  100  5  2  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${c_des}  ${p_des}  ${domains}  ${sub_domains}  ALL  ${licenses}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -491,7 +492,7 @@ JD-TC-UpdateJaldeeCoupon -UH21
 
 JD-TC-UpdateJaldeeCoupon -UH22
     [Documentation]   Consumer create a Jaldee Coupon
-    ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Update Jaldee Coupon  ${cupn_code012}   ${cupn_code012}   ${cupn_name}  ${cupn_des}  ${age_group[2]}  ${DAY1}  ${DAY2}  ${discountType[1]}  50  100  ${bool[1]}  ${bool[1]}  100  100  100  5  2  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${c_des}  ${p_des}  ${domains}  ${sub_domains}  ALL  ${licenses}
     Should Be Equal As Strings  ${resp.status_code}  419

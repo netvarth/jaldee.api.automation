@@ -59,17 +59,20 @@ JD-RecreateReimburseReport1
     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable   ${domain}    ${resp.json()['sector']}
-    Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${domain}  ${decrypted_data['sector']} 
+    Set Test Variable  ${subDomain}  ${decrypted_data['subSector']} 
+    # Set Suite Variable   ${domain}    ${resp.json()['sector']}
+    # Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
     Set Suite Variable  ${PUSERPH0}
     ${resp}=  Enable Waitlist
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}  ${DAY1}
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
     @{Views}=  Create List  self  all  customersOnly
@@ -83,19 +86,24 @@ JD-RecreateReimburseReport1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}101.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  ${DAY1}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
 
     ${resp}=  Update Business Profile with Schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
@@ -111,9 +119,9 @@ JD-RecreateReimburseReport1
     ${domains}=  Jaldee Coupon Target Domains  ${domain}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${domain}_${subDomain}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -143,7 +151,7 @@ JD-RecreateReimburseReport1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
      ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
     ${resp}=  Update Tax Percentage  ${gstpercentage[2]}  ${GST_num}
@@ -159,7 +167,7 @@ JD-RecreateReimburseReport1
     Set Suite Variable  ${cid}
 
     clear_location   ${PUSERPH0}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     Set Suite Variable  ${s_id2}   ${resp['service_id']}
     Set Suite Variable  ${s_name}   ${resp['service_name']}
@@ -167,9 +175,8 @@ JD-RecreateReimburseReport1
     ${msg_des}=    FakerLibrary.sentence
     Set Suite Variable   ${msg_des}
 
-    ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  ${msg_des}  ${bool[1]}  ${self}
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  ${msg_des}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     ${resp}=  Get Bill By UUId  ${wid}
@@ -239,10 +246,10 @@ JD-RecreateReimburseReport1
 
     sleep  02s
 
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
-    # ${end}=  add_time_sec  0  0  0
-    # ${start}=  add_time_sec  0  -5  0
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
+    # ${end}=  db.add_tz_time_sec  ${tz}   0  0  0
+    # ${start}=  db.add_tz_time_sec  ${tz}   0  -5  0
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -305,7 +312,7 @@ JD-RecreateReimburseReport1
 
     ${resp}=  Recreate reimburse report   ${eg_id}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${recreate_date}=   get_time_secs  
+    ${recreate_date}=   db.get_tz_time_secs  ${tz}   
 
 
 
@@ -339,18 +346,22 @@ JD-RecreateReimburseReport2
     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable   ${domain}    ${resp.json()['sector']}
-    Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${domain}  ${decrypted_data['sector']} 
+    Set Test Variable  ${subDomain}  ${decrypted_data['subSector']} 
+    # Set Suite Variable   ${domain}    ${resp.json()['sector']}
+    # Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
     Set Suite Variable  ${PUSERPH0}
     
     ${resp}=  Enable Waitlist
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -365,19 +376,22 @@ JD-RecreateReimburseReport2
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}101.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
 
 
@@ -394,9 +408,9 @@ JD-RecreateReimburseReport2
     ${domains}=  Jaldee Coupon Target Domains  ${domain}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${domain}_${subDomain}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -427,7 +441,7 @@ JD-RecreateReimburseReport2
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
     ${resp}=  Update Tax Percentage  ${gstpercentage[2]}  ${GST_num}
@@ -444,7 +458,7 @@ JD-RecreateReimburseReport2
     Set Suite Variable  ${cid}
 
     clear_location   ${PUSERPH0}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     Set Suite Variable  ${s_id2}   ${resp['service_id']}
     Set Suite Variable  ${s_name}   ${resp['service_name']}
@@ -452,9 +466,8 @@ JD-RecreateReimburseReport2
     ${msg_des}=    FakerLibrary.sentence
     Set Suite Variable   ${msg_des}
 
-    ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  ${msg_des}  ${bool[1]}  ${self}
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  ${msg_des}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     ${resp}=  Get Bill By UUId  ${wid}
@@ -523,10 +536,10 @@ JD-RecreateReimburseReport2
     Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[1]} 
 
     sleep  02s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
-    # ${end}=  add_time_sec  0  0  0
-    # ${start}=  add_time_sec  0  -10  0
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
+    # ${end}=  db.add_tz_time_sec  ${tz}   0  0  0
+    # ${start}=  db.add_tz_time_sec  ${tz}   0  -10  0
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -568,7 +581,7 @@ JD-RecreateReimburseReport2
 
     ${resp}=  Recreate reimburse report   ${eg_id}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${recreate_date}=   get_time_secs 
+    ${recreate_date}=   db.get_tz_time_secs  ${tz}  
 
 
     ${resp}=   Get reimburse

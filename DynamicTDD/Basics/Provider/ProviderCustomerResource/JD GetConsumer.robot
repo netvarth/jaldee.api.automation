@@ -27,7 +27,7 @@ ${pngfile}     /ebs/TDD/upload.png
 JD-TC-Get Consumer-1
     [Documentation]   Get Consumer by provider login using account.
 
-    ${resp}=  Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -57,7 +57,7 @@ JD-TC-Get Consumer-1
 JD-TC-Get Consumer-2
     [Documentation]   Get Consumer by provider login provider add a customer.
 
-    ${resp}=  Provider Login  ${PUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -78,7 +78,7 @@ JD-TC-Get Consumer-2
 JD-TC-Get Consumer-3
     [Documentation]   Get Consumer by Consumer login .
 
-    ${resp}=  Provider Login  ${PUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

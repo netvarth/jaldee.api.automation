@@ -85,7 +85,7 @@ JD-TC-CreateDonationService-3
         ${service_duration}=   Random Int   min=10   max=50
         ${total_amnt}=   Random Int   min=100   max=500
         ${total_amnt}=  Convert To Number  ${total_amnt}  1
-        ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         clear_service   ${PUSERNAME2}
@@ -94,7 +94,7 @@ JD-TC-CreateDonationService-3
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200 
         
-        ${resp}=  Provider Login  ${PUSERNAME150}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         delete_donation_service  ${PUSERNAME150}
         clear_service   ${PUSERNAME150}  
@@ -110,7 +110,7 @@ JD-TC-CreateDonationService-3
 JD-TC-CreateDonationService-UH1
 
         [Documentation]  Create  service for a valid provider when isPrePayment is true
-        ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         delete_donation_service  ${PUSERNAME2}
         clear_service   ${PUSERNAME2}
@@ -275,7 +275,7 @@ JD-TC-CreateDonationService-UH7
 
 JD-TC-CreateDonationService-UH8
         [Documentation]   provider adding donation service to queue
-        ${resp}=  ProviderLogin  ${PUSERNAME102}  ${PASSWORD}   
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}   
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}   200
         delete_donation_service  ${PUSERNAME102}
@@ -284,7 +284,12 @@ JD-TC-CreateDonationService-UH8
         clear_location   ${PUSERNAME102}
         ${acc_id}=  get_acc_id  ${PUSERNAME102}
         ${resp}=   Create Sample Location
-        Set Suite Variable    ${loc_id1}    ${resp}  
+        Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
         ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -300,15 +305,15 @@ JD-TC-CreateDonationService-UH8
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200  
         Set Suite Variable  ${sid5}  ${resp.json()}
-        ${DAY1}=  get_date
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${DAY1}
-        ${DAY2}=  add_date  10      
+        ${DAY2}=  db.add_timezone_date  ${tz}  10        
         Set Suite Variable  ${DAY2}
         ${list}=  Create List  1  2  3  4  5  6  7
         Set Suite Variable  ${list}
-        ${sTime1}=  add_time  0  15
+        ${sTime1}=  add_timezone_time  ${tz}  0  15  
         Set Suite Variable   ${sTime1}
-        ${eTime1}=  add_time   0  30
+        ${eTime1}=  add_timezone_time  ${tz}  0  30  
         Set Suite Variable   ${eTime1}
  
         ${queue_name}=  FakerLibrary.bs
@@ -320,7 +325,7 @@ JD-TC-CreateDonationService-UH8
 JD-TC-CreateDonationService-5
 
         [Documentation]  Create  service for a valid provider without service price.
-        ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         delete_donation_service  ${PUSERNAME2}
         clear_service   ${PUSERNAME2}
@@ -343,7 +348,7 @@ JD-TC-CreateDonationService-5
 JD-TC-CreateDonationService-UH9
 
         [Documentation]  Create  service for a valid provider without giving proper multiples
-        ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         delete_donation_service  ${PUSERNAME2}
         clear_service   ${PUSERNAME2}
@@ -381,10 +386,14 @@ Billable
      
     FOR   ${a}  IN RANGE  ${start}   ${length}
             
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${domain}=   Set Variable    ${resp.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+
         ${resp}=   Get Active License
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}   200
@@ -412,10 +421,16 @@ Non Billable
         ${length}=  Get Length   ${len}
 
      FOR    ${a}   IN RANGE  ${start}    ${length}
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${domain}=   Set Variable    ${resp.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+        
+        # ${domain}=   Set Variable    ${resp.json()['sector']}
+        # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
         ${resp}=  View Waitlist Settings
 	Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable  
         ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}

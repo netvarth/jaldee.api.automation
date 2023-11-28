@@ -45,7 +45,7 @@ JD-TC-OneTimeInfoSave-1
   Log List  ${QnrTransactionType}
   Set Suite Variable   ${colnames}
 
-  ${resp}=  Provider Login  ${PUSERNAME27}  ${PASSWORD}
+  ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
   Log  ${resp.content}
   Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -89,7 +89,7 @@ JD-TC-OneTimeInfoSave-1
   Log  ${resp.content}
   Should Be Equal As Strings  ${resp.status_code}  200
 
-  ${resp}=  Provider Login  ${PUSERNAME27}  ${PASSWORD}
+  ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
   Log  ${resp.content}
   Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -109,9 +109,9 @@ JD-TC-OneTimeInfoSave-1
 
   clear_queue   ${PUSERNAME27}
 
-  ${DAY1}=  get_date
+  ${DAY1}=  db.get_date_by_timezone  ${tz}
     
-  ${resp}=  Sample Queue   ${lid}   ${s_id}
+  ${resp}=  Sample Queue  ${lid}   ${s_id}
   Log  ${resp.content}
   Should Be Equal As Strings  ${resp.status_code}  200
   Set Test Variable  ${q_id}  ${resp.json()}
@@ -173,12 +173,13 @@ JD-TC-OneTimeInfoSave-1
   Should Be Equal As Strings  ${resp.status_code}  200
   Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
 
-  ${DAY1}=  get_date
+  ${DAY1}=  db.get_date_by_timezone  ${tz}
   ${list}=  Create List  1  2  3  4  5  6  7
-  ${DAY1}=  get_date
-  ${DAY2}=  add_date  15 
-  ${sTime}=  db.get_time
-  ${eTime}=  add_time  0  15
+  ${DAY1}=  db.get_date_by_timezone  ${tz}
+  ${DAY2}=  db.add_timezone_date  ${tz}  15   
+  # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+  ${eTime}=  add_timezone_time  ${tz}  0  15  
   ${capacity}=  Random Int  min=20   max=40
   ${parallel}=  Random Int   min=1   max=2
   ${queue1}=    FakerLibrary.Word
@@ -203,7 +204,7 @@ JD-TC-OneTimeInfoSave-1
   Log  ${resp.content}
   Should Be Equal As Strings  ${resp.status_code}  200
 
-  ${resp}=  Provider Login  ${PUSERNAME27}  ${PASSWORD}
+  ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
   Log  ${resp.content}
   Should Be Equal As Strings    ${resp.status_code}    200
 

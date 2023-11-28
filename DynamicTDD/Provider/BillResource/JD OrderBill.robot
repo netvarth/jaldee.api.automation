@@ -35,7 +35,7 @@ JD-TC-ProviderCouponBill-1
     clear_customer   ${PUSERNAME101}
     clear_Coupon     ${PUSERNAME101}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     ${accId}=  get_acc_id  ${PUSERNAME101}
@@ -81,7 +81,12 @@ JD-TC-ProviderCouponBill-1
     Should Be Equal As Strings      ${resp.status_code}  200
     
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -103,11 +108,11 @@ JD-TC-ProviderCouponBill-1
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid2}  ${resp.json()}
     
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   subtract_time  1  55
-    ${end_time}=    add_time  4  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
 
@@ -121,13 +126,13 @@ JD-TC-ProviderCouponBill-1
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime}=  subtract_time  0  15
-    # ${eTime}=  add_time   0  45
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   3  30   
+    # ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    # ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  3  30     
   
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   15
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   15
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=10   max=50
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -155,16 +160,16 @@ JD-TC-ProviderCouponBill-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -236,7 +241,7 @@ JD-TC-ProviderCouponBill-1
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -267,7 +272,7 @@ JD-TC-ProviderCouponBill-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 

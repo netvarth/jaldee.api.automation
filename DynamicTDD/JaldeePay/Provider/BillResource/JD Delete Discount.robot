@@ -20,7 +20,7 @@ ${start}         190
 
 JD-TC-Delete Discount-1
        [Documentation]   login in a Valid provider create and delete discounts
-       ${resp}=   ProviderLogin   ${PUSERNAME237}   ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login   ${PUSERNAME237}   ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        clear_Discount  ${PUSERNAME237}
        ${desc}=  FakerLibrary.Sentence   nb_words=2
@@ -66,7 +66,7 @@ JD-TC-Delete Discount-UH2
 
 JD-TC-Delete Discount-UH3
        [Documentation]   Provider check to delete discount with another provider's discount id
-       ${resp}=   ProviderLogin   ${PUSERNAME238}   ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login   ${PUSERNAME238}   ${PASSWORD} 
        Should Be Equal As Strings  ${resp.status_code}  200       
        ${resp}=   Delete Discount    ${id2}
        Should Be Equal As Strings  ${resp.status_code}  422
@@ -74,7 +74,7 @@ JD-TC-Delete Discount-UH3
 
 JD-TC-Delete Discount-UH4
        [Documentation]   Provider check to delete discount with invalid discount id
-       ${resp}=   ProviderLogin   ${PUSERNAME238}   ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login   ${PUSERNAME238}   ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200       
        ${resp}=   Delete Discount   0
        Should Be Equal As Strings  ${resp.status_code}  422 
@@ -89,10 +89,14 @@ JD-TC- Delete Discount-UH5
        ${length}=  Get Length   ${len}
        
        FOR   ${a}  IN RANGE   ${start}  ${length}
-       ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
        Should Be Equal As Strings    ${resp.status_code}    200
-       ${domain}=   Set Variable    ${resp.json()['sector']}
-       ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+
+       ${decrypted_data}=  db.decrypt_data  ${resp.content}
+       Log  ${decrypted_data}
+       ${domain}=   Set Variable    ${decrypted_data['sector']}
+       ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+
        ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
        Should Be Equal As Strings    ${resp.status_code}    200
        Set Test Variable  ${check}  ${resp2.json()['serviceBillable']}
@@ -106,44 +110,47 @@ JD-TC- Delete Discount-UH5
        sleep   1s
 
        ${list}=  Create List  1  2  3  4  5  6  7
-    ${PUSERPH4}=  Evaluate  ${PUSERNAME${a}}+305
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
-    ${PUSERPH5}=  Evaluate  ${PUSERNAME}+306
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
-    ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
-    ${views}=  Evaluate  random.choice($Views)  random
-    ${name1}=  FakerLibrary.name
-    ${name2}=  FakerLibrary.name
-    ${name3}=  FakerLibrary.name
-    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${PUSERPH4}  ${views}
-    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
-    ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   0  15
-    ${desc}=   FakerLibrary.sentence
-    ${url}=   FakerLibrary.url
-    ${parking}   Random Element   ${parkingType}
-    ${DAY}=  get_date
-    ${resp}=  Update Business Profile with schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${lid}  ${resp.json()['baseLocation']['id']}
-    ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
-    Should Be Equal As Strings    ${fields.status_code}   200
-    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${subdomain}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${spec}=  get_Specializations  ${resp.json()}
-    ${resp}=  Update Specialization  ${spec}
-    Should Be Equal As Strings    ${resp.status_code}   200
+       ${PUSERPH4}=  Evaluate  ${PUSERNAME${a}}+305
+       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
+       ${PUSERPH5}=  Evaluate  ${PUSERNAME}+306
+       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
+       ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
+       ${views}=  Evaluate  random.choice($Views)  random
+       ${name1}=  FakerLibrary.name
+       ${name2}=  FakerLibrary.name
+       ${name3}=  FakerLibrary.name
+       ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${PUSERPH4}  ${views}
+       ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
+       ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
+       ${bs}=  FakerLibrary.bs
+       ${companySuffix}=  FakerLibrary.companySuffix
+       # ${city}=   FakerLibrary.state
+       # ${latti}=  get_latitude
+       # ${longi}=  get_longitude
+       # ${postcode}=  FakerLibrary.postcode
+       # ${address}=  get_address
+       ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+       ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+       # ${sTime}=  db.get_time_by_timezone   ${tz}
+       ${sTime}=  db.get_time_by_timezone  ${tz}
+       ${eTime}=  add_timezone_time  ${tz}  0  15  
+       ${desc}=   FakerLibrary.sentence
+       ${url}=   FakerLibrary.url
+       ${parking}   Random Element   ${parkingType}
+       ${DAY}=  db.get_date_by_timezone  ${tz}
+       ${resp}=  Update Business Profile with schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
+       Should Be Equal As Strings    ${resp.status_code}    200
+       Set Test Variable  ${lid}  ${resp.json()['baseLocation']['id']}
+       ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
+       Should Be Equal As Strings    ${fields.status_code}   200
+       ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+       ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${subdomain}
+       Should Be Equal As Strings  ${resp.status_code}  200
+       ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
+       Should Be Equal As Strings    ${resp.status_code}   200
+       ${spec}=  get_Specializations  ${resp.json()}
+       ${resp}=  Update Specialization  ${spec}
+       Should Be Equal As Strings    ${resp.status_code}   200
     
 
 
@@ -156,14 +163,14 @@ JD-TC- Delete Discount-UH5
        # Should Be Equal As Strings  ${resp.status_code}  200
        # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+       ${resp}=   Get jaldeeIntegration Settings
+       Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+       Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
+       ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
+       Log   ${resp.json()}
+       Should Be Equal As Strings  ${resp.status_code}  200   
 
        ${desc}=  FakerLibrary.Sentence   nb_words=2
        ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=2  right_digits=1
@@ -173,17 +180,23 @@ JD-TC- Delete Discount-UH5
        ${resp} =  Create Sample Queue
        Set Suite Variable  ${s_id}  ${resp['service_id']}
        Set Suite Variable  ${qid}   ${resp['queue_id']}
+       Set Suite Variable   ${lid}   ${resp['location_id']}
+
+       ${resp}=   Get Location ById  ${lid}
+       Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+       Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
        ${resp}=  AddCustomer  ${CUSERNAME4}
        Log   ${resp.json()}
        Should Be Equal As Strings  ${resp.status_code}  200
        Set Suite Variable  ${cid}  ${resp.json()}     
-       ${DAY}=  get_date
+       ${DAY}=  db.get_date_by_timezone  ${tz}
        ${resp}=  Add To Waitlist  ${cId}  ${s_id}  ${qid}  ${DAY}  hi  ${bool[1]}  ${cid}
        Should Be Equal As Strings  ${resp.status_code}  200
-       
        ${wid}=  Get Dictionary Values  ${resp.json()}
        Set Test Variable  ${wid}  ${wid[0]}
+
        ${resp}=  Get Bill By UUId  ${wid} 
        Should Be Equal As Strings  ${resp.status_code}  200
        ${service}=  Service Bill  ${desc}  ${s_id}  1  ${discountId}
@@ -208,15 +221,26 @@ JD-TC- Delete Discount-UH6
        ${length}=  Get Length   ${len}
        
        FOR   ${a}  IN RANGE   ${start}  ${length}
-       ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
-       Should Be Equal As Strings    ${resp.status_code}    200
-       ${domain}=   Set Variable    ${resp.json()['sector']}
-       ${subdomain}=    Set Variable      ${resp.json()['subSector']}
-       ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
-       Should Be Equal As Strings    ${resp.status_code}    200
-       Set Test Variable  ${check}  ${resp2.json()['serviceBillable']}
-       Exit For Loop IF     "${check}" == "True"
+              ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+              Should Be Equal As Strings    ${resp.status_code}    200
+
+              ${decrypted_data}=  db.decrypt_data  ${resp.content}
+              Log  ${decrypted_data}
+              ${domain}=   Set Variable    ${decrypted_data['sector']}
+              ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+              
+              # ${domain}=   Set Variable    ${resp.json()['sector']}
+              # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+              ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
+              Should Be Equal As Strings    ${resp.status_code}    200
+              Set Test Variable  ${check}  ${resp2.json()['serviceBillable']}
+              Exit For Loop IF     "${check}" == "True"
        END
+
+       ${resp}=  Get Business Profile
+       Should Be Equal As Strings  ${resp.status_code}  200
+       Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+     
        clear_Discount  ${PUSERNAME${a}}
        clear_customer   ${PUSERNAME${a}}
        ${desc}=  FakerLibrary.Sentence   nb_words=2
@@ -229,7 +253,7 @@ JD-TC- Delete Discount-UH6
        Log   ${resp.json()}
        Should Be Equal As Strings  ${resp.status_code}  200
        Set Suite Variable  ${cid}  ${resp.json()}   
-       ${DAY}=  get_date
+       ${DAY}=  db.get_date_by_timezone  ${tz}
        ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid}  ${DAY}  hi  True  ${cid}
        Should Be Equal As Strings  ${resp.status_code}  200
        

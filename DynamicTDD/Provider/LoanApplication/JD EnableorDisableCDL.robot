@@ -84,7 +84,7 @@ JD-TC-Enable Disable CDL-1
                                   
     [Documentation]               Enable CDL for a valid provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME131}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -105,7 +105,7 @@ JD-TC-Enable Disable CDL-2
 
     [Documentation]   Disable CDL After Enabling
 
-    ${resp}=  Provider Login  ${PUSERNAME131}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -135,7 +135,7 @@ JD-TC-Enable Disable CDL-3
 
     [Documentation]   Enable CDL which is Disabled
 
-    ${resp}=  Provider Login  ${PUSERNAME131}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -188,7 +188,7 @@ JD-TC-Enable Disable CDL-UH3
 
     [Documentation]   Enable CDL Which is already enabled
 
-    ${resp}=  Provider Login  ${PUSERNAME131}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -216,7 +216,7 @@ JD-TC-Enable Disable CDL-UH4
 
     [Documentation]   Disable CDL Which is already Disabled
 
-    ${resp}=  Provider Login  ${PUSERNAME131}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

@@ -27,7 +27,7 @@ JD-TC-GetGroup Id-1
     
     [Documentation]  Get Group
     
-    ${resp}=  Provider Login  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${accountId}=    get_acc_id       ${PUSERNAME22}
@@ -118,7 +118,7 @@ JD-TC-GetGroupBy Id-UH2
     
     [Documentation]  Get Group with another provider consumer
 
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${accountId}=    get_acc_id       ${PUSERNAME77}
@@ -127,6 +127,7 @@ JD-TC-GetGroupBy Id-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}

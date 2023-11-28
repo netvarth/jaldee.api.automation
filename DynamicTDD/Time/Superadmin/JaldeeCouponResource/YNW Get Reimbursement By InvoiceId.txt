@@ -26,11 +26,11 @@ ${longi}        89.524764
 ${latti}        86.524764
 *** Test Cases ***
 
-YNW-TC-Get reimbursement byInvoiceId-1
+JD-TC-Get reimbursement byInvoiceId-1
     clear_reimburseReport
     clear_payment_invoice  ${PUSERNAME7}
     Comment  Get reimbursement report    
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -48,9 +48,9 @@ YNW-TC-Get reimbursement byInvoiceId-1
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -64,7 +64,7 @@ YNW-TC-Get reimbursement byInvoiceId-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Update Tax Percentage  18  13DEFBV1100M2Z6  
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -202,10 +202,10 @@ YNW-TC-Get reimbursement byInvoiceId-1
     Should Be Equal As Strings  ${resp.json()[0]['paidBy']['id']}  2
     Should Be Equal As Strings  ${resp.json()[0]['paidBy']['userName']}  asha.support
 
-YNW-TC-Get reimbursement byInvoiceId-2
+JD-TC-Get reimbursement byInvoiceId-2
     change_system_time  0  5
     Comment     Reimburse payment of same jaldee coupon and same provider and Get reimbursement report 
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${pid}=  get_acc_id  ${PUSERNAME7}
     ${cid}=  get_id  ${CUSERNAME}
@@ -299,10 +299,10 @@ YNW-TC-Get reimbursement byInvoiceId-2
     Should Be Equal As Strings  ${resp.json()[0]['paidBy']['userName']}  asha.support
 
 
-YNW-TC-Get reimbursement byInvoiceId-3
+JD-TC-Get reimbursement byInvoiceId-3
     Comment  SA do reimuburse payment of 2 jaldeee coupon and same provider
     change_system_time  0  5  
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME1}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  hi  True  ${cid}
@@ -451,14 +451,14 @@ YNW-TC-Get reimbursement byInvoiceId-3
     Should Be Equal As Strings  ${resp.json()[0]['paidBy']['id']}  2
     Should Be Equal As Strings  ${resp.json()[0]['paidBy']['userName']}  asha.support
 
-YNW-TC-Get reimbursement byInvoiceId -UH1
+JD-TC-Get reimbursement byInvoiceId -UH1
     Comment  Get reimbursement byInvoiceId without login 
      
     ${resp}=  Get Reimbursement By InvoiceId  ${invoice_id}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   ${resp.json()}   "Session Expired"
 
-YNW-TC-Get reimbursement byInvoiceId -UH2
+JD-TC-Get reimbursement byInvoiceId -UH2
     Comment   Consumer do Get reimbursement byInvoiceId
     ${resp}=   Consumer Login  ${CUSERNAME}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -466,9 +466,9 @@ YNW-TC-Get reimbursement byInvoiceId -UH2
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   ${resp.json()}   "Session Expired"
 
-YNW-TC-Get reimbursement byInvoiceId -UH3
+JD-TC-Get reimbursement byInvoiceId -UH3
     Comment   Provider do Get reimbursement byInvoiceId
-    ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Reimbursement By InvoiceId  ${invoice_id}
     Should Be Equal As Strings    ${resp.status_code}   419

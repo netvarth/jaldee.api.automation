@@ -18,7 +18,7 @@ JD-TC-EnableDisableCRMforUser-1
 
     [Documentation]   Enable CRM for a valid provider.
 
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -40,7 +40,7 @@ JD-TC-EnableDisableCRMforUser-2
 
     [Documentation]   Disable CRM After Enabling
 
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -70,7 +70,7 @@ JD-TC-EnableDisableCRMforUser-3
 
     [Documentation]   Enable CRM which is Disabled
 
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -123,7 +123,7 @@ JD-TC-EnableDisableCRMforUser-UH3
 
     [Documentation]   Enable CRM Which is already enabled
 
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -151,7 +151,7 @@ JD-TC-EnableDisableCRMforUser-UH4
 
     [Documentation]   Disable CRM Which is already Disabled
 
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

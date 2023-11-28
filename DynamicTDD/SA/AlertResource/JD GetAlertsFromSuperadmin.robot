@@ -15,6 +15,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Variables ***
 ${alert_reason}   Server maintenance 
+${tz}   Asia/Kolkata
 
 *** Test Cases ***
 JD-TC-GetAlertsFromSuperadmin-1
@@ -25,14 +26,14 @@ JD-TC-GetAlertsFromSuperadmin-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid}=  get_acc_id  ${PUSERNAME6}
     clear_Alert  ${pid}
-    ${DAY}=  add_date  1
-    ${time}=  db.add_time  1  10
+    ${DAY}=  db.add_timezone_date  ${tz}  1  
+    ${time}=  db.add_timezone_time  ${tz}  1  10
     ${resp}=  Schedule Maintenance   ${DAY}  ${time}    
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep  4s
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Alerts From Superadmin

@@ -89,11 +89,11 @@ JD-TC-AndroidLevelAnalytics-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  
@@ -108,19 +108,22 @@ JD-TC-AndroidLevelAnalytics-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   5  45
+    ${eTime}=  add_timezone_time  ${tz}  5  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
@@ -149,6 +152,7 @@ JD-TC-AndroidLevelAnalytics-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
@@ -210,7 +214,7 @@ JD-TC-AndroidLevelAnalytics-1
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id1}  ${resp.json()}
@@ -219,7 +223,8 @@ JD-TC-AndroidLevelAnalytics-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone   ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -238,7 +243,7 @@ JD-TC-AndroidLevelAnalytics-1
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id2} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id2} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id2}  ${resp.json()}
@@ -247,7 +252,8 @@ JD-TC-AndroidLevelAnalytics-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone   ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id2}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -273,7 +279,7 @@ JD-TC-AndroidLevelAnalytics-1
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  App Add To Waitlist Consumers  ${androidcons_headers}  ${pid}  ${q_id1}  ${DAY}  ${s_id}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.content}
@@ -307,7 +313,7 @@ JD-TC-AndroidLevelAnalytics-1
 
     END
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -357,7 +363,7 @@ JD-TC-AndroidLevelAnalytics-2
 
     [Documentation]   take ONLINE_APPMT for a provider through CONSUMER_APP and check account level analytics for ANDROID_APPMTS and WEB_APPMTS.
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -449,7 +455,7 @@ JD-TC-AndroidLevelAnalytics-2
 
     Log List   ${appt_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -497,10 +503,13 @@ JD-TC-AndroidLevelAnalytics-3
 
     [Documentation]   take ONLINE_ORDER for a provider trough CONSUMER_APPand check account level analytics for ANDROID_ORDER and WEB_ORDER matrix.
    
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    # Set Test Variable  ${acc_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
     
     ${resp}=  Get Order Settings by account id
     Log  ${resp.json()}
@@ -540,17 +549,17 @@ JD-TC-AndroidLevelAnalytics-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable  ${sTime1}
-    ${eTime1}=  add_time   3  30 
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     Set Suite Variable  ${eTime1}  
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -671,10 +680,10 @@ JD-TC-AndroidLevelAnalytics-3
     ${item_quantity2}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${EMPTY_List}=  Create List
     Set Suite Variable  ${EMPTY_List}
-    ${FUTDAY1}=  add_date   12
+    ${FUTDAY1}=  db.add_timezone_date  ${tz}  12  
     Set Suite Variable  ${FUTDAY1}
 
-    ${DAY2}=  add_date   13
+    ${DAY2}=  db.add_timezone_date  ${tz}  13  
     Set Suite Variable  ${DAY2}
 
     ${resp}=  Provider Logout
@@ -754,7 +763,7 @@ JD-TC-AndroidLevelAnalytics-3
     ${android_order_len}=   Evaluate  len($order_ids) + len($order_ids1)
     Set Suite Variable   ${android_order_len}
 
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -771,7 +780,7 @@ JD-TC-AndroidLevelAnalytics-3
     
     END
     
-    ${DAY}=  add_date   14
+    ${DAY}=  db.add_timezone_date  ${tz}   14
     Set Suite Variable  ${DAY}
 
     ${resp}=  Get Account Level Analytics  metricId=${orderAnalyticsMetrics['ANDROID_ORDER']}  dateFrom=${FUTDAY1}  dateTo=${DAY}  frequency=${analyticsFrequency[0]}
@@ -811,7 +820,7 @@ JD-TC-AndroidLevelAnalytics-4
     ${andr_walkin_token_ids}=  Create List
     Set Suite Variable   ${andr_walkin_token_ids}
 
-    ${DAY2}=  add_date  1
+    ${DAY2}=  db.add_timezone_date  ${tz}  1  
     Set Suite Variable  ${DAY2}  
     
     FOR   ${a}  IN RANGE   ${count}
@@ -825,7 +834,6 @@ JD-TC-AndroidLevelAnalytics-4
         ${resp}=  App Add To Waitlist  ${android_sp_headers}  ${cid${a}}  ${s_id2}  ${q_id2}  ${DAY2}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -847,7 +855,7 @@ JD-TC-AndroidLevelAnalytics-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -915,7 +923,6 @@ JD-TC-AndroidLevelAnalytics-5
         ${resp}=  App Add To Waitlist with mode  ${android_sp_headers}  ${waitlistMode[2]}  ${cid${a}}  ${s_id}  ${q_id1}  ${DAY2}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -940,7 +947,7 @@ JD-TC-AndroidLevelAnalytics-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1049,7 +1056,7 @@ JD-TC-AndroidLevelAnalytics-6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1106,7 +1113,7 @@ JD-TC-AndroidLevelAnalytics-7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY3}=  add_date  2
+    ${DAY3}=  db.add_timezone_date  ${tz}  2  
 
     FOR   ${a}  IN RANGE   ${count}
         
@@ -1158,7 +1165,7 @@ JD-TC-AndroidLevelAnalytics-7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1221,7 +1228,7 @@ JD-TC-AndroidLevelAnalytics-8
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     ${item_quantity2}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
     
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1232,7 +1239,7 @@ JD-TC-AndroidLevelAnalytics-8
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${cid${a}}   ${resp.json()[0]['id']}
       
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -1277,7 +1284,7 @@ JD-TC-AndroidLevelAnalytics-8
  
     FOR   ${a}  IN RANGE   ${count}
     
-        ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1296,7 +1303,7 @@ JD-TC-AndroidLevelAnalytics-8
     ${walkin_order_len}=   Evaluate   len($order_ids3) 
     Set Suite Variable   ${walkin_order_len}
 
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    

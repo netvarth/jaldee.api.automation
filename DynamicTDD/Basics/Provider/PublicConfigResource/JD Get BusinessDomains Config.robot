@@ -16,7 +16,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-GetBusinessDomains -1
        [Documentation]   Provider check to get business domain configurations
-       ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=   Get BusinessDomainsConf
        Should Be Equal As Strings   ${resp.status_code}   200

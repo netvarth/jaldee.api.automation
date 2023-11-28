@@ -87,11 +87,11 @@ JD-TC-JaldeeChannelAnalytics-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  
@@ -116,9 +116,9 @@ JD-TC-JaldeeChannelAnalytics-1
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   5  45
+    ${eTime}=  db.add_timezone_time  ${tz}   5  45
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
@@ -217,7 +217,7 @@ JD-TC-JaldeeChannelAnalytics-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -245,7 +245,7 @@ JD-TC-JaldeeChannelAnalytics-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id2}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -271,7 +271,7 @@ JD-TC-JaldeeChannelAnalytics-1
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  App Add To Waitlist Consumers  ${ioscons_headers}  ${pid}  ${q_id1}  ${DAY}  ${s_id}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.content}
@@ -305,7 +305,7 @@ JD-TC-JaldeeChannelAnalytics-1
 
     END
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

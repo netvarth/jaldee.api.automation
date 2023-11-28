@@ -17,12 +17,12 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-Enable Queue-1
     [Documentation]  Enable  Queue of valid  provider
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service  ${PUSERNAME6}
     clear_location  ${PUSERNAME6}
     clear_queue  ${PUSERNAME6}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid}   ${resp['queue_id']}
     Set Suite Variable  ${s_id1}   ${resp['service_id']}
     Set Suite Variable  ${lid}   ${resp['location_id']}
@@ -53,7 +53,7 @@ JD-TC-Enable Queue-UH2
     
 JD-TC-Enable Queue-UH3
     [Documentation]  Enable queue by another  provider
-    ${resp}=  ProviderLogin  ${PUSERNAME225}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME225}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     clear_queue  ${PUSERNAME225}
     ${resp}=  Get queues
@@ -65,7 +65,7 @@ JD-TC-Enable Queue-UH3
     
 JD-TC-Enable Queue-UH4
     [Documentation]  Enable Queue using Invalid queue id
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${resp}=  Enable Queue  0
     Should Be Equal As Strings  ${resp.status_code}  422   
@@ -73,7 +73,7 @@ JD-TC-Enable Queue-UH4
        
 JD-TC-Enable Queue-UH5
     [Documentation]  Enable a already enabled queue
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${resp}=  Get Queue ById  ${qid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -84,13 +84,13 @@ JD-TC-Enable Queue-UH5
 
 JD-TC-Enable Queue-UH6
     [Documentation]  Enable queue to a conflicting time
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200    
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   0  30
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id1}
     Log  ${resp.json()}

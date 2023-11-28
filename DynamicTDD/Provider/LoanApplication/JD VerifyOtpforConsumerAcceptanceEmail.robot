@@ -53,7 +53,7 @@ JD-TC-VerifyOtpforConsumerAcceptanceEmail-1
                                   
     [Documentation]               Verify Otp for Consumer Acceptance Email
 
-    ${resp}=  Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -103,9 +103,14 @@ JD-TC-VerifyOtpforConsumerAcceptanceEmail-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     clear Customer  ${PUSERNAME87}
@@ -516,7 +521,7 @@ JD-TC-VerifyOtpforConsumerAcceptanceEmail-2
                                   
     [Documentation]               Verify Otp for Consumer Acceptance Email  without otp generation
 
-    ${resp}=  Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -763,7 +768,7 @@ JD-TC-VerifyOtpforConsumerAcceptanceEmail-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME85}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME85}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1074,7 +1079,7 @@ JD-TC-VerifyOtpforConsumerAcceptanceEmail-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME85}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME85}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1092,7 +1097,7 @@ JD-TC-VerifyOtpforConsumerAcceptanceEmail-5
     [Documentation]               Verify Otp for Consumer Acceptance Email   without login
 
    
-    ${resp}=   ProviderLogin  ${PUSERNAME85}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME85}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1131,7 +1136,7 @@ JD-TC-VerifyOtpforConsumerAcceptanceEmail-7
                                   
     [Documentation]               Verify Otp for Consumer Acceptance Email   with  another provider  login
 
-    ${resp}=   ProviderLogin  ${PUSERNAME23}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

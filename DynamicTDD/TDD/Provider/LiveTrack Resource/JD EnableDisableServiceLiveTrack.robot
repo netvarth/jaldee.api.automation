@@ -34,7 +34,7 @@ Get provider by license
     FOR   ${a}  IN RANGE  ${length}
             
         ${Provider_PH}=  Set Variable  ${PUSERNAME${a}}
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${domain}=   Set Variable    ${resp.json()['sector']}
         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
@@ -90,11 +90,11 @@ JD-TC-EnableDisableServiceLiveTrack-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -109,19 +109,22 @@ JD-TC-EnableDisableServiceLiveTrack-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}081.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -154,7 +157,7 @@ JD-TC-EnableDisableServiceLiveTrack-1
 JD-TC-EnableDisableServiceLiveTrack-2
     [Documentation]  Enable live tracking for more than one service
     
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -197,7 +200,7 @@ JD-TC-EnableDisableServiceLiveTrack-2
 JD-TC-EnableDisableServiceLiveTrack-3
     [Documentation]  Disable live tracking for a service
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -220,7 +223,7 @@ JD-TC-EnableDisableServiceLiveTrack-3
 JD-TC-EnableDisableServiceLiveTrack-4
     [Documentation]  Disable live tracking for multiple services service
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -266,7 +269,7 @@ JD-TC-EnableDisableServiceLiveTrack-5
     [Documentation]  Disable Global live tracking when service live tracking is enabled
     ...     and check status of service live tracking
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -316,7 +319,7 @@ JD-TC-EnableDisableServiceLiveTrack-6
     [Documentation]  Disable Global live tracking when service live tracking is enabled
     ...     and enable again and check status of service live tracking
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -378,7 +381,7 @@ JD-TC-EnableDisableServiceLiveTrack-6
 #         comment   Checking with license  
 #         clear_service   ${puser_list[${i}]}
 #         Log   ${licresp.json()[${i}]['displayName']}
-#         ${resp}=   ProviderLogin  ${puser_list[${i}]}  ${PASSWORD} 
+#         ${resp}=   Encrypted Provider Login  ${puser_list[${i}]}  ${PASSWORD} 
 #         Log  ${resp.json()}
 #         Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -423,7 +426,7 @@ JD-TC-EnableDisableServiceLiveTrack-6
 
 #         comment   Checking with license  
 #         Log   ${licresp.json()[${i}]['displayName']}
-#         ${resp}=   ProviderLogin  ${puser_list[${i}]}  ${PASSWORD} 
+#         ${resp}=   Encrypted Provider Login  ${puser_list[${i}]}  ${PASSWORD} 
 #         Log  ${resp.json()}
 #         Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -477,7 +480,7 @@ JD-TC-EnableDisableServiceLiveTrack-UH1
     [Documentation]  Enable service live tracking without Enabling Global live tracking
 
     clear_service   ${PUSERPH0}
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -507,7 +510,7 @@ JD-TC-EnableDisableServiceLiveTrack-UH1
 JD-TC-EnableDisableServiceLiveTrack-UH2
     [Documentation]  Disable service live tracking without Enabling Global live tracking
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -523,7 +526,7 @@ JD-TC-EnableDisableServiceLiveTrack-UH2
 JD-TC-EnableDisableServiceLiveTrack-UH3
     [Documentation]  Disable service live tracking without Enabling it
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200 
 
@@ -547,7 +550,7 @@ JD-TC-EnableDisableServiceLiveTrack-UH3
 
 JD-TC-EnableDisableServiceLiveTrack-UH4
     [Documentation]  Enable already enabled service live tracking
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 

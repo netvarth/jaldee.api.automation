@@ -60,7 +60,7 @@ JD-TC-VerifyLoanBank-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME87}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -289,7 +289,7 @@ JD-TC-VerifyLoanBank-UH2
                                   
     [Documentation]               Verify Loan Bank with empty loanuid
 
-    ${resp}=   ProviderLogin  ${PUSERNAME87}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -302,7 +302,7 @@ JD-TC-VerifyLoanBank-UH3
                                   
     [Documentation]               Verify Loan Bank with invalid loanuid
 
-    ${resp}=   ProviderLogin  ${PUSERNAME87}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -317,7 +317,7 @@ JD-TC-VerifyLoanBank-UH4
                                   
     [Documentation]               Verify Loan Bank with EMPTY bankAccountNo
 
-    ${resp}=   ProviderLogin  ${PUSERNAME87}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -331,7 +331,7 @@ JD-TC-VerifyLoanBank-UH5
                                   
     [Documentation]               Verify Loan Bank with invalid bankIfsc
 
-    ${resp}=   ProviderLogin  ${PUSERNAME87}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

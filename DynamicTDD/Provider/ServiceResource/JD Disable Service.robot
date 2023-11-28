@@ -34,7 +34,7 @@ JD-TC-Disable Service-1
             ${Total}=   Random Int   min=100   max=500
             ${min_pre}=  Convert To Number  ${min_pre}  1
             ${Total}=  Convert To Number  ${Total}  1
-            ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
+            ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
             Should Be Equal As Strings    ${resp.status_code}    200
             clear_service       ${PUSERNAME71}
             ${resp}=  Create Service  ${SERVICE1}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]} 
@@ -57,7 +57,7 @@ JD-TC-Disable Service-UH1
             ${Total}=   Random Int   min=100   max=500
             ${min_pre}=  Convert To Number  ${min_pre}  1
             ${Total}=  Convert To Number  ${Total}  1 
-            ${resp}=  Provider Login  ${PUSERNAME34}  ${PASSWORD}
+            ${resp}=  Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD}
             Should Be Equal As Strings    ${resp.status_code}    200
             clear_service       ${PUSERNAME34}
             ${resp}=  Create Service  ${SERVICE5}    ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]} 
@@ -65,7 +65,7 @@ JD-TC-Disable Service-UH1
             Set Suite Variable  ${ssid}  ${resp.json()}
             ${resp}=   ProviderLogout
             Should Be Equal As Strings    ${resp.status_code}    200
-            ${resp}=  Provider Login  ${PUSERNAME55}  ${PASSWORD}
+            ${resp}=  Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD}
             Should Be Equal As Strings    ${resp.status_code}    200
             ${resp}=  Disable service  ${ssid} 
             Log  ${resp.json()}
@@ -77,7 +77,7 @@ JD-TC-Disable Service-UH2
 
             [Documentation]   Disable  Invalid service id
 
-            ${resp}=  Provider Login  ${PUSERNAME3}  ${PASSWORD}
+            ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
             Should Be Equal As Strings    ${resp.status_code}    200
             ${resp}=  Disable service  0 
             Should Be Equal As Strings  ${resp.status_code}  404
@@ -89,7 +89,7 @@ JD-TC-Disable Service-UH3
             [Documentation]  Disable a already disabled service
 
             
-            ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+            ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
             Should Be Equal As Strings    ${resp.status_code}    200
             clear_service       ${PUSERNAME64}
             ${resp}=    Create Sample Service  ${SERVICE1}
@@ -121,11 +121,11 @@ JD-TC-Disable Service-UH5
 
 JD-TC-Disable Service-UH6
             [Documentation]   Disable a service which in an active checkin(status=prepayment pending)
-            ${resp}=  Provider Login  ${PUSERNAME78}  ${PASSWORD}
+            ${resp}=  Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD}
             Should Be Equal As Strings    ${resp.status_code}    200
             clear_service       ${PUSERNAME78}
             ${list}=  Create List   1  2  3  4  5  6  7
-            ${DAY1}=  get_date
+            ${DAY1}=  db.get_date_by_timezone  ${tz}
             clear_location  ${PUSERNAME78}
             clear_queue  ${PUSERNAME78}
             ${resp} =  Create Sample Queue
@@ -160,7 +160,7 @@ JD-TC-Disable Service-UH6
             Should Be Equal As Strings  ${resp.status_code}  200
             ${resp}=  Consumer Logout
             Should Be Equal As Strings  ${resp.status_code}  200
-            ${resp}=  Provider Login  ${PUSERNAME78}  ${PASSWORD}
+            ${resp}=  Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD}
             Should Be Equal As Strings    ${resp.status_code}    200
             ${resp}=  Disable service  ${s_id} 
             # Should Be Equal As Strings  ${resp.status_code}  200
@@ -180,7 +180,7 @@ JD-TC-Disable Service-UH7
             ${Total}=   Random Int   min=100   max=500
             ${min_pre}=  Convert To Number  ${min_pre}  1
             ${Total}=  Convert To Number  ${Total}  1
-            ${resp}=  Provider Login  ${PUSERNAME78}  ${PASSWORD}
+            ${resp}=  Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD}
             Should Be Equal As Strings    ${resp.status_code}    200
             clear_service       ${PUSERNAME78}
             ${resp}=  Create Service  ${SERVICE2}   ${description1}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]} 
@@ -191,10 +191,10 @@ JD-TC-Disable Service-UH7
             Should Be Equal As Strings  ${resp.status_code}  200
             Set Suite Variable  ${sid3}  ${resp.json()}
 
-            ${DAY1}=  get_date
+            ${DAY1}=  db.get_date_by_timezone  ${tz}
             ${list}=  Create List  1  2  3  4  5  6  7
-            ${sTime2}=  add_time  1  45
-            ${eTime2}=  add_time   2  30
+            ${stime2}=  add_timezone_time  ${tz}  1  45  
+            ${eTime2}=  add_timezone_time  ${tz}  2  30  
             ${p1queue2}=    FakerLibrary.word
             ${capacity}=  FakerLibrary.Numerify  %%
             ${parallel}=  FakerLibrary.Numerify  %%
@@ -206,15 +206,14 @@ JD-TC-Disable Service-UH7
             ${resp}=  ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
             Should Be Equal As Strings  ${resp.status_code}  200
             ${cid}=  get_id  ${CUSERNAME8} 
-            ${DAY1}=  get_date
+            ${DAY1}=  db.get_date_by_timezone  ${tz}
             ${resp}=  Add To Waitlist Consumers  ${pid}  ${qid1}  ${DAY1}  ${sid2}  i need  False  0
             Should Be Equal As Strings  ${resp.status_code}  200
-            
             ${wid}=  Get Dictionary Values  ${resp.json()}
             Set Suite Variable  ${wid1}  ${wid[0]}
             ${resp}=  Consumer Logout
             Should Be Equal As Strings  ${resp.status_code}  200
-            ${resp}=  Provider Login  ${PUSERNAME78}  ${PASSWORD}
+            ${resp}=  Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD}
             Should Be Equal As Strings    ${resp.status_code}    200
             ${resp}=  Disable service  ${sid2} 
             # Should Be Equal As Strings  ${resp.status_code}  200
@@ -232,8 +231,8 @@ JD-TC-Disable Service-UH8
             ${resp}=  ConsumerLogin  ${CUSERNAME9}  ${PASSWORD}
             Should Be Equal As Strings  ${resp.status_code}  200
            
-            ${DAY1}=  get_date
-            ${resp}=  Provider Login  ${PUSERNAME78}  ${PASSWORD}
+            ${DAY1}=  db.get_date_by_timezone  ${tz}
+            ${resp}=  Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD}
             Should Be Equal As Strings    ${resp.status_code}    200
             clear_customer   ${PUSERNAME78}
 

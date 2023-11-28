@@ -20,7 +20,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-Waitist Rating-1
     [Documentation]   a provider Waitlisted consumer gives Rating 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     clear_Rating     ${PUSERNAME58}
@@ -41,10 +41,13 @@ JD-TC-Waitist Rating-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid1}  ${resp.json()}
 
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}
+    
     ${resp}=   Create Sample Location
     Set Test Variable    ${loc_id1}    ${resp}  
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_name1}=   FakerLibrary.name
     Set Test Variable    ${ser_name1} 
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -52,14 +55,18 @@ JD-TC-Waitist Rating-1
     ${ser_name2}=   FakerLibrary.word
     Set Test Variable    ${ser_name2} 
     ${resp}=   Create Sample Service  ${ser_name2}
-    Set Test Variable    ${ser_id2}    ${resp}      
+    Set Test Variable    ${ser_id2}    ${resp}  
+
     ${q_name}=    FakerLibrary.name
     Set Test Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  1  00
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}
+    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  3  00 
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -73,7 +80,6 @@ JD-TC-Waitist Rating-1
     Set Suite Variable    ${desc}
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}   ${cid1}  
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${uuid}  ${wid[0]}
     ${resp}=   Waitlist Rating  ${uuid}   ${rating_stars[0]}   ${rating[0]}
@@ -103,17 +109,16 @@ JD-TC-Waitist Rating-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_U}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_U}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_U}${\n}
     Set Suite Variable  ${PUSERNAME_U}
 
-    ${resp}=  Provider Login  ${PUSERNAME_U}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_U}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_U}+15566124
     ${ph2}=  Evaluate  ${PUSERNAME_U}+25566128
@@ -125,18 +130,22 @@ JD-TC-Waitist Rating-2
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_U}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -182,7 +191,11 @@ JD-TC-Waitist Rating-2
     Set Suite Variable  ${cid2}  ${resp.json()}
 
     ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}  
+    Set Test Variable    ${loc_id1}    ${resp}
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
     ${ser_name1}=   FakerLibrary.word
     Set Test Variable    ${ser_name1} 
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -190,7 +203,8 @@ JD-TC-Waitist Rating-2
     ${ser_name2}=   FakerLibrary.word
     Set Test Variable    ${ser_name2} 
     ${resp}=   Create Sample Service  ${ser_name2}
-    Set Test Variable    ${ser_id2}    ${resp}      
+    Set Test Variable    ${ser_id2}    ${resp} 
+
     ${q_name}=    FakerLibrary.name
     Set Test Variable    ${q_name}   
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}    ${parallel}    ${capacity}   ${loc_id1}  ${ser_id1}  ${ser_id2} 
@@ -200,7 +214,6 @@ JD-TC-Waitist Rating-2
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid2}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}   ${cid2}  
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid}  ${wid[0]}
     ${resp}=   Waitlist Rating  ${uuid}   ${rating_stars[0]}   ${rating[0]}
@@ -211,7 +224,6 @@ JD-TC-Waitist Rating-2
     Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}   ${rating[0]}
     ${resp}=  Add To Waitlist  ${cid2}  ${ser_id2}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}  
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid}  ${wid[0]}
     ${resp}=   Waitlist Rating  ${uuid}   ${rating_stars[1]}   ${rating[1]}
@@ -227,7 +239,7 @@ JD-TC-Waitist Rating-2
 JD-TC-Waitist Rating-3
     [Documentation]   a provider Waitlisted different consumer gives three Ratings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     clear_Rating     ${PUSERNAME11}
@@ -242,6 +254,10 @@ JD-TC-Waitist Rating-3
 
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
     ${ser_name1}=   FakerLibrary.word
     Set Suite Variable    ${ser_name1} 
     ${resp}=   Create Sample Service  ${ser_name1}
@@ -249,7 +265,8 @@ JD-TC-Waitist Rating-3
     ${ser_name2}=   FakerLibrary.word
     Set Suite Variable    ${ser_name2} 
     ${resp}=   Create Sample Service  ${ser_name2}
-    Set Suite Variable    ${ser_id2}    ${resp}      
+    Set Suite Variable    ${ser_id2}    ${resp}  
+        
     ${q_name}=    FakerLibrary.name
     Set Suite Variable    ${q_name}
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}    ${capacity}    ${loc_id1}  ${ser_id1}  ${ser_id2} 
@@ -260,7 +277,6 @@ JD-TC-Waitist Rating-3
     ${resp}=  Add To Waitlist  ${cid3}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}   ${cid3}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid}  ${wid[0]}
     ${resp}=   Waitlist Rating  ${uuid}   ${rating_stars[0]}   ${rating[0]}
@@ -277,7 +293,6 @@ JD-TC-Waitist Rating-3
 
     ${resp}=  Add To Waitlist  ${cid2}  ${ser_id2}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}   ${cid2}  
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid}  ${wid[0]}
     ${resp}=   Waitlist Rating  ${uuid}   ${rating_stars[1]}   ${rating[1]}
@@ -294,7 +309,6 @@ JD-TC-Waitist Rating-3
 
     ${resp}=  Add To Waitlist  ${cid3}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}   ${cid3}  
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid}  ${wid[0]}
     ${resp}=   Waitlist Rating  ${uuid}   ${rating_stars[3]}   ${rating[3]}
@@ -327,7 +341,7 @@ JD-TC-Waitlist Rating -UH2
 JD-TC-Verify Waitist Rating-1
     [Documentation]   Verify Business profile after Consumer Rating     
     
-    ${resp}=  ProviderLogin  ${PUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -336,7 +350,7 @@ JD-TC-Verify Waitist Rating-1
 JD-TC-Verify Waitist Rating-2
     [Documentation]   Verify Business profile after Consumer Rating           
     
-    ${resp}=  ProviderLogin  ${PUSERNAME_U}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -345,7 +359,7 @@ JD-TC-Verify Waitist Rating-2
 JD-TC-Verify Waitist Rating-3
     [Documentation]   Verify Business profile after Consumer Rating   
 
-    ${resp}=  ProviderLogin  ${PUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200

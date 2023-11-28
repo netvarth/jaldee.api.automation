@@ -60,7 +60,7 @@ JD-TC-Approx Waiting Time-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -68,7 +68,7 @@ JD-TC-Approx Waiting Time-1
 ***comment***
 
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -83,19 +83,22 @@ JD-TC-Approx Waiting Time-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}028.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
@@ -142,12 +145,13 @@ JD-TC-Approx Waiting Time-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${today}=  get_date
+    ${today}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${today}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${stime1}=  db.get_time
-    ${etime1}=  add_time  1  0
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  Random Int  min=2   max=2
@@ -185,7 +189,6 @@ JD-TC-Approx Waiting Time-1
         ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q1}  ${today}  ${desc}  ${bool[1]}  ${cid}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${i}}  ${wid[0]}
     END
@@ -214,7 +217,7 @@ JD-TC-Approx Waiting Time-1
 
 JD-TC-Approx Waiting Time-2
     [Documentation]   Check approximate waiting time when calculation mode is Fixed and batch is enabled
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -239,12 +242,12 @@ JD-TC-Approx Waiting Time-2
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${p1_s1}  ${resp.json()} 
     
-    ${today}=  get_date
+    ${today}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${today}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  Random Int  min=2   max=2
@@ -282,7 +285,6 @@ JD-TC-Approx Waiting Time-2
         ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q1}  ${today}  ${desc}  ${bool[1]}  ${cid}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${i}}  ${wid[0]}
     END
@@ -302,7 +304,7 @@ JD-TC-Approx Waiting Time-2
 
 JD-TC-Approx Waiting Time-3
     [Documentation]   Check approximate waiting time when calculation mode is NoCalc and batch is enabled
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -327,12 +329,12 @@ JD-TC-Approx Waiting Time-3
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${p1_s1}  ${resp.json()} 
     
-    ${today}=  get_date
+    ${today}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${today}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  Random Int  min=2   max=2
@@ -371,7 +373,6 @@ JD-TC-Approx Waiting Time-3
         ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q1}  ${today}  ${desc}  ${bool[1]}  ${cid}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${i}}  ${wid[0]}
     END
@@ -389,7 +390,7 @@ JD-TC-Approx Waiting Time-3
 JD-TC-Approx Waiting Time-4
     [Documentation]   Check approximate waiting time when calculation mode is ML, batch is enabled, and waitlists are started
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -418,12 +419,13 @@ JD-TC-Approx Waiting Time-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${today}=  get_date
+    ${today}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${today}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${stime1}=  db.get_time
-    ${etime1}=  add_time  1  0
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  Random Int  min=2   max=4
@@ -462,7 +464,6 @@ JD-TC-Approx Waiting Time-4
         ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q1}  ${today}  ${desc}  ${bool[1]}  ${cid}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${i}}  ${wid[0]}
     END
@@ -579,8 +580,8 @@ JD-TC-Approx Waiting Time-4
 JD-TC-Approx Waiting Time-5
     [Documentation]   Check approximate waiting time when calculation mode is ML, batch is enabled, and 1st and 4th waitlists are cancelled
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    # ${resp}=   ProviderLogin  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -608,12 +609,13 @@ JD-TC-Approx Waiting Time-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${today}=  get_date
+    ${today}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${today}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${stime1}=  db.get_time
-    ${etime1}=  add_time  1  0
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  Random Int  min=2   max=4
@@ -647,7 +649,6 @@ JD-TC-Approx Waiting Time-5
         ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q1}  ${today}  ${desc}  ${bool[1]}  0
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${i}}  ${wid[0]}
     END
@@ -766,7 +767,7 @@ JD-TC-Approx Waiting Time-5
 
 JD-TC-Approx Waiting Time-6
     [Documentation]   Check approximate waiting time when calculation mode is ML, batch is enabled, and 1st checkIn is completed
-    ${resp}=   ProviderLogin  ${PUSERNAME33}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -792,12 +793,13 @@ JD-TC-Approx Waiting Time-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${today}=  get_date
+    ${today}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${today}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${stime1}=  db.get_time
-    ${etime1}=  add_time  1  0
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  Random Int  min=2   max=4
@@ -830,7 +832,6 @@ JD-TC-Approx Waiting Time-6
         ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q1}  ${today}  ${desc}  ${bool[1]}  0
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${i}}  ${wid[0]}
     END
@@ -903,7 +904,7 @@ JD-TC-Approx Waiting Time-6
 JD-TC-Approx Waiting Time-7
     [Documentation]   update parallel serving and check waiting time.
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -932,12 +933,13 @@ JD-TC-Approx Waiting Time-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${today}=  get_date
+    ${today}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${today}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${stime1}=  db.get_time
-    ${etime1}=  add_time  1  0
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  Random Int  min=2   max=4
@@ -972,7 +974,6 @@ JD-TC-Approx Waiting Time-7
         ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q1}  ${today}  ${desc}  ${bool[1]}  0
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${i}}  ${wid[0]}
     END
@@ -1028,7 +1029,7 @@ JD-TC-Approx Waiting Time-7
 JD-TC-Approx Waiting Time-8
     [Documentation]   update service duration and check waiting time.
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -1057,12 +1058,13 @@ JD-TC-Approx Waiting Time-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${today}=  get_date
+    ${today}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${today}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${stime1}=  db.get_time
-    ${etime1}=  add_time  1  0
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  Random Int  min=2   max=4
@@ -1097,7 +1099,6 @@ JD-TC-Approx Waiting Time-8
         ${resp}=  Add To Waitlist  ${cid}  ${p1_s1}  ${p1_q1}  ${today}  ${desc}  ${bool[1]}  0
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${i}}  ${wid[0]}
     END

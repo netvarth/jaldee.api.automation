@@ -23,7 +23,7 @@ ${countryCode}   +91
 JD-TC-GetOrderSettingsStatus-1
     [Documentation]   Get Order Settings Status after signup
 
-    ${resp}=  ProviderLogin  ${PUSERNAME225}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME225}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid225}  ${resp.json()['id']}
     Set Suite Variable  ${P225_fName}  ${resp.json()['firstName']}
@@ -43,7 +43,7 @@ JD-TC-GetOrderSettingsStatus-1
 JD-TC-GetOrderSettingsStatus-2
     [Documentation]   Get Order Settings Status after Enable order settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME225}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME225}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${firstname2}=  FakerLibrary.first_name
@@ -71,7 +71,7 @@ JD-TC-GetOrderSettingsStatus-2
 JD-TC-GetOrderSettingsStatus-3
     [Documentation]   Get Order Settings Status after Disable order settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME225}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME225}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Disable Order Settings
@@ -88,7 +88,7 @@ JD-TC-GetOrderSettingsStatus-3
 JD-TC-GetOrderSettingsStatus-4
     [Documentation]   Enable order settings through Updation, after that Get Order Settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME225}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME225}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${fName}=    FakerLibrary.word
@@ -122,7 +122,7 @@ JD-TC-GetOrderSettingsStatus-4
 JD-TC-GetOrderSettingsStatus-5
     [Documentation]   Disable order settings through Updation, after that Get Order Settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME225}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME225}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 

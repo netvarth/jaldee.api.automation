@@ -22,7 +22,7 @@ JD-TC-EnableDisableItemGroup-1
 
     [Documentation]  Enable Item Grouping of an existing provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME127}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -45,7 +45,7 @@ JD-TC-EnableDisableItemGroup-2
 
     [Documentation]  Disable Item Grouping of an existing provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME128}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME128}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -100,7 +100,7 @@ JD-TC-EnableDisableItemGroup-UH3
 
     [Documentation]  Enable Item Grouping of already enabled.
 
-    ${resp}=  Provider Login  ${PUSERNAME28}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -131,7 +131,7 @@ JD-TC-EnableDisableItemGroup-UH4
 
     [Documentation]  Disable Item Grouping of already disabled.
 
-    ${resp}=  Provider Login  ${PUSERNAME28}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

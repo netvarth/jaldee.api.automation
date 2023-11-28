@@ -23,7 +23,7 @@ JD-TC-CreateItemGroup-1
 
     [Documentation]  Create Item Group for an existing provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -53,7 +53,7 @@ JD-TC-CreateItemGroup-2
 
     [Documentation]  Create multiple Item Group for an existing provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -68,7 +68,7 @@ JD-TC-CreateItemGroup-3
 
     [Documentation]  Create multiple Item Group with same name for an existing provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME38}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -102,7 +102,7 @@ JD-TC-CreateItemGroup-4
 
     [Documentation]  Create Item Group with group name as numbers
 
-    ${resp}=  Provider Login  ${PUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -116,7 +116,7 @@ JD-TC-CreateItemGroup-5
 
     [Documentation]  Create Item Group for a provider without group decscription.
 
-    ${resp}=  Provider Login  ${PUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -144,7 +144,7 @@ JD-TC-CreateItemGroup-UH1
 
     [Documentation]  Create Item Group for a provider without enable item group flag in account settings.
 
-    ${resp}=  Provider Login  ${PUSERNAME27}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -159,7 +159,7 @@ JD-TC-CreateItemGroup-UH2
 
     [Documentation]  Create Item Group for a provider without group name.
 
-    ${resp}=  Provider Login  ${PUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -23,7 +23,7 @@ JD-TC-GetOrderSetings-1
     clear_service  ${PUSERNAME140}
     clear_customer   ${PUSERNAME140}
     clear_Item   ${PUSERNAME140}
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -67,7 +67,7 @@ JD-TC-GetOrderSetings-2
     clear_service  ${PUSERNAME141}
     clear_customer   ${PUSERNAME141}
     clear_Item   ${PUSERNAME141}
-    ${resp}=  ProviderLogin  ${PUSERNAME141}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME141}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -96,7 +96,7 @@ JD-TC-GetOrderSetings-3
     clear_service  ${PUSERNAME143}
     clear_customer   ${PUSERNAME143}
     clear_Item   ${PUSERNAME143}
-    ${resp}=  ProviderLogin  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}

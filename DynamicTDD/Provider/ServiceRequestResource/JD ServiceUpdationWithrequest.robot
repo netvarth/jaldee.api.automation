@@ -22,12 +22,12 @@ JD-TC-CreateServiceWithRequest-1
 
     [Documentation]   Create  service for a valid provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${SERVICE1}=    FakerLibrary.word
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${service_duration}=   Random Int   min=5   max=10
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50

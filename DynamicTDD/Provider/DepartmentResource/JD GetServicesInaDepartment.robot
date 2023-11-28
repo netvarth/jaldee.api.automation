@@ -45,7 +45,7 @@ JD-TC-Get Services in Department-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_K}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_K}${\n}
@@ -113,7 +113,7 @@ JD-TC-Get Services in Department-1
 JD-TC-Get Services in Department-2
     [Documentation]  Provider Create department using Service names then Get Services in Department
     
-    ${resp}=  ProviderLogin   ${MUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${MUSERNAME39}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Enable service   ${sid1} 
@@ -175,7 +175,7 @@ JD-TC-Get Services in Department-UH2
 JD-TC-Get Services in Department-UH3
     [Documentation]  Get Services in Department using invalid department id
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_K}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Services in Department  000
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -184,7 +184,7 @@ JD-TC-Get Services in Department-UH3
 JD-TC-Get Services in Department-UH4
     [Documentation]  Get Services in Department using another provider department id
 
-    ${resp}=  ProviderLogin  ${MUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME40}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Services in Department  ${depid2}
     Should Be Equal As Strings  ${resp.status_code}  401

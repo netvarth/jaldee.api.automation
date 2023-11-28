@@ -27,7 +27,7 @@ JD-TC-CreateUserWithRolesAndScope-1
 
     [Documentation]  Create User With Roles And Scope for an existing provider.
 
-    ${resp}=  Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
@@ -71,9 +71,14 @@ JD-TC-CreateUserWithRolesAndScope-1
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
 
-    ${resp}=   Run Keyword If  '${lic_id}' != '${lic2}'  Change License Package  ${highest_package[0]}
-    Run Keyword If   '${resp}' != '${None}'  Log  ${resp.json()}
-    Run Keyword If   '${resp}' != '${None}'  Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Run Keyword If  '${lic_id}' != '${lic2}'  Change License Package  ${highest_package[0]}
+    # Run Keyword If   '${resp}' != '${None}'  Log  ${resp.json()}
+    # Run Keyword If   '${resp}' != '${None}'  Should Be Equal As Strings  ${resp.status_code}  200
+    IF  '${lic_id}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -199,7 +204,7 @@ JD-TC-CreateUserWithRolesAndScope-2
 
     [Documentation]  Create multiple Users With same Role for an existing provider.
 
-    ${resp}=  Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -257,7 +262,7 @@ JD-TC-CreateUserWithRolesAndScope-3
 
     [Documentation]  Create User With Role and location scope.
 
-    ${resp}=  Provider Login  ${MUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME60}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
@@ -273,9 +278,14 @@ JD-TC-CreateUserWithRolesAndScope-3
     Log  ${highest_package}
     Set Test variable  ${lic2}  ${highest_package[0]}
 
-    ${resp}=   Run Keyword If  '${lic_id}' != '${lic2}'  Change License Package  ${highest_package[0]}
-    Run Keyword If   '${resp}' != '${None}'  Log  ${resp.json()}
-    Run Keyword If   '${resp}' != '${None}'  Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=   Run Keyword If  '${lic_id}' != '${lic2}'  Change License Package  ${highest_package[0]}
+    # Run Keyword If   '${resp}' != '${None}'  Log  ${resp.json()}
+    # Run Keyword If   '${resp}' != '${None}'  Should Be Equal As Strings  ${resp.status_code}  200
+    IF  '${lic_id}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -379,7 +389,7 @@ JD-TC-CreateUserWithRolesAndScope-4
 
     [Documentation]  Create User With multiple Roles and verify the default role without any scope.
 
-    ${resp}=  Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -457,7 +467,7 @@ JD-TC-CreateUserWithRolesAndScope-5
 
     [Documentation]  Create User With multiple Roles and multiple scope.
 
-    ${resp}=  Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -540,7 +550,7 @@ JD-TC-CreateUserWithRolesAndScope-6
 
     [Documentation]  add create loan capability to a bussiness head role.
 
-    ${resp}=  Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -614,11 +624,11 @@ JD-TC-CreateUserWithRolesAndScope-UH1
 
     [Documentation]  Create User With same role multiple times.
 
-    ${resp}=  Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -678,7 +688,7 @@ JD-TC-CreateUserWithRolesAndScope-UH2
 
     [Documentation]  Create User With invalid location id as scope.
 
-    ${resp}=  Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -740,7 +750,7 @@ JD-TC-CreateUserWithRolesAndScope-UH3
 
     [Documentation]  Create User With another providers location id as scope.
 
-    ${resp}=  Provider Login  ${MUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -749,15 +759,20 @@ JD-TC-CreateUserWithRolesAndScope-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  ProviderLogout 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

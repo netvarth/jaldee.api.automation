@@ -33,10 +33,12 @@ JD-TC-GetPartnerType-1
                                   
     [Documentation]               Get Partner Type.
     
-    ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -78,7 +80,7 @@ JD-TC-GetPartnerCategory-UH3
                                   
     [Documentation]               Get Partner type where loged in with another provider
     
-    ${resp}=   ProviderLogin  ${PUSERNAME69}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

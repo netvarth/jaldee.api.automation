@@ -18,7 +18,7 @@ JD-TC-EnableDisableLeadforUser-1
 
     [Documentation]   Enable Lead.
 
-    ${resp}=  Provider Login  ${MUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -40,7 +40,7 @@ JD-TC-EnableDisableLeadforUser-2
 
     [Documentation]   Disable Lead After Enabling
 
-    ${resp}=  Provider Login  ${MUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -70,7 +70,7 @@ JD-TC-EnableDisableLeadforUser-3
 
     [Documentation]   Enable Lead which is Disabled
 
-    ${resp}=  Provider Login  ${MUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -123,7 +123,7 @@ JD-TC-EnableDisableLeadforUser-UH3
 
     [Documentation]   Enable Lead Which is already enabled
 
-    ${resp}=  Provider Login  ${MUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -149,7 +149,7 @@ JD-TC-EnableDisableLeadforUser-UH4
 
     [Documentation]   Disable Lead Which is already Disabled
 
-    ${resp}=  Provider Login  ${MUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

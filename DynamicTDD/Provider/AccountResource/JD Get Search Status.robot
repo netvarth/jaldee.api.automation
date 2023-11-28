@@ -14,7 +14,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-GetSearchStatus -1
     [Documentation]  Get Search Data
-    ${resp}=  ProviderLogin  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Search Status
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -27,7 +27,7 @@ JD-TC-GetSearchStatus -1
 
 JD-TC-GetSearchStatus-UH1
     [Documentation]  Get Search Data which is already enabled and disabled
-    ${resp}=  ProviderLogin  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Search Status
     Should Be Equal As Strings  ${resp.status_code}  200

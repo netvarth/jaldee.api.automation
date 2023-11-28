@@ -570,8 +570,8 @@ Create Sample Jaldee Coupon
     ${domains}=  Jaldee Coupon Target Domains  ALL
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ALL
     ${licenses}=  Jaldee Coupon Target License  0
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
     ${resp}=  Create Jaldee Coupon  XMASCoupon2018  Onam Coupon  Onam offer  CHILDREN  ${DAY1}  ${DAY2}  AMOUNT  50  100  false  false  100  1000  1000  5  2  false  false  false  false  false  consumer first use  50% offer  ${domains}  ${sub_domains}  ALL  ${licenses}
     Should Be Equal As Strings  ${resp.status_code}  200
     [Return]  ${resp}
@@ -579,8 +579,8 @@ Create Sample Jaldee Coupon
 Create Sample Jaldee Coupon For Providers
     ${p1}=  get_acc_id  ${PUSERNAME2}
     ${p2}=  get_acc_id  ${PUSERNAME1}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     ${resp}=  Create Jaldee Coupon For Providers  coupon1  Coupon1  Xmas offer   STUDENT  ${DAY1}  ${DAY2}  PERCENTAGE  50  100  false  false  100  250  1000  5  2  true  true  false  true  false  consumer first use  50% offer  ${p1}  ${p2}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2026,4 +2026,18 @@ Update Reimbursement By InvoiceId
     ${data}=   json.dumps   ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=    PUT On Session   synw    /jc/reimburse/${invoice_id}    data=${data}    expected_status=any
+    [Return]  ${resp}
+
+    
+Get Reminder Notification
+
+    Check And Create YNW SuperAdmin Session
+    ${resp}=    POST On Session    synw    /userAgent/reminderNotificationTask    expected_status=any  
     [Return]  ${resp} 
+
+    
+Get Appointment Reminder
+
+    Check And Create YNW SuperAdmin Session
+    ${resp}=    POST On Session    synw    /userAgent/apptNotificationTask    expected_status=any  
+    [Return]  ${resp}

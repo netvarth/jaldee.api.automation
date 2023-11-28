@@ -36,7 +36,7 @@ JD-TC-ListFamilyMember-1
 
 JD-TC-ListFamilyMember-2
       [Documentation]    Add a family member by consumer login and add to waitlist then provider list family member 
-      ${resp}=   ProviderLogin  ${PUSERNAME78}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       ${pid0}=  get_acc_id  ${PUSERNAME78}
       Should Be Equal As Strings    ${resp.status_code}   200
@@ -44,9 +44,15 @@ JD-TC-ListFamilyMember-2
       clear_location  ${PUSERNAME78}
       clear_queue  ${PUSERNAME78}
       Clear_service  ${PUSERNAME78}
-      ${resp}=  Create Sample Queue
+      ${resp} =  Create Sample Queue
       Set Test Variable  ${s_id}  ${resp['service_id']}
       Set Test Variable  ${qid}   ${resp['queue_id']}
+      Set Suite Variable   ${lid}   ${resp['location_id']}
+
+      ${resp}=   Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       
       ${resp}=   ProviderLogout
       Should Be Equal As Strings    ${resp.status_code}   200
@@ -72,7 +78,7 @@ JD-TC-ListFamilyMember-2
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${mem_id5}  ${resp.json()}
 
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       ${cnote}=   FakerLibrary.word
       ${resp}=  Add To Waitlist Consumers  ${pid0}  ${qid}  ${DAY}  ${s_id}  ${cnote}  ${bool[0]}  ${mem_id5} 
       Log  ${resp.json()}
@@ -91,7 +97,7 @@ JD-TC-ListFamilyMember-2
       Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid}
       Set Test Variable  ${cfid}   ${resp.json()['waitlistingFor'][0]['id']}
 
-      ${resp}=   ProviderLogin  ${PUSERNAME78}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME9}
       Log   ${resp.json()}
@@ -158,7 +164,7 @@ JD-TC-ListFamilyMember-2
       Should Be Equal As Strings  ${resp.json()[0]['userProfile']['gender']}  ${gender} 
       ${resp}=  Consumer Logout
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=   ProviderLogin  ${PUSERNAME17}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       ${cId}=  get_id  ${PUSERNAME17}
       ${resp}=  ListFamilyMemberByProvider  ${cId}

@@ -26,7 +26,7 @@ JD-TC-CreateBranchMaster-1
 
     [Documentation]   Create Branch Master
 
-    ${resp}=  Provider Login  ${PUSERNAME69}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -40,8 +40,13 @@ JD-TC-CreateBranchMaster-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=    Enable Disable Branch    ${status[0]}
@@ -78,7 +83,7 @@ JD-TC-CreateBranchMaster-UH1
 
     [Documentation]   Create Branch Master where branch code is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME69}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -99,7 +104,7 @@ JD-TC-CreateBranchMaster-UH2
 
     [Documentation]   Create Branch Master where branch name is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME69}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -112,7 +117,7 @@ JD-TC-CreateBranchMaster-UH3
 
     [Documentation]   Create Branch Master where location is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME69}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -124,7 +129,7 @@ JD-TC-CreateBranchMaster-UH4
 
     [Documentation]   Create Branch Master where status is inactive
 
-    ${resp}=  Provider Login  ${PUSERNAME69}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -136,7 +141,7 @@ JD-TC-CreateBranchMaster-UH4
 
 #     [Documentation]   Create Branch Master where district is empty
 
-#     ${resp}=  Provider Login  ${PUSERNAME69}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -148,7 +153,7 @@ JD-TC-CreateBranchMaster-UH4
 
 #     [Documentation]   Create Branch Master where state is empty
 
-#     ${resp}=  Provider Login  ${PUSERNAME69}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -160,7 +165,7 @@ JD-TC-CreateBranchMaster-UH4
 
 #     [Documentation]   Create Branch Master where pin is empty
 
-#     ${resp}=  Provider Login  ${PUSERNAME69}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -171,7 +176,7 @@ JD-TC-CreateBranchMaster-UH4
 # JD-TC-CreateBranchMaster-UH8
 
 #     [Documentation]   Create Branch Master where pin is invalid
-#     ${resp}=  Provider Login  ${PUSERNAME69}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -16,7 +16,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
       
 JD-TC-ListFamilyMemberByProvider-1
       [Documentation]    List a family member details by provider login
-      ${resp}=  ProviderLogin  ${PUSERNAME11}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -52,7 +52,7 @@ JD-TC-ListFamilyMemberByProvider-1
 
 JD-TC-ListFamilyMemberByProvider-2
       [Documentation]    List more family members details by provider login
-      ${resp}=  ProviderLogin  ${PUSERNAME11}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
@@ -72,7 +72,7 @@ JD-TC-ListFamilyMemberByProvider-2
 
 JD-TC-ListFamilyMemberByProvider-3
       [Documentation]    Add a family member by provider own his family memeber then list family memeber details
-      ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${pid}  ${resp.json()['id']}
       # clear_FamilyMember  ${pid}
@@ -105,7 +105,7 @@ JD-TC-ListFamilyMemberByProvider-3
 
 JD-TC-ListFamilyMemberByProvider-4
       [Documentation]    Add customer and add familymembers  after consumer signup of that customer the familymembers are  not list there.
-      ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${p_id}  ${resp.json()['id']}
       ${firstname}=  FakerLibrary.first_name
@@ -165,7 +165,7 @@ JD-TC-ListFamilyMemberByProvider-4
 
 JD-TC-ListFamilyMemberByProvider-5
       [Documentation]    Adding a customer and add two family members with two different providers ,in this case one family member is common and if the consumer sign up,then  the list of family members should not be duplicated.
-      ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${p_id}  ${resp.json()['id']}
       ${firstname}=  FakerLibrary.first_name
@@ -203,7 +203,7 @@ JD-TC-ListFamilyMemberByProvider-5
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${mem_id2}  ${resp.json()}
       ${resp}=  ProviderLogout
-      ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email3}  ${gender}  ${dob}  ${ph3}  ${EMPTY}
       Set Suite Variable  ${pcid5}  ${resp.json()}
@@ -267,7 +267,7 @@ JD-TC-ListFamilyMemberByProvider-UH1
 
 NW-TC-ListFamilyMemberByProvider-UH2
       [Documentation]    invalid id using in ListFamilyMemberByProvider
-      ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  ListFamilyMemberByProvider   0
       Log  ${resp.json()}
@@ -277,7 +277,7 @@ NW-TC-ListFamilyMemberByProvider-UH2
 
 # JD-TC-ListFamilyMemberByProvider-3
 #       [Documentation]    List Familymember details by provider as a consumer
-#       ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+#       ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
 #       Should Be Equal As Strings  ${resp.status_code}  200
 #       Set Test Variable  ${pid}  ${resp.json()['id']}
 #       clear_FamilyMember  ${pid}

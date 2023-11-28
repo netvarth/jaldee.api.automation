@@ -26,7 +26,7 @@ JD-TC-Change Branch Status-1
 
     [Documentation]   Change Branch Status
 
-    ${resp}=  Provider Login  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -44,8 +44,13 @@ JD-TC-Change Branch Status-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${branchCode}=    FakerLibrary.Random Number
@@ -87,7 +92,7 @@ JD-TC-Change Branch Status-UH1
 
     [Documentation]   Change Branch Status Where branch id is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -99,7 +104,7 @@ JD-TC-Change Branch Status-UH2
 
     [Documentation]   Change Branch Status Where branch id is invalid
 
-    ${resp}=  Provider Login  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -114,7 +119,7 @@ JD-TC-Change Branch Status-UH3
 
     [Documentation]   Change Branch Status Where status is False
 
-    ${resp}=  Provider Login  ${PUSERNAME59}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -49,11 +49,11 @@ JD-TC-EnableJDN-1
     ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_Z}
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable    ${list}
@@ -70,14 +70,16 @@ JD-TC-EnableJDN-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   0  15
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  15  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -115,7 +117,7 @@ JD-TC-EnableJDN-1
 JD-TC-EnableJDN-2
 	[Documentation]  Enable JDN Percent and check bill
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${cid}=  get_id  ${CUSERNAME3}
     Set Suite Variable  ${cid}
@@ -149,8 +151,8 @@ JD-TC-EnableJDN-2
  
     ${capacity}=   Random Int   min=20   max=100
     ${parallel}=   Random Int   min=1   max=2
-    ${sTime}=  add_time  1  30
-    ${eTime}=  add_time   3  00
+    ${sTime}=  add_timezone_time  ${tz}  1  30  
+    ${eTime}=  add_timezone_time  ${tz}  3  00  
     ${queue1}=   FakerLibrary.word
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${sid1}  ${sid2}   ${sid3}
     Log   ${resp.json()} 
@@ -170,7 +172,6 @@ JD-TC-EnableJDN-2
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -222,7 +223,7 @@ JD-TC-EnableJDN-3
     ${resp}=  Account Set Credential  ${PUSERNAME_Y}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_Y}
-    ${resp}=  Provider Login  ${PUSERNAME_Y}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Y}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+505
@@ -238,14 +239,16 @@ JD-TC-EnableJDN-3
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   0  15
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  15  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -281,8 +284,8 @@ JD-TC-EnableJDN-3
 
     ${capacity}=   Random Int   min=20   max=100
     ${parallel}=   Random Int   min=1   max=2
-    ${sTime}=  add_time  1  30
-    ${eTime}=  add_time   3  00
+    ${sTime}=  add_timezone_time  ${tz}  1  30  
+    ${eTime}=  add_timezone_time  ${tz}  3  00  
     ${queue1}=   FakerLibrary.word
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid11}  ${sid11}   ${sid12}
     Log   ${resp.json()} 
@@ -340,7 +343,7 @@ JD-TC-EnableJDN-3
 JD-TC-EnableJDN-4
 	[Documentation]  Check if already created bill gets updated when JDN is enabled and bill is updated
 
-    ${resp}=  Provider Login  ${PUSERNAME_Y}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Y}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -387,7 +390,7 @@ JD-TC-EnableJDN-4
 JD-TC-EnableJDN-5
 	[Documentation]  Enable JDN Percent and check bill with GST and the JDN discounted amount less than discount max
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200    
     ${GST_num}   ${PAN_num}=  Generate_gst_number  ${Container_id}
     ${resp}=  Update Tax Percentage  ${gstpercentage[1]}   ${GST_num} 
@@ -406,7 +409,6 @@ JD-TC-EnableJDN-5
     ${resp}=  Add To Waitlist  ${cid1}  ${sid2}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -439,7 +441,7 @@ JD-TC-EnableJDN-5
 JD-TC-EnableJDN-6
 	[Documentation]  Enable JDN Percent and check bill with GST and the JDN discounted amount greater than discount max
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200    
     ${GST_num}   ${PAN_num}=  Generate_gst_number  ${Container_id}
     ${resp}=  Update Tax Percentage  ${gstpercentage[2]}   ${GST_num} 
@@ -458,7 +460,6 @@ JD-TC-EnableJDN-6
     ${resp}=  Add To Waitlist  ${cid2}  ${sid3}  ${qid1}  ${DAY}  ${c_note}  ${bool[1]}  ${cid2} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -492,7 +493,7 @@ JD-TC-EnableJDN-7
 	[Documentation]  Enable JDN for a valid provider in billable Domain without display note
 
     clear_jdn   ${PUSERNAME_Z}
-    ${resp}=  ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Enable JDN for Percent    ${EMPTY}  ${jdn_disc_percentage[0]}   ${disc_max}
     Log   ${resp.json()}
@@ -532,7 +533,7 @@ JD-TC-EnableJDN-8
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_A}
     
-    ${resp}=  Provider Login  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -549,14 +550,16 @@ JD-TC-EnableJDN-8
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   0  15
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  15  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -594,7 +597,7 @@ JD-TC-EnableJDN-UH1
 	[Documentation]  Enable a JDN label for a valid provider in billable Domain
 
     clear_jdn   ${PUSERNAME_Z}
-    ${resp}=  ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${label}=   FakerLibrary.word
     ${d_note}=   FakerLibrary.word  
@@ -607,7 +610,7 @@ JD-TC-EnableJDN-UH1
 JD-TC-EnableJDN-UH2
 	[Documentation]  Enable a JDN label  with empty label
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Disable JDN
     Log   ${resp.json()}
@@ -621,7 +624,7 @@ JD-TC-EnableJDN-UH2
 JD-TC-EnableJDN-UH3
 	[Documentation]  Enable already enabled JDN label 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${label}=   FakerLibrary.word
     ${d_note}=   FakerLibrary.word  
@@ -638,7 +641,7 @@ JD-TC-EnableJDN-UH3
 JD-TC-EnableJDN-UH4
 	[Documentation]  Enable already enabled JDN percent
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${disc_max}=   Random Int   min=100   max=300
     ${disc_max}=  Convert To Number   ${disc_max}
@@ -656,7 +659,7 @@ JD-TC-EnableJDN-UH4
 JD-TC-EnableJDN-UH5
 	[Documentation]  Enable a JDN percent for a valid provider in Non-billable Domain
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_A}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Disable JDN
     Log   ${resp.json()}
@@ -693,7 +696,7 @@ JD-TC-EnableJDN-UH8
 	[Documentation]  Enable a JDN Percent with invalid discount percent
 
     clear_jdn   ${PUSERNAME150}
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${disc_max}=   Random Int   min=100   max=500
     ${disc_percent}=   Random Int   min=100   max=500
@@ -706,7 +709,7 @@ JD-TC-EnableJDN-UH8
 JD-TC-EnableJDN-UH9
 	[Documentation]  Enable a JDN Percent with invalid discount max
 
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${disc_max}=   Random Int   min=10   max=90
     ${d_note}=   FakerLibrary.word
@@ -719,7 +722,7 @@ JD-TC-EnableJDN-UH9
 JD-TC-EnableJDN-UH10
 	[Documentation]  Enable a JDN Percent with invalid discount max
 
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${disc_max}=   Random Int   min=100   max=190
     ${d_note}=   FakerLibrary.word
@@ -732,7 +735,7 @@ JD-TC-EnableJDN-UH10
 JD-TC-EnableJDN-UH11
 	[Documentation]  Enable a JDN Percent with invalid discount max
 
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${disc_max}=   Random Int   min=200   max=290
     ${d_note}=   FakerLibrary.word
@@ -745,7 +748,7 @@ JD-TC-EnableJDN-UH11
 JD-TC-EnableJDN-UH12
 	[Documentation]  Enable a JDN Percent with Empty discount max
 
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${d_note}=   FakerLibrary.word
     ${resp}=   Enable JDN for Percent    ${d_note}  ${jdn_disc_percentage[0]}   ${EMPTY}
@@ -756,7 +759,7 @@ JD-TC-EnableJDN-UH12
 JD-TC-EnableJDN-UH13
 	[Documentation]  Enable a JDN Percent with Empty discount percent
 
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${d_note}=   FakerLibrary.word
     ${resp}=   Enable JDN for Percent    ${d_note}  ${EMPTY}   ${disc_max}

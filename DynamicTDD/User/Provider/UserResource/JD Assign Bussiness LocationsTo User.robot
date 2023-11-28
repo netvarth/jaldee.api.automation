@@ -19,7 +19,7 @@ JD-TC-AssignBussinessLocationsToUser-1
 
     [Documentation]  Assign bussiness locations to users multiple users have same multiple locations 
 
-    ${resp}=  Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -36,8 +36,17 @@ JD-TC-AssignBussinessLocationsToUser-1
 
     ${lid1}=   Create Sample Location
     Set Suite Variable    ${lid1} 
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${lid2}=   Create Sample Location
     Set Suite Variable    ${lid2} 
+    ${resp}=   Get Location ById  ${lid2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -45,12 +54,14 @@ JD-TC-AssignBussinessLocationsToUser-1
 #     Set Suite Variable  ${pincode1}  ${resp.json()[0]['pinCode']}
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
 #     sleep  2s
 #     ${resp}=  Get Departments
@@ -159,12 +170,16 @@ JD-TC-AssignBussinessLocationsToUser-1
 JD-TC-AssignBussinessLocationsToUser-2
 
     [Documentation]  Assign bussiness locations to user ,user also have team here same team members have different locations
-    ${resp}=  Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${lid0}=   Create Sample Location
     Set Suite Variable    ${lid0} 
+    ${resp}=   Get Location ById  ${lid0}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz0}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -266,7 +281,7 @@ JD-TC-AssignBussinessLocationsToUser-2
 JD-TC-AssignBussinessLocationsToUser-3
 
     [Documentation]  Assign bussiness locations to user one user have multiple location(account level)
-    ${resp}=  Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -317,7 +332,7 @@ JD-TC-AssignBussinessLocationsToUser-3
 JD-TC-AssignBussinessLocationsToUser-4
     [Documentation]  Assign bussiness locations to assistant users multiple locations (account level)
 
-    ${resp}=  Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -387,7 +402,7 @@ JD-TC-AssignBussinessLocationsToUser-4
 JD-TC-AssignBussinessLocationsToUser-5
     [Documentation]  Assign bussiness locations to users by user login
 
-    ${resp}=  Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -429,7 +444,7 @@ JD-TC-AssignBussinessLocationsToUser-5
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${userIds}=  Create List  ${u_id}  
@@ -450,12 +465,17 @@ JD-TC-AssignBussinessLocationsToUser-5
 JD-TC-AssignBussinessLocationsToUser-UH1
     [Documentation]  Assign bussiness disabled locations to users (account level)
 
-    ${resp}=  Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${lid3}=   Create Sample Location
     Set Suite Variable    ${lid3} 
+
+    ${resp}=   Get Location ById  ${lid3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -559,7 +579,7 @@ JD-TC-AssignBussinessLocationsToUser-UH3
 JD-TC-AssignBussinessLocationsToUser-UH4
     [Documentation]  Assign bussiness locations to users by user login location created in user level
 
-    ${resp}=  Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -601,19 +621,23 @@ JD-TC-AssignBussinessLocationsToUser-UH4
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${lid4}=   Create Sample Location
-    ${DAY}=  add_date  0   
+    ${DAY}=  db.get_date_by_timezone  ${tz}   
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time  0  30
-    ${city}=   fakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  30  
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -641,7 +665,7 @@ JD-TC-AssignBussinessLocationsToUser-UH4
 JD-TC-AssignBussinessLocationsToUser-UH5
     [Documentation]  Assign another provider bussiness locations to users 
 
-    ${resp}=  Provider Login  ${MUSERNAME75}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME75}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -652,7 +676,7 @@ JD-TC-AssignBussinessLocationsToUser-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -728,7 +752,7 @@ JD-TC-AssignBussinessLocationsToUser-UH5
 JD-TC-AssignBussinessLocationsToUser-UH6
     [Documentation]  Assign bussiness locations to epmty users list 
 
-    ${resp}=  Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -770,7 +794,7 @@ JD-TC-AssignBussinessLocationsToUser-UH6
     # @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
     # Should Be Equal As Strings  ${resp[0].status_code}  200
     # Should Be Equal As Strings  ${resp[1].status_code}  200
-    # ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${userIds}=  Create List  
@@ -788,7 +812,7 @@ JD-TC-AssignBussinessLocationsToUser-UH6
 JD-TC-AssignBussinessLocationsToUser-UH7
     [Documentation]  Assign bussiness locations to disabled user
 
-    ${resp}=  Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -864,7 +888,7 @@ JD-TC-AssignBussinessLocationsToUser-UH7
 JD-TC-AssignBussinessLocationsToUser-UH8
     [Documentation]  Assign bussiness locations to mutiple times to same user
 
-    ${resp}=  Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

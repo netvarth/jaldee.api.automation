@@ -69,7 +69,7 @@ JD-TC- Update Bill -PRE
     ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_Z}
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -109,8 +109,7 @@ JD-TC- Update Bill -PRE
     ${resp}=  Create Service  ${SERVICE4}  ${desc}   ${ser_durtn}   ${status[0]}  ${btype}   ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${ser_amount}  ${bool[0]}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Suite Variable  ${sid4}  ${resp.json()}
-    ${DAY}=  get_date
-    Set Suite Variable  ${DAY}
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+305
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
@@ -125,17 +124,25 @@ JD-TC- Update Bill -PRE
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   0  15
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  15  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
+    
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY}
+
     ${resp}=  Update Business Profile with schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${lid}  ${resp.json()['baseLocation']['id']}
@@ -162,8 +169,8 @@ JD-TC- Update Bill -PRE
 
     ${capacity}=   Random Int   min=20   max=100
     ${parallel}=   Random Int   min=1   max=2
-    ${sTime}=  add_time  1  30
-    ${eTime}=  add_time   3  00
+    ${sTime}=  add_timezone_time  ${tz}  1  30  
+    ${eTime}=  add_timezone_time  ${tz}  3  00  
     ${queue1}=   FakerLibrary.word
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${sid1}  ${sid2}   ${sid3}  ${sid4}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -175,7 +182,6 @@ JD-TC- Update Bill -PRE
     Set Suite Variable  ${cid}  ${resp.json()}   
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${qid1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
@@ -220,10 +226,10 @@ JD-TC- Update Bill -PRE
     ${cupn_code1}=   FakerLibrary.word
     Set Suite Variable  ${cupn_code1}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=500   max=750
     ${max_disc_val}=   Random Int   min=50   max=100
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -245,10 +251,10 @@ JD-TC- Update Bill -PRE
     ${cupn_code2}=   FakerLibrary.word
     Set Suite Variable  ${cupn_code2}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=500   max=750
     ${max_disc_val}=   Random Int   min=50   max=100
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -305,7 +311,7 @@ JD-TC- Update Bill -UH1
     [Documentation]    add service to Settled bill
 
     ${des}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${service}=  Service Bill  ${des}  ${sid4}  1 
@@ -319,7 +325,7 @@ JD-TC- Update Bill -UH2
     [Documentation]  add item to Settled bill
 
     ${des}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${item}=  Item Bill  ${des}  ${itemId1}  1
@@ -332,7 +338,7 @@ JD-TC- Update Bill -UH3
 
     [Documentation]  add coupon to Settled bill
 
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     # ${coupon}=  Provider Coupons  ${bid}  ${couponId1}
@@ -345,7 +351,7 @@ JD-TC- Update Bill -UH4
     [Documentation]   add discount to Settled bill
 
     ${des}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${disc1}=  Bill Discount Input  ${discountId1}  ${des}  ${des}
@@ -360,7 +366,7 @@ JD-TC- Update Bill -UH5
     [Documentation]  add service level discount to Settled bill
 
     ${des}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${service}=  Service Bill  ${des}  ${sid1}  1  ${discountId1}
@@ -373,7 +379,7 @@ JD-TC- Update Bill -UH6
     [Documentation]   add item level discount to Settled bill
 
     ${des}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${item}=  Item Bill  ${des}  ${itemId}   1  ${discountId1}
@@ -387,7 +393,7 @@ JD-TC- Update Bill -UH7
     [Documentation]  remove service from Settled bill
 
     ${des}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${service}=  Service Bill  ${des}  ${s_id1}  1 
@@ -400,7 +406,7 @@ JD-TC- Update Bill -UH8
     [Documentation]  remove item from Settled bill
 
     ${des}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${item}=  Item Bill   ${des}   ${itemId}  1
@@ -412,7 +418,7 @@ JD-TC- Update Bill -UH9
 
     [Documentation]  remove coupon from Settled bill
 
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     # ${coupon}=  Provider Coupons  ${bid}  ${couponId}
@@ -423,7 +429,7 @@ JD-TC- Update Bill -UH10
 
     [Documentation]  remove discount from Settled bill
 
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${bdisc}=  Remove Bill Discount  ${bid}  ${discountId} 
@@ -435,7 +441,7 @@ JD-TC- Update Bill -UH11
 
     [Documentation]   remove item level discount from Settled bill
 
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${item}=  Item Bill  my Item  ${itemId}   1  ${discountId}
@@ -448,7 +454,7 @@ JD-TC- Update Bill -UH12
     [Documentation]  remove service level discount from Settled bill
 
     ${des}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${service}=  Service Bill  ${des}  ${sid1}  1  ${discountId}
@@ -460,11 +466,10 @@ JD-TC- Update Bill -UH13
 
     [Documentation]    Add disabled service to bill
     ${des}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Add To Waitlist  ${cid}  ${sid2}  ${qid1}  ${DAY}  hi  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Bill By UUId  ${wid}
@@ -489,7 +494,7 @@ JD-TC- Update Bill -UH14
 
     [Documentation]  Add disabled item to bill
     ${des}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Disable Item  ${itemId1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -506,7 +511,7 @@ JD-TC- Update Bill -UH15
 
     [Documentation]   Add disabled coupon to bill
 
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Disable Coupon  ${couponId}
@@ -525,7 +530,7 @@ JD-TC- Update Bill -UH16
 
     [Documentation]   Add disabled discount to bill
 
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Disable Discount  ${discountId1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -539,18 +544,18 @@ JD-TC- Update Bill -UH17
 
     [Documentation]  Add disabled discount to item
     ${des}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
      ${item}=  Item Bill  ${des}  ${itemId}   1  ${discountId1}
     ${resp}=  Update Bill   ${wid}  addItemLevelDiscount   ${item}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${DISCOUNT_DISABLED}"
 
-YNW-TC- Update Bill -UH18
+JD-TC- Update Bill -UH18
 
     [Documentation]   Add disabled discount to service
     ${des}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin   ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME_Z}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${service}=  Service Bill  ${des}  ${sid1}  1  ${discountId1}
     ${resp}=  Update Bill   ${wid}  addServiceLevelDiscount   ${service} 

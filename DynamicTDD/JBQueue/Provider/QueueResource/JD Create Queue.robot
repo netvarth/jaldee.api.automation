@@ -29,24 +29,30 @@ ${start}    10
 
 JD-TC-CreateQueue-1
     [Documentation]    Create a queue in a location of a valid provider
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME132}
     clear_location  ${PUSERNAME132}
     clear_queue  ${PUSERNAME132}
-    ${DAY1}=  get_date
+
+    ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -74,13 +80,18 @@ JD-TC-CreateQueue-2
     ${length}=  Get Length   ${len}
     
     FOR   ${a}  IN RANGE   ${start}  ${length}
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${domain}=   Set Variable    ${resp.json()['sector']}
-    ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    ${domain}=   Set Variable    ${decrypted_data['sector']}
+    ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+    # ${domain}=   Set Variable    ${resp.json()['sector']}
+    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
     ${resp2}=   Get Domain Settings    ${domain}  
     Should Be Equal As Strings    ${resp.status_code}    200
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${check}  ${resp2.json()['multipleLocation']}
     Exit For Loop IF     "${check}"=="True"
     END
@@ -88,18 +99,23 @@ JD-TC-CreateQueue-2
     clear_service   ${PUSERNAME${a}}
     clear_location  ${PUSERNAME${a}}
     clear_queue  ${PUSERNAME${a}}
-    ${DAY1}=  get_date
+    ${lid22}=  Create Sample Location
+    Set Suite Variable  ${lid22}
+    ${resp}=   Get Location ById  ${lid22}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
-    ${lid22}=  Create Sample Location
-    Set Suite Variable  ${lid22}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  10  ${sTime1}  ${eTime1}  1  5  ${lid22}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -127,7 +143,7 @@ JD-TC-CreateQueue-2
 
 JD-TC-CreateQueue-3
     [Documentation]    Create a second queue to the same location with more services
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${s_id2}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable  ${s_id2}
@@ -135,9 +151,9 @@ JD-TC-CreateQueue-3
     Set Suite Variable  ${s_id3}
     ${s_id4}=  Create Sample Service  ${SERVICE5}
     ${s_id5}=  Create Sample Service  ${SERVICE6}
-    ${sTime2}=  add_time  0  35
+    ${sTime2}=  add_timezone_time  ${tz}  0  35  
     Set Suite Variable   ${sTime2}
-    ${eTime2}=  add_time   0  40
+    ${eTime2}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${eTime2}
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  5  ${lid22}  ${s_id2}  ${s_id3}  ${s_id4}  ${s_id5}
@@ -159,7 +175,7 @@ JD-TC-CreateQueue-3
 
 JD-TC-CreateQueue-4
     [Documentation]    Create a second queue to the same location with same time and different services
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${s_id6}=  Create Sample Service  ${SERVICE7}
     ${s_id7}=  Create Sample Service  ${SERVICE8}
@@ -186,11 +202,17 @@ JD-TC-CreateQueue-5
     clear_service   ${PUSERNAME${a}}
     clear_location  ${PUSERNAME${a}}
     clear_queue  ${PUSERNAME${a}}
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id8}=  Create Sample Service  ${SERVICE9}
+
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  5  ${lid1}  ${s_id8}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -209,23 +231,29 @@ JD-TC-CreateQueue-5
 JD-TC-CreateQueue-6
     [Documentation]    Create 2 queues with same time schedule on different days
 
-    ${resp}=  Provider Login  ${PUSERNAME133}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME133}
     clear_location  ${PUSERNAME133}
     clear_queue  ${PUSERNAME133}
-    ${DAY1}=  get_date
-    ${list}=  Create List  1  3  5  7
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   0  30
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${list}=  Create List  1  3  5  7
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
+    
     ${resp}=  Get Queue ById  ${q_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -258,12 +286,12 @@ JD-TC-CreateQueue-6
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
     Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id1} 
 
-    # ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${sTime3}=  add_time  0  50
+    # ${sTime3}=  add_timezone_time  ${tz}  0  50
     # Set Suite Variable   ${sTime3}
-    # ${eTime3}=  add_time   1  15
+    # ${eTime3}=  add_timezone_time  ${tz}  1  15  
     # Set Suite Variable   ${eTime3}
     # ${queue_name}=  FakerLibrary.bs
     # Set Suite Variable  ${queue_name}
@@ -306,28 +334,35 @@ JD-TC-CreateQueue-6
 
 JD-TC-CreateQueue-7
     [Documentation]    Two queue have same time schedul,one queue is enabled and another one disabled
-    ${resp}=  Provider Login  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME134}
     clear_location  ${PUSERNAME134}
     clear_queue  ${PUSERNAME134}
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  10      
-    Set Suite Variable  ${DAY2}  
-    ${sTime3}=  add_time  0  50
-    Set Suite Variable   ${sTime3}
-    ${eTime3}=  add_time   1  15
-    Set Suite Variable   ${eTime3}
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list}  
+
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${list}=  Create List  2  4  6
     ${s_id2}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable  ${s_id2}
     ${s_id3}=  Create Sample Service  ${SERVICE4}
     Set Suite Variable  ${s_id3}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    Set Suite Variable  ${DAY2}  
+    ${sTime3}=  add_timezone_time  ${tz}  0  50
+    Set Suite Variable   ${sTime3}
+    ${eTime3}=  add_timezone_time  ${tz}  1  15  
+    Set Suite Variable   ${eTime3}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    Set Suite Variable  ${list}  
+    
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  1  5  ${lid1}  ${s_id2}  ${s_id3}
@@ -386,17 +421,16 @@ JD-TC-CreateQueue-8
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
     Set Suite Variable  ${PUSERNAME_B}
 
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_B}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_B}+25566122
@@ -408,18 +442,22 @@ JD-TC-CreateQueue-8
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -465,19 +503,25 @@ JD-TC-CreateQueue-8
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    # ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     # Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME_B}
     clear_location  ${PUSERNAME_B}
     clear_queue  ${PUSERNAME_B}
+    
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id2}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable  ${s_id2}
     ${queue_name}=  FakerLibrary.bs
-    ${sTime1}=  add_time  1  35
+    ${sTime1}=  add_timezone_time  ${tz}  1  35
     Set Suite Variable  ${sTime1}
-    ${eTime1}=  add_time   1  40
+    ${eTime1}=  add_timezone_time  ${tz}   1  40
     Set Suite Variable  ${eTime1}
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid1}  ${s_id2}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -498,9 +542,9 @@ JD-TC-CreateQueue-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['queueState']}  ${Qstate[1]}
 
-    ${sTime2}=  add_time  2  35
+    ${sTime2}=  add_timezone_time  ${tz}  2  35
     Set Suite Variable  ${sTime2}
-    ${eTime2}=  add_time  2  40
+    ${eTime2}=  add_timezone_time  ${tz}  2  40
     Set Suite Variable  ${eTime2}
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  5  ${lid1}  ${s_id2}
@@ -533,17 +577,20 @@ JD-TC-CreateQueue-8
 
 JD-TC-CreateQueue-9
     [Documentation]    Create a queue in different location with overlapping time
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
-    ${sTime}=  add_time  3  15
-    ${eTime}=  add_time   3  30
+    ${sTime}=  add_timezone_time  ${tz}  3  15  
+    ${eTime}=  add_timezone_time  ${tz}  3  30  
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -567,18 +614,24 @@ JD-TC-CreateQueue-9
     
 JD-TC-CreateQueue-10
     [Documentation]    Create a queue with field tokenStart in a location of a valid provider then check next queue token start
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME138}
     clear_location  ${PUSERNAME138}
     clear_queue  ${PUSERNAME138}
-    ${sTime1}=  add_time  0  15
-    Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
-    Set Suite Variable   ${eTime1}
+    
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
+
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    Set Suite Variable   ${sTime1}
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
+    Set Suite Variable   ${eTime1}
     ${queue_name}=  FakerLibrary.bs
     ${token_start}=   Random Int  min=5   max=40
     ${queue_capacity}=   Random Int  min=100   max=200
@@ -606,8 +659,8 @@ JD-TC-CreateQueue-10
 
     ${queue_start}=  Evaluate  ${token_start}+${queue_capacity}
     ${next_queue_start}=  Evaluate  (${queue_start}/100+1)*100
-    ${sTime5}=  add_time  1  15
-    ${eTime5}=  add_time   1  30
+    ${sTime5}=  add_timezone_time  ${tz}  1  15  
+    ${eTime5}=  add_timezone_time  ${tz}  1  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime5}  ${eTime5}  1  5  ${lid}  ${s_id1}
     Log  ${resp.json()}
@@ -632,18 +685,23 @@ JD-TC-CreateQueue-10
 
 JD-TC-CreateQueue-11
     [Documentation]    Create a queue with field tokenStart in a location then create a another queue with another token start then check 2nd queue token start and check third queue token start.
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
     clear_queue  ${PUSERNAME180}
-    ${sTime1}=  add_time  0  15
-    Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
-    Set Suite Variable   ${eTime1}
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
+
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    Set Suite Variable   ${sTime1}
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
+    Set Suite Variable   ${eTime1}
     ${queue_name}=  FakerLibrary.bs
     ${token_start}=   Random Int  min=5   max=40
     ${queue_capacity}=   Random Int  min=5   max=100
@@ -669,8 +727,8 @@ JD-TC-CreateQueue-11
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
     Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id1}
 
-    ${sTime5}=  add_time  1  15
-    ${eTime5}=  add_time   1  30
+    ${sTime5}=  add_timezone_time  ${tz}  1  15  
+    ${eTime5}=  add_timezone_time  ${tz}  1  30  
     ${token_start}=   Random Int  min=45   max=60
     ${queue_capacity}=   Random Int  min=1000   max=2000
     ${queue_name}=  FakerLibrary.bs
@@ -697,8 +755,8 @@ JD-TC-CreateQueue-11
 
     ${queue_start}=  Evaluate  ${token_start}+${queue_capacity}
     ${next_queue_start}=  Evaluate  (${queue_start}/100+1)*100
-    ${sTime5}=  add_time  2  15
-    ${eTime5}=  add_time   2  30
+    ${sTime5}=  add_timezone_time  ${tz}  2  15  
+    ${eTime5}=  add_timezone_time  ${tz}  2  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime5}  ${eTime5}  1  5  ${lid}  ${s_id1}
     Log  ${resp.json()}
@@ -723,7 +781,7 @@ JD-TC-CreateQueue-11
 
 JD-TC-CreateQueue-12
     [Documentation]    Create a queue with field tokenStart in a location then create a another queue with same token start of first queue
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     # ${resp}=   Get upgradable license
     # Should Be Equal As Strings    ${resp.status_code}   200
@@ -741,13 +799,18 @@ JD-TC-CreateQueue-12
     clear_service   ${PUSERNAME20}
     clear_location  ${PUSERNAME20}
     clear_queue  ${PUSERNAME20}
-    ${sTime1}=  add_time  0  15
-    Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
-    Set Suite Variable   ${eTime1}
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
+
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    Set Suite Variable   ${sTime1}
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
+    Set Suite Variable   ${eTime1}
     ${queue_name}=  FakerLibrary.bs
     ${token_start}=   Random Int  min=5   max=40
     ${queue_capacity}=   Random Int  min=5   max=100
@@ -773,8 +836,8 @@ JD-TC-CreateQueue-12
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
     Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id1}
 
-    ${sTime5}=  add_time  1  15
-    ${eTime5}=  add_time   1  30
+    ${sTime5}=  add_timezone_time  ${tz}  1  15  
+    ${eTime5}=  add_timezone_time  ${tz}  1  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue With TokenStart  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime5}  ${eTime5}  1  5  ${lid}  ${token_start}  ${s_id1}
     Log  ${resp.json()}
@@ -799,7 +862,7 @@ JD-TC-CreateQueue-12
 
 JD-TC-CreateQueue-UH1
     [Documentation]    Create a queue in a location with same queue name
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  1  5  ${lid1}  ${s_id2}
     Log  ${resp.json()}
@@ -808,7 +871,7 @@ JD-TC-CreateQueue-UH1
 
 JD-TC-CreateQueue-UH2
     [Documentation]    Create a queue to the same location with overlapping time
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  1  5  ${lid1}  ${s_id2}
@@ -819,7 +882,7 @@ JD-TC-CreateQueue-UH2
 
 JD-TC-CreateQueue-UH3
     [Documentation]    Create a queue in a location without service details
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue without Service  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  1  5  ${lid1}
@@ -828,15 +891,15 @@ JD-TC-CreateQueue-UH3
 
 JD-TC-CreateQueue-UH4
     [Documentation]    Create a queue in a location without location details
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  1  5  ${EMPTY}  ${s_id2}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${QUEUE_LOCATION_REQUIRED}"
+    Should Be Equal As Strings  ${resp.status_code}  404
+    Should Be Equal As Strings  "${resp.json()}"  "${LOCATION_NOT_FOUND}"
 
 JD-TC-CreateQueue-UH6
     [Documentation]    Create a queue with another providers location details
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${s_id5}=  Create Sample Service  ${SERVICE3}
     ${queue_name}=  FakerLibrary.bs
@@ -847,12 +910,12 @@ JD-TC-CreateQueue-UH6
 
 JD-TC-CreateQueue-UH7
     [Documentation]    Create a queue with another providers service  details
-    ${resp}=  Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${s_id6}=  Create Sample Service  ${SERVICE6}
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  1  5  ${lid2}  ${s_id6}
@@ -862,10 +925,10 @@ JD-TC-CreateQueue-UH7
 
 JD-TC-CreateQueue-UH8
     [Documentation]    Create a queue with eTime is less than sTime
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${sTime9}=  add_time  5  15
-    ${eTime9}=  add_time   4  30
+    ${sTime9}=  add_timezone_time  ${tz}  5  15  
+    ${eTime9}=  add_timezone_time  ${tz}  4  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime9}  ${eTime9}  1  5  ${lid1}  ${s_id2}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -873,7 +936,7 @@ JD-TC-CreateQueue-UH8
 
 JD-TC-CreateQueue-UH9
     [Documentation]    Create a queue with schedule time is lass than service duration
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${description}=  FakerLibrary.sentence
     ${notifytype}    Random Element     ['none','pushMsg','email']
@@ -881,8 +944,8 @@ JD-TC-CreateQueue-UH9
     ${resp}=  Create Service  ${SERVICE1}  ${description}   60  ACTIVE  Waitlist  ${notify}   ${notifytype}  0  500  False  True
     Should Be Equal As Strings  ${resp.status_code}  200    
     Set Suite Variable  ${s_id1}  ${resp.json()} 
-    ${sTime9}=  add_time  4  15
-    ${eTime9}=  add_time   4  30
+    ${sTime9}=  add_timezone_time  ${tz}  4  15  
+    ${eTime9}=  add_timezone_time  ${tz}  4  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  queue1  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime9}  ${eTime9}  1  5  ${lid1}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -891,17 +954,22 @@ JD-TC-CreateQueue-UH9
 JD-TC-CreateQueue-UH10
     [Documentation]    Create 2 queues with same time schedule on same date
 
-    ${resp}=  Provider Login  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME134}
     clear_location  ${PUSERNAME134}
     clear_queue  ${PUSERNAME134}
-    ${DAY1}=  get_date
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   0  30
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id}  ${s_id1}
     Log  ${resp.json()}
@@ -930,14 +998,14 @@ JD-TC-CreateQueue-UH10
 JD-TC-CreateQueue-13
     [Documentation]  Create Queue for Branch
     
-    ${resp}=  Provider Login  ${MUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateQueue-14
     [Documentation]  Create Queue for User
 
-    ${resp}=  Provider Login  ${MUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 *** comment ***
@@ -945,25 +1013,30 @@ JD-TC-CreateQueue-14
 #Create Queue with TimeInterval and Appointment
 JD-TC-Create Queue with timeinterval-13
     [Documentation]    Create Queue with timeInterval value and Appointment is Enable
-    ${resp}=  Provider Login  ${PUSERNAME85}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME85}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME85}
     clear_location  ${PUSERNAME85}
     clear_queue  ${PUSERNAME85}
-    ${DAY1}=  get_date
+    ${lid}=  Create Sample Location
+    Set Suite Variable  ${lid}  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable  ${s_id1}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-    Set Suite Variable  ${lid}    
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
-    Set Suite Variable  ${s_id1}
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${timeInterval}=   Random Int  min=5   max=10
@@ -995,25 +1068,30 @@ JD-TC-Create Queue with timeinterval-13
 
 JD-TC-Create Queue with timeinterval-UH1
     [Documentation]    Create Queue with timeInterval value and Appointment is Disable (In this case Can't Expect timeInterval In the Get queue)
-    ${resp}=  Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME80}
     clear_location  ${PUSERNAME80}
     clear_queue  ${PUSERNAME80}
-    ${DAY1}=  get_date
+    ${lid}=  Create Sample Location
+    Set Suite Variable  ${lid}  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}   
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable  ${s_id1}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-    Set Suite Variable  ${lid}    
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
-    Set Suite Variable  ${s_id1}
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${timeInterval}=   Random Int  min=5   max=10
@@ -1045,25 +1123,30 @@ JD-TC-Create Queue with timeinterval-UH1
 
 JD-TC-Create Queue with timeinterval-UH2
     [Documentation]    Create Queue with timeInterval with Negative value
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME120}
     clear_location  ${PUSERNAME120}
     clear_queue  ${PUSERNAME120}
-    ${DAY1}=  get_date
+    ${lid}=  Create Sample Location
+    Set Suite Variable  ${lid}  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable  ${s_id1}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-    Set Suite Variable  ${lid}    
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
-    Set Suite Variable  ${s_id1}
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${timeInterval}=   Random Int  min=-10   max=-5
@@ -1079,27 +1162,32 @@ JD-TC-Create Queue with timeinterval-UH3
     [Documentation]    Calculation Mode is ML when Create Queue with timeinterval value And Appointment is Enable (In this case Can't Expect timeInterval In the Get queue)
     
     clear_queue  ${PUSERNAME120}   
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200  
     clear_service   ${PUSERNAME120}
     clear_location  ${PUSERNAME120}
     clear_queue  ${PUSERNAME120}  
+    ${lid}=  Create Sample Location
+    Set Suite Variable  ${lid}  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}   
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable  ${s_id1}
+
     ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  0  true  true  true  true  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-    Set Suite Variable  ${lid}    
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
-    Set Suite Variable  ${s_id1}
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${timeInterval}=   Random Int  min=5   max=10
@@ -1129,27 +1217,33 @@ JD-TC-Create Queue with timeinterval-UH3
 JD-TC-Create Queue with timeinterval-UH4
     [Documentation]    Calculation Mode is NoCalc when Create Queue with timeinterval value And Appointment is Enable (In this case Can't Expect timeInterval In the Get queue)
     clear_queue  ${PUSERNAME120}    
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200 
     clear_service   ${PUSERNAME120}
     clear_location  ${PUSERNAME120}
     clear_queue  ${PUSERNAME120}   
     ${resp}=  Update Waitlist Settings  ${calc_mode[2]}  0  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}    
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY1}=  get_date
+    
+    ${lid}=  Create Sample Location
+    Set Suite Variable  ${lid}    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable  ${s_id1}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-    Set Suite Variable  ${lid}    
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
-    Set Suite Variable  ${s_id1}
     ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
     ${timeInterval}=   Random Int  min=5   max=10

@@ -88,7 +88,7 @@ JD-TC-AdvancePaymentcalculation-1
 
     [Documentation]   Create a service with prepayment type as fixed then verify the details in get service by id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -115,7 +115,7 @@ JD-TC-AdvancePaymentcalculation-2
 
     [Documentation]   Create a service with prepayment type as percentage then verify the details in get service by id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -142,7 +142,7 @@ JD-TC-AdvancePaymentcalculation-3
 
     [Documentation]   Create a service with prepayment type as fixed then verify the details in get service.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -169,7 +169,7 @@ JD-TC-AdvancePaymentcalculation-4
 
     [Documentation]   Create a service with prepayment type as percentage then verify the details in get service.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -197,7 +197,7 @@ JD-TC-AdvancePaymentcalculation-5
 
     [Documentation]   Create a service with prepayment but not given advance payment type.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -223,7 +223,7 @@ JD-TC-AdvancePaymentcalculation-6
 
     [Documentation]   Create a service without prepayment and has given advance payment type.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -246,7 +246,7 @@ JD-TC-AdvancePaymentcalculation-7
 
     [Documentation]   Create a service with prepayment type as fixed then verify the advance payment from consumer side for waitlist.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     
@@ -257,6 +257,11 @@ JD-TC-AdvancePaymentcalculation-7
 
     ${loc_id1}=  Create Sample Location
     Set Test Variable   ${loc_id1}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -277,11 +282,11 @@ JD-TC-AdvancePaymentcalculation-7
     Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}
     Should Be Equal As Strings  ${resp.json()['prePaymentType']}       ${advancepaymenttype[1]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${q_name}=    FakerLibrary.name
-    ${strt_time}=   subtract_time  1  00
-    ${end_time}=    add_time  1  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
+    ${end_time}=    add_timezone_time  ${tz}  1  00   
     ${parallel}=   Random Int  min=1   max=2
     ${capacity}=  Random Int   min=10   max=100
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1} 
@@ -305,7 +310,7 @@ JD-TC-AdvancePaymentcalculation-8
 
     [Documentation]   Create a service with prepayment type as percentage then verify the advance payment from consumer side for waitlist.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -320,6 +325,11 @@ JD-TC-AdvancePaymentcalculation-8
 
     ${loc_id1}=  Create Sample Location
     Set Test Variable   ${loc_id1}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
    
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=40   max=50
@@ -339,11 +349,11 @@ JD-TC-AdvancePaymentcalculation-8
     Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}
     Should Be Equal As Strings  ${resp.json()['prePaymentType']}       ${advancepaymenttype[0]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${q_name}=    FakerLibrary.name
-    ${strt_time}=   subtract_time  1  00
-    ${end_time}=    add_time  1  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
+    ${end_time}=    add_timezone_time  ${tz}  1  00   
     ${parallel}=   Random Int  min=1   max=2
     ${capacity}=  Random Int   min=10   max=100
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1} 
@@ -371,7 +381,7 @@ JD-TC-AdvancePaymentcalculation-9
 
     [Documentation]   Create a service with prepayment type as fixed then verify the advance payment from consumer side for appointment.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     
@@ -382,6 +392,11 @@ JD-TC-AdvancePaymentcalculation-9
 
     ${loc_id1}=  Create Sample Location
     Set Test Variable   ${loc_id1}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -402,10 +417,10 @@ JD-TC-AdvancePaymentcalculation-9
     Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}
     Should Be Equal As Strings  ${resp.json()['prePaymentType']}       ${advancepaymenttype[1]}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date   10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}   10
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -465,7 +480,7 @@ JD-TC-AdvancePaymentcalculation-10
 
     [Documentation]   Create a service with prepayment type as percentage then verify the advance payment from consumer side for appointment.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     
@@ -480,6 +495,11 @@ JD-TC-AdvancePaymentcalculation-10
 
     ${loc_id1}=  Create Sample Location
     Set Test Variable   ${loc_id1}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
    
     ${ser_durtn}=   Random Int   min=2   max=10
     ${min_pre}=   Random Int   min=40   max=50
@@ -499,10 +519,10 @@ JD-TC-AdvancePaymentcalculation-10
     Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}
     Should Be Equal As Strings  ${resp.json()['prePaymentType']}       ${advancepaymenttype[0]}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date   10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}   10
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -565,7 +585,7 @@ JD-TC-AdvancePaymentcalculation-11
 
     [Documentation]   Create a service without prepayment , then update the service with fixed prepayment.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -605,7 +625,7 @@ JD-TC-AdvancePaymentcalculation-12
 
     [Documentation]   Create a service without prepayment , then update the service with percentage prepayment.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -645,7 +665,7 @@ JD-TC-AdvancePaymentcalculation-13
 
     [Documentation]   Create a service with fixed prepayment , then update the service with percentage prepayment.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
@@ -689,7 +709,7 @@ JD-TC-AdvancePaymentcalculation-14
 
     [Documentation]   Create a service with prepayment type as fixed then take a waitlist and do the prepayment and verify the details.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     
@@ -700,6 +720,11 @@ JD-TC-AdvancePaymentcalculation-14
 
     ${loc_id1}=  Create Sample Location
     Set Test Variable   ${loc_id1}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -720,11 +745,11 @@ JD-TC-AdvancePaymentcalculation-14
     Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}
     Should Be Equal As Strings  ${resp.json()['prePaymentType']}       ${advancepaymenttype[1]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${q_name}=    FakerLibrary.name
-    ${strt_time}=   subtract_time  1  00
-    ${end_time}=    add_time  1  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
+    ${end_time}=    add_timezone_time  ${tz}  1  00   
     ${parallel}=   Random Int  min=1   max=2
     ${capacity}=  Random Int   min=10   max=100
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1} 
@@ -765,7 +790,7 @@ JD-TC-AdvancePaymentcalculation-14
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -801,7 +826,7 @@ JD-TC-AdvancePaymentcalculation-14
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=   ProviderLogin   ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME101}  ${PASSWORD} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     sleep   01s
@@ -815,7 +840,7 @@ JD-TC-AdvancePaymentcalculation-15
 
     [Documentation]   Create a service with prepayment type as percentage then take a waitlist and do the prepayment and verify the details.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     
@@ -826,6 +851,11 @@ JD-TC-AdvancePaymentcalculation-15
 
     ${loc_id1}=  Create Sample Location
     Set Test Variable   ${loc_id1}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -846,11 +876,11 @@ JD-TC-AdvancePaymentcalculation-15
     Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}
     Should Be Equal As Strings  ${resp.json()['prePaymentType']}       ${advancepaymenttype[0]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${q_name}=    FakerLibrary.name
-    ${strt_time}=   subtract_time  1  00
-    ${end_time}=    add_time  1  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
+    ${end_time}=    add_timezone_time  ${tz}  1  00   
     ${parallel}=   Random Int  min=1   max=2
     ${capacity}=  Random Int   min=10   max=100
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1} 
@@ -894,7 +924,7 @@ JD-TC-AdvancePaymentcalculation-15
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -931,7 +961,7 @@ JD-TC-AdvancePaymentcalculation-15
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=   ProviderLogin   ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME101}  ${PASSWORD} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     sleep   01s
@@ -946,7 +976,7 @@ JD-TC-AdvancePaymentcalculation-16
 
     [Documentation]   Create a service with prepayment type as fixed then take an appointment and do the payment then verify the details.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     
@@ -957,6 +987,11 @@ JD-TC-AdvancePaymentcalculation-16
 
     ${loc_id1}=  Create Sample Location
     Set Test Variable   ${loc_id1}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -977,10 +1012,10 @@ JD-TC-AdvancePaymentcalculation-16
     Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}
     Should Be Equal As Strings  ${resp.json()['prePaymentType']}       ${advancepaymenttype[1]}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date   10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}   10
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1057,7 +1092,7 @@ JD-TC-AdvancePaymentcalculation-16
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1094,7 +1129,7 @@ JD-TC-AdvancePaymentcalculation-16
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=   ProviderLogin   ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME101}  ${PASSWORD} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1111,7 +1146,7 @@ JD-TC-AdvancePaymentcalculation-17
 
     [Documentation]   Create a service with prepayment type as percentage then take an appointment and do the payment then verify the details.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     
@@ -1122,6 +1157,11 @@ JD-TC-AdvancePaymentcalculation-17
 
     ${loc_id1}=  Create Sample Location
     Set Test Variable   ${loc_id1}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -1142,10 +1182,10 @@ JD-TC-AdvancePaymentcalculation-17
     Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}
     Should Be Equal As Strings  ${resp.json()['prePaymentType']}       ${advancepaymenttype[0]}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date   10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}   10
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1225,7 +1265,7 @@ JD-TC-AdvancePaymentcalculation-17
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1262,7 +1302,7 @@ JD-TC-AdvancePaymentcalculation-17
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=   ProviderLogin   ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME101}  ${PASSWORD} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1279,7 +1319,7 @@ JD-TC-AdvancePaymentcalculation-18
 
     [Documentation]   Create a service with prepayment type as percentage(100%) then take an appointment and do the payment then verify the details.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     
@@ -1290,6 +1330,11 @@ JD-TC-AdvancePaymentcalculation-18
 
     ${loc_id1}=  Create Sample Location
     Set Test Variable   ${loc_id1}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -1310,10 +1355,10 @@ JD-TC-AdvancePaymentcalculation-18
     Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}
     Should Be Equal As Strings  ${resp.json()['prePaymentType']}       ${advancepaymenttype[0]}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date   10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}   10
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1393,7 +1438,7 @@ JD-TC-AdvancePaymentcalculation-18
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1431,7 +1476,7 @@ JD-TC-AdvancePaymentcalculation-19
 
     [Documentation]   Create a service with prepayment type as percentage(100%) then take a waitlist and do the prepayment and verify the details.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}   
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     
@@ -1442,6 +1487,11 @@ JD-TC-AdvancePaymentcalculation-19
 
     ${loc_id1}=  Create Sample Location
     Set Test Variable   ${loc_id1}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     clear_service  ${PUSERNAME101} 
     ${ser_durtn}=   Random Int   min=2   max=10
@@ -1462,11 +1512,11 @@ JD-TC-AdvancePaymentcalculation-19
     Should Be Equal As Strings  ${resp.json()['minPrePaymentAmount']}  ${min_pre}
     Should Be Equal As Strings  ${resp.json()['prePaymentType']}       ${advancepaymenttype[0]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${q_name}=    FakerLibrary.name
-    ${strt_time}=   subtract_time  1  00
-    ${end_time}=    add_time  1  00 
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
+    ${end_time}=    add_timezone_time  ${tz}  1  00   
     ${parallel}=   Random Int  min=1   max=2
     ${capacity}=  Random Int   min=10   max=100
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1} 
@@ -1510,7 +1560,7 @@ JD-TC-AdvancePaymentcalculation-19
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1545,7 +1595,7 @@ JD-TC-AdvancePaymentcalculation-19
 
 
 
-#  <<<<<<<<<<<<<<<<<<<  SERVICE OPTIONS  >>>>>>>>>>>>>>>>>
+#  -------------------  SERVICE OPTIONS  -----------------
 
 
 JD-TC-AdvancePaymentcalculation-20
@@ -1570,15 +1620,20 @@ JD-TC-AdvancePaymentcalculation-20
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${fname}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname}  ${decrypted_data['lastName']}
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Account Payment Settings 
     Log   ${resp.json()}
@@ -1635,7 +1690,7 @@ JD-TC-AdvancePaymentcalculation-20
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1671,7 +1726,7 @@ JD-TC-AdvancePaymentcalculation-20
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1696,12 +1751,14 @@ JD-TC-AdvancePaymentcalculation-20
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -1782,7 +1839,7 @@ JD-TC-AdvancePaymentcalculation-20
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  ProviderLogin  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1818,7 +1875,7 @@ JD-TC-AdvancePaymentcalculation-20
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin   ${HLMUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${HLMUSERNAME4}  ${PASSWORD} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     sleep   01s
@@ -1852,7 +1909,7 @@ JD-TC-AdvancePaymentcalculation-21
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
@@ -1861,6 +1918,7 @@ JD-TC-AdvancePaymentcalculation-21
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Account Payment Settings 
     Log   ${resp.json()}
@@ -1917,7 +1975,7 @@ JD-TC-AdvancePaymentcalculation-21
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1953,7 +2011,7 @@ JD-TC-AdvancePaymentcalculation-21
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1978,12 +2036,14 @@ JD-TC-AdvancePaymentcalculation-21
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
@@ -2067,7 +2127,7 @@ JD-TC-AdvancePaymentcalculation-21
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  ProviderLogin  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2103,7 +2163,7 @@ JD-TC-AdvancePaymentcalculation-21
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin   ${HLMUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${HLMUSERNAME7}  ${PASSWORD} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     sleep   01s
@@ -2136,15 +2196,20 @@ JD-TC-AdvancePaymentcalculation-22
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${fname}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname}  ${decrypted_data['lastName']}
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Account Payment Settings 
     Log   ${resp.json()}
@@ -2201,7 +2266,7 @@ JD-TC-AdvancePaymentcalculation-22
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2237,7 +2302,7 @@ JD-TC-AdvancePaymentcalculation-22
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2263,10 +2328,10 @@ JD-TC-AdvancePaymentcalculation-22
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date   10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}   10
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -2378,7 +2443,7 @@ JD-TC-AdvancePaymentcalculation-22
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  ProviderLogin  ${HLMUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2418,7 +2483,7 @@ JD-TC-AdvancePaymentcalculation-22
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=   ProviderLogin   ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${HLMUSERNAME6}  ${PASSWORD} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2453,15 +2518,20 @@ JD-TC-AdvancePaymentcalculation-23
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${fname}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname}  ${decrypted_data['lastName']}
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Account Payment Settings 
     Log   ${resp.json()}
@@ -2518,7 +2588,7 @@ JD-TC-AdvancePaymentcalculation-23
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2554,7 +2624,7 @@ JD-TC-AdvancePaymentcalculation-23
     Log         ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}     200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2580,10 +2650,10 @@ JD-TC-AdvancePaymentcalculation-23
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date   10
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}   10
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -2698,7 +2768,7 @@ JD-TC-AdvancePaymentcalculation-23
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=  ProviderLogin  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2738,7 +2808,7 @@ JD-TC-AdvancePaymentcalculation-23
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
    
-    ${resp}=   ProviderLogin   ${HLMUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${HLMUSERNAME2}  ${PASSWORD} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     

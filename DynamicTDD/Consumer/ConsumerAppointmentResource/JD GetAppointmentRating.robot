@@ -26,7 +26,7 @@ JD-TC-GetAppointmentRating-1
 
 	[Documentation]    Get Appointment Rating filter by account id.
 	
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_queue    ${PUSERNAME200}
     clear_service  ${PUSERNAME200}
@@ -34,11 +34,11 @@ JD-TC-GetAppointmentRating-1
 
     ${pid}=  get_acc_id  ${PUSERNAME200}
     Set Suite Variable  ${pid} 
-    Should Be Equal As Strings    ${resp.status_code}   200
  
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     clear_appt_schedule   ${PUSERNAME200}
 
     ${SERVICE1}=   FakerLibrary.name
@@ -57,11 +57,11 @@ JD-TC-GetAppointmentRating-1
     ${s_id4}=  Create Sample Service  ${SERVICE4}
     Set Suite Variable   ${s_id4}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
@@ -80,9 +80,9 @@ JD-TC-GetAppointmentRating-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${DAY2}=  add_date  11      
+    ${DAY2}=  db.add_timezone_date  ${tz}  11      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  1  15
+    ${sTime1}=  add_timezone_time  ${tz}  1  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
@@ -193,7 +193,7 @@ JD-TC-GetAppointmentRating-2
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1} 
 
-    ${DAY2}=  add_date  6
+    ${DAY2}=  db.add_timezone_date  ${tz}  6  
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id2}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
@@ -279,8 +279,12 @@ JD-TC-GetAppointmentRating-3
 
     [Documentation]  Get Appointment Rating filter by rating.  
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Suite Variable  ${lic_name}  ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
     clear_queue    ${PUSERNAME101}
     clear_service  ${PUSERNAME101}
     clear_rating    ${PUSERNAME101}
@@ -293,8 +297,10 @@ JD-TC-GetAppointmentRating-3
     Log   ${pkg_id}
     Set Suite Variable     ${pkgId}   ${pkg_id[0]}
 
-    ${resp}=  Change License Package  ${pkgId}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    IF  '${lic_id}' != '${pkgId}'
+        ${resp}=  Change License Package  ${pkgId}
+        Should Be Equal As Strings    ${resp.status_code}   200
+    END
  
     ${pid1}=  get_acc_id  ${PUSERNAME101}
     Set Suite Variable  ${pid1} 
@@ -303,6 +309,7 @@ JD-TC-GetAppointmentRating-3
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     clear_appt_schedule   ${PUSERNAME101}
 
     ${SERVICE1}=   FakerLibrary.name
@@ -321,9 +328,9 @@ JD-TC-GetAppointmentRating-3
     ${ser_id4}=  Create Sample Service  ${SERVICE4}
     Set Suite Variable   ${ser_id4}
 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
@@ -342,9 +349,9 @@ JD-TC-GetAppointmentRating-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${schedule_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${DAY2}=  add_date  11      
+    ${DAY2}=  db.add_timezone_date  ${tz}  11      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  1  15
+    ${sTime1}=  add_timezone_time  ${tz}  1  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
@@ -390,7 +397,7 @@ JD-TC-GetAppointmentRating-3
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY2}=  add_date  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  2  
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
@@ -424,7 +431,7 @@ JD-TC-GetAppointmentRating-3
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY2}=  add_date  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  2  
     Set Suite Variable   ${DAY2}
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid1}  ${ser_id}  ${schedule_id}  ${DAY2}  ${cnote}   ${apptfor}
@@ -477,7 +484,7 @@ JD-TC-GetAppointmentRating-4
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot2}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY4}=  add_date  4
+    ${DAY4}=  db.add_timezone_date  ${tz}  4  
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid1}  ${ser_id}  ${schedule_id}  ${DAY4}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
@@ -566,7 +573,7 @@ JD-TC-GetAppointmentRating-8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${DAY2}=  subtract_date  2
+    ${DAY2}=  db.subtract_timezone_date  ${tz}   2
     ${resp}=  Get Appointment Rating    createdDate-eq=${DAY2}
     Log   ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200

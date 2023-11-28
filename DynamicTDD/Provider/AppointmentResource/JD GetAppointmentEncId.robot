@@ -34,15 +34,15 @@ JD-TC-GetAppointmentEncId-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME100}
     clear_location  ${PUSERNAME100}
     clear_customer   ${PUSERNAME100}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
@@ -122,15 +122,15 @@ JD-TC-GetAppointmentEncId-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME92}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME92}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME92}
     clear_location  ${PUSERNAME92}
     clear_customer   ${PUSERNAME92}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
@@ -164,7 +164,7 @@ JD-TC-GetAppointmentEncId-2
 
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
-    ${DAY2}=  add_date  5
+    ${DAY2}=  db.add_timezone_date  ${tz}  5  
     ${cnote}=   FakerLibrary.word
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY2}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
@@ -198,7 +198,7 @@ JD-TC-GetAppointmentEncId-2
 
 JD-TC-GetAppointmentEncId-UH1
     [Documentation]    Get Appointment Encrypted ID of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME129}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Appointment EncodedID     ${apptid1} 
     Log   ${resp.json()}
@@ -213,7 +213,7 @@ JD-TC-GetAppointmentEncId-UH2
 
 JD-TC-GetAppointmentEncId-UH3
     [Documentation]     Passing Appointment ID is Empty in the Get Appointment Encrypted ID 
-    ${resp}=  ProviderLogin  ${PUSERNAME92}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME92}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Appointment EncodedID    ${empty}
     Log   ${resp.json()}
@@ -222,7 +222,7 @@ JD-TC-GetAppointmentEncId-UH3
 
 JD-TC-GetAppointmentEncId-UH4
     [Documentation]     Passing Appointment ID is Zero in the Get Appointment Encrypted ID 
-    ${resp}=  ProviderLogin  ${PUSERNAME92}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME92}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Appointment EncodedID    0
     Log   ${resp.json()}

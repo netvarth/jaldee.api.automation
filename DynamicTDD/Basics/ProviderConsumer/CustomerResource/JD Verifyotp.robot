@@ -22,7 +22,7 @@ JD-TC-SendOtp-1
 
 
     [Documentation]    Verify OTP
-    ${resp}=   ProviderLogin  ${PUSERNAME72}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME72}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -50,7 +50,7 @@ JD-TC-SendOtp-UH1
  
     [Documentation]    Verify OTP where customer is not registered under provider
     
-    ${resp}=   ProviderLogin  ${PUSERNAME72}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME72}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -70,7 +70,7 @@ JD-TC-SendOtp-UH2
 
     [Documentation]    Verify OTP with wrong purpose
  
-    ${resp}=   ProviderLogin  ${PUSERNAME72}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME72}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -87,7 +87,7 @@ JD-TC-SendOtp-UH3
 
     [Documentation]    Verify OTP where loginid is empty
 
-    ${resp}=   ProviderLogin  ${PUSERNAME72}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME72}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 

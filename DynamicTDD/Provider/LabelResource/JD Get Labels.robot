@@ -15,7 +15,7 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 *** Test Cases ***
 JD-TC-GetLabels-1
 	[Documentation]  Get Labels by a valid provider
-    ${resp}=  ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Label  ${PUSERNAME7}  
     ${Values}=  FakerLibrary.Words  	nb=9

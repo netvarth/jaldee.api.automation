@@ -23,39 +23,46 @@ ${SERVICE4}  Facial
 
 JD-TC-Available Queues-1
     [Documentation]   Checking Avalible queues
-    ${resp}=  Provider Login  ${PUSERNAME174}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME174}
     clear_location  ${PUSERNAME174}
     clear_queue  ${PUSERNAME174}
-    ${DAY1}=  get_date
+    ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    ${s_id2}=  Create Sample Service  ${SERVICE3}
+    ${s_id3}=  Create Sample Service  ${SERVICE4}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  subtract_time  1  15
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  1  15
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
     ${queue_name1}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name1}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
-    ${sTime2}=  add_time  0  30
+    ${sTime2}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${sTime2}
-    ${eTime2}=  add_time   1  40
+    ${eTime2}=  add_timezone_time  ${tz}   1  40
     Set Suite Variable   ${eTime2}
-    ${s_id2}=  Create Sample Service  ${SERVICE3}
-    ${s_id3}=  Create Sample Service  ${SERVICE4}
     ${queue_name2}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name2}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  5  ${lid}  ${s_id2}  ${s_id3}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
+
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
 
     ${resp}=  Is Available Queue Now
     Log  ${resp.json()}
@@ -66,34 +73,42 @@ JD-TC-Available Queues-1
 
 JD-TC-Available Queues-2
     [Documentation]   Checking avaliable queues when there is no queue
-    ${resp}=  Provider Login  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME175}
     clear_location  ${PUSERNAME175}
     clear_queue  ${PUSERNAME175}
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti}=  get_latitude
+    # Set Suite Variable  ${latti}
+    # ${longi}=  get_longitude
+    # Set Suite Variable  ${longi}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti}=  get_latitude
     Set Suite Variable  ${latti}
-    ${longi}=  get_longitude
     Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
-    ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
-    Set Suite Variable  ${parking_type}
+    ${parking_type1}    Random Element     ['none','free','street','privatelot','valet','paid']
+    Set Suite Variable  ${parking_type1}
     ${24hours}    Random Element    ['True','False']
     Set Suite Variable  ${24hours}
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 	${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime}=  subtract_time  1  15
+    ${sTime}=  db.subtract_timezone_time  ${tz}  1  15
     Set Suite Variable   ${sTime}
-    ${eTime}=  subtract_time   0  30
+    ${eTime}=  db.subtract_timezone_time  ${tz}   0  30
     Set Suite Variable   ${eTime}
-    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
+    ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type1}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()}
@@ -104,41 +119,49 @@ JD-TC-Available Queues-2
 
 JD-TC-Available Queues-3
     [Documentation]   Checking Avalible queues when there is some gaps between two queues
-    ${resp}=  Provider Login  ${PUSERNAME176}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME176}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME176}
     clear_location  ${PUSERNAME176}
     clear_queue  ${PUSERNAME176}
-    ${DAY1}=  get_date
+    ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    ${s_id2}=  Create Sample Service  ${SERVICE3}
+    ${s_id3}=  Create Sample Service  ${SERVICE4}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  subtract_time  1  15
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  1  15
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  05
+    ${eTime1}=  add_timezone_time  ${tz}   0  05
     Set Suite Variable   ${eTime1}
-    ${lid}=  Create Sample Location
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
     ${queue_name1}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name1}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
-    ${sTime2}=  add_time  1  00
+
+    ${sTime2}=  add_timezone_time  ${tz}  1  00  
     Set Suite Variable   ${sTime2}
-    ${eTime2}=  add_time   2  40
+    ${eTime2}=  add_timezone_time  ${tz}  2  40  
     Set Suite Variable   ${eTime2}
-    ${s_id2}=  Create Sample Service  ${SERVICE3}
-    ${s_id3}=  Create Sample Service  ${SERVICE4}
+    
     ${queue_name2}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name2}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  5  ${lid}  ${s_id2}  ${s_id3}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id1}  ${resp.json()}
     
-    ${time}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone   ${tz}
+    # ${Time}=  db.get_time_by_timezone  ${tz}
     ${resp}=  Is Available Queue Now
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

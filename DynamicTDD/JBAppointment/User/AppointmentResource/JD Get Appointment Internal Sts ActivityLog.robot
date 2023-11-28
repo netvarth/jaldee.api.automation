@@ -45,10 +45,14 @@ JD-TC-AppointmentGetInternalStsActivityLog-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${user_name}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+#     Set Suite Variable  ${user_name}  ${resp.json()['userName']}
 
      ${pid}=  get_acc_id  ${HLMUSERNAME16}
      Set Suite Variable  ${pid}
@@ -62,22 +66,24 @@ JD-TC-AppointmentGetInternalStsActivityLog-1
     clear_appt_schedule   ${HLMUSERNAME16}
     clear_customer   ${HLMUSERNAME16}
 
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}  ${DAY1}
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list}  ${list}
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
+#     Set Suite Variable  ${DAY1}  ${DAY1}
+#     ${list}=  Create List  1  2  3  4  5  6  7
+#     Set Suite Variable  ${list}  ${list}
 
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${dep_name1}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name1}
@@ -94,18 +100,20 @@ JD-TC-AppointmentGetInternalStsActivityLog-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_time  4  00   
+    ${eTime1}=  add_timezone_time  ${tz}  4  00     
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -207,7 +215,7 @@ JD-TC-AppointmentGetInternalStsActivityLog-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${encId}=  Set Variable   ${resp.json()}
 
-     ${resp}=  Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -230,7 +238,7 @@ JD-TC-AppointmentGetInternalStsActivityLog-1
 JD-TC-AppointmentGetInternalStsActivityLog-2
      [Documentation]  Apply Internal statuses when user has permission for internal Status
 
-     ${resp}=  Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+301601
@@ -268,7 +276,7 @@ JD-TC-AppointmentGetInternalStsActivityLog-2
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${pid1}=  get_acc_id  ${PUSERNAME_U1}
@@ -324,7 +332,7 @@ JD-TC-AppointmentGetInternalStsActivityLog-2
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Appointment Apply Internal Status  ${apptid1}  ${internal_sts_name1}
@@ -344,10 +352,14 @@ JD-TC-AppointmentGetInternalStsActivityLog-2
 JD-TC-AppointmentGetInternalStsActivityLog-3
      [Documentation]  Apply Internal statuses when user has no permission for internal sts but he is ADMIN=TRUE
 
-     ${resp}=  Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Set Suite Variable  ${user_name}  ${resp.json()['userName']}
+
+     ${decrypted_data}=  db.decrypt_data  ${resp.content}
+     Log  ${decrypted_data}
+     Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+#      Set Suite Variable  ${user_name}  ${resp.json()['userName']}
 
      ${pid}=  get_acc_id  ${HLMUSERNAME15}
 
@@ -365,12 +377,14 @@ JD-TC-AppointmentGetInternalStsActivityLog-3
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${dep_name1}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name1}
@@ -383,22 +397,29 @@ JD-TC-AppointmentGetInternalStsActivityLog-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${depid1}  ${resp.json()}
 
+    # ${resp}=    Get Locations
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
+
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_time  4  00   
+    ${eTime1}=  add_timezone_time  ${tz}  4  00     
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -512,9 +533,14 @@ JD-TC-AppointmentGetInternalStsActivityLog-3
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U2}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${fullname}   ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${fullname}  ${decrypted_data['userName']}
+
+    # Set Suite Variable  ${fullname}   ${resp.json()['userName']}
 
     ${resp}=  AddCustomer  ${CUSERNAME19}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}

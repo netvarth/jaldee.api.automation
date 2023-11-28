@@ -33,10 +33,14 @@ JD-TC-UpdateDeliveryAddress-1
     clear_service  ${PUSERNAME114}
     clear_customer   ${PUSERNAME114}
     clear_Item   ${PUSERNAME114}
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid1}  ${resp.json()['id']}
     
     ${accId3}=  get_acc_id  ${PUSERNAME114}
     Set Suite Variable  ${accId3} 
@@ -110,26 +114,31 @@ JD-TC-UpdateDeliveryAddress-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id5}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15  
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate2}=  add_date  5
-    ${endDate2}=  add_date  25     
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15    
+
+    ${startDate2}=  db.add_timezone_date  ${tz}  5  
+    ${endDate2}=  db.add_timezone_date  ${tz}  25      
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime4}=  add_time  0  15
+    ${sTime4}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime4}
-    ${eTime4}=  add_time   1  00 
+    ${eTime4}=  add_timezone_time  ${tz}  1  00   
     Set Suite Variable    ${eTime4}
     ${list}=  Create List  1  2  3  4  5  6  7
 
-    ${sTime5}=  add_time  1  15
+    ${sTime5}=  add_timezone_time  ${tz}  1  15  
     Set Suite Variable   ${sTime5}
-    ${eTime5}=  add_time   2  00 
+    ${eTime5}=  add_timezone_time  ${tz}  2  00   
     Set Suite Variable    ${eTime5}
   
     ${deliveryCharge1}=  Random Int  min=50   max=100
@@ -263,7 +272,7 @@ JD-TC-UpdateDeliveryAddress-1
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
@@ -301,7 +310,7 @@ JD-TC-UpdateDeliveryAddress-2
     Set Test Variable  ${lname}   ${resp.json()['lastName']}
     Set Test Variable  ${uname}   ${resp.json()['userName']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -332,7 +341,7 @@ JD-TC-UpdateDeliveryAddress-2
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
@@ -374,10 +383,14 @@ JD-TC-UpdateDeliveryAddress-3
     clear_service  ${PUSERNAME115}
     clear_customer   ${PUSERNAME115}
     clear_Item   ${PUSERNAME115}
-    ${resp}=  ProviderLogin  ${PUSERNAME115}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME115}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid2}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid2}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid2}  ${resp.json()['id']}
     
     ${accId4}=  get_acc_id  ${PUSERNAME115}
     Set Suite Variable  ${accId4} 
@@ -442,26 +455,31 @@ JD-TC-UpdateDeliveryAddress-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id5}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15  
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate2}=  add_date  5
-    ${endDate2}=  add_date  25     
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15    
+
+    ${startDate2}=  db.add_timezone_date  ${tz}  5  
+    ${endDate2}=  db.add_timezone_date  ${tz}  25      
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime4}=  add_time  0  15
+    ${sTime4}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime4}
-    ${eTime4}=  add_time   1  00 
+    ${eTime4}=  add_timezone_time  ${tz}  1  00   
     Set Suite Variable    ${eTime4}
     ${list}=  Create List  1  2  3  4  5  6  7
 
-    ${sTime5}=  add_time  1  15
+    ${sTime5}=  add_timezone_time  ${tz}  1  15  
     Set Suite Variable   ${sTime5}
-    ${eTime5}=  add_time   2  00 
+    ${eTime5}=  add_timezone_time  ${tz}  2  00   
     Set Suite Variable    ${eTime5}
   
     ${deliveryCharge1}=  Random Int  min=50   max=100
@@ -573,7 +591,7 @@ JD-TC-UpdateDeliveryAddress-3
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
     ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
@@ -647,7 +665,7 @@ JD-TC-UpdateDeliveryAddress-UH2
 JD-TC-UpdateDeliveryAddress-UH3
     [Documentation]     Update delivery address with another provider customer id 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -669,7 +687,7 @@ JD-TC-UpdateDeliveryAddress-UH3
 JD-TC-UpdateDeliveryAddress-UH4
     [Documentation]     Update delivery address without address 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -692,7 +710,7 @@ JD-TC-UpdateDeliveryAddress-UH5
 
     [Documentation]     Update delivery address without phone 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -715,7 +733,7 @@ JD-TC-UpdateDeliveryAddress-UH6
 
     [Documentation]     Update delivery address without name
 
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -739,7 +757,7 @@ JD-TC-UpdateDeliveryAddress-UH7
 
     [Documentation]     Update delivery address without email
 
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -762,7 +780,7 @@ JD-TC-UpdateDeliveryAddress-UH8
 
     [Documentation]     Update delivery address without postalcode
 
-    ${resp}=  ProviderLogin  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

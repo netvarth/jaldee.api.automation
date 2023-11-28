@@ -27,7 +27,6 @@ ${digits}       0123456789
 @{dom_list}
 @{multiloc_providers}
 ${countryCode}   +91
-
 ${PASSWORD2}          Netvarth56
 ${invalid_provider}   abd@in.in
 @{emptylist}
@@ -70,14 +69,18 @@ JD-TC-EncryptedProviderLogin-1
     ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
-    Set Suite Variable  ${PUSERNAME_B}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
+    # Set Suite Variable  ${PUSERNAME_B}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
 
     # Log  ${decrypted_data.json()}
 
@@ -89,6 +92,10 @@ JD-TC-EncryptedProviderLogin-1
 
     # ${data}=    json.dumps    ${type string}
     # Set Suite Variable  ${id}  ${data['id']}
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${decrypted_data['firstName']}   ${firstname}
     Should Be Equal As Strings  ${decrypted_data['lastName']}   ${lastname}
     Should Be Equal As Strings  ${decrypted_data['userType']}   1

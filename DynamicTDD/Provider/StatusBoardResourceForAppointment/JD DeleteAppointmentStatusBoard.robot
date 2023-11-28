@@ -23,7 +23,7 @@ JD-TC-DeleteAppointmentStatusBoard-1
     
     [Documentation]   Delete a Appointment StatusBoard by provider
     
-    ${resp}=  ProviderLogin  ${PUSERNAME139}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME139}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME139}
     clear_location  ${PUSERNAME139}
@@ -31,13 +31,13 @@ JD-TC-DeleteAppointmentStatusBoard-1
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable  ${delta}
@@ -78,7 +78,7 @@ JD-TC-DeleteAppointmentStatusBoard-1
     Set Suite Variable  ${sba_id1}  ${resp.json()}
 
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sba_id1}  
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sba_id1}  
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     
@@ -118,7 +118,7 @@ JD-TC-DeleteAppointmentStatusBoard -UH2
 
 JD-TC-DeleteAppointmentStatusBoard-UH3
     [Documentation]  Delete a Appointment StatusBoard by id which is not exist
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_id}=   Random Int   min=-10   max=0
     ${resp}=  Delete Appointment Status Board By Id  ${invalid_id}
@@ -128,7 +128,7 @@ JD-TC-DeleteAppointmentStatusBoard-UH3
 
 JD-TC-DeleteAppointmentStatusBoard-UH4
     [Documentation]  Delete a  Appointment StatusBoard by id of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Delete Appointment Status Board By Id  ${sb_id}
     Should Be Equal As Strings  ${resp.status_code}  422

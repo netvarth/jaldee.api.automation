@@ -16,7 +16,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-Get Tax Percentage-1
        [Documentation]   Get Tax valid provider
-       ${resp}=   ProviderLogin  ${PUSERNAME18}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${gstper}=  Random Element  ${gstpercentage}
        ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}

@@ -16,9 +16,12 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-Update License -1
       [Documentation]  Update License Package with valid data
-      ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
-      Should Be Equal As Strings    ${resp.status_code}   200
-      Set Suite Variable  ${old_pkgid}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
+       Should Be Equal As Strings    ${resp.status_code}   200
+       ${decrypted_data}=  db.decrypt_data  ${resp.content}
+       Log  ${decrypted_data}
+       Set Suite Variable  ${old_pkgid}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+       # Set Suite Variable  ${old_pkgid}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']} 
       ${resp}=   Get upgradable license
       Should Be Equal As Strings    ${resp.status_code}   200
       Set Test Variable  ${pkgid}  ${resp.json()[0]['pkgId']} 
@@ -44,7 +47,7 @@ JD-TC-Update License -1
             
 JD-TC-Update License -UH1
       [Documentation]  Update License Package to downgrade
-      ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       ${resp}=  Change License Package  ${old_pkgid}
       Should Be Equal As Strings    ${resp.status_code}   422
@@ -52,7 +55,7 @@ JD-TC-Update License -UH1
       
 JD-TC-Update License -UH2
       [Documentation]  Update License Package to renew
-      ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200      
       ${resp}=  Change License Package  ${pkgid}
       Should Be Equal As Strings    ${resp.status_code}   422
@@ -61,7 +64,7 @@ JD-TC-Update License -UH2
       
 JD-TC-Update License -UH3
       [Documentation]  Update License Package to invalid package id
-      ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       ${resp}=  Change License Package  0
       Should Be Equal As Strings    ${resp.status_code}   422

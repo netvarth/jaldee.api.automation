@@ -85,7 +85,7 @@ JD-TC-paymentprofiles-1
     # Set Suite Variable  ${dom}  ${billable_doms[0][0]}
     # Set Suite Variable  ${sub_dom}  ${billable_doms[1][0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${dom}  ${resp.json()['sector']}
@@ -96,7 +96,6 @@ JD-TC-paymentprofiles-1
     Set Suite Variable   ${pid}
 
     
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME155}+15566124
     ${ph2}=  Evaluate  ${PUSERNAME155}+25566128
@@ -108,18 +107,22 @@ JD-TC-paymentprofiles-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME155}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -153,7 +156,6 @@ JD-TC-paymentprofiles-1
     Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME155}+15566124
     ${ph2}=  Evaluate  ${PUSERNAME155}+25566128
@@ -165,18 +167,22 @@ JD-TC-paymentprofiles-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME155}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -221,6 +227,11 @@ JD-TC-paymentprofiles-1
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -239,12 +250,13 @@ JD-TC-paymentprofiles-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   1   15
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  1  15  
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id}   
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -267,7 +279,7 @@ JD-TC-paymentprofiles-1
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${cwid}  ${wid[0]} 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -287,7 +299,7 @@ JD-TC-paymentprofiles-1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -305,7 +317,7 @@ JD-TC-paymentprofiles-1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -319,11 +331,12 @@ JD-TC-paymentprofiles-1
     Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${DAY}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -349,7 +362,7 @@ JD-TC-paymentprofiles-1.1
 
     [Documentation]  do the prepayment to jaldee bank with convenienceFee.(for online checkin, appointment and order).
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -401,7 +414,7 @@ JD-TC-paymentprofiles-1.1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -419,6 +432,11 @@ JD-TC-paymentprofiles-1.1
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -437,12 +455,13 @@ JD-TC-paymentprofiles-1.1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   1   15
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  1  15  
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id}   
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -483,7 +502,7 @@ JD-TC-paymentprofiles-1.1
     # Should Be Equal As Strings  ${resp.json()[0]['isJaldeeBank']}    ${bool[1]}
     Set Suite Variable    ${proid}  ${resp.json()[0]['profileId']}
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -503,7 +522,7 @@ JD-TC-paymentprofiles-1.1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -521,7 +540,7 @@ JD-TC-paymentprofiles-1.1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -535,11 +554,12 @@ JD-TC-paymentprofiles-1.1
     Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${DAY}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -566,7 +586,7 @@ JD-TC-paymentprofiles-1.2
 
     [Documentation]  do the prepayment to jaldee bank with convenienceFee.(total amount)(for online checkin, appointment and order).
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -586,12 +606,17 @@ JD-TC-paymentprofiles-1.2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -610,12 +635,13 @@ JD-TC-paymentprofiles-1.2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   1   15
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  1  15  
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id}   
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -649,7 +675,7 @@ JD-TC-paymentprofiles-1.2
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()[0]['isJaldeeBank']}    ${bool[1]}
     Set Suite Variable    ${proid}  ${resp.json()[0]['profileId']}
-    # ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -669,7 +695,7 @@ JD-TC-paymentprofiles-1.2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -687,7 +713,7 @@ JD-TC-paymentprofiles-1.2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -701,11 +727,12 @@ JD-TC-paymentprofiles-1.2
     Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${DAY}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -732,7 +759,7 @@ JD-TC-paymentprofiles-1.3
 
     [Documentation]  do the prepayment to jaldee bank with convenienceFee.(Pay the Two Amount Supprate)(for online checkin, appointment and order).
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -752,12 +779,17 @@ JD-TC-paymentprofiles-1.3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -776,12 +808,13 @@ JD-TC-paymentprofiles-1.3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   1   15
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  1  15  
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id}   
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -824,7 +857,7 @@ JD-TC-paymentprofiles-1.3
     Should Be Equal As Strings  ${resp.json()[0]['isJaldeeBank']}    ${bool[1]}
     Set Suite Variable    ${proid}  ${resp.json()[0]['profileId']}
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -848,7 +881,7 @@ JD-TC-paymentprofiles-1.3
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -866,7 +899,7 @@ JD-TC-paymentprofiles-1.3
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -882,11 +915,12 @@ JD-TC-paymentprofiles-1.3
     
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -912,7 +946,7 @@ JD-TC-paymentprofiles-2.1
 
     [Documentation]  do the prepayment to jaldee bank .(for online appointment ).
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -929,11 +963,16 @@ JD-TC-paymentprofiles-2.1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -967,10 +1006,10 @@ JD-TC-paymentprofiles-2.1
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1058,7 +1097,7 @@ JD-TC-paymentprofiles-2.1
     # Should Be Equal As Strings  ${resp.json()[0]['isJaldeeBank']}    ${bool[1]}
     Set Suite Variable    ${proid}  ${resp.json()[0]['profileId']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1078,7 +1117,7 @@ JD-TC-paymentprofiles-2.1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1094,7 +1133,7 @@ JD-TC-paymentprofiles-2.1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1108,11 +1147,12 @@ JD-TC-paymentprofiles-2.1
     Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${DAY1}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -1138,7 +1178,7 @@ JD-TC-paymentprofiles-2.2
 
     [Documentation]  do the prepayment to jaldee bank with convenienceFee.(for online appointment ).
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1150,7 +1190,7 @@ JD-TC-paymentprofiles-2.2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1160,6 +1200,11 @@ JD-TC-paymentprofiles-2.2
     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
 
     ${lid}=  Create Sample Location
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -1193,10 +1238,10 @@ JD-TC-paymentprofiles-2.2
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1289,7 +1334,7 @@ JD-TC-paymentprofiles-2.2
     Should Be Equal As Strings  ${resp.json()[0]['isJaldeeBank']}    ${bool[1]}
     Set Suite Variable    ${proid}  ${resp.json()[0]['profileId']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1309,7 +1354,7 @@ JD-TC-paymentprofiles-2.2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1325,7 +1370,7 @@ JD-TC-paymentprofiles-2.2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1338,11 +1383,12 @@ JD-TC-paymentprofiles-2.2
     Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${DAY1}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -1368,7 +1414,7 @@ JD-TC-paymentprofiles-2.3
 
     [Documentation]  do the prepayment to jaldee bank with convenienceFee.(total amount)(for online appointment ).
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1380,7 +1426,7 @@ JD-TC-paymentprofiles-2.3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1390,6 +1436,11 @@ JD-TC-paymentprofiles-2.3
     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
 
     ${lid}=  Create Sample Location
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -1424,10 +1475,10 @@ JD-TC-paymentprofiles-2.3
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1520,7 +1571,7 @@ JD-TC-paymentprofiles-2.3
     Should Be Equal As Strings  ${resp.json()[0]['isJaldeeBank']}    ${bool[1]}
     Set Suite Variable    ${proid}  ${resp.json()[0]['profileId']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1540,7 +1591,7 @@ JD-TC-paymentprofiles-2.3
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1556,7 +1607,7 @@ JD-TC-paymentprofiles-2.3
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1569,11 +1620,12 @@ JD-TC-paymentprofiles-2.3
     Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${DAY1}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -1599,7 +1651,7 @@ JD-TC-paymentprofiles-2.4
 
     [Documentation]  do the prepayment to jaldee bank with convenienceFee.(Pay the Two Amount Supprate)(for online appointment ).
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1611,7 +1663,7 @@ JD-TC-paymentprofiles-2.4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1622,6 +1674,11 @@ JD-TC-paymentprofiles-2.4
     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
 
     ${lid}=  Create Sample Location
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -1656,10 +1713,10 @@ JD-TC-paymentprofiles-2.4
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1775,7 +1832,7 @@ JD-TC-paymentprofiles-3.1
     Should Be Equal As Strings    ${resp.status_code}   200
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1825,16 +1882,16 @@ JD-TC-paymentprofiles-3.1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -1909,7 +1966,7 @@ JD-TC-paymentprofiles-3.1
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -1940,7 +1997,7 @@ JD-TC-paymentprofiles-3.1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1963,7 +2020,7 @@ JD-TC-paymentprofiles-3.1
     Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1981,7 +2038,7 @@ JD-TC-paymentprofiles-3.1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -1995,11 +2052,12 @@ JD-TC-paymentprofiles-3.1
     Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${startDate}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${startDate}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -2025,7 +2083,7 @@ JD-TC-paymentprofiles-3.2
 
     [Documentation]  do the prepayment to jaldee bank with convenienceFee(for online Order ).
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2043,7 +2101,7 @@ JD-TC-paymentprofiles-3.2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2083,16 +2141,16 @@ JD-TC-paymentprofiles-3.2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -2166,7 +2224,7 @@ JD-TC-paymentprofiles-3.2
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -2208,7 +2266,7 @@ JD-TC-paymentprofiles-3.2
     Should Be Equal As Strings  ${resp.json()[0]['isJaldeeBank']}    ${bool[1]}
     Set Suite Variable    ${proid}  ${resp.json()[0]['profileId']}
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2230,7 +2288,7 @@ JD-TC-paymentprofiles-3.2
     Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2248,7 +2306,7 @@ JD-TC-paymentprofiles-3.2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2261,11 +2319,12 @@ JD-TC-paymentprofiles-3.2
     Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${startDate}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${startDate}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -2291,7 +2350,7 @@ JD-TC-paymentprofiles-4.1
 #  with convenienceFee
     [Documentation]  do the payment to jaldee bank(for online Donation ).
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2320,12 +2379,17 @@ JD-TC-paymentprofiles-4.1
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id1}    ${resp}  
+    Set Suite Variable    ${loc_id1}    ${resp}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
     ${description}=  FakerLibrary.sentence
     ${min_don_amt1}=   Random Int   min=100   max=500
     ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -2353,7 +2417,7 @@ JD-TC-paymentprofiles-4.1
     Set Suite Variable  ${con_id}
     ${acc_id}=  get_acc_id  ${PUSERNAME155}
     Set Suite Variable  ${acc_id}
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${CUR_DAY}
     ${don_amt}=   Random Int   min=1000   max=4000
     ${mod}=  Evaluate  ${don_amt}%${multiples[0]}
@@ -2385,7 +2449,7 @@ JD-TC-paymentprofiles-4.1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2417,7 +2481,7 @@ JD-TC-paymentprofiles-4.1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2430,11 +2494,12 @@ JD-TC-paymentprofiles-4.1
     Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${CUR_DAY}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${CUR_DAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -2461,7 +2526,7 @@ JD-TC-paymentprofiles-P2
 
     [Documentation]  do the bill payment to jaldee bank(for online checkin).
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2477,7 +2542,7 @@ JD-TC-paymentprofiles-P2
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2500,12 +2565,18 @@ JD-TC-paymentprofiles-P2
 
     ${lid}=  Create Sample Location
 
-    ${DAY}=  get_date
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   1   15
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  1  15  
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id1}   
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2532,7 +2603,7 @@ JD-TC-paymentprofiles-P2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2550,7 +2621,7 @@ JD-TC-paymentprofiles-P2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2564,11 +2635,12 @@ JD-TC-paymentprofiles-P2
     Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${DAY}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -2594,7 +2666,7 @@ JD-TC-paymentprofiles-P2.1
 
     [Documentation]  do the bill payment to jaldee bank(for online appointment).
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2610,7 +2682,7 @@ JD-TC-paymentprofiles-P2.1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2620,6 +2692,11 @@ JD-TC-paymentprofiles-P2.1
     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
 
     ${lid}=  Create Sample Location
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -2654,10 +2731,10 @@ JD-TC-paymentprofiles-P2.1
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -2745,7 +2822,7 @@ JD-TC-paymentprofiles-P2.1
     Should Be Equal As Strings  ${resp.json()[0]['isJaldeeBank']}    ${bool[1]}
     Set Suite Variable    ${proid}  ${resp.json()[0]['profileId']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2765,7 +2842,7 @@ JD-TC-paymentprofiles-P2.1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2781,7 +2858,7 @@ JD-TC-paymentprofiles-P2.1
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2795,11 +2872,12 @@ JD-TC-paymentprofiles-P2.1
     Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${DAY1}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -2825,7 +2903,7 @@ JD-TC-paymentprofiles-P3.1
 
     [Documentation]  do the bill payment to my own bank(for online checkin, appointment and order).
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2916,7 +2994,7 @@ JD-TC-paymentprofiles-P3.1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2945,6 +3023,11 @@ JD-TC-paymentprofiles-P3.1
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -2963,12 +3046,13 @@ JD-TC-paymentprofiles-P3.1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${s_id}  ${resp.json()}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   1   15
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  1  15  
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id}   
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2991,7 +3075,7 @@ JD-TC-paymentprofiles-P3.1
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${cwid}  ${wid[0]} 
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME155}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME155}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3011,7 +3095,7 @@ JD-TC-paymentprofiles-P3.1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    # ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3029,7 +3113,7 @@ JD-TC-paymentprofiles-P3.1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3043,11 +3127,12 @@ JD-TC-paymentprofiles-P3.1
     Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${DAY}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -3073,7 +3158,7 @@ JD-TC-paymentprofiles-P3.2
 
     [Documentation]  do the bill payment to my own bank(for  appointment).
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3094,11 +3179,16 @@ JD-TC-paymentprofiles-P3.2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -3132,10 +3222,10 @@ JD-TC-paymentprofiles-P3.2
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -3227,7 +3317,7 @@ JD-TC-paymentprofiles-P3.2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3243,7 +3333,7 @@ JD-TC-paymentprofiles-P3.2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3257,11 +3347,12 @@ JD-TC-paymentprofiles-P3.2
     Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${DAY1}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -3290,7 +3381,7 @@ JD-TC-paymentprofiles-P3.3
     # clear_Item   ${PUSERNAME186}
     # clear_Catalog   ${PUSERNAME186}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3315,7 +3406,7 @@ JD-TC-paymentprofiles-P3.3
     clear_service  ${PUSERNAME186}
     clear_customer   ${PUSERNAME186}
     clear_Item   ${PUSERNAME186}
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -3362,16 +3453,16 @@ JD-TC-paymentprofiles-P3.3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -3444,7 +3535,7 @@ JD-TC-paymentprofiles-P3.3
     Should Be Equal As Strings   ${resp.status_code}    200
     Set Test Variable   ${cid1}   ${resp.json()['id']}
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -3486,7 +3577,7 @@ JD-TC-paymentprofiles-P3.3
     Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3504,7 +3595,7 @@ JD-TC-paymentprofiles-P3.3
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3517,11 +3608,12 @@ JD-TC-paymentprofiles-P3.3
     Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${DAY1}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -3549,7 +3641,7 @@ JD-TC-paymentprofiles-5
 
     [Documentation]  assign the same srevice to multiple profiles then do the payment.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3564,7 +3656,7 @@ JD-TC-paymentprofiles-5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3573,6 +3665,11 @@ JD-TC-paymentprofiles-5
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -3600,12 +3697,13 @@ JD-TC-paymentprofiles-5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   1   15
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  1  15  
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id}   
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3632,7 +3730,7 @@ JD-TC-paymentprofiles-5
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3650,7 +3748,7 @@ JD-TC-paymentprofiles-5
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3664,11 +3762,12 @@ JD-TC-paymentprofiles-5
     Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${DAY}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -3696,7 +3795,7 @@ JD-TC-paymentprofiles-7
 
     [Documentation]  disable one service and do the bill payment.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3718,7 +3817,7 @@ JD-TC-paymentprofiles-7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3727,6 +3826,11 @@ JD-TC-paymentprofiles-7
 
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${min_pre1}=   Random Int   min=50   max=100
     ${Tot}=   Random Int   min=150   max=500
@@ -3754,12 +3858,13 @@ JD-TC-paymentprofiles-7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   1   15
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  1  15  
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  ${s_id}   
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3786,7 +3891,7 @@ JD-TC-paymentprofiles-7
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3811,7 +3916,7 @@ JD-TC-paymentprofiles-7
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3829,7 +3934,7 @@ JD-TC-paymentprofiles-7
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3843,11 +3948,11 @@ JD-TC-paymentprofiles-7
     # Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${DAY}
 
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
     # ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY}	result_format=%d/%m/%Y
     # Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     # Set Test Variable  ${status-eq}              SUCCESS
@@ -3873,7 +3978,7 @@ JD-TC-paymentprofiles-8
 
     [Documentation]  do the donation payment to my own bank.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3894,7 +3999,7 @@ JD-TC-paymentprofiles-8
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3916,7 +4021,12 @@ JD-TC-paymentprofiles-8
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id1}    ${resp}  
+    Set Suite Variable    ${loc_id1}    ${resp}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
     ${description}=  FakerLibrary.sentence
     ${min_don_amt1}=   Random Int   min=100   max=500
     ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -3944,7 +4054,7 @@ JD-TC-paymentprofiles-8
     Set Suite Variable  ${con_id}
     ${acc_id}=  get_acc_id  ${PUSERNAME186}
     Set Suite Variable  ${acc_id}
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${CUR_DAY}
         # ${don_amt}=  Evaluate  ${min_don_amt}*${multiples[0]}
         # ${don_amt_float}=  twodigitfloat  ${don_amt}
@@ -3991,11 +4101,12 @@ JD-TC-paymentprofiles-8
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}  ${acc_id}  
     Should Be Equal As Strings  ${resp.json()[0]['paymentGateway']}  RAZORPAY
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${CUR_DAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -4029,7 +4140,7 @@ JD-TC-paymentprofiles-9
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -4061,7 +4172,7 @@ JD-TC-paymentprofiles-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['paymentProfileId']}          ${id}
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4079,7 +4190,7 @@ JD-TC-paymentprofiles-9
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4097,7 +4208,7 @@ JD-TC-paymentprofiles-9
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4111,11 +4222,12 @@ JD-TC-paymentprofiles-9
     Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}  ${DAY}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME186}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ReportTime}=  db.get_time
+    # ${ReportTime}=  db.get_time_by_timezone   ${tz}
+    ${ReportTime}=  db.get_time_by_timezone  ${tz}
     ${TODAY_dd_mm_yyyy} =	Convert Date	${DAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date_Time}   ${TODAY_dd_mm_yyyy} ${ReportTime}
     Set Test Variable  ${status-eq}              SUCCESS
@@ -4142,7 +4254,7 @@ JD-TC-paymentprofiles-10
 
     [Documentation]  try to create the payment profiles using another providers bank details.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

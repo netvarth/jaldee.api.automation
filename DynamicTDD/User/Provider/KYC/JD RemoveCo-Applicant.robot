@@ -29,7 +29,7 @@ Multiple Users branches
     &{License_total}=  Create Dictionary
     
     FOR   ${a}  IN RANGE   ${length}   
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         
         ${resp1}=   Get Active License
@@ -104,7 +104,7 @@ JD-TC-Remove Co-Applicant -1
     Set Suite Variable   ${unique_lnames}
 
 
-    ${resp}=   ProviderLogin  ${MUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -121,6 +121,7 @@ JD-TC-Remove Co-Applicant -1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
 
@@ -129,8 +130,13 @@ JD-TC-Remove Co-Applicant -1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME14}  
@@ -409,7 +415,7 @@ JD-TC-Remove Co-Applicant -1
 JD-TC-Remove Co-Applicant -UH1
     [Documentation]  Create Kyc with Co-Applicants then Remove two time one Co-Applicant .
 
-    ${resp}=   ProviderLogin  ${MUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -432,7 +438,7 @@ JD-TC-Remove Co-Applicant -UH1
 JD-TC-Remove Co-Applicant -UH2
     [Documentation]  Try to remove Applicant(parant id).
 
-    ${resp}=   ProviderLogin  ${MUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -444,7 +450,7 @@ JD-TC-Remove Co-Applicant -UH2
 JD-TC-Remove Co-Applicant -UH3
     [Documentation]  Try to pass invalid Id.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -456,7 +462,7 @@ JD-TC-Remove Co-Applicant -UH3
 JD-TC-Remove Co-Applicant -UH4
     [Documentation]  Try to pass invalid uid.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -468,7 +474,7 @@ JD-TC-Remove Co-Applicant -UH4
 JD-TC-Remove Co-Applicant -2
     [Documentation]  proceed Kyc after remove co-applicent.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -479,8 +485,13 @@ JD-TC-Remove Co-Applicant -2
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}  

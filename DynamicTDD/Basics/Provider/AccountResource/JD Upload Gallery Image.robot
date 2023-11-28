@@ -25,7 +25,7 @@ JD-TC-Upload Gallery Image-1
     ${resp}=  uploadGalleryImages   ${cookie}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get GalleryOrlogo image  gallery
     Should Be Equal As Strings  ${resp.status_code}  200

@@ -55,11 +55,14 @@ JD-TC-BillJC-1
     ${acc}=    Generate_random_value  11   ${numbers}
     ${notify}    Random Element     ['Current','Saving']
     ${notify1}    Random Element     ['True','False']
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${description}=  FakerLibrary.sentence
     ${snote}=  FakerLibrary.Word
     ${dis}=  FakerLibrary.Word
@@ -68,7 +71,7 @@ JD-TC-BillJC-1
     #Should Be Equal As Strings    ${resp.status_code}   200 
     #${resp}=  Consumer Logout
     #Should Be Equal As Strings    ${resp.status_code}   200
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${d1}  ${resp.json()['sector']}
@@ -104,7 +107,7 @@ JD-TC-BillJC-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
 
-    ${DAY}=  get_date   
+    ${DAY}=  db.get_date_by_timezone  ${tz}   
     Set Suite Variable  ${DAY}
     ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[2]}  ${status[0]}  ${btype}   ${bool[1]}   ${notifytype[2]}   ${EMPTY}  500  ${bool[0]}  ${bool[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -119,14 +122,14 @@ JD-TC-BillJC-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid4}  ${resp.json()}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  30
-    ${eTime}=  add_time   2  00
+    ${sTime}=  add_timezone_time  ${tz}  0  30  
+    ${eTime}=  add_timezone_time  ${tz}  2  00  
     ${resp}=  Create Location  ${loc}  ${longi}  ${latti}  www.${companySuffix}.com  ${postcode}   ${address}  free  True  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}  ${resp.json()}  
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${sTime}=  add_time  3  30
-    ${eTime}=  add_time   4  00
+    ${sTime}=  add_timezone_time  ${tz}  3  30  
+    ${eTime}=  add_timezone_time  ${tz}  4  00  
     ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  100  ${lid}  ${sid1}  ${sid2}  ${sid3}  ${sid4}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -142,9 +145,9 @@ JD-TC-BillJC-1
     ${domains}=  Jaldee Coupon Target Domains  ${d1}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD} 
     Log  ${resp.json()}
@@ -159,7 +162,7 @@ JD-TC-BillJC-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Enable Jaldee Coupon By Provider  ${jcoupon1}
     Log  ${resp.json()}
@@ -174,7 +177,6 @@ JD-TC-BillJC-1
     Should Be Equal As Strings  ${resp.json()['couponState']}  ENABLED
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${qid1}  ${DAY1}  hi  True  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Bill By UUId  ${wid}
@@ -208,7 +210,7 @@ JD-TC-BillJC-2
 
     [Documentation]    Add one more service to a bill in which jc is applied
     ${snote}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${service}=  Service Bill  ${snote}   ${sId2}  1 
     ${resp}=  Update Bill   ${wid}  addService   ${service}
@@ -239,7 +241,7 @@ JD-TC-BillJC-3
 
     [Documentation]   Remove one service from a bill in which jc is applied 
     ${snote}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${service}=  Service Bill  ${snote}  ${sid1}  1 
     ${resp}=  Update Bill   ${wid}  removeService   ${service}
@@ -260,7 +262,7 @@ JD-TC-BillJC-3
 JD-TC-BillJC-4
 
     [Documentation]    adjust service on a bill in which jc is applied 
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${service}=  Service Bill  service forme  ${sid2}  3 
     ${resp}=  Update Bill   ${wid}  adjustService   ${service}
@@ -283,7 +285,7 @@ JD-TC-BillJC-5
     [Documentation]   add item to a bill in which jc is applied
     ${description}=  FakerLibrary.sentence
     ${snote}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     # ${resp}=  Create Item   ${item}  ${snote}  ${description}  100  True 
@@ -316,7 +318,7 @@ JD-TC-BillJC-6
 
     [Documentation]   Remove item from a bill in which jc is applied
     ${snote}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${ritem}=  Item Bill  ${snote}  ${itemId}  1
     ${resp}=  Update Bill   ${wid}  removeItem   ${ritem}
@@ -341,7 +343,7 @@ JD-TC-BillJC-7
 
     [Documentation]   adjust item on a bill in which jc is applied 
     ${snote}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${aitem}=  Item Bill  ${snote}  ${itemId}  2
     ${resp}=  Update Bill   ${wid}  adjustItem   ${aitem}
@@ -370,7 +372,7 @@ JD-TC-BillJC-8
 
     [Documentation]    Remove one auantity of item from a bill(2 is there) in which jc is applied
     ${snote}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${ritem}=  Item Bill  ${snote}  ${itemId}  1
     ${resp}=  Update Bill   ${wid}  adjustItem   ${ritem}
@@ -398,7 +400,7 @@ JD-TC-BillJC-9
 
     [Documentation]  Remove one quantity of a service from a bill(3 is there) in which jc is applied 
     ${snote}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${service}=  Service Bill  ${snote}  ${sid2}  2
     ${resp}=  Update Bill   ${wid}  adjustService   ${service}
@@ -426,7 +428,7 @@ JD-TC-BillJC-10
 
     [Documentation]   Remove all services,items and add new service to bill where jc is applied
     ${snote}=  FakerLibrary.Word
-    ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${service}=  Service Bill   ${snote}   ${sid2}  1 
     ${resp}=  Update Bill   ${wid}  removeService   ${service}

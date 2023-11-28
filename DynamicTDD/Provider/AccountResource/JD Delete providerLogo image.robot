@@ -26,7 +26,7 @@ JD-TC-Delete Provider Logo Image-1
     ${resp}=  uploadLogoImages   ${cookie}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get GalleryOrlogo image  logo
     Should Be Equal As Strings  ${resp.status_code}  200

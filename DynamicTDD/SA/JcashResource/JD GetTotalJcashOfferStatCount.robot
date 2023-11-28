@@ -20,6 +20,8 @@ Resource          /ebs/TDD/Keywords.robot
 *** Variables ***
 
 ${CUSERPH}      ${CUSERNAME}
+${tz}   Asia/Kolkata
+
 
 *** Test Cases ***
 
@@ -39,11 +41,11 @@ JD-TC-GetJcashOfferStatCountToday-1
     ${name}=  FakerLibrary.name
     Set Suite Variable   ${name}
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -116,18 +118,18 @@ JD-TC-GetJcashOfferStatCountToday-2
     ${name1}=  FakerLibrary.name
     Set Suite Variable   ${name1}
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date 
+    ${start_date}=  db.get_date_by_timezone  ${tz} 
     Set Suite Variable   ${start_date}
-    ${end_date}=  add_date   12  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     Set Suite Variable   ${end_date}
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
     Set Suite Variable   ${minOnlinePaymentAmt}
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     Set Suite Variable   ${maxValidUntil}
     ${validForDays}=  Random Int  min=5   max=10 
     Set Suite Variable   ${validForDays}
-    ${ex_date}=    add_date   ${validForDays} 
+    ${ex_date}=    db.add_timezone_date  ${tz}   ${validForDays} 
     Set Suite Variable   ${ex_date}
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -297,11 +299,11 @@ JD-TC-GetJcashOfferStatCountToday-4
     ${name2}=  FakerLibrary.name
     Set Suite Variable   ${name2}
     ${EMPTY_List}=  Create List
-    ${start_date}=  add_date   2  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.add_timezone_date  ${tz}   2  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${maxSpendLimit}=  Random Int  min=30   max=100 
     ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -399,7 +401,7 @@ JD-TC-GetJcashOfferStatCountToday-clear
 
 #     [Documentation]    Get jaldee cash offer stat count today by provider login.  
     
-#     ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 

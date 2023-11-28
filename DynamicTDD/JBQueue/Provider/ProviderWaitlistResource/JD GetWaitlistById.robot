@@ -23,7 +23,7 @@ JD-TC-GetWaitlistById-1
       clear_service     ${PUSERNAME111}
       clear_queue       ${PUSERNAME111} 
       clear_customer    ${PUSERNAME111}
-      ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=   Get Business Profile
@@ -37,23 +37,31 @@ JD-TC-GetWaitlistById-1
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${cid}  ${resp.json()}
 
-      ${CUR_DAY}=  get_date
-      Set Suite Variable  ${CUR_DAY}
       ${resp}=   Create Sample Location
       Set Suite Variable    ${loc_id1}    ${resp}  
+      ${resp}=   Get Location ById  ${loc_id1}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200  
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${resp}=   Create Sample Location
-      Set Suite Variable    ${loc_id2}    ${resp}  
+      Set Suite Variable    ${loc_id2}    ${resp}
+      ${resp}=   Get Location ById  ${loc_id2}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200  
+      Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
       ${ser_name1}=   FakerLibrary.word
       Set Suite Variable    ${ser_name1} 
       ${resp}=   Create Sample Service  ${ser_name1}
       Set Suite Variable    ${ser_id1}    ${resp}  
+      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+      Set Suite Variable  ${CUR_DAY}
       ${q_name}=    FakerLibrary.name
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7
       Set Suite Variable    ${list}
-      ${strt_time}=   add_time  1  00
+      ${strt_time}=   db.add_timezone_time  ${tz}  1  00
       Set Suite Variable    ${strt_time}
-      ${end_time}=    add_time  3  00 
+      ${end_time}=    db.add_timezone_time  ${tz}  3  00 
       Set Suite Variable    ${end_time}  
       ${parallel}=   Random Int  min=1   max=2
       Set Suite Variable   ${parallel}
@@ -68,7 +76,6 @@ JD-TC-GetWaitlistById-1
       ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${wid}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid} 
@@ -83,14 +90,13 @@ JD-TC-GetWaitlistById-1
 JD-TC-GetWaitlistById-2
       [Documentation]   Get waitlist details of a future date entry
 
-      ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${DAY1}=  add_date  2
+      ${DAY1}=  db.add_timezone_date  ${tz}  2
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${wid1}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid1} 
@@ -103,7 +109,7 @@ JD-TC-GetWaitlistById-2
 JD-TC-GetWaitlistById-3
       [Documentation]   Get Waitlist after disabling waitlist
 
-      ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Disable Waitlist
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -120,7 +126,7 @@ JD-TC-GetWaitlistById-3
 JD-TC-GetWaitlistById-4
       [Documentation]   Get Waitlist after disabling location
 
-      ${resp}=  ProviderLogin  ${PUSERNAME111}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Disable Location  ${loc_id2}
       Log  ${resp.json()}
@@ -137,7 +143,7 @@ JD-TC-GetWaitlistById-4
 JD-TC-GetWaitlistById-UH1
       [Documentation]  Get  Waitlist details of another provider
 
-      ${resp}=  ProviderLogin  ${PUSERNAME126}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME126}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Waitlist By Id  ${wid}
       # Should Be Equal As Strings  ${resp.status_code}  404
@@ -164,9 +170,9 @@ JD-TC-GetWaitlistById-UH3
 
  
 *** Comment ***
-YNW-TC-GetWaitlistById-4
+JD-TC-GetWaitlistById-4
       Comment   Get Waitlist after disabling queue
-      ${resp}=  ProviderLogin  ${PUSERNAME}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Disable Queue  ${qid1}
       Should Be Equal As Strings  ${resp.status_code}  200

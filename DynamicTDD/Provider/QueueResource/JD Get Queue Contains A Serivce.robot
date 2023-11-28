@@ -39,17 +39,16 @@ JD-TC-GetQueueService-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_G}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_G}${\n}
     Set Suite Variable  ${PUSERNAME_G}
 
-    ${resp}=  Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_G}+15566124
     ${ph2}=  Evaluate  ${PUSERNAME_G}+25566128
@@ -61,18 +60,22 @@ JD-TC-GetQueueService-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_G}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -111,11 +114,11 @@ JD-TC-GetQueueService-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-    # ${resp}=  Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
@@ -130,9 +133,9 @@ JD-TC-GetQueueService-1
     ${address}=  get_address
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
-    ${sTime}=  add_time  1  15
+    ${sTime}=  add_timezone_time  ${tz}  1  15  
     Set Suite Variable  ${sTime}
-    ${eTime}=  add_time   1  30
+    ${eTime}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable  ${eTime}
     ${resp}=  Create Location   ${c}    ${longi}  ${latti}  www.${c}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
@@ -142,9 +145,9 @@ JD-TC-GetQueueService-1
     
 JD-TC-GetQueueService-UH1
     [Documentation]    search with another Provider's service and location
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY2}=  add_date  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  2  
     ${resp}=  Get Queue Of A Service  ${lid1}  ${s_id}  ${DAY2}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${GIVEN_SERVICE_NOT_FOUND_IN_LOCATION}"
@@ -153,7 +156,7 @@ JD-TC-GetQueueService-UH2
     [Documentation]    search using consumer login
     ${resp}=  Consumer Login  ${CUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY2}=  add_date  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  2  
     ${resp}=  Get Queue Of A Service  ${lid1}  ${s_id}  ${DAY2}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"
@@ -168,35 +171,31 @@ JD-TC-GetQueueService-UH4
     [Documentation]    search on a non scheduled day
     
     clear_location   ${PUSERNAME13}
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${s_id5}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id5}
     ${list}=  Create List  1  2  3  4  5  6
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
-    ${sTime5}=  add_time  1  15
+    ${sTime5}=  add_timezone_time  ${tz}  1  15  
     Set Suite Variable  ${sTime}
-    ${eTime5}=  add_time   1  30
+    ${eTime5}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable  ${eTime}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime5}  ${eTime5}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${CUR_DAY}
     ${queue2}=    FakerLibrary.name
     Set Suite Variable    ${queue2} 
     ${list}=  Create List  1  2  3  4  5  6
-    ${stime}=   Subtract_time   2   00  
+    ${stime}=   db.subtract_timezone_time  ${tz}   2   00  
     Set Suite Variable   ${stime}
-    ${etime}=   add_time   0  15
+    ${etime}=   add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${etime}
     ${resp}=  Create Queue   ${queue2}   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${stime}  ${etime}  1   5   ${lid}  ${s_id5}  
     Log   ${resp.json()}
@@ -206,11 +205,11 @@ JD-TC-GetQueueService-UH4
 JD-TC-VerifyGetQueueService-1
     [Documentation]    Verification of Get queue that contains a service(case1)
     # 32
-    ${resp}=  Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${sTime1}=  add_time  2  15
+    ${sTime1}=  add_timezone_time  ${tz}  2  15  
     Set Suite Variable  ${sTime1}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable  ${eTime1}
     ${queue_name1}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name1}
@@ -218,9 +217,9 @@ JD-TC-VerifyGetQueueService-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id1}  ${resp.json()}
-    ${sTime3}=  add_time  4  15
+    ${sTime3}=  add_timezone_time  ${tz}  4  15  
     Set Suite Variable  ${sTime3}
-    ${eTime3}=  add_time   4  30
+    ${eTime3}=  add_timezone_time  ${tz}  4  30  
     Set Suite Variable  ${eTime3}
     ${queue_name2}=  FakerLibrary.bs
      Set Suite Variable  ${queue_name2}
@@ -277,9 +276,9 @@ JD-TC-VerifyGetQueueService-1
 
 JD-TC-GetQueueService-2
     [Documentation]    Get queue that contains a service for a future date
-    ${resp}=  Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY2}=  add_date  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  2  
     ${resp}=  Get Queue Of A Service  ${lid1}  ${s_id}  ${DAY2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -328,22 +327,22 @@ JD-TC-GetQueueService-2
 
 JD-TC-GetQueueService-UH5
     [Documentation]    Get queue that contains a service for a non scheduled past date
-    ${resp}=  Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY2}=  add_date  -1
+    ${DAY2}=  db.add_timezone_date  ${tz}  -1
     ${resp}=  Get Queue Of A Service  ${lid1}  ${s_id}  ${DAY2}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${NON_SCHEDULE_DAY}"
 
 JD-TC-Verify GetQueueService-UH4
     [Documentation]    Verification of search on a non scheduled day(case UH4)
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get Queues
     Log  ${resp.json()}
-    ${d}=  get_weekday
+    ${d}=  get_timezone_weekday  ${tz}
     ${d}=  Evaluate  7-${d}
-    ${DAY3}=  add_date  ${d}
+    ${DAY3}=  db.add_timezone_date  ${tz}  ${d}  
     ${resp}=  Get Queue Of A Service  ${lid}  ${s_id5}  ${DAY3}
     Should Be Equal As Strings  ${resp.status_code}  422
     Log  ${resp.json()}
@@ -351,7 +350,7 @@ JD-TC-Verify GetQueueService-UH4
 
 JD-TC-GetQueueService-UH6
     [Documentation]    search with a location and a non-associated service
-    ${resp}=  Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${s_id2}=  Create Sample Service  ${SERVICE3}
     ${resp}=  Get Queue Of A Service  ${lid1}  ${s_id2}  ${DAY1}
@@ -363,7 +362,7 @@ JD-TC-GetQueueService-UH6
 
 JD-TC-GetQueueService-UH6
     [Documentation]    search on a holiday
-    ${resp}=  Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Create Holiday  ${DAY1}  Vishu  ${LsTime}  ${LeTime} 

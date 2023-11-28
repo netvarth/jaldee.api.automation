@@ -23,7 +23,7 @@ Variables         /ebs/TDD/varfiles/musers.py
 JD-TC-CreateTask-1
     [Documentation]  Create a task for a provider
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -34,8 +34,13 @@ JD-TC-CreateTask-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -63,7 +68,7 @@ JD-TC-CreateTask-2
 
     [Documentation]   Create multiple Task for same location.  
     
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -78,7 +83,7 @@ JD-TC-CreateTask-3
 
     [Documentation]   Create multiple Task with same details.  
 
-    ${resp}=   ProviderLogin  ${PUSERNAME44}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -89,8 +94,13 @@ JD-TC-CreateTask-3
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id1}
@@ -123,7 +133,7 @@ JD-TC-CreateTask-4
 
     [Documentation]  Create a task for a provider by giving status and priority.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -134,8 +144,13 @@ JD-TC-CreateTask-4
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -177,7 +192,7 @@ JD-TC-CreateTask-5
 
     [Documentation]   Create a consumer Task.  
     
-    ${resp}=   ProviderLogin  ${PUSERNAME47}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -188,8 +203,13 @@ JD-TC-CreateTask-5
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -217,7 +237,7 @@ JD-TC-CreateTask-6
 
     [Documentation]  Create a task without title.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -232,7 +252,7 @@ JD-TC-CreateTask-7
 
     [Documentation]  Create a task without description.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -247,7 +267,7 @@ JD-TC-CreateTask-8
 
     [Documentation]  Create a task without giving user type.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -264,7 +284,7 @@ JD-TC-CreateTask-9
 
     [Documentation]  Create a task with status as empty.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -282,7 +302,7 @@ JD-TC-CreateTask-10
 
     [Documentation]  Create a task with priority as empty.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -299,7 +319,7 @@ JD-TC-CreateTask-10
 JD-TC-CreateTask-UH1
     [Documentation]  Create a task with another providers location.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME46}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -315,7 +335,7 @@ JD-TC-CreateTask-UH1
 JD-TC-CreateTask-UH2
     [Documentation]  Create a task without category.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -331,7 +351,7 @@ JD-TC-CreateTask-UH2
 JD-TC-CreateTask-UH3
     [Documentation]  Create a task without task type.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -347,7 +367,7 @@ JD-TC-CreateTask-UH3
 JD-TC-CreateTask-UH4
     [Documentation]  Create a task without location.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

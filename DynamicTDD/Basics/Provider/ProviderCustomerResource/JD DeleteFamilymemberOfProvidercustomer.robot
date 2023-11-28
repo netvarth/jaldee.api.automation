@@ -15,7 +15,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 *** Test Cases ***
 JD-TC-DeleteFamilymemberofprovidercustomer-1
       [Documentation]  Delete a family member with valid id and verify its deleted
-      ${resp}=  ProviderLogin  ${PUSERNAME4}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       clear_customer   ${PUSERNAME4}
       # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
@@ -48,7 +48,7 @@ JD-TC-DeleteFamilymemberofprovidercustomer-1
 
 JD-TC-DeleteFamilymemberofprovidercustomer-UH1
       [Documentation]  Delete a family member with already deleted familymember id
-      ${resp}=  ProviderLogin  ${PUSERNAME4}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  DeleteFamilymemberByprovidercustomer  ${mem_id0}  ${cid}
       Log  ${resp.json()}
@@ -59,7 +59,7 @@ JD-TC-DeleteFamilymemberofprovidercustomer-UH1
      
 JD-TC-DeleteFamilymemberofprovidercustomer-UH2
       [Documentation]  Delete a family member with invalid familymember id
-      ${resp}=  ProviderLogin  ${PUSERNAME4}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  DeleteFamilymemberByprovidercustomer  0   0
       Should Be Equal As Strings  ${resp.status_code}  422
@@ -82,16 +82,22 @@ JD-TC-DeleteFamilymemberofprovidercustomer-UH4
 
 JD-TC-DeleteFamilymemberofprovidercustomer-UH5  
       [Documentation]  Delete a family member after waitlisted in a queue
-      ${resp}=   ProviderLogin  ${PUSERNAME4}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       clear_location  ${PUSERNAME4}
       clear_queue  ${PUSERNAME4}
       ${resp}=   ProviderKeywords.Get Queues
       Should Be Equal As Strings  ${resp.status_code}  200
       Log   ${resp.json()}
-      ${resp}=  Create Sample Queue
+      ${resp} =  Create Sample Queue
       Set Test Variable  ${s_id}  ${resp['service_id']}
       Set Test Variable  ${qid}   ${resp['queue_id']}
+      Set Suite Variable   ${lid}   ${resp['location_id']}
+
+      ${resp}=   Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${firstname1}=  FakerLibrary.first_name
       ${lastname1}=  FakerLibrary.last_name
       ${dob1}=  FakerLibrary.Date
@@ -99,11 +105,10 @@ JD-TC-DeleteFamilymemberofprovidercustomer-UH5
       ${resp}=  AddFamilyMemberByProvider    ${cid}   ${firstname1}  ${lastname1}  ${dob1}  ${gender1}  
       Log  ${resp.json()}
       Set Test Variable  ${mem_id1}  ${resp.json()}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid}  ${DAY}  ${desc}  ${bool[1]}  ${mem_id1}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid} 
@@ -136,16 +141,22 @@ JD-TC-DeleteFamilymemberofprovidercustomer-UH5
 
 JD-TC-DeleteFamilymemberofprovidercustomer-UH6 
       [Documentation]  Delete a family member after waitlisted in a queue and check that family member in consumer side
-      ${resp}=   ProviderLogin  ${PUSERNAME4}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       clear_location  ${PUSERNAME4}
       clear_queue  ${PUSERNAME4}
       ${resp}=   ProviderKeywords.Get Queues
       Should Be Equal As Strings  ${resp.status_code}  200
       Log   ${resp.json()}
-      ${resp}=  Create Sample Queue
+      ${resp} =  Create Sample Queue
       Set Test Variable  ${s_id}  ${resp['service_id']}
       Set Test Variable  ${qid}   ${resp['queue_id']}
+      Set Suite Variable   ${lid}   ${resp['location_id']}
+
+      ${resp}=   Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${firstname1}=  FakerLibrary.first_name
       ${lastname1}=  FakerLibrary.last_name
       ${dob1}=  FakerLibrary.Date
@@ -153,11 +164,10 @@ JD-TC-DeleteFamilymemberofprovidercustomer-UH6
       ${resp}=  AddFamilyMemberByProvider    ${cid}   ${firstname1}  ${lastname1}  ${dob1}  ${gender1}  
       Log  ${resp.json()}
       Set Test Variable  ${mem_id1}  ${resp.json()}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid}  ${DAY}  ${desc}  ${bool[1]}  ${mem_id1}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid} 
@@ -182,7 +192,7 @@ JD-TC-DeleteFamilymemberofprovidercustomer-UH6
 JD-TC-DeleteFamilymemberofprovidercustomer-UH7
 
       [Documentation]  Delete a family member after waitlisted in a queue in consumer side then delete that family member and check that family member in provider side
-      ${resp}=   ProviderLogin  ${PUSERNAME76}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       ${pid0}=  get_acc_id  ${PUSERNAME76}
       Should Be Equal As Strings    ${resp.status_code}   200
@@ -191,9 +201,15 @@ JD-TC-DeleteFamilymemberofprovidercustomer-UH7
       clear_queue  ${PUSERNAME76}
       Clear_service  ${PUSERNAME76}
       clear_customer   ${PUSERNAME76}
-      ${resp}=  Create Sample Queue
+      ${resp} =  Create Sample Queue
       Set Test Variable  ${s_id}  ${resp['service_id']}
       Set Test Variable  ${qid}   ${resp['queue_id']}
+      Set Suite Variable   ${lid}   ${resp['location_id']}
+
+      ${resp}=   Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       
       ${resp}=   ProviderLogout
       Should Be Equal As Strings    ${resp.status_code}   200
@@ -213,7 +229,7 @@ JD-TC-DeleteFamilymemberofprovidercustomer-UH7
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${mem_id6}  ${resp.json()}
 
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       ${cnote}=   FakerLibrary.word
       ${resp}=  Add To Waitlist Consumers  ${pid0}  ${qid}  ${DAY}  ${s_id}  ${cnote}  ${bool[0]}  ${mem_id6} 
       Log  ${resp.json()}
@@ -232,7 +248,7 @@ JD-TC-DeleteFamilymemberofprovidercustomer-UH7
       Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${qid}
       Set Test Variable  ${cfid}   ${resp.json()['waitlistingFor'][0]['id']}
 
-      ${resp}=   ProviderLogin  ${PUSERNAME76}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       
       ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME12}
@@ -269,7 +285,7 @@ JD-TC-DeleteFamilymemberofprovidercustomer-UH7
       ${resp}=  ListFamilyMember
       Should Not Contain  ${resp.json()}  id=${mem_id6}
 
-      ${resp}=   ProviderLogin  ${PUSERNAME76}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       ${resp}=  ListFamilyMemberByProvider  ${cid}
       Log   ${resp.json()}

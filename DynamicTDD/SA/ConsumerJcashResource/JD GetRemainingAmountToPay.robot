@@ -67,7 +67,9 @@ ${jcash_name6}   JCash81118_offer6
 ${jcash_name7}   JCash81118_offer7
 ${jcash_name8}   JCash81118_offer8
 ${jcash_name9}   JCash81118_offer9
+
 ${CUSERPH}      ${CUSERNAME}
+${tz}   Asia/Kolkata
 
 
 
@@ -120,18 +122,18 @@ JD-TC-GetRemainingAmountToPay-1
 
     ${EMPTY_List}=  Create List
     Set Suite Variable   ${EMPTY_List}
-    ${start_date}=  get_date 
+    ${start_date}=  db.get_date_by_timezone  ${tz} 
     Set Suite Variable   ${start_date}
-    ${end_date}=  add_date   12  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     Set Suite Variable   ${end_date}
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
     Set Suite Variable   ${minOnlinePaymentAmt}
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     Set Suite Variable   ${maxValidUntil}
     ${validForDays}=  Random Int  min=5   max=10 
     Set Suite Variable   ${validForDays}
-    ${ex_date}=    add_date   ${validForDays} 
+    ${ex_date}=    db.add_timezone_date  ${tz}   ${validForDays} 
     Set Suite Variable   ${ex_date}
     # ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit} 
     # ${maxSpendLimit}=  Convert To Number  ${maxSpendLimit}  1
@@ -219,7 +221,7 @@ JD-TC-GetRemainingAmountToPay-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -276,15 +278,16 @@ JD-TC-GetRemainingAmountToPay-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id4}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15 
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15   
     ${noOfOccurance}=  Random Int  min=0   max=0
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  15 
-    ${sTime2}=  add_time  0  17
-    ${eTime2}=  add_time   0  30
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  15   
+    ${sTime2}=  add_timezone_time  ${tz}  0  17
+    ${eTime2}=  add_timezone_time  ${tz}  0  30  
     ${list}=  Create List  1  2  3  4  5  6  7
     ${Del_Charge1}=  Random Int  min=50   max=100
     ${deliveryCharge1}=  Convert To Number  ${Del_Charge1}  1
@@ -354,7 +357,7 @@ JD-TC-GetRemainingAmountToPay-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity1}   max=${maxQuantity1}
     ${EMPTY_List}=  Create List
     ${item3_total}=  Evaluate  ${item_quantity1} * ${promoPrice1}
@@ -615,7 +618,7 @@ JD-TC-GetRemainingAmountToPay-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME185}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME185}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -672,12 +675,18 @@ JD-TC-GetRemainingAmountToPay-4
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME185}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -850,15 +859,19 @@ JD-TC-GetRemainingAmountToPay-5
     clear_service    ${PUSERNAME145}
     clear_customer   ${PUSERNAME145}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME145}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME145}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${acc_id}=  get_acc_id  ${PUSERNAME145}
     Set Suite Variable   ${acc_id} 
 
-    ${CUR_DAY}=  get_date
     ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id1}    ${resp}  
+    Set Suite Variable    ${loc_id1}    ${resp}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
     
     ${resp}=   Create Sample Service  ${SERVICE2}
     Set Suite Variable    ${ser_id1}    ${resp}  
@@ -869,9 +882,10 @@ JD-TC-GetRemainingAmountToPay-5
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  1  00
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  3  00 
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -898,7 +912,7 @@ JD-TC-GetRemainingAmountToPay-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['hasAttachment']}    ${bool[0]}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME145}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME145}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Bill By UUId  ${uuid}
@@ -949,7 +963,7 @@ JD-TC-GetRemainingAmountToPay-UH1
 
 JD-TC-GetRemainingAmountToPay-UH2
     [Documentation]    Get Remaining Amount To Pay by provider login.
-    ${resp}=  ProviderLogin  ${PUSERNAME99}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     

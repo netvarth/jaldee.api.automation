@@ -27,7 +27,7 @@ JD-TC-DeleteFamilyMembers-1
     
     [Documentation]  Delete Provider Consumer Family Member
     
-    ${resp}=  Provider Login  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${accountId}=    get_acc_id       ${PUSERNAME70}
@@ -62,6 +62,7 @@ JD-TC-DeleteFamilyMembers-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
 
 

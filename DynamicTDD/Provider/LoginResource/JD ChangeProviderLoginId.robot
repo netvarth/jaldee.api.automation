@@ -21,7 +21,7 @@ ${PUSERPH}      ${PUSERNAME}
 JD-TC-ChangeProviderLoginId-1
     [Documentation]    Change provider's email login id 
 
-    ${resp}=   Provider Login     ${PUSERNAME18}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${mail}=   FakerLibrary.word
@@ -32,14 +32,14 @@ JD-TC-ChangeProviderLoginId-1
     Should Be Equal As Strings    ${resp.status_code}  200
     ${resp}=  Verify Login        ${PUSEREMAIL18}   4
     Should Be Equal As Strings    ${resp.status_code}  200
-    ${resp}=   Provider Login     ${PUSEREMAIL18}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSEREMAIL18}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-ChangeProviderLoginId-2
     [Documentation]    Change provider's mobile number login id 
 
-    ${resp}=   Provider Login    ${PUSEREMAIL18}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSEREMAIL18}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERPH18}=  Evaluate  ${PUSERPH}+456782
@@ -49,22 +49,22 @@ JD-TC-ChangeProviderLoginId-2
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Verify Login   ${PUSERPH18}  4
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   Provider Login  ${PUSERPH18}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH18}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=   Provider Login     ${PUSERNAME18}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings    ${resp.json()}     ${NOT_REGISTERED_PROVIDER}
 
 JD-TC-ChangeProviderLoginId-ChangeToOld
     [Documentation]    Change to old state
 
-    ${resp}=   Provider Login     ${PUSEREMAIL18}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSEREMAIL18}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Send Verify Login   ${PUSERNAME18}
     Should Be Equal As Strings    ${resp.status_code}  200
     ${resp}=  Verify Login        ${PUSERNAME18}  4
     Should Be Equal As Strings    ${resp.status_code}  200
-    ${resp}=   Provider Login     ${PUSERNAME18}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-ChangeProviderLoginId-UH1
@@ -86,7 +86,7 @@ JD-TC-ChangeProviderLoginId-UH2
 JD-TC-ChangeProviderLoginId-UH3
     [Documentation]    Change provider's mobile num to an already existing provider's number 
 
-    ${resp}=   Provider Login     ${PUSERNAME18}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Send Verify Login   ${PUSERNAME18}
     Should Be Equal As Strings    ${resp.status_code}  422
@@ -95,13 +95,13 @@ JD-TC-ChangeProviderLoginId-UH3
 JD-TC-ChangeProviderLoginId-UH4	
     [Documentation]  Change provider's mobile num to an already existing consumer's number 
 
-    ${resp}=   Provider Login     ${PUSERNAME18}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Send Verify Login   ${CUSERNAME7}
     # Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.json()}    ${PRIMARY_MOB_NO_ALREADY_USED}
-    # ${resp}=   Provider Login     ${CUSERNAME7}  ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login  ${CUSERNAME7}  ${PASSWORD} 
     # Should Be Equal As Strings    ${resp.status_code}    200
     # ${resp}=  ProviderLogout
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -113,7 +113,7 @@ JD-TC-ChangeProviderLoginId-UH4
 JD-TC-ChangeProviderLoginId-UH5
     [Documentation]  Change provider's email login id to an already existing another provider's email
 
-    ${resp}=   Provider Login     ${PUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Send Verify Login   ${PUSEREMAIL18}
     Should Be Equal As Strings    ${resp.status_code}  422
@@ -124,7 +124,7 @@ JD-TC-ChangeProviderLoginId-UH5
 JD-TC-ChangeProviderLoginId-UH6
     [Documentation]  Change provider's email login id to an already existing provider's own email
 
-    ${resp}=   Provider Login     ${PUSERNAME18}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Send Verify Login   ${PUSEREMAIL18}
     Should Be Equal As Strings    ${resp.status_code}  422
@@ -134,7 +134,7 @@ JD-TC-ChangeProviderLoginId-UH6
 JD-TC-ChangeProviderLoginId-UH7
     [Documentation]    Change provider's email login id  to an already existing consumer's email
 
-    ${resp}=   Provider Login     ${PUSERNAME18}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Send Verify Login   ${CUSEREMAIL5}
     Should Be Equal As Strings    ${resp.status_code}  422
@@ -144,7 +144,7 @@ JD-TC-ChangeProviderLoginId-UH7
 JD-TC-ChangeProviderLoginId-H
     [Documentation]    Change provider's mobile number login id and country code
 
-    ${resp}=   Provider Login    ${PUSERNAME18}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -163,7 +163,7 @@ JD-TC-ChangeProviderLoginId-H
 JD-TC-ChangeProviderLoginId-CLEAR
     [Documentation]    Change provider's email login id 
 
-    ${resp}=   Provider Login     ${PUSERNAME18}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200
     ${mail}=   FakerLibrary.word
     ${PUSEREMAIL17}=  Set Variable  ${P_Email}${mail}.${test_mail}
@@ -172,7 +172,7 @@ JD-TC-ChangeProviderLoginId-CLEAR
     Should Be Equal As Strings    ${resp.status_code}  200
     ${resp}=  Verify Login        ${PUSEREMAIL17}  4
     Should Be Equal As Strings    ${resp.status_code}  200
-    ${resp}=   Provider Login     ${PUSEREMAIL17}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSEREMAIL17}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200  
  
     

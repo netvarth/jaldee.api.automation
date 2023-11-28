@@ -17,7 +17,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-EnableDisableSmsStatus-1
     [Documentation]   Enabling SmsStatus
 
-    ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Sms Status    ${toggle[1]}
     Log  ${resp.json()}
@@ -41,7 +41,7 @@ JD-TC-EnableDisableSmsStatus-UH1
 JD-TC-EnableDisableSmsStatus-UH2
     [Documentation]  Enable already enabled SmsStatus
 
-    ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Sms Status     ${toggle[0]}
     Log  ${resp.json()}
@@ -50,7 +50,7 @@ JD-TC-EnableDisableSmsStatus-UH2
 JD-TC-EnableDisableSmsStatus-2
     [Documentation]   disabling SmsStatus
 
-    ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Sms Status    ${toggle[1]}
     Log  ${resp.json()}
@@ -63,7 +63,7 @@ JD-TC-EnableDisableSmsStatus-2
 JD-TC-EnableDisableSmsStatus-UH3
     [Documentation]  Disable already Disabled SmsStatus
 
-    ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Sms Status     ${toggle[1]}
     Log  ${resp.json()}

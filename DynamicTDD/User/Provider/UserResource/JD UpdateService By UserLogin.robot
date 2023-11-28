@@ -49,7 +49,7 @@ JD-TC-UpdateServiceByUserLogin-1
 #      Should Be Equal As Strings    ${resp.status_code}    200
 #      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
 #      Should Be Equal As Strings    ${resp.status_code}    200
-#      ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+#      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
 #      Log  ${resp.json()}
 #      Should Be Equal As Strings    ${resp.status_code}    200
 #      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -84,10 +84,10 @@ JD-TC-UpdateServiceByUserLogin-1
 #     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
 #     Should Be Equal As Strings  ${resp[0].status_code}  200
 #     Should Be Equal As Strings  ${resp[1].status_code}  200
-#     ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=   ProviderLogin  ${HLMUSERNAME2}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD} 
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -101,8 +101,13 @@ JD-TC-UpdateServiceByUserLogin-1
      IF   '${resp.content}' == '${emptylist}'
           ${locId1}=  Create Sample Location
           Set Suite Variable  ${locId1}
+          ${resp}=   Get Location ById  ${locId1}
+          Log  ${resp.content}
+          Should Be Equal As Strings  ${resp.status_code}  200
+          Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
      ELSE
           Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+          Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
      END
 
      ${resp}=   Get Business Profile
@@ -141,7 +146,7 @@ JD-TC-UpdateServiceByUserLogin-1
      Should Be Equal As Strings  ${resp[0].status_code}  200
      Should Be Equal As Strings  ${resp[1].status_code}  200
 
-     ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
      ${description}=  FakerLibrary.sentence
@@ -176,7 +181,7 @@ JD-TC-UpdateServiceByUserLogin-1
 JD-TC-UpdateServiceByUserLogin-2
      [Documentation]  Create  a service for a valid user and update service with service name same as another user
 
-     ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      
@@ -195,7 +200,7 @@ JD-TC-UpdateServiceByUserLogin-2
      Should Be Equal As Strings  ${resp[0].status_code}  200
      Should Be Equal As Strings  ${resp[1].status_code}  200
 
-     ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
      ${description}=  FakerLibrary.sentence
@@ -223,7 +228,7 @@ JD-TC-UpdateServiceByUserLogin-2
 JD-TC-UpdateServiceByUserLogin-UH1
      [Documentation]  create a user service and update that service with new department id
 
-     ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -252,7 +257,7 @@ JD-TC-UpdateServiceByUserLogin-UH1
      Should Be Equal As Strings  ${resp[0].status_code}  200
      Should Be Equal As Strings  ${resp[1].status_code}  200
 
-     ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
      ${resp}=  Create Service For User  ${SERVICE10}  ${description1}   ${dur1}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  ${EMPTY}  ${amt1}  ${bool[0]}  ${bool[0]}  ${dep_id}  ${u_id1}
@@ -276,7 +281,7 @@ JD-TC-UpdateServiceByUserLogin-UH2
 
      [Documentation]  Update a user service name to  an already existing name
      
-     ${resp}=   ProviderLogin  ${HLMUSERNAME2}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD} 
      Log  ${resp.content}
      Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -310,7 +315,7 @@ JD-TC-UpdateServiceByUserLogin-UH2
      Should Be Equal As Strings  ${resp[0].status_code}  200
      Should Be Equal As Strings  ${resp[1].status_code}  200
 
-     ${resp}=  ProviderLogin  ${PUSERNAME_U5}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U5}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
     

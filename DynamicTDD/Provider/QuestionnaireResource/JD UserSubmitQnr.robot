@@ -90,7 +90,7 @@ JD-TC-UserSubmitQuestionnaire-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${MUSERNAME72}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME72}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -105,14 +105,17 @@ JD-TC-UserSubmitQuestionnaire-1
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${resp}=  Get Departments
@@ -204,7 +207,7 @@ JD-TC-UserSubmitQuestionnaire-1
     @{resp}=  ResetProviderPassword  ${P_U2}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${P_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${P_U2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service  provider-eq=${u_id2}
@@ -253,7 +256,7 @@ JD-TC-UserSubmitQuestionnaire-1
     @{resp}=  ResetProviderPassword  ${P_U1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${P_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${P_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
@@ -279,6 +282,7 @@ JD-TC-UserSubmitQuestionnaire-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service  provider-eq=${u_id}
     Log  ${resp.content}
@@ -329,7 +333,7 @@ JD-TC-UserSubmitQuestionnaire-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${P_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${P_U1}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -375,9 +379,10 @@ JD-TC-UserSubmitQuestionnaire-1
     Set Suite Variable  ${cid1}  ${resp.json()}
 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
   
@@ -400,7 +405,6 @@ JD-TC-UserSubmitQuestionnaire-1
     ${resp}=  Add To Waitlist By User  ${cid1}  ${s_id1}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -442,7 +446,7 @@ JD-TC-UserSubmitQuestionnaire-2
     
     [Documentation]  Submit questionnaire for wailtlist(capure time before) by user login
 
-    ${resp}=  ProviderLogin  ${P_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${P_U2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
@@ -468,6 +472,7 @@ JD-TC-UserSubmitQuestionnaire-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service  provider-eq=${u_id2}
     Log  ${resp.content}
@@ -485,7 +490,7 @@ JD-TC-UserSubmitQuestionnaire-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${P_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${P_U2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -531,9 +536,10 @@ JD-TC-UserSubmitQuestionnaire-2
     Set Suite Variable  ${cid1}  ${resp.json()}
 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
   
@@ -556,7 +562,6 @@ JD-TC-UserSubmitQuestionnaire-2
     ${resp}=  Add To Waitlist By User  ${cid1}  ${s_id1}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id2}  ${cid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -597,7 +602,7 @@ JD-TC-UserSubmitQuestionnaire-UH1
     
     [Documentation]  Submit questionnaire for wailtlist(capure time before) by user login waitlist from consumer side
 
-    ${resp}=  ProviderLogin  ${P_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${P_U2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     clear_queue      ${P_U2}
@@ -605,6 +610,7 @@ JD-TC-UserSubmitQuestionnaire-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service  provider-eq=${u_id2}
     Log  ${resp.content}
@@ -622,7 +628,7 @@ JD-TC-UserSubmitQuestionnaire-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${P_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${P_U2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -663,9 +669,10 @@ JD-TC-UserSubmitQuestionnaire-UH1
     Set Suite Variable   ${s_id1}
 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
   
@@ -682,17 +689,16 @@ JD-TC-UserSubmitQuestionnaire-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${msg}=  FakerLibrary.word
-    # ${CUR_DAY}=  get_date
-    ${CUR_DAY}=  add_date  2 
+    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${CUR_DAY}=  db.add_timezone_date  ${tz}  2   
     ${date}=  Convert Date  ${CUR_DAY}  result_format=%d-%m-%Y
     ${resp}=  Add To Waitlist Consumer For User  ${account_id}  ${q_id}  ${DAY1}  ${s_id1}  ${msg}  ${bool[0]}  ${u_id2}  ${self}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]} 
     
-    ${resp}=  Provider Login  ${P_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${P_U2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -732,13 +738,14 @@ JD-TC-UserSubmitQuestionnaire-3
     
     [Documentation]  Submit questionnaire for appointment (capure time before) by user login
 
-    ${resp}=  ProviderLogin  ${P_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${P_U2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service  provider-eq=${u_id2}
     Log  ${resp.content}
@@ -756,7 +763,7 @@ JD-TC-UserSubmitQuestionnaire-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${P_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${P_U2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -807,8 +814,8 @@ JD-TC-UserSubmitQuestionnaire-3
     END
     Set Suite Variable   ${s_id1}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
 
     ${resp}=  AddCustomer  ${CUSERNAME3}  
     Log  ${resp.content}
@@ -820,7 +827,8 @@ JD-TC-UserSubmitQuestionnaire-3
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${sch_id}  ${resp.json()}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -908,7 +916,7 @@ JD-TC-UserSubmitQuestionnaire-4
     [Documentation]  consumer Submit questionnaire for appointment(capure time After) by user login
     Comment  Error is because P_U2 does not have after questionaire in excel file.
 
-    ${resp}=  ProviderLogin  ${P_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${P_U2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -933,7 +941,7 @@ JD-TC-UserSubmitQuestionnaire-4
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${P_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${P_U2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -989,8 +997,8 @@ JD-TC-UserSubmitQuestionnaire-4
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
     Set Suite Variable  ${Questionnaireid}  ${qns.json()['questionnaireId']}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
 
     ${resp}=  AddCustomer  ${CUSERNAME4}  
     Log  ${resp.content}
@@ -1003,7 +1011,8 @@ JD-TC-UserSubmitQuestionnaire-4
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${sch_id}  ${resp.json()}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1138,26 +1147,30 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${MUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${resp}=  Get Departments
@@ -1242,7 +1255,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1288,9 +1301,10 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Set Suite Variable  ${cid1}  ${resp.json()}
 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     # ${capacity}=  Random Int  min=20   max=40
@@ -1317,7 +1331,6 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     ${resp}=  Add To Waitlist By User  ${cid1}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${u_id}  ${cid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -1349,7 +1362,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    # ${resp}=  Provider Login  ${MUSERNAME10}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
     

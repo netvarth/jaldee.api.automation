@@ -29,7 +29,7 @@ JD-TC-EnableDisableCallingStatus-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME253}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME253}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -70,12 +70,18 @@ JD-TC-EnableDisableCallingStatus-1
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME253}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -142,7 +148,7 @@ JD-TC-EnableDisableCallingStatus-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME252}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME252}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -182,12 +188,18 @@ JD-TC-EnableDisableCallingStatus-2
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME252}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -254,7 +266,7 @@ JD-TC-EnableDisableCallingStatus-3
 
     [Documentation]  Provider change status after enable calling status.
 
-    ${resp}=  Provider Login  ${PUSERNAME253}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME253}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -293,7 +305,7 @@ JD-TC-EnableDisableCallingStatus-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200   
     
-    ${resp}=  Provider Login  ${PUSERNAME251}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME251}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME251}
@@ -308,12 +320,18 @@ JD-TC-EnableDisableCallingStatus-4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME251}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -396,7 +414,7 @@ JD-TC-EnableDisableCallingStatus-5
 
     [Documentation]  Disable calling status for multiple appointments.
 
-    ${resp}=  Provider Login  ${PUSERNAME251}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME251}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -426,7 +444,7 @@ JD-TC-EnableDisableCallingStatus-UH1
 
     [Documentation]  Provider enables already enabled calling status.
 
-    ${resp}=  Provider Login  ${PUSERNAME252}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME252}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -450,7 +468,7 @@ JD-TC-EnableDisableCallingStatus-UH2
 
     [Documentation]  Provider disables already disabled calling status.
 
-    ${resp}=  Provider Login  ${PUSERNAME252}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME252}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -518,7 +536,7 @@ JD-TC-EnableDisableCallingStatus-UH7
 
     [Documentation]  Enable calling status using another provider's appointment id.
 
-    ${resp}=  Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -531,7 +549,7 @@ JD-TC-EnableDisableCallingStatus-UH8
 
     [Documentation]  Disable calling status using another provider's appointment id.
 
-    ${resp}=  Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

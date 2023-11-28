@@ -41,7 +41,7 @@ JD-TC-Update Partner Details-1
                                   
     [Documentation]              Update Partner Details
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -83,9 +83,14 @@ JD-TC-Update Partner Details-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${gender}=  Random Element    ${Genderlist}
@@ -315,7 +320,7 @@ JD-TC-Update Partner Details-UH1
                                    
     [Documentation]              Update Partner Details with invalid partner uid
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -331,7 +336,7 @@ JD-TC-Update Partner Details-UH2
                                   
     [Documentation]              Update Partner Details where uid is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -344,7 +349,7 @@ JD-TC-Update Partner Details-UH3
                                   
     [Documentation]              Update Partner Details where partner is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -358,7 +363,7 @@ JD-TC-Update Partner Details-UH4
                                   
     [Documentation]              Update Partner Details where partner phone is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -372,7 +377,7 @@ JD-TC-Update Partner Details-UH5
                                   
     [Documentation]              Update Partner Details where partner phone is invalid
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -417,7 +422,7 @@ JD-TC-Update Partner Details-UH6
                                   
     [Documentation]              Update Partner Details where partner email is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -434,7 +439,7 @@ JD-TC-Update Partner Details-UH7
                                   
     [Documentation]              Update Partner Details where partner description is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -448,7 +453,7 @@ JD-TC-Update Partner Details-UH8
                                   
     [Documentation]              Update Partner Details where partner type id is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -465,7 +470,7 @@ JD-TC-Update Partner Details-UH9
                                   
     [Documentation]              Update Partner Details where partner category id is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -482,7 +487,7 @@ JD-TC-Update Partner Details-UH11
                                   
     [Documentation]              Update Partner Details where partner address is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -499,7 +504,7 @@ JD-TC-Update Partner Details-UH12
                                   
     [Documentation]              Update Partner Details where partner address 2 is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -512,7 +517,7 @@ JD-TC-Update Partner Details-UH13
                                   
     [Documentation]              Update Partner Details where partner pin is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -525,7 +530,7 @@ JD-TC-Update Partner Details-UH14
                                   
     [Documentation]              Update Partner Details where partner city is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -538,7 +543,7 @@ JD-TC-Update Partner Details-UH15
                                   
     [Documentation]              Update Partner Details where partner district is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -551,7 +556,7 @@ JD-TC-Update Partner Details-UH16
                                   
     [Documentation]              Update Partner Details where partner state is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -595,7 +600,7 @@ JD-TC-Update Partner Details-UH17
                                   
     [Documentation]              Update Partner Details where partner aadhaar is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -608,7 +613,7 @@ JD-TC-Update Partner Details-UH18
                                   
     [Documentation]              Update Partner Details where partner pan is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -621,7 +626,7 @@ JD-TC-Update Partner Details-UH19
                                   
     [Documentation]              Update Partner Details where pin is invalid
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -637,7 +642,7 @@ JD-TC-Update Partner Details-UH20
                                   
     [Documentation]              Update Partner Details where partner aadhar is invalid
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -652,7 +657,7 @@ JD-TC-Update Partner Details-UH21
                                   
     [Documentation]              Update Partner Details where gst is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -665,7 +670,7 @@ JD-TC-Update Partner Details-UH22
                                   
     [Documentation]              Update Partner Details where gst is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -681,7 +686,7 @@ JD-TC-Update Partner Details-UH23
                                   
     [Documentation]              Update Partner Details where partner alias name is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -697,7 +702,7 @@ JD-TC-Update Partner Details-UH24
                                   
     [Documentation]              Update Partner Details where aadhar attachment action is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -713,7 +718,7 @@ JD-TC-Update Partner Details-UH25
                                   
     [Documentation]              Update Partner Details where aadhar attachment owner is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -729,7 +734,7 @@ JD-TC-Update Partner Details-UH26
                                   
     [Documentation]              Update Partner Details where aadhar attachment owner is invalid
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -747,7 +752,7 @@ JD-TC-Update Partner Details-UH27
                                   
     [Documentation]              Update Partner Details where aadhar attachment filename is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -763,7 +768,7 @@ JD-TC-Update Partner Details-UH28
                                   
     [Documentation]              Update Partner Details where aadhar attachment filesize is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -780,7 +785,7 @@ JD-TC-Update Partner Details-UH29
                                   
     [Documentation]              Update Partner Details where aadhar attachment caption is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -796,7 +801,7 @@ JD-TC-Update Partner Details-UH30
                                   
     [Documentation]              Update Partner Details where aadhar attachment filetype is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -812,7 +817,7 @@ JD-TC-Update Partner Details-UH31
                                   
     [Documentation]              Update Partner Details where aadhar attachment order is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -829,7 +834,7 @@ JD-TC-Update Partner Details-UH32
                                   
     [Documentation]              Update Partner Details where pan attachment action is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -845,7 +850,7 @@ JD-TC-Update Partner Details-UH33
                                   
     [Documentation]              Update Partner Details where pan attachment owner is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -861,7 +866,7 @@ JD-TC-Update Partner Details-UH34
                                   
     [Documentation]              Update Partner Details where pan attachment owner is invalid
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -879,7 +884,7 @@ JD-TC-Update Partner Details-UH35
                                   
     [Documentation]              Update Partner Details where pan attachment filename is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -895,7 +900,7 @@ JD-TC-Update Partner Details-UH36
                                   
     [Documentation]              Update Partner Details where pan attachment filesize is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -912,7 +917,7 @@ JD-TC-Update Partner Details-UH37
                                   
     [Documentation]              Update Partner Details where pan attachment caption is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -928,7 +933,7 @@ JD-TC-Update Partner Details-UH38
                                   
     [Documentation]              Update Partner Details where pan attachment filetype is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -944,7 +949,7 @@ JD-TC-Update Partner Details-UH39
                                   
     [Documentation]              Update Partner Details where pan attachment order is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -960,7 +965,7 @@ JD-TC-Update Partner Details-UH40
                                   
     [Documentation]              Update Partner Details where gst attachment action is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -976,7 +981,7 @@ JD-TC-Update Partner Details-UH41
                                   
     [Documentation]              Update Partner Details where gst attachment owner is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -992,7 +997,7 @@ JD-TC-Update Partner Details-UH42
                                   
     [Documentation]              Update Partner Details where gst attachment owner is invalid
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1010,7 +1015,7 @@ JD-TC-Update Partner Details-UH43
                                   
     [Documentation]              Update Partner Details where gst attachment filename is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1026,7 +1031,7 @@ JD-TC-Update Partner Details-UH44
                                   
     [Documentation]              Update Partner Details where gst attachment filesize is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1043,7 +1048,7 @@ JD-TC-Update Partner Details-UH45
                                   
     [Documentation]              Update Partner Details where gst attachment caption is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1059,7 +1064,7 @@ JD-TC-Update Partner Details-UH46
                                   
     [Documentation]              Update Partner Details where gst attachment filetype is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1075,7 +1080,7 @@ JD-TC-Update Partner Details-UH47
                                   
     [Documentation]              Update Partner Details where gst attachment order is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1091,7 +1096,7 @@ JD-TC-Update Partner Details-UH48
                                   
     [Documentation]              Update Partner Details where license attachment action is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1107,7 +1112,7 @@ JD-TC-Update Partner Details-UH49
                                   
     [Documentation]              Update Partner Details where licence attachment owner is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1123,7 +1128,7 @@ JD-TC-Update Partner Details-UH50
                                   
     [Documentation]              Update Partner Details where license attachment owner is invalid
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1141,7 +1146,7 @@ JD-TC-Update Partner Details-UH51
                                   
     [Documentation]              Update Partner Details where license attachment filename is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1157,7 +1162,7 @@ JD-TC-Update Partner Details-UH52
                                   
     [Documentation]              Update Partner Details where license attachment filesize is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1174,7 +1179,7 @@ JD-TC-Update Partner Details-UH53
                                   
     [Documentation]              Update Partner Details where license attachment caption is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1190,7 +1195,7 @@ JD-TC-Update Partner Details-UH54
                                   
     [Documentation]              Update Partner Details where license attachment filetype is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1206,7 +1211,7 @@ JD-TC-Update Partner Details-UH55
                                   
     [Documentation]              Update Partner Details where License attachment order is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1222,7 +1227,7 @@ JD-TC-Update Partner Details-UH56
                                   
     [Documentation]              Update Partner Details where partner attachment action is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1238,7 +1243,7 @@ JD-TC-Update Partner Details-UH57
                                   
     [Documentation]              Update Partner Details where partner attachment owner is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1254,7 +1259,7 @@ JD-TC-Update Partner Details-UH58
                                   
     [Documentation]              Update Partner Details where partner attachment owner is invalid
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1272,7 +1277,7 @@ JD-TC-Update Partner Details-UH59
                                   
     [Documentation]              Update Partner Details where partner attachment filename is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1288,7 +1293,7 @@ JD-TC-Update Partner Details-UH60
                                   
     [Documentation]              Update Partner Details where partner attachment filesize is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1305,7 +1310,7 @@ JD-TC-Update Partner Details-UH61
                                   
     [Documentation]              Update Partner Details where partner attachment caption is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1321,7 +1326,7 @@ JD-TC-Update Partner Details-UH62
                                   
     [Documentation]              Update Partner Details where partner attachment filetype is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1337,7 +1342,7 @@ JD-TC-Update Partner Details-UH63
                                   
     [Documentation]              Update Partner Details where partner attachment order is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1353,7 +1358,7 @@ JD-TC-Update Partner Details-UH64
                                   
     [Documentation]              Update Partner Details where store attachment action is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1369,7 +1374,7 @@ JD-TC-Update Partner Details-UH65
                                   
     [Documentation]              Update Partner Details where store attachment owner is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1385,7 +1390,7 @@ JD-TC-Update Partner Details-UH66
                                   
     [Documentation]              Update Partner Details where store attachment owner is invalid
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1403,7 +1408,7 @@ JD-TC-Update Partner Details-UH67
                                   
     [Documentation]              Update Partner Details where store attachment filename is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1419,7 +1424,7 @@ JD-TC-Update Partner Details-UH68
                                   
     [Documentation]              Update Partner Details where store attachment filesize is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1436,7 +1441,7 @@ JD-TC-Update Partner Details-UH69
                                   
     [Documentation]              Update Partner Details where store attachment caption is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1452,7 +1457,7 @@ JD-TC-Update Partner Details-UH70
                                   
     [Documentation]              Update Partner Details where store attachment filetype is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1468,7 +1473,7 @@ JD-TC-Update Partner Details-UH71
                                   
     [Documentation]              Update Partner Details where store attachment order is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1494,7 +1499,7 @@ JD-TC-Update Partner Details-UH73
                                   
     [Documentation]              Update Partner Details with another user login
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

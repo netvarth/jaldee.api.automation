@@ -17,30 +17,37 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-CreateLocation-1
 	[Documentation]  Create a location in account level ${MUSERNAME5}
-      ${resp}=  ProviderLogin  ${MUSERNAME5}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
+
+
       clear_location   ${MUSERNAME5}
-      ${citya}=   get_place
+
+      ${latti}  ${longi}  ${postcode}  ${citya}  ${district}  ${state}  ${address}=  get_loc_details
+      ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+      Set Suite Variable  ${tz}
+
+      # ${citya}=   get_place
       Set Suite Variable  ${citya}
-      ${latti}=  get_latitude
+      # ${latti}=  get_latitude
       Set Suite Variable  ${latti}
-      ${longi}=  get_longitude
+      # ${longi}=  get_longitude
       Set Suite Variable  ${longi}
-      ${postcode}=  FakerLibrary.postcode
+      # ${postcode}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode}
-      ${address}=  get_address
+      # ${address}=  get_address
       Set Suite Variable  ${address}
       ${parking}    Random Element   ${parkingType}
       Set Suite Variable  ${parking}
       ${24hours}    Random Element    ${bool}
       Set Suite Variable  ${24hours}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${DAY}
 	  ${list}=  Create List  1  2  3  4  5  6  7
     	Set Suite Variable  ${list}
-      ${sTime0}=  add_time  0  15
+      ${sTime0}=  add_timezone_time  ${tz}  0  15  
       Set Suite Variable   ${sTime0}
-      ${eTime0}=  add_time   0  30
+      ${eTime0}=  add_timezone_time  ${tz}  0  30  
       Set Suite Variable   ${eTime0}
       ${resp}=  Get Locations
       Log  ${resp.json()}
@@ -71,51 +78,67 @@ JD-TC-CreateLocation-2
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_D}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_D}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_D}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_D}${\n}
      Set Suite Variable  ${MUSERNAME_D}
      ${id}=  get_id  ${MUSERNAME_D}
      Set Suite Variable  ${id}
-      ${city1}=   FakerLibrary.state
+      # ${city1}=   get_place
+      # Set Suite Variable  ${city1}
+      # ${latti1}=  get_latitude
+      # Set Suite Variable  ${latti1}
+      # ${longi1}=  get_longitude
+      # Set Suite Variable  ${longi1}
+      # ${postcode1}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode1}
+      # ${address1}=  get_address
+      # Set Suite Variable  ${address1}
+      ${latti1}  ${longi1}  ${postcode1}  ${city1}  ${district}  ${state}  ${address1}=  get_loc_details
+      ${tz1}=   db.get_Timezone_by_lat_long   ${latti1}  ${longi1}
+      Set Suite Variable  ${tz1}
       Set Suite Variable  ${city1}
-      ${latti1}=  get_latitude
       Set Suite Variable  ${latti1}
-      ${longi1}=  get_longitude
       Set Suite Variable  ${longi1}
-      ${postcode1}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode1}
-      ${address1}=  get_address
       Set Suite Variable  ${address1}
       ${parking_type1}    Random Element   ${parkingType}
       Set Suite Variable  ${parking_type1}
       ${24hours1}    Random Element    ${bool}
       Set Suite Variable  ${24hours1}
-      ${sTime1}=  add_time  0  35
+      ${sTime1}=  add_timezone_time  ${tz}  0  35  
       Set Suite Variable   ${sTime1}
-      ${eTime1}=  add_time   0  40
+      ${eTime1}=  add_timezone_time  ${tz}  0  30  
       Set Suite Variable   ${eTime1}
       ${resp}=  Create Location  ${city1}  ${longi1}  ${latti1}  www.${city1}.com  ${postcode1}  ${address1}  ${parking_type1}  ${24hours1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${city2}=   FakerLibrary.last_name
+      # ${city2}=   get_place
+      # Set Suite Variable  ${city2}
+      # ${latti2}=  get_latitude
+      # Set Suite Variable  ${latti2}
+      # ${longi2}=  get_longitude
+      # Set Suite Variable  ${longi2}
+      # ${postcode2}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode2}
+      # ${address2}=  get_address
+      # Set Suite Variable  ${address2}
+      ${latti2}  ${longi2}  ${postcode2}  ${city2}  ${district}  ${state}  ${address2}=  get_loc_details
+      ${tz2}=   db.get_Timezone_by_lat_long   ${latti2}  ${longi2}
+      Set Suite Variable  ${tz2}
       Set Suite Variable  ${city2}
-      ${latti2}=  get_latitude
       Set Suite Variable  ${latti2}
-      ${longi2}=  get_longitude
       Set Suite Variable  ${longi2}
-      ${postcode2}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode2}
-      ${address2}=  get_address
       Set Suite Variable  ${address2}
       ${parking_type2}    Random Element   ${parkingType}
       Set Suite Variable  ${parking_type2}
       ${24hours2}    Random Element    ${bool}
       Set Suite Variable   ${24hours2}
-      ${sTime2}=  add_time  0  45
+      ${sTime2}=  add_timezone_time  ${tz}  0  45  
       Set Suite Variable   ${sTime2}
-      ${eTime2}=  add_time   0  50
+      ${eTime2}=  add_timezone_time  ${tz}  0  50  
       Set Suite Variable   ${eTime2}
       ${resp}=  Create Location  ${city2}  ${longi2}  ${latti2}  www.${city2}.com  ${postcode2}  ${address2}  ${parking_type2}  ${24hours2}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}
       Log  ${resp.json()}
@@ -142,22 +165,30 @@ JD-TC-CreateLocation-3
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${id}=  get_id  ${MUSERNAME_E}
-      ${city3}=   FakerLibrary.state
-      Set Suite Variable   ${city3}
-      ${latti3}=  get_latitude
-      Set Suite Variable   ${latti3}
-      ${longi3}=  get_longitude
-      Set Suite Variable   ${longi3}
-      ${postcode3}=  FakerLibrary.postcode
-      Set Suite Variable   ${postcode3}
-      ${address3}=  get_address
-      Set Suite Variable   ${address3}
+      # ${city3}=   get_place
+      # Set Suite Variable  ${city3}
+      # ${latti3}=  get_latitude
+      # Set Suite Variable  ${latti3}
+      # ${longi3}=  get_longitude
+      # Set Suite Variable  ${longi3}
+      # ${postcode3}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode3}
+      # ${address3}=  get_address
+      # Set Suite Variable  ${address3}
+      ${latti3}  ${longi3}  ${postcode3}  ${city3}  ${district}  ${state}  ${address3}=  get_loc_details
+      ${tz3}=   db.get_Timezone_by_lat_long   ${latti3}  ${longi3}
+      Set Suite Variable  ${tz3}
+      Set Suite Variable  ${city3}
+      Set Suite Variable  ${latti3}
+      Set Suite Variable  ${longi3}
+      Set Suite Variable  ${postcode3}
+      Set Suite Variable  ${address3}
       ${parking_type3}    Random Element   ${parkingType}
       Set Suite Variable  ${parking_type3}
       ${24hours3}    Random Element    ${bool}
@@ -196,21 +227,29 @@ JD-TC-CreateLocation-4
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_F}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_F}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_F}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_F}${\n}
      Set Suite Variable  ${MUSERNAME_F}
      ${id}=  get_id  ${MUSERNAME_F}
-      ${city5}=   get_place
+      # ${city5}=   get_place
+      # Set Suite Variable  ${city5}
+      # ${latti5}=  get_latitude
+      # Set Suite Variable  ${latti5}
+      # ${longi5}=  get_longitude
+      # Set Suite Variable  ${longi5}
+      # ${postcode5}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode5}
+      # ${address5}=  get_address
+      # Set Suite Variable  ${address5}
+      ${latti5}  ${longi5}  ${postcode5}  ${city5}  ${district}  ${state}  ${address5}=  get_loc_details
+      ${tz5}=   db.get_Timezone_by_lat_long   ${latti5}  ${longi5}
+      Set Suite Variable  ${tz5}
       Set Suite Variable  ${city5}
-      ${latti5}=  get_latitude
       Set Suite Variable  ${latti5}
-      ${longi5}=  get_longitude
       Set Suite Variable  ${longi5}
-      ${postcode5}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode5}
-      ${address5}=  get_address
       Set Suite Variable  ${address5}
       ${parking_type5}    Random Element   ${parkingType}
       Set Suite Variable  ${parking_type5}
@@ -227,26 +266,34 @@ JD-TC-CreateLocation-4
 
 JD-TC-CreateLocation-UH1
       [Documentation]  Create a location for a user in a branch
-      ${resp}=  Provider Login  ${MUSERNAME_F}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME_F}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
 
       ${resp}=  View Waitlist Settings
-      Log  ${resp.json()}
-      Should Be Equal As Strings    ${resp.status_code}    200
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-      Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-      Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
       ${u_id}=  Create Sample User
       Set Suite Variable  ${u_id}
+
+      ${resp}=  Get User By Id  ${u_id}
+      Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${PUSERNAME_U1}  ${resp.json()['mobileNo']}
+
       ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
       Should Be Equal As Strings  ${resp.status_code}  200
        @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
       Should Be Equal As Strings  ${resp[0].status_code}  200
       Should Be Equal As Strings  ${resp[1].status_code}  200
-      ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${city7}=   get_place
       Set Suite Variable  ${city7}
@@ -270,7 +317,7 @@ JD-TC-CreateLocation-UH1
 
 # JD-TC-CreateLocation-6
 #       [Documentation]  Create a multiple locations for a user in a branch
-#       ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+#       ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
 #       Log  ${resp.json()}
 #       Should Be Equal As Strings    ${resp.status_code}    200
 #       ${city8}=   FakerLibrary.state
@@ -282,7 +329,7 @@ JD-TC-CreateLocation-UH1
 
 JD-TC-CreateLocation-UH2
       [Documentation]  Create a location which is already created
-      ${resp}=  ProviderLogin  ${MUSERNAME_F}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME_F}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Create Location  ${city6}  ${longi5}  ${latti5}  www.${city5}.com  ${postcode5}  ${address5}  ${parking_type5}  ${24hours5}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
       Log  ${resp.json()}
@@ -291,7 +338,7 @@ JD-TC-CreateLocation-UH2
 
 # JD-TC-CreateLocation-UH3
 #       [Documentation]  Create same location  for a user in a branch
-#       ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+#       ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
 #       Log  ${resp.json()}
 #       Should Be Equal As Strings    ${resp.status_code}    200
 #       ${resp}=  Create Location  ${city8}  ${longi7}  ${latti7}  www.${city7}.com  ${postcode7}  ${address7}  ${parking_type7}  ${24hours7}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
@@ -302,7 +349,7 @@ JD-TC-CreateLocation-UH2
       sleep  02s
 JD-TC-VerifyCreateLocation-1
 	[Documentation]  Verify location details by provider login
-      ${resp}=  ProviderLogin  ${MUSERNAME5}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Location ById  ${lid}
       Log  ${resp.json()}
@@ -316,7 +363,7 @@ JD-TC-VerifyCreateLocation-1
 
 JD-TC-VerifyCreateLocation-2
 	[Documentation]  Verify location details by provider login
-      ${resp}=  ProviderLogin  ${MUSERNAME_D}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME_D}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Locations
       Log  ${resp.json()}
@@ -352,7 +399,7 @@ JD-TC-VerifyCreateLocation-2
 
 JD-TC-VerifyCreateLocation-3
 	[Documentation]  Verify location details by provider login
-      ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Locations
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -387,7 +434,7 @@ JD-TC-VerifyCreateLocation-3
 
 JD-TC-VerifyCreateLocation-4
 	[Documentation]  Verify location details by provider login
-      ${resp}=  ProviderLogin  ${MUSERNAME_F}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME_F}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Locations
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -423,7 +470,7 @@ JD-TC-VerifyCreateLocation-4
 
 JD-TC-VerifyCreateLocation-5
 	[Documentation]  Verify location details by user login
-      ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Locations
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -472,7 +519,7 @@ JD-TC-VerifyCreateLocation-5
 
 JD-TC-VerifyCreateLocation-6
 	[Documentation]  Verify location details by user login
-      ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Locations
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -549,7 +596,7 @@ JD-TC-CreateLocation-UH5
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}

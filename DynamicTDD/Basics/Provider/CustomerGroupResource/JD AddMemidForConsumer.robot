@@ -19,7 +19,7 @@ ${self}                   0
 
 JD-TC-AddMemberidForConsumer-1
     [Documentation]  Add member id for a consumer
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -113,7 +113,7 @@ JD-TC-AddMemberidForConsumer-1
 JD-TC-AddMemberidForConsumer-2
     [Documentation]  Add different member id for same consumer, two different  consumer group
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -199,7 +199,7 @@ JD-TC-AddMemberidForConsumer-3
 
     [Documentation]  Add different  member id for different consumer, same  consumer group
 
-     ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -278,7 +278,7 @@ JD-TC-AddMemberidForConsumer-4
 
     [Documentation]  Add  different member id for different consumer in two different  consumer groups
    
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -387,7 +387,7 @@ JD-TC-AddMemberidForConsumer-4
 JD-TC-AddMemberidForConsumer-5
     [Documentation]  Add  same member id for same consumer ,two different  consumer group
    
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -472,7 +472,7 @@ JD-TC-AddMemberidForConsumer-6
 
     [Documentation]  Add same member id for  different  consumer , two different   consumer group
    
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -581,7 +581,7 @@ JD-TC-AddMemberidForConsumer-6
 JD-TC-AddMemberidForConsumer-UH1
     [Documentation]  Add same  member id for different consumer in  same   consumer group
     
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -707,7 +707,7 @@ JD-TC-AddMemberidForConsumer-Uh3
 JD-TC-AddMemberidForConsumer-UH4
     [Documentation]  ADD memberid , create  group with generateGrpMemId is false
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -760,7 +760,7 @@ JD-TC-AddMemberidForConsumer-UH5
     [Documentation]  add memberid  for a consumer , the consumer does not contain any  customer group
     
   
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -794,7 +794,7 @@ JD-TC-AddMemberidForConsumer-UH5
 JD-TC-AddMemberidForConsumer-7
 
     [Documentation]   member id was a word
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_customer_groups  ${PUSERNAME64}
@@ -838,7 +838,7 @@ JD-TC-AddMemberidForConsumer-7
 JD-TC-AddMemberidForConsumer-UH6
 
     [Documentation]  add memberid  for a consumer , to another cutomer group
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -892,7 +892,7 @@ JD-TC-AddMemberidForConsumer-UH6
 JD-TC-AddMemberidForConsumer-8
 
     [Documentation]   member id is zero
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
  
@@ -930,7 +930,7 @@ JD-TC-AddMemberidForConsumer-UH7
 
     [Documentation]  another provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${groupName1}=   FakerLibrary.word
@@ -948,7 +948,7 @@ JD-TC-AddMemberidForConsumer-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
 
   
-    ${resp}=  Provider Login  ${PUSERNAME55}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

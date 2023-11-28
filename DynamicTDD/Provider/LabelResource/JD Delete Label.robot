@@ -15,7 +15,7 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 *** Test Cases ***
 JD-TC-DeleteLabel-1
 	[Documentation]  Delete a label by a provider
-    ${resp}=  ProviderLogin  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 *** comment ***
@@ -63,7 +63,7 @@ JD-TC-DeleteLabel -UH2
 
 JD-TC-DeleteLabel-UH3
     [Documentation]  Delete a Label by id which is not exist
-    ${resp}=  ProviderLogin  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_id}=   Random Int   min=-10   max=0
     ${resp}=  Delete Label  ${invalid_id}
@@ -73,7 +73,7 @@ JD-TC-DeleteLabel-UH3
 
 JD-TC-DeleteLabel-UH4
     [Documentation]  Delete a Label by id of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Delete Label  ${label_id}
     Should Be Equal As Strings  ${resp.status_code}  422

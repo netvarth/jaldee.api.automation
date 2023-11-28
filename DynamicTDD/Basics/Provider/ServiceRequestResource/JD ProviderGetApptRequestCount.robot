@@ -27,10 +27,14 @@ JD-TC-ProviderGetApptRequestCount-1
 
     [Documentation]   Provider get an appt request Count and verify it.
 
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${prov_id1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -39,8 +43,7 @@ JD-TC-ProviderGetApptRequestCount-1
 
     clear_appt_schedule   ${PUSERNAME17}
 
-    ${DAY1}=  get_date
-    Set Suite Variable   ${DAY1}
+    
     ${SERVICE1}=    FakerLibrary.word
     ${service_duration}=   Random Int   min=5   max=10
     ${desc}=   FakerLibrary.sentence
@@ -87,15 +90,22 @@ JD-TC-ProviderGetApptRequestCount-1
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
 
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${resp}=  Create Sample Schedule   ${lid}   ${sid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
-
-    ${DAY2}=  add_date  10      
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable   ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time  1  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  15  
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${duration}=  FakerLibrary.Random Int  min=2  max=10
@@ -137,7 +147,7 @@ JD-TC-ProviderGetApptRequestCount-2
 
     [Documentation]   Provider get multiple appt request Count and verify it.
 
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -174,7 +184,7 @@ JD-TC-ProviderGetApptRequestCount-3
 
     [Documentation]   Provider create appt request Count for a provider consumers family member and verify it.
 
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -207,7 +217,7 @@ JD-TC-ProviderGetApptRequestCount-4
 
     [Documentation]   Provider get an appt request Count without create it.
 
-    ${resp}=  Provider Login  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -221,7 +231,7 @@ JD-TC-ProviderGetApptRequestCount-5
 
     [Documentation]   Provider get an appt request Count with location filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -252,7 +262,7 @@ JD-TC-ProviderGetApptRequestCount-6
 
     [Documentation]   Provider get an appt request count with schedule filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -271,7 +281,7 @@ JD-TC-ProviderGetApptRequestCount-7
 
     [Documentation]   Provider get an appt request Count with location and schedule filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

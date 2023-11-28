@@ -24,7 +24,7 @@ JD-TC-CreateLeadforUser-1
 
     [Documentation]   Create Lead to a valid provider.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME53}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -40,8 +40,13 @@ JD-TC-CreateLeadforUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${title}=  FakerLibrary.user name
@@ -69,7 +74,7 @@ JD-TC-CreateLeadforUser-2
     [Documentation]   Create multiple Lead for same location.  
 
     clear_customer   ${MUSERNAME53}
-    ${resp}=   ProviderLogin  ${MUSERNAME53}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -95,7 +100,7 @@ JD-TC-CreateLeadforUser-3
     [Documentation]   Create multiple Lead with same details.
 
     clear_customer   ${MUSERNAME53}
-    ${resp}=   ProviderLogin  ${MUSERNAME53}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -104,8 +109,13 @@ JD-TC-CreateLeadforUser-3
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.word 
@@ -132,7 +142,7 @@ JD-TC-CreateLeadforUser-4
     [Documentation]  Create a Lead for a provider by giving status and priority.
 
     clear_customer   ${MUSERNAME53}
-    ${resp}=   ProviderLogin  ${MUSERNAME53}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${p_id}=  get_acc_id  ${MUSERNAME53}
@@ -141,8 +151,13 @@ JD-TC-CreateLeadforUser-4
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -195,7 +210,7 @@ JD-TC-CreateLeadforUser-4
 JD-TC-CreateLeadforUser-5
     [Documentation]  Create a Lead without description.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME53}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${p_id}=  get_acc_id  ${MUSERNAME53}
@@ -204,8 +219,13 @@ JD-TC-CreateLeadforUser-5
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     ${title}=   FakerLibrary.word
     ${targetPotential}=    FakerLibrary.Building Number
@@ -222,7 +242,7 @@ JD-TC-CreateLeadforUser-5
 JD-TC-CreateLeadforUser-6
     [Documentation]  Create a Lead with status as empty.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME53}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${p_id}=  get_acc_id  ${MUSERNAME53}
@@ -231,8 +251,13 @@ JD-TC-CreateLeadforUser-6
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     ${title}=   FakerLibrary.word
     ${desc}=   FakerLibrary.word
@@ -252,7 +277,7 @@ JD-TC-CreateLeadforUser-6
 JD-TC-CreateLeadforUser-7
     [Documentation]  Create a Lead with priority as empty.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME53}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${p_id}=  get_acc_id  ${MUSERNAME53}
@@ -261,8 +286,13 @@ JD-TC-CreateLeadforUser-7
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     ${title}=   FakerLibrary.word
     ${desc}=   FakerLibrary.word
@@ -300,7 +330,7 @@ JD-TC-CreateLeadforUser-8
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -316,9 +346,16 @@ JD-TC-CreateLeadforUser-8
     ${resp}=   categorytype   ${p_id}
     ${resp}=   tasktype       ${p_id}
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -367,8 +404,13 @@ JD-TC-CreateLeadforUser-8
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
@@ -378,7 +420,7 @@ JD-TC-CreateLeadforUser-8
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -406,7 +448,7 @@ JD-TC-CreateLeadforUser-8
 JD-TC-CreateLeadforUser-9
 
     [Documentation]   Create multiple leads to a user for different locations.
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -442,7 +484,7 @@ JD-TC-CreateLeadforUser-9
 JD-TC-CreateLeadforUser-10
     clear_customer   ${MUSERNAME_E}
     [Documentation]   Create multiple leads to multiple users in same branch.
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+3366462
@@ -473,8 +515,13 @@ JD-TC-CreateLeadforUser-10
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
-        Set Test Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  SendProviderResetMail   ${PUSERNAME_U2}
@@ -484,7 +531,7 @@ JD-TC-CreateLeadforUser-10
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -507,7 +554,7 @@ JD-TC-CreateLeadforUser-10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -537,7 +584,7 @@ JD-TC-CreateLeadforUser-10
 JD-TC-CreateLeadforUser-UH1
     [Documentation]  Create a Lead without title.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME53}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${p_id}=  get_acc_id  ${MUSERNAME53}
@@ -546,8 +593,13 @@ JD-TC-CreateLeadforUser-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     ${desc}=   FakerLibrary.word
     ${targetPotential}=    FakerLibrary.Building Number
@@ -564,7 +616,7 @@ JD-TC-CreateLeadforUser-UH1
 
 JD-TC-CreateLeadforUser-UH2
     [Documentation]  Create a Lead with another providers location.
-    ${resp}=   ProviderLogin  ${MUSERNAME54}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME54}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${p_id}=  get_acc_id  ${MUSERNAME54}
@@ -590,7 +642,7 @@ JD-TC-CreateLeadforUser-UH2
 JD-TC-CreateLeadforUser-UH3
     [Documentation]  Create a Lead without customer id.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME53}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${p_id}=  get_acc_id  ${MUSERNAME53}
@@ -599,8 +651,13 @@ JD-TC-CreateLeadforUser-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     ${desc}=   FakerLibrary.word
     ${title}=   FakerLibrary.word
@@ -632,7 +689,7 @@ JD-TC-CreateLeadforUser-UH4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E1}${\n}
@@ -648,9 +705,16 @@ JD-TC-CreateLeadforUser-UH4
     ${resp}=   categorytype   ${p_id}
     ${resp}=   tasktype       ${p_id}
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -701,7 +765,7 @@ JD-TC-CreateLeadforUser-UH4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -716,7 +780,7 @@ JD-TC-CreateLeadforUser-UH4
     Set Test Variable  ${pcons_id5}  ${resp.json()[0]['id']}
     Set Test Variable  ${jaldeeId}  ${resp.json()[0]['jaldeeId']}
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -725,8 +789,13 @@ JD-TC-CreateLeadforUser-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${title}=  FakerLibrary.user name
@@ -746,7 +815,7 @@ JD-TC-CreateLeadforUser-UH5
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${cons_id9}  ${resp.json()['id']}
 
-    ${resp}=  ProviderLogin  ${MUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -764,7 +833,7 @@ JD-TC-CreateLeadforUser-UH6
 
     [Documentation]   Create Lead to an invalid consumer.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

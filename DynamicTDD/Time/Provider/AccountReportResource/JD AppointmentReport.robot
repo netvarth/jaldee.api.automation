@@ -40,7 +40,7 @@ ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
 JD-TC-Appointment_Report-1
     [Documentation]  Generate LAST_WEEK Appointment_report using "consumer and family_member_id" together for filtering
 
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid}=  get_acc_id  ${PUSERNAME140}
     Set Suite Variable  ${pid}
@@ -52,15 +52,17 @@ JD-TC-Appointment_Report-1
     Should Be Equal As Strings  ${resp.status_code}  200
    
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  calculationMode=${calc_mode[1]}  trnArndTime=${duration}  futureDateWaitlist=${bool[1]}  showTokenId=${bool[1]}  onlineCheckIns=${bool[1]}  maxPartySize=1
     
     clear_queue     ${PUSERNAME140}
     clear_service   ${PUSERNAME140}
     clear_appt_schedule   ${PUSERNAME140}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  55
+    ${DAY2}=  db.add_timezone_date  ${tz}  55
     Set Suite Variable  ${DAY2}
     ${description}=     FakerLibrary.sentence
     Set Suite Variable   ${description}
@@ -78,7 +80,7 @@ JD-TC-Appointment_Report-1
     Set Suite Variable   ${Total}   ${Total1}
     ${amt_float}=  twodigitfloat  ${Total}
     Set Suite Variable  ${amt_float}  ${amt_float}  
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
 
     ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration[1]}  ${status[0]}    ${btype}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[0]}  ${bool[0]}
@@ -134,13 +136,14 @@ JD-TC-Appointment_Report-1
     Log  ${resp.json()}
     Verify Response  ${resp}  name=${V1SERVICE1}  description=${description}  serviceDuration=5   notification=${bool[1]}   notificationType=${notifytype[2]}   totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}  serviceType=virtualService   virtualServiceType=${vstype}
 
-    ${sTime1}=  add_time  0  00
-    ${eTime1}=  add_time   2  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  2  30  
     ${p1queue1}=    FakerLibrary.word
 
     ${resp}=  Get Locations
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=5
@@ -227,7 +230,7 @@ JD-TC-Appointment_Report-1
     
     # ------------------------------------------------------------------------------
     
-    ${TODAY}=  get_date
+    ${TODAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${TODAY}
     ${Current_Date} =	Convert Date	${TODAY}	result_format=%d/%m/%Y
     Set Suite Variable  ${Current_Date}
@@ -321,7 +324,7 @@ JD-TC-Appointment_Report-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${encId06}   ${resp.json()['appointmentEncId']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -440,7 +443,7 @@ JD-TC-Appointment_Report-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY1}=  add_date  1
+    ${Add_DAY1}=  db.add_timezone_date  ${tz}  1  
     Set Suite Variable  ${Add_DAY1}
     ${Add_Date1} =	Convert Date	${Add_DAY1}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_Date1}
@@ -474,7 +477,7 @@ JD-TC-Appointment_Report-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY2}=  add_date  2
+    ${Add_DAY2}=  db.add_timezone_date  ${tz}  2  
     Set Suite Variable  ${Add_DAY2}
     ${Add_Date2} =	Convert Date	${Add_DAY2}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_Date2}
@@ -507,7 +510,7 @@ JD-TC-Appointment_Report-1
     Set Suite Variable  ${encId114}   ${resp.json()['appointmentEncId']}
     # -----------------------------------------------------
 
-    ${Add_DAY3}=  add_date  3
+    ${Add_DAY3}=  db.add_timezone_date  ${tz}  3  
     Set Suite Variable  ${Add_DAY3}
     ${Add_Date3} =	Convert Date	${Add_DAY3}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_Date3}
@@ -540,7 +543,7 @@ JD-TC-Appointment_Report-1
     Set Suite Variable  ${encId116}   ${resp.json()['appointmentEncId']}
     # -----------------------------------------------------
 
-    ${Add_DAY4}=  add_date  4
+    ${Add_DAY4}=  db.add_timezone_date  ${tz}  4  
     Set Suite Variable  ${Add_DAY4}
     ${Add_Date4} =	Convert Date	${Add_DAY4}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_Date4}
@@ -574,7 +577,7 @@ JD-TC-Appointment_Report-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY5}=  add_date  5
+    ${Add_DAY5}=  db.add_timezone_date  ${tz}  5  
     Set Suite Variable  ${Add_DAY5}
     ${Add_Date5} =	Convert Date	${Add_DAY5}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_Date5}
@@ -607,7 +610,7 @@ JD-TC-Appointment_Report-1
     Set Suite Variable  ${encId120}   ${resp.json()['appointmentEncId']}
     # -----------------------------------------------------
 
-    ${Add_DAY6}=  add_date  6
+    ${Add_DAY6}=  db.add_timezone_date  ${tz}  6  
     Set Suite Variable  ${Add_DAY6}
     ${Add_Date6} =	Convert Date	${Add_DAY6}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_Date6}
@@ -641,7 +644,7 @@ JD-TC-Appointment_Report-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY7}=  add_date  7
+    ${Add_DAY7}=  db.add_timezone_date  ${tz}  7  
     Set Suite Variable  ${Add_DAY7}
     ${Add_Date7} =	Convert Date	${Add_DAY7}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_Date7}
@@ -675,7 +678,7 @@ JD-TC-Appointment_Report-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY8}=  add_date  8
+    ${Add_DAY8}=  db.add_timezone_date  ${tz}  8  
     Set Suite Variable  ${Add_DAY8}
     ${Add_Date8} =	Convert Date	${Add_DAY8}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_Date8}
@@ -709,7 +712,7 @@ JD-TC-Appointment_Report-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY15}=  add_date  15
+    ${Add_DAY15}=  db.add_timezone_date  ${tz}  15  
     Set Suite Variable  ${Add_DAY15}
     ${Add_Date15} =	Convert Date	${Add_DAY15}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_Date15}
@@ -743,7 +746,7 @@ JD-TC-Appointment_Report-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY20}=  add_date  20
+    ${Add_DAY20}=  db.add_timezone_date  ${tz}  20
     Set Suite Variable  ${Add_DAY20}
     ${Add_Date20} =	Convert Date	${Add_DAY20}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_Date20}
@@ -777,7 +780,7 @@ JD-TC-Appointment_Report-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY25}=  add_date  25
+    ${Add_DAY25}=  db.add_timezone_date  ${tz}  25 
     Set Suite Variable  ${Add_DAY25}
     ${Add_Date25} =	Convert Date	${Add_DAY25}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_Date25}
@@ -811,7 +814,7 @@ JD-TC-Appointment_Report-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY30}=  add_date  30
+    ${Add_DAY30}=  db.add_timezone_date  ${tz}  30
     Set Suite Variable  ${Add_DAY30}
     ${Add_Date30} =	Convert Date	${Add_DAY30}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_Date30}
@@ -845,7 +848,7 @@ JD-TC-Appointment_Report-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY31}=  add_date  31
+    ${Add_DAY31}=  db.add_timezone_date  ${tz}  31
     Set Suite Variable  ${Add_DAY31}
     ${Add_Date31} =	Convert Date	${Add_DAY31}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_Date31}
@@ -879,7 +882,7 @@ JD-TC-Appointment_Report-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY36}=  add_date  36
+    ${Add_DAY36}=  db.add_timezone_date  ${tz}  36
     Set Suite Variable  ${Add_DAY36}
     ${Add_Date36} =	Convert Date	${Add_DAY36}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_Date36}
@@ -913,7 +916,7 @@ JD-TC-Appointment_Report-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY40}=  add_date  40
+    ${Add_DAY40}=  db.add_timezone_date  ${tz}  40
     Set Suite Variable  ${Add_DAY40}
     ${Add_Date40} =	Convert Date	${Add_DAY40}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_Date40}
@@ -947,7 +950,7 @@ JD-TC-Appointment_Report-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY45}=  add_date  45
+    ${Add_DAY45}=  db.add_timezone_date  ${tz}  45
     Set Suite Variable  ${Add_DAY45}
     ${Add_Date45} =	Convert Date	${Add_DAY45}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_Date45}
@@ -981,7 +984,7 @@ JD-TC-Appointment_Report-1
     # -----------------------------------------------------
 
 
-    ${Add_DAY50}=  add_date  50
+    ${Add_DAY50}=  db.add_timezone_date  ${tz}  50
     Set Suite Variable  ${Add_DAY50}
     ${Add_Date50} =	Convert Date	${Add_DAY50}	result_format=%d/%m/%Y
     Set Suite Variable  ${Add_Date50}
@@ -1014,7 +1017,7 @@ JD-TC-Appointment_Report-1
     Set Suite Variable  ${encId244}   ${resp.json()['appointmentEncId']}
     # -----------------------------------------------------
 
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # Set Suite Variable  ${C6_name}   ${cid6_fname} ${cid6_lname}
@@ -1191,14 +1194,14 @@ JD-TC-Appointment_Report-1
     END        
 
 
-    ${LAST_WEEK1_DAY1}=  subtract_date  6
+    ${LAST_WEEK1_DAY1}=  db.subtract_timezone_date  ${tz}   6
     Set Suite Variable  ${LAST_WEEK1_DAY1} 
-    ${LAST_WEEK1_DAY7}=  get_date
+    ${LAST_WEEK1_DAY7}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${LAST_WEEK1_DAY7}
 
     change_system_date   1
 
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     Set Test Variable  ${status-eq}              SUCCESS
@@ -1367,7 +1370,7 @@ JD-TC-Appointment_Report-2
     resetsystem_time
 
     change_system_date   1
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1579,7 +1582,7 @@ JD-TC-Appointment_Report-3
     resetsystem_time
 
     change_system_date   31
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1937,7 +1940,7 @@ JD-TC-Appointment_Report-4
     resetsystem_time
 
     change_system_date   8
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2155,7 +2158,7 @@ JD-TC-Appointment_Report-5
     resetsystem_time
 
     change_system_date   31
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2511,7 +2514,7 @@ JD-TC-Appointment_Report-6
     resetsystem_time
 
     change_system_date   31
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2877,14 +2880,14 @@ JD-TC-Appointment_Report-7
     [Documentation]  Generate LAST_WEEK Appointment_report of a provider using Disabled Schedule_Id
     resetsystem_time
 
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${P1SERVICE3}=    FakerLibrary.word
     Set Suite Variable   ${P1SERVICE3}
     ${desc}=   FakerLibrary.sentence  
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
 
     ${resp}=  Create Service  ${P1SERVICE3}  ${desc}   ${service_duration[1]}  ${status[0]}    ${btype}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[0]}  ${bool[0]}
@@ -2892,8 +2895,8 @@ JD-TC-Appointment_Report-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s3}  ${resp.json()}
 
-    ${sTime1}=  add_time  0  00
-    ${eTime1}=  add_time   2  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  2  30  
     ${p1queue2}=    FakerLibrary.word
     ${schedule_name2}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=5
@@ -2953,7 +2956,7 @@ JD-TC-Appointment_Report-7
     Set Suite Variable  ${jid_c6}   ${resp.json()['appmtFor'][0]['memberJaldeeId']}
     Set Suite Variable  ${encId72}   ${resp.json()['appointmentEncId']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2983,13 +2986,13 @@ JD-TC-Appointment_Report-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id2}   name=${schedule_name2}  apptState=${Qstate[1]}
 
-    ${LAST_WEEK7_DAY1}=  get_date
+    ${LAST_WEEK7_DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${LAST_WEEK7_DAY1} 
-    ${LAST_WEEK7_DAY7}=  add_date  6
+    ${LAST_WEEK7_DAY7}=  db.add_timezone_date  ${tz}  6  
     Set Suite Variable  ${LAST_WEEK7_DAY7}
 
     change_system_date   7
-    ${resp}=  ProviderLogin  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3052,7 +3055,7 @@ JD-TC-Appointment_Report-7
 JD-TC-Appointment_Report-8
 	[Documentation]   Appointment Report before completing prepayment of a Physical service 
     resetsystem_time
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
@@ -3067,6 +3070,8 @@ JD-TC-Appointment_Report-8
     Should Be Equal As Strings  ${resp.status_code}  200
    
     ${resp}=  View Waitlist Settings
+    Log   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  calculationMode=${calc_mode[1]}  trnArndTime=${duration}  futureDateWaitlist=${bool[1]}  showTokenId=${bool[1]}  onlineCheckIns=${bool[1]}
     
     
@@ -3225,18 +3230,23 @@ JD-TC-Appointment_Report-8
     Log  ${resp.json()}
     Verify Response  ${resp}  name=${SERVICE4}  description=${description}  serviceDuration=5   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre1_V1}  totalAmount=${totalamt_V1}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}  serviceType=virtualService   virtualServiceType=${vstype}
         
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  00
+    ${eTime1}=  add_timezone_time  ${tz}  2  00  
     Set Suite Variable   ${eTime1}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${description2}=  FakerLibrary.sentence
     ${dur2}=  FakerLibrary.Random Int  min=10  max=20
     ${amt2}=  FakerLibrary.Random Int  min=200  max=500
@@ -3261,19 +3271,19 @@ JD-TC-Appointment_Report-8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]}   
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     # Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     # Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     # Set Suite Variable  ${list}
-    ${sTime1}=  subtract_time  0  30
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  0  30
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   1  30
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${eTime1}
     ${TODAY} =	Convert Date	${DAY1}	result_format=%d/%m/%Y
     Set Suite Variable  ${TODAY}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
     ${schedule_name01}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name01}
@@ -3341,7 +3351,7 @@ JD-TC-Appointment_Report-8
     Set Suite Variable  ${jid_c01}   ${resp.json()['appmtFor'][0]['memberJaldeeId']}
     Set Suite Variable  ${encId01_usr}   ${resp.json()['appointmentEncId']}
 
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3405,7 +3415,7 @@ JD-TC-Verify-1-Appointment_Report-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${apptid01}  netTotal=${totalamt2}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  netRate=${totalamt2}  billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${pre2_float1}  amountDue=${balamount2}
 
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3434,14 +3444,14 @@ JD-TC-Verify-1-Appointment_Report-8
     Should Be Equal As Strings  ${paymentStatusReport[1]}   ${resp.json()['reportContent']['data'][0]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id01-2}     ${resp.json()['reportContent']['data'][0]['7']}  # ConfirmationId
 
-    ${LAST_WEEK8_DAY1}=  get_date
+    ${LAST_WEEK8_DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${LAST_WEEK8_DAY1} 
-    ${LAST_WEEK8_DAY7}=  add_date  6
+    ${LAST_WEEK8_DAY7}=  db.add_timezone_date  ${tz}  6  
     Set Suite Variable  ${LAST_WEEK8_DAY7}
 
 
     change_system_date   7
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3477,7 +3487,7 @@ JD-TC-Verify-1-Appointment_Report-8
 JD-TC-Verify-2-Appointment_Report-8
     [Documentation]  Appointment Report When cancel Appointment after completing prepayment of a Physical service 
     resetsystem_time
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -3523,7 +3533,7 @@ JD-TC-Verify-2-Appointment_Report-8
     Set Suite Variable  ${conf_id01-2}     ${resp.json()['reportContent']['data'][0]['7']}  # ConfirmationId
 
     change_system_date   7
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3557,7 +3567,7 @@ JD-TC-Verify-2-Appointment_Report-8
 JD-TC-Appointment_Report-9
     [Documentation]  Appointment Report before completing prepayment of a Virtual service 
     resetsystem_time
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3634,7 +3644,7 @@ JD-TC-Appointment_Report-9
     Set Suite Variable   ${jid_c03}  ${resp.json()['appmtFor'][0]['memberJaldeeId']}
     Set Suite Variable  ${encId03_usr}   ${resp.json()['appointmentEncId']}
 
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3702,7 +3712,7 @@ JD-TC-Verify-1-Appointment_Report-9
 
     
 
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3731,7 +3741,7 @@ JD-TC-Verify-1-Appointment_Report-9
     Set Suite Variable  ${conf_id01-2}     ${resp.json()['reportContent']['data'][0]['7']}  # ConfirmationId
 
     change_system_date   7
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3766,7 +3776,7 @@ JD-TC-Verify-1-Appointment_Report-9
 JD-TC-Verify-2-Appointment_Report-9
     [Documentation]  Appointment report When cancel Appointment after completing prepayment of a Virtual service 
     resetsystem_time
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -3810,7 +3820,7 @@ JD-TC-Verify-2-Appointment_Report-9
 
 
     change_system_date   7
-    ${resp}=  Provider Login  ${MUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

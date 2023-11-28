@@ -17,10 +17,15 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
       
 JD-TC-ListCustomerByProvider-1
       [Documentation]    List a Customer details by provider login
-      ${resp}=  ProviderLogin  ${PUSERNAME11}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${pid}  ${resp.json()['id']}
+
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Test Variable  ${pid}  ${decrypted_data['id']}
+
+      # Set Test Variable  ${pid}  ${resp.json()['id']}
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
       ${ph2}=  Evaluate  ${PUSERNAME23}+73003
@@ -41,7 +46,7 @@ JD-TC-ListCustomerByProvider-1
       
 JD-TC-ListCustomerByProvider-2
       [Documentation]    List more customer details by provider login
-      ${resp}=  ProviderLogin  ${PUSERNAME11}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
@@ -60,9 +65,14 @@ JD-TC-ListCustomerByProvider-2
      
 JD-TC-ListCustomerByProvider-3
       [Documentation]    Add a customer by provider own his customer then list customer details
-      ${resp}=  ProviderLogin  ${PUSERNAME3}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${pid}  ${resp.json()['id']}
+
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Test Variable  ${pid}  ${decrypted_data['id']}
+
+      # Set Test Variable  ${pid}  ${resp.json()['id']}
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
       ${ph2}=  Evaluate  ${PUSERNAME23}+73003
@@ -92,7 +102,7 @@ JD-TC-ListCustomerByProvider-UH1
 
 JD-TC-ListCustomerByProvider-UH2
       [Documentation]    invalid id using in ListcustomerByProvider
-      ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  GetCustomer ById   0
       Log  ${resp.json()}
@@ -101,10 +111,15 @@ JD-TC-ListCustomerByProvider-UH2
 
 JD-TC-ListCustomerByProvider-4
       [Documentation]    List a Customer details by provider login
-      ${resp}=  ProviderLogin  ${PUSERNAME11}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      Set Test Variable  ${pid}  ${resp.json()['id']}
+
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Test Variable  ${pid}  ${decrypted_data['id']}
+
+      # Set Test Variable  ${pid}  ${resp.json()['id']}
       ${ph2}=  Evaluate  ${PUSERNAME23}+73053
       ${resp}=  AddCustomer  ${ph2}
       Log   ${resp.json()}

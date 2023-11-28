@@ -29,7 +29,7 @@ JD-TC-GetCustomerCountForSP-1
 
     [Documentation]   Get customer count for a service provider having one lead.
 
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
@@ -61,9 +61,15 @@ JD-TC-GetCustomerCountForSP-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
+    
     
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.word 
@@ -93,7 +99,7 @@ JD-TC-GetCustomerCountForSP-2
 
     [Documentation]   Get customer count for a service provider without add customer.
 
-    ${resp}=  Provider Login  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -126,7 +132,7 @@ JD-TC-GetCustomerCountForSP-4
 
     [Documentation]   Get customer count for a service provider without create a lead.
 
-    ${resp}=  Provider Login  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -148,7 +154,7 @@ JD-TC-GetCustomerCountForSP-5
 
     [Documentation]   Get customer count for a service provider having multiple customers.
 
-    ${resp}=  Provider Login  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -170,7 +176,7 @@ JD-TC-GetCustomerCountForSP-6
 
     [Documentation]   Get customer count for a service provider having customers and family members.
 
-    ${resp}=  Provider Login  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -197,7 +203,7 @@ JD-TC-GetCustomerCountForSP-UH1
 
     [Documentation]   Get lead count with invalid user token.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME21}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -210,7 +216,7 @@ JD-TC-GetCustomerCountForSP-UH2
 
     [Documentation]   Get lead count with sp token.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME20}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

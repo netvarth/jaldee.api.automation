@@ -16,7 +16,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-GetAccountSettings-1
     [Documentation]   Get Account settings by provider login
 
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Accountsettings  
     Log  ${resp.json()}
@@ -50,12 +50,15 @@ JD-TC-GetAccountSettings-UH2
 JD-TC-GetorderAccountSettings-3
     [Documentation]   Get Order Account settings by provider login here enable order
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid1}  ${resp.json()['id']}
-    
+    # Set Suite Variable  ${pid1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+     Log  ${decrypted_data}
+     Set Suite Variable  ${pid1}  ${decrypted_data['id']}
+ 
     ${accId1}=  get_acc_id  ${PUSERNAME106}
     Set Suite Variable  ${accId1} 
 
@@ -86,10 +89,9 @@ JD-TC-GetorderAccountSettings-3
 JD-TC-GetorderAccountSettings-4
     [Documentation]   Get Order Account settings by provider login disable order
 
-    ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Disable Order Settings
     Log  ${resp.json()}

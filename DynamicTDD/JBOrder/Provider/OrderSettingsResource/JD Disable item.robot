@@ -24,8 +24,18 @@ JD-TC-Disable Item-1
 
     [Documentation]  Provider Create item and try for Disable
     clear_Item  ${PUSERNAME8}
-    ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
     ${displayName1}=   FakerLibrary.name 
     Set Suite Variable  ${displayName1}  
@@ -82,7 +92,7 @@ JD-TC-Disable Item-1
 JD-TC-Disable Item-UH1
 
     [Documentation]   Disable already disabled item
-    ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Disable Item  ${id}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -107,7 +117,7 @@ JD-TC-Disable Item-UH3
 JD-TC-Disable Item-UH4
 
     [Documentation]  try to Disabled another providers item
-    ${resp}=  ProviderLogin  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Disable Item  ${id}
     Should Be Equal As Strings  ${resp.status_code}  401

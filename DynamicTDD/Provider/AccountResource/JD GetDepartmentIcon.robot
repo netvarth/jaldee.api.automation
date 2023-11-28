@@ -36,7 +36,7 @@ JD-TC-Get_Department_Icon-1
 
     [Documentation]   Get Department Icon
 
-    ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -109,7 +109,7 @@ JD-TC-Get_Department_Icon-UH1
                                   
     [Documentation]               Get Department Icon Where Department Icon is Removed
 
-    ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -141,7 +141,7 @@ JD-TC-Get_Department_Icon-UH2
                                   
     [Documentation]               Get Department Icon With Another account
     
-    ${resp}=  Provider Login  ${PUSERNAME27}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

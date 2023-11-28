@@ -23,13 +23,21 @@ ${countryCode}   +91
 JD-TC-EnableOrderSettings-1
     [Documentation]   Enable Order Settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid71}  ${resp.json()['id']}
-    Set Suite Variable  ${P71_fName}  ${resp.json()['firstName']}
-    Set Suite Variable  ${P71_lName}  ${resp.json()['lastName']}
-    Set Suite Variable  ${Ph71}  ${resp.json()['primaryPhoneNumber']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid71}  ${decrypted_data['id']}
+    Set Suite Variable  ${P71_fName}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${P71_lName}  ${decrypted_data['lastName']}
+    Set Suite Variable  ${Ph71}  ${decrypted_data['primaryPhoneNumber']}
+ 
+    # Set Suite Variable  ${pid71}  ${resp.json()['id']}
+    # Set Suite Variable  ${P71_fName}  ${resp.json()['firstName']}
+    # Set Suite Variable  ${P71_lName}  ${resp.json()['lastName']}
+    # Set Suite Variable  ${Ph71}  ${resp.json()['primaryPhoneNumber']}
 
     ${accId71}=  get_acc_id  ${PUSERNAME71}
     Set Suite Variable  ${accId71}
@@ -83,7 +91,7 @@ JD-TC-EnableOrderSettings-1
     Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}        ${Ph71}
     Should Be Equal As Strings  ${resp.json()['storeContactInfo']['email']}        ${email_id71}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -92,12 +100,20 @@ JD-TC-EnableOrderSettings-1
 JD-TC-EnableOrderSettings-2
     [Documentation]   Enable Order Settings after disable order settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid29}  ${resp.json()['id']}
-    Set Suite Variable  ${P29_fName}  ${resp.json()['firstName']}
-    Set Suite Variable  ${P29_lName}  ${resp.json()['lastName']}
-    Set Suite Variable  ${Ph29}  ${resp.json()['primaryPhoneNumber']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid29}  ${decrypted_data['id']}
+    Set Suite Variable  ${P29_fName}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${P29_lName}  ${decrypted_data['lastName']}
+    Set Suite Variable  ${Ph29}  ${decrypted_data['primaryPhoneNumber']}
+
+    # Set Suite Variable  ${pid29}  ${resp.json()['id']}
+    # Set Suite Variable  ${P29_fName}  ${resp.json()['firstName']}
+    # Set Suite Variable  ${P29_lName}  ${resp.json()['lastName']}
+    # Set Suite Variable  ${Ph29}  ${resp.json()['primaryPhoneNumber']}
 
     ${accId29}=  get_acc_id  ${PUSERNAME29}
     Set Suite Variable  ${accId29}
@@ -162,7 +178,7 @@ JD-TC-EnableOrderSettings-2
 JD-TC-EnableOrderSettings-3
     [Documentation]   Disable order settings using Updation, after that Enable Order Settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${p_id}  ${resp.json()['id']}
     
@@ -225,12 +241,15 @@ JD-TC-EnableOrderSettings-3
 JD-TC-EnableOrderSettings-4
     [Documentation]   Add Email using Updation, after that Enable Order Settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid34}  ${resp.json()['id']}
-    Set Suite Variable  ${P34_fName}  ${resp.json()['firstName']}
-    Set Suite Variable  ${P34_lName}  ${resp.json()['lastName']}
-    Set Suite Variable  ${Ph34}  ${resp.json()['primaryPhoneNumber']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid34}  ${decrypted_data['id']}
+    Set Suite Variable  ${P34_fName}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${P34_lName}  ${decrypted_data['lastName']}
+    Set Suite Variable  ${Ph34}  ${decrypted_data['primaryPhoneNumber']}
 
     ${accId34}=  get_acc_id  ${PUSERNAME79}
     Set Suite Variable  ${accId34}
@@ -306,12 +325,15 @@ JD-TC-EnableOrderSettings-UH2
 JD-TC-EnableOrderSettings-UH3
     [Documentation]   Enable Order Settings again
 
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid13}  ${resp.json()['id']}
-    Set Suite Variable  ${P13_fName}  ${resp.json()['firstName']}
-    Set Suite Variable  ${P13_lName}  ${resp.json()['lastName']}
-    Set Suite Variable  ${Ph13}  ${resp.json()['primaryPhoneNumber']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid13}  ${decrypted_data['id']}
+    Set Suite Variable  ${P13_fName}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${P13_lName}  ${decrypted_data['lastName']}
+    Set Suite Variable  ${Ph13}  ${decrypted_data['primaryPhoneNumber']}
 
     ${accId13}=  get_acc_id  ${PUSERNAME13}
     Set Suite Variable  ${accId13}
@@ -354,12 +376,15 @@ JD-TC-EnableOrderSettings-UH3
 JD-TC-EnableOrderSettings-5
     [Documentation]   Enable Order Settings without adding Email
 
-    ${resp}=  ProviderLogin  ${PUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid33}  ${resp.json()['id']}
-    Set Suite Variable  ${P33_fName}  ${resp.json()['firstName']}
-    Set Suite Variable  ${P33_lName}  ${resp.json()['lastName']}
-    Set Suite Variable  ${Ph33}  ${resp.json()['primaryPhoneNumber']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid33}  ${decrypted_data['id']}
+    Set Suite Variable  ${P33_fName}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${P33_lName}  ${decrypted_data['lastName']}
+    Set Suite Variable  ${Ph33}  ${decrypted_data['primaryPhoneNumber']}
 
     ${accId33}=  get_acc_id  ${PUSERNAME11}
     Set Suite Variable  ${accId33}

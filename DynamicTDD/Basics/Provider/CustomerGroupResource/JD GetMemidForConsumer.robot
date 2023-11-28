@@ -20,7 +20,7 @@ ${self}                   0
 JD-TC-GetMemIdforaConsumer-1
 
     [Documentation]   get  member id for a consumer
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -105,7 +105,7 @@ JD-TC-GetMemIdforaConsumer-2
 
     [Documentation]  Add different member id for same consumer in two different  consumer group  and get member id
 
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -191,7 +191,7 @@ JD-TC-GetMemIdforaConsumer-3
 
     [Documentation]  Add different  member id for different consumer, same  consumer group  and get member id
 
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -270,7 +270,7 @@ JD-TC-GetMemIdforaConsumer-4
 
     [Documentation]  Add  different member id for different consumer in two different  consumer groups   and get member id
    
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -380,7 +380,7 @@ JD-TC-GetMemIdforaConsumer-5
 
     [Documentation]  Add  same member id for same consumer  in two different  consumer group and get member id
    
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -465,7 +465,7 @@ JD-TC-GetMemIdforaConsumer-6
 
     [Documentation]  Add same member id for  different  consumer in two different   consumer group  and get member id
    
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -606,7 +606,7 @@ JD-TC-GetMemIdforaConsumer-UH2
 JD-TC-GetMemIdforaConsumer-UH3
 
     [Documentation]  get member id with another group name
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_customer_groups  ${PUSERNAME77}
@@ -650,7 +650,7 @@ JD-TC-GetMemIdforaConsumer-UH3
 JD-TC-GetMemIdforaConsumer-UH4
 
     [Documentation]  get member id  for a consumer in another cutomer group
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -708,7 +708,7 @@ JD-TC-GetMemIdforaConsumer-UH4
 JD-TC-GetMemIdforaConsumer-UH5
 
     [Documentation]   get member id for a customer, that customer doesn't exit customer group  
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
  
@@ -752,7 +752,7 @@ JD-TC-GetMemIdforaConsumer-UH6
 
     [Documentation]  another provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${groupName1}=   FakerLibrary.word
@@ -773,7 +773,7 @@ JD-TC-GetMemIdforaConsumer-UH6
     Should Be Equal As Strings  ${resp.status_code}   200
 
   
-    ${resp}=  Provider Login  ${PUSERNAME55}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=   Get Member Id of a consumer in a group    ${groupName1}   ${cid} 

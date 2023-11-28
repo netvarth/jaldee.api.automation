@@ -26,7 +26,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-1
 
     [Documentation]  Create an item and add that item to an item group, then delete item from that group.
 
-    ${resp}=  Provider Login  ${MUSERNAME136}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME136}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -129,7 +129,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-2
 
     [Documentation]  Create multiple items and add that items to an item group, then delete one item from the group..
 
-    ${resp}=  Provider Login  ${MUSERNAME137}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME137}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -268,7 +268,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-3
 
     [Documentation]  delete items from the item group by passing empty list of item ids.
 
-    ${resp}=  Provider Login  ${MUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME80}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -372,7 +372,7 @@ JD-TC-AddItemsToItemGroupforUser-7
 
     [Documentation]  Add items to item group by user.
 
-    ${resp}=  Provider Login  ${MUSERNAME131}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME131}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -453,7 +453,7 @@ JD-TC-AddItemsToItemGroupforUser-7
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -538,7 +538,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-UH1
 
     [Documentation]  try to delete items from the item group but that item not added in the group.
 
-    ${resp}=  Provider Login  ${MUSERNAME81}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME81}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -654,7 +654,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-UH2
 
     [Documentation]  delete items from group using another providers group id.
 
-    ${resp}=  Provider Login  ${MUSERNAME82}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME82}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -738,7 +738,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME83}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME83}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -769,7 +769,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME82}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME82}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -784,7 +784,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-UH3
 
     [Documentation]  try to delete another providers items from the group.
 
-    ${resp}=  Provider Login  ${MUSERNAME84}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME84}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -818,7 +818,7 @@ JD-TC-DeleteItemsFromItemGroupforUser-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME85}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME85}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

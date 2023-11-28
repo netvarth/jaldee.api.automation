@@ -42,7 +42,7 @@ JD-TC-GetLoanApplicationCountwithFilter-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -276,7 +276,7 @@ JD-TC-GetLoanApplicationCountwithFilter-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -285,6 +285,7 @@ JD-TC-GetLoanApplicationCountwithFilter-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -425,7 +426,7 @@ JD-TC-GetLoanApplicationCountwithFilter-3
                                   
     [Documentation]               Create Loan Application and get the loan with uid filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -453,7 +454,7 @@ JD-TC-GetLoanApplicationCountwithFilter-4
                                   
     [Documentation]               Create Loan Application and get the loan with customer filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -480,7 +481,7 @@ JD-TC-GetLoanApplicationCountwithFilter-5
                                   
     [Documentation]               Create Loan Application and get the loan with customerFirstName filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -507,7 +508,7 @@ JD-TC-GetLoanApplicationCountwithFilter-6
                                   
     [Documentation]               Create Loan Application and get the loan with customerLastName filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -534,7 +535,7 @@ JD-TC-GetLoanApplicationCountwithFilter-7
                                   
     [Documentation]               Create Loan Application and get the loan with location filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -562,7 +563,7 @@ JD-TC-GetLoanApplicationCountwithFilter-8
                                   
     [Documentation]               Create Loan Application and get the loan with locationName filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -590,7 +591,7 @@ JD-TC-GetLoanApplicationCountwithFilter-9
                                   
     [Documentation]               Create Loan Application and get the loan with category filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -629,7 +630,7 @@ JD-TC-GetLoanApplicationCountwithFilter-10
                                   
     [Documentation]               Create Loan Application and get the loan with categoryName filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -668,7 +669,7 @@ JD-TC-GetLoanApplicationCountwithFilter-11
                                   
     [Documentation]               Create Loan Application and get the loan with type filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -708,7 +709,7 @@ JD-TC-GetLoanApplicationCountwithFilter-12
                                   
     [Documentation]               Create Loan Application and get the loan with typeName filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -750,7 +751,7 @@ JD-TC-GetLoanApplicationCountwithFilter-13
                                   
     [Documentation]               Create Loan Application and get the loan with status filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -796,7 +797,7 @@ JD-TC-GetLoanApplicationCountwithFilter-14
                                   
     [Documentation]               Create Loan Application and get the loan with statusName filter.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME11}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -874,7 +875,7 @@ JD-TC-GetLoanApplicationCountwithFilter-UH2
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
     
-#     ${resp}=   ProviderLogin  ${PUSERNAME29}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1053,7 +1054,7 @@ JD-TC-GetLoanApplicationCountwithFilter-UH2
                                   
 #     [Documentation]               Create Loan Application and get the loan application filter Count.
 
-#     ${resp}=   ProviderLogin  ${PUSERNAME29}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1070,7 +1071,7 @@ JD-TC-GetLoanApplicationCountwithFilter-UH2
                                   
 #     [Documentation]               Login a Provider then call Get Loan Application Count with filter.
 
-#     ${resp}=   ProviderLogin  ${PUSERNAME25}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME25}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 

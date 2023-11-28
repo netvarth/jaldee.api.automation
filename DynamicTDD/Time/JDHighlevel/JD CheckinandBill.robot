@@ -34,9 +34,9 @@ ${jcoupon2}   CouponMul01
 ${coupon}   Mulcoupon
 
 *** Test Cases ***
-YNW-TC-Checkin and Bill-1
+JD-TC-Checkin and Bill-1
 	Comment  create bill when parent cancel the waitlist and the bill is created to a member
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Update Account Payment Settings   False  False  True  1888888888   ABCDE1234G  101010101010  icicbank  IFCcodd11234  BIJU  BIJU  Trissur  Individual  Saving   
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -48,7 +48,7 @@ YNW-TC-Checkin and Bill-1
     ${resp}=  SetMerchantId  ${pid}  4825051
     ${pid}=  get_acc_id  ${PUSERNAME6}
     Set Suite Variable  ${pid}
-    ${DAY}=  get_date   
+    ${DAY}=  db.get_date_by_timezone  ${tz}   
     Set Suite Variable  ${DAY} 
     ${resp}=  Update Tax Percentage  12  12DEFBV1100M2Z5 
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -95,7 +95,7 @@ YNW-TC-Checkin and Bill-1
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.json()}
@@ -112,7 +112,7 @@ YNW-TC-Checkin and Bill-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Enable Jaldee Coupon By Provider  ${jcoupon1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -236,7 +236,7 @@ YNW-TC-Checkin and Bill-1
 
     change_system_date  1
 
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 

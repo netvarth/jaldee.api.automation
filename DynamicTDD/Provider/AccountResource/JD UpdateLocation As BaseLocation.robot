@@ -16,29 +16,37 @@ Suite Setup     Run Keyword  clear_location  ${PUSERNAME8}
 
 JD-TC-UpdateBaseLocation-1
       [Documentation]  Update a base location by provider login
-      ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${city}=   get_place
+      # ${city}=   get_place
+      # Set Suite Variable  ${city}
+      # ${latti}=  get_latitude
+      # Set Suite Variable  ${latti}
+      # ${longi}=  get_longitude
+      # Set Suite Variable  ${longi}
+      # ${postcode}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode}
+      # ${address}=  get_address
+      # Set Suite Variable  ${address}
+      ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+      ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+      Set Suite Variable  ${tz}
       Set Suite Variable  ${city}
-      ${latti}=  get_latitude
       Set Suite Variable  ${latti}
-      ${longi}=  get_longitude
       Set Suite Variable  ${longi}
-      ${postcode}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode}
-      ${address}=  get_address
       Set Suite Variable  ${address}
       ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
       Set Suite Variable  ${parking_type}
       ${24hours}    Random Element    ['True','False']
       Set Suite Variable  ${24hours}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
     	Set Suite Variable  ${DAY}
 	${list}=  Create List  1  2  3  4  5  6  7
     	Set Suite Variable  ${list}
-      ${sTime}=  add_time  0  15
+      ${sTime}=  add_timezone_time  ${tz}  0  15  
       Set Suite Variable   ${sTime}
-      ${eTime}=  add_time   0  30
+      ${eTime}=  add_timezone_time  ${tz}  0  30  
       Set Suite Variable   ${eTime}
       ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
       Log  ${resp.json()}
@@ -65,52 +73,68 @@ JD-TC-UpdateBaseLocation-2
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
       Set Suite Variable  ${PUSERNAME_D}
-      ${city1}=   FakerLibrary.state
+      # ${city1}=   get_place
+      # Set Suite Variable  ${city1}
+      # ${latti1}=  get_latitude
+      # Set Suite Variable  ${latti1}
+      # ${longi1}=  get_longitude
+      # Set Suite Variable  ${longi1}
+      # ${postcode1}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode1}
+      # ${address1}=  get_address
+      # Set Suite Variable  ${address1}
+      ${latti1}  ${longi1}  ${postcode1}  ${city1}  ${district}  ${state}  ${address1}=  get_loc_details
+      ${tz1}=   db.get_Timezone_by_lat_long   ${latti1}  ${longi1}
+      Set Suite Variable  ${tz1}
       Set Suite Variable  ${city1}
-      ${latti1}=  get_latitude
       Set Suite Variable  ${latti1}
-      ${longi1}=  get_longitude
       Set Suite Variable  ${longi1}
-      ${postcode1}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode1}
-      ${address1}=  get_address
       Set Suite Variable  ${address1}
       ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
       Set Suite Variable  ${parking_type}
       ${24hours1}    Random Element    ${bool}
       Set Suite Variable  ${24hours1}
-      ${sTime1}=  add_time  0  35
+      ${sTime1}=  add_timezone_time  ${tz}  0  35  
       Set Suite Variable   ${sTime1}
-      ${eTime1}=  add_time   0  40
+      ${eTime1}=  add_timezone_time  ${tz}  0  30  
       Set Suite Variable   ${eTime1}
       ${resp}=  Create Location  ${city1}  ${longi1}  ${latti1}  www.${city1}.com  ${postcode1}  ${address1}  ${parking_type}  ${24hours1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${city2}=   FakerLibrary.last_name
+      # ${city2}=   get_place
+      # Set Suite Variable  ${city2}
+      # ${latti2}=  get_latitude
+      # Set Suite Variable  ${latti2}
+      # ${longi2}=  get_longitude
+      # Set Suite Variable  ${longi2}
+      # ${postcode2}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode2}
+      # ${address2}=  get_address
+      # Set Suite Variable  ${address2}
+      ${latti2}  ${longi2}  ${postcode2}  ${city2}  ${district}  ${state}  ${address2}=  get_loc_details
+      ${tz2}=   db.get_Timezone_by_lat_long   ${latti2}  ${longi2}
+      Set Suite Variable  ${tz2}
       Set Suite Variable  ${city2}
-      ${latti2}=  get_latitude
       Set Suite Variable  ${latti2}
-      ${longi2}=  get_longitude
       Set Suite Variable  ${longi2}
-      ${postcode2}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode2}
-      ${address2}=  get_address
       Set Suite Variable  ${address2}
       ${parking_type2}    Random Element     ['none','free','street','privatelot','valet','paid']
       Set Suite Variable  ${parking_type2}
       ${24hours2}    Random Element    ${bool}
       Set Suite Variable   ${24hours2}
-     # ${d1}=  get_weekday 
+     # ${d1}=  get_timezone_weekday  ${tz} 
      # ${d1}=  Create List  ${d1}
      # Set Suite Variable  ${d1} 
-      ${sTime2}=  add_time  0  45
+      ${sTime2}=  add_timezone_time  ${tz}  0  45  
       Set Suite Variable   ${sTime2}
-      ${eTime2}=  add_time   0  50
+      ${eTime2}=  add_timezone_time  ${tz}  0  50  
       Set Suite Variable   ${eTime2}
       ${resp}=  Create Location  ${city2}  ${longi2}  ${latti2}  www.${city2}.com  ${postcode2}  ${address2}  ${parking_type2}  ${24hours2}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}
       Log  ${resp.json()}
@@ -122,7 +146,7 @@ JD-TC-UpdateBaseLocation-2
 
 JD-TC-VerifyUpdateBaseLocation-3
 	[Documentation]  Verify location details by provider login ${PUSERNAME_D}
-      ${resp}=  ProviderLogin    ${PUSERNAME_D}   ${PASSWORD}
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME_D}   ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  UpdateBaseLocation  ${lid2} 
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -151,7 +175,7 @@ JD-TC-UpdateBaseLocation-UH2
        
 JD-TC-UpdateBaseLocation-UH3
       [Documentation]  Update a base location by provider login using another providers  location id
-      ${resp}=  ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200    
       ${resp}=  UpdateBaseLocation  ${lid}   
       Should Be Equal As Strings  ${resp.status_code}  401
@@ -159,7 +183,7 @@ JD-TC-UpdateBaseLocation-UH3
       
 JD-TC-UpdateBaseLocation-UH4
       [Documentation]  Update a base location by provider login invalid location id
-      ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200   
       ${resp}=  UpdateBaseLocation  0    
       Should Be Equal As Strings    ${resp.status_code}   422
@@ -167,7 +191,7 @@ JD-TC-UpdateBaseLocation-UH4
 
 JD-TC-VerifyUpdateBaseLocation-1
 	[Documentation]  Verify location details by provider login ${PUSERNAME8}
-      ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  UpdateBaseLocation  ${lid} 
       Should Be Equal As Strings  ${resp.status_code}  200

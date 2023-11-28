@@ -25,8 +25,11 @@ JD-TC-AddFavouriteProvider-1
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  List Favourite Provider
       Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response List  ${resp}  0  id=${id}
-      Consumer Logout          
+      ${resp}=  Consumer Logout
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200      
  
 JD-TC-AddFavouriteProvider-2
       [Documentation]  a provider is being added as favourite by multiple consumers
@@ -39,8 +42,12 @@ JD-TC-AddFavouriteProvider-2
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  List Favourite Provider
       Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response List  ${resp}  0  id=${id}  
-      Consumer Logout
+      ${resp}=  Consumer Logout
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      
       ${resp}=  Consumer Login  ${CUSERNAME2}  ${PASSWORD}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -49,6 +56,7 @@ JD-TC-AddFavouriteProvider-2
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  List Favourite Provider
       Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response List  ${resp}  0  id=${id}      
 
 # JD-TC-AddFavouriteProvider-3
@@ -144,7 +152,7 @@ JD-TC-AddFavouriteProvider-UH5
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${INACTIVE_PUSER}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Provider Login  ${INACTIVE_PUSER}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${INACTIVE_PUSER}  ${PASSWORD}
       Should Be Equal As Strings    ${resp.status_code}    200
       # comment  Consumer adding a inactive account as favourite
       ${resp}=  Consumer Login  ${CUSERNAME0}  ${PASSWORD}

@@ -28,7 +28,7 @@ JD-TC-DeleteItemGroupImage-1
 
     [Documentation]  delete item group image after uploading it..
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -69,7 +69,7 @@ JD-TC-DeleteItemGroupImage-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -99,7 +99,7 @@ JD-TC-DeleteItemGroupImage-2
 
     [Documentation]  upload mutiple item images to the same group and then delete one of them.
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -115,7 +115,7 @@ JD-TC-DeleteItemGroupImage-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -147,7 +147,7 @@ JD-TC-DeleteItemGroupImage-UH1
 
     [Documentation]  delete already deleted item image.
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -160,7 +160,7 @@ JD-TC-DeleteItemGroupImage-UH2
 
     [Documentation]  delete using another providers item group id.
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -190,7 +190,7 @@ JD-TC-DeleteItemGroupImage-UH2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -227,7 +227,7 @@ JD-TC-DeleteItemGroupImage-UH5
 
     [Documentation]  upload an image to an item group , then delete that item group and try to delete item image.
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -250,7 +250,7 @@ JD-TC-DeleteItemGroupImage-UH5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME87}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

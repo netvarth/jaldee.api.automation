@@ -42,7 +42,7 @@ JD-TC-Get Search Labels-1
      
 JD-TC-Get Search Labels -2
        [Documentation]   Provider check to Get Search Labels provider login
-       ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
        Should Be Equal As Strings  ${resp.status_code}  200
        ${resp}=  Get Search Labels
        Should Be Equal As Strings    ${resp.status_code}   200  

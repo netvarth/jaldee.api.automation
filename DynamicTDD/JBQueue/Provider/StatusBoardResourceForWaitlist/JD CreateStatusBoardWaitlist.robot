@@ -24,14 +24,14 @@ ${SERVICE3}     Radio Repdca222
 
 JD-TC-CreateStatusBoard-1
 	[Documentation]  Create a StatusBoard for waitlist using queue id
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME150}
     clear_location  ${PUSERNAME150}
     clear_queue   ${PUSERNAME150}
     clear_Statusboard  ${PUSERNAME150}
     clear_Addon  ${PUSERNAME150}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     ${Addon_id}=  get_statusboard_addonId
     ${resp}=  Add addon  ${Addon_id}
@@ -58,7 +58,7 @@ JD-TC-CreateStatusBoard-1
     Set Suite Variable  ${sbq_id1}  ${resp.json()}
     # ${Positions[1]}  ${sbq_id2}
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sbq_id1}  
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sbq_id1}  
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     Set Suite Variable   ${Data11}   ${Data}   
@@ -84,7 +84,7 @@ JD-TC-CreateStatusBoard-1
 JD-TC-CreateStatusBoard-2
 
     [Documentation]   Create a StatusBoard for waitlist using service id
-    ${resp}=  ProviderLogin  ${PUSERNAME132}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME132}
     clear_location  ${PUSERNAME132}
@@ -116,7 +116,7 @@ JD-TC-CreateStatusBoard-2
     Set Suite Variable  ${sbq_id1}  ${resp.json()}
 
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sbq_id1}
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sbq_id1}
 
     
      
@@ -144,10 +144,10 @@ JD-TC-CreateStatusBoard-2
 JD-TC-CreateStatusBoard-3
 
     [Documentation]  Create a another StatusBoard  for a waitlist queueset that has a status board 
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sbq_id1}  
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sbq_id1}  
     Log  ${matric_list}
     Set Suite Variable   ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
@@ -186,7 +186,7 @@ JD-TC-CreateStatusBoard -UH2
 
 JD-TC-CreateStatusBoard-UH3
     [Documentation]  Create a StatusBoard which is already created
-    ${resp}=  ProviderLogin  ${PUSERNAME150}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${Data}=  FakerLibrary.Words  	nb=3
     ${resp}=  Create Status Board waitlist  ${Data11[0]}  ${Data11[1]}  ${Data11[2]}  ${matric_list}
@@ -197,14 +197,14 @@ JD-TC-CreateStatusBoard-UH3
 
 JD-TC-CreateStatusBoard-UH4
 	[Documentation]  Create a StatusBoard with invalid waitlist queue set id
-    ${resp}=  ProviderLogin  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME134}
     clear_location  ${PUSERNAME134}
     clear_queue   ${PUSERNAME134}
     clear_Statusboard  ${PUSERNAME134}
     clear_Addon  ${PUSERNAME134}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     ${Addon_id}=  get_statusboard_addonId
     ${resp}=  Add addon  ${Addon_id}
@@ -212,7 +212,7 @@ JD-TC-CreateStatusBoard-UH4
     Should Be Equal As Strings  ${resp.status_code}   200
     ${Positions}=  FakerLibrary.Words  	nb=3
     ${invalid_id}=   Random Int   min=-10   max=0
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${invalid_id}
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${invalid_id}
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     ${resp}=  Create Status Board waitlist  ${Data[0]}  ${Data[1]}  ${Data[2]}  ${matric_list}
@@ -222,13 +222,13 @@ JD-TC-CreateStatusBoard-UH4
 
 JD-TC-CreateStatusBoard-UH5
 	[Documentation]  Create a StatusBoard with empty metric list
-    ${resp}=  ProviderLogin  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME134}
     clear_location  ${PUSERNAME134}
     clear_queue   ${PUSERNAME134}
     clear_Statusboard  ${PUSERNAME134}
-    ${matric_list}=  Create Matric For Status Board  ${EMPTY}
+    ${matric_list}=  Create Metric For Status Board  ${EMPTY}
     ${Data}=  FakerLibrary.Words  	nb=3
     ${resp}=  Create Status Board waitlist  ${Data[0]}  ${Data[1]}  ${Data[2]}  ${matric_list}
     Log  ${resp.json()}
@@ -237,14 +237,14 @@ JD-TC-CreateStatusBoard-UH5
 
 JD-TC-CreateStatusBoard-UH6
 	[Documentation]  Create a StatusBoard with empty status board name
-    ${resp}=  ProviderLogin  ${PUSERNAME125}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME125}
     clear_location  ${PUSERNAME125}
     clear_queue   ${PUSERNAME125}
     clear_Statusboard  ${PUSERNAME125}
     clear_Addon  ${PUSERNAME125}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     ${Addon_id}=  get_statusboard_addonId
     ${resp}=  Add addon  ${Addon_id}
@@ -267,7 +267,7 @@ JD-TC-CreateStatusBoard-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sbq_id1}  ${resp.json()}
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sbq_id1}
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sbq_id1}
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     ${resp}=  Create Status Board waitlist  ${EMPTY}  ${Data[1]}  ${Data[2]}  ${matric_list}
@@ -277,14 +277,14 @@ JD-TC-CreateStatusBoard-UH6
 
 JD-TC-CreateStatusBoard-UH7
 	[Documentation]  Create a StatusBoard with empty status board layout
-    ${resp}=  ProviderLogin  ${PUSERNAME125}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME125}
     clear_location  ${PUSERNAME125}
     clear_queue   ${PUSERNAME125}
     clear_Statusboard  ${PUSERNAME125}
     clear_Addon  ${PUSERNAME125}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     ${Addon_id}=  get_statusboard_addonId
     ${resp}=  Add addon  ${Addon_id}
@@ -307,7 +307,7 @@ JD-TC-CreateStatusBoard-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sbq_id1}  ${resp.json()}
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sbq_id1}
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sbq_id1}
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     ${resp}=  Create Status Board waitlist   ${Data[0]}  ${Data[1]}  ${EMPTY}  ${matric_list}
@@ -317,14 +317,14 @@ JD-TC-CreateStatusBoard-UH7
 
 JD-TC-CreateStatusBoard-UH8
 	[Documentation]  Create a StatusBoard with empty status board display name
-    ${resp}=  ProviderLogin  ${PUSERNAME125}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME125}
     clear_location  ${PUSERNAME125}
     clear_queue   ${PUSERNAME125}
     clear_Statusboard  ${PUSERNAME125}
     clear_Addon  ${PUSERNAME125}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     ${Addon_id}=  get_statusboard_addonId
     ${resp}=  Add addon  ${Addon_id}
@@ -347,7 +347,7 @@ JD-TC-CreateStatusBoard-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sbq_id1}  ${resp.json()}
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sbq_id1}
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sbq_id1}
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     ${resp}=  Create Status Board waitlist  ${Data[0]}  ${EMPTY}  ${Data[1]}  ${matric_list}

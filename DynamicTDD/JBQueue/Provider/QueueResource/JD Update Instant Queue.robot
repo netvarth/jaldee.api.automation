@@ -36,21 +36,20 @@ Jaldee-TC-UpdateIQ-1
     ${resp}=  Account Set Credential  ${PUSER_J}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${PUSER_J}
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
-    ${DAY1}=  get_date 
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${stime}=  add_time  0  15
-    ${etime}=  add_time   0  30
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${DAY1}=  db.get_date_by_timezone  ${tz} 
+    ${stime}=  add_timezone_time  ${tz}  0  15  
+    ${etime}=  add_timezone_time  ${tz}  0  30  
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${stime}  ${etime}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
@@ -69,8 +68,8 @@ Jaldee-TC-UpdateIQ-1
     Set Test Variable  ${p1_s1}  ${srv_result} 
 
     ${ri}=  Create List  @{EMPTY}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -92,13 +91,11 @@ Jaldee-TC-UpdateIQ-1
     Set Test Variable  ${srv_id}   ${resp.json()['services'][0]['id']}
 
     ${p1queue2}=    FakerLibrary.word
-    
-
     ${resp}=  Update Instant Queue  ${p1_q1}  ${p1queue2}  ${recurringtype[4]}  ${ri}  ${DAY1}  ${EMPTY}  ${s_time}  ${e_time}  ${p_serv}  ${cap}  ${loc_id}  ${srv_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     
-    ${today}=   get_weekday
+    ${today}=   get_timezone_weekday  ${tz}
     ${today}=   Convert To String  ${today}
     ${ri_today}=  Create List  ${today}
     ${resp}=  Get Queue ById  ${p1_q1}
@@ -117,10 +114,11 @@ Jaldee-TC-UpdateIQ-1
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}   ${srv_id}
     Should Be Equal As Strings  ${resp.json()['instantQueue']}   ${bool[1]}
 
+
 Jaldee-TC-UpdateIQ-2
     [Documentation]    Update start time and end time of Instant queue
     [Setup]   clear_queue  ${PUSER_J}
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Service
@@ -132,11 +130,12 @@ Jaldee-TC-UpdateIQ-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -154,11 +153,11 @@ Jaldee-TC-UpdateIQ-2
     Should Be Equal As Strings  ${resp.json()['instantQueue']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['queueState']}   ${Qstate[0]}
 
-    ${stime2}=  add_time  1  15
-    
-    ${etime2}=  add_time  1  30
     
     
+    ${stime2}=  add_timezone_time  ${tz}  1  15  
+    
+    ${etime2}=  add_timezone_time  ${tz}  1  30  
     ${resp}=  Update Instant Queue  ${p1_q1}  ${p1queue1}  ${recurringtype[4]}  ${ri}  ${DAY1}  ${EMPTY}  ${stime2}  ${etime2}  ${parallel}  ${capacity}  ${lid1}  ${sid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
@@ -181,7 +180,7 @@ Jaldee-TC-UpdateIQ-2
 Jaldee-TC-UpdateIQ-3
     [Documentation]    Update instant queue time to a DISABLED instant queue's time
     [Setup]   clear_queue  ${PUSER_J}
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Service
@@ -193,11 +192,12 @@ Jaldee-TC-UpdateIQ-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -215,8 +215,8 @@ Jaldee-TC-UpdateIQ-3
     Should Be Equal As Strings  ${resp.json()['queueState']}   ${Qstate[0]}
     Should Be Equal As Strings   ${resp.json()['instantQueue']}   ${bool[1]}
 
-    ${stime4}=  add_time  2  15
-    ${etime4}=  add_time    2  30
+    ${stime4}=  add_timezone_time  ${tz}  2  15  
+    ${etime4}=  add_timezone_time  ${tz}    2  30
     ${p1queue2}=    FakerLibrary.word
     ${capacity1}=  FakerLibrary.Numerify  %%%
     ${parallel1}=  FakerLibrary.Numerify  %
@@ -280,7 +280,7 @@ Jaldee-TC-UpdateIQ-3
 Jaldee-TC-UpdateIQ-4
     [Documentation]    Update parallel serving of Instant queue
     [Setup]   clear_queue  ${PUSER_J}
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Service
@@ -292,11 +292,12 @@ Jaldee-TC-UpdateIQ-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -343,7 +344,7 @@ Jaldee-TC-UpdateIQ-4
 Jaldee-TC-UpdateIQ-5
     [Documentation]    Update capacity of Instant queue
     [Setup]   clear_queue  ${PUSER_J}
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Service
@@ -355,11 +356,12 @@ Jaldee-TC-UpdateIQ-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -404,7 +406,7 @@ Jaldee-TC-UpdateIQ-5
 Jaldee-TC-UpdateIQ-6
     [Documentation]    Update Service of Instant queue
     [Setup]   clear_queue  ${PUSER_J}
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
  
     ${resp}=   Get Service
@@ -416,11 +418,12 @@ Jaldee-TC-UpdateIQ-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -474,7 +477,7 @@ Jaldee-TC-UpdateIQ-6
 Jaldee-TC-UpdateIQ-7
     [Documentation]    Add multiple services to Instant queue
     [Setup]   clear_queue  ${PUSER_J}
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Service
@@ -487,11 +490,12 @@ Jaldee-TC-UpdateIQ-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}       
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -537,7 +541,7 @@ Jaldee-TC-UpdateIQ-7
 Jaldee-TC-UpdateIQ-9
     [Documentation]    Update location of Instant queue
     [Setup]   clear_queue  ${PUSER_J}
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Service
@@ -549,11 +553,12 @@ Jaldee-TC-UpdateIQ-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
-    ${stime2}=  add_time  1  15
-    ${etime2}=  add_time  1  30
+    ${stime2}=  add_timezone_time  ${tz}  1  15  
+    ${etime2}=  add_timezone_time  ${tz}  1  30  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -577,15 +582,14 @@ Jaldee-TC-UpdateIQ-9
     Should Be Equal As Strings  ${resp.json()['instantQueue']}   ${bool[1]}
 
     #clear_location  ${PUSER_J}
-    ${DAY1}=  get_date
+     
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
+    ${etime1}=  add_timezone_time  ${tz}  1  0 
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -615,7 +619,7 @@ Jaldee-TC-UpdateIQ-9
 Jaldee-TC-UpdateIQ-10
     [Documentation]    Update instant queue with multiple service list of same service
     [Setup]   clear_queue  ${PUSER_J}
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Service
@@ -628,11 +632,12 @@ Jaldee-TC-UpdateIQ-10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
-    ${stime2}=  add_time  1  15
-    ${etime2}=  add_time  1  30
+    ${stime2}=  add_timezone_time  ${tz}  1  15  
+    ${etime2}=  add_timezone_time  ${tz}  1  30  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -681,7 +686,7 @@ Jaldee-TC-UpdateIQ-10
 Jaldee-TC-UpdateIQ-UH-1
     [Documentation]    Update start time and end time of Instant queue to past time 
     [Setup]   clear_queue  ${PUSER_J}
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Service
@@ -694,11 +699,12 @@ Jaldee-TC-UpdateIQ-UH-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
-    ${stime2}=  add_time  1  15
-    ${etime2}=  add_time  1  30
+    ${stime2}=  add_timezone_time  ${tz}  1  15  
+    ${etime2}=  add_timezone_time  ${tz}  1  30  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -716,9 +722,9 @@ Jaldee-TC-UpdateIQ-UH-1
     Should Be Equal As Strings  ${resp.json()['instantQueue']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['queueState']}   ${Qstate[0]}
 
-    ${old_stime}=  subtract_time   0  30
+    ${old_stime}=  db.subtract_timezone_time  ${tz}   0  30
     Set Test Variable   ${old_stime}  
-    ${old_etime}=  subtract_time   0  15
+    ${old_etime}=  db.subtract_timezone_time  ${tz}   0  15
     Set Test Variable   ${old_etime}
 
     ${resp}=  Update Instant Queue  ${p1_q1}  ${p1queue1}  ${recurringtype[4]}  ${ri}  ${DAY1}  ${EMPTY}  ${old_stime}  ${old_etime}  ${parallel}  ${capacity}  ${lid1}  ${sid1} 
@@ -729,7 +735,7 @@ Jaldee-TC-UpdateIQ-UH-1
 Jaldee-TC-UpdateIQ-UH-2
     [Documentation]    Update end time of Instant queue to time before start time. 
     [Setup]   clear_queue  ${PUSER_J}
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Service
@@ -742,11 +748,12 @@ Jaldee-TC-UpdateIQ-UH-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
-    ${stime2}=  add_time  1  15
-    ${etime2}=  add_time  1  30
+    ${stime2}=  add_timezone_time  ${tz}  1  15  
+    ${etime2}=  add_timezone_time  ${tz}  1  30  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -764,7 +771,7 @@ Jaldee-TC-UpdateIQ-UH-2
     Should Be Equal As Strings  ${resp.json()['instantQueue']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['queueState']}   ${Qstate[0]}
 
-    ${etime1}=  add_time  1  0
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     
     ${resp}=  Update Instant Queue  ${p1_q1}  ${p1queue1}  ${recurringtype[4]}  ${ri}  ${DAY1}  ${EMPTY}  ${stime2}  ${etime1}  ${parallel}  ${capacity}  ${lid1}  ${sid1} 
     Log  ${resp.json()}
@@ -774,7 +781,7 @@ Jaldee-TC-UpdateIQ-UH-2
 Jaldee-TC-UpdateIQ-UH-3
     [Documentation]    Update name of instant queue to already existing queue name
     [Setup]   clear_queue  ${PUSER_J}
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Service
@@ -787,11 +794,12 @@ Jaldee-TC-UpdateIQ-UH-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
-    ${stime2}=  add_time  1  15
-    ${etime2}=  add_time  1  30
+    ${stime2}=  add_timezone_time  ${tz}  1  15  
+    ${etime2}=  add_timezone_time  ${tz}  1  30  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -809,8 +817,8 @@ Jaldee-TC-UpdateIQ-UH-3
     Should Be Equal As Strings  ${resp.json()['instantQueue']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['queueState']}   ${Qstate[0]}
 
-    ${stime3}=  add_time  1  45
-    ${etime3}=  add_time    2  0
+    ${stime3}=  add_timezone_time  ${tz}  1  45  
+    ${etime3}=  add_timezone_time  ${tz}    2  0
     ${p1queue2}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -836,7 +844,7 @@ Jaldee-TC-UpdateIQ-UH-3
 Jaldee-TC-UpdateIQ-UH-4
     [Documentation]    Update instant queue time to existing instant queue time
     [Setup]   clear_queue  ${PUSER_J}
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Service
@@ -848,11 +856,12 @@ Jaldee-TC-UpdateIQ-UH-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -863,7 +872,6 @@ Jaldee-TC-UpdateIQ-UH-4
 
     ${resp}=  Get Queue ById  ${p1_q1}
     Log  ${resp.json()}
-    ${resp}=  Get Queue ById  ${p1_q1}
     Should Be Equal As Strings  ${resp.status_code}   200
     Should Be Equal As Strings  ${resp.json()['name']}   ${p1queue1}
     Should Be Equal As Strings  ${resp.json()['queueSchedule']['timeSlots'][0]['sTime']}   ${stime1}
@@ -873,8 +881,8 @@ Jaldee-TC-UpdateIQ-UH-4
     Should Be Equal As Strings  ${resp.json()['queueState']}   ${Qstate[0]}
     
      
-    ${stime2}=  add_time  1  15
-    ${etime2}=  add_time  1  30
+    ${stime2}=  add_timezone_time  ${tz}  1  15  
+    ${etime2}=  add_timezone_time  ${tz}  1  30  
     ${p1queue2}=    FakerLibrary.word 
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -900,7 +908,7 @@ Jaldee-TC-UpdateIQ-UH-4
 Jaldee-TC-UpdateIQ-UH-6
     [Documentation]    Update instant queue with non existant location
     [Setup]   clear_queue  ${PUSER_J}
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Service
@@ -912,11 +920,12 @@ Jaldee-TC-UpdateIQ-UH-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -927,7 +936,6 @@ Jaldee-TC-UpdateIQ-UH-6
 
     ${resp}=  Get Queue ById  ${p1_q1}
     Log  ${resp.json()}
-    ${resp}=  Get Queue ById  ${p1_q1}
     Should Be Equal As Strings  ${resp.status_code}   200
     Should Be Equal As Strings  ${resp.json()['name']}   ${p1queue1}
     Should Be Equal As Strings  ${resp.json()['queueSchedule']['timeSlots'][0]['sTime']}   ${stime1}
@@ -946,7 +954,7 @@ Jaldee-TC-UpdateIQ-UH-6
 Jaldee-TC-UpdateIQ-UH-7
     [Documentation]    Update instant queue with non existant service
     [Setup]   clear_queue  ${PUSER_J}
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Service
@@ -958,11 +966,12 @@ Jaldee-TC-UpdateIQ-UH-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -973,7 +982,6 @@ Jaldee-TC-UpdateIQ-UH-7
 
     ${resp}=  Get Queue ById  ${p1_q1}
     Log  ${resp.json()}
-    ${resp}=  Get Queue ById  ${p1_q1}
     Should Be Equal As Strings  ${resp.status_code}   200
     Should Be Equal As Strings  ${resp.json()['name']}   ${p1queue1}
     Should Be Equal As Strings  ${resp.json()['queueSchedule']['timeSlots'][0]['sTime']}   ${stime1}
@@ -992,19 +1000,23 @@ Jaldee-TC-UpdateIQ-UH-7
 Jaldee-TC-UpdateIQ-UH-8
     [Documentation]    Update instant queue with another provider's location
     [Setup]  Run Keywords  clear_queue  ${PUSERNAME178}  AND  clear_location  ${PUSERNAME178}  AND   clear_service   ${PUSERNAME178}  AND   clear_queue  ${PUSER_J} 
-    ${resp}=  Provider Login  ${PUSERNAME178}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME178}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     clear_location  ${PUSERNAME178}
-    ${DAY1}=  get_date
+    
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${stime}=  add_timezone_time  ${tz}  0  15  
+    ${etime}=  add_timezone_time  ${tz}  0  30  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${stime}=  add_time  0  15
-    ${etime}=  add_time   0  30
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -1017,7 +1029,7 @@ Jaldee-TC-UpdateIQ-UH-8
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=   Get Service
@@ -1029,11 +1041,12 @@ Jaldee-TC-UpdateIQ-UH-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -1044,7 +1057,6 @@ Jaldee-TC-UpdateIQ-UH-8
 
     ${resp}=  Get Queue ById  ${p1_q1}
     Log  ${resp.json()}
-    ${resp}=  Get Queue ById  ${p1_q1}
     Should Be Equal As Strings  ${resp.status_code}   200
     Should Be Equal As Strings  ${resp.json()['name']}   ${p1queue1}
     Should Be Equal As Strings   ${resp.json()['location']['id']}   ${lid1}
@@ -1062,7 +1074,7 @@ Jaldee-TC-UpdateIQ-UH-8
 Jaldee-TC-UpdateIQ-UH-9
     [Documentation]    Update instant queue with another provider's service
     [Setup]   Run Keywords   clear_queue  ${PUSER_J}   AND   clear_service   ${PUSERNAME187}
-    ${resp}=  Provider Login  ${PUSERNAME187}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME187}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${P2SERVICE1}=    FakerLibrary.word
@@ -1079,7 +1091,7 @@ Jaldee-TC-UpdateIQ-UH-9
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=   Get Service
@@ -1092,12 +1104,13 @@ Jaldee-TC-UpdateIQ-UH-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -1108,7 +1121,6 @@ Jaldee-TC-UpdateIQ-UH-9
 
     ${resp}=  Get Queue ById  ${p1_q1}
     Log  ${resp.json()}
-    ${resp}=  Get Queue ById  ${p1_q1}
     Should Be Equal As Strings  ${resp.status_code}   200
     Should Be Equal As Strings  ${resp.json()['name']}   ${p1queue1}
     Should Be Equal As Strings   ${resp.json()['location']['id']}   ${lid1}
@@ -1136,7 +1148,7 @@ Jaldee-TC-UpdateIQ-8
     comment updating recurring type and not giving repeat intervals gives glitch and
     comment updating recuring type and repeat intervals will change this from instant queue to normal queue.
     [Setup]   clear_queue  ${PUSER_J}
-    ${resp}=  Provider Login  ${PUSER_J}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSER_J}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Service
@@ -1148,11 +1160,12 @@ Jaldee-TC-UpdateIQ-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid1}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${ri}=  Create List  @{EMPTY}
-    ${stime1}=  add_time  0  45
-    ${etime1}=  add_time  1  0
+    ${stime1}=  add_timezone_time  ${tz}  0  45  
+    ${etime1}=  add_timezone_time  ${tz}  1  0  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %

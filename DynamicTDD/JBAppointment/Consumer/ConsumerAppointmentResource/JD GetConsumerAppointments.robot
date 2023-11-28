@@ -22,6 +22,7 @@ ${SERVICE3}  sampleservice3
 ${SERVICE4}  sampleservice4
 ${self}     0
 ${digits}       0123456789
+${CUSERPH}      ${CUSERNAME}
 
 *** Test Cases ***
 
@@ -29,7 +30,7 @@ JD-TC-GetConsumerAppointments-1
 
     [Documentation]  Get consumer appointments for today and future.
 
-    ${resp}=  Provider Login  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid1}=  get_acc_id  ${PUSERNAME140}
@@ -57,7 +58,7 @@ JD-TC-GetConsumerAppointments-1
     ${resp}=   Get Service
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -75,16 +76,19 @@ JD-TC-GetConsumerAppointments-1
 
     ${lid1}=  Create Sample Location 
     Set Suite Variable  ${lid1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  30
-    ${eTime1}=  add_time  1  00
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime1}=  add_timezone_time  ${tz}  0  30  
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -94,9 +98,10 @@ JD-TC-GetConsumerAppointments-1
     Set Suite Variable  ${lid2}  ${resp.json()} 
     clear_appt_schedule   ${PUSERNAME140}
     
-    ${DAY10}=  add_date  10 
+    ${DAY10}=  db.add_timezone_date  ${tz}  10   
     Set Suite Variable  ${DAY1}     
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
@@ -119,7 +124,8 @@ JD-TC-GetConsumerAppointments-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
 
-    ${sTime2}=  db.get_time
+    # ${sTime2}=  db.get_time_by_timezone   ${tz}  
+    ${sTime2}=  db.get_time_by_timezone  ${tz}  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime1}  ${delta}
 
@@ -138,7 +144,7 @@ JD-TC-GetConsumerAppointments-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${DAY2}=  add_date  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  2  
     Set Suite Variable  ${DAY2}
     
     ${resp}=  Get Appointment Schedule ById  ${sch_id2}
@@ -149,10 +155,38 @@ JD-TC-GetConsumerAppointments-1
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${cid1}=  get_id  ${CUSERNAME30}
+    ${SIGNUP_CONS1}=  Evaluate  ${CUSERPH}+100100203
+    Append To File  ${EXECDIR}/TDD/numbers.txt  ${SIGNUP_CONS1}${\n}
+    Set Suite Variable   ${SIGNUP_CONS1}
+    ${CUSERPH_SECOND}=  Evaluate  ${SIGNUP_CONS1}+1000
+    ${CUSERMAIL2}=   Set Variable  ${C_Email}ph203.${test_mail}
+    ${firstname}=  FakerLibrary.first_name
+    ${lastname}=  FakerLibrary.last_name
+    ${address}=  FakerLibrary.address
+    ${dob}=  FakerLibrary.Date
+    ${gender}    Random Element    ${Genderlist}
+    ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${SIGNUP_CONS1}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERMAIL2}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Consumer Activation  ${CUSERMAIL2}  ${OtpPurpose['ConsumerSignUp']}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Consumer Set Credential  ${CUSERMAIL2}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${SIGNUP_CONS1}${\n}
+
+    # ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${cid1}=  get_id  ${SIGNUP_CONS1}
     Set Suite Variable   ${cid1}
     Set Suite Variable  ${f_Name1}  ${resp.json()['firstName']}
     Set Suite Variable  ${l_Name1}  ${resp.json()['lastName']}
@@ -216,11 +250,11 @@ JD-TC-GetConsumerAppointments-1
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME30}
+    ${resp}=  GetCustomer  phoneNo-eq=${SIGNUP_CONS1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${cons_id1}   ${resp.json()[0]['id']}
@@ -240,7 +274,7 @@ JD-TC-GetConsumerAppointments-1
     ${resp}=  Provider Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -290,11 +324,11 @@ JD-TC-GetConsumerAppointments-2
 
     [Documentation]  Get consumer appointments by service.
 
-    ${resp}=  Provider Login  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -329,7 +363,7 @@ JD-TC-GetConsumerAppointments-2
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -339,7 +373,7 @@ JD-TC-GetConsumerAppointments-2
     ${encId3}=  Set Variable   ${resp.json()}
     Set Suite Variable   ${encId3}  
 
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -369,7 +403,7 @@ JD-TC-GetConsumerAppointments-3
 
     [Documentation]  Get consumer appointments by appointmentEncId.
 
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -399,7 +433,7 @@ JD-TC-GetConsumerAppointments-4
 
     [Documentation]  Get consumer appointments by first name.
 
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -466,7 +500,7 @@ JD-TC-GetConsumerAppointments-5
 
     [Documentation]  Get consumer appointments by last name.
 
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -534,7 +568,7 @@ JD-TC-GetConsumerAppointments-6
 
     [Documentation]  Get consumer appointments by schedule id.
 
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -566,7 +600,7 @@ JD-TC-GetConsumerAppointments-6
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid4}  ${apptid[0]}
 
-    ${resp}=  Provider Login  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -576,7 +610,7 @@ JD-TC-GetConsumerAppointments-6
     ${encId4}=  Set Variable   ${resp.json()}
     Set Suite Variable   ${encId4}  
 
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -666,7 +700,7 @@ JD-TC-GetConsumerAppointments-7
 
     [Documentation]  Get consumer's appointments where appointment taken by consumer(apptBy).
 
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -749,7 +783,7 @@ JD-TC-GetConsumerAppointments-8
 
     [Documentation]  Get consumer appointments by appointment time.
 
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -809,16 +843,19 @@ JD-TC-GetConsumerAppointments-9
     ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${p_id}  ${decrypted_data['id']}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
     Set Suite Variable  ${PUSERNAME_D}
 
-    # ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${p_id}  ${resp.json()['id']}
+    # Set Suite Variable  ${p_id}  ${resp.json()['id']}
 
     Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_D}.${test_mail}
 
@@ -826,7 +863,7 @@ JD-TC-GetConsumerAppointments-9
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_D}+15566124
     ${ph2}=  Evaluate  ${PUSERNAME_D}+25566128
@@ -838,18 +875,22 @@ JD-TC-GetConsumerAppointments-9
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}${PUSERNAME_D}.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -895,14 +936,14 @@ JD-TC-GetConsumerAppointments-9
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    ${DAY2}=  add_date   9      
+    ${DAY2}=  db.add_timezone_date  ${tz}  9      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  5  00
+    ${sTime1}=  add_timezone_time  ${tz}  5  00  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${prov_id}=  get_acc_id  ${PUSERNAME_D}
     
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -948,10 +989,10 @@ JD-TC-GetConsumerAppointments-9
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  4  15
+    ${sTime1}=  add_timezone_time  ${tz}  4  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1004,7 +1045,7 @@ JD-TC-GetConsumerAppointments-9
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot21}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY6}=  add_date   6
+    ${DAY6}=  db.add_timezone_date  ${tz}   6
     Set Suite Variable   ${DAY6}
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${prov_id}  ${ser_id1}  ${schedule_id1}  ${DAY6}  ${cnote}   ${apptfor}
@@ -1027,7 +1068,7 @@ JD-TC-GetConsumerAppointments-9
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}                       ${slot21}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${loc_id1}
 
-    #  ${resp}=  ProviderLogin  ${PUSERNAME_D}  ${PASSWORD}
+    #  ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1085,7 +1126,7 @@ JD-TC-GetConsumerAppointments-9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1128,7 +1169,7 @@ JD-TC-GetConsumerAppointments-10
 
     [Documentation]  Get consumer appointments by location.
 
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1195,7 +1236,7 @@ JD-TC-GetConsumerAppointments-11
 
     [Documentation]  Get consumer appointments by appointment start time.
     
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1256,7 +1297,7 @@ JD-TC-GetConsumerAppointments-12
 
     [Documentation]  Get consumer appointments by Appointment status Arrived.
 
-    ${resp}=  Provider Login  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Appointment Action   ${apptStatus[2]}   ${apptid1}
@@ -1273,7 +1314,7 @@ JD-TC-GetConsumerAppointments-12
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1303,7 +1344,7 @@ JD-TC-GetConsumerAppointments-13
 
     [Documentation]  Get consumer appointments by Appointment status Started.
 
-    ${resp}=  Provider Login  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid1}
@@ -1320,7 +1361,7 @@ JD-TC-GetConsumerAppointments-13
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1350,7 +1391,7 @@ JD-TC-GetConsumerAppointments-14
 
     [Documentation]  Get consumer appointments by Appointment status Completed.
 
-    ${resp}=  Provider Login  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Appointment Action   ${apptStatus[6]}   ${apptid1}
@@ -1367,7 +1408,7 @@ JD-TC-GetConsumerAppointments-14
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1397,7 +1438,7 @@ JD-TC-GetConsumerAppointments-15
 
     [Documentation]  Get consumer appointments by Appointment status Canceled.
 
-    ${resp}=  Provider Login  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${reason}=  Random Element  ${cancelReason}
@@ -1416,7 +1457,7 @@ JD-TC-GetConsumerAppointments-15
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1446,7 +1487,7 @@ JD-TC-GetConsumerAppointments-16
 
     [Documentation]  Get consumer appointments by Appointment status Rejected.
 
-    ${resp}=  Provider Login  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${reason}=  Random Element  ${cancelReason}
@@ -1465,7 +1506,7 @@ JD-TC-GetConsumerAppointments-16
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME30}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1495,7 +1536,7 @@ JD-TC-GetConsumerAppointments-17
 
     [Documentation]  Get consumer's appointments today with provider login
     
-    ${resp}=  Provider Login  ${PUSERNAME141}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME141}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

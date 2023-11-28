@@ -29,7 +29,7 @@ JD-TC-GetSPToken-1
 
     [Documentation]  Get SP Token for a service provider after enabling the api gateway.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -50,7 +50,7 @@ JD-TC-GetSPToken-2
 
     [Documentation]  Get SP Token for a branch(account level) after enabling the api gateway.
 
-    ${resp}=  Provider Login  ${MUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -71,7 +71,7 @@ JD-TC-GetSPToken-UH1
 
     [Documentation]  Get SP Token for a service provider after disabling the api gateway.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -120,7 +120,7 @@ JD-TC-GetSPToken-UH4
 
     [Documentation]  Get SP Token for a branch(account level) after disabling the api gateway.
 
-    ${resp}=  Provider Login  ${MUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

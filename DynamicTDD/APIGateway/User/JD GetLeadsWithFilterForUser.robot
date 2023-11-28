@@ -121,7 +121,7 @@ JD-TC-GetLeadsWithFilterForUser-1
     Set Suite Variable   ${unique_lnames}
 
 
-    ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id1}  ${resp.json()['id']}
@@ -162,8 +162,13 @@ JD-TC-GetLeadsWithFilterForUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=   Get Location ById  ${locId1}
@@ -383,7 +388,7 @@ JD-TC-GetLeadsWithFilterForUser-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${first_name}  ${resp.json()['firstName']}
@@ -542,7 +547,7 @@ JD-TC-GetLeadsWithFilterForUser-2
 
     [Documentation]   Get api lead details for a user having one lead with id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -557,7 +562,7 @@ JD-TC-GetLeadsWithFilterForUser-3
 
     [Documentation]   Get api lead details for a user having one lead with uid.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -572,7 +577,7 @@ JD-TC-GetLeadsWithFilterForUser-4
 
     [Documentation]   Get api lead details for a user having one lead with account. 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -587,12 +592,12 @@ JD-TC-GetLeadsWithFilterForUser-5
 
     [Documentation]   Get api lead details for a user having one lead with createdDate. 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${day}=  get_date
-    ${day1}=  add_date  1
+    ${day}=  db.get_date_by_timezone  ${tz}
+    ${day1}=  db.add_timezone_date  ${tz}  1  
     ${resp}=    Get Leads Details With Filter   ${user_token}  createdDate-eq=${day}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -609,7 +614,7 @@ JD-TC-GetLeadsWithFilterForUser-6
 
     [Documentation]   Get api lead details for a user having one lead with createdBy. 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -624,7 +629,7 @@ JD-TC-GetLeadsWithFilterForUser-7
 
     [Documentation]   Get api lead details for a user having one lead with createdBy. 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -639,7 +644,7 @@ JD-TC-GetLeadsWithFilterForUser-8
 
     [Documentation]   Get api lead details for a user having one lead with originUid. 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -654,7 +659,7 @@ JD-TC-GetLeadsWithFilterForUser-9
 
     [Documentation]   Get api lead details for a user having one lead with originFrom. 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -669,7 +674,7 @@ JD-TC-GetLeadsWithFilterForUser-10
 
     [Documentation]   Get api lead details for a user having one lead with originId. 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -684,7 +689,7 @@ JD-TC-GetLeadsWithFilterForUser-11
 
     [Documentation]   Get api lead details for a user having one lead with isSanctioned. 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -699,7 +704,7 @@ JD-TC-GetLeadsWithFilterForUser-12
 
     [Documentation]   Get api lead details for a user having one lead with customerFirstName. 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -714,7 +719,7 @@ JD-TC-GetLeadsWithFilterForUser-13
 
     [Documentation]   Get api lead details for a user having one lead with assigneeFirstName. 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -729,7 +734,7 @@ JD-TC-GetLeadsWithFilterForUser-14
 
     [Documentation]   Get api lead details for a user having one lead with locationName. 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -744,12 +749,12 @@ JD-TC-GetLeadsWithFilterForUser-15
 
     [Documentation]   Get api lead details for a user having one lead with Created Date range. 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${day}=  get_date
-    ${day1}=  add_date  1
+    ${day}=  db.get_date_by_timezone  ${tz}
+    ${day1}=  db.add_timezone_date  ${tz}  1  
     ${resp}=  Get Leads Details With Filter  ${user_token}  createdDate-ge=${day}  createdDate-le=${day1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -761,7 +766,7 @@ JD-TC-GetLeadsWithFilterForUser-16
 
     [Documentation]   Get api lead details for a user having one lead with uid.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -803,7 +808,7 @@ JD-TC-GetLeadsWithFilterForUser-17
     Log  ${unique_lnames}
     Set Suite Variable   ${unique_lnames}
 
-    ${resp}=  Provider Login  ${MUSERNAME41}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id1}  ${resp.json()['id']}
@@ -843,8 +848,13 @@ JD-TC-GetLeadsWithFilterForUser-17
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=   Get Location ById  ${locId1}
@@ -1045,7 +1055,7 @@ JD-TC-GetLeadsWithFilterForUser-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${MUSERNAME41}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1158,9 +1168,16 @@ JD-TC-GetLeadsWithFilterForUser-17
     
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -1195,7 +1212,7 @@ JD-TC-GetLeadsWithFilterForUser-17
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${first_name1}  ${resp.json()['firstName']}

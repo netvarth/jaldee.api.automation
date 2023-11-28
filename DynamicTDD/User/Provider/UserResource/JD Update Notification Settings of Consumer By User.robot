@@ -59,7 +59,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E1}${\n}
@@ -70,7 +70,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-1
      Set Suite Variable  ${bs}
 
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -84,20 +84,23 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     
-    ${sTime}=  subtract_time  0  10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  10
     Set Suite Variable  ${BsTime30}  ${sTime}
-    ${eTime}=  add_time   1  30
+    ${eTime}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable  ${BeTime30}  ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -125,12 +128,14 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-1
 
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[0]}
-    ${resp}=  Enable Waitlist
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}
+        ${resp}=  Enable Waitlist
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     sleep   01s
 
     ${resp}=  Get jaldeeIntegration Settings
@@ -266,7 +271,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-1
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-2
     [Documentation]   Update Early Notification and Getting Notification Settings of Consumer By USER
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -294,7 +299,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-2
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-3
     [Documentation]   Update Prefinal Notification and Getting Notification Settings of Consumer By USER
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -322,7 +327,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-3
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-4
     [Documentation]   Update Final Notification and Getting Notification Settings of Consumer By USER
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -350,7 +355,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-4
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-5
     [Documentation]   Update Final Notification and Getting Notification Settings of Consumer By USER
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -377,7 +382,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-5
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-6
     [Documentation]   Update AppointmentAdd and Getting Notification Settings of Consumer By USER
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -403,7 +408,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-6
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-7
     [Documentation]   Update Final Notification and Getting Notification Settings of Consumer By USER
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -430,7 +435,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-7
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-8
     [Documentation]   Update prefinal Notification and Getting Notification Settings of Consumer By USER
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -456,7 +461,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-8
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-9
     [Documentation]   Updated all notification settings of consumer By USER u_id1, then Get notification settings of consumer By another USER u_id2
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -557,7 +562,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
     Set Suite Variable  ${f_id1}   ${resp.json()}
     Set Suite Variable  ${uname_f_id1}   ${family_fname1} ${family_lname1}
    
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
@@ -567,15 +572,15 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${bname}   ${resp.json()['businessName']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_time  0  05
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  0  05
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
     Set Test Variable  ${qTime}   ${sTime1}-${eTime1}
     
@@ -628,13 +633,12 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${msg}=  FakerLibrary.word
-    # ${CUR_DAY}=  get_date
-    ${CUR_DAY}=  add_date  2 
+    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${CUR_DAY}=  db.add_timezone_date  ${tz}  2   
     ${date}=  Convert Date  ${CUR_DAY}  result_format=%d-%m-%Y
     ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${CUR_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${cwid0}  ${wid[0]} 
     ${resp}=  Get consumer Waitlist By Id   ${cwid0}  ${p_id}   
@@ -650,7 +654,6 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
     ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${CUR_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${p1_id}  ${f_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${cwid1}  ${wid[0]} 
     ${resp}=  Get consumer Waitlist By Id   ${cwid1}  ${p_id}   
@@ -670,21 +673,21 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${que_id}
 
 
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Waitlist EncodedId    ${cwid0}
     Log   ${resp.json()}
-    Set Suite Variable   ${W_uuid0}   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${W_uuid0}   ${resp.json()}
     
     Set Suite Variable  ${W_encId0}  ${resp.json()}
 
     ${resp}=   Get Waitlist EncodedId    ${cwid1}
     Log   ${resp.json()}
-    Set Suite Variable   ${W_uuid1}   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${W_uuid1}   ${resp.json()}
     
     Set Suite Variable  ${W_encId1}  ${resp.json()}
 
@@ -757,7 +760,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
 
 JD-TC-Update_Notification_Settings_of_ConsumerByUser-11
     [Documentation]   Update Notification Settings and Verify push notifications of APPOINTMENT-CANCEL
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
@@ -791,15 +794,15 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]}   
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_time  3  30
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  3  30
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   1  00
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
     Set Suite Variable   ${eTime1}
 
     ${schedule_name}=  FakerLibrary.bs
@@ -888,7 +891,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-11
 
 
 
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1017,7 +1020,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser -UH1
 JD-TC-Update_Notification_Settings_of_ConsumerByUser -UH2
     [Documentation]   Use provider_id (admin user) to Update Notification Settings of Consumer By User 
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1062,7 +1065,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser -UH3
 JD-TC-Update_Notification_Settings_of_ConsumerByUser -UH4
 	[Documentation]  invalid provider
 
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1078,7 +1081,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser -UH4
 
 JD-TC-Update_Notification_Settings_of_ConsumerByUser -UH5
     [Documentation]  Update Notification Settings of Consumer By User using Disabled USER_id
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1110,7 +1113,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-UH6
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E2}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E2}${\n}
@@ -1152,7 +1155,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-UH6
     Set Suite Variable   ${p0_id40}   ${resp.json()[1]['id']}
 
 
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

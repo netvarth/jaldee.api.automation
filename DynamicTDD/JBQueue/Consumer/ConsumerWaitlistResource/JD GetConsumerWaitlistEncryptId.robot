@@ -20,7 +20,7 @@ ${waitlistedby}           CONSUMER
 JD-TC-GetWaitlistByEncryptedID-1
     [Documentation]   Get Waitlist details By Encrypted ID
     
-    ${resp}=  ProviderLogin  ${PUSERNAME202}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME202}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${pid}=  get_acc_id  ${PUSERNAME202}
@@ -30,17 +30,21 @@ JD-TC-GetWaitlistByEncryptedID-1
     clear waitlist   ${PUSERNAME202}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=   FakerLibrary.name
     Set Suite Variable  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
-    ${sTime1}=  subtract_time  1  00
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  1  00
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  50
+    ${eTime1}=  add_timezone_time  ${tz}  0  50  
     Set Suite Variable   ${eTime1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  70      
+    ${DAY2}=  db.add_timezone_date  ${tz}  70      
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -95,13 +99,13 @@ JD-TC-GetWaitlistByEncryptedID-1
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['lastName']}  ${lastname}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['phoneNo']}  ${CUSERNAME6}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME202}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME202}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Waitlist EncodedId    ${uuid1}
     Log   ${resp.json()}
-    Set Suite Variable   ${W_uuid1}   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${W_uuid1}   ${resp.json()}
     
     Set Suite Variable  ${W_uuid1}  ${resp.json()}
 

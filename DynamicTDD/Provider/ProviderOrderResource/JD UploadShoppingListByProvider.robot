@@ -34,7 +34,7 @@ JD-TC-Upload_ShoppingList_By_Provider-1
     clear_service  ${PUSERNAME73}
     clear_customer   ${PUSERNAME73}
     clear_Item   ${PUSERNAME73}
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -126,22 +126,22 @@ JD-TC-Upload_ShoppingList_By_Provider-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id4}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   1  00 
+    ${eTime1}=  add_timezone_time  ${tz}  1  00   
     Set Suite Variable    ${eTime1}
 
-    ${sTime2}=  add_time  1  05
+    ${sTime2}=  add_timezone_time  ${tz}  1  05  
     Set Suite Variable   ${sTime2}
-    ${eTime2}=  add_time   2  15 
+    ${eTime2}=  add_timezone_time  ${tz}  2  15   
     Set Suite Variable    ${eTime2}
 
 
@@ -251,7 +251,7 @@ JD-TC-Upload_ShoppingList_By_Provider-1
     Should Be Equal As Strings      ${resp.status_code}  200
 
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${firstname}=  FakerLibrary.first_name
     Set Suite Variable  ${email}  ${firstname}${CUSERNAME32}.${test_mail}
 
@@ -269,7 +269,7 @@ JD-TC-Upload_ShoppingList_By_Provider-1
     Set Test Variable  ${orderid1}  ${orderid[0]}
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -299,11 +299,11 @@ JD-TC-Upload_ShoppingList_By_Provider-1
 JD-TC-Upload_ShoppingList_By_Provider-2
     [Documentation]    Place an order By Provider for Home Delivery.           
 
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY10}=  add_date   10
+    ${DAY10}=  db.add_timezone_date  ${tz}   10
     ${C_firstName}=   FakerLibrary.first_name 
     Set Suite Variable  ${C_firstName}
     ${C_lastName}=   FakerLibrary.name 
@@ -374,7 +374,7 @@ JD-TC-Upload_ShoppingList_By_Provider-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mem_id2}  ${resp.json()}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -400,7 +400,7 @@ JD-TC-Upload_ShoppingList_By_Provider-3
 
     ${resp}=  ListFamilyMemberByProvider  ${cid15}
 
-    ${DAY10}=  add_date   10
+    ${DAY10}=  db.add_timezone_date  ${tz}   10
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -425,11 +425,11 @@ JD-TC-Upload_ShoppingList_By_Provider-3
 
 JD-TC-Upload_ShoppingList_By_Provider-4
     [Documentation]    Place an order By Provider using two items_list images.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY10}=  add_date   10
+    ${DAY10}=  db.add_timezone_date  ${tz}   10
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -465,11 +465,11 @@ JD-TC-Upload_ShoppingList_By_Provider-4
 
 JD-TC-Upload_ShoppingList_By_Provider-5
     [Documentation]    Place an order By Provider for today.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${TODAY}=    add_date   10
+    ${TODAY}=    db.add_timezone_date  ${tz}   10
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -494,7 +494,7 @@ JD-TC-Upload_ShoppingList_By_Provider-5
 
 JD-TC-Upload_ShoppingList_By_Provider-6
     [Documentation]    Provider place the order for two consumers using same item_list images.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -506,7 +506,7 @@ JD-TC-Upload_ShoppingList_By_Provider-6
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${DAY1}=  add_date   1
+    ${DAY1}=  db.add_timezone_date  ${tz}  1
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -547,11 +547,11 @@ JD-TC-Upload_ShoppingList_By_Provider-6
 
 JD-TC-Upload_ShoppingList_By_Provider-UH1
     [Documentation]    Place an order By Provider for Home Delivery without home delivery address.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY2}=  add_date   2
+    ${DAY2}=  db.add_timezone_date  ${tz}   2
 
     ${address1}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${EMPTY}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
   
@@ -569,11 +569,11 @@ JD-TC-Upload_ShoppingList_By_Provider-UH1
 
 JD-TC-Upload_ShoppingList_By_Provider-UH2
     [Documentation]    Place an order By Provider for Home Delivery without phone number in home delivery address.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY2}=  add_date   2
+    ${DAY2}=  db.add_timezone_date  ${tz}   2
 
     ${address1}=  Create Dictionary   phoneNumber=${EMPTY}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
     
@@ -591,11 +591,11 @@ JD-TC-Upload_ShoppingList_By_Provider-UH2
 
 JD-TC-Upload_ShoppingList_By_Provider-UH3
     [Documentation]    Place an order By Provider for Home Delivery without firstname in home delivery address.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY2}=  add_date   2
+    ${DAY2}=  db.add_timezone_date  ${tz}   2
 
     ${address1}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${EMPTY}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
     
@@ -613,11 +613,11 @@ JD-TC-Upload_ShoppingList_By_Provider-UH3
 
 JD-TC-Upload_ShoppingList_By_Provider-UH4
     [Documentation]    Place an order By Provider for Home Delivery without lastname in home delivery address.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY2}=  add_date   2
+    ${DAY2}=  db.add_timezone_date  ${tz}   2
 
     ${address1}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${EMPTY}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
     
@@ -635,11 +635,11 @@ JD-TC-Upload_ShoppingList_By_Provider-UH4
 
 JD-TC-Upload_ShoppingList_By_Provider-UH5
     [Documentation]    Place an order By Provider for Home Delivery without email in home delivery address.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY2}=  add_date   2
+    ${DAY2}=  db.add_timezone_date  ${tz}   2
 
     ${address1}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${EMPTY}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
     
@@ -657,11 +657,11 @@ JD-TC-Upload_ShoppingList_By_Provider-UH5
 
 JD-TC-Upload_ShoppingList_By_Provider-UH6
     [Documentation]    Place an order By Provider for Home Delivery without city in home delivery address.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY2}=  add_date   2
+    ${DAY2}=  db.add_timezone_date  ${tz}   2
 
     ${address1}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${EMPTY}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
     
@@ -679,11 +679,11 @@ JD-TC-Upload_ShoppingList_By_Provider-UH6
 
 JD-TC-Upload_ShoppingList_By_Provider-UH7
     [Documentation]    Place an order By Provider for Home Delivery without postalcode in home delivery address.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY2}=  add_date   2
+    ${DAY2}=  db.add_timezone_date  ${tz}   2
 
     ${address1}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${EMPTY}    landMark=${landMark}   countryCode=${countryCodes[0]}
     
@@ -701,11 +701,11 @@ JD-TC-Upload_ShoppingList_By_Provider-UH7
 
 JD-TC-Upload_ShoppingList_By_Provider-UH8
     [Documentation]    Place an order By Provider for Home Delivery without country_code in home delivery address.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY2}=  add_date   2
+    ${DAY2}=  db.add_timezone_date  ${tz}   2
 
     ${address1}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${EMPTY}
     
@@ -723,11 +723,11 @@ JD-TC-Upload_ShoppingList_By_Provider-UH8
 
 JD-TC-Upload_ShoppingList_By_Provider-10
     [Documentation]    Place an order By Provider for Home Delivery without landmark in home delivery address.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY2}=  add_date   2
+    ${DAY2}=  db.add_timezone_date  ${tz}   2
 
     ${address1}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${EMPTY}   countryCode=${countryCodes[0]}
     
@@ -756,11 +756,11 @@ JD-TC-Upload_ShoppingList_By_Provider-10
 
 JD-TC-Upload_ShoppingList_By_Provider-11
     [Documentation]   place an order by Provider  without email.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY5}=  add_date   5
+    ${DAY5}=  db.add_timezone_date  ${tz}   5
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -786,11 +786,11 @@ JD-TC-Upload_ShoppingList_By_Provider-11
 
 JD-TC-Upload_ShoppingList_By_Provider-12
     [Documentation]   place an order by Provider  without phone number.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY6}=  add_date   6
+    ${DAY6}=  db.add_timezone_date  ${tz}   6
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -816,11 +816,11 @@ JD-TC-Upload_ShoppingList_By_Provider-12
 
 JD-TC-Upload_ShoppingList_By_Provider-UH9
     [Documentation]    Place an order By Provider for Home Delivery a date other than in catalog schedule.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${OrderDate}=  add_date  35
+    ${OrderDate}=  db.add_timezone_date  ${tz}  35
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -835,11 +835,11 @@ JD-TC-Upload_ShoppingList_By_Provider-UH9
 
 JD-TC-Upload_ShoppingList_By_Provider-UH10
     [Documentation]   place an order by Provider for a past date.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${OrderDate}=  subtract_date   2
+    ${OrderDate}=  db.subtract_timezone_date  ${tz}    2
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -854,7 +854,7 @@ JD-TC-Upload_ShoppingList_By_Provider-UH10
 
 JD-TC-Upload_ShoppingList_By_Provider-UH11
     [Documentation]   place an order by Provider  without an order date.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -871,10 +871,10 @@ JD-TC-Upload_ShoppingList_By_Provider-UH11
 
 JD-TC-Upload_ShoppingList_By_Provider-UH12
     [Documentation]   place an order by Provider  without any timings.
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY4}=  add_date  4
+    ${DAY4}=  db.add_timezone_date  ${tz}  4  
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -889,11 +889,11 @@ JD-TC-Upload_ShoppingList_By_Provider-UH12
 
 JD-TC-Upload_ShoppingList_By_Provider-UH13
     [Documentation]    Place an order By Provider using unavailable time slot           
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY9}=  add_date   9
+    ${DAY9}=  db.add_timezone_date  ${tz}  9
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -910,7 +910,7 @@ JD-TC-Upload_ShoppingList_By_Provider-UH13
 JD-TC-Upload_ShoppingList_By_Provider-UH14
     [Documentation]   place an order by Provider without enable order settings.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME73}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -919,7 +919,7 @@ JD-TC-Upload_ShoppingList_By_Provider-UH14
     Should Be Equal As Strings  ${resp.status_code}  200
     Run Keyword If  ${resp.json()['enableOrder']}==${bool[1]}   Disable Order Settings
 
-    ${DAY4}=  add_date  4
+    ${DAY4}=  db.add_timezone_date  ${tz}  4  
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME73}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

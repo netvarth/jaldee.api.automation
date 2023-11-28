@@ -48,7 +48,7 @@ ${qnty}  10.0
 JD-TC-Multicoupon-1
 	[Documentation]  Create two jaldee coupons and provider coupons and apply in a bill and also add discount
     
-    ${resp}=  ProviderLogin  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${domain}    ${resp.json()['sector']}
     Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
@@ -73,7 +73,7 @@ JD-TC-Multicoupon-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY}=  get_date   
+    ${DAY}=  db.get_date_by_timezone  ${tz}   
     Set Suite Variable  ${DAY}
 
     ${gstper}=  Random Element  ${gstpercentage}
@@ -143,8 +143,8 @@ JD-TC-Multicoupon-1
     ${list}=  Create List  1  2  3  4  5  6  7
     ${capacity}=   Random Int   min=20   max=100
     ${parallel}=   Random Int   min=1   max=2
-    ${sTime}=  add_time  0  30
-    ${eTime}=  add_time   0  45
+    ${sTime}=  add_timezone_time  ${tz}  0  30  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
 
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid1}  ${sId_1}  ${sId_2}  ${sId_3}  ${sId_4}  
     Log  ${resp.json()}
@@ -158,9 +158,9 @@ JD-TC-Multicoupon-1
     ${resp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -169,9 +169,9 @@ JD-TC-Multicoupon-1
     Set Suite Variable   ${cupn_name}
     ${cupn_des}=   FakerLibrary.sentence
     Set Suite Variable     ${cupn_des}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${c_des}=   FakerLibrary.sentence
     Set Suite Variable     ${c_des}
@@ -194,7 +194,7 @@ JD-TC-Multicoupon-1
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     clear_customer   ${PUSERNAME134}
 
@@ -212,7 +212,6 @@ JD-TC-Multicoupon-1
     ${resp}=  Add To Waitlist  ${id}  ${sId_1}  ${q1_l1}  ${DAY}  hi  ${bool[1]}  ${id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Bill By UUId  ${wid1}
@@ -259,10 +258,10 @@ JD-TC-Multicoupon-1
     ${pc_amount}=   FakerLibrary.Pyfloat  positive=True  left_digits=2  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -336,7 +335,7 @@ JD-TC-Multicoupon-1
 JD-TC-Multicoupon-2
 
     [Documentation]   using jaldee coupon in different payment status with adding service quantity
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     
     ${resp}=  Enable Jaldee Coupon By Provider  ${jcoupon2}
@@ -353,7 +352,6 @@ JD-TC-Multicoupon-2
     ${resp}=  Add To Waitlist  ${id}  ${sId_3}  ${q1_l1}  ${DAY}  hi  ${bool[1]}  ${id}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Bill By UUId  ${wid1}

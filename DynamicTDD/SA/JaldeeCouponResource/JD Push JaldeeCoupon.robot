@@ -22,30 +22,39 @@ ${longi}        89.524764
 ${latti}        88.259874
 ${longi1}       70.524764
 ${latti1}       88.259874
+${tz}   Asia/Kolkata
 
 *** Test Cases ***
 
 JD-TC-PushJaldeeCoupon-1
     [Documentation]    Create a jaldee coupon by superadmin login and push coupon to target and check its status and alerts
     
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${d1}  ${resp.json()['sector']}
-    Set Suite Variable  ${sd1}  ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${d1}  ${decrypted_data['sector']} 
+    Set Test Variable  ${sd1}  ${decrypted_data['subSector']}
+    # Set Suite Variable  ${d1}  ${resp.json()['sector']}
+    # Set Suite Variable  ${sd1}  ${resp.json()['subSector']}
     ${resp}=   Get Active License
-    Log   ${resp}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${lic1}  ${resp.json()['accountLicense']['licPkgOrAddonId']}
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${d2}  ${resp.json()['sector']}
-    Set Suite Variable  ${sd2}  ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${d2}  ${decrypted_data['sector']} 
+    Set Test Variable  ${sd2}  ${decrypted_data['subSector']}
+    # Set Suite Variable  ${d2}  ${resp.json()['sector']}
+    # Set Suite Variable  ${sd2}  ${resp.json()['subSector']}
     ${resp}=   Get Active License
-    Log   ${resp}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${lic2}  ${resp.json()['accountLicense']['licPkgOrAddonId']}
     ${resp}=   ProviderLogout
@@ -54,9 +63,9 @@ JD-TC-PushJaldeeCoupon-1
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d2}_${sd2}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}  ${lic2}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -89,7 +98,7 @@ JD-TC-PushJaldeeCoupon-1
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     sleep  10s
@@ -100,7 +109,7 @@ JD-TC-PushJaldeeCoupon-1
     # Should Contain    ${resp.json()}  ${push_msg}
     Should Contain    ${resp.json()}  Jaldee Coupon Enabled
 
-    ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
@@ -111,12 +120,12 @@ JD-TC-PushJaldeeCoupon-1
 
 JD-TC-PushJaldeeCoupon-2
     [Documentation]    Create jaldee coupon for specific providers and push it to its target then check its status and alerts
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p1}=  get_acc_id  ${PUSERNAME2}
     ${p1}=  Convert To String  ${p1}
     Set Suite Variable  ${p1}
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p2}=  get_acc_id  ${PUSERNAME5}
     ${p2}=  Convert To String  ${p2}
@@ -147,19 +156,19 @@ JD-TC-PushJaldeeCoupon-2
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep  3s
-    ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Contain    ${resp.json()}  ${push_msg}
     Should Contain    ${resp.json()}  Jaldee Coupon Enabled
-    ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Contain    ${resp.json()}  ${push_msg}
     Should Contain    ${resp.json()}  Jaldee Coupon Enabled
-    ${resp}=   ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -180,8 +189,8 @@ JD-TC-PushJaldeeCoupon-3
     ${domains}=  Jaldee Coupon Target Domains  ALL
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ALL
     ${licenses}=  Jaldee Coupon Target License  0
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
     ${resp}=  Create Jaldee Coupon  XMASCoupon2008  Onamm Coupon  Onam offer  CHILDREN  ${DAY1}  ${DAY2}  AMOUNT  50  100  false  false  100  1000  1000  5  2  false  false  false  false  false  consumer first use  50% offer  ${domains}  ${sub_domains}  ALL  ${licenses}
     Should Be Equal As Strings  ${resp.status_code}  200
     Log   ${resp.json()}
@@ -210,7 +219,7 @@ JD-TC-PushJaldeeCoupon-3
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep  10s
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
@@ -219,31 +228,31 @@ JD-TC-PushJaldeeCoupon-3
     Should Not Contain    ${resp.json()}  ${push_msg}
     Should Contain    ${resp.json()}  Jaldee Coupon Enabled
 
-    ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Contain    ${resp.json()}  ${push_msg1}
     Should Contain    ${resp.json()}  Jaldee Coupon Enabled
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Contain    ${resp.json()}  ${push_msg1}
     Should Contain    ${resp.json()}  Jaldee Coupon Enabled
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Contain    ${resp.json()}  ${push_msg1}
     Should Contain    ${resp.json()}  Jaldee Coupon Enabled
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Contain    ${resp.json()}  ${push_msg1}
     Should Contain    ${resp.json()}  Jaldee Coupon Enabled
-    ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -254,24 +263,28 @@ JD-TC-PushJaldeeCoupon-3
 JD-TC-PushJaldeeCoupon-4
     [Documentation]   Superadmin trying to push default enabled coupon
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${d1}  ${resp.json()['sector']}
-    Set Suite Variable  ${sd1}  ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${d1}  ${decrypted_data['sector']} 
+    Set Test Variable  ${sd1}  ${decrypted_data['subSector']}
+    # Set Suite Variable  ${d1}  ${resp.json()['sector']}
+    # Set Suite Variable  ${sd1}  ${resp.json()['subSector']}
     ${resp}=   Get Active License
-    Log   ${resp}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${lic1}  ${resp.json()['accountLicense']['licPkgOrAddonId']}
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${d2}  ${resp.json()['sector']}
     Set Suite Variable  ${sd2}  ${resp.json()['subSector']}
     ${resp}=   Get Active License
-    Log   ${resp}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${lic3}  ${resp.json()['accountLicense']['licPkgOrAddonId']}
     ${resp}=   ProviderLogout
@@ -314,21 +327,21 @@ JD-TC-PushJaldeeCoupon-4
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep  3s
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
     Should Be Equal As Strings  ${resp.status_code}  200
     #Should  Contain    ${resp.json()}  ${push_msg1}
     Should Contain    ${resp.json()}  Jaldee Coupon Enabled
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
     Should Be Equal As Strings  ${resp.status_code}  200
     #Should  Not Contain    ${resp.json()}  ${push_msg1}
     Should Contain    ${resp.json()}  Jaldee Coupon Enabled
 
-    ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -367,21 +380,21 @@ JD-TC-PushJaldeeCoupon-5
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep  10s
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
     Should Be Equal As Strings  ${resp.status_code}  200
     #Should Contain    ${resp.json()}  ${push_msg1}
     Should Contain    ${resp.json()}  Jaldee Coupon Enabled
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
     Should Be Equal As Strings  ${resp.status_code}  200
     #Should Contain    ${resp.json()}  ${push_msg1}
     Should Contain    ${resp.json()}  Jaldee Coupon Enabled
 
-    ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -414,7 +427,7 @@ JD-TC-PushJaldeeCoupon-UH1
     Should Be Equal As Strings  ${resp.json()['couponStatus']}  ${couponStatus[1]}
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Alerts
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -445,12 +458,12 @@ JD-TC-PushJaldeeCoupon-UH5
 
 JD-TC-PushJaldeeCoupon-UH6
     [Documentation]  Check superadmin push jaldee coupon to ownered provider
-    ${resp}=   ProviderLogin  ${PUSERNAME55}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${d1}  ${resp.json()['sector']}
     Set Suite Variable  ${sd1}  ${resp.json()['subSector']}
     ${resp}=   Get Active License
-    Log   ${resp}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${lic1}  ${resp.json()['accountLicense']['licPkgOrAddonId']}
     ${resp}=   ProviderLogout
@@ -462,9 +475,9 @@ JD-TC-PushJaldeeCoupon-UH6
     Set Suite Variable  ${sub_domains}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     Set Suite Variable  ${licenses}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -477,7 +490,7 @@ JD-TC-PushJaldeeCoupon-UH6
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code551}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -487,7 +500,8 @@ JD-TC-PushJaldeeCoupon -UH7
     [Documentation]   Push a Jaldee Coupon without login
     ${resp}=  Push Jaldee Coupon  coupon1  ${push_msg}
     Should Be Equal As Strings    ${resp.status_code}   419
-    Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED_IN_SA}"
+    # Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED}"
+    Should Start With   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-PushJaldeeCoupon -UH8
     [Documentation]   Consumer push a Jaldee Coupon
@@ -495,12 +509,14 @@ JD-TC-PushJaldeeCoupon -UH8
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Push Jaldee Coupon  ${cupn_code1}  ${push_msg}
     Should Be Equal As Strings    ${resp.status_code}   419
-    Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED_IN_SA}"
+    # Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED}"
+    Should Start With   ${resp.json()}   ${SESSION_EXPIRED}
 
 JD-TC-PushJaldeeCoupon -UH9
     [Documentation]   Provider push a Jaldee Coupon
-    ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Push Jaldee Coupon  ${cupn_code1}  ${push_msg}
     Should Be Equal As Strings    ${resp.status_code}   419
-    Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED_IN_SA}"
+    # Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED}"
+    Should Start With   ${resp.json()}   ${SESSION_EXPIRED}

@@ -37,7 +37,7 @@ JD-TC-Enable Item-UH3
 #     clear_Item  ${PUSERNAME20}
 #     ${des}=  FakerLibrary.Word
 #     ${description}=  FakerLibrary.sentence
-#     ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${amount1}=   FakerLibrary.pyfloat  left_digits=2   right_digits=2    positive=True
    
@@ -75,7 +75,7 @@ JD-TC-Enable Item-UH3
 # JD-TC-Enable Item-UH4
 
 #     [Documentation]  try to enabled another providers item
-#     ${resp}=  ProviderLogin  ${PUSERNAME3}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #      ${resp}=  Enable Item  ${id}
 #     Should Be Equal As Strings  ${resp.status_code}  401

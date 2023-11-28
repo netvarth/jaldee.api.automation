@@ -18,18 +18,23 @@ ${SERVICE2}  Hair makeup
 
 *** Test Cases ***
 
-YNW-TC-GetQueuesCount-1
+JD-TC-GetQueuesCount-1
     [Documentation]    Create a queue and Get queues count
-    ${resp}=  Provider Login  ${PUSERNAME148}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME148}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_service   ${PUSERNAME148}
     clear_location  ${PUSERNAME148}
     clear_queue  ${PUSERNAME148}
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
-    ${DAY1}=  get_date
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
@@ -37,9 +42,9 @@ YNW-TC-GetQueuesCount-1
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable  ${s_id1}
-    ${sTime1}=  add_time  2  15
+    ${sTime1}=  add_timezone_time  ${tz}  2  15  
     Set Suite Variable  ${sTime1}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable  ${eTime1}
     ${queue_name1}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name1}
@@ -47,7 +52,7 @@ YNW-TC-GetQueuesCount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id1}  ${resp.json()}
 
-YNW-TC-GetQueuesCount-UH1
+JD-TC-GetQueuesCount-UH1
     [Documentation]  Enable Queue by consumer
     ${resp}=   Consumer Login  ${CUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -55,27 +60,27 @@ YNW-TC-GetQueuesCount-UH1
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}"	
     
-YNW-TC-GetQueuesCount-UH2
+JD-TC-GetQueuesCount-UH2
     [Documentation]  Enable queue without login
     ${resp}=  Get Queues Counts
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
 
-YNW-TC-VerifyGetQueuesCount-1
+JD-TC-VerifyGetQueuesCount-1
     [Documentation]    Verification of case1
-    ${resp}=  Provider Login  ${PUSERNAME148}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME148}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get Queues Counts
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
 
-YNW-TC-GetQueuesCount-2
+JD-TC-GetQueuesCount-2
     [Documentation]    Create more queues and check queues counts
-    ${resp}=  Provider Login  ${PUSERNAME148}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME148}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${sTime1}=  add_time  3  15
+    ${sTime1}=  add_timezone_time  ${tz}  3  15  
     Set Suite Variable  ${sTime1}
-    ${eTime1}=  add_time   3  30
+    ${eTime1}=  add_timezone_time  ${tz}  3  30  
     Set Suite Variable  ${eTime1}
     ${queue_name2}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name2}
@@ -86,9 +91,9 @@ YNW-TC-GetQueuesCount-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  2
 
-YNW-TC-GetQueuesCount-3
+JD-TC-GetQueuesCount-3
     [Documentation]   Disable a queue then check queues counts
-    ${resp}=  Provider Login  ${PUSERNAME148}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME148}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Disable Queue  ${q_id2}
     sleep  02s

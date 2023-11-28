@@ -27,18 +27,30 @@ JD-TC-Create_Membership-1
 
     [Documentation]  Create Membership where membership with provider consumer signup where approval type is Manual 
 
-    ${resp}=  Provider Login  ${PUSERNAME43}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     ${accountId}=    get_acc_id       ${PUSERNAME43}
     Set Suite Variable    ${accountId}
 
+    ${lid}=  Create Sample Location
+    Set Suite Variable   ${lid}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${description}=    FakerLibrary.bs
     ${name}=           FakerLibrary.firstName
     ${displayname}=    FakerLibrary.firstName
-    ${effectiveFrom}=  get_date
-    ${effectiveTo}=      add_date  10 
+    ${effectiveFrom}=  db.get_date_by_timezone  ${tz}
+    ${effectiveTo}=      db.add_timezone_date  ${tz}  10  
     Set Suite Variable    ${description}
     Set Suite Variable    ${name}
     Set Suite Variable    ${displayname}
@@ -151,7 +163,7 @@ JD-TC-Create_Membership-6
 
     [Documentation]  Create Membership where membership without provider consumer signup where approval type is Manual 
 
-    ${resp}=  Provider Login  ${PUSERNAME43}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -186,11 +198,11 @@ JD-TC-Create_Membership-UH2
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
 
-JD-TC-Create_Membership-UH8
+JD-TC-Create_Membership-UH3
 
     [Documentation]  Create Member where another provider logged in and try to use another providers service
 
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${accountId2}=    get_acc_id       ${PUSERNAME21}
@@ -220,5 +232,5 @@ JD-TC-Create_Membership-UH8
 
     ${resp}=    Create Membership     ${firstName2}    ${lastName2}    ${number5}    ${membershipid}    ${countryCodes[1]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   600
+    Should Be Equal As Strings    ${resp.status_code}   422
 

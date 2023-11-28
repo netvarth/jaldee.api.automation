@@ -20,7 +20,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-Get Provider By Id-1
 
         [Documentation]  Get Provider By Id
-        ${resp}=  Provider Login  ${PUSERNAME111}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME111}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         Log  ${resp.json()}
         Set Suite Variable   ${firstname}   ${resp.json()['firstName']}
@@ -51,7 +51,7 @@ JD-TC-Get Provider By Id-UH2
 JD-TC-Get Provider By Id-UH3
 
         [Documentation]  Get Provider details using id of another provider 
-        ${resp}=  Provider Login  ${PUSERNAME112}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Get Provider By Id  ${PUSERNAME111}
         Should Be Equal As Strings  ${resp.status_code}  401

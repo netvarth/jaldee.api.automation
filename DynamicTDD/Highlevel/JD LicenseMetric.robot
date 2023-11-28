@@ -48,7 +48,7 @@ ${PUSERNAME4}    1111111125
 
 *** Test Cases ***
 
-YNW-TC-License Metric-1
+JD-TC-License Metric-1
     Comment    Basic Package - gallery limit
 
     Comment  Gallery limit set to 1MB IN licenseconfig.json 
@@ -63,9 +63,9 @@ YNW-TC-License Metric-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph_nos1}=  Phone Numbers  Doctor  Phoneno  ${ph1}  self
     ${ph_nos2}=  Phone Numbers  Receptionist  Phoneno  ${ph2}  all
@@ -89,7 +89,7 @@ YNW-TC-License Metric-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-YNW-TC-License Metric-2
+JD-TC-License Metric-2
     Comment    Silver-- gallery limit
     ${resp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -101,9 +101,9 @@ YNW-TC-License Metric-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200   
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph_nos1}=  Phone Numbers  Beautician  Phoneno  ${ph3}  self
     ${ph_nos2}=  Phone Numbers  Receptionist  Phoneno  ${ph4}  all
@@ -127,7 +127,7 @@ YNW-TC-License Metric-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-YNW-TC-License Metric-3
+JD-TC-License Metric-3
     Comment    Gold - gallery limit
     ${resp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -139,9 +139,9 @@ YNW-TC-License Metric-3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph_nos1}=  Phone Numbers  Manager  Phoneno  ${ph5}  self
     ${ph_nos2}=  Phone Numbers  Receptionist  Phoneno  ${ph6}  all
@@ -165,7 +165,7 @@ YNW-TC-License Metric-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-YNW-TC-License Metric-4
+JD-TC-License Metric-4
     Comment    Diamond - gallery limit
     ${resp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -177,9 +177,9 @@ YNW-TC-License Metric-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph_nos1}=  Phone Numbers  Manager  Phoneno  ${ph7}  self
     ${ph_nos2}=  Phone Numbers  Receptionist  Phoneno  ${ph8}  all
@@ -204,7 +204,7 @@ YNW-TC-License Metric-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-YNW-TC-License Metric-5
+JD-TC-License Metric-5
     Comment    Gold-trial - gallery limit
     ${resp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -216,9 +216,9 @@ YNW-TC-License Metric-5
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph_nos1}=  Phone Numbers  Manager  Phoneno  ${ph9}  self
     ${ph_nos2}=  Phone Numbers  Receptionist  Phoneno  ${ph10}  all
@@ -243,7 +243,7 @@ YNW-TC-License Metric-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-YNW-TC-License Metric-6
+JD-TC-License Metric-6
     Comment  Basic - gallery limit (multiple images in same request)
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME}  ${PASSWORD}
     Log  ${resp.json()}
@@ -253,7 +253,7 @@ YNW-TC-License Metric-6
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  You are not allowed to do operation because it exceeds limit. You can upgrade license package/addon for more benefits
 
-YNW-TC-License Metric-7
+JD-TC-License Metric-7
     Comment  Silevr - gallery limit (multiple images in same request)
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
@@ -263,7 +263,7 @@ YNW-TC-License Metric-7
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  You are not allowed to do operation because it exceeds limit. You can upgrade license package/addon for more benefits
 
-YNW-TC-License Metric-8
+JD-TC-License Metric-8
     Comment  Gold - gallery limit (multiple images in same request)
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
@@ -273,7 +273,7 @@ YNW-TC-License Metric-8
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  You are not allowed to do operation because it exceeds limit. You can upgrade license package/addon for more benefits
 
-YNW-TC-License Metric-9
+JD-TC-License Metric-9
     Comment  Diamond - gallery limit (multiple images in same request)
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME3}  ${PASSWORD}
     Log  ${resp.json()}
@@ -283,7 +283,7 @@ YNW-TC-License Metric-9
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  You are not allowed to do operation because it exceeds limit. You can upgrade license package/addon for more benefits
 
-YNW-TC-License Metric-10
+JD-TC-License Metric-10
     Comment  Gold Trial - gallery limit (multiple images in same request)
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}

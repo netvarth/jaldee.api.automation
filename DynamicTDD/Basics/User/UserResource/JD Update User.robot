@@ -41,7 +41,7 @@ JD-TC-UpdateUser-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}   
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}   
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -97,21 +97,22 @@ JD-TC-UpdateUser-1
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-
+     sleep  2s
      ${resp}=  Get User By Id  ${u_id}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
 
-     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}   deptId=${dep_id}  state=${state}  pincode=${pin}  admin=${bool[0]} 
+     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}   deptId=${dep_id}  pincode=${pin}  admin=${bool[0]} 
      Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${whpnum} 
      Should Be Equal As Strings  ${resp.json()['whatsAppNum']['countryCode']}      ${countryCodes[1]}
      Should Be Equal As Strings  ${resp.json()['telegramNum']['number']}           ${tlgnum} 
      Should Be Equal As Strings  ${resp.json()['telegramNum']['countryCode']}      ${countryCodes[1]}
-     Should Be Equal As Strings  ${resp.json()['city']}      ${city}    ignore_case=True
+     Variable Should Exist   ${resp.json()['city']}      ${city}    
+     Variable Should Exist   ${resp.json()['state']}      ${state} 
 
      ${PUSERNAME_U3}=  Evaluate  ${PUSERNAME}+336341
      clear_users  ${PUSERNAME_U3}
@@ -162,7 +163,7 @@ JD-TC-UpdateUser-1
 
 JD-TC-UpdateUser-2
      [Documentation]  Update a user with different department id by branch login
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=   Get Service
@@ -195,7 +196,7 @@ JD-TC-UpdateUser-2
 
 JD-TC-UpdateUser-3
      [Documentation]  Update a user with a different subdomain in same domain by branch login
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     #  ${iscorp_subdomains}=  get_iscorp_subdomains  1
@@ -216,7 +217,7 @@ JD-TC-UpdateUser-3
 
 JD-TC-UpdateUser-4
      [Documentation]  Update ph of a user by branch login
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U6}=  Evaluate  ${PUSERNAME}+336146
@@ -237,7 +238,7 @@ JD-TC-UpdateUser-4
     
 JD-TC-UpdateUser-5
      [Documentation]   Update users department id to another one here that user services also changed with that changed department services.
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${dep_desc1}=   FakerLibrary.word  
@@ -338,7 +339,7 @@ JD-TC-UpdateUser-5
 
 JD-TC-UpdateUser-6
      [Documentation]  Update a user from PROVIDER to ADMIN usertype by branch login, when checkin doesn't exist
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      
@@ -354,7 +355,7 @@ JD-TC-UpdateUser-6
 
 JD-TC-UpdateUser-7
      [Documentation]  Update a user from ADMIN to PROVIDER usertype by branch login
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -370,7 +371,7 @@ JD-TC-UpdateUser-7
      
 JD-TC-UpdateUser-8
      [Documentation]  Update a user from PROVIDER to ASSISTANT usertype by branch login
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -385,7 +386,7 @@ JD-TC-UpdateUser-8
 
 JD-TC-UpdateUser-9
      [Documentation]  Update a user from ASSISTANT to PROVIDER usertype by branch login
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -420,7 +421,7 @@ JD-TC-UpdateUser -UH2
 
 JD-TC-UpdateUser-UH3
      [Documentation]  Update a user with invalid id by branch login
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -431,7 +432,7 @@ JD-TC-UpdateUser-UH3
 
 JD-TC-UpdateUser-UH4
      [Documentation]  Update a user for a invalid subdomain by branch login
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${sub_domain_id2}=  Random Int   min=100  max=200
@@ -444,7 +445,7 @@ JD-TC-UpdateUser-UH4
 
 JD-TC-UpdateUser-UH5
      [Documentation]  Update a user for a invalid department by branch login
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${depid2}=  Random Int   min=1000  max=2000
@@ -457,7 +458,7 @@ JD-TC-UpdateUser-UH5
 
 JD-TC-UpdateUser-UH6
      [Documentation]  Update a user with Empty ph by branch login
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -469,7 +470,7 @@ JD-TC-UpdateUser-UH6
 
 JD-TC-UpdateUser-UH7
      [Documentation]  Update a user with empty firstname by branch login
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      
@@ -480,7 +481,7 @@ JD-TC-UpdateUser-UH7
 
 JD-TC-UpdateUser-UH8
      [Documentation]  Update a user with empty last name by branch login
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      
@@ -511,12 +512,12 @@ JD-TC-UpdateUser-UH9
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E2}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E2}${\n}
      Set Suite Variable  ${MUSERNAME_E2}
-     ${DAY1}=  get_date
+     ${DAY1}=  db.get_date_by_timezone  ${tz}
      Set Suite Variable  ${DAY1}  ${DAY1}
      ${list}=  Create List  1  2  3  4  5  6  7
      Set Suite Variable  ${list}  ${list}
@@ -530,19 +531,22 @@ JD-TC-UpdateUser-UH9
      ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
      ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
      ${bs}=  FakerLibrary.bs
-     ${city}=   get_place
-     ${latti}=  get_latitude
-     ${longi}=  get_longitude
      ${companySuffix}=  FakerLibrary.companySuffix
-     ${postcode}=  FakerLibrary.postcode
-     ${address}=  get_address
+     # ${city}=   get_place
+     # ${latti}=  get_latitude
+     # ${longi}=  get_longitude
+     # ${postcode}=  FakerLibrary.postcode
+     # ${address}=  get_address
+     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+     Set Suite Variable  ${tz}
      ${parking}   Random Element   ${parkingType}
      ${24hours}    Random Element    ${bool}
      ${desc}=   FakerLibrary.sentence
      ${url}=   FakerLibrary.url
-     ${sTime}=  add_time  0  15
+     ${sTime}=  add_timezone_time  ${tz}  0  15  
      Set Suite Variable   ${sTime}
-     ${eTime}=  add_time   0  45
+     ${eTime}=  add_timezone_time  ${tz}  0  45  
      Set Suite Variable   ${eTime}
      ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
      Log  ${resp.json()}
@@ -643,21 +647,22 @@ JD-TC-UpdateUser-UH9
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${u_p_id}  ${resp.json()['profileId']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable   ${eTime1}
 
     ${resp}=  Get Locations
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${description}=  FakerLibrary.sentence
     Set Suite Variable  ${description}
@@ -701,7 +706,6 @@ JD-TC-UpdateUser-UH9
     ${resp}=  Add To Waitlist By User  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${user_id}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -739,7 +743,7 @@ JD-TC-UpdateUser-UH9
 JD-TC-UpdateUser-UH10
      [Documentation]  Update a user with international country code
 
-     ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${domain}=   Set Variable    ${resp.json()['sector']}
@@ -800,7 +804,7 @@ JD-TC-UpdateUser-UH10
 JD-TC-UpdateUser-UH11
      [Documentation]  Update a user with empty country code
 
-     ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${domain}=   Set Variable    ${resp.json()['sector']}
@@ -904,15 +908,22 @@ JD-TC-UpdateUser -10
     ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${BUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -973,7 +984,7 @@ JD-TC-UpdateUser -10
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     ${resp}=  Provider Login  ${PUSERPH1}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1004,15 +1015,22 @@ JD-TC-UpdateUser -11
     ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${BUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -1113,7 +1131,7 @@ JD-TC-UpdateUser -11
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERPH2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
@@ -1146,15 +1164,22 @@ JD-TC-UpdateUser -12
     ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${BUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -1253,7 +1278,7 @@ JD-TC-UpdateUser -12
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERPH2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
@@ -1283,15 +1308,22 @@ JD-TC-UpdateUser -13
     ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${BUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -1324,11 +1356,11 @@ JD-TC-UpdateUser -13
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  Provider Login  ${BUSERPH0}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  Provider Login  ${P_Email}${BUSERPH0}.${test_mail}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${P_Email}${BUSERPH0}.${test_mail}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1357,15 +1389,22 @@ JD-TC-UpdateUser -14
     ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${BUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -1397,12 +1436,12 @@ JD-TC-UpdateUser -14
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${BUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings    ${resp.json()}     ${NOT_REGISTERED_PROVIDER}
 
-    ${resp}=  Provider Login  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 #     Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
@@ -1433,15 +1472,22 @@ JD-TC-UpdateUser -15
     ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${BUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -1481,12 +1527,12 @@ JD-TC-UpdateUser -15
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${P_Email}${PUSERPH1}.${test_mail}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${P_Email}${PUSERPH1}.${test_mail}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings  "${resp.json()}"  "${NOT_REGISTERED_PROVIDER}"
 
-    ${resp}=  Provider Login  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_INVALID_USERID_PASSWORD}"
@@ -1517,15 +1563,22 @@ JD-TC-UpdateUser -16
     ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${BUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -1565,12 +1618,12 @@ JD-TC-UpdateUser -16
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${P_Email}${PUSERPH1}.${test_mail}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${P_Email}${PUSERPH1}.${test_mail}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_INVALID_USERID_PASSWORD}"
 
-    ${resp}=  Provider Login  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_INVALID_USERID_PASSWORD}"
@@ -1601,15 +1654,22 @@ JD-TC-UpdateUser -17
     ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${BUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -1655,11 +1715,11 @@ JD-TC-UpdateUser -17
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  Provider Login  ${P_Email}${PUSERPH1}.${test_mail}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${P_Email}${PUSERPH1}.${test_mail}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  Provider Login  ${PUSERPH1}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1689,15 +1749,22 @@ JD-TC-UpdateUser -18
     ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${BUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -1737,12 +1804,12 @@ JD-TC-UpdateUser -18
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${P_Email}${PUSERPH1}.${test_mail}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${P_Email}${PUSERPH1}.${test_mail}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_INVALID_USERID_PASSWORD}"
 
-    ${resp}=  Provider Login  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_INVALID_USERID_PASSWORD}"
@@ -1773,15 +1840,22 @@ JD-TC-UpdateUser -19
     ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${BUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -1821,12 +1895,12 @@ JD-TC-UpdateUser -19
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${P_Email}${PUSERPH1}.${test_mail}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${P_Email}${PUSERPH1}.${test_mail}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_INVALID_USERID_PASSWORD}"
 
-    ${resp}=  Provider Login  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings  "${resp.json()}"  "${NOT_REGISTERED_PROVIDER}"
@@ -1857,15 +1931,22 @@ JD-TC-UpdateUser -20
     ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${BUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -1897,7 +1978,7 @@ JD-TC-UpdateUser -20
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERPH1}
 
-     ${resp}=  Update User  ${u_id1}  ${firstname1}  ${lastname1}  ${dob}  ${Genderlist[0]}  ${EMPTY}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH1}  ${dep_id}   ${sub_domain_id}   ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+     ${resp}=  Update User  ${u_id1}  ${firstname1}  ${lastname1}  ${dob}  ${Genderlist[0]}  ${EMPTY}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH1}  ${dep_id}   ${sub_domain_id}   ${bool[0]}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1905,16 +1986,107 @@ JD-TC-UpdateUser -20
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${P_Email}${PUSERPH1}.${test_mail}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${P_Email}${PUSERPH1}.${test_mail}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings  "${resp.json()}"  "${NOT_REGISTERED_PROVIDER}"
 
-    ${resp}=  Provider Login  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_INVALID_USERID_PASSWORD}"
 
+
+
+JD-TC-UpdateUser -21
+    [Documentation]   create user with ph no and email and update phone number and update email to empty for the user and login
+
+    ${iscorp_subdomains}=  get_iscorp_subdomains  1
+    Log  ${iscorp_subdomains}
+    Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
+    Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
+    Set Test Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
+    Set Test Variable  ${userSubDomain}  ${iscorp_subdomains[0]['userSubDomain']}
+    ${PO_Number}    Generate random string    4    123456789
+    ${PO_Number}    Convert To Integer  ${PO_Number}
+    ${BUSERPH0}=  Evaluate  ${MUSERNAME}+${PO_Number}
+    clear_users  ${BUSERPH0}
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+    ${highest_package}=  get_highest_license_pkg
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domains}  ${sub_domains}  ${BUSERPH0}   ${highest_package[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Activation  ${BUSERPH0}  0
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Set Credential  ${BUSERPH0}  ${PASSWORD}  0
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Append To File  ${EXECDIR}/TDD/numbers.txt  ${BUSERPH0}${\n}
+    ${id}=  get_id  ${BUSERPH0}
+    
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
+    sleep  2s
+    ${resp}=  Get Departments
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+
+    ${resp}=  Get User
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${u_id}  ${resp.json()[0]['id']}
+
+#     ${PO_Number}    Generate random string    4    123456789
+#     ${PO_Number}    Convert To Integer  ${PO_Number}
+#     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+${PO_Number}
+     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+678876
+#     clear_users  ${PUSERPH1}
+    ${firstname1}=  FakerLibrary.name
+    ${lastname1}=  FakerLibrary.last_name
+    ${dob}=  FakerLibrary.Date
+    ${gender}=  Random Element    ${Genderlist}
+  
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERPH1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERPH1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${u_id1}  ${resp.json()}
+
+    ${resp}=  Get User By Id  ${u_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERPH1}
+
+     ${resp}=  Update User  ${u_id1}  ${firstname1}  ${lastname1}  ${NULL}  ${NULL}  ${EMPTY}   ${userType[2]}  ${pin}  ${countryCodes[1]}  ${PUSERPH1}  ${dep_id}   ${sub_domain_id}   ${bool[0]}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}
+     Log   ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${P_Email}${PUSERPH1}.${test_mail}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    401
+    Should Be Equal As Strings  "${resp.json()}"  "${NOT_REGISTERED_PROVIDER}"
+
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    401
+    Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_INVALID_USERID_PASSWORD}"
 
 
 

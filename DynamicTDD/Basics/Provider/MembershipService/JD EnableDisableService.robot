@@ -27,18 +27,30 @@ JD-TC-Enable_Disable_Service-1
 
     [Documentation]  taking service where service is enabled (Defaultly enabled)
 
-    ${resp}=  Provider Login  ${PUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
     ${accountId}=    get_acc_id       ${PUSERNAME45}
     Set Suite Variable    ${accountId}
 
+    ${lid}=  Create Sample Location
+    Set Suite Variable   ${lid}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${description}=    FakerLibrary.bs
     ${name}=           FakerLibrary.firstName
     ${displayname}=    FakerLibrary.firstName
-    ${effectiveFrom}=  get_date
-    ${effectiveTo}=      add_date  10 
+    ${effectiveFrom}=  db.get_date_by_timezone  ${tz}
+    ${effectiveTo}=      db.add_timezone_date  ${tz}  10  
     Set Suite Variable    ${description}
     Set Suite Variable    ${name}
     Set Suite Variable    ${displayname}
@@ -96,7 +108,7 @@ JD-TC-Enable_Disable_Service-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Provider Login  ${PUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -109,7 +121,7 @@ JD-TC-Enable_Disable_Service-UH1
 
     [Documentation]  Enable Disable Service Where Service is already Enabled
 
-    ${resp}=  Provider Login  ${PUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -122,7 +134,7 @@ JD-TC-Enable_Disable_Service-2
 
     [Documentation]  Disable an Enabled Service
 
-    ${resp}=  Provider Login  ${PUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -134,7 +146,7 @@ JD-TC-Enable_Disable_Service-UH2
 
     [Documentation]  Disable Service Which is Already Disabled
 
-    ${resp}=  Provider Login  ${PUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -156,15 +168,15 @@ JD-TC-Enable_Disable_Service-UH4
 
     [Documentation]  create member for service where service is disabled
 
-    ${resp}=  Provider Login  ${PUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${description2}=    FakerLibrary.bs
     ${name2}=           FakerLibrary.firstName
     ${displayname2}=    FakerLibrary.firstName
-    ${effectiveFrom2}=  get_date
-    ${effectiveTo2}=      add_date  10 
+    ${effectiveFrom2}=  db.get_date_by_timezone  ${tz}
+    ${effectiveTo2}=      db.add_timezone_date  ${tz}  10 
 
     ${resp}=    Create Membership Service     ${description2}    ${name2}    ${displayname2}    ${effectiveFrom2}    ${effectiveTo2}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}
     Log  ${resp.content}

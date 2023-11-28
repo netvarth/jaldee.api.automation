@@ -34,7 +34,7 @@ JD-TC-GetConsumerOrderHistoryByCriteria-1
     clear_customer   ${PUSERNAME188}
     clear_Item   ${PUSERNAME188}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME188}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME188}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -84,16 +84,16 @@ JD-TC-GetConsumerOrderHistoryByCriteria-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  subtract_date   5
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.subtract_timezone_date  ${tz}    5
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -180,7 +180,7 @@ JD-TC-GetConsumerOrderHistoryByCriteria-1
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -212,7 +212,7 @@ JD-TC-GetConsumerOrderHistoryByCriteria-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${order_no1}  ${resp.json()['orderNumber']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME188}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME188}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -225,7 +225,7 @@ JD-TC-GetConsumerOrderHistoryByCriteria-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY}=  add_date   11
+    ${DAY}=  db.add_timezone_date  ${tz}  11  
   
     ${resp}=   Create Order For Pickup   ${cookie}  ${accId}    ${self}    ${CatalogId2}   ${bool[1]}  ${sTime1}    ${eTime1}   ${DAY}    ${CUSERNAME23}    ${email}  ${countryCodes[0]}  ${EMPTY_List}   ${item_id1}    ${item_quantity1} 
     Log   ${resp.json()}
@@ -239,7 +239,7 @@ JD-TC-GetConsumerOrderHistoryByCriteria-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${order_no2}  ${resp.json()['orderNumber']}
 
-    ${DAY2}=  add_date   12
+    ${DAY2}=  db.add_timezone_date  ${tz}  12  
     Set Suite Variable   ${DAY2}
 
     ${resp}=   Create Order For Pickup  ${cookie}  ${accId}    ${self}    ${CatalogId2}   ${bool[1]}  ${sTime1}    ${eTime1}   ${DAY2}    ${CUSERNAME23}    ${email}  ${countryCodes[0]}  ${EMPTY_List}   ${item_id1}    ${item_quantity1} 
@@ -254,7 +254,7 @@ JD-TC-GetConsumerOrderHistoryByCriteria-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${order_no3}  ${resp.json()['orderNumber']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME188}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME188}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -293,7 +293,7 @@ JD-TC-GetConsumerOrderHistoryByCriteria-2
     clear_Item   ${PUSERNAME161}
     
     # change_system_date  -5
-    ${resp}=  ProviderLogin  ${PUSERNAME161}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -341,16 +341,16 @@ JD-TC-GetConsumerOrderHistoryByCriteria-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate1}=  subtract_date   5
-    ${endDate1}=  add_date  10      
+    ${startDate1}=  db.subtract_timezone_date  ${tz}    5
+    ${endDate1}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -423,7 +423,7 @@ JD-TC-GetConsumerOrderHistoryByCriteria-2
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=  add_date  13
+    ${DAY1}=  db.add_timezone_date  ${tz}  13
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -738,7 +738,7 @@ JD-TC-GetConsumerOrderHistoryByCriteria-20
 
     [Documentation]    Get history order details by provider login.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME161}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME161}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -773,7 +773,7 @@ JD-TC-GetConsumerOrderHistoryByCriteria-22
     clear_customer   ${PUSERNAME147}
     clear_Item   ${PUSERNAME147}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME147}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME147}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -820,16 +820,16 @@ JD-TC-GetConsumerOrderHistoryByCriteria-22
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  subtract_date   5
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.subtract_timezone_date  ${tz}    5
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -927,7 +927,7 @@ JD-TC-GetConsumerOrderHistoryByCriteria-22
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -957,7 +957,7 @@ JD-TC-GetConsumerOrderHistoryByCriteria-22
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${order_no2}  ${resp.json()['orderNumber']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME147}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME147}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

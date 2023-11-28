@@ -42,7 +42,7 @@ Get branch by license
     FOR   ${a}  IN RANGE  ${length}
             
         ${Branch_PH}=  Set Variable  ${MUSERNAME${a}}
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${domain}=   Set Variable    ${resp.json()['sector']}
         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
@@ -126,18 +126,21 @@ JD-TC-Consumer Deactivation -2
     ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
-    Log  ${resp.content}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    # Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
     Set Suite Variable  ${PUSERNAME_B}
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    
 
-    # ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_B}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_B}+25566122
@@ -149,18 +152,22 @@ JD-TC-Consumer Deactivation -2
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -221,17 +228,30 @@ JD-TC-Consumer Deactivation -2
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${pid}=  get_acc_id  ${PUSERNAME_B}
-    Set Suite Variable   ${pid}
-    ${DAY1}=  get_date
-    Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
+
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${pid}=  get_acc_id  ${PUSERNAME_B}
+    Set Suite Variable   ${pid}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable   ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${list}=  Create List  1  2  3  4  5  6  7
+    # ${sTime1}=  add_time  0  15  
+    # ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    # ${eTime1}=  add_two   ${sTime1}  ${delta}
+    # ${lid}=  Create Sample Location
+    # Set Suite Variable   ${lid}
+
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
     clear_appt_schedule   ${PUSERNAME_B}
     ${SERVICE1}=   FakerLibrary.name
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -254,7 +274,7 @@ JD-TC-Consumer Deactivation -2
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${sTime2}=  add_time  1  15
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}   
 
@@ -412,10 +432,13 @@ JD-TC-Consumer Deactivation -4
     clear_service  ${PUSERNAME200}
     clear_customer   ${PUSERNAME200}
     clear_Item   ${PUSERNAME200}
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
-    Log  ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
+    # Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME200}
 
@@ -459,16 +482,16 @@ JD-TC-Consumer Deactivation -4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -560,7 +583,7 @@ JD-TC-Consumer Deactivation -4
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -607,10 +630,13 @@ JD-TC-Consumer Deactivation -5
     clear_service  ${PUSERNAME200}
     clear_customer   ${PUSERNAME200}
     clear_Item   ${PUSERNAME200}
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
-    Log  ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
+    # Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME200}
 
@@ -654,16 +680,16 @@ JD-TC-Consumer Deactivation -5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -755,7 +781,7 @@ JD-TC-Consumer Deactivation -5
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -829,7 +855,7 @@ JD-TC-Consumer Deactivation -6
     clear_service   ${PUSERNAME28}
     clear_location   ${PUSERNAME28}
     clear_queue     ${PUSERNAME28}
-    ${resp}=  ProviderLogin  ${PUSERNAME28}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Business Profile
@@ -842,21 +868,26 @@ JD-TC-Consumer Deactivation -6
 
     ${pid}=  get_acc_id  ${PUSERNAME28}
     Set Suite Variable  ${pid} 
-    Should Be Equal As Strings    ${resp.status_code}   200
     ${loc_id1}=   Create Sample Location
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id1}
     ${s_id2}=   Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id2}
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${q_name1}=    FakerLibrary.name
     Set Suite Variable    ${q_name1}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   subtract_time  3  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  3  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  0  10 
+    ${end_time}=    add_timezone_time  ${tz}  0  10   
     Set Suite Variable    ${end_time}  
     ${capacity}=  Random Int  min=8   max=20
     ${parallel}=  Random Int   min=1   max=2
@@ -868,9 +899,9 @@ JD-TC-Consumer Deactivation -6
     Set Suite Variable  ${q_id1}   ${resp.json()}
     ${q_name2}=    FakerLibrary.name
     Set Suite Variable    ${q_name2}
-    ${strt_time1}=   add_time  0  10
+    ${strt_time1}=   add_timezone_time  ${tz}  0  10  
     Set Suite Variable    ${strt_time1}
-    ${end_time1}=    add_time  0  29 
+    ${end_time1}=    add_timezone_time  ${tz}  0  29   
     Set Suite Variable    ${end_time1}
     ${resp}=  Create Queue    ${q_name2}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${strt_time1}  ${end_time1}   ${parallel}   ${capacity}    ${loc_id1}  ${s_id1}   ${s_id2}
     Log   ${resp.json()}
@@ -883,6 +914,7 @@ JD-TC-Consumer Deactivation -6
     Should Be Equal As Strings  ${resp.status_code}  200   
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  calculationMode=${calc_mode[1]}  trnArndTime=${duration}  futureDateWaitlist=${bool[1]}  showTokenId=${bool[1]}  onlineCheckIns=${bool[1]}   maxPartySize=1
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -915,7 +947,6 @@ JD-TC-Consumer Deactivation -6
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id1}  ${DAY}  ${s_id1}  ${cnote}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid1}  ${wid[0]}
     ${cnote}=   FakerLibrary.word
@@ -949,7 +980,7 @@ JD-TC-Consumer Deactivation -6
     
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${w1}  ${wid[0]}
-    ${resp}=  ProviderLogin  ${PUSERNAME28}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Waitlist Action  ${waitlist_actions[1]}  ${uuid1}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -972,7 +1003,7 @@ JD-TC-Consumer Deactivation -7
     clear_service   ${PUSERNAME30}
     clear_location   ${PUSERNAME30}
     clear_queue     ${PUSERNAME30}
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Business Profile
@@ -985,21 +1016,26 @@ JD-TC-Consumer Deactivation -7
 
     ${pid}=  get_acc_id  ${PUSERNAME30}
     Set Suite Variable  ${pid} 
-    Should Be Equal As Strings    ${resp.status_code}   200
     ${loc_id1}=   Create Sample Location
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=   Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id1}
     ${s_id2}=   Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id2}
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${q_name1}=    FakerLibrary.name
     Set Suite Variable    ${q_name1}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   subtract_time  3  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  3  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  0  10 
+    ${end_time}=    add_timezone_time  ${tz}  0  10   
     Set Suite Variable    ${end_time}  
     ${capacity}=  Random Int  min=8   max=20
     ${parallel}=  Random Int   min=1   max=2
@@ -1011,9 +1047,9 @@ JD-TC-Consumer Deactivation -7
     Set Suite Variable  ${q_id1}   ${resp.json()}
     ${q_name2}=    FakerLibrary.name
     Set Suite Variable    ${q_name2}
-    ${strt_time1}=   add_time  0  10
+    ${strt_time1}=   add_timezone_time  ${tz}  0  10  
     Set Suite Variable    ${strt_time1}
-    ${end_time1}=    add_time  0  29 
+    ${end_time1}=    add_timezone_time  ${tz}  0  29   
     Set Suite Variable    ${end_time1}
     ${resp}=  Create Queue    ${q_name2}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${strt_time1}  ${end_time1}   ${parallel}   ${capacity}    ${loc_id1}  ${s_id1}   ${s_id2}
     Log   ${resp.json()}
@@ -1026,6 +1062,7 @@ JD-TC-Consumer Deactivation -7
     Should Be Equal As Strings  ${resp.status_code}  200   
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  calculationMode=${calc_mode[1]}  trnArndTime=${duration}  futureDateWaitlist=${bool[1]}  showTokenId=${bool[1]}  onlineCheckIns=${bool[1]}   maxPartySize=1
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1058,7 +1095,6 @@ JD-TC-Consumer Deactivation -7
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id1}  ${DAY}  ${s_id1}  ${cnote}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid1}  ${wid[0]}
     ${cnote}=   FakerLibrary.word
@@ -1092,7 +1128,7 @@ JD-TC-Consumer Deactivation -7
     
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${w1}  ${wid[0]}
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Waitlist Action  ${waitlist_actions[1]}  ${uuid1}
     Should Be Equal As Strings  ${resp.status_code}  200 

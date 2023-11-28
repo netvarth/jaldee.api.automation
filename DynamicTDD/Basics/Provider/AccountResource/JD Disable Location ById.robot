@@ -39,35 +39,43 @@ JD-TC-DisableLocation-1
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
       Set Suite Variable  ${PUSERNAME_D}
       ${lid1}=  Create Sample Location
-      ${DAY}=  get_date
+      ${resp}=   Get Location ById  ${lid1}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+      ${DAY}=  db.get_date_by_timezone  ${tz}
     	Set Suite Variable  ${DAY}
-      ${DAY2}=  add_date  10
+      ${DAY2}=  db.add_timezone_date  ${tz}  10  
     	Set Suite Variable  ${DAY2}
 	${list1}=  Create List  1  2  3  4
     	Set Suite Variable  ${list1}
-      ${city2}=   FakerLibrary.state
-      Set Suite Variable  ${city2}
-      ${latti2}=  get_latitude
-      Set Suite Variable  ${latti2}
-      ${longi2}=  get_longitude
-      Set Suite Variable  ${longi2}
-      ${postcode2}=  FakerLibrary.postcode
-      Set Suite Variable  ${postcode2}
-      ${address2}=  get_address
-      Set Suite Variable  ${address2}
+      # ${city2}=   FakerLibrary.state
+      # Set Suite Variable  ${city2}
+      # ${latti2}=  get_latitude
+      # Set Suite Variable  ${latti2}
+      # ${longi2}=  get_longitude
+      # Set Suite Variable  ${longi2}
+      # ${postcode2}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode2}
+      # ${address2}=  get_address
+      # Set Suite Variable  ${address2}
+      ${latti2}  ${longi2}  ${postcode2}  ${city2}  ${district}  ${state}  ${address2}=  get_loc_details
+      ${tz2}=   db.get_Timezone_by_lat_long   ${latti2}  ${longi2}
+      Set Suite Variable  ${tz2}
       ${parking_type2}    Random Element     ['none','free','street','privatelot','valet','paid']
       Set Suite Variable  ${parking_type2}
       ${24hours2}    Random Element    ['True','False']
       Set Suite Variable   ${24hours2}
-      ${sTime2}=  add_time  2  15
+      ${sTime2}=  add_timezone_time  ${tz}  2  15  
       Set Suite Variable  ${sTime2}
-      ${eTime2}=  add_time   2  45
+      ${eTime2}=  add_timezone_time  ${tz}  2  45  
       Set Suite Variable  ${eTime2}
       ${resp}=  Create Location  ${city2}  ${longi2}  ${latti2}  www.${city2}.com  ${postcode2}  ${address2}  ${parking_type2}  ${24hours2}  Weekly  ${list1}  ${DAY}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}
       Log  ${resp.json()}
@@ -81,17 +89,15 @@ JD-TC-DisableLocation-1
       Set Suite Variable   ${p1_s1}   ${resp.json()[0]['id']}
       Set Suite Variable   ${P1SERVICE1}   ${resp.json()[0]['name']}
 
-      ${sTime1}=  add_time  2  15
+      ${sTime1}=  add_timezone_time  ${tz}  2  15  
       Set Suite Variable  ${sTime1}
-      ${eTime1}=  add_time   2  30
+      ${eTime1}=  add_timezone_time  ${tz}  2  30  
       Set Suite Variable  ${eTime1}
       ${queue_name1}=  FakerLibrary.bs
       Set Suite Variable  ${queue_name1}
       ${resp}=  Create Queue  ${queue_name1}  Weekly  ${list1}  ${DAY}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${p1_s1}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${q_id1}  ${resp.json()}
-
-
 
       ${resp}=  Disable Location  ${lid}
       Log  ${resp.json()}
@@ -116,28 +122,41 @@ JD-TC-DisableLocation-2
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_E}${\n}
       Set Suite Variable  ${PUSERNAME_E}
       ${uid}=  get_uid  ${PUSERNAME_E}
       ${lid}=  Create Sample Location
-      ${DAY}=  get_date
+      ${resp}=   Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+      ${DAY}=  db.get_date_by_timezone  ${tz}
     	Set Suite Variable  ${DAY}
-      ${DAY2}=  add_date  10
+      ${DAY2}=  db.add_timezone_date  ${tz}  10  
     	Set Suite Variable  ${DAY2}
 	${list1}=  Create List  1  2  3  4
     	Set Suite Variable  ${list1}
-      ${city2}=   FakerLibrary.last_name
+      # ${city2}=   get_place
+      # Set Suite Variable  ${city2}
+      # ${latti2}=  get_latitude
+      # Set Suite Variable  ${latti2}
+      # ${longi2}=  get_longitude
+      # Set Suite Variable  ${longi2}
+      # ${postcode2}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode2}
+      # ${address2}=  get_address
+      # Set Suite Variable  ${address2}
+      ${latti2}  ${longi2}  ${postcode2}  ${city2}  ${district}  ${state}  ${address2}=  get_loc_details
+      ${tz2}=   db.get_Timezone_by_lat_long   ${latti2}  ${longi2}
+      Set Suite Variable  ${tz2}
       Set Suite Variable  ${city2}
-      ${latti2}=  get_latitude
       Set Suite Variable  ${latti2}
-      ${longi2}=  get_longitude
       Set Suite Variable  ${longi2}
-      ${postcode2}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode2}
-      ${address2}=  get_address
       Set Suite Variable  ${address2}
       ${parking_type2}    Random Element     ['none','free','street','privatelot','valet','paid']
       Set Suite Variable  ${parking_type2}
@@ -151,7 +170,7 @@ JD-TC-DisableLocation-2
       
 JD-TC-DisableLocation-UH1
       [Documentation]  Disable a location which is already disabled
-      ${resp}=  ProviderLogin  ${PUSERNAME_D}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Disable Location  ${lid}
       Should Be Equal As Strings  ${resp.status_code}  422
@@ -177,15 +196,19 @@ JD-TC-DisableLocation-UH2
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${PUSERNAME_G}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_G}${\n}
       ${lid3}=  Create Sample Location
       Set Suite Variable  ${lid3}
+      ${resp}=   Get Location ById  ${lid3}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${resp}=   ProviderLogout
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Disable Location  ${lid3}
       Should Be Equal As Strings  ${resp.status_code}  401
@@ -224,12 +247,16 @@ JD-TC-DisableLocation-UH6
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${PUSERNAME_F}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Provider Login  ${PUSERNAME_F}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_F}${\n}
       Set Suite Variable  ${PUSERNAME_F}
       ${lid4}=  Create Sample Location
+      ${resp}=   Get Location ById  ${lid4}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz4}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${resp}=  Disable Location  ${lid4}
       Should Be Equal As Strings  ${resp.status_code}  422
       Should Be Equal As Strings  "${resp.json()}"  "${BASE_LOCATION_CANNOT_BE_DISABLED}"
@@ -252,33 +279,44 @@ JD-TC-DisableLocation-UH7
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
       Should Be Equal As Strings    ${resp.status_code}    200
-      ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
       Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
       Set Suite Variable  ${MUSERNAME_E}
       ${uid}=  get_uid  ${MUSERNAME_E}
-      ${city8}=   get_place
+      # ${city8}=   get_place
+      # Set Suite Variable  ${city8}
+      # ${latti8}=  get_latitude
+      # Set Suite Variable  ${latti8}
+      # ${longi8}=  get_longitude
+      # Set Suite Variable  ${longi8}
+      # ${postcode8}=  FakerLibrary.postcode
+      # Set Suite Variable  ${postcode8}
+      ${latti8}  ${longi8}  ${city8}  ${postcode8}=  get_lat_long_city_pin
+      ${tz8}=   db.get_Timezone_by_lat_long   ${latti8}  ${longi8}
+      Set Suite Variable  ${tz8}
       Set Suite Variable  ${city8}
-      ${latti8}=  get_latitude
       Set Suite Variable  ${latti8}
-      ${longi8}=  get_longitude
       Set Suite Variable  ${longi8}
-      ${postcode8}=  FakerLibrary.postcode
       Set Suite Variable  ${postcode8}
       ${parking8}    Random Element   ${parkingType}
       Set Suite Variable  ${parking8}
       ${24hours8}    Random Element    ${bool}
       Set Suite Variable  ${24hours8}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
     	Set Suite Variable  ${DAY}
 	${list}=  Create List  1  2  3  4  5  6  7
     	Set Suite Variable  ${list}
-      ${sTime}=  add_time  0  15
+      ${sTime}=  add_timezone_time  ${tz}  0  15  
       Set Suite Variable   ${sTime}
-      ${eTime}=  add_time   0  30
+      ${eTime}=  add_timezone_time  ${tz}  0  30  
       Set Suite Variable   ${eTime}
       ${lid_A}=  Create Sample Location
+      ${resp}=   Get Location ById  ${lid_A}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tzA}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       # ${resp}=  Get Locations
       # Log  ${resp.json()}
       # Should Be Equal As Strings  ${resp.status_code}  200
@@ -305,12 +343,12 @@ JD-TC-DisableLocation-UH7
 
 JD-TC-VerifyDisableLocation-2
       [Documentation]  Verification of Disable location
-      ${resp}=  ProviderLogin  ${PUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       sleep  04s
       ${s_id}=  Create Sample Service  ${SERVICE1}
-      ${sTime3}=  add_time  0  55
-      ${eTime3}=  add_time   0  60
+      ${sTime3}=  add_timezone_time  ${tz}  0  55  
+      ${eTime3}=  add_timezone_time  ${tz}  0  60  
       ${resp}=  Create Queue  ${queue1}  Weekly  ${list1}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  5  ${lid2}  ${s_id}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -335,7 +373,7 @@ JD-TC-VerifyDisableLocation-2
 
 JD-TC-VerifyDisableLocation-1
       [Documentation]  Verification of Disable location
-      ${resp}=  ProviderLogin  ${PUSERNAME_D}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get queues
       Log  ${resp.json()}
@@ -347,7 +385,7 @@ JD-TC-VerifyDisableLocation-1
 
 JD-TC-VerifyDisableLocation-3
       [Documentation]  Verification of Disable location
-      ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       # ${resp}=  Get queues
       # Log  ${resp.json()}

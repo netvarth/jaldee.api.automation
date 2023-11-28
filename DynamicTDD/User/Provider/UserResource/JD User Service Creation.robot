@@ -47,7 +47,7 @@ JD-TC-ServiceForUser-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -99,7 +99,7 @@ JD-TC-ServiceForUser-1
 
 JD-TC-ServiceForUser-2
      [Documentation]  Create  a service for a valid user with service name same as another user
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+55662
@@ -143,7 +143,7 @@ JD-TC-ServiceForUser -UH2
 
 JD-TC-ServiceForUser-UH3      
      [Documentation]  Create an already existing service
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Create Service For User  ${SERVICE1}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id}  000
@@ -161,7 +161,7 @@ JD-TC-ServiceForUser-4
      ${length}=  Get Length   ${len}
      ${licId}  ${licname}=  get_highest_license_pkg
      FOR   ${a}  IN RANGE   0  ${length}
-          ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+          ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
           Log  ${resp.json()}
           Should Be Equal As Strings    ${resp.status_code}    200
           clear_service   ${MUSERNAME${a}}

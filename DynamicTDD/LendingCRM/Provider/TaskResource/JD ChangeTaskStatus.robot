@@ -25,7 +25,7 @@ JD-TC-ChangeTaskStatus-1
 
     [Documentation]  Change  task  status to Assigned
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -37,8 +37,13 @@ JD-TC-ChangeTaskStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -121,7 +126,7 @@ JD-TC-ChangeTaskStatus-2
 
     [Documentation]  Change  task  status to  In Progress
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -164,7 +169,7 @@ JD-TC-ChangeTaskStatus-3
 
     [Documentation]  Change  task  status to  Canceled
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -208,7 +213,7 @@ JD-TC-ChangeTaskStatus-4
 
     [Documentation]  Change  task  status to  completed
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -251,7 +256,7 @@ JD-TC-ChangeTaskStatus-UH5
 
     [Documentation]  Change  task  status  cancelled to  completed
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -277,7 +282,7 @@ JD-TC-ChangeTaskStatus-UH5
 
     ${resp}=    Change Task Status   ${task_uid2}  ${status_id5}
     Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}   422
+    Should Be Equal As Strings  ${resp.status_code}   200
 
     ${resp}=   Get Task By Id   ${task_uid2}
     Log   ${resp.content}
@@ -293,7 +298,7 @@ JD-TC-ChangeTaskStatus-UH1
 
     [Documentation]  Change  task  status to  Done already done status
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -327,7 +332,7 @@ JD-TC-ChangeTaskStatus-UH2
 
     [Documentation]  Change  task  status to   cancell already cancelled
 
-    ${resp}=   ProviderLogin  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

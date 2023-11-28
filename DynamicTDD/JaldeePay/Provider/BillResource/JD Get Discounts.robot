@@ -19,7 +19,7 @@ ${discount2}  Discge21
 
 JD-TC-Get Discounts-1
        [Documentation]   Provider login to Get Discounts
-       ${resp}=   ProviderLogin  ${PUSERNAME246}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME246}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        clear_Discount  ${PUSERNAME246}
        ${desc}=  FakerLibrary.Sentence   nb_words=2

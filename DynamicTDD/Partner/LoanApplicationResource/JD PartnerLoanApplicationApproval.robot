@@ -59,7 +59,7 @@ JD-TC-Partner Loan Application Approval Request-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -68,6 +68,7 @@ JD-TC-Partner Loan Application Approval Request-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -303,7 +304,7 @@ JD-TC-Partner Loan Application Approval Request-1
                                   
     [Documentation]             Partner Loan Application Approval Request - without add bank details
 
-     ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -312,6 +313,7 @@ JD-TC-Partner Loan Application Approval Request-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -519,7 +521,7 @@ JD-TC-Partner Loan Application Approval Request-1
                                   
     [Documentation]             Partner Loan Application Approval Request -  without verify bank details
 
-     ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -528,6 +530,7 @@ JD-TC-Partner Loan Application Approval Request-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -735,7 +738,7 @@ JD-TC-Partner Loan Application Approval Request-1
                                   
     [Documentation]             Partner Loan Application Approval Request - empty loan uid
 
-     ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -744,6 +747,7 @@ JD-TC-Partner Loan Application Approval Request-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -951,7 +955,7 @@ JD-TC-Partner Loan Application Approval Request-1
                                   
     [Documentation]             Partner Loan Application Approval Request -invalid loan uid
 
-     ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -960,6 +964,7 @@ JD-TC-Partner Loan Application Approval Request-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1167,7 +1172,7 @@ JD-TC-Partner Loan Application Approval Request-1
                                   
     [Documentation]             Partner Loan Application Approval Request - without scheme id
 
-     ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -1176,6 +1181,7 @@ JD-TC-Partner Loan Application Approval Request-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -1393,7 +1399,7 @@ JD-TC-Partner Loan Application Approval Request-UH2
                                   
     [Documentation]             Partner Loan Application Approval Request - with another provider login 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

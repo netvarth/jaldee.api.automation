@@ -48,7 +48,7 @@ JD-TC-Get_partner_Count-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -155,7 +155,7 @@ JD-TC-Get_partner_Count-2
                                   
     [Documentation]               Get Partner with id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -167,7 +167,7 @@ JD-TC-Get_partner_Count-3
                                   
     [Documentation]               Get Partner with uid
 
-    ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -179,7 +179,7 @@ JD-TC-Get_partner_Count-4
                                   
     [Documentation]               Get Partner with referenceNo
 
-    ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -191,7 +191,7 @@ JD-TC-Get_partner_Count-5
                                   
     [Documentation]               Get Partner with partnerName
 
-    ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -203,7 +203,7 @@ JD-TC-Get_partner_Count-6
                                   
     [Documentation]               Get Partner with  
 
-    ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -215,7 +215,7 @@ JD-TC-Get_partner_Count-7
                                   
     [Documentation]               Get Partner with partnerMobile
 
-    ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -236,7 +236,7 @@ JD-TC-Get_partner_Count-UH2
                                   
     [Documentation]               Get Partner with another Provider Login
 
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

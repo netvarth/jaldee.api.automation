@@ -112,7 +112,7 @@ JD-TC-ChangeLeadStatusbyuser-1
     Log  ${unique_lnames}
     Set Suite Variable   ${unique_lnames}
 
-    ${resp}=  Provider Login  ${MUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME42}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id1}  ${resp.json()['id']}
@@ -144,8 +144,13 @@ JD-TC-ChangeLeadStatusbyuser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=   Get Location ById  ${locId1}
@@ -419,9 +424,16 @@ JD-TC-ChangeLeadStatusbyuser-1
     
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -464,7 +476,7 @@ JD-TC-ChangeLeadStatusbyuser-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${first_name1}  ${resp.json()['firstName']}
@@ -820,7 +832,7 @@ JD-TC-ChangeLeadStatusbyuser-2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -830,8 +842,13 @@ JD-TC-ChangeLeadStatusbyuser-2
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
 
@@ -1079,7 +1096,7 @@ JD-TC-ChangeLeadStatusbyuser-2
 JD-TC-ChangeLeadStatusbyuser-3
     [Documentation]  lead status change  Sales Verified  to login with qns
  
-    ${resp}=   ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1133,7 +1150,7 @@ JD-TC-ChangeLeadStatusbyuser-3
 JD-TC-ChangeLeadStatusbyuser-4
     [Documentation]  lead status change   login to login varification  
   
-    ${resp}=   ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1151,7 +1168,7 @@ JD-TC-ChangeLeadStatusbyuser-4
 JD-TC-ChangeLeadStatusbyuser-5
     [Documentation]  lead status change   login varification  to credit recommendation with qnsans
     
-    ${resp}=   ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1198,7 +1215,7 @@ JD-TC-ChangeLeadStatusbyuser-6
 
     [Documentation]  lead status change    credit recommendation  to loan sanction with qnsans
     
-    ${resp}=   ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1242,7 +1259,7 @@ JD-TC-ChangeLeadStatusbyuser-7
 
     [Documentation]  lead status change  loan sanction to Loan Disbursement
 
-    ${resp}=   ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1260,7 +1277,7 @@ JD-TC-ChangeLeadStatusbyuser-8
 
     [Documentation]  lead created by user then change status by branch
 
-    ${resp}=   ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1270,8 +1287,13 @@ JD-TC-ChangeLeadStatusbyuser-8
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${title3}=  FakerLibrary.user name
@@ -1414,7 +1436,7 @@ JD-TC-ChangeLeadStatusbyuser-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1468,7 +1490,7 @@ JD-TC-ChangeLeadStatusbyuser-9
 
     [Documentation]  lead created by branch then change status by user
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1477,8 +1499,13 @@ JD-TC-ChangeLeadStatusbyuser-9
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${title3}=  FakerLibrary.user name
@@ -1622,7 +1649,7 @@ JD-TC-ChangeLeadStatusbyuser-9
     Should Be Equal As Strings    ${resp.status_code}    200
 
    
-    ${resp}=   ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1676,7 +1703,7 @@ JD-TC-ChangeLeadStatusbyuser-10
 
     [Documentation]  lead created by one  user then change status by another user same branch
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1685,8 +1712,13 @@ JD-TC-ChangeLeadStatusbyuser-10
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
       FOR  ${p}  IN RANGE  5
@@ -1747,13 +1779,13 @@ JD-TC-ChangeLeadStatusbyuser-10
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
 
 
-    ${resp}=   ProviderLogin  ${PUSERPH1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -1763,8 +1795,13 @@ JD-TC-ChangeLeadStatusbyuser-10
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
   
     # ${resp}=  Provider Logout
@@ -1772,7 +1809,7 @@ JD-TC-ChangeLeadStatusbyuser-10
     # Should Be Equal As Strings    ${resp.status_code}    200
 
    
-    # ${resp}=   ProviderLogin  ${PUSERPH1}  ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD} 
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
     # Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1792,7 +1829,7 @@ JD-TC-ChangeLeadStatusbyuser-UH1
 
     [Documentation]  lead created by one  user then change status by another provider
 
-    ${resp}=   ProviderLogin  ${MUSERNAME63}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME63}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}

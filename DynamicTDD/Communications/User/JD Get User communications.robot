@@ -69,7 +69,7 @@ JD-TC-Get User communications-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E1}${\n}
@@ -79,11 +79,6 @@ JD-TC-Get User communications-1
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
 
-
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}  ${DAY1}
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list}  ${list}
     ${ph1}=  Evaluate  ${MUSERNAME_E1}+1000000000
     ${ph2}=  Evaluate  ${MUSERNAME_E1}+2000000000
     ${views}=  Random Element    ${Views}
@@ -94,21 +89,29 @@ JD-TC-Get User communications-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
    
-    ${sTime}=  subtract_time  0  30
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  30
     Set Suite Variable  ${BsTime30}  ${sTime}
-    ${eTime}=  add_time   3  00
+    ${eTime}=  add_timezone_time  ${tz}  3  00  
     Set Suite Variable  ${BeTime30}  ${eTime}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  
+    ${list}=  Create List  1  2  3  4  5  6  7
+    Set Suite Variable  ${list}  
     ${resp}=  Update Business Profile with Schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -132,12 +135,14 @@ JD-TC-Get User communications-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[0]}
-    ${resp}=  Enable Waitlist
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}
+        ${resp}=  Enable Waitlist
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     sleep   01s
 
     ${resp}=  Get jaldeeIntegration Settings
@@ -155,6 +160,11 @@ JD-TC-Get User communications-1
     ${resp}=  Get Consumer Notification Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${bsname}  ${resp.json()['businessName']}
 
      ${resp}=  Toggle Department Enable
      Log   ${resp.json()}
@@ -211,15 +221,15 @@ JD-TC-Get User communications-1
     ${p_id}=  get_acc_id  ${MUSERNAME_E1}
     Set Suite Variable   ${p_id}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  subtract_time  0  30
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  0  30
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   1  30
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${eTime1}
     
     ${resp}=    Get Locations
@@ -283,12 +293,11 @@ JD-TC-Get User communications-1
 
     ${cid}=  get_id  ${CUSERNAME25}
     ${msg}=  FakerLibrary.word
-    # ${CUR_DAY}=  get_date
-    ${CUR_DAY}=  add_date  2 
+    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${CUR_DAY}=  db.add_timezone_date  ${tz}  2   
     ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${CUR_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${u_id1}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${cwid0}  ${wid[0]} 
     ${resp}=  Get consumer Waitlist By Id   ${cwid0}  ${p_id}   
@@ -297,7 +306,7 @@ JD-TC-Get User communications-1
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Set Suite Variable  ${estTime}  ${resp.json()['serviceTime']}
    
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -307,8 +316,8 @@ JD-TC-Get User communications-1
 
     ${resp}=   Get Waitlist EncodedId    ${cwid0}
     Log   ${resp.json()}
-    Set Suite Variable   ${W_uuid1}   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${W_uuid1}   ${resp.json()}
     
     Set Suite Variable  ${W_encId}  ${resp.json()}
 
@@ -332,12 +341,17 @@ JD-TC-Get User communications-1
     ${resp}=  Get Appointment Messages
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
-    ${WaitlistNotify_msg}=  Set Variable   ${resp.json()['confirmationMessages']['Consumer_APP']} 
+    ${WaitlistNotify_msg}=  Set Variable   ${resp.json()['confirmationMessages']['Consumer_APP']}
+
+    # ${provider_msg}=   Set Variable  Message from [providerName] : [message] 
+    # ${provider_msg}=   Replace String  ${provider_msg}  [providerName]   ${bsname}
+    # ${provider_msg}=   Replace String  ${provider_msg}  [message]        other
    
     ${bookingid}=  Format String  ${bookinglink}  ${W_encId}  ${W_encId}
     ${WaitlistNotify_msg}=  Replace String  ${WaitlistNotify_msg}  [consumer]   ${cname}
     ${WaitlistNotify_msg}=  Replace String  ${WaitlistNotify_msg}  [bookingId]   ${W_encId}
-
+    # ${WaitlistNotify_msg}=  Replace String  ${WaitlistNotify_msg}  [providerMessage]   ${provider_msg}
+ 
     ${resp}=  Get User communications   ${u_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}                     200
@@ -384,24 +398,33 @@ JD-TC-Get User communications-2
     clear_Consumermsg  ${CUSERNAME25}
     clear_Providermsg  ${MUSERNAME_E1}
 
-    ${resp}=  Delete Waitlist Consumer  ${cwid0}  ${p_id}
+    ${resp}=  Cancel Waitlist  ${cwid0}  ${p_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep  04s
 
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
      
     ${resp}=  Get Appointment Messages
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
-    ${WaitlistNotify_msg}=  Set Variable   ${resp.json()['cancellationMessages']['SP_APP']} 
+    ${WaitlistNotify_msg}=  Set Variable   ${resp.json()['cancellationMessages']['Consumer_APP']} 
+   
+    # ${bookingid}=  Format String  ${bookinglink}  ${W_encId}  ${W_encId}
+    # ${WaitlistNotify_msg}=  Replace String  ${WaitlistNotify_msg}  [consumer]   ${uname1}
+    # ${WaitlistNotify_msg}=  Replace String  ${WaitlistNotify_msg}  [bookingId]   ${W_encId}
+
+    ${provider_msg}=   Set Variable  Message from [providerName] : [message] 
+    ${provider_msg}=   Replace String  ${provider_msg}  [providerName]   ${bsname}
+    ${provider_msg}=   Replace String  ${provider_msg}  [message]        other
    
     ${bookingid}=  Format String  ${bookinglink}  ${W_encId}  ${W_encId}
     ${WaitlistNotify_msg}=  Replace String  ${WaitlistNotify_msg}  [consumer]   ${uname1}
     ${WaitlistNotify_msg}=  Replace String  ${WaitlistNotify_msg}  [bookingId]   ${W_encId}
+    ${WaitlistNotify_msg}=  Replace String  ${WaitlistNotify_msg}  [providerMessage]   ${provider_msg}
 
     ${resp}=  Consumer Login  ${CUSERNAME25}  ${PASSWORD}
     Log  ${resp.json()}
@@ -414,10 +437,10 @@ JD-TC-Get User communications-2
 
     Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}        ${u_id1}
     Should Be Equal As Strings  ${resp.json()[0]['waitlistId']}         ${cwid0}
-    Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${WaitlistNotify_msg}${SPACE}
+    Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${WaitlistNotify_msg}
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${cid}
 
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -493,7 +516,7 @@ JD-TC-Get User communications-3
     Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${msg2}
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${u_id1}
 
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -525,7 +548,7 @@ JD-TC-Get User communications-4
     clear_Consumermsg  ${CUSERNAME27}
     clear_Consumermsg  ${CUSERNAME25}
 
-    ${resp}=   ProviderLogin  ${MUSERNAME_E1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${account_id1}=  get_acc_id  ${MUSERNAME_E1}
@@ -608,10 +631,15 @@ JD-TC-Get User communications-4
 JD-TC-Get User communications-5
 	[Documentation]   User communicate with consumer after Appointment_Add operation
 
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${P_Sector}  ${decrypted_data['sector']}
+
+    # Set Test Variable  ${P_Sector}   ${resp.json()['sector']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -631,12 +659,12 @@ JD-TC-Get User communications-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    waitlist=${bool[1]}   appointment=${bool[1]}   
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  subtract_time  0  30
+    ${sTime1}=  db.subtract_timezone_time  ${tz}  0  30
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   1  30
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${eTime1}
 
     ${schedule_name}=  FakerLibrary.bs
@@ -688,7 +716,7 @@ JD-TC-Get User communications-5
     Set Suite Variable  ${apptid1}  ${apptid[0]}
     # sleep  02s 
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -806,7 +834,7 @@ JD-TC-Get User communications-6
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${u_id1}
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}          ${p_id}
 
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -826,7 +854,7 @@ JD-TC-Get User communications-7
 	[Documentation]   Communication between provider and consumer after Appointment_Cancel operation
 
     
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -856,7 +884,7 @@ JD-TC-Get User communications-7
 
     sleep  02s
 
-    ${TODAY1}=  get_date
+    ${TODAY1}=  db.get_date_by_timezone  ${tz}
     ${TODAY}=  Convert Date  ${TODAY1}  result_format=%a, %d %b %Y
     ${converted_slot}=  convert_slot_12hr  ${slot1} 
     log    ${converted_slot}
@@ -902,7 +930,7 @@ JD-TC-Get User communications-7
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}   ${cid}
 
 
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -969,7 +997,7 @@ JD-TC-Get User communications-UH2
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${u_id1}
 
 
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -990,7 +1018,7 @@ JD-TC-Get User communications-UH2
 
 JD-TC-Get User communications-UH3
     [Documentation]  Get User communications using Provider id
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${cid2}=  get_id  ${CUSERNAME2}
@@ -1010,7 +1038,7 @@ JD-TC-Get User communications-UH3
 
 JD-TC-Get User communications-UH4
     [Documentation]  verify 'Get_User_communications' using another user id of same provider
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${cid2}=  get_id  ${CUSERNAME2}
@@ -1031,7 +1059,7 @@ JD-TC-Get User communications-UH4
 
 JD-TC-Get User communications-UH5
     [Documentation]  Get User communications using invalid Provider id
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${cid2}=  get_id  ${CUSERNAME2}
@@ -1087,7 +1115,7 @@ JD-TC-Get User communications-UH7
     Should Be Equal As Strings  ${resp.json()[0]['msg']}                ${msg2}
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${u_id1}
 
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -25,7 +25,7 @@ ${count}       ${9}
 JD-TC-Create Lucene Search Documentation-1
     [Documentation]   Create Lucene Search Documentation by provider login .
 
-    ${resp}=  Provider Login  ${PUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pid}  ${resp.json()['id']}

@@ -42,7 +42,7 @@ JD-TC-Upload Logo Image of USER-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E1}${\n}
@@ -136,7 +136,7 @@ JD-TC-Upload Logo Image of USER-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -174,7 +174,7 @@ JD-TC-Upload Logo Image of USER-1
 
 JD-TC-Upload Logo Image of USER-UH1
     [Documentation]   Provider check to  Upload Logo image of USER
-    ${resp}=  ProviderLogin  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p_id}=  get_acc_id  ${MUSERNAME_E1}
     # ${resp}=  pyproviderlogin  ${MUSERNAME_E1}  ${PASSWORD}
@@ -227,7 +227,7 @@ JD-TC-Upload Logo Image of USER-UH3
 
 JD-TC-Upload Logo Image of USER-UH4
     [Documentation]   User Upload Logo image without creating user profile
-    ${resp}=  ProviderLogin  ${MUSERNAME43}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME43}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p_id}=  get_acc_id  ${MUSERNAME43}
     # ${resp}=  pyproviderlogin  ${MUSERNAME43}  ${PASSWORD}

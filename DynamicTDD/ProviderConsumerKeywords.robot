@@ -9,11 +9,15 @@ Resource          Keywords.robot
 *** Keywords ***
 
 Send Otp For Login
-    [Arguments]    ${loginid}  ${accountId}  ${countryCode}=+91
-    ${otp}=    Create Dictionary    loginId=${loginid}  accountId=${accountId}  countryCode=${countryCode}
-    ${log}=    json.dumps    ${otp}
+    [Arguments]    ${loginid}  ${accountId}  ${countryCode}=+91  &{kwargs}
+    Check And Create YNW Session
+    ${data}=    Create Dictionary    loginId=${loginid}  accountId=${accountId}  countryCode=${countryCode}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${body}=    json.dumps    ${data}
     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
-    ${resp}=    POST On Session    ynw    /consumer/oauth/identify    data=${log}  headers=${headers2}  expected_status=any
+    ${resp}=    POST On Session    ynw    /consumer/oauth/identify    data=${body}  headers=${headers2}  expected_status=any
     [Return]  ${resp}
 
 Verify Otp For Login

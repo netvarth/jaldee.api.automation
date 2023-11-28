@@ -41,18 +41,21 @@ JD-TC-GetApptByEncryptedIDconsumer-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_X}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_X}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_X}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_X}${\n}
     Set Suite Variable  ${PUSERNAME_X}
 
-    # ${resp}=  Provider Login  ${PUSERNAME_X}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_X}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    ${DAY1}=  get_date
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
+
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_X}+15566122
     ${ph2}=  Evaluate  ${PUSERNAME_X}+25566122
@@ -64,18 +67,22 @@ JD-TC-GetApptByEncryptedIDconsumer-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -129,7 +136,7 @@ JD-TC-GetApptByEncryptedIDconsumer-1
 
     clear_service   ${PUSERNAME_X}
     clear_location  ${PUSERNAME_X}
-    # ${resp}=  Provider Login  ${PUSERNAME_X}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_X}  ${PASSWORD}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # ${highest_package}=  get_highest_license_pkg
     # Log  ${highest_package}
@@ -139,14 +146,19 @@ JD-TC-GetApptByEncryptedIDconsumer-1
     # Should Be Equal As Strings    ${resp.status_code}   200
     ${pid}=  get_acc_id  ${PUSERNAME_X}
     Set Suite Variable   ${pid}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME_X}
     ${SERVICE1}=   FakerLibrary.name
     Set Suite Variable   ${SERVICE1} 
@@ -215,7 +227,7 @@ JD-TC-GetApptByEncryptedIDconsumer-1
     Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY1}
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_X}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_X}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment EncodedID    ${apptid1}

@@ -59,13 +59,20 @@ JD-TC-UpdateStoreContactinfo-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
-    Set Suite Variable  ${pid236}  ${resp.json()['id']}
-    Set Suite Variable  ${P236_fName}  ${resp.json()['firstName']}
-    Set Suite Variable  ${P236_lName}  ${resp.json()['lastName']}
-    Set Suite Variable  ${Ph236}  ${resp.json()['primaryPhoneNumber']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid236}  ${decrypted_data['id']}
+    Set Suite Variable  ${P236_fName}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${P236_lName}  ${decrypted_data['lastName']}
+    Set Suite Variable  ${Ph236}  ${decrypted_data['primaryPhoneNumber']}
+
+    # Set Suite Variable  ${pid236}  ${resp.json()['id']}
+    # Set Suite Variable  ${P236_fName}  ${resp.json()['firstName']}
+    # Set Suite Variable  ${P236_lName}  ${resp.json()['lastName']}
+    # Set Suite Variable  ${Ph236}  ${resp.json()['primaryPhoneNumber']}
 
     ${accId236}=  get_acc_id  ${PUSERPH0}
     Set Suite Variable  ${accId236}
@@ -116,7 +123,7 @@ JD-TC-UpdateStoreContactinfo-1
 JD-TC-UpdateStoreContactinfo-UH1
     [Documentation]   Update Store_Contact_info Without using First_Name
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -130,7 +137,7 @@ JD-TC-UpdateStoreContactinfo-UH1
 JD-TC-UpdateStoreContactinfo-2
     [Documentation]   Update Store_Contact_info Without using Last_Name
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -148,7 +155,7 @@ JD-TC-UpdateStoreContactinfo-2
 JD-TC-UpdateStoreContactinfo-UH2
     [Documentation]   Update Store_Contact_info Without using Phone_Number
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -162,7 +169,7 @@ JD-TC-UpdateStoreContactinfo-UH2
 JD-TC-UpdateStoreContactinfo-3
     [Documentation]   Update Store_Contact_info Without using Email_id
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -176,7 +183,7 @@ JD-TC-UpdateStoreContactinfo-3
 JD-TC-UpdateStoreContactinfo-4
     [Documentation]   Update Store_Contact_info Without using Address
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -189,7 +196,7 @@ JD-TC-UpdateStoreContactinfo-4
 JD-TC-UpdateStoreContactinfo-5
     [Documentation]   Update Store_Contact_info Without using Whatsapp_Number
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -223,7 +230,7 @@ JD-TC-UpdateStoreContactinfo-UH4
 JD-TC-UpdateStoreContactinfo-UH5
     [Documentation]   Update Store_Contact_info using Store_Contact_info as EMPTY
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Update Store Contact info 

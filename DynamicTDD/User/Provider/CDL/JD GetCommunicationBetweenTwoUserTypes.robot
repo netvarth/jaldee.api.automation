@@ -48,7 +48,7 @@ JD-TC-GetCommunicationBetweenTwoUserTypes-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME70}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME70}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id1}  ${resp.json()['id']}
@@ -95,7 +95,7 @@ JD-TC-GetCommunicationBetweenTwoUserTypes-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME21}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -141,7 +141,7 @@ JD-TC-GetCommunicationBetweenTwoUserTypes-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id3}  ${resp.json()['id']}
@@ -186,7 +186,7 @@ JD-TC-GetCommunicationBetweenTwoUserTypes-4
     [Documentation]   Provider send a message to a provider consumer with one attachment.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -241,7 +241,7 @@ JD-TC-GetCommunicationBetweenTwoUserTypes-5
     [Documentation]   Provider send a message to a partner with one attachment.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME34}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

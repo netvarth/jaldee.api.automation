@@ -23,7 +23,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-Get_Catalog_By_Criteria-1
     [Documentation]  Provider Create order catalog  and Get_Catalog_By_Criteria
     clear_Item  ${PUSERNAME10}
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${displayName1}=   FakerLibrary.name 
@@ -94,9 +94,9 @@ JD-TC-Get_Catalog_By_Criteria-1
     Verify Response  ${resp}  promotionalPriceType=${promotionalPriceType[1]}   promotionalPrice=${promoPrice1float}    promotionalPrcnt=0.0   showPromotionalPrice=${bool[1]}   itemCode=${itemCode2}   promotionLabelType=${promotionLabelType[3]}   promotionLabel=${promoLabel1}   
 
     
-    ${startDate}=  get_date
+    ${startDate}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${startDate}
-    ${endDate}=  add_date  10      
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${endDate}
 
     # ${noOfOccurance}=  Random Int  min=0   max=10
@@ -104,9 +104,9 @@ JD-TC-Get_Catalog_By_Criteria-1
 
     Set Suite Variable  ${noOfOccurance}   0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
 
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -272,7 +272,7 @@ JD-TC-Get_Catalog_By_Criteria-1
 
 JD-TC-Get_Catalog_By_Criteria-UH1
     [Documentation]  Get_Items_From_Catalog using invalid id
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -309,7 +309,7 @@ JD-TC-Get_Catalog_By_Criteria-UH3
 JD-TC-Get_Catalog_By_Criteria-UH4
     [Documentation]   A provider try to Get_Items_From_Catalog of another provider
     clear_Item  ${PUSERNAME100}
-    ${resp}=  ProviderLogin  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

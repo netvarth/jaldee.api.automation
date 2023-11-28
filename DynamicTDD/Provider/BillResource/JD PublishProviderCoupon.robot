@@ -22,7 +22,7 @@ JD-TC-PublishProviderCoupon-1
     clear_service  ${PUSERNAME103}
     clear_customer   ${PUSERNAME103}
     clear_Item   ${PUSERNAME103}
-    ${resp}=  ProviderLogin  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME103}
 
@@ -41,10 +41,10 @@ JD-TC-PublishProviderCoupon-1
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -79,7 +79,7 @@ JD-TC-PublishProviderCoupon-2
     clear_service  ${PUSERNAME103}
     clear_customer   ${PUSERNAME103}
     clear_Item   ${PUSERNAME103}
-    ${resp}=  ProviderLogin  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME103}
 
@@ -98,10 +98,10 @@ JD-TC-PublishProviderCoupon-2
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -141,7 +141,7 @@ JD-TC-PublishProviderCoupon-UH1
     clear_service  ${PUSERNAME104}
     clear_customer   ${PUSERNAME104}
     clear_Item   ${PUSERNAME104}
-    ${resp}=  ProviderLogin  ${PUSERNAME104}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME104}
     
@@ -160,10 +160,10 @@ JD-TC-PublishProviderCoupon-UH1
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -181,7 +181,7 @@ JD-TC-PublishProviderCoupon-UH1
     Should Be Equal As Strings  ${resp.status_code}  200  
     Should Be Equal As Strings  ${resp.json()['couponRules']['published']}  ${bool[0]}
     
-    ${PUB_DAY}=  subtract_date  4
+    ${PUB_DAY}=  db.subtract_timezone_date  ${tz}   4
     ${resp}=  Publish Provider Coupon    ${coupon_id1}   ${PUB_DAY}    ${EN_DAY}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -195,7 +195,7 @@ JD-TC-PublishProviderCoupon-UH2
     clear_service  ${PUSERNAME103}
     clear_customer   ${PUSERNAME103}
     clear_Item   ${PUSERNAME103}
-    ${resp}=  ProviderLogin  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME103}
     
@@ -214,10 +214,10 @@ JD-TC-PublishProviderCoupon-UH2
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -248,7 +248,7 @@ JD-TC-PublishProviderCoupon-UH3
     clear_service  ${PUSERNAME103}
     clear_customer   ${PUSERNAME103}
     clear_Item   ${PUSERNAME103}
-    ${resp}=  ProviderLogin  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME103}
     
@@ -267,10 +267,10 @@ JD-TC-PublishProviderCoupon-UH3
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -305,7 +305,7 @@ JD-TC-PublishProviderCoupon-UH4
     clear_service  ${PUSERNAME103}
     clear_customer   ${PUSERNAME103}
     clear_Item   ${PUSERNAME103}
-    ${resp}=  ProviderLogin  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME103}
     
@@ -324,10 +324,10 @@ JD-TC-PublishProviderCoupon-UH4
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -364,7 +364,7 @@ JD-TC-PublishProviderCoupon-UH5
     clear_service  ${PUSERNAME103}
     clear_customer   ${PUSERNAME103}
     clear_Item   ${PUSERNAME103}
-    ${resp}=  ProviderLogin  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME103}
     
@@ -383,10 +383,10 @@ JD-TC-PublishProviderCoupon-UH5
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -419,7 +419,7 @@ JD-TC-PublishProviderCoupon-UH6
     clear_service  ${PUSERNAME103}
     clear_customer   ${PUSERNAME103}
     clear_Item   ${PUSERNAME103}
-    ${resp}=  ProviderLogin  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME103}
     
@@ -438,10 +438,10 @@ JD-TC-PublishProviderCoupon-UH6
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -463,7 +463,7 @@ JD-TC-PublishProviderCoupon-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Publish Provider Coupon    ${coupon_id1}   ${ST_DAY}    ${EN_DAY}  
@@ -481,7 +481,7 @@ JD-TC-PublishProviderCoupon-UH7
     clear_service  ${PUSERNAME103}
     clear_customer   ${PUSERNAME103}
     clear_Item   ${PUSERNAME103}
-    ${resp}=  ProviderLogin  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME103}
     
@@ -500,10 +500,10 @@ JD-TC-PublishProviderCoupon-UH7
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  subtract_date   15
-    ${EN_DAY}=  subtract_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.subtract_timezone_date  ${tz}    15
+    ${EN_DAY}=  db.subtract_timezone_date  ${tz}    10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -521,8 +521,8 @@ JD-TC-PublishProviderCoupon-UH7
     Should Be Equal As Strings  ${resp.status_code}  200  
     Should Be Equal As Strings  ${resp.json()['couponRules']['published']}  ${bool[0]}
     
-    ${pub_date_to}=   add_date   2
-    ${pub_date_from}=   add_date  1
+    ${pub_date_to}=   db.add_timezone_date  ${tz}   2
+    ${pub_date_from}=   db.add_timezone_date  ${tz}  1  
     ${resp}=  Publish Provider Coupon    ${coupon_id1}   ${pub_date_to}    ${pub_date_from}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -536,7 +536,7 @@ JD-TC-PublishProviderCoupon-UH8
     clear_service  ${PUSERNAME103}
     clear_customer   ${PUSERNAME103}
     clear_Item   ${PUSERNAME103}
-    ${resp}=  ProviderLogin  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME103}
     
@@ -555,10 +555,10 @@ JD-TC-PublishProviderCoupon-UH8
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -576,8 +576,8 @@ JD-TC-PublishProviderCoupon-UH8
     Should Be Equal As Strings  ${resp.status_code}  200  
     Should Be Equal As Strings  ${resp.json()['couponRules']['published']}  ${bool[0]}
     
-    ${pub_date_to}=  get_date
-    ${pub_date_from}=  add_date  5
+    ${pub_date_to}=  db.get_date_by_timezone  ${tz}
+    ${pub_date_from}=  db.add_timezone_date  ${tz}  5  
     ${resp}=  Publish Provider Coupon    ${coupon_id1}   ${pub_date_from}    ${pub_date_to}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422  
@@ -591,7 +591,7 @@ JD-TC-PublishProviderCoupon-UH9
     clear_service  ${PUSERNAME103}
     clear_customer   ${PUSERNAME103}
     clear_Item   ${PUSERNAME103}
-    ${resp}=  ProviderLogin  ${PUSERNAME103}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME103}
     
@@ -610,10 +610,10 @@ JD-TC-PublishProviderCoupon-UH9
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -631,8 +631,8 @@ JD-TC-PublishProviderCoupon-UH9
     Should Be Equal As Strings  ${resp.status_code}  200  
     Should Be Equal As Strings  ${resp.json()['couponRules']['published']}  ${bool[0]}
     
-    ${pub_date_to}=   add_date   20
-    ${pub_date_from}=   add_date  15
+    ${pub_date_to}=   db.add_timezone_date  ${tz}   20
+    ${pub_date_from}=   db.add_timezone_date  ${tz}  15  
     ${resp}=  Publish Provider Coupon    ${coupon_id1}   ${pub_date_to}    ${pub_date_from}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422  

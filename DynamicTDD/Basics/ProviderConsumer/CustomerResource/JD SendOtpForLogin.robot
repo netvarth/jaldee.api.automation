@@ -23,7 +23,7 @@ ${wrongaccid}=    11
 JD-TC-SendOtp-1
     [Documentation]    Send OTP with valid login id and account id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME72}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME72}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${accountId}=    get_acc_id       ${PUSERNAME72}
@@ -44,7 +44,7 @@ JD-TC-SendOtp-1
 JD-TC-SendOtp-UH1
     [Documentation]    Send OTP with Another login id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME72}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME72}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${accountId}=    get_acc_id       ${PUSERNAME72}
@@ -56,7 +56,7 @@ JD-TC-SendOtp-UH1
 JD-TC-SendOtp-UH2
     [Documentation]    Send OTP where loginid is empty
 
-    ${resp}=   ProviderLogin  ${PUSERNAME72}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME72}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${accountId}=    get_acc_id       ${PUSERNAME72}
@@ -69,7 +69,7 @@ JD-TC-SendOtp-UH2
 
 JD-TC-SendOtp-UH3
     [Documentation]    Send OTP with wrong accid
-    ${resp}=   ProviderLogin  ${PUSERNAME72}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME72}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${accountId}=    get_acc_id       ${PUSERNAME72}

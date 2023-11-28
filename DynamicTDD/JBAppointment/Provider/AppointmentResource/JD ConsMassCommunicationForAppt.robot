@@ -37,10 +37,14 @@ JD-TC-ConsMassCommunicationForAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${p_id}  ${decrypted_data['id']}
+    # Set Suite Variable  ${p_id}  ${resp.json()['id']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -88,14 +92,20 @@ JD-TC-ConsMassCommunicationForAppt-1
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME250}
     clear_Consumermsg  ${CUSERNAME11}
     clear_Providermsg  ${PUSERNAME250}
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -258,10 +268,14 @@ JD-TC-ConsMassCommunicationForAppt-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME247}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME247}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -292,12 +306,18 @@ JD-TC-ConsMassCommunicationForAppt-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME247}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -456,7 +476,7 @@ JD-TC-ConsMassCommunicationForAppt-3
 
     [Documentation]   Provider sending consumer mass communication with all medium set as false.
 
-    ${resp}=  Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -560,7 +580,7 @@ JD-TC-ConsMassCommunicationForAppt-UH1
 
     [Documentation]   Provider sending consumer mass communication without communication msg.
 
-    ${resp}=  Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -583,7 +603,7 @@ JD-TC-ConsMassCommunicationForAppt-UH2
 
     [Documentation]   Provider sending consumer mass communication without appointment id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -606,7 +626,7 @@ JD-TC-ConsMassCommunicationForAppt-UH3
 
     [Documentation]   Provider sending consumer mass communication using invalid appointment id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${invalid_uuid}=   Random Int  min=1000   max=2000
 
@@ -630,7 +650,7 @@ JD-TC-ConsMassCommunicationForAppt-UH4
 
     [Documentation]   Provider sending consumer mass communication using another provider's appointment id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${cookie}   ${resp}=    Imageupload.spLogin     ${PUSERNAME250}     ${PASSWORD}

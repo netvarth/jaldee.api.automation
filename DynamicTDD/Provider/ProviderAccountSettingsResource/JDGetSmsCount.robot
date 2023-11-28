@@ -16,7 +16,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-SmsCount-1
     [Documentation]   Get Account settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${resp}=  Get Business Profile
     # Log  ${resp.content}

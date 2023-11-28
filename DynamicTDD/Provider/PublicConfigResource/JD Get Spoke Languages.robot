@@ -56,7 +56,7 @@ JD-TC-Get Spoke Languages -1
        
 JD-TC-Get Spoke Languages -2
        [Documentation]   Provider check to Get Get Sub Domain Settings provider login
-       ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
        Should Be Equal As Strings  ${resp.status_code}  200
        ${resp}=  Get Spoke Languages
        Should Be Equal As Strings    ${resp.status_code}   200 

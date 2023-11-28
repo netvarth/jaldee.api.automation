@@ -33,15 +33,21 @@ JD-TC-Get Appointment Schedule Count-1
     ${length}=  Get Length   ${len}
     ${licId}  ${licname}=  get_highest_license_pkg
     FOR   ${a}  IN RANGE   ${start}  ${length}
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-    ${domain}=   Set Variable    ${resp.json()['sector']}
-    ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+    
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable   ${pkgId}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${domain}=   Set Variable    ${decrypted_data['sector']}
+    ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+    # ${domain}=   Set Variable    ${resp.json()['sector']}
+    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
     ${resp2}=   Get Domain Settings    ${domain}  
     Should Be Equal As Strings    ${resp.status_code}    200
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${check}  ${resp2.json()['multipleLocation']}
     Run Keyword If  "${check}"=="True" and "${pkgId}"=="${licId}"  Exit For Loop
     END
@@ -73,12 +79,13 @@ JD-TC-Get Appointment Schedule Count-1
     Set Suite Variable   ${s_id3}
     ${s_id4}=  Create Sample Service  ${SERVICE4}
     Set Suite Variable   ${s_id4}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  30
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable   ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -96,7 +103,7 @@ JD-TC-Get Appointment Schedule Count-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name}  parallelServing=${parallel}   batchEnable=${bool[1]}
 
-    ${sTime1}=  add_time  1  35
+    ${sTime1}=  add_timezone_time  ${tz}  1  35
     ${delta}=  FakerLibrary.Random Int  min=10  max=25
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name2}=  FakerLibrary.bs
@@ -113,7 +120,7 @@ JD-TC-Get Appointment Schedule Count-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id2}   name=${schedule_name2}  parallelServing=${parallel}   batchEnable=${bool[1]}
 
-    ${sTime1}=  add_time  2  05
+    ${sTime1}=  add_timezone_time  ${tz}  2  05  
     ${delta}=  FakerLibrary.Random Int  min=10  max=25
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name3}=  FakerLibrary.bs
@@ -130,7 +137,7 @@ JD-TC-Get Appointment Schedule Count-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id3}   name=${schedule_name3}  parallelServing=${parallel}   batchEnable=${bool[1]}
 
-    ${sTime1}=  add_time  2  35
+    ${sTime1}=  add_timezone_time  ${tz}  2  35
     ${delta}=  FakerLibrary.Random Int  min=10  max=25
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name4}=  FakerLibrary.bs
@@ -163,7 +170,7 @@ JD-TC-Get Appointment Schedule Count-1
 JD-TC-Get Appointment Schedule Count-2
     [Documentation]   Get Appointment Schedule Count of Schedule Id
 
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -175,7 +182,7 @@ JD-TC-Get Appointment Schedule Count-2
 JD-TC-Get Appointment Schedule Count-3
     [Documentation]   Get Appointment Schedule Count of schedule Name
 
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -187,7 +194,7 @@ JD-TC-Get Appointment Schedule Count-3
 JD-TC-Get Appointment Schedule Count-4
     [Documentation]   Another Provider Login
 
-    ${resp}=  Provider Login  ${PUSERNAME201}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME201}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -199,7 +206,7 @@ JD-TC-Get Appointment Schedule Count-4
 JD-TC-Get Appointment Schedule Count-UH1
     [Documentation]   Get Appointment Schedule Count of apptState
 
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -211,7 +218,7 @@ JD-TC-Get Appointment Schedule Count-UH1
 JD-TC-Get Appointment Schedule Count-UH2
     [Documentation]   Get Appointment Schedule Count of parallelServing
 
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

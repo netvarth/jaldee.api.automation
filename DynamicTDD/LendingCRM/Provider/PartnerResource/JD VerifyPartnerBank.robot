@@ -38,11 +38,13 @@ JD-TC-Verify Partner Bank-1
                                   
     [Documentation]              Verify Partner Bank
 
-    ${resp}=  Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -80,9 +82,14 @@ JD-TC-Verify Partner Bank-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${gender}=  Random Element    ${Genderlist}
@@ -252,7 +259,7 @@ JD-TC-Verify Partner Bank-UH1
                                   
     [Documentation]              Verify Partner Bank where pid is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -265,7 +272,7 @@ JD-TC-Verify Partner Bank-UH2
                                   
     [Documentation]              Verify Partner Bank where pid is invalid
 
-    ${resp}=  Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -280,7 +287,7 @@ JD-TC-Verify Partner Bank-UH3
                                   
     [Documentation]              Verify Partner Bank where uid is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -295,7 +302,7 @@ JD-TC-Verify Partner Bank-UH4
                                   
     [Documentation]              Verify Partner Bank where uid is invalid
 
-    ${resp}=  Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -311,7 +318,7 @@ JD-TC-Verify Partner Bank-UH5
                                   
     [Documentation]              Verify Partner Bank where bankname is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -324,7 +331,7 @@ JD-TC-Verify Partner Bank-UH6
                                   
     [Documentation]              Verify Partner Bank where bank account number is empty
 
-    ${resp}=  Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -340,7 +347,7 @@ JD-TC-Verify Partner Bank-UH7
 
     # which account number or ifsc code we are using while verifing that will be updated as partner ac num and ifsc
 
-    ${resp}=  Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -360,7 +367,7 @@ JD-TC-Verify Partner Bank-UH8
                                   
     [Documentation]              Verify Partner Bank where bank ifsc is invalid
 
-    ${resp}=  Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -380,7 +387,7 @@ JD-TC-Verify Partner Bank-UH9
                                   
     [Documentation]              Verify Partner Bank with another provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME152}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -41,10 +41,12 @@ JD-TC-GetLeadActivityLog-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
 
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
     Set Suite Variable  ${MUSERNAME_E}
@@ -56,9 +58,16 @@ JD-TC-GetLeadActivityLog-1
     ${resp}=   categorytype   ${p_id}
     ${resp}=   tasktype       ${p_id}
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -109,7 +118,7 @@ JD-TC-GetLeadActivityLog-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p_id}=  get_acc_id  ${MUSERNAME_E}
@@ -183,7 +192,7 @@ JD-TC-GetLeadActivityLog-1
 JD-TC-GetLeadActivityLog-2
     [Documentation]    Create a lead to a branch and change the lead status to in progres then get the lead Activity log.
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -203,7 +212,7 @@ JD-TC-GetLeadActivityLog-2
 JD-TC-GetLeadActivityLog-3
     [Documentation]    Create a lead to a branch and change the lead status to Success then get the lead Activity log.
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -223,7 +232,7 @@ JD-TC-GetLeadActivityLog-3
 JD-TC-GetLeadActivityLog-4
     [Documentation]    Create a lead to a branch and change the lead status to Failed then get the lead Activity log.
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -243,7 +252,7 @@ JD-TC-GetLeadActivityLog-4
 JD-TC-GetLeadActivityLog-5
     [Documentation]    Create a lead to a branch and update the lead status then get the lead Activity log.
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -276,7 +285,7 @@ JD-TC-GetLeadActivityLog-5
 JD-TC-GetLeadActivityLog-6
     [Documentation]    Create a lead to a branch and change the lead priority then get the lead Activity log.
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -301,7 +310,7 @@ JD-TC-GetLeadActivityLog-6
 JD-TC-GetLeadActivityLog-7
     [Documentation]    Create a lead to a branch and change the lead Manager then get the lead Activity log.
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -322,7 +331,7 @@ JD-TC-GetLeadActivityLog-8
 
     [Documentation]    Create a lead to a branch and Add a Waitlist Token then get the lead Activity log.
     
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -337,6 +346,10 @@ JD-TC-GetLeadActivityLog-8
 
     ${resp}=  Create Sample Location
     Set Test Variable    ${loc_id4}   ${resp}
+    ${resp}=   Get Location ById  ${loc_id4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${ser_name3}=    FakerLibrary.name
     Set Test Variable     ${ser_name3}
     # ${resp}=  Create Sample Service   ${ser_name3}
@@ -352,11 +365,11 @@ JD-TC-GetLeadActivityLog-8
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep   01s
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${q_name3}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${sone}=   db.get_time
-    ${eone}=   add_time  3  00
+    ${sone}=   db.get_time_by_timezone  ${tz}
+    ${eone}=   add_timezone_time  ${tz}  3  00  
     
     ${parallel}=   FakerLibrary.Random Int  min=1   max=10 
     ${capacity}=   FakerLibrary.Random Int  min=1   max=10 
@@ -365,7 +378,7 @@ JD-TC-GetLeadActivityLog-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id}   ${resp.json()}
 
-    ${DAY4}=  add_date  4
+    ${DAY4}=  db.add_timezone_date  ${tz}  4  
     ${desc}=   FakerLibrary.word
     ${lead}=  Create Dictionary   id=${leid}
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id4}  ${q_id}  ${DAY4}  ${desc}  ${bool[1]}  ${cid}   lead=${lead}
@@ -399,7 +412,7 @@ JD-TC-GetLeadActivityLog-9
 
     [Documentation]    Create a lead to a branch and add notes then get the lead Activity log.
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -427,7 +440,7 @@ JD-TC-GetLeadActivityLog-10
 
     [Documentation]    Create a lead to a branch and change the location then get the lead Activity log.
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -456,7 +469,7 @@ JD-TC-GetLeadActivityLog-11
 
     [Documentation]    Create a lead for a user  then get the lead Activity log.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${id1}=  get_id  ${PUSERNAME_U1}
@@ -519,7 +532,7 @@ JD-TC-GetLeadActivityLog-UH2
 JD-TC-GetLeadActivityLog-8
     [Documentation]    Create a lead to a branch and change the lead Assignee then get the lead Activity log.
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -551,7 +564,7 @@ JD-TC-GetLeadActivityLog-12
 
     [Documentation]    Create a lead for a user and change the location ,change the lead Assignee  then get the lead Activity log.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${id1}=  get_id  ${PUSERNAME_U1}

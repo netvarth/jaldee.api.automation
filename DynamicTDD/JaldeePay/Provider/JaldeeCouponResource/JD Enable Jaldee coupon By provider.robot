@@ -25,11 +25,17 @@ ${latti1}       88.259874
 
 JD-TC-EnableJaldeeCoupon-1
     [Documentation]   Enable a jaldee coupon by provider
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${lic1}  ${resp.json()['accountLicense']['licPkgOrAddonId']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
     ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get BusinessDomainsConf
@@ -43,13 +49,14 @@ JD-TC-EnableJaldeeCoupon-1
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}
 
-    ${loc1}=  Jaldee Coupon Target Locations  ${longi}  ${latti}  5
-    ${loc2}=  Jaldee Coupon Target Locations  ${longi1}  ${latti1}  2
-    ${locations}=  Create List  ${loc1}  ${loc2}
+    # ${loc1}=  Jaldee Coupon Target Locations  ${longi}  ${latti}  5
+    # ${loc2}=  Jaldee Coupon Target Locations  ${longi1}  ${latti1}  2
+    # ${locations}=  Create List  ${loc1}  ${loc2}
+ 
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -71,7 +78,7 @@ JD-TC-EnableJaldeeCoupon-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_code2018}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -102,7 +109,7 @@ JD-TC-EnableJaldeeCoupon-1
 
 JD-TC-EnableJaldeeCoupon-2
     [Documentation]   Enable a disabled coupon
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Disable Jaldee Coupon By Provider  ${cupn_code2018}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -118,7 +125,7 @@ JD-TC-EnableJaldeeCoupon-2
 
 JD-TC-EnableJaldeeCoupon-UH1
     [Documentation]   Enable a already enabled jaldee coupon
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_code2018}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -146,9 +153,9 @@ JD-TC-EnableJaldeeCoupon-UH3
     Set Test Variable  ${sd4}  ${resp.json()[1]['subDomains'][1]['subDomain']}
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}
-    ${loc1}=  Jaldee Coupon Target Locations  ${longi}  ${latti}  5
-    ${loc2}=  Jaldee Coupon Target Locations  ${longi1}  ${latti1}  2
-    ${locations}=  Create List  ${loc1}  ${loc2}
+    # ${loc1}=  Jaldee Coupon Target Locations  ${longi}  ${latti}  5
+    # ${loc2}=  Jaldee Coupon Target Locations  ${longi1}  ${latti1}  2
+    # ${locations}=  Create List  ${loc1}  ${loc2}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -162,7 +169,7 @@ JD-TC-EnableJaldeeCoupon-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_code55}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -180,9 +187,9 @@ JD-TC-EnableJaldeeCoupon-UH4
     Set Test Variable  ${sd4}  ${resp.json()[1]['subDomains'][1]['subDomain']}
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}
-    ${loc1}=  Jaldee Coupon Target Locations  ${longi}  ${latti}  5
-    ${loc2}=  Jaldee Coupon Target Locations  ${longi1}  ${latti1}  2
-    ${locations}=  Create List  ${loc1}  ${loc2}
+    # ${loc1}=  Jaldee Coupon Target Locations  ${longi}  ${latti}  5
+    # ${loc2}=  Jaldee Coupon Target Locations  ${longi1}  ${latti1}  2
+    # ${locations}=  Create List  ${loc1}  ${loc2}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -195,7 +202,7 @@ JD-TC-EnableJaldeeCoupon-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_code50}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -217,9 +224,9 @@ JD-TC-EnableJaldeeCoupon-UH7
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -236,7 +243,7 @@ JD-TC-EnableJaldeeCoupon-UH7
     Should Be Equal As Strings  ${resp.json()['couponStatus']}  ${status[0]}
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code03}
     Should Be Equal As Strings  ${resp.json()['couponState']}  ${couponState[0]}
@@ -255,7 +262,7 @@ JD-TC-EnableJaldeeCoupon-UH7
 
 JD-TC-EnableJaldeeCoupon-UH8
     [Documentation]   Enable a invalid jaldee coupon
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Enable Jaldee Coupon By Provider  invalidcoupon
@@ -281,7 +288,7 @@ JD-TC-EnableJaldeeCoupon -UH10
 
 JD-TC-EnableJaldeeCoupon -UH11
     [Documentation]   Another Provider disable a Jaldee Coupon
-    ${resp}=   ProviderLogin  ${PUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_code02}
     Should Be Equal As Strings    ${resp.status_code}   422
@@ -293,7 +300,7 @@ JD-TC-Verify EnableJaldeeCoupon-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code2018}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -313,7 +320,7 @@ JD-TC-Verify EnableJaldeeCoupon-UH7
     Should Be Equal As Strings  ${resp.json()['couponStatus']}  ${couponStatus[2]}
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code03}
     Should Be Equal As Strings  ${resp.json()['couponState']}  ${couponState[4]}

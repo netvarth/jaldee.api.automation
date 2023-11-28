@@ -18,7 +18,7 @@ ${self}        0
 
 JD-TC-ActivateCustomer-1
      [Documentation]  Activate a deleted customer
-     ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
@@ -46,7 +46,7 @@ JD-TC-ActivateCustomer-1
  
 JD-TC-ActivateCustomer-UH1
       [Documentation]  Again Activate a activated customer 
-      ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  ActivateCustomer  ${customerId}
       Should Be Equal As Strings  ${resp.status_code}  422
@@ -54,7 +54,7 @@ JD-TC-ActivateCustomer-UH1
      
 JD-TC-ActivateCustomer-UH2
       [Documentation]  Activate a customer with invalid customer id
-      ${resp}=  ProviderLogin  ${PUSERNAME101}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  ActivateCustomer  0
       Should Be Equal As Strings  ${resp.status_code}  422
@@ -77,22 +77,28 @@ JD-TC-ActivateCustomer-UH4
     
 JD-TC-ActivateCustomer-2  
       [Documentation]  Adding a customer to waitlist after activate customer
-      ${resp}=   ProviderLogin  ${PUSERNAME174}  ${PASSWORD} 
+      ${resp}=   Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD} 
       Should Be Equal As Strings    ${resp.status_code}   200
       clear_location  ${PUSERNAME174}
       clear_queue  ${PUSERNAME174}
       ${resp}=   ProviderKeywords.Get Queues
       Should Be Equal As Strings  ${resp.status_code}  200
       Log   ${resp.json()}
-      ${resp}=  Create Sample Queue
+      ${resp} =  Create Sample Queue
       Set Test Variable  ${s_id}  ${resp['service_id']}
       Set Test Variable  ${qid}   ${resp['queue_id']}
+      Set Suite Variable   ${lid}   ${resp['location_id']}
+
+      ${resp}=   Get Location ById  ${lid}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
       ${dob}=  FakerLibrary.Date
       ${ph2}=  Evaluate  ${PUSERNAME1}+1587
       ${gender}=  Random Element    ${Genderlist}
-      ${DAY}=  get_date
+      ${DAY}=  db.get_date_by_timezone  ${tz}
       ${resp}=  AddCustomer without email   ${firstname}  ${lastname}  ${EMPTY}  ${gender}  ${dob}   ${ph2}  ${EMPTY} 
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cId}  ${resp.json()}
@@ -100,7 +106,6 @@ JD-TC-ActivateCustomer-2
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cId}  ${s_id}  ${qid}  ${DAY}  ${desc}  ${bool[1]}  ${cId} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid} 
@@ -127,7 +132,6 @@ JD-TC-ActivateCustomer-2
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cId}  ${s_id}  ${qid}  ${DAY}  ${desc}  ${bool[1]}  ${cId} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Test Variable  ${wid}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid} 

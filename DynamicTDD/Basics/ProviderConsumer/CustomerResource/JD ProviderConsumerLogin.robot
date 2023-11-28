@@ -22,7 +22,7 @@ JD-TC-providerConsumerLogin-1
 
     [Documentation]    ProviderConsumer  Login with token After Sign up
 
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${accountId}=    get_acc_id       ${PUSERNAME70}
@@ -68,7 +68,7 @@ JD-TC-providerConsumerLogin-2
 
     [Documentation]    ProviderConsumer  Login with token(Jaldee integration DISABLED)
 
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${accountId}=    get_acc_id       ${PUSERNAME70}
@@ -104,7 +104,7 @@ JD-TC-providerConsumerLogin-3
 
     [Documentation]    ProviderConsumer  Login with token(Jaldee integration ENABLED)
     
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${accountId}=    get_acc_id       ${PUSERNAME70}
@@ -155,7 +155,7 @@ JD-TC-providerConsumerLogin-3
 
 JD-TC-providerConsumerLogin-UH1
     [Documentation]    ProviderConsumer  Login with another consumer
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${accountId}=    get_acc_id       ${PUSERNAME70}
@@ -170,7 +170,7 @@ JD-TC-providerConsumerLogin-UH1
 
 JD-TC-providerConsumerLogin-UH2
     [Documentation]    ProviderConsumer Login with wrong Account id
-    ${resp}=   ProviderLogin  ${PUSERNAME70}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${accountId}=    get_acc_id       ${PUSERNAME72}

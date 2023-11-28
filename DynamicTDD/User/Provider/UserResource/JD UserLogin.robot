@@ -29,7 +29,7 @@ JD-TC-UserLoginwithEmail-1
 
     [Documentation]  Create an user and user  login with email
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -42,8 +42,13 @@ JD-TC-UserLoginwithEmail-1
     IF   '${resp.content}' == '${emptylist}'
         ${locId1}=  Create Sample Location
         Set Suite Variable  ${locId1}
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=   Get Business Profile
@@ -54,9 +59,12 @@ JD-TC-UserLoginwithEmail-1
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
@@ -84,7 +92,7 @@ JD-TC-UserLoginwithEmail-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${email}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${email}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     
@@ -99,18 +107,18 @@ JD-TC-UserLoginwithEmail-UH1
     [Documentation]  user try to login with invalid password two times.
 
     
-    ${resp}=  ProviderLogin  ${email}  ${SPASSWORD}
+    ${resp}=  Encrypted Provider Login  ${email}  ${SPASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
 
-    ${resp}=  ProviderLogin  ${email}  ${SPASSWORD}
+    ${resp}=  Encrypted Provider Login  ${email}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
 
-    ${resp}=  ProviderLogin  ${email}  ${SPASSWORD}
+    ${resp}=  Encrypted Provider Login  ${email}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
 
-    ${resp}=  ProviderLogin  ${email}  asdfghj123
+    ${resp}=  Encrypted Provider Login  ${email}  asdfghj123
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401

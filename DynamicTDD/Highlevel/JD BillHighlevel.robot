@@ -58,12 +58,12 @@ JD-TC-Bill Highlevel-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${fname}  ${resp.json()['firstName']}
     Set Test Variable  ${p_id}  ${resp.json()['id']}
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+305
@@ -79,15 +79,19 @@ JD-TC-Bill Highlevel-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    # ${eTime}=  add_time   4  15
-    ${eTime}=  add_time   2  15
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    # ${eTime}=  add_timezone_time  ${tz}  4  15  
+    ${eTime}=  add_timezone_time  ${tz}  2  15  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -127,7 +131,7 @@ JD-TC-Bill Highlevel-1
     ${resp}=  SetMerchantId  ${pid}  ${merchantid}
     ${pid}=  get_acc_id  ${PUSERPH0}
     Set Suite Variable  ${pid}
-    ${DAY}=  get_date   
+    ${DAY}=  db.get_date_by_timezone  ${tz}   
     Set Suite Variable  ${DAY} 
     ${gstper}=  Random Element  ${gstpercentage}
     Set Suite Variable   ${gstper}
@@ -137,7 +141,7 @@ JD-TC-Bill Highlevel-1
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Enable Tax
     Should Be Equal As Strings    ${resp.status_code}   200  
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
    
     ${description}=  FakerLibrary.sentence
@@ -160,9 +164,9 @@ JD-TC-Bill Highlevel-1
     ${resp}=  Create Service  ${SERVICE4}  ${description}   ${ser_dutratn}  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  ${min_prepayment}  ${total_amount2}  ${bool[1]}  ${bool[1]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sId_4}  ${resp.json()}
-    ${sTime}=  add_time  0  00
-    # ${eTime}=  add_time  4  00
-    ${eTime}=  add_time  2  00
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    # ${eTime}=  add_timezone_time  ${tz}  4  00  
+    ${eTime}=  add_timezone_time  ${tz}  2  00  
     ${q_name}=   FakerLibrary.word
     ${parallel}=   Random Int   min=1    max=5
     ${capacity}=   Random Int   min=10   max=20
@@ -213,7 +217,6 @@ JD-TC-Bill Highlevel-1
     ${resp}=  Add To Waitlist  ${id}  ${sId_1}  ${q1_l1}  ${DAY}  ${consumernote}  ${bool[1]}  ${id}  ${mem_id}  ${mem_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     Set Test Variable  ${wid2}  ${wid[1]}
@@ -272,14 +275,13 @@ JD-TC-Bill Highlevel-1
 JD-TC-Bill Highlevel-2
 	[Documentation]  create bill when parent cancel the waitlist and the bill is created to a member(Future waitlist)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY}=  add_date  1
+    ${DAY}=  db.add_timezone_date  ${tz}  1  
     # ${id}=  get_id  ${CUSERNAME5}
     ${consumernote}=  FakerLibrary.sentence   
     ${resp}=  Add To Waitlist  ${id}  ${sId_1}  ${q1_l1}  ${DAY}  ${consumernote}  ${bool[1]}  ${id}  ${mem_id}  ${mem_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     Set Test Variable  ${wid2}  ${wid[1]}
@@ -316,14 +318,13 @@ JD-TC-Bill Highlevel-2
 JD-TC-Bill Highlevel-3
 	[Documentation]  prepayment bill for cancelled member's waitlist
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${Conid}=  get_id  ${CUSERNAME5}
     ${consumernote}=  FakerLibrary.sentence   
     ${resp}=  Add To Waitlist  ${id}  ${sId_2}  ${q1_l1}  ${DAY}  ${consumernote}  ${bool[1]}  ${id}  ${mem_id}  ${mem_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid4}  ${wid[0]}
     Set Test Variable  ${wid5}  ${wid[1]}
@@ -346,7 +347,7 @@ JD-TC-Bill Highlevel-3
     ${resp}=  ConsumerLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${reason}  Random Element    ${waitlist_cancl_reasn}
     ${message}=  FakerLibrary.sentence
@@ -383,15 +384,14 @@ JD-TC-Bill Highlevel-3
 JD-TC-Bill Highlevel-4
 	[Documentation]  prepayment bill for cancelled member's waitlist (Future date)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${Conid}=  get_id  ${CUSERNAME5}
-    ${DAY}=  add_date  1
+    ${DAY}=  db.add_timezone_date  ${tz}  1  
     ${consumernote}=  FakerLibrary.sentence   
     ${resp}=  Add To Waitlist  ${id}  ${sId_2}  ${q1_l1}  ${DAY}  ${consumernote}  ${bool[1]}  ${id}  ${mem_id}  ${mem_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     Set Test Variable  ${wid2}  ${wid[1]}
@@ -409,7 +409,7 @@ JD-TC-Bill Highlevel-4
     ${resp}=  ConsumerLogout
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${reason}  Random Element     ${waitlist_cancl_reasn}
     ${message}=  FakerLibrary.sentence
@@ -446,13 +446,12 @@ JD-TC-Bill Highlevel-4
 JD-TC-Bill Highlevel-5
 	[Documentation]  cancel after bill creation
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     # ${id}=  get_id  ${CUSERNAME5}
     ${consumernote}=  FakerLibrary.sentence   
     ${resp}=  Add To Waitlist  ${id}  ${sId_3}  ${q1_l1}  ${DAY}  ${consumernote}  ${bool[1]}  ${id}  ${mem_id}  ${mem_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     Set Test Variable  ${wid2}  ${wid[1]}
@@ -497,14 +496,13 @@ JD-TC-Bill Highlevel-5
 JD-TC-Bill Highlevel-6
 	[Documentation]  cancel after bill creation (Future date)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     # ${id}=  get_id  ${CUSERNAME5}
-    ${DAY}=  add_date  1
+    ${DAY}=  db.add_timezone_date  ${tz}  1  
     ${consumernote}=  FakerLibrary.sentence   
     ${resp}=  Add To Waitlist  ${id}  ${sId_3}  ${q1_l1}  ${DAY}  ${consumernote}  ${bool[1]}  ${id}  ${mem_id}  ${mem_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     Set Test Variable  ${wid2}  ${wid[1]}
@@ -548,16 +546,15 @@ JD-TC-Bill Highlevel-6
 JD-TC-Bill Highlevel-7
 	[Documentation]  checkin partially paid waitlist and pay complete amount
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
     # ${id}=  get_id  ${CUSERNAME5}
-    ${DAY}=  get_date 
+    ${DAY}=  db.get_date_by_timezone  ${tz} 
     ${consumernote}=  FakerLibrary.sentence   
     ${resp}=  Add To Waitlist  ${id}  ${sId_3}  ${q1_l1}  ${DAY}  ${consumernote}  ${bool[1]}  ${id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
 
@@ -636,13 +633,12 @@ JD-TC-Bill Highlevel-7
 JD-TC-Bill Highlevel-8
 	[Documentation]  preapyment bill for a waitlist having only family members
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${Conid}=  get_id  ${CUSERNAME5}
     ${consumernote}=  FakerLibrary.sentence   
     ${resp}=  Add To Waitlist  ${id}  ${sId_4}  ${q1_l1}  ${DAY}  ${consumernote}  ${bool[1]}  ${mem_id}  ${mem_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     Set Test Variable  ${wid2}  ${wid[1]}
@@ -660,7 +656,7 @@ JD-TC-Bill Highlevel-8
     ${resp}=  ConsumerLogout
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${net_rate}=  Evaluate   ${total_amount2} * 2
@@ -687,15 +683,14 @@ JD-TC-Bill Highlevel-8
 JD-TC-Bill Highlevel-9
 	[Documentation]  preapyment bill for a waitlist having only family members (Future date)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${Conid}=  get_id  ${CUSERNAME5}
     
     ${consumernote}=  FakerLibrary.sentence
-    ${DAY}=  add_date  2   
+    ${DAY}=  db.add_timezone_date  ${tz}  2     
     ${resp}=  Add To Waitlist  ${id}  ${sId_4}  ${q1_l1}  ${DAY}  ${consumernote}  ${bool[1]}  ${mem_id}  ${mem_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     Set Test Variable  ${wid2}  ${wid[1]}
@@ -713,7 +708,7 @@ JD-TC-Bill Highlevel-9
     ${resp}=  ConsumerLogout
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${net_rate}=  Evaluate   ${total_amount2} * 2
@@ -740,7 +735,7 @@ JD-TC-Bill Highlevel-9
 JD-TC-Bill Highlevel-10
 	[Documentation]  create bill for a waitlist having only family members
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
     ${resp}=  AddCustomer  ${CUSERNAME3}
@@ -771,7 +766,6 @@ JD-TC-Bill Highlevel-10
     ${consumernote}=  FakerLibrary.sentence
     ${resp}=  Add To Waitlist  ${id}  ${sId_1}  ${q1_l1}  ${DAY}  ${consumernote}  ${bool[1]}  ${mem2_id}  ${mem2_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     Set Test Variable  ${wid2}  ${wid[1]}
@@ -799,14 +793,13 @@ JD-TC-Bill Highlevel-10
 JD-TC-Bill Highlevel-11
 	[Documentation]  create bill for a waitlist having only family members(Future date)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     # ${id}=  get_id  ${CUSERNAME3}
-    ${DAY}=  add_date  2 
+    ${DAY}=  db.add_timezone_date  ${tz}  2   
     ${consumernote}=  FakerLibrary.sentence   
     ${resp}=  Add To Waitlist  ${id}  ${sId_1}  ${q1_l1}  ${DAY}  ${consumernote}  ${bool[1]}  ${mem2_id}  ${mem2_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     Set Test Variable  ${wid2}  ${wid[1]}
@@ -835,7 +828,7 @@ JD-TC-Bill Highlevel-12
 	[Documentation]  preapyment bill for a waitlist having only family members after cancel
     
     clear_waitlist  ${PUSERPH0}
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${Conid}=  get_id  ${CUSERNAME12} 
 
@@ -867,7 +860,6 @@ JD-TC-Bill Highlevel-12
     ${resp}=  Add To Waitlist  ${id}  ${sId_2}  ${q1_l1}  ${DAY}  ${consumernote}  ${bool[1]}  ${memb_id}  ${memb_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     Set Test Variable  ${wid2}  ${wid[1]}
@@ -916,7 +908,7 @@ JD-TC-Bill Highlevel-12
     ${total}=    Evaluate   ${gst_rate} + ${net_rate}
     ${amount_due}=    Evaluate   ${total} - ${min_prepayment}
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Bill By UUId  ${wid2}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -968,15 +960,14 @@ JD-TC-Bill Highlevel-12
 JD-TC-Bill Highlevel-13
 	[Documentation]  preapyment bill for a waitlist having only family members after cancel (Future date)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${Conid}=  get_id  ${CUSERNAME12}
 
-    ${DAY}=  add_date  1 
+    ${DAY}=  db.add_timezone_date  ${tz}  1   
     ${consumernote}=  FakerLibrary.sentence   
     ${resp}=  Add To Waitlist  ${id}  ${sId_2}  ${q1_l1}  ${DAY}  ${consumernote}  ${bool[1]}  ${memb_id}  ${memb_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     Set Test Variable  ${wid2}  ${wid[1]}
@@ -1025,7 +1016,7 @@ JD-TC-Bill Highlevel-13
     ${total}=    Evaluate   ${gst_rate} + ${net_rate}
     ${amount_due}=    Evaluate   ${total} - ${min_prepayment}
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Bill By UUId  ${wid2}
     Log   ${resp.json()}
@@ -1045,7 +1036,7 @@ JD-TC-Bill Highlevel-13
 JD-TC-Bill Highlevel-14
 	[Documentation]  create bill for a waitlist having only family members after a cancel
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     # ${id}=  get_id  ${CUSERNAME3}
 
@@ -1057,7 +1048,6 @@ JD-TC-Bill Highlevel-14
     ${consumernote}=  FakerLibrary.sentence   
     ${resp}=  Add To Waitlist  ${id}  ${sId_3}  ${q1_l1}  ${DAY}  ${consumernote}  ${bool[1]}  ${mem2_id}  ${mem2_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     Set Test Variable  ${wid2}  ${wid[1]}
@@ -1114,15 +1104,14 @@ JD-TC-Bill Highlevel-14
 JD-TC-Bill Highlevel-15
 	[Documentation]  create bill for a waitlist having only family members after a cancel (Future date)
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     # ${id}=  get_id  ${CUSERNAME3}
-    ${DAY}=  add_date  1 
+    ${DAY}=  db.add_timezone_date  ${tz}  1   
     ${consumernote}=  FakerLibrary.sentence   
     ${resp}=  Add To Waitlist  ${id}  ${sId_3}  ${q1_l1}  ${DAY}  ${consumernote}  ${bool[1]}  ${mem2_id}  ${mem2_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
     Set Test Variable  ${wid2}  ${wid[1]}
@@ -1181,7 +1170,7 @@ JD-TC-Bill Highlevel-16
     [Documentation]  Create bill for having taxable service and non taxable service and  0% reiumbursement coupon applied:coupon amount is lessthan non taxable service amount     
     
     ${description}=  FakerLibrary.sentence
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${sd5}  ${resp.json()['subSector']}
@@ -1201,9 +1190,9 @@ JD-TC-Bill Highlevel-16
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}  ${d2}_${sd5}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -1234,7 +1223,7 @@ JD-TC-Bill Highlevel-16
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${gstper}=  Random Element  ${gstpercentage}
     ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
@@ -1250,7 +1239,7 @@ JD-TC-Bill Highlevel-16
     Set Suite Variable  ${cid}  ${resp.json()[2]['id']}
 
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
     clear_service       ${PUSERPH0}
     ${description}=  FakerLibrary.sentence
@@ -1271,9 +1260,10 @@ JD-TC-Bill Highlevel-16
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  30
-    ${eTime}=  add_time   2  00
+    ${sTime}=  add_timezone_time  ${tz}  0  30  
+    ${eTime}=  add_timezone_time  ${tz}  2  00  
     ${q_name}=   FakerLibrary.word
     ${parallel}=   Random Int   min=1    max=5
     ${capacity}=   Random Int   min=10   max=20
@@ -1285,7 +1275,6 @@ JD-TC-Bill Highlevel-16
     ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${qid1}  ${DAY1}  ${consumernote}  ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${net_rate}=  Evaluate   ${total_amount1} * 1
@@ -1425,7 +1414,7 @@ JD-TC-Bill Highlevel-17
     [Documentation]  Create bill for having taxable service and non taxable service and 0% reiumbursement coupon applied and coupon amount is more than non taxable service amount
     
     ${description}=  FakerLibrary.sentence
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${sd5}  ${resp.json()['subSector']}
@@ -1445,9 +1434,9 @@ JD-TC-Bill Highlevel-17
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}  ${d2}_${sd5}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -1476,7 +1465,7 @@ JD-TC-Bill Highlevel-17
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${gstper}=  Random Element  ${gstpercentage}
     ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
@@ -1495,7 +1484,6 @@ JD-TC-Bill Highlevel-17
     ${resp}=  Add To Waitlist  ${cid2}  ${sid1}  ${qid1}  ${DAY1}  ${consumernote}  ${bool[1]}  ${cid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${net_rate}=  Evaluate   ${total_amount1} * 1
@@ -1632,9 +1620,9 @@ JD-TC-Bill Highlevel-18
     ${description}=  FakerLibrary.sentence
     ${notifytype}    Random Element     ['none','pushMsg','email']
     ${bool[1]}    Random Element     ['${bool[1]}','${bool[0]}']
-    ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${resp}=   Get ${status[0]} License
+    ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${lic1}  ${resp.json()['accountLicense']['licPkgOrAddonId']}
     ${resp}=  Get BusinessDomainsConf
@@ -1648,9 +1636,9 @@ JD-TC-Bill Highlevel-18
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1661,7 +1649,7 @@ JD-TC-Bill Highlevel-18
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Create Service  ${SERVICE3}  ${description}   2  ${status[0]}  Waitlist  ${bool[1]}  ${notifytype}  0  300.0  ${bool[0]}  ${bool[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1675,7 +1663,6 @@ JD-TC-Bill Highlevel-18
     ${resp}=  Add To Waitlist  ${cid3}  ${sid1}  ${qid1}  ${DAY1}  hi  ${bool[1]}  ${cid3}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${net_rate}=  Evaluate   ${total_amount1} * 1
@@ -1762,9 +1749,9 @@ JD-TC-Bill Highlevel-19
     ${description}=  FakerLibrary.sentence
     ${notifytype}    Random Element     ['none','pushMsg','email']
     ${bool[1]}    Random Element     ['${bool[1]}','${bool[0]}']
-    ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${resp}=   Get ${status[0]} License
+    ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${lic1}  ${resp.json()['accountLicense']['licPkgOrAddonId']}
     ${resp}=  Get BusinessDomainsConf
@@ -1778,9 +1765,9 @@ JD-TC-Bill Highlevel-19
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1791,7 +1778,7 @@ JD-TC-Bill Highlevel-19
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Tax Percentage  18  12DEFBV1100I7Z2
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -1802,7 +1789,6 @@ JD-TC-Bill Highlevel-19
     ${resp}=  Add To Waitlist  ${cid4}  ${sid1}  ${qid1}  ${DAY1}  hi  ${bool[1]}  ${cid4}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${resp}=  Get Bill By UUId  ${wid}
@@ -1879,7 +1865,7 @@ JD-TC-Bill Highlevel-19
 
 JD-TC-Bill Highlevel-20    
     [Documentation]  Create bill for having taxable service and non taxable service and 100% reiumbursement coupon applied and coupon amount is more than non taxable service amount then remove non taxable service    
-    ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${service}=  Service Bill  service forme  ${sid3}  1 
     ${resp}=  Update Bill   ${wid}  removeService   ${service}

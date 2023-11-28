@@ -13,7 +13,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-EnableDisableSearchData-1
       [Documentation]  Enable and Disable Search Data
-      ${resp}=  ProviderLogin  ${PUSERNAME20}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get jaldeeIntegration Settings
       Log   ${resp.json()}
@@ -29,7 +29,7 @@ JD-TC-EnableDisableSearchData-1
 
 JD-TC-EnableDisableSearchData-UH1
       [Documentation]  Enable and Disable Search Data which is already enabled and disabled
-      ${resp}=  ProviderLogin  ${PUSERNAME21}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get jaldeeIntegration Settings
       Log   ${resp.json()}

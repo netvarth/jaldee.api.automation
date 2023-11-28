@@ -93,7 +93,7 @@ JD-TC-Get locations by service-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -107,7 +107,7 @@ JD-TC-Get locations by service-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -131,9 +131,9 @@ JD-TC-Get locations by service-1
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  db.add_timezone_time  ${tz}  0  15
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  db.add_timezone_time  ${tz}   0  45
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
@@ -197,13 +197,13 @@ JD-TC-Get locations by service-1
     clear_service   ${PUSERPH0}
     clear_location  ${PUSERPH0}
     ${pid}=  get_acc_id  ${PUSERPH0}
-    ${DAY}=  add_date  0   
+    ${DAY}=  db.add_timezone_date  ${tz}  0   
     Set Suite Variable  ${DAY} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
 
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time  0  30
+    ${sTime}=  db.db.get_time_by_timezone  ${tz}
+    ${eTime}=  db.add_timezone_time  ${tz}  0  30
     ${city}=   fakerLibrary.state
     ${latti}=  get_latitude
     ${longi}=  get_longitude
@@ -217,8 +217,8 @@ JD-TC-Get locations by service-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_l1}  ${resp.json()}
     
-    ${sTime1}=  add_time  0  30
-    ${eTime1}=  add_time  1  00
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  30
+    ${eTime1}=  db.add_timezone_time  ${tz}  1  00
     ${city}=   get_place
     ${latti}=  get_latitude
     ${longi}=  get_longitude
@@ -267,10 +267,10 @@ JD-TC-Get locations by service-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s3}  ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
-    ${sTime1}=  add_time  0  15
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -289,10 +289,10 @@ JD-TC-Get locations by service-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name1}  apptState=${Qstate[0]}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
-    ${sTime1}=  add_time  0  35
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  35
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name2}=  FakerLibrary.bs
@@ -345,7 +345,7 @@ JD-TC-Get locations by service-2
     
 JD-TC-Get locations by service-3
     [Documentation]   Consumer get location by service When Services are disabled
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Disable service  ${p1_s1} 
@@ -386,7 +386,7 @@ JD-TC-Get locations by service-3
     Verify Response List  ${resp}   0  id=${sch_id1}   name=${schedule_name1}  apptState=${Qstate[0]}
 
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Enable service  ${p1_s1} 
@@ -398,7 +398,7 @@ JD-TC-Get locations by service-3
 JD-TC-Get locations by service-4
 
     [Documentation]  Consumer get location by service When Services are disabled (Another Location)
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Disable service  ${p1_s2} 
@@ -438,7 +438,7 @@ JD-TC-Get locations by service-4
     Verify Response List  ${resp}   0  id=${sch_id2}   name=${schedule_name2}  apptState=${Qstate[0]}
 
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Enable service  ${p1_s2} 
@@ -464,7 +464,7 @@ JD-TC-Get locations by service-UH1
 
 JD-TC-Get locations by service-UH2
     [Documentation]  Consumer trying to get location by service, When Location are disabled 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Disable Location  ${p1_l2} 
@@ -485,7 +485,7 @@ JD-TC-Get locations by service-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}  422
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Enable Location  ${p1_l2} 

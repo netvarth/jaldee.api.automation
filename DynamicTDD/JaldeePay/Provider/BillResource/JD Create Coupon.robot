@@ -18,7 +18,7 @@ JD-TC-CreateProviderCoupon-1
 
     [Documentation]  Provider a Create Coupon (service based on coupon)
     
-    ${resp}=  ProviderLogin  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME203}
     
@@ -42,16 +42,20 @@ JD-TC-CreateProviderCoupon-1
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid2}  ${resp.json()}
     
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    
     ${coupon}=    FakerLibrary.word
     Set Suite Variable   ${coupon}
     ${desc}=  FakerLibrary.Sentence   nb_words=2
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -73,11 +77,11 @@ JD-TC-CreateProviderCoupon-2
     [Documentation]  Provider Create Coupon  with Percentage Calculation Type
     
     clear_service   ${PUSERNAME175}
-    clear_location  ${PUSERNAME175}
+    # clear_location  ${PUSERNAME175}
     clear_appt_schedule   ${PUSERNAME175}
     clear_customer   ${PUSERNAME175}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME175}
     
@@ -101,15 +105,19 @@ JD-TC-CreateProviderCoupon-2
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid2}  ${resp.json()}
     
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
     ${coupon}=    FakerLibrary.word
     ${desc}=  FakerLibrary.Sentence   nb_words=2
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=2  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -131,11 +139,11 @@ JD-TC-CreateProviderCoupon-3
     [Documentation]  Provider check to create a coupon with another provider's coupon name
 
     clear_service   ${PUSERNAME175}
-    clear_location  ${PUSERNAME175}
+    # clear_location  ${PUSERNAME175}
     clear_appt_schedule   ${PUSERNAME175}
     clear_customer   ${PUSERNAME175}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME175}
     
@@ -159,14 +167,18 @@ JD-TC-CreateProviderCoupon-3
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid2}  ${resp.json()}
     
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
     ${desc}=  FakerLibrary.Sentence   nb_words=2
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -187,7 +199,7 @@ JD-TC-CreateProviderCoupon-4
 
     [Documentation]  Provider a Create Coupon with online booking channel.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME203}
     
@@ -206,10 +218,10 @@ JD-TC-CreateProviderCoupon-4
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -231,7 +243,7 @@ JD-TC-CreateProviderCoupon-5
 
     [Documentation]  Provider a Create Coupon with phone-in booking channel.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME203}
     
@@ -244,16 +256,16 @@ JD-TC-CreateProviderCoupon-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid1}  ${resp.json()}
-
+    
     ${coupon1}=    FakerLibrary.word
     ${desc}=  FakerLibrary.Sentence   nb_words=2
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -275,7 +287,7 @@ JD-TC-CreateProviderCoupon-6
 
     [Documentation]  Provider a Create Coupon with whatsapp booking channel.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME203}
     
@@ -294,10 +306,10 @@ JD-TC-CreateProviderCoupon-6
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -319,7 +331,7 @@ JD-TC-CreateProviderCoupon-7
 
     [Documentation]  Provider Create Coupon with telegram booking channel.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME203}
     
@@ -338,10 +350,10 @@ JD-TC-CreateProviderCoupon-7
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -362,7 +374,7 @@ JD-TC-CreateProviderCoupon-8
 
     [Documentation]  Provider a Create Coupon without giving terms and conditions.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME203}
     
@@ -381,10 +393,10 @@ JD-TC-CreateProviderCoupon-8
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -413,10 +425,10 @@ JD-TC-CreateProviderCoupon-UH1
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -437,10 +449,10 @@ JD-TC-CreateProviderCoupon-UH2
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -457,11 +469,11 @@ JD-TC-CreateProviderCoupon-UH3
     [Documentation]  Provider Create Coupon with Percentage Calculation Type  more than  100 
     
     clear_service   ${PUSERNAME175}
-    clear_location  ${PUSERNAME175}
+    # clear_location  ${PUSERNAME175}
     clear_appt_schedule   ${PUSERNAME175}
     clear_customer   ${PUSERNAME175}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME175}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME175}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME175}
     
@@ -485,15 +497,19 @@ JD-TC-CreateProviderCoupon-UH3
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid2}  ${resp.json()}
     
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    
     ${coupon}=    FakerLibrary.word
     ${desc}=  FakerLibrary.Sentence   nb_words=2
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=4  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -510,7 +526,7 @@ JD-TC-CreateProviderCoupon-UH4
 
     [Documentation]  Provider check to create a coupon with already existing coupon name.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME203}
     
@@ -539,10 +555,10 @@ JD-TC-CreateProviderCoupon-UH4
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -569,7 +585,7 @@ JD-TC-CreateProviderCoupon-UH5
 
     [Documentation]  Provider a Create Coupon wiht another provider's service id in the policies.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME203}
     
@@ -593,7 +609,7 @@ JD-TC-CreateProviderCoupon-UH5
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid2}  ${resp.json()}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME208}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME208}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME208}
     
@@ -602,10 +618,10 @@ JD-TC-CreateProviderCoupon-UH5
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -622,7 +638,7 @@ JD-TC-CreateProviderCoupon-UH6
 
     [Documentation]  Provider a Create Coupon wiht invalid service id in the policies.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME203}
     
@@ -631,10 +647,10 @@ JD-TC-CreateProviderCoupon-UH6
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -655,7 +671,7 @@ JD-TC-CreateProviderCoupon-UH7
     clear_service  ${PUSERNAME203}
     clear_customer   ${PUSERNAME203}
     clear_Item   ${PUSERNAME203}
-    ${resp}=  ProviderLogin  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME203}
     
@@ -674,10 +690,10 @@ JD-TC-CreateProviderCoupon-UH7
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  45
-    ${eTime}=  add_time   0  15
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  45  
+    ${eTime}=  add_timezone_time  ${tz}  0  15  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -698,7 +714,7 @@ JD-TC-CreateProviderCoupon-UH8
 
     [Documentation]  Provider a Create Coupon with negative coupon amount.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME203}
     
@@ -707,10 +723,10 @@ JD-TC-CreateProviderCoupon-UH8
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -726,7 +742,7 @@ JD-TC-CreateProviderCoupon-UH9
 
     [Documentation]  Provider a Create Coupon with integer coupon name.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME203}
     
@@ -735,10 +751,10 @@ JD-TC-CreateProviderCoupon-UH9
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -755,7 +771,7 @@ JD-TC-CreateProviderCoupon-UH10
 
     [Documentation]  Provider a Create Coupon with integer coupon code.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME203}
     
@@ -764,10 +780,10 @@ JD-TC-CreateProviderCoupon-UH10
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   Random Int   min=100   max=1000
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -783,7 +799,7 @@ JD-TC-CreateProviderCoupon-UH11
 
     [Documentation]  Provider a Create Coupon without any policies.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME203}
     
@@ -793,10 +809,10 @@ JD-TC-CreateProviderCoupon-UH11
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -813,7 +829,7 @@ JD-TC-CreateProviderCoupon-UH12
 
     [Documentation]  Provider a Create Coupon without any policies(catalouge based).
     
-    ${resp}=  ProviderLogin  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME203}
     
@@ -822,10 +838,10 @@ JD-TC-CreateProviderCoupon-UH12
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20

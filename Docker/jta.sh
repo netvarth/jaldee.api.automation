@@ -26,7 +26,7 @@ PAN_FILE='pan.txt'
 TIME_FILE='time.txt'
 VAR_DIR='varfiles'
 BASE_DIR="$(dirname "${PWD%*/*/*}")"
-CONF_DIR="$(find $BASE_DIR -type d -name "ynwconf" -print0 2>/dev/null | tr -d '\0')"
+# CONF_DIR="$(find $BASE_DIR -type d -name "ynwconf" -print0 2>/dev/null | tr -d '\0')"
 
 
 # Shows usage of the script. used when this script is run without a parameter.
@@ -61,6 +61,7 @@ usage()
     echo -e "\n Examples: $0 -i ---> runs this script in interactive mode"
 }
 
+# Shows usage of the script. used when this script is run without a parameter.
 checkInputArgs()
 {
     if [[ "$*" == *"--APre"* ]] && [[ "$*" == *"--noAPre"* ]]; then
@@ -70,6 +71,62 @@ checkInputArgs()
     # else
     #     echo "NO"
     fi
+}
+
+# Shows usage of the script. used when this script is run without a parameter.
+checkSysType()
+{
+    # cat /proc/sys/kernel/osrelease >> $LogFileName
+	if [[ "$(< /proc/sys/kernel/osrelease)" == *[Mm]icrosoft* ]]; then 
+        LogFileName='/mnt/d/LOGS/jtacheck.log'
+        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - WSL" | tee -a $LogFileName
+        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] Ubuntu on Windows- Windows Subsystem for Linux"
+        cat /etc/resolv.conf | grep nameserver | cut -d' ' -f 2
+        MYSQL_HOST="$(hostname).local"
+        CONF_DIR='/mnt/d/ebs/ynwconf'
+        
+        # CONF_DIR="$(find $BASE_DIR -type d -name "ynwconf" -print0 2>/dev/null | tr -d '\0')"
+    else 
+        LogFileName='/logs/jtacheck.log'
+        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - Ubuntu" | tee -a $LogFileName
+        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux"
+        MYSQL_HOST='localhost'
+        CONF_DIR='/ebs/ynwconf'
+        
+    fi
+    # cat /proc/sys/kernel/osrelease >> $LogFileName
+    cat /proc/sys/kernel/osrelease | tee -a $LogFileName
+    # uname -r >> $LogFileName
+    # uname -a >> $LogFileName
+    # if [[ $(uname -r | grep -iE 'Microsoft|Windows') ]]; then
+    #     echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] uname check" >> $LogFileName
+    #     echo "Bash is running on WSL" >> $LogFileName
+    # else
+    #     echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] uname check" >> $LogFileName
+    #     echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux" >> $LogFileName
+    # fi
+    # cat /proc/version >> $LogFileName
+    # if grep -qi microsoft /proc/version; then
+    #     echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/version check" >> $LogFileName
+    #     echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] Ubuntu on Windows- Windows Subsystem for Linux" >> $LogFileName
+    # else
+    #     echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/version check" >> $LogFileName
+    #     echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux" >> $LogFileName
+    # fi
+    # if [[ $(lscpu | grep -iE 'Microsoft|Windows') ]]; then
+    #     echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] lscpu check" >> $LogFileName
+    #     echo "Bash is running on WSL" >> $LogFileName
+    # else
+    #     echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] lscpu check" >> $LogFileName
+    #     echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux" >> $LogFileName
+    # fi
+    # if [[ -f "/proc/sys/fs/binfmt_misc/WSLInterop" ]]; then
+    #     echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/fs/binfmt_misc/WSLInterop check" >> $LogFileName
+    #     echo "Windows Subsystem for Linux" >> $LogFileName
+    # else
+    #     echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/fs/binfmt_misc/WSLInterop check" >> $LogFileName
+    #     echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux" >> $LogFileName
+    # fi
 }
 
 # Sets default environment to dev for develpment, jenkins for jenkins server or scale for scale server
@@ -109,19 +166,22 @@ setPathVariables()
 }
 
 # Create missing paths specified as parameter
+# $1 generally output of $? from ifExists
+# $2 specifies whether to create dir with(1) or without(0) asking user
+# $3 dir to create
 createDir()
 {
-    if [ "$1" -eq 1 ] && [ "$2" = "0" ]; then
+    if [ "$1" -eq 1 ] && [ "$2" = "0" ] && [ ! -d "$3" ]; then
         mkdir -p "$3"
         echo " Created Directory $3 "
-    elif [ "$1" -eq 1 ] && [ "$2" = "1" ]; then
+    elif [ "$1" -eq 1 ] && [ "$2" = "1" ] && [ ! -d "$3" ]; then
         read -p "The given path does not exist. would you like to create it? (y/n): " reply
         if [ "$reply" = "y" ] || [ "$reply" = "yes" ] ;then
             mkdir -p "$3"
             echo " Created Directory $3 "
         elif [ "$reply" = "n" ] || [ "$reply" = "no" ] ;then
             echo "Directory does not exist. cannot continue."
-            exit 1
+            exit 3
         fi
     else
         return 0
@@ -150,13 +210,13 @@ setDefaults()
         *)
             echo "Invalid Option."
             echo "Please select between [dev | jenkins | scale]"
-            exit 1
+            exit 4
             ;;
     esac
     ifExists "$defaultInputPath"
     if [ "$?" -eq 1 ]; then
         echo "Default Input Location does not exist. Please run $0 -i for interactive session."
-        exit 1
+        exit 3
     fi
     ifExists "$defaultOutputPath"
     createDir $? 0 "$defaultOutputPath"
@@ -166,8 +226,10 @@ setDefaults()
     setSuite
     ifExists "$DB_BACKUP_PATH"
     createDir $? 0 "$DB_BACKUP_PATH"
-    dynSignUp="${dynSignUp:-$defaultDynSignUp}"
-    timeFlag="${timeFlag:-$defaulttimeFlag}"
+    # dynSignUp="${dynSignUp:-$defaultDynSignUp}"
+    # timeFlag="${timeFlag:-$defaulttimeFlag}"
+    dynSignUp="yes"
+    timeFlag="True"
     setCounts
 }
 
@@ -483,14 +545,6 @@ dbBackup ()
     local -r BACKUP_FILE="${DATABASE_NAME}autobk-${TODAY}.sql"
     INPUT_PATH="${INPUT_PATH:-$defaultInputPath}"
 
-    if [[ "$(< /proc/sys/kernel/osrelease)" == *Microsoft ]]; then 
-        echo "Ubuntu on Windows"
-        local -r MYSQL_HOST='127.0.0.1'
-        
-    else 
-        echo "native Linux"
-        local -r MYSQL_HOST='localhost'
-    fi
 
     if [ ! -e "$HOME/$cnffile" ]; then
         touch "$HOME/$cnffile" 
@@ -522,7 +576,7 @@ eof
         echo "Database backup completed successfully"
     else
         echo "Error found during backup"
-        exit 1
+        exit 5
     fi
 
     if [ ! -z "$DB_BACKUP_PATH" ]; then
@@ -577,6 +631,12 @@ setUserAndIP()
 # Turn date and time sync with ntp server off, if parameter passed is 0 and on, if parameter passed is 1
 setDateTimeSync()
 {
+    is_installed="$(which sshd)"
+    if [ -z "$is_installed" ]; then
+        echo -e "openssh-server not installed. Please install it using the command: \n sudo apt install openssh-server"
+        exit 6
+    fi
+
     status="$(timedatectl status | grep systemd-timesyncd.service | cut -d" " -f3)"
     # echo "systemd-timesyncd.service status= $status"
     if [ -z "$status" ]; then
@@ -631,11 +691,12 @@ fi
 # If no parameters are passed with this script show usage.
 if [ "$*" = ""  ]; then
     usage
-    exit 1
+    exit 2
 fi
 
 # check if --APre and --noAPre parameters are used together.
 checkInputArgs $@
+checkSysType
 
 # set default values passed as parameters from command line with this script
 while [ "$1" != "" ]; do 
@@ -672,6 +733,13 @@ while [ "$1" != "" ]; do
                 setPathVariables
                 shift
                 echo "Run TDDSE."
+            ;;
+        "--SA")
+                suite="SA"
+                setPaths
+                setPathVariables
+                shift
+                echo "Run SA."
             ;;
         "--Time")
                 suite="Time"
@@ -769,9 +837,6 @@ while [ "$1" != "" ]; do
                 suite="Provider"
                 setPaths
                 setPathVariables
-                # setCounts
-                # dbBackup
-                # clearFiles
                 shift
                 echo "Run Provider."
             ;;
@@ -779,9 +844,6 @@ while [ "$1" != "" ]; do
                 suite="Consumer"
                 setPaths
                 setPathVariables
-                # setCounts
-                # dbBackup
-                # clearFiles
                 shift
                 echo "Run Consumer."
             ;;
@@ -789,9 +851,6 @@ while [ "$1" != "" ]; do
                 suite="User"
                 setPaths
                 setPathVariables
-                # setCounts
-                # dbBackup
-                # clearFiles
                 shift
                 echo "Run User."
             ;;
@@ -799,19 +858,16 @@ while [ "$1" != "" ]; do
                 suite="Partner"
                 setPaths
                 setPathVariables
-                # setCounts
-                # dbBackup
-                # clearFiles
                 shift
                 echo "Run Partner."
             ;;
         "-h" | "--help" )           
                 usage
-                exit 
+                exit 2
             ;;
         * )                     
                 usage
-                exit 1
+                exit 2
             ;;
     esac
     shift
@@ -905,8 +961,9 @@ if [ "$parallelContainers" -gt "1" ]; then
         setUserAndIP 1
         variablelogs "$inputPath" "$newoutputPath" "$c"
 
-        if [[ "$(< /proc/sys/kernel/osrelease)" == *Microsoft ]]; then 
-            echo "Ubuntu on Windows"
+        if [[ "$(< /proc/sys/kernel/osrelease)" == *[Mm]icrosoft* ]]; then 
+            echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - WSL" >> $LogFileName
+            echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] Ubuntu on Windows- Windows Subsystem for Linux"
             winInputPath=$(wslpath -w "$inputPath")
             winOutputPath=$(wslpath -w "$newoutputPath")
             winDockerPath=$(wslpath -w "$defaultDockerPath")
@@ -915,12 +972,12 @@ if [ "$parallelContainers" -gt "1" ]; then
             time docker run --rm --network="host" -v $winConfPath:/ebs/ynwconf -v "$winInputPath:/ebs/TDD" -v "$winInputPath/$VAR_DIR/$c:/ebs/TDD/varfiles" -v "$winOutputPath:/ebs/TDD_Output" -v "$winDockerPath/config:/ebs/conf" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env$c.list jaldeetdd &
             
         else 
-            echo "native Linux"
+            echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - Ubuntu" >> $LogFileName
+            echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux"
             echo -e "SYSTEM_ENV=LINUX" >> env$c.list
             time docker run --rm --network="host" -v $CONF_DIR:/ebs/ynwconf -v "$inputPath:/ebs/TDD" -v "$inputPath/$VAR_DIR/$c:/ebs/TDD/varfiles" -v "$newoutputPath:/ebs/TDD_Output" -v "$defaultDockerPath/config:/ebs/conf" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env$c.list jaldeetdd &
         fi
         
-        # time docker run --rm --network="host" -v /ebs/ynwconf:/ebs/ynwconf -v "$inputPath:/ebs/TDD" -v "$inputPath/$VAR_DIR/$c:/ebs/TDD/varfiles" -v "$newoutputPath:/ebs/TDD_Output" -v "$defaultDockerPath/config:/ebs/conf" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env$c.list jaldeetdd &
     done
     
     cnum=$(docker ps --filter "status=running" | wc -l)
@@ -949,22 +1006,28 @@ else
     setEnvVariables 0
     setUserAndIP 0
     variablelogs "$inputPath" "$outputPath"
-    if [[ "$(< /proc/sys/kernel/osrelease)" == *Microsoft ]]; then 
-        echo "Ubuntu on Windows"
-        winInputPath=$(wslpath -w "$inputPath")
-        winOutputPath=$(wslpath -w "$outputPath")
-        winDockerPath=$(wslpath -w "$defaultDockerPath")
-        winConfPath=$(wslpath -w "$CONF_DIR")
+    if [[ "$(< /proc/sys/kernel/osrelease)" == *[Mm]icrosoft* ]]; then 
+        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - WSL" >> $LogFileName
+        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] Ubuntu on Windows- Windows Subsystem for Linux"
+        # winInputPath=$(wslpath -w "$inputPath")
+        # winOutputPath=$(wslpath -w "$outputPath")
+        # winDockerPath=$(wslpath -w "$defaultDockerPath")
+        # winConfPath=$(wslpath -w "$CONF_DIR")
         echo -e "SYSTEM_ENV=Microsoft WSL" >> env.list
-        time docker run --rm --network="host" -v $winConfPath:/ebs/ynwconf/:ro -v "$winInputPath:/ebs/TDD"  -v "$winInputPath/$VAR_DIR:/ebs/TDD/varfiles" -v "$winOutputPath:/ebs/TDD_Output" -v "$winDockerPath"/config:/ebs/conf:ro -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd
+        # time docker run --rm --network="host" -v "${winConfPath}:/ebs/ynwconf/:ro" -v "${winInputPath}:/ebs/TDD"  -v "${winInputPath}\\$VAR_DIR:/ebs/TDD/varfiles" -v "$winOutputPath:/ebs/TDD_Output" -v "${winDockerPath}\\config:/ebs/conf:ro" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd
+        # time docker run --rm --network="host" -v "${winInputPath}:/ebs/TDD"  -v "${winInputPath}\\$VAR_DIR:/ebs/TDD/varfiles" -v "$winOutputPath:/ebs/TDD_Output" --mount "source=${winConfPath},destination=/ebs/ynwconf/,readonly" --mount "source=${winDockerPath}\\config,destination=/ebs/conf,readonly" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd
+        time docker run --rm --network="host" -v "${CONF_DIR}:/ebs/ynwconf/:ro" -v "${inputPath}:/ebs/TDD"  -v "${inputPath}/$VAR_DIR:/ebs/TDD/varfiles" -v "$outputPath:/ebs/TDD_Output" -v "${defaultDockerPath}/config:/ebs/conf:ro" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd
+        # setDateTimeSync 1
+        # echo -n > "$inputPath/$TIME_FILE"
     else 
-        echo "native Linux"
+        echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - Ubuntu" >> $LogFileName
+        echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux"
         echo -e "SYSTEM_ENV=LINUX" >> env.list
-        time docker run --rm --network="host" -v $CONF_DIR:/ebs/ynwconf/:ro -v "$inputPath:/ebs/TDD"  -v "$inputPath/$VAR_DIR:/ebs/TDD/varfiles" -v "$outputPath:/ebs/TDD_Output" -v "$defaultDockerPath"/config:/ebs/conf:ro -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd   
+        time docker run --rm --network="host" -v $CONF_DIR:/ebs/ynwconf/:ro -v "$inputPath:/ebs/TDD"  -v "$inputPath/$VAR_DIR:/ebs/TDD/varfiles" -v "$outputPath:/ebs/TDD_Output" -v "$defaultDockerPath/config:/ebs/conf:ro" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd   
+        # setDateTimeSync 1
+        # echo -n > "$inputPath/$TIME_FILE"
     fi
-    # time docker run --rm --network="host" -v /ebs/ynwconf:/ebs/ynwconf/:ro -v "$inputPath:/ebs/TDD"  -v "$inputPath/$VAR_DIR:/ebs/TDD/varfiles" -v "$outputPath:/ebs/TDD_Output" -v "$defaultDockerPath"/config:/ebs/conf:ro -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd
     setDateTimeSync 1
-    # echo "" > "$inputPath/time.txt"
     echo -n > "$inputPath/$TIME_FILE"
 
 fi

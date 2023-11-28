@@ -13,7 +13,7 @@ Library		    /ebs/TDD/Imageupload.py
 Test Teardown   Remove File  cookies.txt
 *** Test Cases ***
 
-YNW-TC-Delete Provider Gallery Image-1
+JD-TC-Delete Provider Gallery Image-1
     Comment   Provider check to Delete Gallery Image
     # ${resp}=  pyproviderlogin  ${PUSERNAME10}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp}  200  
@@ -24,7 +24,7 @@ YNW-TC-Delete Provider Gallery Image-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${itemId}   ${resp[0]}
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get GalleryOrlogo image  gallery
@@ -43,7 +43,7 @@ YNW-TC-Delete Provider Gallery Image-1
     ${resp}=   Get GalleryOrlogo image  gallery
     Should Not Contain  ${resp.json()}  ${name}
 
-YNW-TC-Delete Provider Gallery Image-UH1
+JD-TC-Delete Provider Gallery Image-UH1
     Comment   Consumer check to Delete Gallery Image
     # ${resp}=  Pyconsumerlogin  ${CUSERNAME1}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp}  200
@@ -58,7 +58,7 @@ YNW-TC-Delete Provider Gallery Image-UH1
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  ${resp.content}    "${LOGIN_NO_ACCESS_FOR_URL}"
 
-YNW-TC-Delete Provider Gallery Image-UH2
+JD-TC-Delete Provider Gallery Image-UH2
     Comment   Delete Gallery Image without login  
     ${empty_cookie}=  Create Dictionary
     # ${resp}=  DeleteProviderGalleryImage  ${name}   

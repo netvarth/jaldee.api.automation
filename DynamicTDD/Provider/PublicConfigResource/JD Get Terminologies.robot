@@ -21,7 +21,7 @@ JD-TC-Get Terminologies -1
 
 JD-TC-Get Terminologies -2
        [Documentation]   Provider check to Get Terminologies
-       ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
        Should Be Equal As Strings  ${resp.status_code}  200
        ${resp}=  Get Terminologies  healthCare  physiciansSurgeons
        Should Be Equal As Strings    ${resp.status_code}   200 
@@ -29,7 +29,7 @@ JD-TC-Get Terminologies -2
                   
 JD-TC-Get Terminologies -3
        [Documentation]   Provider check to Get Terminologies
-       ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
        Should Be Equal As Strings  ${resp.status_code}  200
        ${resp}=  Get Terminologies  personalCare  beautyCare
        Should Be Equal As Strings    ${resp.status_code}   200 

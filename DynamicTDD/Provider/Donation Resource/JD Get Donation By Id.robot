@@ -22,7 +22,7 @@ ${SERVICE3}   Painting
 
 JD-TC-GetDonationById-1
         [Documentation]   Provider Get Donation By Id
-        ${resp}=  Provider Login  ${PUSERNAME30}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         delete_donation_service  ${PUSERNAME30}
@@ -40,7 +40,12 @@ JD-TC-GetDonationById-1
         Should Be Equal As Strings  ${resp.status_code}  200
         
         ${resp}=   Create Sample Location
-        Set Suite Variable    ${loc_id1}    ${resp}  
+        Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
         ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -67,7 +72,7 @@ JD-TC-GetDonationById-1
         Set Suite Variable  ${con_id}
         ${acc_id}=  get_acc_id  ${PUSERNAME30}
         Set Suite Variable  ${acc_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         ${don_amt}=   Random Int   min=1000   max=4000
@@ -82,7 +87,7 @@ JD-TC-GetDonationById-1
         ${don_id}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${don_id}  ${don_id[0]}
 
-        ${resp}=  Provider Login  ${PUSERNAME30}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Get Donation By Id  ${don_id}
         Log  ${resp.json()}
@@ -97,7 +102,7 @@ JD-TC-GetDonationById-1
 
 JD-TC-GetDonationById-UH1
         [Documentation]   Provider get a donation by id but there is no donation done by consumer
-        ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Get Donation By Id  ${don_id}
         Log  ${resp.json()}
@@ -113,7 +118,7 @@ JD-TC-GetDonationById -UH2
 
 JD-TC-GetDonationById-UH3
         [Documentation]   Provider get a invalid donation by id
-        ${resp}=  Provider Login  ${PUSERNAME30}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Get Donation By Id  000
         Log  ${resp.json()}

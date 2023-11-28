@@ -53,7 +53,7 @@ JD-TC-GetLoanBankDetails-1
                                   
     [Documentation]               Verify Loan Bank
 
-    ${resp}=  Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${provider_id1}  ${resp.json()['id']}
@@ -103,9 +103,14 @@ JD-TC-GetLoanBankDetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     clear Customer  ${PUSERNAME87}
@@ -488,7 +493,7 @@ JD-TC-GetLoanBankDetails-UH2
                                   
     [Documentation]               Verify Loan Bank with empty loanuid
 
-    ${resp}=   ProviderLogin  ${PUSERNAME87}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -501,7 +506,7 @@ JD-TC-GetLoanBankDetails-UH3
                                   
     [Documentation]               Verify Loan Bank with invalid loanuid
 
-    ${resp}=   ProviderLogin  ${PUSERNAME87}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME87}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -525,7 +530,7 @@ JD-TC-GetLoanBankDetails-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME59}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME59}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}

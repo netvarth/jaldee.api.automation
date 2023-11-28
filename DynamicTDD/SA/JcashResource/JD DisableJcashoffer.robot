@@ -23,6 +23,7 @@ ${jcash_name2}   JCash881_offer282
 ${jcash_name3}   JCash881_offer383
 ${jcash_name4}   JCash881_offer484
 ${jcash_name5}   JCash881_offer585
+${tz}   Asia/Kolkata
 
 
 *** Test Cases ***
@@ -39,11 +40,11 @@ JD-TC-Disable_JCash_Offer-1
     Set Suite Variable   ${global_max_limit}
 
     ${EMPTY_List}=  Create List
-    ${start_date}=  get_date  
-    ${end_date}=  add_date   12  
+    ${start_date}=  db.get_date_by_timezone  ${tz}  
+    ${end_date}=  db.add_timezone_date  ${tz}  12    
     ${minOnlinePaymentAmt}=  Random Int  min=250   max=1000  
     ${minOnlinePaymentAmt}=  Convert To Number  ${minOnlinePaymentAmt}  1
-    ${maxValidUntil}=  add_date   26  
+    ${maxValidUntil}=  db.add_timezone_date  ${tz}   26  
     ${validForDays}=  Random Int  min=5   max=10   
     ${issueLimit}=  Random Int  min=1   max=5   
     ${maxSpendLimit}=  Random Int  min=10   max=${global_max_limit}
@@ -97,7 +98,7 @@ JD-TC-Disable_JCash_Offer -UH4
 
 JD-TC-Disable_JCash_Offer -UH5
     [Documentation]   Disable a Jaldee Cash Offer by provider login
-    ${resp}=   ProviderLogin  ${PUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Disable Jaldee Cash Offer  ${offerId1}
     Should Be Equal As Strings    ${resp.status_code}   419

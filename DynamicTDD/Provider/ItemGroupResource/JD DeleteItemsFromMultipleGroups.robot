@@ -23,7 +23,7 @@ JD-TC-DeleteItemsFromMultipleGroups-1
 
     [Documentation]  Create an item and add that item to 2 item groups, then delete items from the group.
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -161,7 +161,7 @@ JD-TC-DeleteItemsFromMultipleGroups-2
 
     [Documentation]  Create an item and add that item to 2 item groups, then delete items from one group.
 
-    ${resp}=  Provider Login  ${PUSERNAME121}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

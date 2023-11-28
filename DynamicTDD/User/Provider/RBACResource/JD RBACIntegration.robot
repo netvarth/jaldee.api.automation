@@ -92,7 +92,7 @@ Account with Multiple Users in NBFC
     ${licid}  ${licname}=  get_highest_license_pkg
     
     FOR   ${a}  ${start}   IN RANGE   ${length}   
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Test Variable  ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
         Set Test Variable  ${Dom}   ${resp.json()['sector']}
@@ -125,7 +125,7 @@ JD-TC-RBAC-CDL-1
     ${MUAcct}=  Account with Multiple Users in NBFC
     Log  ${MUAcct}
     
-    # ${resp}=  Provider Login  ${MUAcct}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${MUAcct}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -133,6 +133,7 @@ JD-TC-RBAC-CDL-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     # ${resp}=  categorytype  ${account_id}
@@ -196,8 +197,13 @@ JD-TC-RBAC-CDL-1
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Suite Variable  ${locId}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  Get roles
@@ -416,7 +422,7 @@ JD-TC-RBAC-CDL-1
     @{resp}=  ResetProviderPassword  ${User5_BOH}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
     Should Be Equal As Strings  ${resp[0].status_code}  200
 
-    ${resp}=  ProviderLogin  ${User4_BH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${User4_BH}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -448,7 +454,7 @@ JD-TC-RBAC-CDL-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${MUAcct}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUAcct}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -462,7 +468,7 @@ JD-TC-RBAC-CDL-1
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${User1_SO}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${so_proid}  ${resp.json()['id']}
@@ -527,7 +533,7 @@ JD-TC-RBAC-CDL-1
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${User2_CO}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${User2_CO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -544,7 +550,7 @@ JD-TC-RBAC-CDL-1
     Should Be Equal As Strings  ${resp.json()['generatedByName']}  ${pro_name}
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${locId}
 
-    ${resp}=  Provider Login  ${User3_CO2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${User3_CO2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -558,7 +564,7 @@ JD-TC-RBAC-CDL-2
  
     [Documentation]  Sales officer creates loan for existing provider customer with full details and check if branch credit head can view it.
 
-    ${resp}=  ProviderLogin  ${User1_SO}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${so_proid}  ${resp.json()['id']}
@@ -618,7 +624,7 @@ JD-TC-RBAC-CDL-2
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${loanid}
     Should Be Equal As Strings  ${resp.json()[0]['uid']}  ${loanuid}
 
-    ${resp}=  Provider Login  ${User2_CO}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${User2_CO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -628,7 +634,7 @@ JD-TC-RBAC-CDL-2
     Should Be Equal As Strings  ${resp.json()['id']}  ${loanid}
     Should Be Equal As Strings  ${resp.json()['uid']}  ${loanuid}
 
-    ${resp}=  Provider Login  ${User3_CO2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${User3_CO2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -641,7 +647,7 @@ JD-TC-RBAC-CDL-3
  
     [Documentation]  Sales officer creates loan for existing provider customer without full details and check if branch credit head can view it.
 
-    ${resp}=  ProviderLogin  ${User1_SO}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${so_proid}  ${resp.json()['id']}
@@ -701,7 +707,7 @@ JD-TC-RBAC-CDL-3
     Should Be Equal As Strings  ${resp.json()[0]['id']}  ${loanid}
     Should Be Equal As Strings  ${resp.json()[0]['uid']}  ${loanuid}
 
-    ${resp}=  Provider Login  ${User2_CO}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${User2_CO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -711,7 +717,7 @@ JD-TC-RBAC-CDL-3
     Should Be Equal As Strings  ${resp.json()['id']}  ${loanid}
     Should Be Equal As Strings  ${resp.json()['uid']}  ${loanuid}
 
-    ${resp}=  Provider Login  ${User3_CO2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${User3_CO2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -724,7 +730,7 @@ JD-TC-RBAC-CDL-UH1
  
     [Documentation]  Sales officer creates loan for new provider customer without gender.
 
-    ${resp}=  ProviderLogin  ${User1_SO}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${so_proid}  ${resp.json()['id']}
@@ -766,7 +772,7 @@ JD-TC-RBAC-CDL-UH2
  
     [Documentation]  Sales officer creates loan for new provider customer without dob.
 
-    ${resp}=  ProviderLogin  ${User1_SO}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${so_proid}  ${resp.json()['id']}
@@ -808,7 +814,7 @@ JD-TC-RBAC-CDL-UH3
  
     [Documentation]  Sales officer creates loan for new provider customer without firstname.
 
-    ${resp}=  ProviderLogin  ${User1_SO}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${so_proid}  ${resp.json()['id']}
@@ -850,7 +856,7 @@ JD-TC-RBAC-CDL-UH4
  
     [Documentation]  Sales officer creates loan for new provider customer without lastname.
 
-    ${resp}=  ProviderLogin  ${User1_SO}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${so_proid}  ${resp.json()['id']}
@@ -892,7 +898,7 @@ JD-TC-RBAC-CDL-UH5
  
     [Documentation]  Sales officer creates loan for new provider customer without phone number.
 
-    ${resp}=  ProviderLogin  ${User1_SO}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${so_proid}  ${resp.json()['id']}
@@ -933,7 +939,7 @@ JD-TC-RBAC-CDL-2
  
     [Documentation]  create loan by partner and assign to sales_officer and View the loan
 
-    ${resp}=  ProviderLogin  ${User1_SO}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${User1_SO}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${so_proid}  ${resp.json()['id']}
@@ -949,8 +955,13 @@ JD-TC-RBAC-CDL-2
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
         Set Suite Variable  ${locId}
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${PH_Number}    Random Number 	digits=5  #fix_len=True
@@ -1000,7 +1011,7 @@ JD-TC-RBAC-CDL-2
     ${resp}=  Provider Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${User5_BOH}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${User5_BOH}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1154,7 +1165,7 @@ JD-TC-Cases-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1359,7 +1370,7 @@ JD-TC-Cases-2
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
 
-    ${resp}=  Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1404,7 +1415,7 @@ JD-TC-Cases-2
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U5}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME_U5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U5}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${account_id}  ${resp.json()['id']}
@@ -1435,7 +1446,7 @@ JD-TC-Cases-3
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=  Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1644,7 +1655,7 @@ JD-TC-Cases-3
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
 
-    ${resp}=  Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1692,7 +1703,7 @@ JD-TC-Cases-3
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U6}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME_U6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U6}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${account_id}  ${resp.json()['id']}
@@ -1711,7 +1722,7 @@ JD-TC-Case-5
  
     [Documentation]   create loan by partner and view the loan by
     
-    ${resp}=  Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1792,7 +1803,7 @@ JD-TC-Case-5
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U7}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U7}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1853,7 +1864,7 @@ JD-TC-Case-5
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U10}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1870,7 +1881,7 @@ JD-TC-Case-5
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U7}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2025,7 +2036,7 @@ JD-TC-Case-5
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
     
-    ${resp}=  Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2111,7 +2122,7 @@ JD-TC-Case-5
     Should Be Equal As Strings  ${resp[0].status_code}  200
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U8}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2129,7 +2140,7 @@ JD-TC-Case-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME_U9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U9}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2155,7 +2166,7 @@ JD-TC-Case-6
  
     [Documentation]   create loan by partner and view Partner with another user . the another user gave partner id in user scope
     
-    ${resp}=  Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2193,7 +2204,7 @@ JD-TC-Case-6
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U8}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
    
-    ${resp}=  ProviderLogin  ${PUSERNAME_U8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U8}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -2208,7 +2219,7 @@ JD-TC-Case-7
  
     [Documentation]   create loan by partner and view Partner with another user . the another user gave partner id in user scope
   
-    ${resp}=  Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2224,7 +2235,7 @@ JD-TC-Case-8
     [Documentation]   create loan by partner and view Partner with another user . the another user gave partner id in user scope
   
 
-    ${resp}=  Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2333,7 +2344,7 @@ JD-TC-Case-8
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U10}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2429,7 +2440,7 @@ JD-TC-Case-8
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U10}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2460,7 +2471,7 @@ JD-TC-Case-8
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2608,7 +2619,7 @@ JD-TC-Case-8
     Log    ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME_U10}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_U10}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2616,7 +2627,7 @@ JD-TC-Case-8
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2626,7 +2637,7 @@ JD-TC-Case-8
     Should Be Equal As Strings     ${resp.status_code}    200
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

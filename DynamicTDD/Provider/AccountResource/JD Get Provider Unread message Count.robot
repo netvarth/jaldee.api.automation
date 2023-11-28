@@ -50,7 +50,7 @@ JD-TC-Get Unread Message Count-INDEPENDENT_SP-1
 
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=   ProviderLogin  ${PUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get provider Unread message Count
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -78,7 +78,7 @@ JD-TC-Get Unread Message Count-INDEPENDENT_SP-2
 
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=   ProviderLogin  ${PUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get provider Unread message Count
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -86,7 +86,7 @@ JD-TC-Get Unread Message Count-INDEPENDENT_SP-2
 
 JD-TC-Get Unread Message Count-INDEPENDENT_SP-3
 	[Documentation]   Get Unread message count after Communication Between Consumer and Provider after waitlist
-	${resp}=  ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+	${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_queue      ${PUSERNAME7}
     clear_location   ${PUSERNAME7}
@@ -124,17 +124,20 @@ JD-TC-Get Unread Message Count-INDEPENDENT_SP-3
     Set Suite Variable  ${cid}
     ${aid}=  get_acc_id  ${PUSERNAME7}
     Set Suite Variable  ${aid}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     Set Suite Variable  ${s_id1}   ${resp['service_id']}
     Set Suite Variable  ${lid}   ${resp['location_id']}
-    ${DAY1}=  get_date
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
 
     ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid1}  ${DAY1}  hi  True  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${resp}=   ProviderLogout
@@ -177,7 +180,7 @@ JD-TC-Get Unread Message Count-INDEPENDENT_SP-4
 
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id8}  ${resp.json()['id']}
     ${account_id1}=  get_acc_id  ${PUSERNAME8}
@@ -221,7 +224,7 @@ JD-TC-Get Unread Message Count-UH2
 
 JD-TC-Verify Get Unread Message Count-INDEPENDENT_SP-3
     [Documentation]   verification of Get Unread message count after Communication Between Consumer and Provider after waitlist
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${account_id1}=  get_acc_id  ${PUSERNAME7}
     ${resp}=  Get provider Unread message Count
@@ -251,7 +254,7 @@ JD-TC-Verify Get Unread Message Count-INDEPENDENT_SP-3
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id7}  ${resp.json()['id']}
 
@@ -312,7 +315,7 @@ JD-TC-Get Unread Message Count-BRANCH-5
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E1}${\n}
@@ -323,7 +326,7 @@ JD-TC-Get Unread Message Count-BRANCH-5
     Set Suite Variable  ${bs}
 
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -337,25 +340,28 @@ JD-TC-Get Unread Message Count-BRANCH-5
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    # ${sTime}=  add_time  0  15
+    # ${sTime}=  add_timezone_time  ${tz}  0  15  
     # Set Suite Variable   ${sTime}
-    # ${eTime}=  add_time   0  45
+    # ${eTime}=  add_timezone_time  ${tz}  0  45  
     # Set Suite Variable   ${eTime}
-    ${sTime}=  subtract_time  0  30
-    # ${sTime}=  subtract_time  0  05
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  30
+    # ${sTime}=  db.subtract_timezone_time  ${tz}  0  05
     Set Suite Variable  ${BsTime30}  ${sTime}
-    # ${eTime}=  subtract_time  1  00
-    ${eTime}=  add_time   1  00
+    # ${eTime}=  db.subtract_timezone_time  ${tz}  1  00
+    ${eTime}=  add_timezone_time  ${tz}  1  00  
     Set Suite Variable  ${BeTime30}  ${eTime}
     ${resp}=  Update Business Profile With Schedule   ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -363,9 +369,16 @@ JD-TC-Get Unread Message Count-BRANCH-5
     sleep   02s
 
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -430,7 +443,7 @@ JD-TC-Get Unread Message Count-BRANCH-5
     Set Suite Variable  ${cR_id1}  ${cR_id1}
     clear_Consumermsg  ${CUSERNAME8}
 
-    ${resp}=   ProviderLogin  ${MUSERNAME_E1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${pR_id1}  ${resp.json()['id']}
@@ -543,7 +556,7 @@ JD-TC-Get Unread Message Count-BRANCH-6
     clear_Consumermsg  ${CUSERNAME7}
     clear_Consumermsg  ${CUSERNAME5}
 
-    ${resp}=   ProviderLogin  ${MUSERNAME_E1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 

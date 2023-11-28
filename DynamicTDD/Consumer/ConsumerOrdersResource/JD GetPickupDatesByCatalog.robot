@@ -28,7 +28,7 @@ JD-TC-GetPickUpDatesByCatalog-1
     clear_customer   ${PUSERNAME196}
     clear_Item   ${PUSERNAME196}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME196}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME196}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -75,16 +75,16 @@ JD-TC-GetPickUpDatesByCatalog-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -132,11 +132,11 @@ JD-TC-GetPickUpDatesByCatalog-1
    
     ${far}=  Random Int  min=15  max=15
 
-    ${far_date}=   add_date   15
+    ${far_date}=   db.add_timezone_date  ${tz}   15
    
     ${soon}=  Random Int  min=1   max=1
 
-    ${soon_date}=   add_date   11
+    ${soon_date}=   db.add_timezone_date  ${tz}  11  
    
     Set Test Variable  ${minNumberItem}   1
 
@@ -155,8 +155,8 @@ JD-TC-GetPickUpDatesByCatalog-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${calender_sdate}=  add_date   1
-    ${calender_edate}=  add_date   14
+    ${calender_sdate}=  db.add_timezone_date  ${tz}  1
+    ${calender_edate}=  db.add_timezone_date  ${tz}   14
   
     ${resp}=  Get Pickup Dates By Catalog  ${accId}  ${CatalogId1}  
     Log   ${resp.json()}
@@ -165,7 +165,7 @@ JD-TC-GetPickUpDatesByCatalog-1
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
         
-        ${DAY}=  add_date   ${a} 
+        ${DAY}=  db.add_timezone_date  ${tz}   ${a} 
         Run Keyword IF  '${resp.json()[${i}]['isAvailable']}' == '${bool[1]}'   
                 ...     Run Keywords 
                 ...     Should Be Equal As Strings  ${resp.json()[${i}]['date']}                 ${DAY}
@@ -188,7 +188,7 @@ JD-TC-GetPickUpDatesByCatalog-2
     clear_customer   ${PUSERNAME191}
     clear_Item   ${PUSERNAME191}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME191}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME191}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -235,16 +235,16 @@ JD-TC-GetPickUpDatesByCatalog-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  subtract_date   10
-    ${endDate}=  get_date
+    ${startDate}=  db.subtract_timezone_date  ${tz}    10
+    ${endDate}=  db.get_date_by_timezone  ${tz}
 
-    ${startDate1}=  subtract_date    2   
-    ${endDate1}=   get_date  
+    ${startDate1}=  db.subtract_timezone_date  ${tz}     2   
+    ${endDate1}=   db.get_date_by_timezone  ${tz}  
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -318,7 +318,7 @@ JD-TC-GetPickUpDatesByCatalog-2
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
         
-        ${DAY}=  add_date   ${i} 
+        ${DAY}=  db.add_timezone_date  ${tz}   ${i} 
         Run Keyword IF  '${resp.json()[${i}]['isAvailable']}' == '${bool[1]}'   
                 ...     Run Keywords 
                 ...     Should Be Equal As Strings  ${resp.json()[${i}]['date']}                 ${DAY}
@@ -342,7 +342,7 @@ JD-TC-GetPickUpDatesByCatalog-3
     clear_customer   ${PUSERNAME193}
     clear_Item   ${PUSERNAME193}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME193}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME193}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -389,16 +389,16 @@ JD-TC-GetPickUpDatesByCatalog-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  subtract_date   10
-    ${endDate}=  get_date
+    ${startDate}=  db.subtract_timezone_date  ${tz}    10
+    ${endDate}=  db.get_date_by_timezone  ${tz}
 
-    ${startDate1}=  subtract_date    2   
-    ${endDate1}=   get_date  
+    ${startDate1}=  db.subtract_timezone_date  ${tz}     2   
+    ${endDate1}=   db.get_date_by_timezone  ${tz}  
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -471,7 +471,7 @@ JD-TC-GetPickUpDatesByCatalog-3
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
         
-        ${DAY}=  add_date   ${i} 
+        ${DAY}=  db.add_timezone_date  ${tz}   ${i} 
         Run Keyword IF  '${resp.json()[${i}]['isAvailable']}' == '${bool[1]}'   
                 ...     Run Keywords 
                 ...     Should Be Equal As Strings  ${resp.json()[${i}]['date']}                 ${DAY}
@@ -494,7 +494,7 @@ JD-TC-GetPickUpDatesByCatalog-4
     clear_customer   ${PUSERNAME174}
     clear_Item   ${PUSERNAME174}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME174}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME174}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -542,16 +542,16 @@ JD-TC-GetPickUpDatesByCatalog-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -599,11 +599,11 @@ JD-TC-GetPickUpDatesByCatalog-4
    
     ${far}=  Random Int  min=14  max=14
 
-    ${far_date}=   add_date   15
+    ${far_date}=   db.add_timezone_date  ${tz}   15
    
     ${soon}=  Random Int  min=0   max=0
 
-    ${soon_date}=   add_date   11
+    ${soon_date}=   db.add_timezone_date  ${tz}  11  
    
     Set Test Variable  ${minNumberItem}   1
 
@@ -629,7 +629,7 @@ JD-TC-GetPickUpDatesByCatalog-4
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
         
-        ${DAY}=  add_date   ${i} 
+        ${DAY}=  db.add_timezone_date  ${tz}   ${i} 
         Run Keyword IF  '${resp.json()[${i}]['isAvailable']}' == '${bool[1]}'   
                 ...     Run Keywords 
                 ...     Should Be Equal As Strings  ${resp.json()[${i}]['date']}                 ${DAY}
@@ -653,7 +653,7 @@ JD-TC-GetPickUpDatesByCatalog-5
     clear_customer   ${PUSERNAME195}
     clear_Item   ${PUSERNAME195}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME195}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME195}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
@@ -701,16 +701,16 @@ JD-TC-GetPickUpDatesByCatalog-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -758,11 +758,11 @@ JD-TC-GetPickUpDatesByCatalog-5
    
     ${far}=  Random Int  min=14  max=14
 
-    ${far_date}=   add_date   15
+    ${far_date}=   db.add_timezone_date  ${tz}   15
    
     ${soon}=  Random Int  min=1   max=1
 
-    ${soon_date}=   add_date   11
+    ${soon_date}=   db.add_timezone_date  ${tz}  11  
    
     Set Test Variable  ${minNumberItem}   1
 
@@ -784,7 +784,7 @@ JD-TC-GetPickUpDatesByCatalog-5
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
         
-        ${DAY}=  add_date   ${a} 
+        ${DAY}=  db.add_timezone_date  ${tz}   ${a} 
         Run Keyword IF  '${resp.json()[${i}]['isAvailable']}' == '${bool[1]}'   
                 ...     Run Keywords 
                 ...     Should Be Equal As Strings  ${resp.json()[${i}]['date']}                 ${DAY}

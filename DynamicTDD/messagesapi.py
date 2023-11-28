@@ -247,7 +247,7 @@ CANNOT_LOGIN_SUPPORT_USER= "Sorry, you are not allowed to login as a support use
 LOGIN_FAILED= "Login attempt failed. It looks like there have been multiple login sessions for the same customer. "
 EMAIL_NOT_VERIFIED= "Email not verified."
 EMAIL_VERIFIED= "Email already verified."
-
+NO_PERMISSION_TO_UNASSIGN_USERSERVICE= "You cannot unassign from a user-specific service."
 
 PHONE_NOT_VERIFIED= "Phone number not verified."
 PHONE_VERIFIED= "Phone number already verified."
@@ -1175,6 +1175,7 @@ NO_PERMISSION_TO_ADD_LOCATION= "You have no permission to assign to location"
 USER_NOT_FOUND_WITH_ID= "User not found with id {}"
 
 #consumer
+INVALID_CONS_ID= "Invalid Consumer Id"
 INVALID_ID= "Invalid Consumer Id"
 PRO_CON_ALREADY_EXIST= "[customer] already exists"
 ENTER_CON_PHONE_NO= "Enter Consumer phone number"
@@ -1822,6 +1823,8 @@ INVALID_LOAN_APPLICATION_ID=  "Invalid Loan Application ID"
 CATEGORY_REQUIRES = " Sourcing Channel is Required"
 UNABLE_TO_CHANGE_INTERNAL_STATUS= "Unable to change internal status. Current Loan Application internal status is {}"
 NOMINEE_NAME_REQUIRED= "Nominee Name required"
+LOAN_APPLICATION_REF_REQ= "Loan Application Reference Required"
+ALREADY_APPROVAL_REQUESTED= "Loan Application already rejected."
 #jaldee drive
 
 UPLOAD_ATLEAST_ONEFILE= "Need to upload atleast one file"
@@ -1964,7 +1967,11 @@ UNABLE_TO_SUSPEND = "Unable to suspend. Current Partner internal status is Suspe
 
 INVALID_PARTNER_UID = "Invalid Dealer"
 DOB_REQUIRED = "DoB required"
-
+STATUS_IS_APPROVALREQUIRED = "Unable to change internal status. Current Loan Application internal status is ApprovalRequired"
+STATUS_IS_ALREADY_CONSUMERACCEPTED= "Unable to change internal status. Current Loan Application internal status is ConsumerAccepted"
+STATUS_IS_ALREADY_CREDITAPPROVED= "Unable to change internal status. Current Loan Application internal status is CreditApproved"
+INVALID_APPLICATION_ID = "Invalid Loan Application ID"
+INVALID_LOAN_REQUESTED_AMOUNT = "Invalid Loan Requested Amount"
 
 # Branch Master
 
@@ -1995,6 +2002,7 @@ GST_NUM_REQUIRED = "Gst Number required"
 
 
 PAYMENT_AMOUNT_IS_NOT_MATCHED="Payment amount is not matched with required amount"
+VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT = "Payment amount({}) is not matched with required amount({})."
 LOGIN_INVALID_URL = "Invalid URL"
 INVALID_URL = "Invalid Url"
 
@@ -2021,7 +2029,7 @@ NO_ACTIVE_SCHEDULES_FOUND="No active schedules found"
 PLEASE_FILL_THE_FORM_TO_COMPLETE="Please fill the form to complete"
 CUSTOM_EMAIL_ALREADY_DISABLED="custom Email already disabled"	
 DAY_CANNOT_BE_EMPTY="Day cannot be empty"
-Invalid_CC="Invalid Country Code"
+INVALID_COUNTRYCODE = "Invalid Country Code"
 INVALID_STATUS="Invalid Status"
 
 
@@ -2112,7 +2120,7 @@ MEMBER_SERVICE_ALREADY_DISABLED = "Membership Settings already disabled"
 MEMBER_SERVICE_ALREADY_ENABLED = "Membership Settings already enabled"
 MEMBER_SERVICE_IS_DISABLED = "Service is disabled"
 MEMBER_SERVICE_REQUIRED = "Member Service ID required"
-
+MEMBER_SERVICE_DOES_NOT_EXIST = "Member Service does not exist"
 
 # ..................Patient Record............
 
@@ -2151,3 +2159,18 @@ MEDICINE_NAME_REQUIRED="Medicine name required for prescription creation"
 MEDICAL_HISTORY_NOT_FOUND= "Medical History not found with ID {}"
 ALREADY_UPDATED_STATUS="work status is COMPLETE"
 TIME_IS_OVER_UPDATION="Prescription cannot be updated since allowed edit time is over"
+
+# Provider Consumer
+
+INVALID_FOR_PHONE_NO = "Invalid phone No."
+INVALID_FOR_SECONDARY_NO = "Invalid secondary phone No."
+INVALID_FOR_TERTIARY_NO = "Invalid tertiary phone No."
+
+COUNTRY_CODE_REQUIRED_FOR_SECONDARY_NO = "Country code required for Secondary Phone No."
+COUNTRY_CODE_REQUIRED_FOR_TERTIARY_NO = "Country code required for Tertiary Phone No."
+		
+COUNTRY_CODE_INVALID_FOR_SECONDARY_NO = "Invalid secondary phone No country code."
+COUNTRY_CODE_INVALID_FOR_TERTIARY_NO = "Invalid tertiary phone No country code."
+
+appmntReminder_Consumer_APP= "[consumer],\n[appttime] reminder for your appointment with\n[provider],\n[time],[date]\n[service]"
+

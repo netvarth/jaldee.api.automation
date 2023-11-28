@@ -20,7 +20,7 @@ ${waitlistedby}           PROVIDER
 JD-TC-GetEncryptedID-1
     [Documentation]   Get By Encrypted ID 
     
-    ${resp}=  ProviderLogin  ${PUSERNAME125}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${pid}=  get_acc_id  ${PUSERNAME125}
 
@@ -30,17 +30,21 @@ JD-TC-GetEncryptedID-1
     # clear waitlist   ${PUSERNAME125}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${SERVICE1}=   FakerLibrary.name
     Set Suite Variable  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
-    ${sTime1}=  subtract_time  2  00
+    ${sTime1}=  db.subtract_timezone_time   ${tz}  2  00
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   3  30
+    ${eTime1}=  db.add_timezone_time  ${tz}   3  30
     Set Suite Variable   ${eTime1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  70      
+    ${DAY2}=  db.add_timezone_date  ${tz}  70      
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -67,7 +71,6 @@ JD-TC-GetEncryptedID-1
     ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${waitlist_id}  ${wid[0]}
 
@@ -86,7 +89,7 @@ JD-TC-GetEncryptedID-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${encId}=  Set Variable   ${resp.json()}
     Set Suite Variable  ${encId}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    
 
     ${resp}=  Get Waitlist By EncodedID    ${encId}
     Log   ${resp.json()}
@@ -100,15 +103,14 @@ JD-TC-GetEncryptedID-1
 
 JD-TC-GetEncryptedID-2
     [Documentation]   Get Encrypted ID of a future day
-    ${resp}=  ProviderLogin  ${PUSERNAME125}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY2}=  add_date  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  2
     ${desc}=   FakerLibrary.word
     Set Suite Variable  ${desc}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid}  ${DAY2}  ${desc}  ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${waitlist_id2}  ${wid[0]}
 
@@ -127,7 +129,7 @@ JD-TC-GetEncryptedID-2
     Should Be Equal As Strings  ${resp.status_code}  200
     ${encId2}=  Set Variable   ${resp.json()}
     Set Suite Variable  ${encId2}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    
 
     ${resp}=  Get Waitlist By EncodedID    ${encId2}
     Log   ${resp.json()}
@@ -141,7 +143,7 @@ JD-TC-GetEncryptedID-2
 
 JD-TC-GetEncryptedID-UH1
     [Documentation]    Get Waitlist Encrypted ID of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME129}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME129}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Waitlist By EncodedID     ${encId2} 
     Log   ${resp.json()}
@@ -156,7 +158,7 @@ JD-TC-GetEncryptedID-UH2
 
 JD-TC-GetEncryptedID-UH3
     [Documentation]     Passing Encrypeted ID is Empty in the Get Encrypted ID 
-    ${resp}=  ProviderLogin  ${PUSERNAME125}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Waitlist By EncodedID    ${empty}
     Log   ${resp.json()}
@@ -165,7 +167,7 @@ JD-TC-GetEncryptedID-UH3
 
 JD-TC-GetEncryptedID-UH4
     [Documentation]     Passing Encrypted ID is Zero in the Get Encrypted ID 
-    ${resp}=  ProviderLogin  ${PUSERNAME125}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Waitlist By EncodedID    0
     Log   ${resp.json()}

@@ -11,6 +11,9 @@ MYSQL_PASSWORD='netvarth'
 cnffile='.my.cnf'
 SQL_FILE='Queries.sql'
 PINCODE_FILE='pincode_table.sql'
+BANK_FILE='bank_master_tbl.sql'
+BACKUP_FILE="APreDB-$(date +"%d%b%y%H%M").sql"
+DB_BACKUP_PATH="TDD/APreBackup"
 # DB_HOST='127.0.0.1'
 REDIS_HOST='127.0.0.1'
 tddpath="TDD/${SUITE}"
@@ -47,8 +50,11 @@ cp /ebs/conf/VariablesFor*.py /ebs/
 
 if [[ "$(< /proc/sys/kernel/osrelease)" == *[Mm]icrosoft* ]]; then 
     echo "Ubuntu on Windows"
-    DB_HOST='host.docker.internal'
-    sed -i /ebs/VariablesForLocalServer.py -e 's/localhost:8080/host.docker.internal:8080/g'
+    cat /etc/resolv.conf | grep nameserver | cut -d' ' -f 2
+    # DB_HOST='host.docker.internal'
+    DB_HOST="$(hostname).local"
+    # sed -i /ebs/VariablesForLocalServer.py -e 's/localhost:8080/host.docker.internal:8080/g'
+    sed -i /ebs/VariablesForLocalServer.py -e "s/localhost:8080/$DB_HOST:8080/g"
 else 
     echo "native Linux"
     DB_HOST='127.0.0.1'
@@ -193,8 +199,11 @@ fullRun()
 {
     echo "Running all JTA Resources"
     if [ "${SIGN_UP}" == "yes" ]; then
+        populatePostalCodeTable
+        populateBankMasterTable
         runAPre $1 TDD/APre
         execQueries
+        backupDB
     fi
     runAPI $1 TDD/JCloudAPI
     runBasics $1 TDD/Basics
@@ -252,6 +261,26 @@ checkPincode()
     fi
 }
 
+populateBankMasterTable()
+{
+    bnkcount=$(mysql -h ${DB_HOST} -u ${MYSQL_USER} ${DATABASE_NAME} -se "select count(*) from bank_master_tbl;")
+    if [ -z ${bnkcount} ] || [[ ${bnkcount}<=1 ]]; then
+        echo "Bank master table count= '$bnkcount'. Bank master table not populated. Populating it using TDD/$BANK_FILE"
+        mysql -f -h ${DB_HOST} -u ${MYSQL_USER} ${DATABASE_NAME} < TDD/$BANK_FILE
+        bnkcount=$(mysql -h ${DB_HOST} -u ${MYSQL_USER} ${DATABASE_NAME} -se "select count(*) from bank_master_tbl;")
+        if [ ! -z ${bnkcount} ] && (( ${bnkcount}>=1310 )); then
+            echo "Bank master table count= '$bnkcount'. Bank master table populated."
+        else
+            echo "Populating Bank master table encountered error. Please try populating manually using the command."
+            echo "mysql -h ${DB_HOST} -u ${MYSQL_USER} -p ${DATABASE_NAME} < DynamicTDD/$BANK_FILE"
+        fi
+            
+    else
+        echo "Bank master table count= '$bnkcount'. Bank master table already populated."
+    fi
+
+}
+
 execQueries()
 {
     if [ -s TDD/$SQL_FILE ]; then
@@ -261,6 +290,16 @@ execQueries()
     else
         echo "DynamicTDD/$SQL_FILE is empty. No queries to execute."
     fi
+}
+
+backupDB()
+{
+    if [ ! -d "$DB_BACKUP_PATH" ]; then
+        echo "$DB_BACKUP_PATH does not exist. Creating it."
+        mkdir "$DB_BACKUP_PATH"
+    fi
+    mysqldump -h ${DB_HOST} -u ${MYSQL_USER} --opt --databases ${DATABASE_NAME} --result-file="${DB_BACKUP_PATH}/${BACKUP_FILE}"
+    echo " APre populated ynw backed up to ${DB_BACKUP_PATH}/${BACKUP_FILE} "
 }
 
 if [ ! -e "TDD/$SQL_FILE" ]; then
@@ -471,6 +510,7 @@ case $ENV_KEY in
         echo "Executing case *- local- Signup flag APre"
         runAPre VariablesForLocalServer.py TDD/APre
         execQueries
+        backupDB
     fi
 
     if [ "$FULL_RUN" == "True" ]; then

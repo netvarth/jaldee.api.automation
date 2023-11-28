@@ -27,7 +27,7 @@ JD-TC-ChangeTaskStatusForUser-1
 
     [Documentation]  Change  task  status to Assigned
 
-    ${resp}=   ProviderLogin  ${MUSERNAME22}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -39,8 +39,13 @@ JD-TC-ChangeTaskStatusForUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -126,7 +131,7 @@ JD-TC-ChangeTaskStatusForUser-2
 
     [Documentation]  Change  task  status to  In Progress
 
-    ${resp}=   ProviderLogin  ${MUSERNAME22}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -172,7 +177,7 @@ JD-TC-ChangeTaskStatusForUser-3
 
     [Documentation]  Change  task  status to  Canceled
 
-    ${resp}=   ProviderLogin  ${MUSERNAME22}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -219,7 +224,7 @@ JD-TC-ChangeTaskStatusForUser-4
 
     [Documentation]  Change  task  status to  Done
 
-    ${resp}=   ProviderLogin  ${MUSERNAME22}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -265,7 +270,7 @@ JD-TC-ChangeTaskStatusForUser-5
 
     [Documentation]  Change  task  status to  Done
 
-    ${resp}=   ProviderLogin  ${MUSERNAME22}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -310,7 +315,7 @@ JD-TC-ChangeTaskStatusForUser-6
 
     [Documentation]  Change  task  status by user login.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME10}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -323,8 +328,13 @@ JD-TC-ChangeTaskStatusForUser-6
     IF   '${resp.content}' == '${emptylist}'
         ${locId1}=  Create Sample Location
         Set Suite Variable  ${locId1}
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id1}
@@ -355,9 +365,12 @@ JD-TC-ChangeTaskStatusForUser-6
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
@@ -384,7 +397,7 @@ JD-TC-ChangeTaskStatusForUser-6
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -407,7 +420,7 @@ JD-TC-ChangeTaskStatusForUser-UH1
 
     [Documentation]  Change  task  status to  Done already done status
 
-    ${resp}=   ProviderLogin  ${MUSERNAME22}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -445,7 +458,7 @@ JD-TC-ChangeTaskStatusForUser-UH2
 
     [Documentation]  Change  task  status to   cancell already cancelled
 
-    ${resp}=   ProviderLogin  ${MUSERNAME22}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME22}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

@@ -63,7 +63,7 @@ ${requestedAmount1}    4000
 ***Test Cases***
 JD-TC-Enabling and Disabling User Availability-1
      [Documentation]  Create a user and Enabling and Disabling User Availability to Online status.
-    #  ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    #  ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     #  Log  ${resp.json()}
     #  Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -83,7 +83,7 @@ JD-TC-Enabling and Disabling User Availability-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -132,7 +132,7 @@ JD-TC-Enabling and Disabling User Availability-1
      @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
      Should Be Equal As Strings  ${resp[0].status_code}  200
      Should Be Equal As Strings  ${resp[1].status_code}  200
-     ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Enabling Disabling User Availability    ${u_id}    ${UserStatus[0]}
@@ -148,7 +148,7 @@ JD-TC-Enabling and Disabling User Availability-1
 JD-TC-Enabling and Disabling User Availability-2
      [Documentation]  Create a user and Enabling and Disabling User Availability to  Away.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Enabling Disabling User Availability    ${u_id}    ${UserStatus[1]}
@@ -164,7 +164,7 @@ JD-TC-Enabling and Disabling User Availability-2
 JD-TC-Enabling and Disabling User Availability-3
      [Documentation]  Create a user and Enabling and Disabling User Availability to NotAvailable.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Enabling Disabling User Availability    ${u_id}    ${UserStatus[2]}
@@ -180,7 +180,7 @@ JD-TC-Enabling and Disabling User Availability-3
 JD-TC-Enabling and Disabling User Availability-4
      [Documentation]   Change Enabling and Disabling User Availability status two times.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Enabling Disabling User Availability    ${u_id}    ${UserStatus[0]}
@@ -208,10 +208,14 @@ JD-TC-Enabling and Disabling User Availability-5
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id1}  ${decrypted_data['id']}
+    # Set Test Variable  ${provider_id1}  ${resp.json()['id']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -256,6 +260,7 @@ JD-TC-Enabling and Disabling User Availability-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     clear Customer  ${MUSERNAME_E}
 
@@ -321,7 +326,7 @@ JD-TC-Enabling and Disabling User Availability-5
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${user_id1}  ${resp.json()['id']}
 
@@ -408,7 +413,7 @@ JD-TC-Enabling and Disabling User Availability-6
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -416,15 +421,21 @@ JD-TC-Enabling and Disabling User Availability-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${place}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     clear Customer  ${MUSERNAME_E}
@@ -489,7 +500,7 @@ JD-TC-Enabling and Disabling User Availability-6
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Enabling Disabling User Availability    ${u_id}    ${UserStatus[0]}

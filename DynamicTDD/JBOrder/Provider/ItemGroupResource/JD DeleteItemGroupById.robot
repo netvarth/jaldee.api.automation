@@ -23,7 +23,7 @@ JD-TC-DeleteItemGroupById-1
 
     [Documentation]  Create Item Group for an existing provider and get the details then delete item group.
 
-    ${resp}=  Provider Login  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -71,7 +71,7 @@ JD-TC-DeleteItemGroupById-2
 
     [Documentation]  Create multiple Item Group for an existing provider then delete one group.
 
-    ${resp}=  Provider Login  ${PUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -143,7 +143,7 @@ JD-TC-DeleteItemGroupById-UH1
 
     [Documentation]  Get Item Group with invalid item group id.
 
-    ${resp}=  Provider Login  ${PUSERNAME127}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

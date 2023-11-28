@@ -25,7 +25,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-1
     [Documentation]  Provider Create order catalog
 
     clear_Item  ${PUSERNAME30}
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${displayName1}=   FakerLibrary.name 
@@ -79,26 +79,28 @@ JD-TC-Create_Catalog_For_ShoppingCart-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${Pid2}  ${resp.json()}
 
+    # ${resp}=   Get Item By Id  ${Pid1} 
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response  ${resp}  displayName=${displayName1}  shortDesc=${shortDesc1}   price=${price2float}   taxable=${bool[1]}   status=${status[0]}    itemName=${itemName1}  itemNameInLocal=${itemNameInLocal1}  isShowOnLandingpage=${bool[0]}   isStockAvailable=${bool[0]}   
+    # Verify Response  ${resp}  promotionalPriceType=${promotionalPriceType[1]}   promotionalPrice=${promoPrice1float}    promotionalPrcnt=0.0   showPromotionalPrice=${bool[0]}   itemCode=${itemCode1}    
+    # #  promotionLabelType=${promotionLabelType[3]}   promotionLabel=${promoLabel1} 
 
 
-    ${resp}=   Get Item By Id  ${Pid1} 
-    Log   ${resp.json()}
+    # ${resp}=   Get Item By Id  ${Pid2} 
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200    
+    # Verify Response  ${resp}  displayName=${displayName1}  shortDesc=${shortDesc1}   price=${price2float}   taxable=${bool[0]}   status=${status[0]}    itemName=${itemName2}  itemNameInLocal=${itemNameInLocal1}  isShowOnLandingpage=${bool[1]}   isStockAvailable=${bool[1]}   
+    # Verify Response  ${resp}  promotionalPriceType=${promotionalPriceType[1]}   promotionalPrice=${promoPrice1float}    promotionalPrcnt=0.0   showPromotionalPrice=${bool[1]}   itemCode=${itemCode2}   promotionLabelType=${promotionLabelType[3]}   promotionLabel=${promoLabel1}   
+
+    ${resp}=   Get Locations
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  displayName=${displayName1}  shortDesc=${shortDesc1}   price=${price2float}   taxable=${bool[1]}   status=${status[0]}    itemName=${itemName1}  itemNameInLocal=${itemNameInLocal1}  isShowOnLandingpage=${bool[0]}   isStockAvailable=${bool[0]}   
-    Verify Response  ${resp}  promotionalPriceType=${promotionalPriceType[1]}   promotionalPrice=${promoPrice1float}    promotionalPrcnt=0.0   showPromotionalPrice=${bool[0]}   itemCode=${itemCode1}    
-    #  promotionLabelType=${promotionLabelType[3]}   promotionLabel=${promoLabel1} 
-
-
-    ${resp}=   Get Item By Id  ${Pid2} 
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200    
-    Verify Response  ${resp}  displayName=${displayName1}  shortDesc=${shortDesc1}   price=${price2float}   taxable=${bool[0]}   status=${status[0]}    itemName=${itemName2}  itemNameInLocal=${itemNameInLocal1}  isShowOnLandingpage=${bool[1]}   isStockAvailable=${bool[1]}   
-    Verify Response  ${resp}  promotionalPriceType=${promotionalPriceType[1]}   promotionalPrice=${promoPrice1float}    promotionalPrcnt=0.0   showPromotionalPrice=${bool[1]}   itemCode=${itemCode2}   promotionLabelType=${promotionLabelType[3]}   promotionLabel=${promoLabel1}   
-
-    
-    ${startDate}=  get_date
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+ 
+    ${startDate}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${startDate}
-    ${endDate}=  add_date  10      
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${endDate}
 
     # ${noOfOccurance}=  Random Int  min=0   max=10
@@ -106,9 +108,9 @@ JD-TC-Create_Catalog_For_ShoppingCart-1
 
     Set Suite Variable  ${noOfOccurance}   0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
 
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -191,7 +193,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-*** comment ***
+
     ${resp}=  Create Catalog For ShoppingCart   ${catalogName1}  ${catalogDesc}   ${catalogSchedule}   ${orderType1}   ${paymentType}   ${orderStatus_list}   ${catalogItem}   ${minNumberItem}   ${maxNumberItem}    ${cancelationPolicy}   catalogStatus=${catalogStatus}   pickUp=${pickUp}   homeDelivery=${homeDelivery}   showPrice=${boolean[1]}   advanceAmount=${advanceAmount}   showContactInfo=${boolean[1]}   howFar=${far}   howSoon=${soon}   preInfo=${preInfo}   postInfo=${postInfo}    
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -205,7 +207,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-1
 JD-TC-Create_Catalog_For_ShoppingCart-2
     [Documentation]  Allow Store_Pickup only and Create order catalog for SHOPPINGCART 
     
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName3}=   FakerLibrary.firstname 
@@ -224,7 +226,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-2
 JD-TC-Create_Catalog_For_ShoppingCart-3
     [Documentation]  Allow Home_delivery only and Create order catalog for SHOPPINGCART 
     
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName4}=   FakerLibrary.word 
@@ -244,7 +246,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-3
 JD-TC-Create_Catalog_For_ShoppingCart-UH1
     [Documentation]  Provider Create order catalog without using Store_Pickup and Home_delivery details
     
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName2}=   FakerLibrary.name 
@@ -259,7 +261,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH1
 JD-TC-Create_Catalog_For_ShoppingCart-UH2
     [Documentation]  Provider Create order catalog again using same details
     
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName5}=   FakerLibrary.word 
@@ -302,7 +304,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH2
 JD-TC-Create_Catalog_For_ShoppingCart-UH3
     [Documentation]  Provider Create order catalog again using same details
     
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${item1_Id}=  Create Dictionary  itemId=${Pid1}
@@ -324,7 +326,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH3
 JD-TC-Create_Catalog_For_ShoppingCart-UH4
     [Documentation]  Provider Create order catalog for SHOPPINGLIST and add items details 
     
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName47}=   FakerLibrary.word 
@@ -341,7 +343,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH4
 JD-TC-Create_Catalog_For_ShoppingCart-UH5
     [Documentation]  Provider Create order catalog for SHOPPINGCART using Minimum_Number_of_item as EMPTY
     
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName7}=   FakerLibrary.firstname 
@@ -357,7 +359,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH5
 JD-TC-Create_Catalog_For_ShoppingCart-UH6
     [Documentation]  Provider Create order catalog for SHOPPINGCART using Maximum_Number_of_item as EMPTY
     
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName10}=   FakerLibrary.word 
@@ -377,7 +379,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH6
 JD-TC-Create_Catalog_For_ShoppingCart-UH7
     [Documentation]  Provider Create order catalog for SHOPPINGCART using CancelationPolicy as EMPTY
     
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName11}=   FakerLibrary.word 
@@ -392,7 +394,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH7
 
 JD-TC-Create_Catalog_For_ShoppingCart-UH8
     [Documentation]  Create catalog using invalid item_id
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -450,7 +452,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH10
 JD-TC-Create_Catalog_For_ShoppingCart-UH11
     [Documentation]   A provider try to Create catalog using another providers item deatils
     clear_Item  ${PUSERNAME200}
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -463,7 +465,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH11
 
 JD-TC-Create_Catalog_For_ShoppingCart-UH12
     [Documentation]  Provider Create order catalog without using ORDER_CONFIRMED status
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${INVALID_orderStatus}=  Create List  ${orderStatuses[0]}  ${orderStatuses[9]}  ${orderStatuses[12]}
@@ -481,7 +483,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH12
 
 JD-TC-Create_Catalog_For_ShoppingCart-UH13
     [Documentation]  Provider Create order catalog without using ORDER_RECEIVED status
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${INVALID_orderStatus}=  Create List  ${orderStatuses[2]}   ${orderStatuses[9]}  ${orderStatuses[12]}
@@ -498,7 +500,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH13
 
 JD-TC-Create_Catalog_For_ShoppingCart-UH14
     [Documentation]  Provider Create order catalog without using ORDER_CANCELED status
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${INVALID_orderStatus}=  Create List  ${orderStatuses[0]}  ${orderStatuses[2]}   ${orderStatuses[9]}
@@ -514,7 +516,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH14
 
 # JD-TC-Create_Catalog_For_ShoppingCart-UH14
 #     [Documentation]  Provider Create order catalog when store_pickup schedule startDate is EMPTY
-#     ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
 #     ${terminator}=  Create Dictionary  endDate=${endDate}  noOfOccurance=${noOfOccurance}
@@ -533,7 +535,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH14
 
 # JD-TC-Create_Catalog_For_ShoppingCart-UH15
 #     [Documentation]  Provider Create order catalog when store_pickup schedule endDate is EMPTY
-#     ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
 #     ${terminator}=  Create Dictionary  endDate=${EMPTY}  noOfOccurance=${noOfOccurance}
@@ -551,7 +553,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH14
 
 # JD-TC-Create_Catalog_For_ShoppingCart-UH16
 #     [Documentation]  Provider Create order catalog when homedelivery schedule startDate is EMPTY
-#     ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
 #     ${terminator}=  Create Dictionary  endDate=${endDate}  noOfOccurance=${noOfOccurance}
@@ -569,7 +571,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH14
 
 # JD-TC-Create_Catalog_For_ShoppingCart-UH17
 #     [Documentation]  Provider Create order catalog when homedelivery schedule endDate is EMPTY
-#     ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
 #     ${terminator}=  Create Dictionary  endDate=${EMPTY}  noOfOccurance=${noOfOccurance}
@@ -586,7 +588,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH14
 
 JD-TC-Create_Catalog_For_ShoppingCart-UH15
     [Documentation]  Provider Create order catalog using Minimum_Quantity of item as EMPTY
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${item1_Id}=  Create Dictionary  itemId=${Pid1}
@@ -605,7 +607,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH15
 
 JD-TC-Create_Catalog_For_ShoppingCart-4
     [Documentation]  Provider Create order catalog using Maximum_Quantity of item as EMPTY
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${item1_Id}=  Create Dictionary  itemId=${Pid1}
@@ -628,7 +630,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-4
 
 JD-TC-Create_Catalog_For_ShoppingCart-5
     [Documentation]  Provider Create order catalog when deliveryCharge is EMPTY
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${terminator}=  Create Dictionary  endDate=${endDate}  noOfOccurance=${noOfOccurance}
@@ -658,10 +660,14 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH16
     clear_service  ${PUSERNAME12}
     clear_customer   ${PUSERNAME12}
     clear_Item   ${PUSERNAME12}
-    ${resp}=  ProviderLogin  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid2}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid2}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid2}  ${resp.json()['id']}
     
     ${accId11}=  get_acc_id  ${PUSERNAME12}
     Set Suite Variable  ${accId11}
@@ -706,17 +712,22 @@ JD-TC-Create_Catalog_For_ShoppingCart-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id2}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime2}=  add_time  0  15
+    ${sTime2}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable    ${sTime2}
-    ${eTime2}=  add_time   3  30 
+    ${eTime2}=  add_timezone_time  ${tz}  3  30   
     Set Suite Variable    ${eTime2}  
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -789,13 +800,13 @@ JD-TC-Create_Catalog_For_ShoppingCart-6
     clear_service  ${PUSERNAME12}
     clear_customer   ${PUSERNAME12}
     clear_Item   ${PUSERNAME12}
-    ${resp}=  ProviderLogin  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid2}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid2}  ${resp.json()['id']}
     
-    ${accId11}=  get_acc_id  ${PUSERNAME12}
-    Set Suite Variable  ${accId11}
+    # ${accId11}=  get_acc_id  ${PUSERNAME12}
+    # Set Suite Variable  ${accId11}
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -837,17 +848,22 @@ JD-TC-Create_Catalog_For_ShoppingCart-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id2}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+ 
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime2}=  add_time  0  15
+    ${sTime2}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable    ${sTime2}
-    ${eTime2}=  add_time   3  30 
+    ${eTime2}=  add_timezone_time  ${tz}  3  30   
     Set Suite Variable    ${eTime2}  
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -924,13 +940,13 @@ JD-TC-Create_Catalog_For_ShoppingCart-7
     clear_service  ${PUSERNAME12}
     clear_customer   ${PUSERNAME12}
     clear_Item   ${PUSERNAME12}
-    ${resp}=  ProviderLogin  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid2}  ${resp.json()['id']}
+    # Set Suite Variable  ${pid2}  ${resp.json()['id']}
     
-    ${accId11}=  get_acc_id  ${PUSERNAME12}
-    Set Suite Variable  ${accId11}
+    # ${accId11}=  get_acc_id  ${PUSERNAME12}
+    # Set Suite Variable  ${accId11}
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -972,17 +988,22 @@ JD-TC-Create_Catalog_For_ShoppingCart-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id2}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+ 
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime2}=  add_time  0  15
+    ${sTime2}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable    ${sTime2}
-    ${eTime2}=  add_time   3  30 
+    ${eTime2}=  add_timezone_time  ${tz}  3  30   
     Set Suite Variable    ${eTime2}  
     ${list}=  Create List  1  2  3  4  5  6  7
   

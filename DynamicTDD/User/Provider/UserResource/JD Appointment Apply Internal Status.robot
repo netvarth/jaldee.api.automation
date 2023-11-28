@@ -45,7 +45,7 @@ JD-TC-AppointmentApplyInternalSts-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -61,7 +61,7 @@ JD-TC-AppointmentApplyInternalSts-1
     clear_appt_schedule   ${HLMUSERNAME10}
     clear_customer   ${HLMUSERNAME10}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -71,12 +71,14 @@ JD-TC-AppointmentApplyInternalSts-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${dep_name1}=  FakerLibrary.bs
     Set Suite Variable   ${dep_name1}
@@ -98,13 +100,14 @@ JD-TC-AppointmentApplyInternalSts-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_time   4  00 
+    ${eTime1}=  add_timezone_time  ${tz}  4  00   
     ${SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
@@ -206,7 +209,7 @@ JD-TC-AppointmentApplyInternalSts-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${encId}=  Set Variable   ${resp.json()}
 
-     ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -226,7 +229,7 @@ JD-TC-AppointmentApplyInternalSts-1
 
 JD-TC-AppointmentApplyInternalSts-UH1
      [Documentation]  Apply Internal statuses when user has no permission for internal Status
-     ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+301601
@@ -264,7 +267,7 @@ JD-TC-AppointmentApplyInternalSts-UH1
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${cnote}=   FakerLibrary.word
@@ -335,7 +338,7 @@ JD-TC-AppointmentApplyInternalSts-2
 
     ${internal_sts}=  MultiUser_InternalStatus  ${combined_json}  ${pid}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Appointment Apply Internal Status  ${apptid2}  ${internal_sts_name2}
@@ -355,7 +358,7 @@ JD-TC-AppointmentApplyInternalSts-2
 JD-TC-AppointmentApplyInternalSts-UH2
      [Documentation]  Apply Internal statuses when service has no permission for internal Status 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Appointment Apply Internal Status  ${apptid2}  ${internal_sts_name1}
@@ -366,7 +369,7 @@ JD-TC-AppointmentApplyInternalSts-UH2
 JD-TC-AppointmentApplyInternalSts-UH3
      [Documentation]  Trying to apply Internal statuses when one user applied internal sts already
 
-    ${resp}=  ProviderLogin  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Appointment Apply Internal Status  ${apptid2}  ${internal_sts_name2}
@@ -376,7 +379,7 @@ JD-TC-AppointmentApplyInternalSts-UH3
 JD-TC-AppointmentApplyInternalSts-3
      [Documentation]  Apply Internal statuses when user has no permission for internal sts but he is ADMIN=TRUE
 
-     ${resp}=  Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+301602
@@ -414,7 +417,7 @@ JD-TC-AppointmentApplyInternalSts-3
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U2}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  AddCustomer  ${CUSERNAME19}  firstName=${fname}   lastName=${lname}

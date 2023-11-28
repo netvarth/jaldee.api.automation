@@ -26,7 +26,7 @@ JD-TC-Get Branch With Filter-1
 
     [Documentation]   Get Branch With Filter
 
-    ${resp}=  Provider Login  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -44,8 +44,13 @@ JD-TC-Get Branch With Filter-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${branchCode}=    FakerLibrary.Random Number
@@ -107,7 +112,7 @@ JD-TC-Get Branch With Filter-2
 
     [Documentation]   Get Branch With Filter with id
 
-    ${resp}=  Provider Login  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -129,7 +134,7 @@ JD-TC-Get Branch With Filter-3
 
     [Documentation]   Get Branch With Filter with Branch code
 
-    ${resp}=  Provider Login  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -161,7 +166,7 @@ JD-TC-Get Branch With Filter-4
 
     [Documentation]   Get Branch With Filter with branchName
 
-    ${resp}=  Provider Login  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -183,7 +188,7 @@ JD-TC-Get Branch With Filter-5
 
     [Documentation]   Get Branch With Filter with branchAliasName
 
-    ${resp}=  Provider Login  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -205,7 +210,7 @@ JD-TC-Get Branch With Filter-6
 
     [Documentation]   Get Branch With Filter with status
 
-    ${resp}=  Provider Login  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -227,7 +232,7 @@ JD-TC-Get Branch With Filter-7
 
     [Documentation]   Get Branch With Filter with location
 
-    ${resp}=  Provider Login  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -259,7 +264,7 @@ JD-TC-Get Branch With Filter-8
 
     [Documentation]   Get Branch With Filter with locationName
 
-    ${resp}=  Provider Login  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

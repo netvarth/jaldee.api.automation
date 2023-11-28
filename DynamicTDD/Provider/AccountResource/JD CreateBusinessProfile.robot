@@ -34,12 +34,12 @@ JD-TC-CreateBusinessProfile-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
 #     Set Suite Variable  ${PUSERNAME_B}
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     Set Suite Variable  ${DAY1}  ${DAY1}
 #     ${list}=  Create List  1  2  3  4  5  6  7
 #     Set Suite Variable  ${list}  ${list}
@@ -59,7 +59,7 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
@@ -99,7 +99,7 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
@@ -121,7 +121,7 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${PUSERNAME_E}  ${PASSWORD}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${PUSERNAME_E}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_E}${\n}
@@ -141,7 +141,7 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${PUSERNAME_F}  ${PASSWORD}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${PUSERNAME_F}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_F}${\n}
@@ -166,7 +166,7 @@ JD-TC-CreateBusinessProfile-1
 
 # JD-TC-CreateBusinessProfile-6
 #     [Documentation]  Create  business profile only with already existing same location details
-#     ${resp}=  ProviderLogin  ${PUSERNAME_F}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${resp}=  Create Business Profile with location only   ${EMPTY}   ${EMPTY}   ${EMPTY}  ${city}  ${longi}  ${latti}  www.${city}.com  ${parking_type}  ${24hours}  ${postcode}  ${address}  
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -183,7 +183,7 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${PUSERNAME_G}  ${PASSWORD}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${PUSERNAME_G}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_G}${\n}
@@ -217,7 +217,7 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${PUSERNAME_H}  ${PASSWORD}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${PUSERNAME_H}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_H}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_H}${\n}
@@ -254,14 +254,14 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${PUSERNAME_I}  ${PASSWORD}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${PUSERNAME_I}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_I}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_I}${\n}
 #     Set Suite Variable  ${PUSERNAME_I}
-#     ${sTime9}=  add_time  1  0
+#     ${sTime9}=  add_timezone_time  ${tz}  1  0  
 #     Set Suite Variable   ${sTime9}
-#     ${eTime9}=  add_time   1  50
+#     ${eTime9}=  add_timezone_time  ${tz}  1  50  
 #     Set Suite Variable   ${eTime9}
 #     ${resp}=  Create Business Profile  ${EMPTY}   ${EMPTY}   ${EMPTY}  ${EMPTY}   ${EMPTY}  ${EMPTY}  ${EMPTY}  free  True  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime9}  ${eTime9}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}
 #     Log  ${resp.json()}
@@ -269,11 +269,11 @@ JD-TC-CreateBusinessProfile-1
 
 # JD-TC-CreateBusinessProfile-10
 #     [Documentation]  Create  business profile  with overlapping location schedule(there is no overlapping checking in location schedule)
-#     ${resp}=  ProviderLogin  ${PUSERNAME_I}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_I}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
-#     ${sTime10}=  add_time  1  30
+#     ${sTime10}=  add_timezone_time  ${tz}  1  30  
 #     Set Suite Variable   ${sTime10}
-#     ${eTime10}=  add_time   2  50
+#     ${eTime10}=  add_timezone_time  ${tz}  2  50  
 #     Set Suite Variable   ${eTime10}
 #     ${resp}=  Create Business Profile  ${EMPTY}   ${EMPTY}   ${EMPTY}  ${EMPTY}   ${EMPTY}  ${EMPTY}  ${EMPTY}  free  True  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime10}  ${eTime10}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}
 #     Log  ${resp.json()}
@@ -291,12 +291,12 @@ JD-TC-CreateBusinessProfile-1
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Account Set Credential  ${PUSERNAME_J}  ${PASSWORD}  0
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=  Provider Login  ${PUSERNAME_J}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_J}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_J}${\n}
 #     Set Suite Variable  ${PUSERNAME_J}
-#     ${sTime11}=  add_time  1  0
+#     ${sTime11}=  add_timezone_time  ${tz}  1  0  
 #     Set Suite Variable   ${sTime11}
 #     ${eTime11}=  add_time   1  80
 #     Set Suite Variable   ${eTime11}
@@ -324,7 +324,7 @@ JD-TC-CreateBusinessProfile-1
 #     sleep  06s
 # JD-TC-VerifyCreateBusinessProfile-1
 # 	[Documentation]  Verification of get business profile of ${PUSERNAME_B}
-#     ${resp}=  ProviderLogin  ${PUSERNAME_B}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${resp}=  Get Business Profile
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -337,7 +337,7 @@ JD-TC-CreateBusinessProfile-1
 
 # JD-TC-VerifyCreateBusinessProfile-2
 # 	[Documentation]  Verification of get business profile of ${PUSERNAME_C}
-#     ${resp}=  ProviderLogin  ${PUSERNAME_C}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${resp}=  Get Business Profile
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -353,7 +353,7 @@ JD-TC-CreateBusinessProfile-1
 
 # JD-TC-VerifyCreateBusinessProfile-3
 # 	[Documentation]  Verification of get business profile of ${PUSERNAME_D}
-#     ${resp}=  ProviderLogin  ${PUSERNAME_D}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${resp}=  Get Business Profile
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -366,7 +366,7 @@ JD-TC-CreateBusinessProfile-1
 
 # JD-TC-VerifyCreateBusinessProfile-4
 # 	[Documentation]  Verification of get business profile of ${PUSERNAME_E}
-#     ${resp}=  ProviderLogin  ${PUSERNAME_E}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${resp}=  Get Business Profile
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -382,7 +382,7 @@ JD-TC-CreateBusinessProfile-1
 
 # JD-TC-VerifyCreateBusinessProfile-6
 # 	[Documentation]  Verification of get business profile of ${PUSERNAME_F}
-#     ${resp}=  ProviderLogin  ${PUSERNAME_F}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${resp}=  Get Business Profile
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -398,7 +398,7 @@ JD-TC-CreateBusinessProfile-1
 
 # JD-TC-VerifyCreateBusinessProfile-7
 # 	[Documentation]  Verification of get business profile of ${PUSERNAME_G}
-#     ${resp}=  ProviderLogin  ${PUSERNAME_G}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${resp}=  Get Business Profile
 #     Log  ${resp.json()}
@@ -415,7 +415,7 @@ JD-TC-CreateBusinessProfile-1
 
 # JD-TC-VerifyCreateBusinessProfile-8
 # 	[Documentation]  Verification of get business profile of ${PUSERNAME_H}
-#     ${resp}=  ProviderLogin  ${PUSERNAME_H}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_H}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${resp}=  Get Business Profile
 #     Log  ${resp.json()}
@@ -439,7 +439,7 @@ JD-TC-CreateBusinessProfile-1
 
 # JD-TC-VerifyCreateBusinessProfile-9
 # 	[Documentation]  Verification of get business profile of ${PUSERNAME_I}(case 9 and case 10)
-#     ${resp}=  ProviderLogin  ${PUSERNAME_I}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_I}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${resp}=  Get Business Profile  
 #     Log  ${resp.json()} 
@@ -459,7 +459,7 @@ JD-TC-CreateBusinessProfile-1
 
 # JD-TC-VerifyCreateBusinessProfile-UH2
 #     [Documentation]  Create  business profile with same location schedule
-#     ${resp}=  Provider Login  ${PUSERNAME_J}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME_J}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Get Business Profile  

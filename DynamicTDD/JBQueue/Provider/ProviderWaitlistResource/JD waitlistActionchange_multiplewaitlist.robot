@@ -29,65 +29,67 @@ JD-TC-change Waitlist Action for multiple account-1
       clear_service    ${PUSERNAME8}
       clear_customer    ${PUSERNAME8}
 
-      ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
     
-      #${highest_package}=   get_highest_license_pkg
-      #Log  ${highest_package}
-      #Set Suite variable   ${lic2}    ${highest_package[0]}
+      # ${highest_package}=   get_highest_license_pkg
+      # Log  ${highest_package}
+      # Set Suite variable   ${lic2}    ${highest_package[0]}
 
-     # ${resp}=    Change License Package   ${highest_package[0]}
-     # Log  ${resp.content}
-     # Should Be Equal As Strings    ${resp.status_code}   200
+      # ${resp}=    Change License Package   ${highest_package[0]}
+      # Log  ${resp.content}
+      # Should Be Equal As Strings    ${resp.status_code}   200
 
-    #   ${DAY1}=  get_date
-     # Set Suite Variable  ${DAY1}
-     # ${resp}=   Create Sample Location
-     # Set Suite Variable    ${loc_id1}    ${resp}  
-     # ${ser_name1}=   FakerLibrary.word
-     # Set Suite Variable    ${ser_name1} 
-     # ${resp}=   Create Sample Service  ${ser_name1}
-     # Set Suite Variable    ${ser_id1}    ${resp}  
-     # ${ser_name2}=   FakerLibrary.word
-     # Set Suite Variable    ${ser_name2} 
-      #${resp}=   Create Sample Service  ${ser_name2}
-      #Set Suite Variable    ${ser_id2}    ${resp}
+      # ${DAY1}=  db.get_date_by_timezone  ${tz}
+      # Set Suite Variable  ${DAY1}
+      # ${resp}=   Create Sample Location
+      # Set Suite Variable    ${loc_id1}    ${resp}  
+      # ${ser_name1}=   FakerLibrary.word
+      # Set Suite Variable    ${ser_name1} 
+      # ${resp}=   Create Sample Service  ${ser_name1}
+      # Set Suite Variable    ${ser_id1}    ${resp}  
+      # ${ser_name2}=   FakerLibrary.word
+      # Set Suite Variable    ${ser_name2} 
+      # ${resp}=   Create Sample Service  ${ser_name2}
+      # Set Suite Variable    ${ser_id2}    ${resp}
 
-     # ${resp}=   Sample Queue   ${loc_id1}  ${ser_id1}
-     # Log   ${resp.json()}
-     #  Should Be Equal As Strings  ${resp.status_code}  200
-     # Set Test Variable  ${que_id1}   ${resp.json()}
+      # ${resp}=   Sample Queue  ${loc_id1}  ${ser_id1}
+      # Log   ${resp.json()}
+      # Should Be Equal As Strings  ${resp.status_code}  200
+      # Set Test Variable  ${que_id1}   ${resp.json()}
 
 
 
-     ${DAY1}=  get_date
-      Set Suite Variable  ${DAY1}
       ${resp}=   Create Sample Location
-      Set Suite Variable    ${loc_id1}    ${resp}  
+      Set Suite Variable    ${loc_id1}    ${resp} 
+      ${resp}=   Get Location ById  ${loc_id1}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
       ${ser_name1}=   FakerLibrary.word
       Set Suite Variable    ${ser_name1} 
       ${resp}=   Create Sample Service  ${ser_name1}
       Set Suite Variable    ${ser_id1}    ${resp}  
       ${ser_name2}=   FakerLibrary.word
-     Set Suite Variable    ${ser_name2} 
+      Set Suite Variable    ${ser_name2} 
       ${resp}=   Create Sample Service  ${ser_name2}
       Set Suite Variable    ${ser_id2}    ${resp}
 
-   #   ${resp}=   Sample Queue   ${loc_id1}  ${ser_id1}
-  #   Log   ${resp.json()}
-   #    Should Be Equal As Strings  ${resp.status_code}  200
-   #   Set Test Variable  ${que_id1}   ${resp.json()}
-
-
+      # ${resp}=   Sample Queue  ${loc_id1}  ${ser_id1}
+      # Log   ${resp.json()}
+      # Should Be Equal As Strings  ${resp.status_code}  200
+      # Set Test Variable  ${que_id1}   ${resp.json()}
 
 
       ${q_name}=    FakerLibrary.name
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7
       Set Suite Variable    ${list}
-      ${strt_time}=   subtract_time  3  00
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
+      Set Suite Variable  ${DAY1}
+      ${strt_time}=   db.subtract_timezone_time   ${tz}  3  00
       Set Suite Variable    ${strt_time}
-      ${end_time}=    add_time       0  30 
+      ${end_time}=    db.add_timezone_time  ${tz}  0  30 
       Set Suite Variable    ${end_time}   
       ${parallel}=   Random Int  min=1   max=2
       Set Suite Variable   ${parallel}
@@ -107,7 +109,6 @@ JD-TC-change Waitlist Action for multiple account-1
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cons_id}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cons_id} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id}  ${wid[0]}
      # Set Suite Variable  ${waitlist_id1}  ${wid[1]}
@@ -125,7 +126,6 @@ JD-TC-change Waitlist Action for multiple account-1
       ${desc2}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cons_id2}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc2}  ${bool[1]}  ${cons_id2} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid2}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id2}  ${wid2[0]}
 
@@ -157,17 +157,17 @@ JD-TC-change Waitlist Action for multiple account-1
 
 JD-TC-change Waitlist Action for multiple account-2
       [Documentation]   Waitlist Action multiple account Done in  different services
-      ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
     
       ${resp}=  AddCustomer  ${CUSERNAME5}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${cons_id}  ${resp.json()}
+
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cons_id}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cons_id} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id}  ${wid[0]}
 
@@ -183,7 +183,6 @@ JD-TC-change Waitlist Action for multiple account-2
       ${desc2}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cons_id2}  ${ser_id2}  ${que_id1}  ${DAY1}  ${desc2}  ${bool[1]}  ${cons_id2} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid2}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id2}  ${wid2[0]}
 
@@ -218,17 +217,17 @@ JD-TC-change Waitlist Action for multiple account-2
 JD-TC-change Waitlist Action for multiple account-3
       [Documentation]   Waitlist Action multiple account Done after Check_in
       
-      ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
     
       ${resp}=  AddCustomer  ${CUSERNAME3}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${cons_id}  ${resp.json()}
+
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cons_id}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cons_id} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id}  ${wid[0]}
 
@@ -244,7 +243,6 @@ JD-TC-change Waitlist Action for multiple account-3
       ${desc2}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cons_id2}  ${ser_id2}  ${que_id1}  ${DAY1}  ${desc2}  ${bool[1]}  ${cons_id2} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid2}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id2}  ${wid2[0]}
 
@@ -277,7 +275,7 @@ JD-TC-change Waitlist Action for multiple account-3
 JD-TC-change Waitlist Action for multiple account-4
       [Documentation]   Waitlist Action cunsumer and family member Done after Check_in
       
-      ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
     
       ${lname}=   FakerLibrary.last_name
@@ -306,14 +304,12 @@ JD-TC-change Waitlist Action for multiple account-4
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cid}   ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id}  ${wid[0]}
 
       ${desc1}=   FakerLibrary.word
       ${resp}=  Add To Waitlist   ${mem_id}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}   ${mem_id}
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid1}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id1}  ${wid1[1]}
 
@@ -342,7 +338,7 @@ JD-TC-change Waitlist Action for multiple account-4
 JD-TC-change Waitlist Action for multiple account -5
       [Documentation]    Waitlist DONE  for a checkedIn id
 
-      ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
      
       ${resp}=  Waitlist Action multiple account  ${waitlist_actions[4]}    ${waitlist_id}    ${waitlist_id2}  
@@ -358,7 +354,7 @@ JD-TC-change Waitlist Action for multiple account UH-1
       [Documentation]   Waitlist Action multiple account empty waitlistid
         
 
-      ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
     
       ${resp}=  AddCustomer  ${CUSERNAME13}
@@ -368,7 +364,6 @@ JD-TC-change Waitlist Action for multiple account UH-1
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cons_id}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cons_id} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id}  ${wid[0]}
 
@@ -384,7 +379,6 @@ JD-TC-change Waitlist Action for multiple account UH-1
       ${desc2}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cons_id2}  ${ser_id2}  ${que_id1}  ${DAY1}  ${desc2}  ${bool[1]}  ${cons_id2} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid2}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id2}  ${wid2[0]}
 
@@ -413,7 +407,7 @@ JD-TC-change Waitlist Action for multiple account UH-1
 
 JD-TC-change Waitlist Action for multiple account UH-2
       [Documentation]  Waitlist Action Done in another provider
-      ${resp}=  ProviderLogin  ${PUSERNAME218}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME218}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
        sleep   04s
 
@@ -451,11 +445,9 @@ JD-TC-change Waitlist Action for multiple account-6
       clear_service    ${PUSERNAME8}
       clear_customer    ${PUSERNAME8}
 
-      ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
 
-      ${DAY1}=  get_date
-      Set Suite Variable  ${DAY1}
       ${resp}=   Create Sample Location
       Set Suite Variable    ${loc_id1}    ${resp}  
       ${ser_name1}=   FakerLibrary.word
@@ -470,9 +462,11 @@ JD-TC-change Waitlist Action for multiple account-6
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7
       Set Suite Variable    ${list}
-      ${strt_time}=   subtract_time  3  00
+      ${DAY1}=  db.get_date_by_timezone  ${tz}
+      Set Suite Variable  ${DAY1}
+      ${strt_time}=   db.subtract_timezone_time   ${tz}  3  00
       Set Suite Variable    ${strt_time}
-      ${end_time}=    add_time       0  30 
+      ${end_time}=    db.add_timezone_time  ${tz}  0  30 
       Set Suite Variable    ${end_time}   
       ${parallel}=   Random Int  min=1   max=2
       Set Suite Variable   ${parallel}
@@ -484,7 +478,7 @@ JD-TC-change Waitlist Action for multiple account-6
       Set Suite Variable  ${que_id1}   ${resp.json()}
     
     
-      ${DAY3}=  get_date
+      ${DAY3}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${DAY3}
       ${resp}=   Create Sample Location
       Set Suite Variable    ${loc_id1}    ${resp}  
@@ -500,9 +494,9 @@ JD-TC-change Waitlist Action for multiple account-6
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7
       Set Suite Variable    ${list}
-      ${strt_time}=   subtract_time  3  00
+      ${strt_time}=   db.subtract_timezone_time   ${tz}  3  00
       Set Suite Variable    ${strt_time}
-      ${end_time}=    add_time       0  30 
+      ${end_time}=    db.add_timezone_time  ${tz}  0  30 
       Set Suite Variable    ${end_time}   
       ${parallel}=   Random Int  min=1   max=2
       Set Suite Variable   ${parallel}
@@ -518,10 +512,10 @@ JD-TC-change Waitlist Action for multiple account-6
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${cons_id}  ${resp.json()}
-       ${desc}=   FakerLibrary.word
+
+      ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cons_id}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cons_id} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id}  ${wid[0]}
 
@@ -537,7 +531,6 @@ JD-TC-change Waitlist Action for multiple account-6
       ${desc2}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cons_id2}  ${ser_id1}  ${que_id1}  ${DAY1}  ${desc2}  ${bool[1]}  ${cons_id2} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid2}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id2}  ${wid2[0]}
 
@@ -553,7 +546,6 @@ JD-TC-change Waitlist Action for multiple account-6
       ${desc3}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cons_id3}  ${ser_id3}  ${que_id3}  ${DAY3}  ${desc3}  ${bool[1]}  ${cons_id3} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid3}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id3}  ${wid3[0]}
 
@@ -569,7 +561,6 @@ JD-TC-change Waitlist Action for multiple account-6
       ${desc4}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cons_id4}  ${ser_id4}  ${que_id3}  ${DAY3}  ${desc4}  ${bool[1]}  ${cons_id4} 
       Should Be Equal As Strings  ${resp.status_code}  200
-      
       ${wid4}=  Get Dictionary Values  ${resp.json()}
       Set Suite Variable  ${waitlist_id4}  ${wid4[0]}
 
@@ -584,7 +575,7 @@ JD-TC-change Waitlist Action for multiple account-6
       Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response  ${resp}      waitlistStatus=${wl_status[2]}
 
-       ${resp}=  Waitlist Action  ${waitlist_actions[1]}   ${waitlist_id}   
+      ${resp}=  Waitlist Action  ${waitlist_actions[1]}   ${waitlist_id}   
       Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Get Waitlist By Id  ${waitlist_id}
@@ -598,8 +589,8 @@ JD-TC-change Waitlist Action for multiple account-6
       Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response  ${resp}      waitlistStatus=${wl_status[2]}
 
-     ${resp}=  Waitlist Action  ${waitlist_actions[1]}   ${waitlist_id4}   
-     Should Be Equal As Strings  ${resp.status_code}  200
+      ${resp}=  Waitlist Action  ${waitlist_actions[1]}   ${waitlist_id4}   
+      Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  Get Waitlist By Id  ${waitlist_id4}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -618,7 +609,7 @@ JD-TC-change Waitlist Action for multiple account-6
 JD-TC-change Waitlist Action for multiple account UH-5
       [Documentation]  waitlist Action for another provider's waitlist
 
-      ${resp}=  ProviderLogin   ${PUSERNAME17}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login   ${PUSERNAME17}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action multiple account  ${waitlist_actions[4]}    ${waitlist_id3}  ${waitlist_id4}
       Log   ${resp.json()}
@@ -629,7 +620,7 @@ JD-TC-change Waitlist Action for multiple account UH-6
       [Documentation]   Waitlist DONE for already DONE id
 
 
-      ${resp}=  ProviderLogin  ${PUSERNAME8}  ${PASSWORD}
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Waitlist Action multiple account  ${waitlist_actions[4]}    ${waitlist_id}  ${waitlist_id2}
       Log   ${resp.json()}

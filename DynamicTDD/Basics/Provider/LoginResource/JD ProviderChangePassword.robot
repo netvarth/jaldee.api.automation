@@ -21,11 +21,11 @@ ${NEW_PASSWORD}       Netvarth007
 JD-TC-ProviderChangePassword-1
     [Documentation]    Provider Change password
 
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Provider Change Password  ${PASSWORD}  ${NEW_PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${NEW_PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${NEW_PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-ProviderChangePassword-UH1
@@ -38,7 +38,7 @@ JD-TC-ProviderChangePassword-UH1
 JD-TC-ProviderChangePassword-UH2
     [Documentation]    Provider Change password with current password 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${NEW_PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${NEW_PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Provider Change Password  ${PASSWORD}  ${NEW_PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    422
@@ -47,7 +47,7 @@ JD-TC-ProviderChangePassword-UH2
 JD-TC-ProviderChangePassword-UH3
     [Documentation]    Set new password as empty
 
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${NEW_PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${NEW_PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Provider Change Password  ${NEW_PASSWORD}  ${EMPTY}
     Should Be Equal As Strings    ${resp.status_code}    422
@@ -58,7 +58,7 @@ JD-TC-ProviderChangePassword-UH3
 JD-TC-Change To Old Password
     [Documentation]    Reset the password to old one to avoid errors in other test suites
 
-    ${resp}=  ProviderLogin  ${PUSERNAME30}  ${NEW_PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${NEW_PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Provider Change Password  ${NEW_PASSWORD}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200

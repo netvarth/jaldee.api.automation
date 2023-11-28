@@ -25,7 +25,7 @@ JD-TC-RemoveCustomerLabel-1
     clear_appt_schedule   ${PUSERNAME203}
     clear_customer   ${PUSERNAME203}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -124,7 +124,7 @@ JD-TC-RemoveCustomerLabel-2
     clear_appt_schedule   ${PUSERNAME216}
     clear_customer   ${PUSERNAME216}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -291,7 +291,7 @@ JD-TC-RemoveCustomerLabel-UH3
 
     [Documentation]  Remove a label from a non existant Customer 
 
-    ${resp}=  Provider Login  ${PUSERNAME257}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME257}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_customer   ${PUSERNAME257}
@@ -305,7 +305,7 @@ JD-TC-RemoveCustomerLabel-UH4
 
     [Documentation]  Remove a non existant label from a customer 
 
-    ${resp}=  Provider Login  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${labelname}=  FakerLibrary.Word
@@ -318,7 +318,7 @@ JD-TC-RemoveCustomerLabel-UH5
 
     [Documentation]  Remove an already removed customer label 
 
-    ${resp}=  Provider Login  ${PUSERNAME203}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

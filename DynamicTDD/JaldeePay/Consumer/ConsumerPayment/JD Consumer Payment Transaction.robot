@@ -28,107 +28,118 @@ JD-TC-Consumer-Payment-Transaction-1
 
     [Documentation]  Taking waitlist from consumer side and the consumer doing the prepayment 
 
-    ${PO_Number}    Generate random string    8    1234563789
-    ${PO_Number}    Convert To Integer  ${PO_Number}
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
-    Set Suite Variable   ${PUSERPH0}
-    ${resp}=   Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service  ${PUSERPH0}  AND  clear_Item    ${PUSERPH0}  AND   clear_Coupon   ${PUSERPH0}   AND  clear_Discount  ${PUSERPH0}  AND  clear_appt_schedule   ${PUSERPH0}
-    ${licid}  ${licname}=  get_highest_license_pkg
-    Log  ${licid}
-    Log  ${licname}
-    Set Test Variable   ${licid}
+    # ${PO_Number}    Generate random string    8    1234563789
+    # ${PO_Number}    Convert To Integer  ${PO_Number}
+    # ${PUSERNAME210}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME210}${\n}
+    # Set Suite Variable   ${PUSERNAME210}
+    # ${resp}=   Run Keywords  clear_queue  ${PUSERNAME210}   AND  clear_service  ${PUSERNAME210}  AND  clear_Item    ${PUSERNAME210}  AND   clear_Coupon   ${PUSERNAME210}   AND  clear_Discount  ${PUSERNAME210}  AND  clear_appt_schedule   ${PUSERNAME210}
+    # ${licid}  ${licname}=  get_highest_license_pkg
+    # Log  ${licid}
+    # Log  ${licname}
+    # Set Test Variable   ${licid}
     
-    ${domresp}=  Get BusinessDomainsConf
-    Log   ${domresp.content}
-    Should Be Equal As Strings  ${domresp.status_code}  200
-    ${dlen}=  Get Length  ${domresp.json()}
-    ${d1}=  Random Int   min=0  max=${dlen-1}
-    Set Test Variable  ${dom}  ${domresp.json()[${d1}]['domain']}
-    ${sdlen}=  Get Length  ${domresp.json()[${d1}]['subDomains']}
-    ${sdom}=  Random Int   min=0  max=${sdlen-1}
-    Set Test Variable  ${sub_dom}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
+    # ${domresp}=  Get BusinessDomainsConf
+    # Log   ${domresp.content}
+    # Should Be Equal As Strings  ${domresp.status_code}  200
+    # ${dlen}=  Get Length  ${domresp.json()}
+    # ${d1}=  Random Int   min=0  max=${dlen-1}
+    # Set Test Variable  ${dom}  ${domresp.json()[${d1}]['domain']}
+    # ${sdlen}=  Get Length  ${domresp.json()[${d1}]['subDomains']}
+    # ${sdom}=  Random Int   min=0  max=${sdlen-1}
+    # Set Test Variable  ${sub_dom}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
 
-    ${firstname}=  FakerLibrary.first_name
-    ${lastname}=  FakerLibrary.last_name
-    ${address}=  FakerLibrary.address
-    ${dob}=  FakerLibrary.Date
-    ${gender}    Random Element    ['Male', 'Female']
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERPH0}  ${licid}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${firstname}=  FakerLibrary.first_name
+    # ${lastname}=  FakerLibrary.last_name
+    # ${address}=  FakerLibrary.address
+    # ${dob}=  FakerLibrary.Date
+    # ${gender}    Random Element    ['Male', 'Female']
+    # ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME210}  ${licid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Account Activation  ${PUSERPH0}  0
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.content}    "true"
+    # ${resp}=  Account Activation  ${PUSERNAME210}  0
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings    ${resp.content}    "true"
     
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Account Set Credential  ${PUSERNAME210}  ${PASSWORD}  0
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME210}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    Set Test Variable   ${lic_id}   ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+    Set Test Variable   ${lic_name}   ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
+
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
-    ${DAY}=  get_date
-    Set Suite Variable  ${DAY}  
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  
-    @{Views}=  Create List  self  all  customersOnly
-    ${ph1}=  Evaluate  ${PUSERPH0}+1000000000
-    ${ph2}=  Evaluate  ${PUSERPH0}+2000000000
-    ${views}=  Evaluate  random.choice($Views)  random
-    ${name1}=  FakerLibrary.name
-    ${name2}=  FakerLibrary.name
-    ${name3}=  FakerLibrary.name
-    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
-    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
-    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
-    ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${parking}   Random Element   ${parkingType}
-    ${24hours}    Random Element    ['True','False']
-    ${desc}=   FakerLibrary.sentence
-    ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
-    Set Suite Variable   ${eTime}
-    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # @{Views}=  Create List  self  all  customersOnly
+    # ${ph1}=  Evaluate  ${PUSERNAME210}+1000000000
+    # ${ph2}=  Evaluate  ${PUSERNAME210}+2000000000
+    # ${views}=  Evaluate  random.choice($Views)  random
+    # ${name1}=  FakerLibrary.name
+    # ${name2}=  FakerLibrary.name
+    # ${name3}=  FakerLibrary.name
+    # ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+    # ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+    # ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
+    # ${bs}=  FakerLibrary.bs
+    # ${companySuffix}=  FakerLibrary.companySuffix
+    # # ${city}=   FakerLibrary.state
+    # # ${latti}=  get_latitude
+    # # ${longi}=  get_longitude
+    # # ${postcode}=  FakerLibrary.postcode
+    # # ${address}=  get_address
+    # ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    # Set Suite Variable  ${tz}
+    # ${parking}   Random Element   ${parkingType}
+    # ${24hours}    Random Element    ['True','False']
+    # ${desc}=   FakerLibrary.sentence
+    # ${url}=   FakerLibrary.url
+    # ${sTime}=  add_timezone_time  ${tz}  0  15  
+    # Set Suite Variable   ${sTime}
+    # ${eTime}=  add_timezone_time  ${tz}  0  45  
+    # Set Suite Variable   ${eTime}
 
-    ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
-    Log  ${fields.content}
-    Should Be Equal As Strings    ${fields.status_code}   200
-
-    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
-
-    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_dom}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get specializations Sub Domain  ${dom}  ${sub_dom}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${spec}=  get_Specializations  ${resp.json()}
     
-    ${resp}=  Update Specialization  ${spec}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    
+    # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH0}.${test_mail}
+    # ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
+    # Log  ${fields.content}
+    # Should Be Equal As Strings    ${fields.status_code}   200
 
-    ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    # ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_dom}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Get specializations Sub Domain  ${dom}  ${sub_dom}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    # ${spec}=  get_Specializations  ${resp.json()}
+    
+    # ${resp}=  Update Specialization  ${spec}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    # Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME210}.${test_mail}
+
+    # ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     
     # ------------- Get general details and settings of the provider and update all needed settings
     
@@ -136,8 +147,19 @@ JD-TC-Consumer-Payment-Transaction-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
-    ${accId}=  get_acc_id  ${PUSERPH0}
+    ${highest_package}=  get_highest_license_pkg
+    Log  ${highest_package}
+    Set Suite variable  ${lic2}  ${highest_package[0]}
+
+    IF  '${lic_id}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${accId}=  get_acc_id  ${PUSERNAME210}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
@@ -147,9 +169,9 @@ JD-TC-Consumer-Payment-Transaction-1
     Log  ${resp.content}
     Verify Response  ${resp}  onlineCheckIns=${bool[1]}
 
-    ${resp}=  Enable Waitlist
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Enable Waitlist
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -158,11 +180,11 @@ JD-TC-Consumer-Payment-Transaction-1
     Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
     Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    # Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
@@ -186,10 +208,14 @@ JD-TC-Consumer-Payment-Transaction-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_lid}  ${resp.json()[0]['id']} 
-
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY}  
     ${min_pre}=   Random Int   min=40   max=50
     ${Tot}=   Random Int   min=100   max=500
     ${min_pre}=  Convert To Number  ${min_pre}  1
+    Set Suite Variable   ${min_pre}
     ${pre_float}=  twodigitfloat  ${min_pre}
     ${Tot1}=  Convert To Number  ${Tot}  1 
     Set Suite Variable   ${Tot}   ${Tot1}
@@ -211,8 +237,8 @@ JD-TC-Consumer-Payment-Transaction-1
 
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
-    ${sTime}=  add_time  2   00
-    ${eTime}=  add_time   2   15
+    ${sTime}=  add_timezone_time  ${tz}  2  00  
+    ${eTime}=  add_timezone_time  ${tz}  2  15  
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${p1_lid}  ${p1_sid1}  ${p1_sid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -260,6 +286,9 @@ JD-TC-Consumer-Payment-Transaction-1
 
     sleep   02s
 
+    ${payment_time}=  db.get_date_time_by_timezone  ${tz}
+    ${payment_time}=   db.remove_date_time_secs   ${payment_time}
+    
     ${resp}=  Get Payment Details  account-eq=${pid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -269,8 +298,9 @@ JD-TC-Consumer-Payment-Transaction-1
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}   ${cwid}
     Should Be Equal As Strings  ${resp.json()[0]['paymentRefId']}   ${payref} 
     Should Be Equal As Strings  ${resp.json()[0]['paymentPurpose']}   ${purpose[0]}
-
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.json()[0]['paymentOn']}   ${payment_time}
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME210}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -301,7 +331,7 @@ JD-TC-Consumer-Payment-Transaction-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME210}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -318,7 +348,7 @@ JD-TC-Consumer-Payment-Transaction-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}   billPaymentStatus=${paymentStatus[2]}
 
-    ${resp}=   ProviderLogin   ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME210}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
    
     ${resp}=  Get Waitlist By Id  ${cwid}
@@ -356,7 +386,7 @@ JD-TC-Consumer-Payment-Transaction-2
     Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME210}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -389,7 +419,7 @@ JD-TC-Consumer-Payment-Transaction-2
     Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}   ${amt_float} 
 
     # sleep   02s
-    ${resp}=   ProviderLogin   ${PUSERPH0}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME210}   ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
     sleep  2s   
@@ -434,7 +464,7 @@ JD-TC-Consumer-Payment-Transaction-3
     Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME210}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -466,7 +496,7 @@ JD-TC-Consumer-Payment-Transaction-3
     Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}   ${amt_float} 
 
     # sleep   02s
-    ${resp}=   ProviderLogin   ${PUSERPH0}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${PUSERNAME210}   ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
    
     sleep   02s
@@ -499,15 +529,17 @@ JD-TC-Consumer-Payment-Transaction-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  paymentStatus=${paymentStatus[0]}   
+
+    ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}=  Format String  ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}  ${amt_float}  ${min_pre}
     
     ${resp}=  Make payment Consumer Mock  ${pid}  ${amt_float}  ${purpose[0]}  ${wid1}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${Pcid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings    ${resp.json()}   ${PAYMENT_AMOUNT_IS_NOT_MATCHED}
+    Should Be Equal As Strings    ${resp.json()}   ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}
     # Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     # Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
 
-    # ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME210}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -539,7 +571,7 @@ JD-TC-Consumer-Payment-Transaction-4
     
 
     # sleep   02s
-    # ${resp}=   ProviderLogin   ${PUSERPH0}   ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login   ${PUSERNAME210}   ${PASSWORD} 
     # Should Be Equal As Strings    ${resp.status_code}   200
    
     # ${resp}=  Get Waitlist By Id  ${wid1}
@@ -550,7 +582,7 @@ JD-TC-Consumer-Payment-Transaction-4
 JD-TC-Consumer-Payment-Transaction-5
     [Documentation]  Taking waitlist from provider side and the consumer doing the billpayment
 
-    ${resp}=  Provider Login   ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME210}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -571,7 +603,6 @@ JD-TC-Consumer-Payment-Transaction-5
     ${resp}=  Add To Waitlist  ${cid2}  ${p1_sid2}  ${p1_qid}  ${DAY}  ${msg}  ${bool[1]}  ${cid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid2}  ${wid[0]}
 
@@ -623,10 +654,10 @@ JD-TC-Consumer-Payment-Transaction-5
 JD-TC-Consumer-Payment-Transaction-6
     [Documentation]   provider takes waitlist and accept payment then consumer get details
     
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME210}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     
@@ -644,7 +675,6 @@ JD-TC-Consumer-Payment-Transaction-6
     ${resp}=  Add To Waitlist  ${cid}  ${p1_sid2}  ${p1_qid}  ${DAY}  ${msg}  ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -699,7 +729,7 @@ JD-TC-Consumer-Payment-Transaction-6
 JD-TC-Consumer-Payment-Transaction-7
 
     [Documentation]  Provider try to check payment detailss
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME210}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Payment Details  account-eq=${pid}

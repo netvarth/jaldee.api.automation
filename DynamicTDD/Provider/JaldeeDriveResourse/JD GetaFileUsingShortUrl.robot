@@ -52,7 +52,7 @@ JD-TC-GetaFileusingShortUrl-1
 
     clear_customer      ${PUSERNAME21}
  
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${PUSERNAME21}
@@ -88,7 +88,7 @@ JD-TC-GetaFileusingShortUrl-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin     ${PUSERNAME21}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME21}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME2}
@@ -120,7 +120,7 @@ JD-TC-GetaFileusingShortUrl-2
 
     clear_customer      ${PUSERNAME21}
  
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${PUSERNAME21}
@@ -155,7 +155,7 @@ JD-TC-GetaFileusingShortUrl-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin     ${PUSERNAME21}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME21}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME2}
@@ -187,7 +187,7 @@ JD-TC-GetaFileusingShortUrl-3
 
     clear_customer      ${PUSERNAME21}
  
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${PUSERNAME21}
@@ -222,7 +222,7 @@ JD-TC-GetaFileusingShortUrl-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin     ${PUSERNAME21}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME21}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME2}
@@ -252,7 +252,7 @@ JD-TC-GetaFileusingShortUrl-4
 
     clear_customer      ${PUSERNAME21}
  
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${PUSERNAME21}
@@ -287,7 +287,7 @@ JD-TC-GetaFileusingShortUrl-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin     ${PUSERNAME21}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME21}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME2}
@@ -317,7 +317,7 @@ JD-TC-GetaFileusingShortUrl-5
     [Documentation]   get jpeg file using short url
 
     clear_customer      ${PUSERNAME2}
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${PUSERNAME2}
@@ -365,7 +365,7 @@ JD-TC-GetaFileusingShortUrl-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin     ${PUSERNAME2}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME2}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME13}
@@ -396,7 +396,7 @@ JD-TC-GetaFileusingShortUrl-6
 
     clear_customer      ${PUSERNAME21}
  
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${PUSERNAME21}
@@ -431,7 +431,7 @@ JD-TC-GetaFileusingShortUrl-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin     ${PUSERNAME21}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME21}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME2}
@@ -462,7 +462,7 @@ JD-TC-GetaFileusingShortUrl-7
 
     clear_customer      ${PUSERNAME21}
  
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${PUSERNAME21}
@@ -497,7 +497,7 @@ JD-TC-GetaFileusingShortUrl-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=   ProviderLogin     ${PUSERNAME21}   ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login     ${PUSERNAME21}   ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME2}
@@ -525,7 +525,7 @@ JD-TC-GetaFileusingShortUrl-UH1
 
 	[Documentation]    upload file to jaldeedrive and get using short url
 
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${id}=  get_id  ${HLMUSERNAME2}
@@ -542,9 +542,12 @@ JD-TC-GetaFileusingShortUrl-UH1
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     
 
     # ${resp}=  Toggle Department Enable
@@ -595,7 +598,7 @@ JD-TC-GetaFileusingShortUrl-UH1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -645,7 +648,7 @@ JD-TC-GetaFileusingShortUrl-UH1
 
 #     [Documentation]  invalid provider id
 
-#     ${resp}=   ProviderLogin     ${PUSERNAME21}   ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login     ${PUSERNAME21}   ${PASSWORD} 
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -659,7 +662,7 @@ JD-TC-GetaFileusingShortUrl-UH1
 
 #     [Documentation]  empty provider id 
 
-#     ${resp}=   ProviderLogin     ${PUSERNAME21}   ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login     ${PUSERNAME21}   ${PASSWORD} 
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}   200
     

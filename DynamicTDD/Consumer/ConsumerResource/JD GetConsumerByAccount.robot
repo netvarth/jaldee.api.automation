@@ -36,7 +36,7 @@ JD-TC-GetConsumerByAccount-1
     ${resp}=   Consumer Logout
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Consumer By Account  primaryMobileNo-eq=${CUSERNAME5}  firstName-eq=${firstname}
@@ -58,7 +58,7 @@ JD-TC-GetConsumerByAccount-2
     ${resp}=   Consumer Logout
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Consumer By Account  primaryMobileNo-eq=${CUSERNAME7}  lastName-eq=${lastname}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -77,7 +77,7 @@ JD-TC-GetConsumerByAccount-3
     ${resp}=   Consumer Logout
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Consumer By Account  primaryMobileNo-eq=${CUSERNAME7}  firstName-eq=${firstname}  lastName-eq=${lastname}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -85,7 +85,7 @@ JD-TC-GetConsumerByAccount-3
 
 JD-TC-GetConsumerByAccount-4
     [Documentation]    Get Consumer By Account  using primary no. and firstname of a provider
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Consumer By Id  ${PUSERNAME2}
     Log  ${resp.json()}
@@ -98,7 +98,7 @@ JD-TC-GetConsumerByAccount-4
 
 JD-TC-GetConsumerByAccount-5
     [Documentation]    Get Consumer By Account  using primary no. and lastname of a provider
-    ${resp}=   ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Consumer By Id  ${PUSERNAME6}
     Log  ${resp.json()}
@@ -144,7 +144,7 @@ JD-TC-GetConsumerByAccount-UH2
 
 JD-TC-GetConsumerByAccount-UH3
     [Documentation]    Get Consumer By Account  using primary no. and firstname of a provider using consumer login
-    ${resp}=   ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Consumer By Id  ${PUSERNAME0}
     Log  ${resp.json()}
@@ -163,7 +163,7 @@ JD-TC-GetConsumerByAccount-UH3
 
 JD-TC-GetConsumerByAccount-UH4
     [Documentation]    Get Consumer ByAccount  using primary no. and firstname of a provider without login
-    ${resp}=   ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Consumer By Id  ${PUSERNAME0}
     Log  ${resp.json()}
@@ -179,7 +179,7 @@ JD-TC-GetConsumerByAccount-UH4
 
 JD-TC-GetConsumerByAccount-UH5
     [Documentation]    GetConsumerByAccount with one parameter
-    ${resp}=   ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Consumer By Account  primaryMobileNo-eq=${CUSERNAME7}
@@ -188,7 +188,7 @@ JD-TC-GetConsumerByAccount-UH5
 
 JD-TC-GetConsumerByAccount-UH6
     [Documentation]    GetConsumerByAccount using 'neq' filter
-    ${resp}=   ProviderLogin  ${PUSERNAME0}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Consumer By Id  ${CUSERNAME7}

@@ -24,7 +24,7 @@ JD-TC-Get_Default_Catalog_Status-1
     [Documentation]  Provider Get Default Catalog Status
     clear_Item  ${PUSERNAME46}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Get Default Catalog Status  

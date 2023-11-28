@@ -29,15 +29,20 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-1
     ${length}=  Get Length   ${len}
     ${licId}  ${licname}=  get_highest_license_pkg
     FOR   ${a}  IN RANGE   ${start}  ${length}
-    ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable   ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-    ${domain}=   Set Variable    ${resp.json()['sector']}
-    ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    ${domain}=   Set Variable    ${decrypted_data['sector']}
+    ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+    # ${domain}=   Set Variable    ${resp.json()['sector']}
+    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
     ${resp2}=   Get Domain Settings    ${domain}  
     Should Be Equal As Strings    ${resp.status_code}    200
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${check}  ${resp2.json()['multipleLocation']}
     Run Keyword If  "${check}"=="True" and "${pkgId}"=="${licId}"  Exit For Loop
     END
@@ -60,12 +65,14 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-1
     Set Suite Variable  ${sub_domain_id}    ${resp2.json()['serviceSubSector']['id']}
 
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
@@ -114,9 +121,15 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-1
        
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${MUSERNAME${a}}    
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  60
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  60  
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable   ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -124,8 +137,8 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-1
     ${duration}=   Random Int  min=2  max=10
     Set Suite Variable   ${duration}    
     
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
     ${resp}=  Create Appointment Schedule For User  ${u_id}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool[1]}  ${s_id}
@@ -156,7 +169,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-1
 JD-TC-Appointment Schedule AvailableNow By ProviderId-2
     [Documentation]    AvailableNow is False, when Appointment Schedule is Future timeslot
     
-    ${resp}=  Provider Login  ${MUSERNAME69}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME69}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${subdomain}=    Set Variable      ${resp.json()['subSector']}
@@ -167,9 +180,16 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-2
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
-    ${resp1}=   Run Keyword If   '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'   Change License Package  ${highest_package[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    # ${resp1}=   Run Keyword If   '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'   Change License Package  ${highest_package[0]}
+    # Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
+    # Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    IF  '${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
     # ${resp}=   Change License Package  ${highest_package[0]}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
@@ -196,9 +216,16 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-2
         END
     END
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
@@ -247,12 +274,17 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-2
        
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${MUSERNAME69}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -288,7 +320,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-2
 JD-TC-Appointment Schedule AvailableNow By ProviderId-3
     [Documentation]    AvailableNow is False, when Appointment Schedule is a Non working day
     
-    ${resp}=  Provider Login  ${MUSERNAME68}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME68}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -297,9 +329,16 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-3
     ${highest_package}=  get_highest_license_pkg
     Log  ${highest_package}
     Set Suite variable  ${lic2}  ${highest_package[0]}
-    ${resp1}=   Run Keyword If   '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'   Change License Package  ${highest_package[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    # ${resp1}=   Run Keyword If   '${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'   Change License Package  ${highest_package[0]}
+    # Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
+    # Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    IF  '${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}' != '${lic2}'
+        ${resp1}=   Change License Package  ${highest_package[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
     # ${resp}=   Change License Package  ${highest_package[0]}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
@@ -314,9 +353,16 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-3
     Should Be Equal As Strings    ${resp2.status_code}    200
     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
@@ -360,15 +406,21 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-3
     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERPH0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH0}.${test_mail}  deptId=${dep_id}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${MUSERNAME68}     
     ${list}=  Create List    1  2  3  4  5  6
 
-    ${curr_weekday}=  get_weekday
+    ${curr_weekday}=  get_timezone_weekday  ${tz}
     ${daygap}=  Evaluate  7-${curr_weekday}
-    ${DAY1}=  add_date  ${daygap}
+    ${DAY1}=  db.add_timezone_date  ${tz}  ${daygap}
 
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   0  60
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  0  60  
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable   ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -411,7 +463,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-UH1
 JD-TC-Appointment Schedule AvailableNow By ProviderId-UH2
     [Documentation]   Another  Provider login 
 
-    ${resp}=  Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -434,7 +486,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-UH3
 JD-TC-Appointment Schedule AvailableNow By ProviderId-4
     [Documentation]    AvailableNow is False, when Appointment Schedule is Holiday
     
-    ${resp}=  Provider Login  ${MUSERNAME67}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME67}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${subdomain}=  Set Variable  ${resp.json()['subSector']}
@@ -470,9 +522,16 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-4
         END
     END
 
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
     ${dep_code1}=   Random Int  min=100   max=999
@@ -500,13 +559,18 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-4
 
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${MUSERNAME67}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1} 
     ${list}=  Create List    1  2  3  4  5  6  7
-    ${sTime1}=  add_time   0  15
-    ${eTime1}=  add_time   0  60
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  0  60  
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable   ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10

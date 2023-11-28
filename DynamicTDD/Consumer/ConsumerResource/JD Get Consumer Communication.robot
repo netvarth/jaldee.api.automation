@@ -33,7 +33,7 @@ JD-TC-GetConsumerCommunication-1
     [Documentation]  Get Communication with a valid consumer to provider with attachment as jpg file.
 
     clear_Providermsg  ${PUSERNAME215}
-    ${resp}=   ProviderLogin  ${PUSERNAME215}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME215}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -79,7 +79,7 @@ JD-TC-GetConsumerCommunication-2
     [Documentation]  Get General Communication with a valid provider with attachment as png file.
     
     clear_Providermsg  ${PUSERNAME215}
-    ${resp}=   ProviderLogin  ${PUSERNAME215}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME215}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -126,7 +126,7 @@ JD-TC-GetConsumerCommunication-3
     [Documentation]  Get General Communication with a valid provider with attachment as pdf file.
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME16}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -174,7 +174,7 @@ JD-TC-GetConsumerCommunication-4
     [Documentation]  Get General Communication with a valid provider with attachment as jpeg file.
 
     clear_Providermsg  ${PUSERNAME17}
-    ${resp}=   ProviderLogin  ${PUSERNAME17}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -221,7 +221,7 @@ JD-TC-GetConsumerCommunication-5
     [Documentation]  Get General Communication with a valid provider without message.
 
     clear_Providermsg  ${PUSERNAME220}
-    ${resp}=   ProviderLogin  ${PUSERNAME220}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME220}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -268,7 +268,7 @@ JD-TC-GetConsumerCommunication-6
     [Documentation]  Get General Communication with a valid provider without caption.
 
     clear_Providermsg  ${PUSERNAME13}
-    ${resp}=   ProviderLogin  ${PUSERNAME13}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -314,7 +314,7 @@ JD-TC-GetConsumerCommunication-7
     [Documentation]  Get General Communication with a valid provider with attachment as gif file.
 
     clear_Providermsg  ${PUSERNAME19}
-    ${resp}=   ProviderLogin  ${PUSERNAME19}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -368,7 +368,7 @@ JD-TC-GetConsumerCommunication-UH2
     [Documentation]  Get Communication without having any communication.
 
     clear_Providermsg  ${PUSERNAME19}
-    ${resp}=   ProviderLogin  ${PUSERNAME19}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -394,7 +394,7 @@ JD-TC-GetConsumerCommunication-UH3
     [Documentation]  Get Communication by provider login.
 
     clear_Providermsg  ${PUSERNAME19}
-    ${resp}=   ProviderLogin  ${PUSERNAME19}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -420,7 +420,7 @@ JD-TC-GetConsumerCommunication-UH4
     [Documentation]  Get General Communication with a valid provider with attachment as doc file.
 
     clear_Providermsg  ${PUSERNAME31}
-    ${resp}=   ProviderLogin  ${PUSERNAME31}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -468,7 +468,7 @@ JD-TC-GetConsumerCommunication-UH5
     [Documentation]  Get General Communication with a valid provider with attachment as sh file.
     
     clear_Providermsg  ${PUSERNAME31}
-    ${resp}=   ProviderLogin  ${PUSERNAME31}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -501,7 +501,7 @@ JD-TC-GetConsumerCommunication-UH6
     [Documentation]  Get General Communication with a valid provider with attachment as text file.
     
     clear_Providermsg  ${PUSERNAME3}
-    ${resp}=   ProviderLogin  ${PUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -549,7 +549,7 @@ JD-TC-GetConsumerCommunication-UH6
 
 JD-TC-Get Consumer Communication-2
     Comment  Get Communication with a provider as a consumer to another provider 
-    ${resp}=   ProviderLogin  ${PUSERNAME2155}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2155}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${a_id}=  get_acc_id  ${PUSERNAME2155}
@@ -577,7 +577,7 @@ JD-TC-Get Consumer Communication-2
 
 JD-TC-Get Consumer Communication-3
     Comment  Get Communication with a provider as a consumer to his own account
-    ${resp}=   ProviderLogin  ${PUSERNAME2156}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2156}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
     ${a_id}=  get_acc_id  ${PUSERNAME2156}
@@ -606,14 +606,14 @@ JD-TC-Get Consumer Communication-3
 
 JD-TC-Get Consumer Communication-4
     Comment  Get Communication done by provider to another provider
-    ${resp}=   ProviderLogin  ${PUSERNAME2155}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2155}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
     Log  ${p_id}
     ${id}=  get_acc_id  ${PUSERNAME2155}
     ${msg}=   FakerLibrary.Word
     Log  ${msg}
-    ${resp}=   Provider Login  ${PUSERNAME2156}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME2156}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${c_id}=  get_id  ${PUSERNAME2156}
     ${resp}=  General Communication with Provider    ${msg}  ${id}

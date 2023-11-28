@@ -83,7 +83,7 @@ Take checkin
 
     FOR   ${a}  IN RANGE   ${count}
         
-        ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -101,7 +101,7 @@ Take checkin
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid${a}}
 
-        ${DAY1}=  get_date
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
         ${desc}=   FakerLibrary.word
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid${a}}
         Log  ${resp.content}
@@ -138,7 +138,7 @@ Take checkin
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         
@@ -155,7 +155,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     [Documentation]  Submit questionnaire for wailtlist
 
     change_system_date  -${days}
-    ${today}=  get_date
+    ${today}=  db.get_date_by_timezone  ${tz}
     
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
@@ -169,13 +169,14 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -225,7 +226,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -274,14 +275,16 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
-    # ${DAY1}=  get_date
-    # ${DAY2}=  add_date  10 
-    ${sTime}=  db.get_time
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=15  max=60
-    ${eTime}=  add_time  8  00 
+    ${eTime}=  add_timezone_time  ${tz}  8  00 
     ${capacity}=  Random Int  min=500   max=600
     ${parallel}=  Random Int   min=1   max=2
     ${queue1}=    FakerLibrary.Word
@@ -298,7 +301,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-1
     FOR   ${a}  IN RANGE   ${days}
 
         change_system_date  ${a}
-        ${today}=  get_date
+        ${today}=  db.get_date_by_timezone  ${tz}
         Take checkin  ${s_id}  ${q_id}  ${qnrid}  ${id}  
 
     END

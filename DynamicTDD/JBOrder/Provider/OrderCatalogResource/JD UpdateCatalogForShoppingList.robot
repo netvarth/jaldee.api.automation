@@ -26,20 +26,30 @@ JD-TC-Update_Catalog_For_ShoppingList-1
     [Documentation]  Provider Create order catalog For SHOPPINGLIST
     clear_Item  ${PUSERNAME62}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
-    ${startDate}=  get_date
+    ${startDate}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${startDate}
-    ${endDate}=  add_date  10      
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${endDate}
 
 
     Set Suite Variable  ${noOfOccurance}   0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
 
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -121,15 +131,15 @@ JD-TC-Update_Catalog_For_ShoppingList-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${startDate2}=  add_date  2
+    ${startDate2}=  db.add_timezone_date  ${tz}  2  
     Set Suite Variable  ${startDate2}
-    ${endDate2}=  add_date  45      
+    ${endDate2}=  db.add_timezone_date  ${tz}  45      
     Set Suite Variable  ${endDate2}
 
    
-    ${sTime2}=  add_time  0  10
+    ${sTime2}=  add_timezone_time  ${tz}  0  10  
     Set Suite Variable   ${sTime2}
-    ${eTime2}=  add_time   2  30
+    ${eTime2}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable   ${eTime2}
 
     ${list2}=  Create List  1  2  3  4  5  6  
@@ -213,7 +223,7 @@ JD-TC-Update_Catalog_For_ShoppingList-1
 JD-TC-Update_Catalog_For_ShoppingList-UH1
     [Documentation]   Another provider also uses same details to Create catalog for shoppinglist
     clear_Item  ${PUSERNAME200}
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

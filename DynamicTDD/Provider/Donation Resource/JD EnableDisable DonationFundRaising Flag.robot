@@ -25,7 +25,7 @@ ${DisplayName1}   item1_DisplayName
 
 JD-TC-EnableDisableDonationFundraisingFlag-1
      [Documentation]  Enable and disable DonationFundRaising Flag
-     ${resp}=   ProviderLogin  ${PUSERNAME33}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD} 
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}   200
      
@@ -92,7 +92,7 @@ JD-TC-EnableDisableDonationFundraisingFlag -UH2
 
 JD-TC-EnableDisableDonationFundraisingFlag-UH3
      [Documentation]  Enable a already enabled donation flag
-     ${resp}=  Provider Login  ${PUSERNAME33}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  DonationFundRaising flag  ${toggle[0]}
@@ -105,7 +105,7 @@ JD-TC-EnableDisableDonationFundraisingFlag-UH3
 
 JD-TC-EnableDisableDonationFundraisingFlag-UH4
      [Documentation]  Disable a already disabled donation flag 
-     ${resp}=  Provider Login  ${PUSERNAME33}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  DonationFundRaising flag  ${toggle[1]}
@@ -118,7 +118,7 @@ JD-TC-EnableDisableDonationFundraisingFlag-UH4
 
 JD-TC-EnableDisableDonationFundraisingFlag-UH5
      [Documentation]  Enable and disable DonationFundRaising Flag without creating donation service.
-     ${resp}=   ProviderLogin  ${PUSERNAME35}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD} 
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}   200
      

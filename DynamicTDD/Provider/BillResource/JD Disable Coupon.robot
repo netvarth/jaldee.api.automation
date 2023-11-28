@@ -24,7 +24,7 @@ ${start}  90
 *** Test Cases ***
 JD-TC-Disable coupon-1
     [Documentation]   Provider check to Disable coupon 
-    ${resp}=  ProviderLogin  ${PUSERNAME211}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME211}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Coupon   ${PUSERNAME211}
 
@@ -69,10 +69,10 @@ JD-TC-Disable coupon-1
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=3  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=1000
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -100,7 +100,7 @@ JD-TC-Disable coupon-UH1
 
     [Documentation]   Disable a already disabled coupon
 
-    ${resp}=  ProviderLogin  ${PUSERNAME211}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME211}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Disable Coupon  ${value1}
@@ -130,7 +130,7 @@ JD-TC-Disable coupon-UH4
 
     [Documentation]   Provider check to Disable coupon  with invalid coupon id
 
-    ${resp}=  ProviderLogin  ${PUSERNAME220}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME220}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Disable Coupon  0
@@ -141,7 +141,7 @@ JD-TC-Disable coupon-UH5
 
     [Documentation]    Disable coupon  with another provider coupon id
 
-    ${resp}=   ProviderLogin  ${PUSERNAME220}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME220}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Disable Coupon  ${value1}   
@@ -158,7 +158,7 @@ JD-TC-Disable coupon-2
     ${length}=  Get Length   ${len}
      
     FOR   ${a}  IN RANGE   ${start}  ${length}    
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${domain}=   Set Variable    ${resp.json()['sector']}
         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
@@ -173,7 +173,7 @@ JD-TC-Disable coupon-2
         Exit For Loop If     '${check}' == 'True'  
     END
     Set Suite Variable  ${a}
-    # ${resp}=   ProviderLogin  ${PUSERNAME220}  ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login  ${PUSERNAME220}  ${PASSWORD} 
     # Should Be Equal As Strings    ${resp.status_code}   200
     clear_Coupon   ${PUSERNAME${a}}
     clear_customer   ${PUSERNAME${a}}
@@ -202,6 +202,12 @@ JD-TC-Disable coupon-2
     ${resp} =  Create Sample Queue
     Set Suite Variable  ${s_id}  ${resp['service_id']}
     Set Suite Variable  ${qid}   ${resp['queue_id']}
+    Set Suite Variable   ${lid}   ${resp['location_id']}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     
 
     ${coupon}=    FakerLibrary.word
@@ -209,10 +215,10 @@ JD-TC-Disable coupon-2
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=10  max=100
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -230,10 +236,9 @@ JD-TC-Disable coupon-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}      
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Add To Waitlist  ${cId}  ${s_id}  ${qid}  ${DAY}  ${cnote}  ${bool[1]}  ${cId}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 
@@ -257,7 +262,7 @@ JD-TC-Disable coupon-3
 
     [Documentation]  try to Disable coupon when coupon is on setled bill
 
-    ${resp}=   ProviderLogin  ${PUSERNAME${a}}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
 
@@ -272,10 +277,10 @@ JD-TC-Disable coupon-3
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=10   max=100
     ${max_disc_val}=   Random Int   min=100   max=500
     ${max_prov_use}=   Random Int   min=10   max=20
@@ -293,10 +298,9 @@ JD-TC-Disable coupon-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}   
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${qid}  ${DAY}  ${cnote}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
 

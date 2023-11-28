@@ -44,10 +44,12 @@ JD-TC-Get Lucene Search Documentation-1
     [Documentation]   Get Lucene Search Documentation by provider login .
 
     clear_customer    ${PUSERNAME21}
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
 
     ${acc_id}=  get_acc_id  ${PUSERNAME21}
     Set Test Variable   ${acc_id}
@@ -61,14 +63,20 @@ JD-TC-Get Lucene Search Documentation-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
    
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=   Get jaldeeIntegration Settings
@@ -150,7 +158,7 @@ JD-TC-Get Lucene Search Documentation-2
 
     clear_customer    ${PUSERNAME21}
 
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -181,7 +189,7 @@ JD-TC-Get Lucene Search Documentation-3
 
     clear_customer    ${PUSERNAME21}
 
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -211,7 +219,7 @@ JD-TC-Get Lucene Search Documentation-4
     [Documentation]   Get Lucene Search Documentation by name.
     clear_customer    ${PUSERNAME21}
 
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -235,7 +243,7 @@ JD-TC-Get Lucene Search Documentation-4
 JD-TC-Get Lucene Search Documentation-5
     [Documentation]   Get Lucene Search Documentation and get all details.
 
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -250,7 +258,7 @@ JD-TC-Get Lucene Search Documentation-5
 JD-TC-Get Lucene Search Documentation-6
     [Documentation]   A Provider Create Lucene Search Documentation then another Provider get lucene search.
 
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -267,7 +275,7 @@ JD-TC-Get Lucene Search Documentation-6
     # Log    ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -281,7 +289,7 @@ JD-TC-Get Lucene Search Documentation-7
 
     clear_customer    ${PUSERNAME21}
 
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -299,7 +307,7 @@ JD-TC-Get Lucene Search Documentation-8
 
     clear_customer    ${PUSERNAME21}
 
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -335,7 +343,7 @@ JD-TC-Get Lucene Search Documentation-UH2
 JD-TC-Get Lucene Search Documentation-UH3
     [Documentation]   A Provider Create Lucene Search Documentation then try to  get lucene search by name using Special character.
 
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

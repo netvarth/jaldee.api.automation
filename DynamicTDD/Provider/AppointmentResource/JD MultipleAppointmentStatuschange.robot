@@ -39,7 +39,7 @@ ${digits}       0123456789
 JD-TC-change appointment status for multiple appointments-1
     [Documentation]   Provider change appointment status for multiple appmt
 
-    ${resp}=  Provider Login  ${PUSERNAME85}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME85}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id}  ${resp.json()['id']}
@@ -74,6 +74,11 @@ JD-TC-change appointment status for multiple appointments-1
     
     ${lid}=  Create Sample Location 
     Set Suite Variable   ${lid}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
    
     ${s_id}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable   ${s_id}
@@ -90,7 +95,7 @@ JD-TC-change appointment status for multiple appointments-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-   ${DAY1}=  get_date
+   ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
   
    
@@ -173,7 +178,7 @@ JD-TC-change appointment status for multiple appointments-1
 JD-TC-change appointment status for multiple appointments-2
     [Documentation]   Provider change appointment status in multiple appmt  different service
     
-    ${resp}=  Provider Login  ${PUSERNAME85}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME85}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -284,7 +289,7 @@ JD-TC-change appointment status for multiple appointments-2
 JD-TC-change appointment status for multiple appointments UH-1
     [Documentation]   Provider change appointment status in multiple account empty appt ( it was unhappy case .but it responce 200)
     
-    ${resp}=  Provider Login  ${PUSERNAME85}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME85}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -297,7 +302,7 @@ JD-TC-change appointment status for multiple appointments UH-1
 
 JD-TC-change appointment status for multiple appointments-3
     [Documentation]  appointment status change - consumer and consumer's family member
-    ${resp}=  Provider Login  ${PUSERNAME85}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME85}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -310,7 +315,7 @@ JD-TC-change appointment status for multiple appointments-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Test Variable   ${DAY1}
  
     ${resp}=  Get Appointment Schedule ById  ${sch_id1}
@@ -393,7 +398,7 @@ JD-TC-change appointment status for multiple appointments-3
 JD-TC-change appointment status for multiple appointments- 4
 
     [Documentation]    multiple consumer appmt status change arrived to completed  
-    ${resp}=  Provider Login  ${PUSERNAME85}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME85}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -417,7 +422,7 @@ JD-TC-change appointment status for multiple appointments- 4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Test Variable   ${DAY1}
  
     ${resp}=  Get Appointment Schedule ById  ${sch_id1}
@@ -510,7 +515,7 @@ JD-TC-change appointment status for multiple appointments- 4
 JD-TC-change appointment status for multiple appointments- 5
 
     [Documentation]  single appmt status change arrived  to completed
-    ${resp}=  Provider Login  ${PUSERNAME85}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME85}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -522,7 +527,7 @@ JD-TC-change appointment status for multiple appointments- 5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
  
     ${resp}=  Get Appointment Schedule ById  ${sch_id1}
@@ -572,7 +577,7 @@ JD-TC-change appointment status for multiple appointments- 5
 JD-TC-change appointment status for multiple appointments-6
     [Documentation]   multiple appmt - change status to Completed from confirmed
    
-    ${resp}=  Provider Login   ${PUSERNAME85}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME85}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
      clear_appt_schedule   ${PUSERNAME85}
@@ -670,7 +675,7 @@ JD-TC-change appointment status for multiple appointments-6
 JD-TC-change appointment status for multiple appointments- 7
 
     [Documentation]    multiple account status change started to completed  
-    ${resp}=  Provider Login  ${PUSERNAME85}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME85}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -774,7 +779,7 @@ JD-TC-change appointment status for multiple appointments- 7
 
 JD-TC-change appointment status for multiple appointments UH-2
     [Documentation]  Change appointment status of another provider  (comment : appointment id was number of list ,so it response was 200)
-    ${resp}=  Provider Login  ${PUSERNAME181}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME181}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -798,7 +803,7 @@ JD-TC-change appointment status for multiple appointments UH-3
 JD-TC-change appointment status for multiple appointments UH-4
     [Documentation]  Change appointment status of invalid appointment  : comment -response 200
 
-    ${resp}=  Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -813,7 +818,7 @@ JD-TC-change appointment status for multiple appointments UH-4
 JD-TC-change appointment status for multiple appointments UH-5
 
     [Documentation]   check another status work on this URL 
-    ${resp}=  Provider Login  ${PUSERNAME85}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME85}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    

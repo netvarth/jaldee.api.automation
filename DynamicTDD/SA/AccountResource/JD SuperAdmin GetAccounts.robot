@@ -1,21 +1,25 @@
 *** Settings ***
 Suite Teardown    Delete All Sessions
 Test Teardown     Delete All Sessions
-Force Tags        POC
+Force Tags        Get Accounts
 Library           Collections
 Library           String
 Library           json
-Library         /ebs/TDD/db.py
+Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
+*** Variable ***
+${tz}   Asia/Kolkata
+
+
 *** Test Cases ***
 
 JD-TC-SuperadminGetAccount-1
-	Comment  Get Account Data  when  id-eq=${id}  uid-eq=${uid}
+	[Documentation]  Get Account Data  when  id-eq=${id}  uid-eq=${uid}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -29,25 +33,33 @@ JD-TC-SuperadminGetAccount-1
 # ***Comment***
 
 JD-TC-SuperadminGetAccount-2
-	Comment  Get Account Data  when  id-eq=${id}  businessName-eq=${busName}
+	[Documentation]  Get Account Data  when  id-eq=${id}  businessName-eq=${busName}
         
-        ${resp}=   Provider Login  ${PUSERNAME1}  ${PASSWORD} 
+        ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}   200
 
         ${resp}=  Get Business Profile
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Set Suite Variable  ${account_id}  ${resp.json()['id']}
+        Set Test Variable  ${id}  ${resp.json()['id']}
         Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
         Set Suite Variable  ${busName}  ${resp.json()['businessName']}
+
+        ${resp}=   Get Accountsettings
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${resp}=  Get jaldeeIntegration Settings
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=   Provider Logout 
         Should Be Equal As Strings    ${resp.status_code}   200
 
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
+        
         ${resp} =  Get Accounts  id-eq=${id}  businessName-eq=${busName}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
@@ -59,55 +71,79 @@ JD-TC-SuperadminGetAccount-2
 # *** Test Cases ***
 
 JD-TC-SuperadminGetAccount-3
-        Comment  Get Account Data when id-eq=${id}   license-eq=${vari}
+        [Documentation]  Get Account Data when id-eq=${id}   license-eq=${lic_id}
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}  ${PASSWORD}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']} 
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${id}  ${resp.json()['id']} 
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages  
-        Set Test Variable   ${vari}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}  
-        ${resp} =  Get Accounts    id-eq=${id}  license-eq=${vari}
+         
+        ${resp} =  Get Accounts    id-eq=${id}  license-eq=${lic_id}
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
-        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${vari}
+        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${lic_id}
       
 
 
 JD-TC-SuperadminGetAccount-4
-        Comment  Get Account Data when id-eq=${id}  serviceSector-eq=1
+        [Documentation]  Get Account Data when id-eq=${id}  serviceSector-eq=${domain_id}
+        
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}  ${PASSWORD}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']} 
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${id}  ${resp.json()['id']} 
+        Set Suite Variable  ${bname}  ${resp.json()['businessName']}
+        Set Suite Variable  ${domain_id}  ${resp.json()['serviceSector']['id']}
+        Set Suite Variable  ${subdomain_id}  ${resp.json()['serviceSubSector']['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts    id-eq=${id}  serviceSector-eq=1
+
+        ${resp} =  Get Accounts    id-eq=${id}  serviceSector-eq=${domain_id}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
         Should Be Equal As Integers  ${count}  1
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  ${domain_id}
         
 # ***Comment***   
 
 JD-TC-SuperadminGetAccount-5
-        Comment  Get Account Data when id-eq=${id}  serviceSubSector-eq=1
+        [Documentation]  Get Account Data when id-eq=${id}  serviceSubSector-eq=${subdomain_id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts    id-eq=${id}  serviceSubSector-eq=1
+
+        ${resp} =  Get Accounts    id-eq=${id}  serviceSubSector-eq=${subdomain_id}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  ${subdomain_id}
        
 
 JD-TC-SuperadminGetAccount-6
-        Comment  Get Account Data when id-eq=${id} accountLinkedPhoneNumber-eq=${PUSERNAME1} 
+        [Documentation]  Get Account Data when id-eq=${id} accountLinkedPhoneNumber-eq=${PUSERNAME1} 
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
+
         ${resp} =  Get Accounts   id-eq=${id}  accountLinkedPhoneNumber-eq=${PUSERNAME1} 
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
@@ -118,10 +154,11 @@ JD-TC-SuperadminGetAccount-6
 
 
 JD-TC-SuperadminGetAccount-7
-        Comment  Get Account Data when id-eq=${id}  accntStatus-eq=ACTIVE
+        [Documentation]  Get Account Data when id-eq=${id}  accntStatus-eq=ACTIVE
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
+
         ${resp} =  Get Accounts    id-eq=${id}   accntStatus-eq=ACTIVE
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
@@ -131,10 +168,11 @@ JD-TC-SuperadminGetAccount-7
           
 
 JD-TC-SuperadminGetAccount-8
-       Comment  Get Account Data when id-eq=${id}  claimStatus-eq=Claimed
+       [Documentation]  Get Account Data when id-eq=${id}  claimStatus-eq=Claimed
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
+
         ${resp} =  Get Accounts    id-eq=${id}  claimStatus-eq=Claimed
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
@@ -144,12 +182,74 @@ JD-TC-SuperadminGetAccount-8
        
 
 JD-TC-SuperadminGetAccount-9
-	Comment  Get Account Data when id-eq=${id}  createdDate-eq=${currentDate}
+	[Documentation]  Get Account Data when id-eq=${id}  createdDate-eq=${currentDate}
+        
+        ${PH_Number}    Random Number 	digits=5  #fix_len=True
+        ${ph}=  Evaluate   ${PUSERNAME}+${PH_Number}
+        Log   ${ph}
+        
+        ${ph1}=  Evaluate  ${ph}+1000000000
+        ${ph2}=  Evaluate  ${ph}+2000000000
+
+        ${licresp}=   Get Licensable Packages
+        Log   ${licresp.content}
+        Should Be Equal As Strings  ${licresp.status_code}  200
+        ${liclen}=  Get Length  ${licresp.json()}
+        Set Test Variable  ${licpkgid}  ${licresp.json()[0]['pkgId']}
+        Set Test Variable  ${licpkgname}  ${licresp.json()[0]['displayName']}
+
+        # ${corp_resp}=   get_iscorp_subdomains  1
+
+        ${resp}=  Get BusinessDomainsConf
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${dom_len}=  Get Length  ${resp.json()}
+        # ${dom}=  random.randint  ${0}  ${dom_len-1}
+        ${dom}=  Random Int  min=0   max=${dom_len-1}
+        ${sdom_len}=  Get Length  ${resp.json()[${dom}]['subDomains']}
+        Set Test Variable  ${domain}  ${resp.json()[${dom}]['domain']}
+        Log   ${domain}
+        
+        FOR  ${subindex}  IN RANGE  ${sdom_len}
+        #     ${sdom}=  random.randint  ${0}  ${sdom_len-1}
+            ${sdom}=  Random Int  min=0   max=${sdom_len-1}
+            Set Test Variable  ${subdomain}  ${resp.json()[${dom}]['subDomains'][${subindex}]['subDomain']}
+        #     ${is_corp}=  check_is_corp  ${subdomain}
+        #     Exit For Loop If  '${is_corp}' == 'False'
+        END
+        Log   ${subdomain}
+        
+        ${fname}=  FakerLibrary.name
+        ${lname}=  FakerLibrary.lastname
+        ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${ph}  ${licpkgid}
+        Log   ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}    200
+        ${resp}=  Account Activation  ${ph}  0
+        Log   ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}    200
+        ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
+        Log   ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}    200
+        sleep  03s
+        ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
+        Should Be Equal As Strings    ${resp.status_code}    200
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${accId}  ${resp.json()['id']}
+
+        ${resp}=  Provider Logout
+        Should Be Equal As Strings  ${resp.status_code}  200
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${currentdate} =  get_date
+        
+        ${id} =  get_acc_id  ${ph}
+
+        ${currentdate} =  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate}
+
         ${resp} =  Get Accounts    id-eq=${id}  createdDate-eq=${currentDate}
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
@@ -161,7 +261,7 @@ JD-TC-SuperadminGetAccount-9
 
 
 JD-TC-SuperadminGetAccount-10
-        Comment  Get Account Data when id-eq=${id}  verifiedLevel-eq=NONE
+        [Documentation]  Get Account Data when id-eq=${id}  verifiedLevel-eq=NONE
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -175,7 +275,7 @@ JD-TC-SuperadminGetAccount-10
 
 
 JD-TC-SuperadminGetAccount-11
-	Comment  Get Account Data when id-eq=${id}  searchEnabled-eq=true
+	[Documentation]  Get Account Data when id-eq=${id}  searchEnabled-eq=true
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -188,199 +288,265 @@ JD-TC-SuperadminGetAccount-11
        
 
 JD-TC-SuperadminGetAccount-12
-        Comment  Get Account Data when businessName-eq=Anjali Health Care  license-eq=${vari}  id-eq=${id}  
+        [Documentation]  Get Account Data when businessName-eq=${bname}  license-eq=${lic_id}  id-eq=${id}  
+        
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}  ${PASSWORD}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        Set Suite Variable  ${bname}  ${resp.json()['businessName']}
+        Set Suite Variable  ${domain_id}  ${resp.json()['serviceSector']['id']}
+        Set Suite Variable  ${subdomain_id}  ${resp.json()['serviceSubSector']['id']}
+
+        # ${id} =  get_acc_id  ${PUSERNAME1}
+        # ${licence} =  Get Licensable Packages  
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        # Set Test Variable   ${lic_id}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}  
+
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages  
-        Set Test Variable   ${vari}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}  
-        ${resp} =  Get Accounts    businessName-eq=Anjali Health Care   license-eq=${vari}   id-eq=${id}   
+
+        ${resp} =  Get Accounts    businessName-eq=${bname}   license-eq=${lic_id}   id-eq=${id}   
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  Anjali Health Care
-        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${vari}
+        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  ${bname}
+        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${lic_id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
        
 
 
 JD-TC-SuperadminGetAccount-13
-        Comment  Get Account Data when businessName-eq=Anjali Health Care  serviceSector-eq=1
+        [Documentation]  Get Account Data when businessName-eq=${bname}  serviceSector-eq=${domain_id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  Get Accounts    businessName-eq=Anjali Health Care  serviceSector-eq=1
+        ${resp} =  Get Accounts    businessName-eq=${bname}  serviceSector-eq=${domain_id}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1  
-        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  Anjali Health Care
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  ${bname}
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  ${domain_id}
        
 
 JD-TC-SuperadminGetAccount-14
-        Comment  Get Account Data when businessName-eq=Anjali Health Care   serviceSubSector-eq=1
+        [Documentation]  Get Account Data when businessName-eq=${bname}   serviceSubSector-eq=${subdomain_id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  Get Accounts    businessName-eq=Anjali Health Care  serviceSubSector-eq=1
+        ${resp} =  Get Accounts    businessName-eq=${bname}  serviceSubSector-eq=${subdomain_id}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1 
-        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  Anjali Health Care
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  ${bname}
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  ${subdomain_id}
        
 
 JD-TC-SuperadminGetAccount-15   
-       Comment  Get Account Data when businessName-eq=Anjali Health Care  accountLinkedPhoneNumber-eq=${PUSERNAME1} 
+       [Documentation]  Get Account Data when businessName-eq=${bname}  accountLinkedPhoneNumber-eq=${PUSERNAME1} 
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  Get Accounts    businessName-eq=Anjali Health Care   accountLinkedPhoneNumber-eq=${PUSERNAME1} 
+        ${resp} =  Get Accounts    businessName-eq=${bname}   accountLinkedPhoneNumber-eq=${PUSERNAME1} 
         Should Be Equal As Strings  ${resp.status_code}  200
         ${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  Anjali Health Care
+        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  ${bname}
         Should Be Equal As Strings  ${resp.json()[0]['account']['accountLinkedPhNo']}  ${PUSERNAME1} 
     
 
 JD-TC-SuperadminGetAccount-16
-        Comment  Get Account Data when businessName-eq=Anjali Health Care  accntStatus-eq=ACTIVE
+        [Documentation]  Get Account Data when businessName-eq=${bname}  accntStatus-eq=ACTIVE
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  Get Accounts    businessName-eq=Anjali Health Care  accntStatus-eq=ACTIVE
+        ${resp} =  Get Accounts    businessName-eq=${bname}  accntStatus-eq=ACTIVE
 	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1 
-        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  Anjali Health Care
+        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  ${bname}
         Should Be Equal As Strings  ${resp.json()[0]['account']['status']}  ACTIVE
        
 
 JD-TC-SuperadminGetAccount-17
-        Comment  Get Account Data when businessName-eq=Anjali Health Care  claimStatus-eq=Claimed
+        [Documentation]  Get Account Data when businessName-eq=${bname}  claimStatus-eq=Claimed
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts   businessName-eq=Anjali Health Care  claimStatus-eq=Claimed
+        ${resp} =  Get Accounts   businessName-eq=${bname}  claimStatus-eq=Claimed
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  Anjali Health Care
+        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  ${bname}
         Should Be Equal As Strings  ${resp.json()[0]['account']['claimStatus']}  Claimed
         
 
 JD-TC-SuperadminGetAccount-18
-        Comment  Get Account Data when businessName-eq=Anjali Health Care  createdDate-eq=${currentDate}  id-eq=${id}
+        [Documentation]  Get Account Data when businessName-eq=${bname}  createdDate-eq=${currentDate}  id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${currentdate}=  get_date
-        Set Suite Variable  ${currentDate}  ${currentdate} 
-        ${resp} =   Get Accounts    businessName-eq=Anjali Health Care  createdDate-eq=${currentDate}  id-eq=${id}
+        ${currentdate}=  db.get_date_by_timezone  ${tz}
+        # Set Suite Variable  ${currentDate}  ${currentdate} 
+        ${resp} =   Get Accounts    businessName-eq=${bname}  createdDate-eq=${currentDate}  id-eq=${id}
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  Anjali Health Care
+        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  ${bname}
         Should Be Equal As Strings  ${resp.json()[0]['account']['createdDate']}  ${currentDate}
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
         
 
 JD-TC-SuperadminGetAccount-19
-        Comment  Get Account Data when businessName-eq=Anjali Health Care  verifiedLevel-eq=NONE
+        [Documentation]  Get Account Data when businessName-eq=${bname}  verifiedLevel-eq=NONE
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts    businessName-eq=Anjali Health Care  verifiedLevel-eq=NONE
+        ${resp} =  Get Accounts    businessName-eq=${bname}  verifiedLevel-eq=NONE
         Should Be Equal As Strings  ${resp.status_code}  200
         ${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  Anjali Health Care
+        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  ${bname}
         Should Be Equal As Strings  ${resp.json()[0]['account']['verifyLevel']}  NONE
        
 
 JD-TC-SuperadminGetAccount-20
-	Comment  Get Account Data when businessName-eq=Anjali Health Care  searchEnabled-eq=true
+	[Documentation]  Get Account Data when businessName-eq=${bname}  searchEnabled-eq=true
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts   businessName-eq=Anjali Health Care   searchEnabled-eq=true
+        ${resp} =  Get Accounts   businessName-eq=${bname}   searchEnabled-eq=true
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  Anjali Health Care
+        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  ${bname}
         Should Be Equal As Strings  ${resp.json()[0]['account']['enableSearch']}  True
        
 
 
 JD-TC-SuperadminGetAccount-21
-        Comment  Get Account Data when license-eq=${vari}  serviceSector-eq=1   id-eq=${id}
+        [Documentation]  Get Account Data when license-eq=${lic_id}  serviceSector-eq=${domain_id}   id-eq=${id}
+        
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        Set Suite Variable  ${bname}  ${resp.json()['businessName']}
+        Set Suite Variable  ${domain_id}  ${resp.json()['serviceSector']['id']}
+        # Set Suite Variable  ${subdomain_id}  ${resp.json()['serviceSubSector']['id']}
+
+        # ${id} =  get_acc_id  ${PUSERNAME1}
+
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}   ${PASSWORD}
-        Should Be Equal As Strings   ${resp.status_code}  200
-	${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages
-        Set Test Variable  ${vari}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-        ${resp} =  Get Accounts   license-eq=${vari}  serviceSector-eq=1   id-eq=${id}
+        ${resp} =  Get Accounts   license-eq=${lic_id}  serviceSector-eq=${domain_id}   id-eq=${id}
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
         Should Be Equal As Integers  ${count}  1 
-        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}   ${vari}
-       Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}   ${lic_id}
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  ${domain_id}
  	Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
       
 
 
 
 JD-TC-SuperadminGetAccount-22
-        Comment  Get Account Data when license-eq=${vari}  serviceSubSector-eq=1  id-eq=${id}
+        [Documentation]  Get Account Data when license-eq=${lic_id}  serviceSubSector-eq=${subdomain_id}  id-eq=${id}
+        
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        Set Suite Variable  ${bname}  ${resp.json()['businessName']}
+        Set Suite Variable  ${subdomain_id}  ${resp.json()['serviceSubSector']['id']}
+        
+        
+        # ${id} =  get_acc_id  ${PUSERNAME1}
+        # ${licence} =  Get Licensable Packages
+        # Set Test Variable  ${lic_id}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}   ${PASSWORD}
-        Should Be Equal As Strings   ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages
-        Set Test Variable  ${vari}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-        ${resp} =  Get Accounts    license-eq=${vari}  serviceSubSector-eq=1  id-eq=${id}
+        
+        ${resp} =  Get Accounts    license-eq=${lic_id}  serviceSubSector-eq=${subdomain_id}  id-eq=${id}
 	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
         Should Be Equal As Integers  ${count}  1 
-        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${vari}
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${lic_id}
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  ${subdomain_id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
      
          
 
 JD-TC-SuperadminGetAccount-23  
-       Comment  Get Account Data when license-eq=${vari}   accountLinkedPhoneNumber-eq=${PUSERNAME1} 
+       [Documentation]  Get Account Data when license-eq=${lic_id}   accountLinkedPhoneNumber-eq=${PUSERNAME1} 
+        
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        # ${resp}=  Get Business Profile
+        # Log  ${resp.content}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        # Set Test Variable  ${id}  ${resp.json()['id']}
+        # Set Suite Variable  ${bname}  ${resp.json()['businessName']}
+        # Set Suite Variable  ${subdomain_id}  ${resp.json()['serviceSubSector']['id']}
+        
+        
+        # ${id} =  get_acc_id  ${PUSERNAME1}
+        # ${licence} =  Get Licensable Packages
+        # Set Test Variable  ${lic_id}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}   ${PASSWORD}
-        Should Be Equal As Strings   ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages
-        Set Test Variable  ${vari}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-        ${resp} =  Get Accounts    license-eq=${vari}    accountLinkedPhoneNumber-eq=${PUSERNAME1} 
+        
+        ${resp} =  Get Accounts    license-eq=${lic_id}    accountLinkedPhoneNumber-eq=${PUSERNAME1} 
 	Should Be Equal As Strings  ${resp.status_code}  200
         ${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${vari} 
+        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${lic_id} 
         Should Be Equal As Strings  ${resp.json()[0]['account']['accountLinkedPhNo']}  ${PUSERNAME1} 
      
 
 
 
 JD-TC-SuperadminGetAccount-24
-        Comment  Get Account Data when license-eq=${vari}  accntStatus-eq=ACTIVE  id-eq=${id}
+        [Documentation]  Get Account Data when license-eq=${lic_id}  accntStatus-eq=ACTIVE  id-eq=${id}
+        
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}   ${PASSWORD}
-        Should Be Equal As Strings   ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages
-        Set Test Variable  ${vari}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-        ${resp} =  Get Accounts   license-eq=${vari}  accntStatus-eq=ACTIVE   id-eq=${id}
+        
+        ${resp} =  Get Accounts   license-eq=${lic_id}  accntStatus-eq=ACTIVE   id-eq=${id}
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}   ${vari} 
+        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}   ${lic_id} 
         Should Be Equal As Strings  ${resp.json()[0]['account']['status']}  ACTIVE
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id} 
  
@@ -388,40 +554,56 @@ JD-TC-SuperadminGetAccount-24
 
 
 JD-TC-SuperadminGetAccount-25
-        Comment  Get Account Data when license-eq=${vari}  claimStatus-eq=Claimed   id-eq=${id}
+        [Documentation]  Get Account Data when license-eq=${lic_id}  claimStatus-eq=Claimed   id-eq=${id}
+        
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}   ${PASSWORD}
-        Should Be Equal As Strings   ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages
-        Set Test Variable  ${vari}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-        ${resp} =  Get Accounts  license-eq=${vari}  claimStatus-eq=Claimed   id-eq=${id}
+        
+        ${resp} =  Get Accounts  license-eq=${lic_id}  claimStatus-eq=Claimed   id-eq=${id}
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${vari} 
+        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${lic_id} 
         Should Be Equal As Strings  ${resp.json()[0]['account']['claimStatus']}  Claimed
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
      
 
 
 JD-TC-SuperadminGetAccount-26
-        Comment  Get Account Data when license-eq=${vari}  createdDate-eq=${currentDate}   id-eq=${id}
+        [Documentation]  Get Account Data when license-eq=${lic_id}  createdDate-eq=${currentDate}   id-eq=${id}
+        
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}   ${PASSWORD}
-        Should Be Equal As Strings   ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages
-        Set Test Variable  ${vari}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-        ${currentdate} =  get_date
+        
+        ${currentdate} =  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate} 
-        ${resp} =   Get Accounts   license-eq=${vari}  createdDate-eq=${currentDate}   id-eq=${id}
+        ${resp} =   Get Accounts   license-eq=${lic_id}  createdDate-eq=${currentDate}   id-eq=${id}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${vari}
+        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${lic_id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['createdDate']}  ${currentDate}
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
       
@@ -429,232 +611,302 @@ JD-TC-SuperadminGetAccount-26
 
 
 JD-TC-SuperadminGetAccount-27
-        Comment  Get Account Data when license-eq=${vari}   verifiedLevel-eq=NONE   id-eq=${id} 
+        [Documentation]  Get Account Data when license-eq=${lic_id}   verifiedLevel-eq=NONE   id-eq=${id} 
+        
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}   ${PASSWORD}
-        Should Be Equal As Strings   ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages
-        Set Test Variable  ${vari}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']} 
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts  license-eq=${vari}  verifiedLevel-eq=NONE    id-eq=${id} 
+        
+        ${resp} =  Get Accounts  license-eq=${lic_id}  verifiedLevel-eq=NONE    id-eq=${id} 
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${vari} 
+        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${lic_id} 
         Should Be Equal As Strings  ${resp.json()[0]['account']['verifyLevel']}   NONE  
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id} 
        
         
 JD-TC-SuperadminGetAccount-28
-	Comment  Get Account Data when license-eq=${vari}   searchEnabled-eq=true  id-eq=${id}
+	[Documentation]  Get Account Data when license-eq=${lic_id}   searchEnabled-eq=true  id-eq=${id}
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}   ${PASSWORD}
-        Should Be Equal As Strings   ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages
-        Set Test Variable  ${vari}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts  license-eq=${vari}   searchEnabled-eq=true    id-eq=${id}
+        
+        ${resp} =  Get Accounts  license-eq=${lic_id}   searchEnabled-eq=true    id-eq=${id}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${vari}  
+        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${lic_id}  
         Should Be Equal As Strings  ${resp.json()[0]['account']['enableSearch']}  True
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
    
 
 JD-TC-SuperadminGetAccount-29
-        Comment  Get Account Data when serviceSector-eq=1  serviceSubSector-eq=1   id-eq=${id}
+        [Documentation]  Get Account Data when serviceSector-eq=${domain_id}  serviceSubSector-eq=${subdomain_id}   id-eq=${id}
+        
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        Set Suite Variable  ${bname}  ${resp.json()['businessName']}
+        Set Suite Variable  ${domain_id}  ${resp.json()['serviceSector']['id']}
+        Set Suite Variable  ${subdomain_id}  ${resp.json()['serviceSubSector']['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts    serviceSector-eq=1  serviceSubSector-eq=1    id-eq=${id}
+        ${resp} =  Get Accounts    serviceSector-eq=${domain_id}  serviceSubSector-eq=${subdomain_id}    id-eq=${id}
  	Should Be Equal As Strings  ${resp.status_code}  200
         ${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  ${domain_id}
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  ${subdomain_id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
       
 
 JD-TC-SuperadminGetAccount-30 
-       Comment  Get Account Data when serviceSector-eq=1  accountLinkedPhoneNumber-eq=${PUSERNAME1}    id-eq=${id}
+       [Documentation]  Get Account Data when serviceSector-eq=${domain_id}  accountLinkedPhoneNumber-eq=${PUSERNAME1}    id-eq=${id}
+        
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        Set Suite Variable  ${bname}  ${resp.json()['businessName']}
+        Set Suite Variable  ${domain_id}  ${resp.json()['serviceSector']['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts    serviceSector-eq=1  accountLinkedPhoneNumber-eq=${PUSERNAME1}   id-eq=${id}
+        ${resp} =  Get Accounts    serviceSector-eq=${domain_id}  accountLinkedPhoneNumber-eq=${PUSERNAME1}   id-eq=${id}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  ${domain_id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['accountLinkedPhNo']}  ${PUSERNAME1} 
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
       
 
 JD-TC-SuperadminGetAccount-31
-        Comment  Get Account Data when serviceSector-eq=1  accntStatus-eq=ACTIVE   id-eq=${id}
+        [Documentation]  Get Account Data when serviceSector-eq=${domain_id}  accntStatus-eq=ACTIVE   id-eq=${id}
+        
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        Set Suite Variable  ${bname}  ${resp.json()['businessName']}
+        Set Suite Variable  ${domain_id}  ${resp.json()['serviceSector']['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts   serviceSector-eq=1   accntStatus-eq=ACTIVE   id-eq=${id}
+        ${resp} =  Get Accounts   serviceSector-eq=${domain_id}   accntStatus-eq=ACTIVE   id-eq=${id}
 	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}   1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}   ${domain_id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['status']}  ACTIVE
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
          
 
 JD-TC-SuperadminGetAccount-32
-        Comment  Get Account Data when serviceSector-eq=1  claimStatus-eq=Claimed   id-eq=${id}
+        [Documentation]  Get Account Data when serviceSector-eq=${domain_id}  claimStatus-eq=Claimed   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts   serviceSector-eq=1    claimStatus-eq=Claimed   id-eq=${id}
+        ${resp} =  Get Accounts   serviceSector-eq=${domain_id}    claimStatus-eq=Claimed   id-eq=${id}
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  ${domain_id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['claimStatus']}  Claimed
        
 
 JD-TC-SuperadminGetAccount-33
-        Comment  Get Account Data when serviceSector-eq=1  createdDate-eq=${currentDate}   id-eq=${id}
+        [Documentation]  Get Account Data when serviceSector-eq=${domain_id}  createdDate-eq=${currentDate}   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${currentdate} =  get_date
+        ${currentdate} =  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate} 
-        ${resp} =   Get Accounts  serviceSector-eq=1   createdDate-eq=${currentDate}   id-eq=${id}
+        ${resp} =   Get Accounts  serviceSector-eq=${domain_id}   createdDate-eq=${currentDate}   id-eq=${id}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1 
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  ${domain_id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['createdDate']}  ${currentDate}
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
       
 
 JD-TC-SuperadminGetAccount-34
-        Comment  Get Account Data when  serviceSector-eq=1  verifiedLevel-eq=NONE   id-eq=${id}
+        [Documentation]  Get Account Data when  serviceSector-eq=${domain_id}  verifiedLevel-eq=NONE   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts   serviceSector-eq=1  verifiedLevel-eq=NONE   id-eq=${id}
+        ${resp} =  Get Accounts   serviceSector-eq=${domain_id}  verifiedLevel-eq=NONE   id-eq=${id}
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  ${domain_id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['verifyLevel']}  NONE
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
       
         
 JD-TC-SuperadminGetAccount-35
-	Comment  Get Account Data when serviceSector-eq=1  searchEnabled-eq=true  id-eq=${id}
+	[Documentation]  Get Account Data when serviceSector-eq=${domain_id}  searchEnabled-eq=true  id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts  serviceSector-eq=1   searchEnabled-eq=true   id-eq=${id}
+        ${resp} =  Get Accounts  serviceSector-eq=${domain_id}   searchEnabled-eq=true   id-eq=${id}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  ${domain_id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['enableSearch']}  True
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
       
 
 JD-TC-SuperadminGetAccount-36
-        Comment  Get Account Data when serviceSubSector-eq=1  accountLinkedPhoneNumber-eq=${PUSERNAME1}    id-eq=${id}
+        [Documentation]  Get Account Data when serviceSubSector-eq=${subdomain_id}  accountLinkedPhoneNumber-eq=${PUSERNAME1}    id-eq=${id}
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        Set Suite Variable  ${bname}  ${resp.json()['businessName']}
+        Set Suite Variable  ${domain_id}  ${resp.json()['serviceSector']['id']}
+        Set Suite Variable  ${subdomain_id}  ${resp.json()['serviceSubSector']['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts    serviceSubSector-eq=1  accountLinkedPhoneNumber-eq=${PUSERNAME1}    id-eq=${id}
+        ${resp} =  Get Accounts    serviceSubSector-eq=${subdomain_id}  accountLinkedPhoneNumber-eq=${PUSERNAME1}    id-eq=${id}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  ${subdomain_id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['accountLinkedPhNo']}  ${PUSERNAME1} 
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
 
 
 JD-TC-SuperadminGetAccount-37
-        Comment  Get Account Data when serviceSubSector-eq=1   accntStatus-eq=ACTIVE   id-eq=${id}
+        [Documentation]  Get Account Data when serviceSubSector-eq=${subdomain_id}   accntStatus-eq=ACTIVE   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts   serviceSubSector-eq=1  accntStatus-eq=ACTIVE  id-eq=${id}
+        ${resp} =  Get Accounts   serviceSubSector-eq=${subdomain_id}  accntStatus-eq=ACTIVE  id-eq=${id}
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}   1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  ${subdomain_id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['status']}  ACTIVE
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
        
 
 
 JD-TC-SuperadminGetAccount-38 
-        Comment  Get Account Data when serviceSubSector-eq=1  claimStatus-eq=Claimed  id-eq=${id}
+        [Documentation]  Get Account Data when serviceSubSector-eq=${subdomain_id}  claimStatus-eq=Claimed  id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts   serviceSubSector-eq=1  claimStatus-eq=Claimed    id-eq=${id}
+        ${resp} =  Get Accounts   serviceSubSector-eq=${subdomain_id}  claimStatus-eq=Claimed    id-eq=${id}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  ${subdomain_id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['claimStatus']}  Claimed
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
      
 
 JD-TC-SuperadminGetAccount-39
-        Comment  Get Account Data when serviceSubSector-eq=1  createdDate-eq=${currentDate}  id-eq=${id}
+        [Documentation]  Get Account Data when serviceSubSector-eq=${subdomain_id}  createdDate-eq=${currentDate}  id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${currentdate} =  get_date
+        ${currentdate} =  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate} 
-        ${resp} =   Get Accounts  serviceSubSector-eq=1  createdDate-eq=${currentDate}   id-eq=${id}
+        ${resp} =   Get Accounts  serviceSubSector-eq=${subdomain_id}  createdDate-eq=${currentDate}   id-eq=${id}
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  ${subdomain_id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['createdDate']}  ${currentDate}
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
        
 
 JD-TC-SuperadminGetAccount-40
-        Comment  Get Account Data when  serviceSubSector-eq=1  verifiedLevel-eq=NONE   id-eq=${id}
+        [Documentation]  Get Account Data when  serviceSubSector-eq=${subdomain_id}  verifiedLevel-eq=NONE   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts   serviceSubSector-eq=1  verifiedLevel-eq=NONE    id-eq=${id}
+        ${resp} =  Get Accounts   serviceSubSector-eq=${subdomain_id}  verifiedLevel-eq=NONE    id-eq=${id}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  ${subdomain_id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['verifyLevel']}  NONE
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id} 
       
         
 JD-TC-SuperadminGetAccount-41
-	Comment  Get Account Data when serviceSubSector-eq=1  searchEnabled-eq=true  id-eq=${id}
+	[Documentation]  Get Account Data when serviceSubSector-eq=${subdomain_id}  searchEnabled-eq=true  id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts  serviceSubSector-eq=1   searchEnabled-eq=true  id-eq=${id}
+        ${resp} =  Get Accounts  serviceSubSector-eq=${subdomain_id}   searchEnabled-eq=true  id-eq=${id}
         Should Be Equal As Strings  ${resp.status_code}  200 
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  1
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  ${subdomain_id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['enableSearch']}  True
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id} 
        
 
 JD-TC-SuperadminGetAccount-42
-	Comment  Get Account Data when accountLinkedPhoneNumber-eq=${PUSERNAME1}   accntStatus-eq=ACTIVE   id-eq=${id}
+	[Documentation]  Get Account Data when accountLinkedPhoneNumber-eq=${PUSERNAME1}   accntStatus-eq=ACTIVE   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -668,7 +920,7 @@ JD-TC-SuperadminGetAccount-42
       
 
 JD-TC-SuperadminGetAccount-43
-        Comment  Get Account Data when accountLinkedPhoneNumber-eq=${PUSERNAME1}   claimStatus-eq=Claimed  id-eq=${id}
+        [Documentation]  Get Account Data when accountLinkedPhoneNumber-eq=${PUSERNAME1}   claimStatus-eq=Claimed  id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -684,11 +936,11 @@ JD-TC-SuperadminGetAccount-43
 
 
 JD-TC-SuperadminGetAccount-44
-        Comment  Get Account Data when accountLinkedPhoneNumber-eq=${PUSERNAME1}    createdDate-eq=${currentDate}   id-eq=${id}
+        [Documentation]  Get Account Data when accountLinkedPhoneNumber-eq=${PUSERNAME1}    createdDate-eq=${currentDate}   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${currentdate}=  get_date
+        ${currentdate}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate} 
         ${resp} =   Get Accounts  accountLinkedPhoneNumber-eq=${PUSERNAME1}   createdDate-eq=${currentDate}   id-eq=${id}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -700,7 +952,7 @@ JD-TC-SuperadminGetAccount-44
   
 
 JD-TC-SuperadminGetAccount-45
-        Comment  Get Account Data when accountLinkedPhoneNumber-eq=${PUSERNAME1}   verifiedLevel-eq=NONE  id-eq=${id} 
+        [Documentation]  Get Account Data when accountLinkedPhoneNumber-eq=${PUSERNAME1}   verifiedLevel-eq=NONE  id-eq=${id} 
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -714,7 +966,7 @@ JD-TC-SuperadminGetAccount-45
      
         
 JD-TC-SuperadminGetAccount-46
-	Comment  Get Account Data when accountLinkedPhoneNumber-eq=${PUSERNAME1}   searchEnabled-eq=true   id-eq=${id} 
+	[Documentation]  Get Account Data when accountLinkedPhoneNumber-eq=${PUSERNAME1}   searchEnabled-eq=true   id-eq=${id} 
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -728,7 +980,7 @@ JD-TC-SuperadminGetAccount-46
         
 
 JD-TC-SuperadminGetAccount-47
-        Comment  Get Account Data when  accntStatus-eq=ACTIVE  claimStatus-eq=Claimed   id-eq=${id}
+        [Documentation]  Get Account Data when  accntStatus-eq=ACTIVE  claimStatus-eq=Claimed   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -743,11 +995,11 @@ JD-TC-SuperadminGetAccount-47
 
 
 JD-TC-SuperadminGetAccount-48
-        Comment  Get Account Data when  accntStatus-eq=ACTIVE   createdDate-eq=${currentDate}   id-eq=${id}
+        [Documentation]  Get Account Data when  accntStatus-eq=ACTIVE   createdDate-eq=${currentDate}   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${currentdate} =  get_date
+        ${currentdate} =  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate} 
         ${resp} =   Get Accounts  accntStatus-eq=ACTIVE  createdDate-eq=${currentDate}   id-eq=${id}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -759,7 +1011,7 @@ JD-TC-SuperadminGetAccount-48
   
 
 JD-TC-SuperadminGetAccount-49
-        Comment  Get Account Data when  accntStatus-eq=ACTIVE   verifiedLevel-eq=NONE   id-eq=${id}
+        [Documentation]  Get Account Data when  accntStatus-eq=ACTIVE   verifiedLevel-eq=NONE   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -773,7 +1025,7 @@ JD-TC-SuperadminGetAccount-49
        
         
 JD-TC-SuperadminGetAccount-50
-	Comment  Get Account Data when  accntStatus-eq=ACTIVE  searchEnabled-eq=true   id-eq=${id}
+	[Documentation]  Get Account Data when  accntStatus-eq=ACTIVE  searchEnabled-eq=true   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -788,11 +1040,11 @@ JD-TC-SuperadminGetAccount-50
         
 
 JD-TC-SuperadminGetAccount-51
-        Comment  Get Account Data when  claimStatus-eq=Claimed   createdDate-eq=${currentDate}   id-eq=${id}
+        [Documentation]  Get Account Data when  claimStatus-eq=Claimed   createdDate-eq=${currentDate}   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1} 
-        ${currentdate} =  get_date
+        ${currentdate} =  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate} 
         ${resp} =   Get Accounts   claimStatus-eq=Claimed   createdDate-eq=${currentDate}   id-eq=${id}
    	Should Be Equal As Strings  ${resp.status_code}  200
@@ -804,7 +1056,7 @@ JD-TC-SuperadminGetAccount-51
 
 
 JD-TC-SuperadminGetAccount-52
-        Comment  Get Account Data when   claimStatus-eq=Claimed   verifiedLevel-eq=NONE   id-eq=${id}
+        [Documentation]  Get Account Data when   claimStatus-eq=Claimed   verifiedLevel-eq=NONE   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -818,7 +1070,7 @@ JD-TC-SuperadminGetAccount-52
      
         
 JD-TC-SuperadminGetAccount-53
-	Comment  Get Account Data when  claimStatus-eq=Claimed  searchEnabled-eq=true  id-eq=${id}
+	[Documentation]  Get Account Data when  claimStatus-eq=Claimed  searchEnabled-eq=true  id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -834,11 +1086,11 @@ JD-TC-SuperadminGetAccount-53
 
 
 JD-TC-SuperadminGetAccount-54
-	Comment  Get Account Data when createdDate-eq=${currentDate}  accntStatus-eq=ACTIVE   id-eq=${id}
+	[Documentation]  Get Account Data when createdDate-eq=${currentDate}  accntStatus-eq=ACTIVE   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${currentdate} =  get_date
+        ${currentdate} =  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate}  
         ${resp} =  Get Accounts    createdDate-eq=${currentDate}  accntStatus-eq=ACTIVE   id-eq=${id}
 	${count} =  Get Length  ${resp.json()}
@@ -850,11 +1102,11 @@ JD-TC-SuperadminGetAccount-54
      
 
 JD-TC-SuperadminGetAccount-55
-	Comment  Get Account Data when createdDate-eq=${currentDate}  verifiedLevel-eq=NONE   id-eq=${id}
+	[Documentation]  Get Account Data when createdDate-eq=${currentDate}  verifiedLevel-eq=NONE   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1} 
-        ${currentdate} =  get_date
+        ${currentdate} =  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate}
         ${resp} =  Get Accounts    createdDate-eq=${currentDate}  verifiedLevel-eq=NONE   id-eq=${id}
     	Should Be Equal As Strings  ${resp.status_code}  200
@@ -866,7 +1118,7 @@ JD-TC-SuperadminGetAccount-55
        
 
 JD-TC-SuperadminGetAccount-56
-	Comment  Get Account Data when createdDate-eq=${currentDate}  searchEnabled-eq=true   id-eq=${id}
+	[Documentation]  Get Account Data when createdDate-eq=${currentDate}  searchEnabled-eq=true   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -880,7 +1132,7 @@ JD-TC-SuperadminGetAccount-56
        
 
 JD-TC-SuperadminGetAccount-57
-	Comment  Get Account Data when  verifiedLevel-eq=NONE  searchEnabled-eq=true   id-eq=${id}
+	[Documentation]  Get Account Data when  verifiedLevel-eq=NONE  searchEnabled-eq=true   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -894,24 +1146,36 @@ JD-TC-SuperadminGetAccount-57
      
 
 JD-TC-SuperadminGetAccount-58
-        Comment  Get Account Data when businessName-eq=Anjali Health Care
+        [Documentation]  Get Account Data when businessName-eq=${bname}
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}  ${PASSWORD}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        Set Suite Variable  ${bname}  ${resp.json()['businessName']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}  
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts  businessName-eq=Anjali Health Care
+        
+        ${resp} =  Get Accounts  businessName-eq=${bname}
  	Should Be Equal As Strings  ${resp.status_code}  200 
 	${count} =   Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
 	Should Be Equal As Strings  ${status}  True 
-        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  Anjali Health Care
+        Should Be Equal As Strings  ${resp.json()[0]['account']['businessName']}  ${bname}
      
 
 JD-TC-SuperadminGetAccount-59
-	Comment  Get Account Data when createdDate-eq=${currentDate}   id-eq=${id}
+	[Documentation]  Get Account Data when createdDate-eq=${currentDate}   id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}  
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${currentdate} =  get_date
+        ${currentdate} =  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate} 
         ${resp} =  Get Accounts  createdDate-eq=${currentDate}   id-eq=${id}
  	Should Be Equal As Strings  ${resp.status_code}  200 
@@ -922,7 +1186,7 @@ JD-TC-SuperadminGetAccount-59
      
 
 JD-TC-SuperadminGetAccount-60
-	Comment  Get Account Data when id-eq=${id}
+	[Documentation]  Get Account Data when id-eq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -934,7 +1198,7 @@ JD-TC-SuperadminGetAccount-60
       
 
 JD-TC-SuperadminGetAccount-61
-        Comment  Get Account Data when accountLinkedPhoneNumber-eq=${PUSERNAME1}  
+        [Documentation]  Get Account Data when accountLinkedPhoneNumber-eq=${PUSERNAME1}  
         ${resp}=  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}  
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -946,7 +1210,7 @@ JD-TC-SuperadminGetAccount-61
         
 
 JD-TC-SuperadminGetAccount-62
-	Comment  Get Account Data when  uid-eq=${uid}
+	[Documentation]  Get Account Data when  uid-eq=${uid}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -961,7 +1225,7 @@ JD-TC-SuperadminGetAccount-62
 
 
 JD-TC-SuperadminGetAccount-63
-	Comment  Get Account Data when accntStatus-eq=ACTIVE
+	[Documentation]  Get Account Data when accntStatus-eq=ACTIVE
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp} =  Get Accounts   accntStatus-eq=ACTIVE
@@ -972,48 +1236,54 @@ JD-TC-SuperadminGetAccount-63
         
 
 JD-TC-SuperadminGetAccount-64
-	Comment  Get Account Data when  serviceSubSector-eq=1 
+	[Documentation]  Get Account Data when  serviceSubSector-eq=${subdomain_id} 
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  Get Accounts    serviceSubSector-eq=1 
+        ${resp} =  Get Accounts    serviceSubSector-eq=${subdomain_id} 
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
 	Should Be Equal As Strings  ${status}  True 
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSubSector']['id']}  ${subdomain_id}
        
 
 JD-TC-SuperadminGetAccount-65
-	Comment  Get Account Data when serviceSector-eq=1
+	[Documentation]  Get Account Data when serviceSector-eq=${domain_id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  Get Accounts   serviceSector-eq=1
+        ${resp} =  Get Accounts   serviceSector-eq=${domain_id}
 	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
 	Should Be Equal As Strings  ${status}  True 
-        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  1
+        Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  ${domain_id}
         
 
 JD-TC-SuperadminGetAccount-66
-	Comment  Get Account Data when  license-eq=${vari}
+	[Documentation]  Get Account Data when  license-eq=${lic_id}
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages  
-        Set Test Variable   ${vari}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}  
-        ${resp} =  Get Accounts   license-eq=${vari}
+        Should Be Equal As Strings  ${resp.status_code}  200  
+        ${resp} =  Get Accounts   license-eq=${lic_id}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
 	Should Be Equal As Strings  ${status}  True 
-        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${vari}
+        Should Be Equal As Strings  ${resp.json()[0]['account']['licensePkgID']}  ${lic_id}
         
 
 JD-TC-SuperadminGetAccount-67
-	Comment  Get Account Data when   claimStatus-eq=Claimed 
+	[Documentation]  Get Account Data when   claimStatus-eq=Claimed 
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp} =  Get Accounts   claimStatus-eq=Claimed
@@ -1025,7 +1295,7 @@ JD-TC-SuperadminGetAccount-67
         
 
 JD-TC-SuperadminGetAccount-68
-	Comment  Get Account Data when  verifiedLevel-eq=NONE
+	[Documentation]  Get Account Data when  verifiedLevel-eq=NONE
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp} =  Get Accounts  verifiedLevel-eq=NONE
@@ -1037,7 +1307,7 @@ JD-TC-SuperadminGetAccount-68
         
 
 JD-TC-SuperadminGetAccount-69
-	Comment  Get Account Data when    searchEnabled-eq=false
+	[Documentation]  Get Account Data when    searchEnabled-eq=false
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp} =  Get Accounts    searchEnabled-eq=false
@@ -1049,7 +1319,7 @@ JD-TC-SuperadminGetAccount-69
         
 
 JD-TC-SuperadminGetAccount-70
-	Comment  Get Account Data  when  id-neq=${id}  uid-neq=${uid}
+	[Documentation]  Get Account Data  when  id-neq=${id}  uid-neq=${uid}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1062,11 +1332,11 @@ JD-TC-SuperadminGetAccount-70
       
 
 JD-TC-SuperadminGetAccount-71
-	Comment  Get Account Data  when  id-neq=${id}  businessName-neq=Anjali Health Care
+	[Documentation]  Get Account Data  when  id-neq=${id}  businessName-neq=${bname}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts  id-neq=${id}  businessName-neq=Anjali Health Care
+        ${resp} =  Get Accounts  id-neq=${id}  businessName-neq=${bname}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
         ${status} =  Evaluate  ${count}>=0 
@@ -1075,16 +1345,22 @@ JD-TC-SuperadminGetAccount-71
 
 
 JD-TC-SuperadminGetAccount-72
-        Comment  Get Account Data when id-neq=${id}   license-neq=${vari} 
+        [Documentation]  Get Account Data when id-neq=${id}   license-neq=${lic_id} 
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.status_code}  200  
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages  
-        Set Test Variable   ${vari}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}  
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts    id-neq=${id}  license-neq=${vari} 
+        ${resp} =  Get Accounts    id-neq=${id}  license-neq=${lic_id} 
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1092,11 +1368,11 @@ JD-TC-SuperadminGetAccount-72
        
 
 JD-TC-SuperadminGetAccount-73
-        Comment  Get Account Data when id-neq=${id}  serviceSector-neq=1
+        [Documentation]  Get Account Data when id-neq=${id}  serviceSector-neq=${domain_id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts    id-neq=${id}  serviceSector-neq=1
+        ${resp} =  Get Accounts    id-neq=${id}  serviceSector-neq=${domain_id}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
         ${status} =  Evaluate  ${count}>=0 
@@ -1104,11 +1380,11 @@ JD-TC-SuperadminGetAccount-73
        
 
 JD-TC-SuperadminGetAccount-74
-        Comment  Get Account Data when id-neq=${id}  serviceSubSector-neq=1
+        [Documentation]  Get Account Data when id-neq=${id}  serviceSubSector-neq=${subdomain_id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts    id-neq=${id}  serviceSubSector-neq=1
+        ${resp} =  Get Accounts    id-neq=${id}  serviceSubSector-neq=${subdomain_id}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1116,7 +1392,7 @@ JD-TC-SuperadminGetAccount-74
         
 
 JD-TC-SuperadminGetAccount-75
-        Comment  Get Account Data when id-neq=${id} accountLinkedPhoneNumber-neq=${PUSERNAME1} 
+        [Documentation]  Get Account Data when id-neq=${id} accountLinkedPhoneNumber-neq=${PUSERNAME1} 
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1128,7 +1404,7 @@ JD-TC-SuperadminGetAccount-75
        
 
 JD-TC-SuperadminGetAccount-76
-        Comment  Get Account Data when id-neq=${id}  accntStatus-neq=ACTIVE
+        [Documentation]  Get Account Data when id-neq=${id}  accntStatus-neq=ACTIVE
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1141,7 +1417,7 @@ JD-TC-SuperadminGetAccount-76
   
 
 JD-TC-SuperadminGetAccount-77
-       Comment  Get Account Data when id-neq=${id}  claimStatus-neq=Claimed
+       [Documentation]  Get Account Data when id-neq=${id}  claimStatus-neq=Claimed
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1153,11 +1429,11 @@ JD-TC-SuperadminGetAccount-77
        
 
 JD-TC-SuperadminGetAccount-78
-	Comment  Get Account Data when id-neq=${id}  createdDate-neq=${currentDate}
+	[Documentation]  Get Account Data when id-neq=${id}  createdDate-neq=${currentDate}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${currentdate} =  get_date
+        ${currentdate} =  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate} 
         ${resp} =  Get Accounts    id-neq=${id}  createdDate-neq=${currentDate}
  	Should Be Equal As Strings  ${resp.status_code}  200
@@ -1167,7 +1443,7 @@ JD-TC-SuperadminGetAccount-78
        
 
 JD-TC-SuperadminGetAccount-79
-        Comment  Get Account Data when id-neq=${id}  verifiedLevel-neq=NONE
+        [Documentation]  Get Account Data when id-neq=${id}  verifiedLevel-neq=NONE
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1180,7 +1456,7 @@ JD-TC-SuperadminGetAccount-79
 
 
 JD-TC-SuperadminGetAccount-80
-	Comment  Get Account Data when id-neq=${id}  searchEnabled-neq=false
+	[Documentation]  Get Account Data when id-neq=${id}  searchEnabled-neq=false
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1193,15 +1469,21 @@ JD-TC-SuperadminGetAccount-80
 
 
 JD-TC-SuperadminGetAccount-81
-        Comment  Get Account Data when businessName-neq=Anjali Health Care  license-neq=${vari}   id-neq=${id}  
+        [Documentation]  Get Account Data when businessName-neq=${bname}  license-neq=${lic_id}   id-neq=${id}  
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages  
-        Set Test Variable   ${vari}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}  
-        ${resp} =  Get Accounts   businessName-neq=Anjali Health Care  license-neq=${vari}     id-neq=${id} 
+        Should Be Equal As Strings  ${resp.status_code}  200  
+        ${resp} =  Get Accounts   businessName-neq=${bname}  license-neq=${lic_id}     id-neq=${id} 
 	Should Be Equal As Strings  ${resp.status_code}  200 
         ${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1210,11 +1492,11 @@ JD-TC-SuperadminGetAccount-81
 
 
 JD-TC-SuperadminGetAccount-82
-        Comment  Get Account Data when businessName-neq=Anjali Health Care  serviceSector-neq=1
+        [Documentation]  Get Account Data when businessName-neq=${bname}  serviceSector-neq=${domain_id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts    businessName-neq=Anjali Health Care  serviceSector-neq=1
+        ${resp} =  Get Accounts    businessName-neq=${bname}  serviceSector-neq=${domain_id}
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1222,10 +1504,10 @@ JD-TC-SuperadminGetAccount-82
         
 
 JD-TC-SuperadminGetAccount-83
-        Comment  Get Account Data when businessName-neq=Anjali Health Care   serviceSubSector-neq=1
+        [Documentation]  Get Account Data when businessName-neq=${bname}   serviceSubSector-neq=${subdomain_id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  Get Accounts    businessName-neq=Anjali Health Care  serviceSubSector-neq=1
+        ${resp} =  Get Accounts    businessName-neq=${bname}  serviceSubSector-neq=${subdomain_id}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${count} =  Get Length  ${resp.json()}
         ${status} =  Evaluate  ${count}>=0 
@@ -1233,10 +1515,10 @@ JD-TC-SuperadminGetAccount-83
      
 
 JD-TC-SuperadminGetAccount-84   
-       Comment  Get Account Data when businessName-neq=Anjali Health Care  accountLinkedPhoneNumber-neq=${PUSERNAME1} 
+       [Documentation]  Get Account Data when businessName-neq=${bname}  accountLinkedPhoneNumber-neq=${PUSERNAME1} 
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  Get Accounts    businessName-neq=Anjali Health Care  accountLinkedPhoneNumber-neq=${PUSERNAME1} 
+        ${resp} =  Get Accounts    businessName-neq=${bname}  accountLinkedPhoneNumber-neq=${PUSERNAME1} 
   	Should Be Equal As Strings  ${resp.status_code}  200
         ${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1245,10 +1527,10 @@ JD-TC-SuperadminGetAccount-84
         
 
 JD-TC-SuperadminGetAccount-85
-        Comment  Get Account Data when businessName-neq=Anjali Health Care  accntStatus-neq=ACTIVE
+        [Documentation]  Get Account Data when businessName-neq=${bname}  accntStatus-neq=ACTIVE
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  Get Accounts    businessName-neq=Anjali Health Care  accntStatus-neq=ACTIVE
+        ${resp} =  Get Accounts    businessName-neq=${bname}  accntStatus-neq=ACTIVE
   	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1256,11 +1538,11 @@ JD-TC-SuperadminGetAccount-85
     
 
 JD-TC-SuperadminGetAccount-86
-        Comment  Get Account Data when businessName-neq=Anjali Health Care  claimStatus-neq=Claimed
+        [Documentation]  Get Account Data when businessName-neq=${bname}  claimStatus-neq=Claimed
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts   businessName-neq=Anjali Health Care  claimStatus-neq=Claimed
+        ${resp} =  Get Accounts   businessName-neq=${bname}  claimStatus-neq=Claimed
   	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1268,12 +1550,12 @@ JD-TC-SuperadminGetAccount-86
         
 
 JD-TC-SuperadminGetAccount-87
-        Comment  Get Account Data when businessName-neq=Anjali Health Care  createdDate-neq=${currentDate}
+        [Documentation]  Get Account Data when businessName-neq=${bname}  createdDate-neq=${currentDate}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${currentdate}=  get_date
+        ${currentdate}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate} 
-        ${resp} =   Get Accounts    businessName-neq=Anjali Health Care  createdDate-neq=${currentDate}
+        ${resp} =   Get Accounts    businessName-neq=${bname}  createdDate-neq=${currentDate}
   	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1282,11 +1564,11 @@ JD-TC-SuperadminGetAccount-87
 
 
 JD-TC-SuperadminGetAccount-88
-        Comment  Get Account Data when businessName-neq=Anjali Health Care  verifiedLevel-neq=NONE
+        [Documentation]  Get Account Data when businessName-neq=${bname}  verifiedLevel-neq=NONE
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts    businessName-neq=Anjali Health Care  verifiedLevel-neq=NONE
+        ${resp} =  Get Accounts    businessName-neq=${bname}  verifiedLevel-neq=NONE
 	Should Be Equal As Strings  ${resp.status_code}  200
         ${count} =  Get Length  ${resp.json()}
         ${status} =  Evaluate  ${count}>=0 
@@ -1294,11 +1576,11 @@ JD-TC-SuperadminGetAccount-88
      
 
 JD-TC-SuperadminGetAccount-89
-	Comment  Get Account Data when businessName-neq=Anjali Health Care  searchEnabled-neq=false
+	[Documentation]  Get Account Data when businessName-neq=${bname}  searchEnabled-neq=false
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts   businessName-neq=Anjali Health Care   searchEnabled-neq=false
+        ${resp} =  Get Accounts   businessName-neq=${bname}   searchEnabled-neq=false
   	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1306,15 +1588,21 @@ JD-TC-SuperadminGetAccount-89
      
 
 JD-TC-SuperadminGetAccount-90
-        Comment  Get Account Data when license-neq=${vari}   serviceSector-neq=1
+        [Documentation]  Get Account Data when license-neq=${lic_id}   serviceSector-neq=${domain_id}
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages  
-        Set Test Variable   ${vari}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}  
-        ${resp} =  Get Accounts   license-neq=${vari}  serviceSector-neq=1
+        Should Be Equal As Strings  ${resp.status_code}  200  
+        ${resp} =  Get Accounts   license-neq=${lic_id}  serviceSector-neq=${domain_id}
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
         ${status} =  Evaluate  ${count}>=0 
@@ -1323,15 +1611,21 @@ JD-TC-SuperadminGetAccount-90
 
 
 JD-TC-SuperadminGetAccount-91
-        Comment  Get Account Data when license-neq=${vari}  serviceSubSector-neq=1
+        [Documentation]  Get Account Data when license-neq=${lic_id}  serviceSubSector-neq=${subdomain_id}
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages  
-        Set Test Variable   ${vari}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}  
-        ${resp} =  Get Accounts    license-neq=${vari}  serviceSubSector-neq=1
+        Should Be Equal As Strings  ${resp.status_code}  200  
+        ${resp} =  Get Accounts    license-neq=${lic_id}  serviceSubSector-neq=${subdomain_id}
   	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
         ${status} =  Evaluate  ${count}>=0 
@@ -1339,15 +1633,21 @@ JD-TC-SuperadminGetAccount-91
       
 
 JD-TC-SuperadminGetAccount-92
-       Comment  Get Account Data when license-neq=${vari}  accountLinkedPhoneNumber-neq=${PUSERNAME1} 
+       [Documentation]  Get Account Data when license-neq=${lic_id}  accountLinkedPhoneNumber-neq=${PUSERNAME1} 
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages  
-        Set Test Variable   ${vari}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}  
-        ${resp} =  Get Accounts    license-neq=${vari}   accountLinkedPhoneNumber-neq=${PUSERNAME1}
+        Should Be Equal As Strings  ${resp.status_code}  200  
+        ${resp} =  Get Accounts    license-neq=${lic_id}   accountLinkedPhoneNumber-neq=${PUSERNAME1}
   	Should Be Equal As Strings  ${resp.status_code}  200 
         ${count} =  Get Length  ${resp.json()}
         ${status} =  Evaluate  ${count}>=0 
@@ -1355,15 +1655,21 @@ JD-TC-SuperadminGetAccount-92
       
 
 JD-TC-SuperadminGetAccount-93
-        Comment  Get Account Data when license-neq=${vari}  accntStatus-neq=ACTIVE   id-neq=${id}
+        [Documentation]  Get Account Data when license-neq=${lic_id}  accntStatus-neq=ACTIVE   id-neq=${id}
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages  
-        Set Test Variable   ${vari}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}  
-        ${resp} =  Get Accounts   license-neq=${vari}   accntStatus-neq=ACTIVE    id-neq=${id}
+        Should Be Equal As Strings  ${resp.status_code}  200  
+        ${resp} =  Get Accounts   license-neq=${lic_id}   accntStatus-neq=ACTIVE    id-neq=${id}
   	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1371,15 +1677,21 @@ JD-TC-SuperadminGetAccount-93
         
 
 JD-TC-SuperadminGetAccount-94
-        Comment  Get Account Data when license-neq=${vari}  claimStatus-neq=Claimed   id-eq=${id}
+        [Documentation]  Get Account Data when license-neq=${lic_id}  claimStatus-neq=Claimed   id-eq=${id}
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages  
-        Set Test Variable   ${vari}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}  
-        ${resp} =  Get Accounts  license-neq=${vari}  claimStatus-neq=Claimed
+        Should Be Equal As Strings  ${resp.status_code}  200  
+        ${resp} =  Get Accounts  license-neq=${lic_id}  claimStatus-neq=Claimed
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1387,17 +1699,23 @@ JD-TC-SuperadminGetAccount-94
      
 
 JD-TC-SuperadminGetAccount-95
-        Comment  Get Account Data when license-neq=${vari}  createdDate-neq=${currentDate}
+        [Documentation]  Get Account Data when license-neq=${lic_id}  createdDate-neq=${currentDate}
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages  
-        Set Test Variable   ${vari}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}  
-        ${currentdate}=  get_date
+        Should Be Equal As Strings  ${resp.status_code}  200  
+        ${currentdate}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate} 
-        ${resp} =   Get Accounts   license-neq=${vari}  createdDate-neq=${currentDate}
+        ${resp} =   Get Accounts   license-neq=${lic_id}  createdDate-neq=${currentDate}
   	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1405,15 +1723,21 @@ JD-TC-SuperadminGetAccount-95
       
 
 JD-TC-SuperadminGetAccount-96
-        Comment  Get Account Data when license-neq=${vari}   verifiedLevel-neq=NONE   id-eq=${id} 
+        [Documentation]  Get Account Data when license-neq=${lic_id}   verifiedLevel-neq=NONE   id-eq=${id} 
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages  
-        Set Test Variable   ${vari}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}  
-        ${resp} =  Get Accounts  license-neq=${vari}  verifiedLevel-neq=NONE   id-eq=${id} 
+        Should Be Equal As Strings  ${resp.status_code}  200  
+        ${resp} =  Get Accounts  license-neq=${lic_id}  verifiedLevel-neq=NONE   id-eq=${id} 
         Should Be Equal As Strings  ${resp.status_code}  200
         ${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1421,15 +1745,21 @@ JD-TC-SuperadminGetAccount-96
      
 
 JD-TC-SuperadminGetAccount-97
-	Comment  Get Account Data when license-neq=${vari}  searchEnabled-neq=false   id-neq=${id}
+	[Documentation]  Get Account Data when license-neq=${lic_id}  searchEnabled-neq=false   id-neq=${id}
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages  
-        Set Test Variable   ${vari}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}  
-        ${resp} =  Get Accounts  license-neq=${vari}  searchEnabled-neq=false   id-neq=${id}
+        Should Be Equal As Strings  ${resp.status_code}  200  
+        ${resp} =  Get Accounts  license-neq=${lic_id}  searchEnabled-neq=false   id-neq=${id}
  	Should Be Equal As Strings  ${resp.status_code}  200
         ${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1437,11 +1767,11 @@ JD-TC-SuperadminGetAccount-97
  
 
 JD-TC-SuperadminGetAccount-98
-        Comment  Get Account Data when serviceSector-neq=1  serviceSubSector-neq=1
+        [Documentation]  Get Account Data when serviceSector-neq=${domain_id}  serviceSubSector-neq=${subdomain_id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts    serviceSector-neq=1  serviceSubSector-neq=1
+        ${resp} =  Get Accounts    serviceSector-neq=${domain_id}  serviceSubSector-neq=${subdomain_id}
 	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1449,11 +1779,11 @@ JD-TC-SuperadminGetAccount-98
       
 
 JD-TC-SuperadminGetAccount-99
-       Comment  Get Account Data when serviceSector-neq=1  accountLinkedPhoneNumber-neq=${PUSERNAME1}    id-neq=${id}
+       [Documentation]  Get Account Data when serviceSector-neq=${domain_id}  accountLinkedPhoneNumber-neq=${PUSERNAME1}    id-neq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts    serviceSector-neq=1  accountLinkedPhoneNumber-neq=${PUSERNAME1}   id-neq=${id}
+        ${resp} =  Get Accounts    serviceSector-neq=${domain_id}  accountLinkedPhoneNumber-neq=${PUSERNAME1}   id-neq=${id}
  	Should Be Equal As Strings  ${resp.status_code}  200
         ${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1461,11 +1791,11 @@ JD-TC-SuperadminGetAccount-99
      
 
 JD-TC-SuperadminGetAccount-100
-        Comment  Get Account Data when serviceSector-neq=1  accntStatus-neq=ACTIVE
+        [Documentation]  Get Account Data when serviceSector-neq=${domain_id}  accntStatus-neq=ACTIVE
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts   serviceSector-eq=1   accntStatus-eq=ACTIVE
+        ${resp} =  Get Accounts   serviceSector-eq=${domain_id}   accntStatus-eq=ACTIVE
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1473,11 +1803,11 @@ JD-TC-SuperadminGetAccount-100
    
 
 JD-TC-SuperadminGetAccount-101
-        Comment  Get Account Data when serviceSector-neq=1  claimStatus-neq=Claimed   id-neq=${id}
+        [Documentation]  Get Account Data when serviceSector-neq=${domain_id}  claimStatus-neq=Claimed   id-neq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts   serviceSector-neq=1    claimStatus-neq=Claimed
+        ${resp} =  Get Accounts   serviceSector-neq=${domain_id}    claimStatus-neq=Claimed
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1485,13 +1815,13 @@ JD-TC-SuperadminGetAccount-101
    
 
 JD-TC-SuperadminGetAccount-102
-        Comment  Get Account Data when serviceSector-neq=1  createdDate-neq=${currentDate}
+        [Documentation]  Get Account Data when serviceSector-neq=${domain_id}  createdDate-neq=${currentDate}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${currentdate}=  get_date
+        ${currentdate}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate} 
-        ${resp} =   Get Accounts  serviceSector-neq=1  createdDate-neq=${currentDate}
+        ${resp} =   Get Accounts  serviceSector-neq=${domain_id}  createdDate-neq=${currentDate}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1500,11 +1830,11 @@ JD-TC-SuperadminGetAccount-102
 	
 
 JD-TC-SuperadminGetAccount-103
-        Comment  Get Account Data when  serviceSector-neq=1  verifiedLevel-neq=NONE   id-neq=${id}
+        [Documentation]  Get Account Data when  serviceSector-neq=${domain_id}  verifiedLevel-neq=NONE   id-neq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts   serviceSector-neq=1  verifiedLevel-neq=NONE    id-neq=${id}
+        ${resp} =  Get Accounts   serviceSector-neq=${domain_id}  verifiedLevel-neq=NONE    id-neq=${id}
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1512,11 +1842,11 @@ JD-TC-SuperadminGetAccount-103
   
         
 JD-TC-SuperadminGetAccount-104
-	Comment  Get Account Data when serviceSector-neq=1  searchEnabled-neq=false  id-neq=${id}
+	[Documentation]  Get Account Data when serviceSector-neq=${domain_id}  searchEnabled-neq=false  id-neq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts  serviceSector-neq=1   searchEnabled-neq=false
+        ${resp} =  Get Accounts  serviceSector-neq=${domain_id}   searchEnabled-neq=false
         Should Be Equal As Strings  ${resp.status_code}  200
         ${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1524,11 +1854,11 @@ JD-TC-SuperadminGetAccount-104
      
      
 JD-TC-SuperadminGetAccount-105
-        Comment  Get Account Data when serviceSubSector-neq=1  accountLinkedPhoneNumber-neq=${PUSERNAME1}    id-neq=${id}
+        [Documentation]  Get Account Data when serviceSubSector-neq=${subdomain_id}  accountLinkedPhoneNumber-neq=${PUSERNAME1}    id-neq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts    serviceSubSector-neq=1  accountLinkedPhoneNumber-neq=${PUSERNAME1}   id-neq=${id}
+        ${resp} =  Get Accounts    serviceSubSector-neq=${subdomain_id}  accountLinkedPhoneNumber-neq=${PUSERNAME1}   id-neq=${id}
 	Should Be Equal As Strings  ${resp.status_code}  200
         ${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1536,11 +1866,11 @@ JD-TC-SuperadminGetAccount-105
        
 
 JD-TC-SuperadminGetAccount-106
-        Comment  Get Account Data when serviceSubSector-neq=1 accntStatus-neq=ACTIVE
+        [Documentation]  Get Account Data when serviceSubSector-neq=${subdomain_id} accntStatus-neq=ACTIVE
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts   serviceSubSector-neq=1  accntStatus-neq=ACTIVE
+        ${resp} =  Get Accounts   serviceSubSector-neq=${subdomain_id}  accntStatus-neq=ACTIVE
 	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1548,11 +1878,11 @@ JD-TC-SuperadminGetAccount-106
         
 
 JD-TC-SuperadminGetAccount-107
-        Comment  Get Account Data when serviceSubSector-neq=1  claimStatus-neq=Claimed   id-neq=${id}
+        [Documentation]  Get Account Data when serviceSubSector-neq=${subdomain_id}  claimStatus-neq=Claimed   id-neq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts   serviceSubSector-neq=1  claimStatus-neq=Claimed   id-neq=${id}
+        ${resp} =  Get Accounts   serviceSubSector-neq=${subdomain_id}  claimStatus-neq=Claimed   id-neq=${id}
 	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1560,13 +1890,13 @@ JD-TC-SuperadminGetAccount-107
     
 
 JD-TC-SuperadminGetAccount-108
-        Comment  Get Account Data when serviceSubSector-neq=1  createdDate-neq=${currentDate}
+        [Documentation]  Get Account Data when serviceSubSector-neq=${subdomain_id}  createdDate-neq=${currentDate}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${currentdate}=  get_date
+        ${currentdate}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate} 
-        ${resp} =   Get Accounts  serviceSubSector-neq=1  createdDate-neq=${currentDate}
+        ${resp} =   Get Accounts  serviceSubSector-neq=${subdomain_id}  createdDate-neq=${currentDate}
 	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1575,11 +1905,11 @@ JD-TC-SuperadminGetAccount-108
      
 
 JD-TC-SuperadminGetAccount-109
-        Comment  Get Account Data when  serviceSubSector-neq=1  verifiedLevel-neq=NONE   id-neq=${id}
+        [Documentation]  Get Account Data when  serviceSubSector-neq=${subdomain_id}  verifiedLevel-neq=NONE   id-neq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts   serviceSubSector-neq=1  verifiedLevel-neq=NONE
+        ${resp} =  Get Accounts   serviceSubSector-neq=${subdomain_id}  verifiedLevel-neq=NONE
 	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1587,11 +1917,11 @@ JD-TC-SuperadminGetAccount-109
    
         
 JD-TC-SuperadminGetAccount-110
-	Comment  Get Account Data when serviceSubSector-neq=1  searchEnabled-neq=false  id-neq=${id}
+	[Documentation]  Get Account Data when serviceSubSector-neq=${subdomain_id}  searchEnabled-neq=false  id-neq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts  serviceSubSector-neq=1   searchEnabled-neq=false   id-neq=${id}
+        ${resp} =  Get Accounts  serviceSubSector-neq=${subdomain_id}   searchEnabled-neq=false   id-neq=${id}
  	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1599,7 +1929,7 @@ JD-TC-SuperadminGetAccount-110
        
 
 JD-TC-SuperadminGetAccount-111
-	Comment  Get Account Data when accountLinkedPhoneNumber-neq=${PUSERNAME1}   accntStatus-neq=ACTIVE   id-neq=${id}
+	[Documentation]  Get Account Data when accountLinkedPhoneNumber-neq=${PUSERNAME1}   accntStatus-neq=ACTIVE   id-neq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1611,7 +1941,7 @@ JD-TC-SuperadminGetAccount-111
       
 
 JD-TC-SuperadminGetAccount-112
-        Comment  Get Account Data when accountLinkedPhoneNumber-neq=${PUSERNAME1}   claimStatus-neq=Claimed  id-neq=${id}
+        [Documentation]  Get Account Data when accountLinkedPhoneNumber-neq=${PUSERNAME1}   claimStatus-neq=Claimed  id-neq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1623,11 +1953,11 @@ JD-TC-SuperadminGetAccount-112
        
  
 JD-TC-SuperadminGetAccount-113
-        Comment  Get Account Data when accountLinkedPhoneNumber-neq=${PUSERNAME1}    createdDate-neq=${currentDate}
+        [Documentation]  Get Account Data when accountLinkedPhoneNumber-neq=${PUSERNAME1}    createdDate-neq=${currentDate}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${currentdate}=  get_date
+        ${currentdate}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate} 
         ${resp} =   Get Accounts  accountLinkedPhoneNumber-neq=${PUSERNAME1}   createdDate-neq=${currentDate}
 	Should Be Equal As Strings  ${resp.status_code}  200
@@ -1637,7 +1967,7 @@ JD-TC-SuperadminGetAccount-113
   
 
 JD-TC-SuperadminGetAccount-114
-        Comment  Get Account Data when accountLinkedPhoneNumber-neq=${PUSERNAME1}    verifiedLevel-neq=NONE  id-neq=${id} 
+        [Documentation]  Get Account Data when accountLinkedPhoneNumber-neq=${PUSERNAME1}    verifiedLevel-neq=NONE  id-neq=${id} 
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1649,7 +1979,7 @@ JD-TC-SuperadminGetAccount-114
      
         
 JD-TC-SuperadminGetAccount-115
-	Comment  Get Account Data when accountLinkedPhoneNumber-neq=${PUSERNAME1}   searchEnabled-neq=false   id-neq=${id} 
+	[Documentation]  Get Account Data when accountLinkedPhoneNumber-neq=${PUSERNAME1}   searchEnabled-neq=false   id-neq=${id} 
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1661,7 +1991,7 @@ JD-TC-SuperadminGetAccount-115
       
 
 JD-TC-SuperadminGetAccount-116
-        Comment  Get Account Data when  accntStatus-neq=ACTIVE  claimStatus-neq=Claimed   id-neq=${id}
+        [Documentation]  Get Account Data when  accntStatus-neq=ACTIVE  claimStatus-neq=Claimed   id-neq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1673,11 +2003,11 @@ JD-TC-SuperadminGetAccount-116
      
 
 JD-TC-SuperadminGetAccount-117
-        Comment  Get Account Data when  accntStatus-neq=ACTIVE   createdDate-neq=${currentDate}
+        [Documentation]  Get Account Data when  accntStatus-neq=ACTIVE   createdDate-neq=${currentDate}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${currentdate}=  get_date
+        ${currentdate}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate} 
         ${resp} =   Get Accounts  accntStatus-neq=ACTIVE  createdDate-neq=${currentDate}
 	Should Be Equal As Strings  ${resp.status_code}  200
@@ -1687,7 +2017,7 @@ JD-TC-SuperadminGetAccount-117
       
 
 JD-TC-SuperadminGetAccount-118
-        Comment  Get Account Data when  accntStatus-neq=ACTIVE   verifiedLevel-neq=NONE   id-neq=${id}
+        [Documentation]  Get Account Data when  accntStatus-neq=ACTIVE   verifiedLevel-neq=NONE   id-neq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1699,7 +2029,7 @@ JD-TC-SuperadminGetAccount-118
         
 
 JD-TC-SuperadminGetAccount-119
-	Comment  Get Account Data when  accntStatus-neq=ACTIVE  searchEnabled-neq=false   id-neq=${id}
+	[Documentation]  Get Account Data when  accntStatus-neq=ACTIVE  searchEnabled-neq=false   id-neq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1711,11 +2041,11 @@ JD-TC-SuperadminGetAccount-119
         
 
 JD-TC-SuperadminGetAccount-120
-        Comment  Get Account Data when  claimStatus-neq=Claimed   createdDate-neq=${currentDate}
+        [Documentation]  Get Account Data when  claimStatus-neq=Claimed   createdDate-neq=${currentDate}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1} 
-        ${currentdate}=  get_date
+        ${currentdate}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${currentDate}  ${currentdate} 
         ${resp} =   Get Accounts   claimStatus-neq=Claimed   createdDate-neq=${currentDate}
 	Should Be Equal As Strings  ${resp.status_code}  200
@@ -1725,7 +2055,7 @@ JD-TC-SuperadminGetAccount-120
         
 
 JD-TC-SuperadminGetAccount-121
-        Comment  Get Account Data when   claimStatus-neq=Claimed   verifiedLevel-neq=NONE   id-neq=${id}
+        [Documentation]  Get Account Data when   claimStatus-neq=Claimed   verifiedLevel-neq=NONE   id-neq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1737,7 +2067,7 @@ JD-TC-SuperadminGetAccount-121
        
         
 JD-TC-SuperadminGetAccount-122
-	Comment  Get Account Data when  claimStatus-neq=Claimed  searchEnabled-neq=false  id-neq=${id}
+	[Documentation]  Get Account Data when  claimStatus-neq=Claimed  searchEnabled-neq=false  id-neq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1749,7 +2079,7 @@ JD-TC-SuperadminGetAccount-122
        
         
 JD-TC-SuperadminGetAccount-123
-	Comment  Get Account Data when createdDate-neq=${currentDate}  accntStatus-neq=ACTIVE
+	[Documentation]  Get Account Data when createdDate-neq=${currentDate}  accntStatus-neq=ACTIVE
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1761,7 +2091,7 @@ JD-TC-SuperadminGetAccount-123
        
 
 JD-TC-SuperadminGetAccount-124
-	Comment  Get Account Data when createdDate-neq=${currentDate}  verifiedLevel-neq=NONE
+	[Documentation]  Get Account Data when createdDate-neq=${currentDate}  verifiedLevel-neq=NONE
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1} 
@@ -1773,7 +2103,7 @@ JD-TC-SuperadminGetAccount-124
       
 
 JD-TC-SuperadminGetAccount-125
-	Comment  Get Account Data when createdDate-neq=${currentDate}  searchEnabled-neq=false
+	[Documentation]  Get Account Data when createdDate-neq=${currentDate}  searchEnabled-neq=false
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1785,7 +2115,7 @@ JD-TC-SuperadminGetAccount-125
        
 
 JD-TC-SuperadminGetAccount-126
-	Comment  Get Account Data when  verifiedLevel-neq=NONE  searchEnabled-neq=false  id-neq=${id}
+	[Documentation]  Get Account Data when  verifiedLevel-neq=NONE  searchEnabled-neq=false  id-neq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1798,7 +2128,7 @@ JD-TC-SuperadminGetAccount-126
 
 
 JD-TC-SuperadminGetAccount-127
-	Comment  Get Account Data when  uid-neq=${uid}
+	[Documentation]  Get Account Data when  uid-neq=${uid}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1812,7 +2142,7 @@ JD-TC-SuperadminGetAccount-127
 
 
 JD-TC-SuperadminGetAccount-128
-	Comment  Get Account Data when  id-neq=${id}
+	[Documentation]  Get Account Data when  id-neq=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1824,11 +2154,11 @@ JD-TC-SuperadminGetAccount-128
        
 
 JD-TC-SuperadminGetAccount-129
-        Comment  Get Account Data when businessName-neq=Anjali Health Care
+        [Documentation]  Get Account Data when businessName-neq=${bname}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}  
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
-        ${resp} =  Get Accounts  businessName-neq=Anjali Health Care
+        ${resp} =  Get Accounts  businessName-neq=${bname}
 	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =   Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1837,15 +2167,21 @@ JD-TC-SuperadminGetAccount-129
 
 
 JD-TC-SuperadminGetAccount-130
-	Comment  Get Account Data when  license-neq=${vari} 
+	[Documentation]  Get Account Data when  license-neq=${lic_id} 
+        ${resp} =  Encrypted Provider Login   ${PUSERNAME1}   ${PASSWORD}
+        Should Be Equal As Strings   ${resp.status_code}  200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${id}  ${resp.json()['id']}
+        
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  ProviderLogin   ${PUSERNAME1}  ${PASSWORD}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        ${id} =  get_acc_id  ${PUSERNAME1}
-        ${licence} =  Get Licensable Packages  
-        Set Test Variable   ${vari}   ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}   
-        ${resp} =  Get Accounts   license-neq=${vari}
+        Should Be Equal As Strings  ${resp.status_code}  200   
+        ${resp} =  Get Accounts   license-neq=${lic_id}
 	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1853,10 +2189,10 @@ JD-TC-SuperadminGetAccount-130
       
 
 JD-TC-SuperadminGetAccount-131
-        Comment  Get Account Data when serviceSector-neq=1
+        [Documentation]  Get Account Data when serviceSector-neq=${domain_id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  Get Accounts   serviceSector-neq=1
+        ${resp} =  Get Accounts   serviceSector-neq=${domain_id}
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1864,10 +2200,10 @@ JD-TC-SuperadminGetAccount-131
       
 
 JD-TC-SuperadminGetAccount-132
-	Comment  Get Account Data when  serviceSubSector-neq=1 
+	[Documentation]  Get Account Data when  serviceSubSector-neq=${subdomain_id} 
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  Get Accounts    serviceSubSector-neq=1 
+        ${resp} =  Get Accounts    serviceSubSector-neq=${subdomain_id} 
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -1875,7 +2211,7 @@ JD-TC-SuperadminGetAccount-132
         
 
 JD-TC-SuperadminGetAccount-133
-        Comment  Get Account Data when accountLinkedPhoneNumber-neq=${PUSERNAME1}  
+        [Documentation]  Get Account Data when accountLinkedPhoneNumber-neq=${PUSERNAME1}  
         ${resp}=  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}  
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1886,7 +2222,7 @@ JD-TC-SuperadminGetAccount-133
         Should Be Equal As Strings  ${status}  True 
        
 JD-TC-SuperadminGetAccount-134
-	Comment  Get Account Data when accntStatus-neq=ACTIVE
+	[Documentation]  Get Account Data when accntStatus-neq=ACTIVE
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp} =  Get Accounts   accntStatus-neq=ACTIVE
@@ -1896,7 +2232,7 @@ JD-TC-SuperadminGetAccount-134
 	Should Be Equal As Strings  ${status}  True
        
 JD-TC-SuperadminGetAccount-135
-	Comment  Get Account Data when   claimStatus-neq=Claimed 
+	[Documentation]  Get Account Data when   claimStatus-neq=Claimed 
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp} =  Get Accounts   claimStatus-neq=Claimed
@@ -1907,7 +2243,7 @@ JD-TC-SuperadminGetAccount-135
        
 
 JD-TC-SuperadminGetAccount-136
-	Comment  Get Account Data when createdDate-eq=${currentDate}
+	[Documentation]  Get Account Data when createdDate-eq=${currentDate}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}  
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME1}
@@ -1919,7 +2255,7 @@ JD-TC-SuperadminGetAccount-136
       
         
 JD-TC-SuperadminGetAccount-137
-	Comment  Get Account Data when  verifiedLevel-neq=NONE
+	[Documentation]  Get Account Data when  verifiedLevel-neq=NONE
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp} =  Get Accounts  verifiedLevel-eq=NONE
@@ -1931,7 +2267,7 @@ JD-TC-SuperadminGetAccount-137
 
 
 JD-TC-SuperadminGetAccount-138
-	Comment  Get Account Data when    searchEnabled-neq=false
+	[Documentation]  Get Account Data when    searchEnabled-neq=false
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp} =  Get Accounts    searchEnabled-neq=false
@@ -1943,7 +2279,7 @@ JD-TC-SuperadminGetAccount-138
 
 
 JD-TC-SuperadminGetAccount-139
-        Comment  Get Account Data when businessName-like=Anjali
+        [Documentation]  Get Account Data when businessName-like=Anjali
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}  
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp} =  Get Accounts  businessName-like=Anjali
@@ -1954,7 +2290,7 @@ JD-TC-SuperadminGetAccount-139
       
 
 JD-TC-SuperadminGetAccount-140
-        Comment  Get Account Data when businessName-like=Health
+        [Documentation]  Get Account Data when businessName-like=Health
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}  
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp} =  Get Accounts  businessName-like=Health
@@ -1965,7 +2301,7 @@ JD-TC-SuperadminGetAccount-140
       
 
 JD-TC-SuperadminGetAccount-141
-        Comment  Get Account Data when businessName-like=Care
+        [Documentation]  Get Account Data when businessName-like=Care
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}  
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp} =  Get Accounts  businessName-like=Care
@@ -1976,7 +2312,7 @@ JD-TC-SuperadminGetAccount-141
        
 
 JD-TC-SuperadminGetAccount-142
-        Comment  Get Account Data when id-gt=${id}
+        [Documentation]  Get Account Data when id-gt=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}  
         Should Be Equal As Strings  ${resp.status_code}  200
 	${id} =  get_acc_id  ${PUSERNAME1}
@@ -1988,7 +2324,7 @@ JD-TC-SuperadminGetAccount-142
 	
 
 JD-TC-SuperadminGetAccount-143
-        Comment  Get Account Data when id-lt=${id}
+        [Documentation]  Get Account Data when id-lt=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}  
         Should Be Equal As Strings  ${resp.status_code}  200
 	${id} =  get_acc_id  ${PUSERNAME1}
@@ -2000,7 +2336,7 @@ JD-TC-SuperadminGetAccount-143
 	
 
 JD-TC-SuperadminGetAccount-144
-        Comment  Get Account Data when id-le=${id}
+        [Documentation]  Get Account Data when id-le=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}  
         Should Be Equal As Strings  ${resp.status_code}  200
 	${id} =  get_acc_id  ${PUSERNAME1}
@@ -2011,7 +2347,7 @@ JD-TC-SuperadminGetAccount-144
 	Should Be Equal As Strings  ${status}  True 
 	
 JD-TC-SuperadminGetAccount-145
-        Comment  Get Account Data when id-ge=${id}
+        [Documentation]  Get Account Data when id-ge=${id}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}  
         Should Be Equal As Strings  ${resp.status_code}  200
 	${id} =  get_acc_id  ${PUSERNAME1}
@@ -2023,7 +2359,7 @@ JD-TC-SuperadminGetAccount-145
 
 
 JD-TC-SuperadminGetAccount-146
-        Comment  Get Account Data when createdDate-gt=${currentDate}
+        [Documentation]  Get Account Data when createdDate-gt=${currentDate}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}  
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp} =  Get Accounts   createdDate-gt=${currentDate}
@@ -2033,7 +2369,7 @@ JD-TC-SuperadminGetAccount-146
 	
 
 JD-TC-SuperadminGetAccount-147
-        Comment  Get Account Data when createdDate-lt=${currentDate}
+        [Documentation]  Get Account Data when createdDate-lt=${currentDate}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}  
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp} =  Get Accounts   createdDate-lt=${currentDate}
@@ -2044,7 +2380,7 @@ JD-TC-SuperadminGetAccount-147
 	
 
 JD-TC-SuperadminGetAccount-148
-        Comment  Get Account Data when createdDate-ge=${currentDate}
+        [Documentation]  Get Account Data when createdDate-ge=${currentDate}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}  
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp} =  Get Accounts   createdDate-ge=${currentDate}
@@ -2054,7 +2390,7 @@ JD-TC-SuperadminGetAccount-148
 	Should Be Equal As Strings  ${status}  True 
 	
 JD-TC-SuperadminGetAccount-149
-        Comment  Get Account Data when  createdDate-le=${currentDate}
+        [Documentation]  Get Account Data when  createdDate-le=${currentDate}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}  
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp} =  Get Accounts   createdDate-le=${currentDate}
@@ -2066,7 +2402,7 @@ JD-TC-SuperadminGetAccount-149
 
 
 JD-TC-SuperadminGetAccount-150
-	Comment  Get Account Data when  accountstatus=INACTIVE
+	[Documentation]  Get Account Data when  accountstatus=INACTIVE
         ${resp} =   SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp} =   Get Accounts  accntStatus-eq=INACTIVE  
@@ -2079,7 +2415,7 @@ JD-TC-SuperadminGetAccount-150
      
 
 JD-TC-SuperadminGetAccount-151
-	Comment  Get Account Data when   accntStatus-eq=INACTIVE  id-eq=${id} 
+	[Documentation]  Get Account Data when   accntStatus-eq=INACTIVE  id-eq=${id} 
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
     	${id} =   get_acc_id  ${PUSERNAME1}
@@ -2090,20 +2426,20 @@ JD-TC-SuperadminGetAccount-151
         
 
 JD-TC-SuperadminGetAccount-152
-	Comment  Get Account Data when   accntStatus-eq=INACTIVE  businessName-eq=Anjali Health Care
+	[Documentation]  Get Account Data when   accntStatus-eq=INACTIVE  businessName-eq=${bname}
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  Get Accounts    accntStatus-eq=INACTIVE  businessName-eq=Anjali Health Care
+        ${resp} =  Get Accounts    accntStatus-eq=INACTIVE  businessName-eq=${bname}
         Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	Should Be Equal As Integers  ${count}  0
        
 
 JD-TC-SuperadminGetAccount-153
-	Comment  Get Account Data when   accntStatus-eq=INACTIVE  serviceSector=health
+	[Documentation]  Get Account Data when   accntStatus-eq=INACTIVE  serviceSector=health
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp} =  Get Accounts    accntStatus-eq=INACTIVE  serviceSector-eq=1
+        ${resp} =  Get Accounts    accntStatus-eq=INACTIVE  serviceSector-eq=${domain_id}
 	Should Be Equal As Strings  ${resp.status_code}  200
 	${count} =  Get Length  ${resp.json()}
 	${status} =  Evaluate  ${count}>=0 
@@ -2112,7 +2448,7 @@ JD-TC-SuperadminGetAccount-153
 
 
 JD-TC-SuperadminGetAccount-154
-        Comment  Get Account Data when id-eq=${id}  accntStatus-eq=INACTIVE
+        [Documentation]  Get Account Data when id-eq=${id}  accntStatus-eq=INACTIVE
         ${resp} =  SuperAdminLogin  ${SUSERNAME}  ${SPASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${id} =  get_acc_id  ${PUSERNAME4}
@@ -2125,7 +2461,7 @@ JD-TC-SuperadminGetAccount-154
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['status']}  INACTIVE
         Should Be Equal As Strings  ${resp.status_code}  200 
-        ${resp} =    ProviderLogin  ${PUSERNAME4}  ${PASSWORD}
+        ${resp} =    Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
 

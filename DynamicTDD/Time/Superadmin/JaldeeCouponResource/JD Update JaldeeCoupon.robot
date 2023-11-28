@@ -41,13 +41,13 @@ JD-TC-UpdateJaldeeCoupon-1
     Set Suite Variable  ${lic2}  ${resp.json()[1]['pkgId']}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}  ${lic2} 
     Set Suite Variable  ${licenses}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
-    ${DAY3}=  get_date
+    ${DAY3}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY3}  ${DAY3}
-    ${DAY4}=  add_date  10
+    ${DAY4}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY4}  ${DAY4}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -143,11 +143,11 @@ JD-TC-UpdateJaldeeCoupon-UH1
     Set Suite Variable  ${lic1}  ${resp.json()[0]['pkgId']}
     Set Suite Variable  ${lic2}  ${resp.json()[1]['pkgId']}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}  ${lic2} 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  1
+    ${DAY2}=  db.add_timezone_date  ${tz}  1  
     Set Suite Variable  ${DAY2}  ${DAY2}
-    ${DAY4}=  add_date  15
+    ${DAY4}=  db.add_timezone_date  ${tz}  15  
     Set Suite Variable  ${DAY4}  ${DAY4}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -166,7 +166,7 @@ JD-TC-UpdateJaldeeCoupon-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['couponStatus']}  ACTIVE
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Jaldee Coupon After Push   ${cupn_code013}   ${cupn_name}  ${cupn_des}  ${DAY4}  ${c_des}  ${p_des}

@@ -27,7 +27,7 @@ JD-TC-ProviderConfirmApptRequest-1
 
     [Documentation]   Provider create an appt request for today and confirm it.
 
-    ${resp}=  Provider Login  ${PUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
@@ -43,7 +43,7 @@ JD-TC-ProviderConfirmApptRequest-1
 
     clear_appt_schedule   ${PUSERNAME35}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${SERVICE1}=    FakerLibrary.word
     ${service_duration}=   Random Int   min=5   max=10
@@ -94,10 +94,10 @@ JD-TC-ProviderConfirmApptRequest-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time  1  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  15  
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${duration}=  FakerLibrary.Random Int  min=2  max=10
@@ -155,7 +155,7 @@ JD-TC-ProviderConfirmApptRequest-2
 
     [Documentation]   Provider create an appt request for today and confirm it for another day.
 
-    ${resp}=  Provider Login  ${PUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -183,7 +183,7 @@ JD-TC-ProviderConfirmApptRequest-2
     ${apptfor1}=  Create Dictionary  id=${pcid1}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
 
-    ${DAY}=   add_date  2
+    ${DAY}=   db.add_timezone_date  ${tz}  2  
     ${resp}=  Confirm Appt Service Request   ${appt_reqid2}  ${pcid1}  ${sid2}  ${sch_id2}  ${DAY}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME25}  ${coupons}  ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -199,7 +199,7 @@ JD-TC-ProviderConfirmApptRequest-UH1
 
     [Documentation]   Provider create an appt request for today and confirm with another request id.
 
-    ${resp}=  Provider Login  ${PUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -236,11 +236,11 @@ JD-TC-ProviderConfirmApptRequest-UH2
 
     [Documentation]   Provider create an appt request for today and confirm without request id.
 
-    ${resp}=  Provider Login  ${PUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY}=   add_date  2
+    ${DAY}=   db.add_timezone_date  ${tz}  2  
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY}  ${sid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -260,6 +260,6 @@ JD-TC-ProviderConfirmApptRequest-UH3
 
     [Documentation]   Provider try to confirm 2 appt request to the same slot.
 
-    ${resp}=  Provider Login  ${PUSERNAME35}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

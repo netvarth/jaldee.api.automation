@@ -22,7 +22,7 @@ ${queue2}   Evening queue
 
 JD-TC-CloudSearch-1
     [Documentation]   search data after creating business profile
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 *** Comments ***
@@ -30,7 +30,7 @@ JD-TC-CloudSearch-1
     clear_location   ${PUSERNAME5}
     clear_queue   ${PUSERNAME5}
     Set Suite Variable    ${pname}    ${resp.json()['userName']}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3 
     Set Suite Variable  ${list}
@@ -68,9 +68,9 @@ JD-TC-CloudSearch-1
     Set Suite Variable   ${postcode}
     ${address}=  get_address
     Set Suite Variable   ${address}
-    ${sTime}=  add_time  0   5
+    ${sTime}=  db.add_timezone_time  ${tz}  0   5
     Set Suite Variable   ${sTime}   
-    ${eTime}=  add_time  5  5
+    ${eTime}=  db.add_timezone_time  ${tz}  5  5
     Set Suite Variable   ${eTime}
     ${description}=     FakerLibrary.sentence
     Set Suite Variable   ${description}
@@ -102,7 +102,7 @@ JD-TC-CloudSearch-1
 *** Comments ***
 JD-TC-CloudSearch-2
     [Documentation]   search data after updating business profile
-    ${resp}=  Provider Login   ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  
     Set Suite Variable    ${pname}     ${resp.json()['userName']}
@@ -145,7 +145,7 @@ JD-TC-CloudSearch-2
 
 JD-TC-CloudSearch-3
     [Documentation]   search data after updating Basic info
-    ${resp}=  Provider Login  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${id}=  get_id  ${PUSERNAME4} 
     Log  ${resp.json()}
@@ -165,15 +165,15 @@ JD-TC-CloudSearch-3
 *** Comments ***
 JD-TC-CloudSearch-4
     [Documentation]   search data after creating location
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 	${list}=  Create List  1  2  5  6
     ${city}=  get_place
     ${companySuffix}=  FakerLibrary.companySuffix
     ${postcode}=  FakerLibrary.postcode
     ${address}=  get_address
-    ${sTime1}=  add_time  0  5
-    ${eTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  5
+    ${eTime1}=  db.add_timezone_time  ${tz}  0  15
     ${latti1}=  get_latitude
     ${longi1}=  get_longitude
     ${resp}=  Create Location  ${city}  ${longi1}  ${latti1}  www.${companySuffix}.com  ${postcode}  ${address}  free  True  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
@@ -202,7 +202,7 @@ JD-TC-CloudSearch-4
 
 JD-TC-CloudSearch-5
     [Documentation]   search data after updating location
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${city}=  get_place
     ${companySuffix}=  FakerLibrary.companySuffix
@@ -232,7 +232,7 @@ JD-TC-CloudSearch-5
     
 JD-TC-CloudSearch-6
     [Documentation]   search data after disabling location
-    ${resp}=  Provider Login  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Disable Location  ${lid2}
     Log  ${resp.json()}
@@ -252,7 +252,7 @@ JD-TC-CloudSearch-6
 
 JD-TC-CloudSearch-7
     [Documentation]   search data after enabling location
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_location   ${PUSERNAME8}
     ${resp}=  Enable Location  ${lid2}
@@ -277,7 +277,7 @@ JD-TC-CloudSearch-7
 
 JD-TC-CloudSearch-8
     [Documentation]   search data after creating queue
-    ${resp}=  Provider Login  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${list}=  Create List  1  2  3  4  5  6  7
     ${description}=  FakerLibrary.sentence
@@ -298,8 +298,8 @@ JD-TC-CloudSearch-8
     ${resp}=  Create Service  ${SERVICE2}  ${description}   30  ACTIVE  Waitlist  ${notify}   ${notifytype}  45  500  ${isPrePayment}  ${taxable}
     Should Be Equal As Strings  ${resp.status_code}  200     
     Set Suite Variable  ${s_id1}  ${resp.json()} 
-    ${sTime2}=  add_time
-    ${eTime2}=  add_time
+    ${sTime2}=  db.add_timezone_time  ${tz}
+    ${eTime2}=  db.add_timezone_time  ${tz}
     ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  1  5  ${lid2}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${qid}  ${resp.json()}
@@ -325,7 +325,7 @@ JD-TC-CloudSearch-8
     
 JD-TC-CloudSearch-9
     [Documentation]   search data after rating waitlist
-    ${resp}=  ProviderLogin   ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${cid}=  get_id  ${CUSERNAME1}
     Log   ${resp.json()}
@@ -367,7 +367,7 @@ JD-TC-CloudSearch-9
 
 JD-TC-CloudSearch-10
     [Documentation]   search data after rating updation
-    ${resp}=  ProviderLogin  ${PUSERNAME11}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=   Update Rating  ${wid[0]}   2  bad
@@ -395,7 +395,7 @@ JD-TC-CloudSearch-10
 
 JD-TC-CloudSearch-11
     [Documentation]   search data after disabling queue
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Disable Queue  ${qid}
     Log  ${resp.json()}
@@ -419,7 +419,7 @@ JD-TC-CloudSearch-11
 
 JD-TC-CloudSearch-12
     [Documentation]   search data after enabling queue
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Enable Queue  ${qid}
     Log   ${resp.json()}
@@ -447,7 +447,7 @@ JD-TC-CloudSearch-12
 
 JD-TC-CloudSearch-13
     [Documentation]   search data after updating queue
-    ${resp}=  Provider Login  ${PUSERNAME14}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${list}=  Create List  5  6  7
     ${resp}=  Update Queue  ${qid}  ${queue2}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  2  3  ${lid2}  ${s_id}
@@ -473,7 +473,7 @@ JD-TC-CloudSearch-13
 
 JD-TC-CloudSearch-14
     [Documentation]   search data after adding adword
-    ${resp}=  Provider Login   ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Add Adword  latest 
     Log   ${resp.json()}
@@ -504,7 +504,7 @@ JD-TC-CloudSearch-14
 
 JD-TC-CloudSearch-15
     [Documentation]   search data after removing adword
-    ${resp}=  Provider Login  ${PUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME16}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Adword
     Should Be Equal As Strings  ${resp.status_code}   200 
@@ -534,7 +534,7 @@ JD-TC-CloudSearch-15
 
 JD-TC-CloudSearch-16
     [Documentation]   search data after updating domain virtual fields 
-    ${resp}=  ProviderLogin  ${PUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME17}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Domain Level Field For healthCare   Clinic1  fever  headache  Surgery  Angiography  8years  Albany Medical Center Prize  2012  March  Dr.Ravi  www.anjalihealthcare.com
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -555,7 +555,7 @@ JD-TC-CloudSearch-16
 
 JD-TC-CloudSearch-17
     [Documentation]   search data after updating subdomain virtual fields 
-    ${resp}=  ProviderLogin   ${PUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME18}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Update Subdomain Field For healthCare  physiciansSurgeons  2017  January  MBBS  JUBILEE    
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -633,7 +633,7 @@ JD-TC-CloudSearch-19
 
 JD-TC-CloudSearch-20
     [Documentation]   search data after updating Basic info and business profile 
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${id}=  get_id  ${PUSERNAME22}
     ${firstname}=  FakerLibrary.first_name
@@ -688,7 +688,7 @@ JD-TC-CloudSearch-20
 
 JD-TC-CloudSearch-21
     [Documentation]   disable search data 
-    ${resp}=  Provider Login  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Disable Search Data
     Log   ${resp.json()}

@@ -35,7 +35,7 @@ JD-TC-DynamicPricingInSchedule-1
     clear_queue      ${PUSERNAME112}
     clear_customer   ${PUSERNAME112} 
 
-    ${resp}=  Provider Login  ${PUSERNAME112}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -79,9 +79,9 @@ JD-TC-DynamicPricingInSchedule-1
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite variable  ${DAY1}
-    ${DAY2}=  add_date  10  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
     Set Suite variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     
@@ -110,8 +110,8 @@ JD-TC-DynamicPricingInSchedule-1
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=5
     ${bool1}=  Random Element  ${bool}
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time  2  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  2  15  
 
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
     Log  ${resp.json()}
@@ -122,8 +122,8 @@ JD-TC-DynamicPricingInSchedule-1
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=5
     ${bool1}=  Random Element  ${bool}
-    ${sTime2}=  add_time  3  15
-    ${eTime2}=  add_time  5  15
+    ${sTime2}=  add_timezone_time  ${tz}  3  15  
+    ${eTime2}=  add_timezone_time  ${tz}  5  15  
 
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
     Log  ${resp.json()}
@@ -310,7 +310,7 @@ JD-TC-DynamicPricingInSchedule-2
     clear_queue      ${PUSERNAME113}
     clear_customer   ${PUSERNAME113} 
 
-    ${resp}=  Provider Login  ${PUSERNAME113}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME113}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -363,8 +363,8 @@ JD-TC-DynamicPricingInSchedule-2
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  12 
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  12 
     ${list}=  Create List  1  2  3  4  5  6  7
     
     ${min_pre1}=   Random Int   min=50   max=100
@@ -392,8 +392,8 @@ JD-TC-DynamicPricingInSchedule-2
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=5
     ${bool1}=  Random Element  ${bool}
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time  2  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  2  15  
 
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
     Log  ${resp.json()}
@@ -404,8 +404,8 @@ JD-TC-DynamicPricingInSchedule-2
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=5
     ${bool1}=  Random Element  ${bool}
-    ${sTime2}=  add_time  3  15
-    ${eTime2}=  add_time  5  15
+    ${sTime2}=  add_timezone_time  ${tz}  3  15  
+    ${eTime2}=  add_timezone_time  ${tz}  5  15  
 
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
     Log  ${resp.json()}
@@ -598,7 +598,7 @@ JD-TC-DynamicPricingInSchedule-3
     clear_queue      ${PUSERNAME114}
     clear_customer   ${PUSERNAME114} 
 
-    ${resp}=  Provider Login  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -651,8 +651,8 @@ JD-TC-DynamicPricingInSchedule-3
         Set Test Variable  ${locId1}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  12 
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  12 
     ${list}=  Create List  1  2  3  4  5  6  7
     
     ${min_pre1}=   Random Int   min=50   max=100
@@ -680,8 +680,8 @@ JD-TC-DynamicPricingInSchedule-3
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=5
     ${bool1}=  Random Element  ${bool}
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time  2  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  2  15  
 
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
     Log  ${resp.json()}
@@ -692,8 +692,8 @@ JD-TC-DynamicPricingInSchedule-3
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=5
     ${bool1}=  Random Element  ${bool}
-    ${sTime2}=  add_time  3  15
-    ${eTime2}=  add_time  5  15
+    ${sTime2}=  add_timezone_time  ${tz}  3  15  
+    ${eTime2}=  add_timezone_time  ${tz}  5  15  
 
     ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
     Log  ${resp.json()}
@@ -792,6 +792,7 @@ JD-TC-DynamicPricingInSchedule-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    sleep  2s
     ${resp}=  Get Bill By consumer  ${apptid1}  ${account_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -877,6 +878,7 @@ JD-TC-DynamicPricingInSchedule-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    sleep   2s
     ${resp}=  Get Bill By consumer  ${apptid2}  ${account_id1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -887,7 +889,7 @@ JD-TC-DynamicPricingInSchedule-3
     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}             ${P1SERVICE1}  
     Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}                1.0
     Should Be Equal As Strings  ${resp.json()['netTotal']}                              ${nettotal}
-    Should Be Equal As Strings  ${resp.json()['netRate']}                               ${nettotal}
+    Should Be Equal As Strings  ${resp.json()['netRate']}                               ${tax_amount}
     Should Be Equal As Strings  ${resp.json()['amountDue']}                             ${balamount1}
 
     sleep   2s
@@ -908,10 +910,10 @@ JD-TC-DynamicPricingInSchedule-3
     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}             ${P1SERVICE1}  
     Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}                1.0
     Should Be Equal As Strings  ${resp.json()['netTotal']}                              ${nettotal}
-    Should Be Equal As Strings  ${resp.json()['netRate']}                               ${nettotal}
+    Should Be Equal As Strings  ${resp.json()['netRate']}                               ${tax_amount}
     Should Be Equal As Strings  ${resp.json()['amountDue']}                             0.0
     
-    ${resp}=  Provider Login  ${PUSERNAME114}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

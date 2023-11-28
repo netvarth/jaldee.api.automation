@@ -217,7 +217,7 @@ JD-TC-GetDonationQuestionnaire-1
     ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -261,11 +261,11 @@ JD-TC-GetDonationQuestionnaire-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}    ${xlFile} 
+    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}  ${xlFile}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -321,7 +321,7 @@ JD-TC-GetDonationQuestionnaire-1
 JD-TC-GetDonationQuestionnaire-UH1
     [Documentation]  Get donation questionnaire without enabling it.
 
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -381,7 +381,7 @@ JD-TC-GetDonationQuestionnaire-UH2
 
     ${pid}=  get_acc_id  ${PUSERNAME18}
 
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -414,7 +414,7 @@ JD-TC-GetDonationQuestionnaire-UH3
 
     ${pid}=   FakerLibrary.Numerify  %%%%%
 
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -446,7 +446,7 @@ JD-TC-GetDonationQuestionnaire-UH4
 
     # ${pid}=   FakerLibrary.Numerify  %%%%%
 
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -481,7 +481,7 @@ JD-TC-GetDonationQuestionnaire-UH4
 JD-TC-GetDonationQuestionnaire-UH5
     [Documentation]  Get donation questionnaire for a non existant service
 
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -518,7 +518,7 @@ JD-TC-GetDonationQuestionnaire-UH5
 JD-TC-GetDonationQuestionnaire-UH6
     [Documentation]  Get donation questionnaire by provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -555,7 +555,7 @@ JD-TC-GetDonationQuestionnaire-UH6
 JD-TC-GetDonationQuestionnaire-UH7
     [Documentation]  Get donation questionnaire without consumer login
 
-    ${resp}=  Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

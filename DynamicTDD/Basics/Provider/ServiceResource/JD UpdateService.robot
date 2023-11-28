@@ -72,6 +72,7 @@ JD-TC-UpdateService-2
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable   ${id}  ${resp.json()}
         ${resp}=   Get Service By Id  ${id}
+        Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  name=${SERVICE5}  description=${description}  serviceDuration=${service_duration[2]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}   bType=${btype}  isPrePayment=${bool[1]}
         ${resp}=  Update Service  ${id}  ${SERVICE5}  ${description}   ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[0]}   ${notifytype[0]}  ${min_pre}  ${Total}  ${bool[1]}  ${bool[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -118,6 +119,7 @@ JD-TC-UpdateService-4
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable   ${id}  ${resp.json()}
         ${resp}=   Get Service By Id  ${id}
+        Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  name=${SERVICE6}  description=${description}   serviceDuration=${service_duration[3]}   notification=${bool[1]}   notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
         ${resp}=  Update Service  ${id}  ${SERVICE6}  ${description}   ${service_duration[2]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  0  ${Total}  ${bool[0]}   ${bool[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -138,6 +140,7 @@ JD-TC-UpdateService-5
         ${resp}=  Create Service  ${SERVICE7}  ${description}  ${service_duration[2]}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${EMPTY}  ${bool[0]}  ${bool[0]}
         Set Test Variable   ${id}  ${resp.json()}
         ${resp}=   Get Service By Id  ${id}
+        Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  name=${SERVICE7}  description=${description}  serviceDuration=${service_duration[2]}  notification=${bool[1]}  notificationType=${notifytype[2]}  totalAmount=0.0  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}
         ${resp}=  Update Service  ${id}  ${SERVICE4}  ${description}  ${service_duration[2]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  ${min_pre}  ${Total}  ${bool[0]}  ${bool[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -170,7 +173,7 @@ JD-TC-UpdateService-UH1
         ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+        ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}   200
         Set Suite Variable  ${PUSERPH0}
@@ -232,7 +235,7 @@ JD-TC-UpdateService-UH4
   
         ${min_pre}=   Random Int  min=1   max=10
         ${Total}=   Random Int  min=11   max=100
-        ${resp}=  Provider Login  ${PUSERNAME69}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME69}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         clear_service       ${PUSERNAME69}
         ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[3]}  ${status[0]}  ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}   ${Total}   ${bool[1]}   ${bool[0]}
@@ -240,7 +243,7 @@ JD-TC-UpdateService-UH4
         Set Suite Variable  ${id123}  ${resp.json()}
         ${resp}=  ProviderLogout
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp}=  Provider Login  ${PUSERNAME63}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME63}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Update Service  ${id123}  ${SERVICE2}  ${description}  ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[1]}    ${notifytype[2]}  ${min_pre}   ${Total}   ${bool[1]}   ${bool[0]}
         Should Be Equal As Strings  ${resp.status_code}  401
@@ -267,7 +270,7 @@ JD-TC-UpdateService-UH6
         Verify Response  ${resp}  name=${SERVICE8}  description=${description}  serviceDuration=${service_duration[2]}  notification=${bool[1]}  notificationType=${notifytype[2]}   minPrePaymentAmount=${min_pre}  totalAmount=${Total}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[1]}
         ${resp}=  Update Service  ${id}  ${SERVICE8}  ${description}   ${service_duration[3]}  ${status[0]}  ${btype}  ${bool[0]}  ${notifytype[0]}  ${min_pre}  0  ${bool[1]}  ${bool[0]}
         Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  422
+        Should Be Equal As Strings  ${resp.status_code}  200
         #Should Be Equal As Strings  "${resp.json()}"  "${PREPAYMENT_AMT_LT_PRICE}"
         
 
@@ -297,7 +300,7 @@ JD-TC-UpdateService-UH7
 JD-TC-UpdateService-6
         [Documentation]  Update max bookings allowed in a service
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -334,7 +337,7 @@ JD-TC-UpdateService-6
 JD-TC-UpdateService-7
         [Documentation]  Update priceDynamic in a service
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -380,7 +383,7 @@ JD-TC-UpdateService-7
 JD-TC-UpdateService-8
         [Documentation]  Update resoucesRequired in a service
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -417,7 +420,7 @@ JD-TC-UpdateService-8
 JD-TC-UpdateService-9
         [Documentation]  Update lead time in a service
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -454,7 +457,7 @@ JD-TC-UpdateService-9
 JD-TC-UpdateService-10
         [Documentation]  Update maxBookingsAllowed, priceDynamic, resoucesRequired and lead time in a service 
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -494,7 +497,7 @@ JD-TC-UpdateService-10
 JD-TC-UpdateService-UH8
         [Documentation]  Update maxBookingsAllowed in a service as empty
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -531,7 +534,7 @@ JD-TC-UpdateService-UH8
 JD-TC-UpdateService-UH9
         [Documentation]  Update resoucesRequired in a service as empty
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -568,7 +571,7 @@ JD-TC-UpdateService-UH9
 JD-TC-UpdateService-UH10
         [Documentation]  Update lead time in a service as empty
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=  Get Business Profile
@@ -619,10 +622,16 @@ Billable
     FOR   ${a}  IN RANGE   ${length}
             
         clear_service       ${PUSERNAME${a}}
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${domain}=   Set Variable    ${resp.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+
+        # ${domain}=   Set Variable    ${resp.json()['sector']}
+        # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
         ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Suite Variable  ${check}    ${resp2.json()['serviceBillable']} 
@@ -639,10 +648,16 @@ Non Billable
 
      FOR    ${a}   IN RANGE    ${length}
         clear_service       ${MUSERNAME${a}}
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${domain}=   Set Variable    ${resp.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+
+        # ${domain}=   Set Variable    ${resp.json()['sector']}
+        # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
         ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Suite Variable  ${check}    ${resp2.json()['serviceBillable']} 

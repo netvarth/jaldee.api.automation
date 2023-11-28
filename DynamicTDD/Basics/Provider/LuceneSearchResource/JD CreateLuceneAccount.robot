@@ -24,15 +24,21 @@ ${lname}    Hisham
 JD-TC-Create Lucene Search Documentation-1
     [Documentation]   Create Lucene Search Documentation by provider login .
 
-    ${resp}=  Provider Login  ${PUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+
+    # Set Suite Variable  ${pid}  ${resp.json()['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  AddCustomer  ${CUSERNAME8}
     Log   ${resp.json()}
@@ -59,10 +65,15 @@ JD-TC-Create Lucene Search Documentation-1
 JD-TC-Create Lucene Search Documentation-2
     [Documentation]   Create Lucene Search Documentation by Highlevel provider login .
 
-    ${resp}=  Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${account_id1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${account_id1}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${account_id1}  ${resp.json()['id']}
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
@@ -75,7 +86,7 @@ JD-TC-Create Lucene Search Documentation-2
 JD-TC-Create Lucene Search Documentation-5
     [Documentation]   Create Lucene Search Documentation two times .
 
-    ${resp}=  Provider Login  ${PUSERNAME58}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME58}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

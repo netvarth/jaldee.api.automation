@@ -27,7 +27,7 @@ JD-SA-TC-EnableDisableChannel-1
     [Documentation]   Enable Channel for a provider by super admin(web_jaldee_homeo,android_jaldee_homeo,ios_jaldee_homeo).
 
     
-    ${resp}=  Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -92,7 +92,7 @@ JD-SA-TC-EnableDisableChannel-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -108,7 +108,7 @@ JD-SA-TC-EnableDisableChannel-2
     [Documentation]   Disable Channel for a provider by super admin(web_jaldee_homeo).
 
     
-    ${resp}=  Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -143,7 +143,7 @@ JD-SA-TC-EnableDisableChannel-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -176,7 +176,7 @@ JD-SA-TC-EnableDisableChannel-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -192,7 +192,7 @@ JD-SA-TC-EnableDisableChannel-3
     [Documentation]   Enable Channel for a multi user account by super admin(web_jaldee_homeo).
 
     
-    ${resp}=  Provider Login  ${MUSERNAME99}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME99}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -225,7 +225,7 @@ JD-SA-TC-EnableDisableChannel-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${MUSERNAME99}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME99}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -241,7 +241,7 @@ JD-SA-TC-EnableDisableChannel-UH1
     [Documentation]   Enable Channel for a user by super admin(web_jaldee_homeo).
 
     
-    ${resp}=  Provider Login  ${MUSERNAME100}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME100}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -328,7 +328,7 @@ JD-SA-TC-EnableDisableChannel-UH1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -344,7 +344,7 @@ JD-SA-TC-EnableDisableChannel-UH2
     [Documentation]   Enable Channel for a provider by super admin(web_jaldee_homeo) without giving any channel ids.
 
     
-    ${resp}=  Provider Login  ${PUSERNAME104}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -371,7 +371,7 @@ JD-SA-TC-EnableDisableChannel-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME104}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -402,7 +402,7 @@ JD-SA-TC-EnableDisableChannel-UH4
     [Documentation]   Enable Channel for a provider by super admin(web_jaldee_homeo) which is already enabled.
 
     
-    ${resp}=  Provider Login  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -431,7 +431,7 @@ JD-SA-TC-EnableDisableChannel-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -466,7 +466,7 @@ JD-SA-TC-EnableDisableChannel-UH5
     [Documentation]   Disable Channel for a provider by super admin(web_jaldee_homeo) which is already disabled.
 
     
-    ${resp}=  Provider Login  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -495,7 +495,7 @@ JD-SA-TC-EnableDisableChannel-UH5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME123}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

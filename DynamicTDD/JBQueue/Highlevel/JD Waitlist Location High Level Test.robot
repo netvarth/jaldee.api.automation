@@ -31,13 +31,19 @@ JD-TC-Waitlist Location High Level Test Case-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_location   ${PUSERNAME50}
     clear_customer   ${PUSERNAME50}
     ${resp} =  Create Sample Queue
     Set Test Variable  ${s_id}  ${resp['service_id']}
     Set Test Variable  ${qid}   ${resp['queue_id']}
+    Set Suite Variable   ${lid}   ${resp['location_id']}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Disable service  ${s_id}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -47,7 +53,7 @@ JD-TC-Waitlist Location High Level Test Case-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cId}  ${resp.json()}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Add To Waitlist  ${cId}  ${s_id}  ${qid}  ${DAY}  hi  ${bool[1]}  ${cId}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${INVALID_SERVICE}"
@@ -76,13 +82,18 @@ JD-TC-Waitlist Location High Level Test Case-2
     ${length}=  Get Length   ${len}
     
     FOR   ${a}  IN RANGE   ${start}  ${length}
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${domain}=   Set Variable    ${resp.json()['sector']}
-    ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    ${domain}=   Set Variable    ${decrypted_data['sector']}
+    ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+    # ${domain}=   Set Variable    ${resp.json()['sector']}
+    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
     ${resp2}=   Get Domain Settings    ${domain}  
     Should Be Equal As Strings    ${resp.status_code}    200
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${check}  ${resp2.json()['multipleLocation']}
     Exit For Loop IF     "${check}"=="True"
     END
@@ -113,35 +124,44 @@ JD-TC-Waitlist Location High Level Test Case-2
     ${resp} =  Create Sample Queue
     Set Test Variable  ${s_id}  ${resp['service_id']}
     Set Suite Variable  ${SERVICE1}   ${resp['service_name']}
-    ${city}=   FakerLibrary.state
+    # ${city}=   FakerLibrary.state
+    # Set Suite Variable  ${city}
+    # ${latti}=  get_latitude
+    # Set Suite Variable  ${latti}
+    # ${longi}=  get_longitude
+    # Set Suite Variable  ${longi}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti}=  get_latitude
     Set Suite Variable  ${latti}
-    ${longi}=  get_longitude
     Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${parking}    Random Element   ${parkingType}
     Set Suite Variable  ${parking}
     ${24hours}    Random Element    ${bool}
     Set Suite Variable  ${24hours}
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
 	${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime}=  db.get_time
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  100
+    ${eTime}=  add_timezone_time  ${tz}   0  100
     Set Suite Variable   ${eTime}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${lid1}  ${resp.json()}
 
-    ${sTime1}=  add_time  0  00
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
     ${resp}=  Create Queue  ${p1queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1   ${capacity}  ${lid1}  ${s_id} 
@@ -154,11 +174,10 @@ JD-TC-Waitlist Location High Level Test Case-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cId1}  ${resp.json()}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY}
     ${resp}=  Add To Waitlist  ${cId1}  ${s_id}  ${qid}  ${DAY}  hi  ${bool[1]}  ${cId1}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
     Comment  Disable Location
@@ -180,19 +199,25 @@ JD-TC-Waitlist Location High Level Test Case-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_location   ${PUSERNAME50}
     ${resp} =  Create Sample Queue
     Set Test Variable  ${s_id}  ${resp['service_id']}
     Set Test Variable  ${qid}   ${resp['queue_id']}
+    Set Suite Variable   ${lid}   ${resp['location_id']}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  AddCustomer  ${CUSERNAME6}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cId}  ${resp.json()}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Add To Waitlist  ${cId}  ${s_id}  ${qid}  ${DAY}  hi  ${bool[1]}  ${cId}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -221,7 +246,7 @@ JD-TC- Waitlist Location High Level Test Case-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME52}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME52}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_location   ${PUSERNAME52}
     clear_Providermsg  ${PUSERNAME52}
@@ -242,15 +267,19 @@ JD-TC- Waitlist Location High Level Test Case-3
     Set Test Variable  ${lid1}   ${resp['location_id']}
     Set Suite Variable  ${SERVICE2}   ${resp['service_name']}
 
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${resp}=  AddCustomer  ${CUSERNAME2}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pcId2}  ${resp.json()}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Add To Waitlist  ${pcId2}  ${s_id}  ${qid}  ${DAY}  hi  ${bool[1]}  ${pcId2}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid2}  ${wid[0]}
     ${resp}=  Get Queue ById  ${qid}
@@ -274,7 +303,7 @@ JD-TC- Waitlist Location High Level Test Case-3
 JD-TC-Waitlist Location High Level Test Case-4
     [Documentation]  change queue settings that queue have waitlist
 
-    ${resp}=  ProviderLogin  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_location   ${PUSERNAME64}
     clear_customer   ${PUSERNAME64}
@@ -284,21 +313,26 @@ JD-TC-Waitlist Location High Level Test Case-4
     Set Test Variable  ${qid}   ${resp['queue_id']}
     Set Test Variable  ${lid}   ${resp['location_id']}
 
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${resp}=  AddCustomer  ${CUSERNAME6}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cId}  ${resp.json()}
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Add To Waitlist  ${cId}  ${s_id}  ${qid}  ${DAY}  hi  ${bool[1]}  ${cId}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid1}  ${wid[0]}
-    ${DAY2}=  add_date  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  2  
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   0  30
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Update Queue  ${qid}  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY2}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -306,7 +340,7 @@ JD-TC-Waitlist Location High Level Test Case-4
 
 JD-TC-Waitlist Location High Level Test Case-5
     [Documentation]  create family member and waitlist and delete from consumerside and check communication  
-    ${resp}=  ProviderLogin  ${PUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_location   ${PUSERNAME50}
     clear_Providermsg  ${PUSERNAME50}
@@ -316,6 +350,11 @@ JD-TC-Waitlist Location High Level Test Case-5
     Set Test Variable  ${qid}   ${resp['queue_id']}
     Set Test Variable  ${lid1}   ${resp['location_id']}
     Set Suite Variable  ${SERVICE3}   ${resp['service_name']}
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
     Log   ${resp.json()}
@@ -330,7 +369,7 @@ JD-TC-Waitlist Location High Level Test Case-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pcId3}  ${resp.json()}
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     ${a_id}=  get_acc_id  ${PUSERNAME50}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -341,14 +380,13 @@ JD-TC-Waitlist Location High Level Test Case-5
     Set Test Variable  ${mem_id}  ${resp.json()}
     ${resp}=  Add To Waitlist  ${pcId3}  ${s_id}  ${qid}  ${DAY}  hi  ${bool[1]}  ${mem_id}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid3}  ${wid[0]}
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Consumer Login  ${CUSERNAME3}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${resp}=  Delete Waitlist Consumer  ${wid3}  ${a_id}
+    ${resp}=  Cancel Waitlist  ${wid3}  ${a_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
    
@@ -368,28 +406,36 @@ JD-TC-Waitlist Location High Level Test Case-6
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_D}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_D}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
     Set Suite Variable  ${PUSERNAME_D}
-    ${city1}=   get_place
+    # ${city1}=   get_place
+    # Set Suite Variable  ${city1}
+    # ${latti1}=  get_latitude
+    # Set Suite Variable  ${latti1}
+    # ${longi1}=  get_longitude
+    # Set Suite Variable  ${longi1}
+    # ${postcode1}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode1}
+    # ${address1}=  get_address
+    # Set Suite Variable  ${address1}
+    ${latti1}  ${longi1}  ${postcode1}  ${city1}  ${district}  ${state}  ${address1}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti1}  ${longi1}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city1}
-    ${latti1}=  get_latitude
     Set Suite Variable  ${latti1}
-    ${longi1}=  get_longitude
     Set Suite Variable  ${longi1}
-    ${postcode1}=  FakerLibrary.postcode
     Set Suite Variable  ${postcode1}
-    ${address1}=  get_address
     Set Suite Variable  ${address1}
     ${parking_type1}    Random Element   ${parkingType}
     Set Suite Variable  ${parking_type1}
     ${24hours1}    Random Element    ${bool}
     Set Suite Variable  ${24hours1}
-    ${sTime1}=  add_time  0  35
+    ${sTime1}=  add_timezone_time  ${tz}  0  35  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  40
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
     ${resp}=  Create Location  ${city1}  ${longi1}  ${latti1}  www.${city1}.com  ${postcode1}  ${address1}  ${parking_type1}  ${24hours1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
     Log  ${resp.json()}
@@ -415,11 +461,15 @@ JD-TC-Waitlist Location High Level Test Case-2-Verify
     
 
     Sleep  3s
-    ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable   ${a_id00}   ${resp.json()['id']}
-    Set Test Variable   ${pName00}   ${resp.json()['userName']}
-    ${a_id}=  get_acc_id  ${${PUSERNAME${a}}}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${a_id00}  ${decrypted_data['id']}
+    Set Test Variable  ${pName00}  ${decrypted_data['userName']}
+    # Set Test Variable   ${a_id00}   ${resp.json()['id']}
+    # Set Test Variable   ${pName00}   ${resp.json()['userName']}
+    ${a_id}=  get_acc_id  ${PUSERNAME${a}}
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${bname}  ${resp.json()['businessName']}
@@ -431,8 +481,8 @@ JD-TC-Waitlist Location High Level Test Case-2-Verify
     
     ${resp}=   Get Waitlist EncodedId    ${wid1}
     Log   ${resp.json()}
-    Set Suite Variable   ${W_uuid1}   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${W_uuid1}   ${resp.json()}
     
     Set Suite Variable  ${W_encId}  ${resp.json()}
 
@@ -467,7 +517,7 @@ JD-TC-Waitlist Location High Level Test Case-2-Verify
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${${PUSERNAME${a}}}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${${PUSERNAME${a}}}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get provider communications
@@ -487,10 +537,14 @@ JD-TC-Waitlist Location High Level Test Case-3-Verify
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME52}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME52}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${a_id52}  ${resp.json()['id']}
-    Set Test Variable   ${pName52}   ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${a_id52}  ${decrypted_data['id']}
+    Set Test Variable  ${pName52}  ${decrypted_data['userName']}
+    # Set Test Variable   ${a_id52}  ${resp.json()['id']}
+    # Set Test Variable   ${pName52}   ${resp.json()['userName']}
     sleep  03s
     ${a_id}=  get_acc_id  ${PUSERNAME52}
     ${resp}=  Get Business Profile
@@ -504,8 +558,8 @@ JD-TC-Waitlist Location High Level Test Case-3-Verify
     
     ${resp}=   Get Waitlist EncodedId    ${wid2}
     Log   ${resp.json()}
-    Set Suite Variable   ${W_uuid2}   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${W_uuid2}   ${resp.json()}
     
     Set Suite Variable  ${W_encId2}  ${resp.json()}
 
@@ -559,10 +613,14 @@ JD-TC-Waitlist Location High Level Test Case-5-Verify
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${a_id50}  ${resp.json()['id']}
-    Set Test Variable   ${pName50}   ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${a_id50}  ${decrypted_data['id']}
+    Set Test Variable  ${pName50}  ${decrypted_data['userName']}
+    # Set Test Variable   ${a_id50}  ${resp.json()['id']}
+    # Set Test Variable   ${pName50}   ${resp.json()['userName']}
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${bname}  ${resp.json()['businessName']}
@@ -570,15 +628,15 @@ JD-TC-Waitlist Location High Level Test Case-5-Verify
 
     ${resp}=  ListFamilyMemberByProvider  ${pcId3}
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${firstname1}   ${resp.json()[0]['firstName']}  
     Set Test Variable  ${lastname1}    ${resp.json()[0]['lastName']}  
     Set Test Variable  ${uname}   ${firstname1} ${lastname1}
 
     ${resp}=   Get Waitlist EncodedId    ${wid3}
     Log   ${resp.json()}
-    Set Suite Variable   ${W_uuid3}   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
+    # Set Suite Variable   ${W_uuid3}   ${resp.json()}   
     Set Suite Variable  ${W_encId3}  ${resp.json()}
 
     ${resp}=  Get Appointment Messages
@@ -586,6 +644,10 @@ JD-TC-Waitlist Location High Level Test Case-5-Verify
     Should Be Equal As Strings  ${resp.status_code}   200
     ${confirmAppt_push}=  Set Variable   ${resp.json()['confirmationMessages']['SP_APP']} 
     ${defconsumerCancel_msg}=  Set Variable   ${resp.json()['cancellationMessages']['Consumer_APP']}
+
+    ${provider_msg}=   Set Variable  Message from [providerName] : [message] 
+    ${provider_msg}=   Replace String  ${provider_msg}  [providerName]   ${bname}
+    ${provider_msg}=   Replace String  ${provider_msg}  [message]        other
     
     ${bookingid}=  Format String  ${bookinglink}  ${W_encId3}  ${W_encId3}
     ${defconfirm_msg}=  Replace String  ${confirmAppt_push}  [consumer]   ${uname}
@@ -593,7 +655,7 @@ JD-TC-Waitlist Location High Level Test Case-5-Verify
 
     ${defaultmsg}=  Replace String  ${defconsumerCancel_msg}  [consumer]   ${uname}
     ${defconsumerCancel_msg}=  Replace String  ${defaultmsg}  [bookingId]   ${W_encId3}
-    ${defconsumerCancel_msg}=  Replace String  ${defconsumerCancel_msg}  [providerMessage]   ${EMPTY}
+    ${defconsumerCancel_msg}=  Replace String  ${defconsumerCancel_msg}  [providerMessage]   ${provider_msg} 
 
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}   200   
@@ -623,7 +685,7 @@ JD-TC-Waitlist Location High Level Test Case-5-Verify
 *** Comment ***
 JD-TC-Waitlist Location High Level Test Case-9
     Comment  disable  location and check queue status
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200  
     ${resp}=  Disable Queue  ${q2_l1}
     Should Be Equal As Strings  ${resp.status_code}  200   
@@ -646,7 +708,7 @@ JD-TC-Waitlist Location High Level Test Case-6
     clear_consumer_msgs  ${CUSERNAME4}
     clear_provider_msgs  ${PUSERNAME6}
     clear_queue  ${PUSERNAME6}
-    ${resp}=  ProviderLogin  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
     
     ${resp}=  Create Queue  Evening queue  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime1}   ${eTime1}  1  5  ${lid1}  ${sId_1}  ${sId_2} 
@@ -659,16 +721,15 @@ JD-TC-Waitlist Location High Level Test Case-6
     clear_provider_msgs  ${PUSERNAME6}
     ${resp}=  Add To Waitlist  ${cid}  ${sId_2}  ${q1_l1}  ${DAY}  hi  true  ${fid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
     ${resp}=  Waitlist Action  STARTED  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${CurrTime}=  add_time  0  0
+    ${CurrTime}=  add_timezone_time  ${tz}  0  0
     sleep  3s
     ${resp}=  Waitlist Action  DONE  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200   
-    ${CurrTime1}=  add_time  0  0
+    ${CurrTime1}=  add_timezone_time  ${tz}  0  0
     sleep  3s
     ${resp}=  Get provider communications
     Should Be Equal As Strings  ${resp.status_code}  200   

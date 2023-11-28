@@ -25,7 +25,7 @@ JD-TC-AddCustomerLabel-1
     clear_appt_schedule   ${PUSERNAME213}
     clear_customer   ${PUSERNAME213}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME213}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -103,7 +103,7 @@ JD-TC-AddCustomerLabel-2
     clear_appt_schedule   ${PUSERNAME214}
     clear_customer   ${PUSERNAME214}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME214}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -199,7 +199,7 @@ JD-TC-AddCustomerLabel-3
     clear_appt_schedule   ${PUSERNAME215}
     clear_customer   ${PUSERNAME215}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME215}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME215}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -342,7 +342,7 @@ JD-TC-AddCustomerLabel-4
     clear_appt_schedule   ${PUSERNAME216}
     clear_customer   ${PUSERNAME216}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -434,7 +434,7 @@ JD-TC-AddCustomerLabel-5
     clear_appt_schedule   ${PUSERNAME216}
     clear_customer   ${PUSERNAME216}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME216}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME216}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -570,7 +570,7 @@ JD-TC-AddCustomerLabel-6
     clear_appt_schedule   ${PUSERNAME217}
     clear_customer   ${PUSERNAME217}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME217}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME217}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -649,7 +649,7 @@ JD-TC-AddCustomerLabel-7
     clear_appt_schedule   ${PUSERNAME217}
     clear_customer   ${PUSERNAME217}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME217}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME217}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -728,7 +728,7 @@ JD-TC-AddCustomerLabel-8
     clear_appt_schedule   ${PUSERNAME213}
     clear_customer   ${PUSERNAME213}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME213}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -829,7 +829,7 @@ JD-TC-AddCustomerLabel-9
     clear_appt_schedule   ${PUSERNAME213}
     clear_customer   ${PUSERNAME213}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME213}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -850,6 +850,7 @@ JD-TC-AddCustomerLabel-9
     ${gender0}=  Random Element    ${Genderlist}
     ${resp}=  AddFamilyMemberByProvider  ${cid}  ${firstname0}  ${lastname0}  ${dob0}  ${gender0}  
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mem_id0}  ${resp.json()}
 
     clear_Label  ${PUSERNAME213}
@@ -916,7 +917,7 @@ JD-TC-AddCustomerLabel-10
     clear_appt_schedule   ${PUSERNAME213}
     clear_customer   ${PUSERNAME213}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME213}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -937,6 +938,7 @@ JD-TC-AddCustomerLabel-10
     ${gender0}=  Random Element    ${Genderlist}
     ${resp}=  AddFamilyMemberByProvider  ${cid}  ${firstname0}  ${lastname0}  ${dob0}  ${gender0}  
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mem_id0}  ${resp.json()}
 
     clear_Label  ${PUSERNAME213}
@@ -1010,7 +1012,7 @@ JD-TC-AddCustomerLabel-UH1
     clear_appt_schedule   ${PUSERNAME213}
     clear_customer   ${PUSERNAME213}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME213}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1041,7 +1043,7 @@ JD-TC-AddCustomerLabel-UH2
     clear_appt_schedule   ${PUSERNAME213}
     clear_customer   ${PUSERNAME213}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME213}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1112,7 +1114,7 @@ JD-TC-AddCustomerLabel-UH3
     clear_appt_schedule   ${PUSERNAME213}
     clear_customer   ${PUSERNAME213}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME213}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1180,7 +1182,7 @@ JD-TC-AddCustomerLabel-UH4
     clear_appt_schedule   ${PUSERNAME213}
     clear_customer   ${PUSERNAME213}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME212}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME212}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_customer   ${PUSERNAME212}
@@ -1196,7 +1198,7 @@ JD-TC-AddCustomerLabel-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME213}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1255,7 +1257,7 @@ JD-TC-AddCustomerLabel-UH5
     clear_appt_schedule   ${PUSERNAME213}
     clear_customer   ${PUSERNAME213}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME213}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1301,7 +1303,7 @@ JD-TC-AddCustomerLabel-UH5
     ${i}=   Random Int   min=0   max=${len-1}
     ${label_value}=   Set Variable   ${ValueSet[${i}]['value']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME212}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME212}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_customer   ${PUSERNAME212}
@@ -1331,7 +1333,7 @@ JD-TC-AddCustomerLabel-UH6
     clear_appt_schedule   ${PUSERNAME213}
     clear_customer   ${PUSERNAME213}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME213}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1406,7 +1408,7 @@ JD-TC-AddCustomerLabel-UH7
     clear_appt_schedule   ${PUSERNAME213}
     clear_customer   ${PUSERNAME213}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME213}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1486,7 +1488,7 @@ JD-TC-AddCustomerLabel-UH8
     clear_appt_schedule   ${PUSERNAME213}
     clear_customer   ${PUSERNAME213}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME213}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1557,7 +1559,7 @@ JD-TC-AddCustomerLabel-UH9
     clear_appt_schedule   ${PUSERNAME213}
     clear_customer   ${PUSERNAME213}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME213}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1619,7 +1621,7 @@ JD-TC-AddCustomerLabel-UH9
 JD-TC-AddCustomerLabel-11
     [Documentation]  Add multiple labels for multiple customers.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME107}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1747,7 +1749,7 @@ JD-TC-AddCustomerLabel-11
 JD-TC-AddCustomerLabel-12
     [Documentation]  Add multiple labels for single customer.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME107}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1839,7 +1841,7 @@ JD-TC-AddCustomerLabel-12
 JD-TC-AddCustomerLabel-13
     [Documentation]  Add same label with different values for multiple customer.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME107}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1933,7 +1935,7 @@ JD-TC-AddCustomerLabel-14
 
     END
     
-    ${resp}=  ProviderLogin  ${PUSERNAME107}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

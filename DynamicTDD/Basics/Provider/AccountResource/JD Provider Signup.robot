@@ -44,7 +44,7 @@ JD-TC-Provider_Signup-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  ProviderLogin  ${ph}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
  
@@ -61,7 +61,7 @@ JD-TC-Provider_Signup-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${ph1}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${ph1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph1}${\n}
 
@@ -78,7 +78,7 @@ JD-TC-Provider_Signup-3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${firstname}${P_Email}.${test_mail}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${ph2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
 
@@ -210,11 +210,15 @@ JD-TC-Provider Signup-UH5
 JD-TC-Provider Signup-4
     [Documentation]    sign up a provider with same number as a user's
 
-    ${resp}=  Provider Login  ${MUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${domain}=   Set Variable    ${resp.json()['sector']}
-    ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    ${domain}=   Set Variable    ${decrypted_data['sector']}
+    ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
+    # ${domain}=   Set Variable    ${resp.json()['sector']}
+    # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
 
     ${resp}=   Get Business Profile
     Log  ${resp.json()}
@@ -334,11 +338,11 @@ JD-TC-Provider Signup-4
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=   ProviderLogin  ${User1}  ${PASSWORD}  
+    # ${resp}=   Encrypted Provider Login  ${User1}  ${PASSWORD}  
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
     
-    # ${DAY1}=  get_date
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     # Set Suite Variable  ${DAY1}  ${DAY1}
     # ${list}=  Create List  1  2  3  4  5  6  7
     # Set Suite Variable  ${list}  ${list}
@@ -363,9 +367,9 @@ JD-TC-Provider Signup-4
     # ${24hours}    Random Element    ['True','False']
     # ${desc}=   FakerLibrary.sentence
     # ${url}=   FakerLibrary.url
-    # ${sTime}=  add_time  0  15
+    # ${sTime}=  add_timezone_time  ${tz}  0  15  
     # Set Suite Variable   ${sTime}
-    # ${eTime}=  add_time   0  45
+    # ${eTime}=  add_timezone_time  ${tz}  0  45  
     # Set Suite Variable   ${eTime}
     # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address1}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     # Log  ${resp.json()}
@@ -514,11 +518,11 @@ JD-TC-Provider Signup-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${CUSERPH3}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${CUSERPH3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -533,19 +537,22 @@ JD-TC-Provider Signup-5
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
@@ -614,11 +621,11 @@ JD-TC-Provider Signup-UH6
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD}  countryCode=${country_code}
+    # ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}  countryCode=${country_code}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}   200
     
-    # ${DAY1}=  get_date
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
     # Set Suite Variable  ${DAY1}  ${DAY1}
     # ${list}=  Create List  1  2  3  4  5  6  7
     # Set Suite Variable  ${list}  ${list}
@@ -643,9 +650,9 @@ JD-TC-Provider Signup-UH6
     # ${24hours}    Random Element    ['True','False']
     # ${desc}=   FakerLibrary.sentence
     # ${url}=   FakerLibrary.url
-    # ${sTime}=  add_time  0  15
+    # ${sTime}=  add_timezone_time  ${tz}  0  15  
     # Set Suite Variable   ${sTime}
-    # ${eTime}=  add_time   0  45
+    # ${eTime}=  add_timezone_time  ${tz}  0  45  
     # Set Suite Variable   ${eTime}
     # ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     # Log  ${resp.json()}
@@ -713,7 +720,7 @@ JD-TC-Provider Signup-UH7
 JD-TC-Provider Signup-UH8
     [Documentation]    signup a provider with same number and country code as that of another provider's customer.
 
-    ${resp}=  Provider Login  ${PUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -846,7 +853,7 @@ JD-TC-Provider_Signup-6
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  ProviderLogin  ${ph}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
     

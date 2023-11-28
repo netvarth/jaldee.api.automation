@@ -18,19 +18,21 @@ JD-TC-GetInternalStatus-1
 
      clear_customer   ${HLMUSERNAME4}
 
-     ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${pid}=  get_acc_id  ${HLMUSERNAME4}
      Set Suite Variable  ${pid}
 
      ${resp}=  View Waitlist Settings
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-     Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
      sleep  2s
      ${resp}=  Get Departments
@@ -182,17 +184,22 @@ JD-TC-GetInternalStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${CUR_DAY}
     ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id1}    ${resp}  
+    Set Suite Variable    ${loc_id1}    ${resp}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
     ${q_name}=    FakerLibrary.name
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   Subtract_time     3   00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}     3   00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  3  30 
+    ${end_time}=    add_timezone_time  ${tz}  3  30   
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
@@ -211,7 +218,7 @@ JD-TC-GetInternalStatus-1
      ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -232,7 +239,7 @@ JD-TC-GetInternalStatus-1
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get InternalStatuses by uid  ${wid}
      Log   ${resp.json()}
@@ -251,7 +258,7 @@ JD-TC-GetInternalStatus-1
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U2}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get InternalStatuses by uid  ${wid}
      Log   ${resp.json()}
@@ -268,7 +275,7 @@ JD-TC-GetInternalStatus-1
 
 JD-TC-GetInternalStatus-2
      [Documentation]  Getting Internal statuses when  user is ADMIN=TRUE(No need to add  admin true user to userlist for permission)
-     ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -286,7 +293,7 @@ JD-TC-GetInternalStatus-2
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U3}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get InternalStatuses by uid  ${wid}
      Log   ${resp.json()}
@@ -303,7 +310,7 @@ JD-TC-GetInternalStatus-2
 
 JD-TC-GetInternalStatus-3
      [Documentation]  Changed user list in permission list then get Internal sts(ADMIN=FALSE)
-     ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U4}=  Evaluate  ${PUSERNAME}+301296
@@ -333,7 +340,7 @@ JD-TC-GetInternalStatus-3
     @{resp}=  ResetProviderPassword  ${PUSERNAME_U4}  ${PASSWORD}  2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME_U4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get InternalStatuses by uid  ${wid}
      Log   ${resp.json()}
@@ -348,7 +355,7 @@ JD-TC-GetInternalStatus-3
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id1}
 
-     ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -364,7 +371,7 @@ JD-TC-GetInternalStatus-3
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id1}
 
-     ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get InternalStatuses by uid  ${wid}
      Log   ${resp.json()}
@@ -381,7 +388,7 @@ JD-TC-GetInternalStatus-3
 
 JD-TC-GetInternalStatus-4
      [Documentation]  Assign users to team then give permission to that team and getting internal sts
-     ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get User
@@ -417,7 +424,7 @@ JD-TC-GetInternalStatus-4
      ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -433,7 +440,7 @@ JD-TC-GetInternalStatus-4
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id2}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get InternalStatuses by uid  ${wid}
      Log   ${resp.json()}
@@ -448,7 +455,7 @@ JD-TC-GetInternalStatus-4
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id2}
      
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get InternalStatuses by uid  ${wid}
      Log   ${resp.json()}
@@ -463,7 +470,7 @@ JD-TC-GetInternalStatus-4
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id2}
 
-     ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get InternalStatuses by uid  ${wid}
      Log   ${resp.json()}
@@ -478,7 +485,7 @@ JD-TC-GetInternalStatus-4
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id2}
 
-     ${resp}=  ProviderLogin  ${PUSERNAME_U4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get InternalStatuses by uid  ${wid}
      Log   ${resp.json()}
@@ -496,7 +503,7 @@ JD-TC-GetInternalStatus-4
 
 JD-TC-GetInternalStatus-5
      [Documentation]  Change internal sts with more services then taking waitlist and check internal sts
-     ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -554,7 +561,7 @@ JD-TC-GetInternalStatus-5
      ${resp}=   ProviderLogout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -570,7 +577,7 @@ JD-TC-GetInternalStatus-5
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id2}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -586,7 +593,7 @@ JD-TC-GetInternalStatus-5
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id2}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -602,23 +609,7 @@ JD-TC-GetInternalStatus-5
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id2}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Get InternalStatuses by uid  ${wid}
-     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Should Be Equal As Strings  ${resp.json()[0]['statusId']}  ${internal_sts_name2}
-     Should Be Equal As Strings  ${resp.json()[0]['status']}  ${internal_sts_dis_name2}
-     Should Be Equal As Strings  ${resp.json()[0]['isPermitted']}  ${bool[0]}
-     Should Be Equal As Strings  ${resp.json()[0]['users'][0]}  ${u_id4}
-     Should Be Equal As Strings  ${resp.json()[0]['teams']}  ${empty_list}
-     Should Be Equal As Strings  ${resp.json()[0]['roles']}  ${empty_list}
-     Should Be Equal As Strings  ${resp.json()[0]['displayOrder']}  2
-     Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
-     Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id2}
-
-     ${resp}=  Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -634,7 +625,23 @@ JD-TC-GetInternalStatus-5
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id2}
 
-     ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
+     Log  ${resp.json()}
+     Should Be Equal As Strings    ${resp.status_code}    200
+     ${resp}=  Get InternalStatuses by uid  ${wid}
+     Log   ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()[0]['statusId']}  ${internal_sts_name2}
+     Should Be Equal As Strings  ${resp.json()[0]['status']}  ${internal_sts_dis_name2}
+     Should Be Equal As Strings  ${resp.json()[0]['isPermitted']}  ${bool[0]}
+     Should Be Equal As Strings  ${resp.json()[0]['users'][0]}  ${u_id4}
+     Should Be Equal As Strings  ${resp.json()[0]['teams']}  ${empty_list}
+     Should Be Equal As Strings  ${resp.json()[0]['roles']}  ${empty_list}
+     Should Be Equal As Strings  ${resp.json()[0]['displayOrder']}  2
+     Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
+     Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id2}
+
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid2}
@@ -650,7 +657,7 @@ JD-TC-GetInternalStatus-5
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id3}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid2}
@@ -666,7 +673,7 @@ JD-TC-GetInternalStatus-5
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id3}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid2}
@@ -682,7 +689,7 @@ JD-TC-GetInternalStatus-5
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id3}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid2}
@@ -698,7 +705,7 @@ JD-TC-GetInternalStatus-5
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id3}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid2}
@@ -716,7 +723,7 @@ JD-TC-GetInternalStatus-5
 
 JD-TC-GetInternalStatus-6
      [Documentation]  Change internal sts with team id only then taking waitlist and check internal sts
-     ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -757,7 +764,7 @@ JD-TC-GetInternalStatus-6
     Set Suite Variable  ${wid}  ${wid[0]}
 
 
-     ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -773,7 +780,7 @@ JD-TC-GetInternalStatus-6
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id1}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -789,7 +796,7 @@ JD-TC-GetInternalStatus-6
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id1}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -805,7 +812,7 @@ JD-TC-GetInternalStatus-6
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id1}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -821,7 +828,7 @@ JD-TC-GetInternalStatus-6
      Should Be Equal As Strings  ${resp.json()[0]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[0]['serviceId']}  ${s_id1}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid}
@@ -839,7 +846,7 @@ JD-TC-GetInternalStatus-6
 
 JD-TC-GetInternalStatus-7
      [Documentation]  Checking internal sts for USER service
-     ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -847,6 +854,7 @@ JD-TC-GetInternalStatus-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid}  ${resp.json()[0]['id']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${SERVICE4}=    FakerLibrary.word
     ${description}=  FakerLibrary.sentence
@@ -863,15 +871,15 @@ JD-TC-GetInternalStatus-7
 
      ${queue_name}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name}
-     ${DAY1}=  get_date
+     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable   ${eTime1}
     ${resp}=  Create Queue For User  ${queue_name}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${u_id1}  ${s_id4}
     Log  ${resp.json()}
@@ -923,7 +931,7 @@ JD-TC-GetInternalStatus-7
     Set Suite Variable  ${wid3}  ${wid3[0]}
 
 
-     ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid3}
@@ -948,7 +956,7 @@ JD-TC-GetInternalStatus-7
      Should Be Equal As Strings  ${resp.json()[1]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[1]['serviceId']}  ${s_id4}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid3}
@@ -973,7 +981,7 @@ JD-TC-GetInternalStatus-7
      Should Be Equal As Strings  ${resp.json()[1]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[1]['serviceId']}  ${s_id4}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid3}
@@ -998,7 +1006,7 @@ JD-TC-GetInternalStatus-7
      Should Be Equal As Strings  ${resp.json()[1]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[1]['serviceId']}  ${s_id4}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid3}
@@ -1023,7 +1031,7 @@ JD-TC-GetInternalStatus-7
      Should Be Equal As Strings  ${resp.json()[1]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[1]['serviceId']}  ${s_id4}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid3}
@@ -1050,7 +1058,7 @@ JD-TC-GetInternalStatus-7
 
 JD-TC-GetInternalStatus-8
      [Documentation]  Change internal sts with empty team and empty user list then check only admin=true user can get internal sts
-     ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${permission1}=  InternalStatuses_permissions  ${empty_list}  ${empty_list}
@@ -1084,7 +1092,7 @@ JD-TC-GetInternalStatus-8
     Set Suite Variable  ${wid3}  ${wid3[0]}
 
 
-     ${resp}=  Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid3}
@@ -1109,7 +1117,7 @@ JD-TC-GetInternalStatus-8
      Should Be Equal As Strings  ${resp.json()[1]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[1]['serviceId']}  ${s_id4}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid3}
@@ -1134,7 +1142,7 @@ JD-TC-GetInternalStatus-8
      Should Be Equal As Strings  ${resp.json()[1]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[1]['serviceId']}  ${s_id4}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid3}
@@ -1159,7 +1167,7 @@ JD-TC-GetInternalStatus-8
      Should Be Equal As Strings  ${resp.json()[1]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[1]['serviceId']}  ${s_id4}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid3}
@@ -1184,7 +1192,7 @@ JD-TC-GetInternalStatus-8
      Should Be Equal As Strings  ${resp.json()[1]['prevStatuses']}  ${empty_list}
      Should Be Equal As Strings  ${resp.json()[1]['serviceId']}  ${s_id4}
 
-     ${resp}=  Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Get InternalStatuses by uid  ${wid3}

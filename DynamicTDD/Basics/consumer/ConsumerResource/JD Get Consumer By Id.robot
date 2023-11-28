@@ -59,7 +59,7 @@ JD-TC-Get Consumer By Id-4
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   Provider Login  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Consumer By Id  ${CUSERNAME4}
@@ -103,11 +103,15 @@ JD-TC-Get Consumer By Id-UH3
 
 JD-TC-Get Consumer By Id-UH4
     [Documentation]  get a provider's own details using consumer id by provider login
-    ${resp}=   Provider Login  ${PUSERNAME11}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${firstname}    ${resp.json()['firstName']}
-    Set Test Variable  ${lastname}    ${resp.json()['lastName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${firstname}    ${decrypted_data['firstName']}
+    Set Suite Variable  ${lastname}    ${decrypted_data['lastName']}
+    # Set Test Variable  ${firstname}    ${resp.json()['firstName']}
+    # Set Test Variable  ${lastname}    ${resp.json()['lastName']}
     ${resp}=  Get Consumer By Id  ${PUSERNAME11}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422 
@@ -132,7 +136,7 @@ JD-TC-Get Consumer By Id-UH4
 
 # JD-TC-Get Consumer By Id-2
 #     [Documentation]  get a provider's own details using consumer id by provider login
-#     ${resp}=   Provider Login  ${PUSERNAME11}  ${PASSWORD}
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME11}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Set Test Variable  ${firstname}    ${resp.json()['firstName']}
@@ -167,7 +171,7 @@ JD-TC-Get Consumer By Id-UH4
 #     ${resp}=  Consumer Logout
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
-#     ${resp}=   Provider Login  ${PUSERNAME13}  ${PASSWORD}
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${resp}=  Get Consumer By Id  ${PUSERNAME1}

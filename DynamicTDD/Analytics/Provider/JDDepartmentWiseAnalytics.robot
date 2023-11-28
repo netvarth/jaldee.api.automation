@@ -84,13 +84,13 @@ JD-TC-DepartmentWiseAnalytics-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
 
-     ${DAY1}=  get_date
+     ${DAY1}=  db.get_date_by_timezone  ${tz}
      Set Suite Variable  ${DAY1}  ${DAY1}
      ${list}=  Create List  1  2  3  4  5  6  7
      Set Suite Variable  ${list}  ${list}
@@ -114,9 +114,9 @@ JD-TC-DepartmentWiseAnalytics-1
      ${24hours}    Random Element    ${bool}
      ${desc}=   FakerLibrary.sentence
      ${url}=   FakerLibrary.url
-     ${sTime}=  add_time  0  15
+     ${sTime}=  db.add_timezone_time  ${tz}  0  15
      Set Suite Variable   ${sTime}
-     ${eTime}=  add_time   0  45
+     ${eTime}=  db.add_timezone_time  ${tz}   0  45
      Set Suite Variable   ${eTime}
      ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
      Log  ${resp.json()}
@@ -422,18 +422,18 @@ JD-TC-DepartmentWiseAnalytics-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     Set Suite Variable  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  db.add_timezone_time  ${tz}  0  15
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  db.add_timezone_time  ${tz}   2  30
     Set Suite Variable   ${eTime1}
 
     ${resp}=  Get Locations
@@ -458,7 +458,7 @@ JD-TC-DepartmentWiseAnalytics-1
     ${dur1}=  FakerLibrary.Random Int  min=10  max=20
     Set Suite Variable  ${dur1}
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Create Service For User  ${SERVICE2}  ${description}   ${dur1}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${depid1}  ${u_id1}
@@ -486,7 +486,7 @@ JD-TC-DepartmentWiseAnalytics-1
     Should Be Equal As Strings  ${resp.status_code}   200
 
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${queue_name1}=  FakerLibrary.bs
@@ -497,7 +497,7 @@ JD-TC-DepartmentWiseAnalytics-1
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${q_id1}  ${resp.json()}
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -525,7 +525,7 @@ JD-TC-DepartmentWiseAnalytics-1
 
     END
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${walkin_waitlist_ids}=  Create List
@@ -553,7 +553,7 @@ JD-TC-DepartmentWiseAnalytics-1
 
     # END
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     FOR   ${a}  IN RANGE   ${count}
@@ -650,7 +650,7 @@ JD-TC-DepartmentWiseAnalytics-1
 JD-TC-DepartmentWiseAnalytics-2
     [Documentation]   take walkin checkins for an another user and check Department wise analytics for TOTAL_FOR_TOKEN and TOTAL_ON_TOKEN
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${description}=  FakerLibrary.sentence
@@ -686,7 +686,7 @@ JD-TC-DepartmentWiseAnalytics-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -720,7 +720,7 @@ JD-TC-DepartmentWiseAnalytics-2
     ${service_count}=  Create List
     Set Suite Variable   ${service_count}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     FOR   ${a}  IN RANGE   ${count}
@@ -770,7 +770,7 @@ JD-TC-DepartmentWiseAnalytics-2
 
     # sleep  05s
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -820,7 +820,7 @@ JD-TC-DepartmentWiseAnalytics-2
 JD-TC-DepartmentWiseAnalytics-3
     [Documentation]   take checkins for teleservice for a user and check Department wise analytics for TOTAL_FOR_TOKEN and TOTAL_ON_TOKEN
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${ZOOM_id0}=  Format String  ${ZOOM_url}  ${PUSERNAME_U2}
@@ -876,11 +876,11 @@ JD-TC-DepartmentWiseAnalytics-3
 
     comment  queue 1 for checkins
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  db.add_timezone_time  ${tz}   1  30
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue For User  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  25  ${lid}  ${u_id1}  ${v_s1} 
     Log  ${resp.json()}
@@ -959,7 +959,7 @@ JD-TC-DepartmentWiseAnalytics-3
     
     END
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -984,7 +984,7 @@ JD-TC-DepartmentWiseAnalytics-3
 JD-TC-DepartmentWiseAnalytics-4
     [Documentation]   take online checkins for a user and check Department wise analytics for TOTAL_FOR_TOKEN and TOTAL_ON_TOKEN
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Business Profile
@@ -1009,7 +1009,7 @@ JD-TC-DepartmentWiseAnalytics-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id3}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -1033,7 +1033,7 @@ JD-TC-DepartmentWiseAnalytics-4
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id3}  ${DAY}  ${s_id4}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.content}
@@ -1056,7 +1056,7 @@ JD-TC-DepartmentWiseAnalytics-4
     ${online_token_len}=  Evaluate  len($online_waitlist_ids) 
     Set Suite Variable   ${online_token_len}
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep  01s
@@ -1093,7 +1093,7 @@ JD-TC-DepartmentWiseAnalytics-4
 JD-TC-DepartmentWiseAnalytics-5
     [Documentation]   take online checkins for a prepayment service for a user and check Department wise analytics for TOTAL_FOR_TOKEN and TOTAL_ON_TOKEN
 
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     comment  prepayment service for online check-ins 
@@ -1110,7 +1110,7 @@ JD-TC-DepartmentWiseAnalytics-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${resp}=  Update Queue  ${q_id2}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
     ...  ${resp.json()['queueSchedule']['startDate']}  ${EMPTY}  ${EMPTY}  ${resp.json()['queueStartTime']}  ${resp.json()['queueEndTime']}
     ...  ${resp.json()['parallelServing']}   ${resp.json()['capacity']}  ${lid}   ${s_id5}
@@ -1134,7 +1134,7 @@ JD-TC-DepartmentWiseAnalytics-5
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id2}  ${DAY}  ${s_id5}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.content}
@@ -1168,7 +1168,7 @@ JD-TC-DepartmentWiseAnalytics-5
 
     END
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}= Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

@@ -26,7 +26,7 @@ JD-TC-EnableDisableItemGroupforUser-1
 
     [Documentation]  Enable Item Grouping of an existing provider.
 
-    ${resp}=  Provider Login  ${MUSERNAME27}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -49,7 +49,7 @@ JD-TC-EnableDisableItemGroupforUser-2
 
     [Documentation]  Disable Item Grouping of an existing provider.
 
-    ${resp}=  Provider Login  ${MUSERNAME28}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -81,7 +81,7 @@ JD-TC-EnableDisableItemGroupforUser-3
 
     [Documentation]  Enable item grouping by a user.
 
-    ${resp}=  Provider Login  ${MUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME122}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -147,7 +147,7 @@ JD-TC-EnableDisableItemGroupforUser-3
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -193,7 +193,7 @@ JD-TC-EnableDisableItemGroupforUser-UH3
 
     [Documentation]  Enable Item Grouping of already enabled.
 
-    ${resp}=  Provider Login  ${MUSERNAME28}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -224,7 +224,7 @@ JD-TC-EnableDisableItemGroupforUser-UH4
 
     [Documentation]  Disable Item Grouping of already disabled.
 
-    ${resp}=  Provider Login  ${MUSERNAME28}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

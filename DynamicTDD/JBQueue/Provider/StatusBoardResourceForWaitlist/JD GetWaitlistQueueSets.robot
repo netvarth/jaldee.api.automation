@@ -41,7 +41,7 @@ JD-TC-GetWaitlistQueueSets-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_M}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_M}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_M}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_M}${\n}
@@ -54,7 +54,7 @@ JD-TC-GetWaitlistQueueSets-1
     ${s_id3}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable  ${s_id3}
     sleep  03s
-    ${resp}=  Create Sample Queue   
+    ${resp}=  Create Sample Queue 
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     ${resp}=  Toggle Department Enable
     Should Be Equal As Strings  ${resp.status_code}  200

@@ -23,8 +23,18 @@ JD-TC-Get_Items_From_Catalog-1
     [Documentation]  Create order catalog and Get_Items_From_Catalog
     clear_Item  ${PUSERNAME46}
     
-    ${resp}=  ProviderLogin  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     
     ${displayName1}=   FakerLibrary.name 
     Set Suite Variable  ${displayName1}  
@@ -94,9 +104,9 @@ JD-TC-Get_Items_From_Catalog-1
     Verify Response  ${resp}  promotionalPriceType=${promotionalPriceType[1]}   promotionalPrice=${promoPrice1float}    promotionalPrcnt=0.0   showPromotionalPrice=${bool[1]}   itemCode=${itemCode2}   promotionLabelType=${promotionLabelType[3]}   promotionLabel=${promoLabel1}   
 
     
-    ${startDate}=  get_date
+    ${startDate}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${startDate}
-    ${endDate}=  add_date  10      
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${endDate}
 
     # ${noOfOccurance}=  Random Int  min=0   max=10
@@ -104,9 +114,9 @@ JD-TC-Get_Items_From_Catalog-1
 
     Set Suite Variable  ${noOfOccurance}   0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
 
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -207,7 +217,7 @@ JD-TC-Get_Items_From_Catalog-1
 JD-TC-Get_Items_From_Catalog-2
     [Documentation]  Create order catalog and Add Items To Catalog. After that Get_Items_From_Catalog
     
-    ${resp}=  ProviderLogin  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${itemName3}=   FakerLibrary.firstname 
@@ -264,7 +274,7 @@ JD-TC-Get_Items_From_Catalog-3
 
     [Documentation]  Create catalog only for Store_pickup and Add Items To Catalog. After that Get_Items_From_Catalog
    
-    ${resp}=  ProviderLogin  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName2}=   FakerLibrary.name 
@@ -303,7 +313,7 @@ JD-TC-Get_Items_From_Catalog-4
 
     [Documentation]  Create catalog only for Home_Delivery and Add Items To Catalog. After that Get_Items_From_Catalog
    
-    ${resp}=  ProviderLogin  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${catalogName4}=   FakerLibrary.word 
@@ -342,7 +352,7 @@ JD-TC-Get_Items_From_Catalog-UH1
 
     [Documentation]  Create catalog for shoppingList. After that try to Get_Items_From_Catalog
    
-    ${resp}=  ProviderLogin  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     Set Suite Variable  ${orderType2}       ${OrderTypes[1]}
@@ -364,7 +374,7 @@ JD-TC-Get_Items_From_Catalog-UH1
 JD-TC-Get_Items_From_Catalog-UH2
 
     [Documentation]  Get_Items_From_Catalog using invalid catalog_id
-    ${resp}=  ProviderLogin  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -403,7 +413,7 @@ JD-TC-Get_Items_From_Catalog-UH4
 JD-TC-Get_Items_From_Catalog-UH5
     [Documentation]   A provider try to Get_Items_From_Catalog of another provider
     clear_Item  ${PUSERNAME200}
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

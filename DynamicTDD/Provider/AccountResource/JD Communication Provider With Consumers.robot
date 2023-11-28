@@ -27,7 +27,7 @@ JD-TC-Communication provider with consumer-1
 
     clear_Providermsg  ${PUSERNAME4}
     
-    ${resp}=   ProviderLogin  ${PUSERNAME4}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -108,7 +108,7 @@ JD-TC-Communication provider with consumer-2
     [Documentation]   Communication provider with consumer
 
     clear_Providermsg  ${PUSERNAME5}
-    ${resp}=   ProviderLogin  ${PUSERNAME5}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id}  ${resp.json()['id']}

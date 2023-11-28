@@ -32,7 +32,7 @@ JD-TC-GetPaymentProfileById-1
 
     [Documentation]  Create and get payment profile by id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME191}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME191}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -106,7 +106,7 @@ JD-TC-GetPaymentProfileById-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME191}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME191}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -130,7 +130,7 @@ JD-TC-GetPaymentProfile-2
 
     [Documentation]  Create and get payment profile for multiple banks.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME191}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME191}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -207,7 +207,7 @@ JD-TC-GetPaymentProfile-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${resp}=  ProviderLogin  ${PUSERNAME191}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME191}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -232,7 +232,7 @@ JD-TC-GetPaymentProfileById-UH1
 
     [Documentation]  try to get another payment profile by id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -256,7 +256,7 @@ JD-TC-GetPaymentProfileById-UH3
 
     [Documentation]  try to get payment profile by invalid id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     

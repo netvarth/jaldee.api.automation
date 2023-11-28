@@ -28,7 +28,7 @@ JD-TC-ProviderCreateApptRequest-1
 
     [Documentation]   Provider create an appt request for today.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
@@ -41,7 +41,7 @@ JD-TC-ProviderCreateApptRequest-1
     clear_service   ${PUSERNAME2}
     clear_appt_schedule   ${PUSERNAME2}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${SERVICE1}=    FakerLibrary.word
     ${service_duration}=   Random Int   min=5   max=10
@@ -109,11 +109,11 @@ JD-TC-ProviderCreateApptRequest-2
 
     [Documentation]   Provider create an appt request for a future day for the same provider consumer.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${DAY2}=  add_date  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  2  
 
     ${apptfor1}=  Create Dictionary  id=${pcid1}  
     ${apptfor}=   Create List  ${apptfor1}
@@ -130,7 +130,7 @@ JD-TC-ProviderCreateApptRequest-3
 
     [Documentation]   Provider create an appt request for a future day for different provider consumer.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -146,7 +146,7 @@ JD-TC-ProviderCreateApptRequest-3
         Set Suite Variable  ${pcid2}  ${resp.json()[0]['id']}
     END
 
-    ${DAY2}=  add_date  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  2  
 
     ${apptfor1}=  Create Dictionary  id=${pcid2}  
     ${apptfor}=   Create List  ${apptfor1}
@@ -163,7 +163,7 @@ JD-TC-ProviderCreateApptRequest-4
 
     [Documentation]   Provider create an appt request for today for different provider consumer.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -183,7 +183,7 @@ JD-TC-ProviderCreateApptRequest-5
     [Documentation]   Provider create a service request with date/time mode, 
     ...   then try to create appt request with time slot.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -226,7 +226,7 @@ JD-TC-ProviderCreateApptRequest-6
     [Documentation]   Provider create a service request with date/time mode and update it with no datetime, 
     ...   then try to create appt request without time slot and date.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -257,7 +257,7 @@ JD-TC-ProviderCreateApptRequest-7
 
     [Documentation]   Create a booking type service and update it to request type and create appt request.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -269,10 +269,10 @@ JD-TC-ProviderCreateApptRequest-7
     ${sid4}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable  ${sid4}
     
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time  1  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  1  15  
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${duration}=  FakerLibrary.Random Int  min=2  max=10
@@ -312,7 +312,7 @@ JD-TC-ProviderCreateApptRequest-8
 
     [Documentation]   Provider create multiple appt request with same details.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -337,7 +337,7 @@ JD-TC-ProviderCreateApptRequest-9
 
     [Documentation]   Provider create appt request for a donation service.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -380,7 +380,7 @@ JD-TC-ProviderCreateApptRequest-10
 
     [Documentation]   Provider create appt request for a virtual service.
 
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -455,10 +455,10 @@ JD-TC-ProviderCreateApptRequest-10
         Set Suite Variable  ${locid1}  ${resp.json()[0]['id']}
     END
 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  25
-    ${eTime1}=  add_time  2  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  25  
+    ${eTime1}=  add_timezone_time  ${tz}  2  15  
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${duration}=  FakerLibrary.Random Int  min=2  max=10
@@ -497,7 +497,7 @@ JD-TC-ProviderCreateApptRequest-11
 
     [Documentation]   Provider create an appt request for provider consumers family member.
 
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -527,11 +527,11 @@ JD-TC-ProviderCreateApptRequest-12
 
     [Documentation]   Provider create an appt request for provider consumer and his family member.
 
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${future_day}=  add_date   3 
+    ${future_day}=  db.add_timezone_date  ${tz}   3 
     ${apptfor1}=  Create Dictionary  id=${procid}  
     ${apptfor2}=  Create Dictionary  id=${mem_id0} 
     ${apptfor}=   Create List  ${apptfor1}  ${apptfor2}
@@ -549,11 +549,11 @@ JD-TC-ProviderCreateApptRequest-13
 
     [Documentation]   Provider create an appt request without phone number.
 
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${future_day}=  add_date   4
+    ${future_day}=  db.add_timezone_date  ${tz}   4
     ${apptfor1}=  Create Dictionary  id=${procid}  
     ${apptfor}=   Create List  ${apptfor1} 
 
@@ -570,11 +570,11 @@ JD-TC-ProviderCreateApptRequest-14
 
     [Documentation]   Provider create an appt request without consumer note.
 
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${future_day}=  add_date   4
+    ${future_day}=  db.add_timezone_date  ${tz}   4
     ${apptfor1}=  Create Dictionary  id=${procid}  
     ${apptfor}=   Create List  ${apptfor1} 
 
@@ -590,7 +590,7 @@ JD-TC-ProviderCreateApptRequest-UH1
     [Documentation]   Provider create a service request with date/time mode and update it with no datetime, 
     ...   then try to create appt request with time slot and date.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -615,7 +615,7 @@ JD-TC-ProviderCreateApptRequest-UH2
     [Documentation]   Provider create a service request with date/time mode and update it with no datetime, 
     ...   then try to create appt request with time slot and without date.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -640,7 +640,7 @@ JD-TC-ProviderCreateApptRequest-UH3
     [Documentation]   Provider create a service request with date mode, 
     ...   then try to create appt request with time slot.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -663,7 +663,7 @@ JD-TC-ProviderCreateApptRequest-UH4
 
     [Documentation]   Provider create an appt request for booking type service.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -718,7 +718,7 @@ JD-TC-ProviderCreateApptRequest-UH7
 
     [Documentation]   Provider create an appt request for another providers customer.
 
-    ${resp}=  Provider Login  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -734,7 +734,7 @@ JD-TC-ProviderCreateApptRequest-UH7
         Set Test Variable  ${pcid}  ${resp.json()[0]['id']}
     END
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -752,7 +752,7 @@ JD-TC-ProviderCreateApptRequest-UH8
 
     [Documentation]   Provider create an appt request for a disabled service.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -775,7 +775,7 @@ JD-TC-ProviderCreateApptRequest-UH9
 
     [Documentation]   Provider create appt request for a donation service with type as booking.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -816,7 +816,7 @@ JD-TC-ProviderCreateApptRequest-UH10
 
     [Documentation]   Provider create an appt request for a past date.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -840,7 +840,7 @@ JD-TC-ProviderCreateApptRequest-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    ${DAY}=  subtract_date  2
+    ${DAY}=  db.subtract_timezone_date  ${tz}   2
     ${apptfor1}=  Create Dictionary  id=${pcid1}  
     ${apptfor}=   Create List  ${apptfor1}
 
@@ -856,11 +856,11 @@ JD-TC-ProviderCreateApptRequest-UH11
 
     [Documentation]   Provider create an appt request with another providers service.
 
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${future_day}=  add_date   4
+    ${future_day}=  db.add_timezone_date  ${tz}   4
     ${apptfor1}=  Create Dictionary  id=${procid}  
     ${apptfor}=   Create List  ${apptfor1} 
 
@@ -875,11 +875,11 @@ JD-TC-ProviderCreateApptRequest-UH12
 
     [Documentation]   Provider create an appt request with another providers schedule.
 
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${future_day}=  add_date   4
+    ${future_day}=  db.add_timezone_date  ${tz}   4
     ${apptfor1}=  Create Dictionary  id=${procid}  
     ${apptfor}=   Create List  ${apptfor1} 
 

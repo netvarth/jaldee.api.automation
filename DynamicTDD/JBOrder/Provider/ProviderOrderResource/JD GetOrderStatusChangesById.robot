@@ -25,10 +25,14 @@ JD-TC-Getorderstatuschangebyid-1
     clear_service  ${PUSERNAME130}
     clear_customer   ${PUSERNAME130}
     clear_Item   ${PUSERNAME130}
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME130}
     Set Suite Variable  ${accId} 
@@ -74,17 +78,22 @@ JD-TC-Getorderstatuschangebyid-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   3  30 
+    ${eTime1}=  add_timezone_time  ${tz}  3  30   
     Set Suite Variable    ${eTime1}
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -161,7 +170,7 @@ JD-TC-Getorderstatuschangebyid-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -174,7 +183,7 @@ JD-TC-Getorderstatuschangebyid-1
     ${address}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
     Set Test Variable  ${address}
 
-    # ${sTime1}=  add_time  0  15
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}  max=${maxQuantity}
@@ -194,7 +203,7 @@ JD-TC-Getorderstatuschangebyid-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -207,7 +216,7 @@ JD-TC-Getorderstatuschangebyid-1
     Should Be Equal As Strings    ${resp.status_code}    200
     sleep  05s
     
-    # ${UpdatedTime}=  db.get_date_time
+    # ${UpdatedTime}=  db.get_date_time_by_timezone  ${tz}
     # ${statusUpdatedTime}=   db.remove_date_time_secs1   ${UpdatedTime}
     
     ${resp}=  Get Order Status Changes by uid    ${orderid1}
@@ -232,10 +241,14 @@ JD-TC-Getorderstatuschangebyid-2
     clear_service  ${PUSERNAME131}
     clear_customer   ${PUSERNAME131}
     clear_Item   ${PUSERNAME131}
-    ${resp}=  ProviderLogin  ${PUSERNAME131}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid1}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid1}  ${resp.json()['id']}
     
     ${accId1}=  get_acc_id  ${PUSERNAME131}
     Set Suite Variable  ${accId1} 
@@ -280,17 +293,22 @@ JD-TC-Getorderstatuschangebyid-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id2}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz1}
+    ${endDate}=  db.add_timezone_date  ${tz1}  10        
+
+    ${startDate1}=  db.add_timezone_date  ${tz1}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz1}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime0}=  add_time  0  15
+    ${sTime0}=  add_timezone_time  ${tz1}  0  15  
     Set Suite Variable   ${sTime0}
-    ${eTime0}=  add_time   3  30 
+    ${eTime0}=  add_timezone_time  ${tz1}  3  30   
     Set Suite Variable    ${eTime0}
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -362,7 +380,7 @@ JD-TC-Getorderstatuschangebyid-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz1}  12  
     # ${address}=  get_address
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
@@ -375,7 +393,7 @@ JD-TC-Getorderstatuschangebyid-2
     ${address}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
     Set Test Variable  ${address}
       
-    # ${sTime1}=  add_time  0  15
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}  max=${maxQuantity}
@@ -397,7 +415,7 @@ JD-TC-Getorderstatuschangebyid-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME131}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -423,7 +441,7 @@ JD-TC-Getorderstatuschangebyid-2
 JD-TC-Getorderstatuschangebyid-3
     [Documentation]  Get order status to ready for delivery from Preparing
     
-    ${resp}=  Provider Login   ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME130}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -454,7 +472,7 @@ JD-TC-Getorderstatuschangebyid-3
 JD-TC-Getorderstatuschangebyid-4
     [Documentation]  Get order status to ready for shipment from ready for delivery
     
-    ${resp}=  Provider Login   ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME130}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -489,7 +507,7 @@ JD-TC-Getorderstatuschangebyid-4
 JD-TC-Getorderstatuschangebyid-5
     [Documentation]  Get order status to completed from ready for shipment
     
-    ${resp}=  Provider Login   ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME130}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -529,7 +547,7 @@ JD-TC-Getorderstatuschangebyid-5
 JD-TC-Getorderstatuschangebyid-6
     [Documentation]  Get order status to shipped from completed
     
-    ${resp}=  Provider Login   ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME130}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -573,7 +591,7 @@ JD-TC-Getorderstatuschangebyid-6
 JD-TC-Getorderstatuschangebyid-7
     [Documentation]  Get order status to canceld from shipped
     
-    ${resp}=  Provider Login   ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME130}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -624,10 +642,14 @@ JD-TC-Getorderstatuschangebyid-8
     clear_service  ${PUSERNAME132}
     clear_customer   ${PUSERNAME132}
     clear_Item   ${PUSERNAME132}
-    ${resp}=  ProviderLogin  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid3}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid3}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid3}  ${resp.json()['id']}
     
     ${accId3}=  get_acc_id  ${PUSERNAME132}
     Set Suite Variable  ${accId3} 
@@ -673,17 +695,22 @@ JD-TC-Getorderstatuschangebyid-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id3}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz2}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz2}
+    ${endDate}=  db.add_timezone_date  ${tz2}  10        
+
+    ${startDate1}=  db.add_timezone_date  ${tz2}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz2}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime2}=  add_time  0  15
+    ${sTime2}=  add_timezone_time  ${tz2}  0  15  
     Set Suite Variable   ${sTime2}
-    ${eTime2}=  add_time   3  30 
+    ${eTime2}=  add_timezone_time  ${tz2}  3  30   
     Set Suite Variable    ${eTime2}
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -756,8 +783,8 @@ JD-TC-Getorderstatuschangebyid-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   12
-    # ${sTime1}=  add_time  0  15
+    ${DAY1}=  db.add_timezone_date  ${tz2}  12  
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}
@@ -780,7 +807,7 @@ JD-TC-Getorderstatuschangebyid-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -805,7 +832,7 @@ JD-TC-Getorderstatuschangebyid-8
 JD-TC-Getorderstatuschangebyid-9
     [Documentation]  Get order status to ready for pickup from order confermed 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -835,7 +862,7 @@ JD-TC-Getorderstatuschangebyid-9
 JD-TC-Getorderstatuschangebyid-10
     [Documentation]  Get order status to  completed from ready to pickup 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -870,7 +897,7 @@ JD-TC-Getorderstatuschangebyid-10
 JD-TC-Getorderstatuschangebyid-11
     [Documentation]  Get order status to  cancelled from completed 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME132}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -909,7 +936,7 @@ JD-TC-Getorderstatuschangebyid-11
 
 JD-TC-Getorderstatuschangebyid-UH1
     [Documentation]  Get order status of another provider
-    ${resp}=  Provider Login  ${PUSERNAME130}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME130}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -929,7 +956,7 @@ JD-TC-Getorderstatuschangebyid-UH2
 JD-TC-Getorderstatuschangebyid-UH3
     [Documentation]  Get order status of invalid orderid
 
-    ${resp}=  Provider Login  ${PUSERNAME131}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME131}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -942,7 +969,7 @@ JD-TC-Getorderstatuschangebyid-UH3
 # JD-TC-Getorderstatuschangebyid-UH1
 #     [Documentation]  Get order status when status not in status list
 
-#     ${resp}=  Provider Login   ${PUSERNAME131}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login   ${PUSERNAME131}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 

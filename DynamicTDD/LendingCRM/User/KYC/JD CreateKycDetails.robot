@@ -27,7 +27,7 @@ Multiple Users branches
     &{License_total}=  Create Dictionary
     
     FOR   ${a}  IN RANGE   ${length}   
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         
         ${resp1}=   Get Active License
@@ -105,15 +105,18 @@ JD-TC-CreateKyc-1
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=   ProviderLogin  ${MUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=    Get Locations
@@ -121,8 +124,13 @@ JD-TC-CreateKyc-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME13}  
@@ -302,7 +310,7 @@ JD-TC-CreateKyc-1
 JD-TC-CreateKyc-2
     [Documentation]  create Kyc with Co-applicent.
 
-    ${resp}=   ProviderLogin  ${MUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -459,10 +467,12 @@ JD-TC-CreateKyc-3
     Should Be Equal As Strings    ${resp.status_code}    200
     
 
-    ${resp}=   ProviderLogin  ${MUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -475,8 +485,13 @@ JD-TC-CreateKyc-3
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
      ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME10}  
@@ -593,10 +608,12 @@ JD-TC-CreateKyc-4
     [Documentation]  User Create Kyc .
 
   
-    ${resp}=   ProviderLogin  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypted_data['id']}
     clear_customer   ${HLMUSERNAME6}
     ${resp}=   Get Active License
     Log  ${resp.content}
@@ -665,7 +682,7 @@ JD-TC-CreateKyc-4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -674,8 +691,13 @@ JD-TC-CreateKyc-4
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}  
@@ -783,7 +805,7 @@ JD-TC-CreateKyc-4
 JD-TC-CreateKyc-5
     [Documentation]  Create Kyc With Incorrect Phone Number.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME6}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -810,8 +832,13 @@ JD-TC-CreateKyc-5
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     updateEnquiryStatus  ${account_id6}
@@ -907,10 +934,12 @@ JD-TC-CreateKyc-5
 JD-TC-CreateKyc-UH1
     [Documentation]  Create Kyc with Invalid Customer Id .
 
-    ${resp}=   ProviderLogin  ${MUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME3}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id3}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id3}  ${decrypted_data['id']}
 
     ${resp}=   Get Active License
     Log  ${resp.content}
@@ -951,7 +980,7 @@ JD-TC-CreateKyc-UH1
     Set Suite Variable  ${targetPotential}
     
 
-    # ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1135,18 +1164,25 @@ JD-TC-CreateKyc-UH3
 JD-TC-CreateKyc-UH4
     [Documentation]  Create Kyc With Co-applicant permanentPhone is Empty.
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_idu1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_idu1}  ${decrypted_data['id']}
     clear_customer   ${HLMUSERNAME6}
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}  
@@ -1278,7 +1314,7 @@ JD-TC-CreateKyc-UH4
 JD-TC-CreateKyc-UH5
     [Documentation]  Create a  Kyc With same idType Attachment  
 
-    ${resp}=   ProviderLogin  ${BUSER_U1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     clear_customer   ${HLMUSERNAME6}

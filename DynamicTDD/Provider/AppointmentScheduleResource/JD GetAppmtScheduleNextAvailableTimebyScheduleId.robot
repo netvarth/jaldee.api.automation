@@ -25,7 +25,7 @@ ${SERVICE3}     Scannings111
 JD-TC-Appointment Schedule NextAvailableTime By Schedule-1
     [Documentation]   Appointment Schedyle NextAvailbleTime By ScheduleId
     
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -45,11 +45,11 @@ JD-TC-Appointment Schedule NextAvailableTime By Schedule-1
     Set Suite Variable   ${s_id1}
     
     clear_appt_schedule   ${PUSERNAME60}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -91,7 +91,7 @@ JD-TC-Appointment Schedule NextAvailableTime By Schedule-1
 JD-TC-Appointment Schedule NextAvailableTime By Schedule-2
     [Documentation]   Appointment Schedyle NextAvailbleTime By ScheduleId with FutureDay
     
-    ${resp}=  Provider Login  ${PUSERNAME61}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -111,10 +111,10 @@ JD-TC-Appointment Schedule NextAvailableTime By Schedule-2
     Set Suite Variable   ${s_id1}
     
     clear_appt_schedule   ${PUSERNAME61}
-    ${DAY1}=  add_date  4
+    ${DAY1}=  db.add_timezone_date  ${tz}  4  
     Set Suite Variable   ${DAY1} 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -156,7 +156,7 @@ JD-TC-Appointment Schedule NextAvailableTime By Schedule-2
 JD-TC-Appointment Schedule NextAvailableTime By Schedule-3
     [Documentation]   Appointment Schedyle NextAvailbleTime By ScheduleId with Holiday
     
-    ${resp}=  Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -176,11 +176,11 @@ JD-TC-Appointment Schedule NextAvailableTime By Schedule-3
     Set Suite Variable   ${s_id1}
     
     clear_appt_schedule   ${PUSERNAME62}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
-    ${DAY2}=  add_date  10 
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -237,7 +237,7 @@ JD-TC-Appointment Schedule NextAvailableTime By Schedule-3
 JD-TC-Appointment Schedule NextAvailableTime By Schedule-UH1
     [Documentation]   Appointment Schedyle NextAvailbleTime By ScheduleId with Another Provider
     
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -249,7 +249,7 @@ JD-TC-Appointment Schedule NextAvailableTime By Schedule-UH1
 JD-TC-Appointment Schedule NextAvailableTime By Schedule-UH2
     [Documentation]   Appointment Schedyle NextAvailbleTime By ScheduleId with Another ScheduleId
     
-    ${resp}=  Provider Login  ${PUSERNAME61}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -261,7 +261,7 @@ JD-TC-Appointment Schedule NextAvailableTime By Schedule-UH2
 JD-TC-Appointment Schedule NextAvailableTime By Schedule-UH3
     [Documentation]   Appointment Schedyle NextAvailbleTime By ScheduleId is Zero
     
-    ${resp}=  Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -281,7 +281,7 @@ JD-TC-Appointment Schedule NextAvailableTime By Schedule-UH4
 
 JD-TC-Appointment Schedule NextAvailableTime By Schedule-UH5
     [Documentation]   With another Provider Login
-    ${resp}=  Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 

@@ -22,7 +22,7 @@ ${countryCode}   +91
 JD-TC-DisableOrderSettings-1
     [Documentation]   Disable Order Settings and verify
 
-    ${resp}=  ProviderLogin  ${PUSERNAME235}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid235}  ${resp.json()['id']}
     Set Suite Variable  ${P235_fName}  ${resp.json()['firstName']}
@@ -85,7 +85,7 @@ JD-TC-DisableOrderSettings-1
 JD-TC-DisableOrderSettings-2
     [Documentation]   Enable order settings using Updation, after that Disable Order Settings
 
-    ${resp}=  ProviderLogin  ${PUSERNAME28}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${P28_fName}  ${resp.json()['firstName']}
     Set Suite Variable  ${P28_lName}  ${resp.json()['lastName']}
@@ -174,7 +174,7 @@ JD-TC-DisableOrderSettings-UH2
 JD-TC-DisableOrderSettings-UH3
     [Documentation]   Disable Order Settings again
 
-    ${resp}=  ProviderLogin  ${PUSERNAME117}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME117}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${P117_fName}  ${resp.json()['firstName']}
     Set Suite Variable  ${P117_lName}  ${resp.json()['lastName']}

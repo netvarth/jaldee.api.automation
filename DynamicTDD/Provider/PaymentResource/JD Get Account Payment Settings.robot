@@ -16,7 +16,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-Get Account Payment Settings of an account-1
        [Documentation]   Provider check to Get payment settings of an account
-       #${resp}=   ProviderLogin  ${PUSERNAME_B}  ${PASSWORD} 
+       #${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
        #Should Be Equal As Strings    ${resp.status_code}   200
        ${domresp}=  Get BusinessDomainsConf
        Should Be Equal As Strings  ${domresp.status_code}  200
@@ -37,12 +37,12 @@ JD-TC-Get Account Payment Settings of an account-1
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
        Should Be Equal As Strings    ${resp.status_code}    200
-       ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
        Log  ${resp.json()}
        Should Be Equal As Strings    ${resp.status_code}    200
        Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
        Set Suite Variable  ${PUSERNAME_B}
-       ${DAY1}=  get_date
+       ${DAY1}=  db.get_date_by_timezone  ${tz}
        Set Suite Variable  ${DAY1}  ${DAY1}
        ${list}=  Create List  1  2  3  4  5  6  7
        Set Suite Variable  ${list}  ${list}
@@ -79,7 +79,7 @@ JD-TC-Get Account Payment Settings of an account-1
        
 JD-TC-Get Account Payment Settings of an account-2
        [Documentation]   Provider check to Get payment of an account with payUverified=false when changing any of field in payment settings
-       ${resp}=   ProviderLogin  ${PUSERNAME_B}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${acct_id1}=  get_acc_id  ${PUSERNAME_B} 
        ${businessStatus}=   Random Element   ${businessStatus}  

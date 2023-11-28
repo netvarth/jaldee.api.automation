@@ -108,7 +108,7 @@ JD-TC-ChangeAnswerStatusForOrder-1
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -116,6 +116,7 @@ JD-TC-ChangeAnswerStatusForOrder-1
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -163,7 +164,7 @@ JD-TC-ChangeAnswerStatusForOrder-1
             Log  ${ttype}
             ${u_ttype}=    Remove Duplicates    ${ttype}
             Log  ${u_ttype}
-            ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}    ${item_id1}
+            ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}    ${item_id1}
    
         END
     END
@@ -201,7 +202,7 @@ JD-TC-ChangeAnswerStatusForOrder-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -246,7 +247,7 @@ JD-TC-ChangeAnswerStatusForOrder-1
         Set Suite Variable  ${cid21}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.${test_mail}
@@ -364,7 +365,7 @@ JD-TC-ChangeAnswerStatusForOrder-2
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Suite Variable  ${pid1}  ${resp.json()['id']}
@@ -372,6 +373,7 @@ JD-TC-ChangeAnswerStatusForOrder-2
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -419,7 +421,7 @@ JD-TC-ChangeAnswerStatusForOrder-2
     #         Log  ${ttype}
     #         ${u_ttype}=    Remove Duplicates    ${ttype}
     #         Log  ${u_ttype}
-    #         ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}    ${item_id1}
+    #         ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}    ${item_id1}
    
     #     END
     # END
@@ -479,7 +481,7 @@ JD-TC-ChangeAnswerStatusForOrder-2
     # ${resp}=  SuperAdmin Logout 
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=  ProviderLogin  ${PUSERNAME138}  ${PASSWORD}
+    # ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     # Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -531,7 +533,7 @@ JD-TC-ChangeAnswerStatusForOrder-2
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.${test_mail}
@@ -563,7 +565,7 @@ JD-TC-ChangeAnswerStatusForOrder-2
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -646,13 +648,14 @@ JD-TC-ChangeAnswerStatusForOrder-3
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -700,7 +703,7 @@ JD-TC-ChangeAnswerStatusForOrder-3
             Log  ${ttype}
             ${u_ttype}=    Remove Duplicates    ${ttype}
             Log  ${u_ttype}
-            ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}    ${item_id1}
+            ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}    ${item_id1}
    
         END
     END
@@ -773,7 +776,7 @@ JD-TC-ChangeAnswerStatusForOrder-3
         Set Suite Variable  ${cid21}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.${test_mail}
@@ -906,13 +909,14 @@ JD-TC-ChangeAnswerStatusForOrder-4
     Log  ${unique_cnames}
     Set Suite Variable   ${unique_cnames}
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -960,7 +964,7 @@ JD-TC-ChangeAnswerStatusForOrder-4
             Log  ${ttype}
             ${u_ttype}=    Remove Duplicates    ${ttype}
             Log  ${u_ttype}
-            ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}    ${item_id1}
+            ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}    ${item_id1}
    
         END
     END
@@ -1033,7 +1037,7 @@ JD-TC-ChangeAnswerStatusForOrder-4
         Set Suite Variable  ${cid21}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.${test_mail}
@@ -1136,7 +1140,7 @@ JD-TC-ChangeAnswerStatusForOrder-4
 JD-TC-ChangeAnswerStatusForOrder-5
     [Documentation]  complete already completed order
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1186,7 +1190,7 @@ JD-TC-ChangeAnswerStatusForOrder-5
     #         Log  ${ttype}
     #         ${u_ttype}=    Remove Duplicates    ${ttype}
     #         Log  ${u_ttype}
-    #         ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}    ${item_id1}
+    #         ${CatalogId1}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}    ${item_id1}
    
     #     END
     # END
@@ -1259,7 +1263,7 @@ JD-TC-ChangeAnswerStatusForOrder-5
         Set Suite Variable  ${cid21}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.${test_mail}
@@ -1352,7 +1356,7 @@ JD-TC-ChangeAnswerStatusForOrder-5
 JD-TC-ChangeAnswerStatusForOrder-UH1
     [Documentation]   change answer status to complete, without giving details.
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1419,7 +1423,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH1
         Set Suite Variable  ${cid21}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.${test_mail}
@@ -1502,7 +1506,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH1
 JD-TC-ChangeAnswerStatusForOrder-UH2
     [Documentation]   change answer status without provider login
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1569,7 +1573,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH2
         Set Suite Variable  ${cid21}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.${test_mail}
@@ -1646,7 +1650,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH2
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}    ${SESSION_EXPIRED}
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1659,7 +1663,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH2
 JD-TC-ChangeAnswerStatusForOrder-UH3
     [Documentation]   change answer status without file uid
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1726,7 +1730,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH3
         Set Suite Variable  ${cid21}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.${test_mail}
@@ -1812,7 +1816,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH3
 JD-TC-ChangeAnswerStatusForOrder-UH4
     [Documentation]   change answer status without labelname
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1879,7 +1883,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH4
         Set Suite Variable  ${cid21}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.${test_mail}
@@ -1965,7 +1969,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH4
 JD-TC-ChangeAnswerStatusForOrder-UH5
     [Documentation]   change answer status without column id
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2032,7 +2036,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH5
         Set Suite Variable  ${cid21}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.${test_mail}
@@ -2116,7 +2120,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH5
 JD-TC-ChangeAnswerStatusForOrder-UH6
     [Documentation]   change answer status with invalid order id.
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2183,7 +2187,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH6
         Set Suite Variable  ${cid21}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.${test_mail}
@@ -2269,7 +2273,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH6
 JD-TC-ChangeAnswerStatusForOrder-UH7
     [Documentation]   change answer status with another provider's order id.
 
-    ${resp}=  Provider Login  ${PUSERNAME139}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME139}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2319,7 +2323,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH7
             Log  ${ttype}
             ${u_ttype}=    Remove Duplicates    ${ttype}
             Log  ${u_ttype}
-            ${CatalogId2}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}    ${item_id1}
+            ${CatalogId2}=  Run Keyword If   '${kwstatus}' == 'FAIL' and '${QnrTransactionType[8]}' in @{u_ttype}  Create Sample Catalog  ${unique_cnames[${i}]}   ${tz}    ${item_id1}
    
         END
     END
@@ -2376,7 +2380,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH7
         Set Suite Variable  ${cid21-1}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.${test_mail}
@@ -2405,7 +2409,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH7
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2468,7 +2472,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH7
 JD-TC-ChangeAnswerStatusForOrder-UH8
     [Documentation]   change answer status with another label name.
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2535,7 +2539,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH8
         Set Suite Variable  ${cid21}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.${test_mail}
@@ -2621,7 +2625,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH8
 JD-TC-ChangeAnswerStatusForOrder-UH9
     [Documentation]   change answer status with non existant label name.
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2688,7 +2692,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH9
         Set Suite Variable  ${cid21}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.${test_mail}
@@ -2775,7 +2779,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH9
 JD-TC-ChangeAnswerStatusForOrder-UH10
     [Documentation]   change answer status with invalid file id.
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2842,7 +2846,7 @@ JD-TC-ChangeAnswerStatusForOrder-UH10
         Set Suite Variable  ${cid21}  ${resp.json()[0]['id']}
     END
 
-    ${DAY1}=   db.get_date
+    ${DAY1}=   db.get_date_by_timezone  ${tz}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     ${first}= 	Split String 	${fname}
     Set Test Variable  ${C_email}  ${first[0]}${CUSERNAME21}.${test_mail}

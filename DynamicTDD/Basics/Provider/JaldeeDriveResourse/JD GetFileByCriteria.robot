@@ -62,7 +62,7 @@ ${xlFile}            ${EXECDIR}/TDD/sampleqnr.xlsx    # DataSheet
 JD-TC-GetFileByCriteria-1
 	[Documentation]    Upload files
 
-    ${resp}=  Provider Login  ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -228,7 +228,7 @@ JD-TC-GetFileByCriteria-2
 
     [Documentation]     get private files from jaldee drive
 
-    ${resp}=  Provider Login            ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login            ${PUSERNAME66}  ${PASSWORD}
     Log                                 ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}    200
     ${acc_id1}=  get_acc_id  ${PUSERNAME66}
@@ -247,7 +247,7 @@ JD-TC-GetFileByCriteria-3
 
     [Documentation]     get shared files from jaldee drive
 
-    ${resp}=  Provider Login            ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login            ${PUSERNAME66}  ${PASSWORD}
     Log                                 ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}    200
 
@@ -262,7 +262,7 @@ JD-TC-GetFileByCriteria-4
 
     [Documentation]     get  files from jaldee drive - filter owner 
 
-    ${resp}=  Provider Login            ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login            ${PUSERNAME66}  ${PASSWORD}
     Log                                 ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}    200
 
@@ -282,7 +282,7 @@ JD-TC-GetFileByCriteria-5
 
     [Documentation]     get  files from jaldee drive - filter  accound id
 
-    ${resp}=  Provider Login            ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login            ${PUSERNAME66}  ${PASSWORD}
     Log                                 ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}    200
 
@@ -300,7 +300,7 @@ JD-TC-GetFileByCriteria-6
 
     [Documentation]     get  files from jaldee drive - filter contexttype-jaldeedrive
 
-    ${resp}=  Provider Login            ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login            ${PUSERNAME66}  ${PASSWORD}
     Log                                 ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}    200
 
@@ -321,7 +321,7 @@ JD-TC-GetFileByCriteria-7
 
     [Documentation]     get  files from jaldee drive - filter ownertype- providerConsumer
 
-    ${resp}=  Provider Login            ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login            ${PUSERNAME66}  ${PASSWORD}
     Log                                 ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}    200
 
@@ -338,7 +338,7 @@ JD-TC-GetFileByCriteria-8
 
     [Documentation]     get  files from jaldee drive - filter  context: communication
 
-    ${resp}=  Provider Login            ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login            ${PUSERNAME66}  ${PASSWORD}
     Log                                 ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}    200
 
@@ -360,7 +360,7 @@ JD-TC-GetFileByCriteria-9
     [Documentation]     get  files from jaldee drive - filterfiletype: pdf
 
       
-    ${resp}=  Provider Login            ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login            ${PUSERNAME66}  ${PASSWORD}
     Log                                 ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}    200
 
@@ -379,7 +379,7 @@ JD-TC-GetFileByCriteria-10
     [Documentation]     get  files from jaldee drive - filetype: png
 
       
-    ${resp}=  Provider Login            ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login            ${PUSERNAME66}  ${PASSWORD}
     Log                                 ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}    200
 
@@ -397,7 +397,7 @@ JD-TC-GetFileByCriteria-11
 
 	[Documentation]   user get  - filetype: jpg
 
-    ${resp}=  Provider Login  ${MUSERNAME7}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME7}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${MUSERNAME7} 
@@ -422,12 +422,14 @@ JD-TC-GetFileByCriteria-11
     Should Be Equal As Strings    ${resp2.status_code}    200
     
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
      ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -532,7 +534,7 @@ JD-TC-GetFileByCriteria-11
     Should Be Equal As Strings      ${resp[0].status_code}  200
     Should Be Equal As Strings      ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin         ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login         ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -563,7 +565,7 @@ JD-TC-GetFileByCriteria-11
     Should Be Equal As Strings      ${resp.status_code}  200
 
     
-    ${resp}=  ProviderLogin         ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login         ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
  
@@ -579,7 +581,7 @@ JD-TC-GetFileByCriteria-12
 
 	[Documentation]   user get  filter in upload file to jaldeedrive
 
-    ${resp}=  ProviderLogin         ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login         ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
@@ -610,7 +612,7 @@ JD-TC-GetFileByCriteria-13
 
     [Documentation]  UploadTaskAttachment using Task Id.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME55}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME55}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -625,8 +627,13 @@ JD-TC-GetFileByCriteria-13
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -721,18 +728,21 @@ JD-TC-GetFileByCriteria-14
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_C}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_C}  ${PASSWORD}
-    Log  ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
+    # Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${id}    ${resp.json()['id']} 
-    Set Suite Variable    ${userName}    ${resp.json()['userName']}         
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${id}  ${decrypted_data['id']}
+    Set Suite Variable  ${userName}  ${decrypted_data['userName']}
+    # Set Suite Variable    ${id}    ${resp.json()['id']} 
+    # Set Suite Variable    ${userName}    ${resp.json()['userName']}         
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
     Set Suite Variable  ${PUSERNAME_C}
 
     ${pid}=  get_acc_id  ${PUSERNAME_C}
     Set Suite Variable  ${pid}
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_C}+15566187
     ${ph2}=  Evaluate  ${PUSERNAME_C}+25566187
@@ -744,18 +754,22 @@ JD-TC-GetFileByCriteria-14
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -813,19 +827,25 @@ JD-TC-GetFileByCriteria-14
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${CUR_DAY}
     ${C_date}=  Convert Date  ${CUR_DAY}  result_format=%d-%m-%Y
     Set Suite Variable   ${C_date}
     ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id1}    ${resp}  
+    Set Suite Variable    ${loc_id1}    ${resp}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
     ${resp}=   Create Sample Service  ${SERVICE12}
     Set Suite Variable    ${ser_id1}    ${resp}  
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   add_time  1  00
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
     Set Suite Variable   ${strt_time}
-    ${end_time}=    add_time  3  00  
+    ${end_time}=    add_timezone_time  ${tz}  3  00    
     ${parallel}=   Random Int  min=1   max=1
     ${capacity}=  Random Int   min=10   max=20
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1} 
@@ -837,14 +857,14 @@ JD-TC-GetFileByCriteria-14
     ${resp}=  Add To Waitlist  ${cid1}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
     ${resp}=  Get Waitlist By Id  ${wid1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${ctime}=         db.get_time
+    # ${ctime}=         db.get_time_by_timezone   ${tz}
+    ${ctime}=         db.get_time_by_timezone  ${tz}
     ${complaint}=     FakerLibrary.word
     ${symptoms}=      FakerLibrary.sentence
     ${allergies}=     FakerLibrary.sentence
@@ -921,7 +941,7 @@ JD-TC-GetFileByCriteria-UH3
     [Documentation]     get  files from jaldee drive - filetype: EMPTY
 
       
-    ${resp}=  Provider Login            ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login            ${PUSERNAME66}  ${PASSWORD}
     Log                                 ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}    200
 
@@ -935,7 +955,7 @@ JD-TC-GetFileByCriteria-UH4
 
     [Documentation]     get  files from jaldee drive - filetype: invalid
     
-    ${resp}=  Provider Login            ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login            ${PUSERNAME66}  ${PASSWORD}
     Log                                 ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}    200
 
@@ -949,7 +969,7 @@ JD-TC-GetFileByCriteria-UH5
 
     [Documentation]     another provider login
     
-    ${resp}=  Provider Login            ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login            ${PUSERNAME1}  ${PASSWORD}
     Log                                 ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}    200
 
@@ -975,7 +995,7 @@ JD-TC-GetFileByCriteria-15
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -991,6 +1011,7 @@ JD-TC-GetFileByCriteria-15
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1045,7 +1066,7 @@ JD-TC-GetFileByCriteria-15
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1058,6 +1079,7 @@ JD-TC-GetFileByCriteria-15
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1156,7 +1178,7 @@ JD-TC-GetFileByCriteria-15
     ${resp}=   Consumer Logout         
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin   ${PUSERNAME66}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME66}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1223,13 +1245,13 @@ JD-TC-GetFileByCriteria-16
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_B}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
     Set Suite Variable  ${PUSERNAME_B}
 
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid12}=  get_acc_id  ${PUSERNAME_B}
@@ -1238,7 +1260,6 @@ JD-TC-GetFileByCriteria-16
     Set Suite Variable  ${id}
    
 
-    ${DAY1}=  get_date
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_B}+15566174
     ${ph2}=  Evaluate  ${PUSERNAME_B}+25566174
@@ -1250,18 +1271,22 @@ JD-TC-GetFileByCriteria-16
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1312,10 +1337,15 @@ JD-TC-GetFileByCriteria-16
 
 
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${CUR_DAY}
     ${resp}=   Create Sample Location
-    Set Suite Variable    ${loc_id1}    ${resp}  
+    Set Suite Variable    ${loc_id1}    ${resp}
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}  
     ${resp}=   Create Sample Service   ${SERV1} 
     Set Suite Variable    ${ser_id1}    ${resp}  
     ${resp}=   Create Sample Service  ${SERV2}              
@@ -1326,9 +1356,10 @@ JD-TC-GetFileByCriteria-16
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   add_time  1  00
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${strt_time}=   add_timezone_time  ${tz}  1  00  
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time  3  00 
+    ${end_time}=    add_timezone_time  ${tz}  3  00   
     Set Suite Variable    ${end_time}   
     ${parallel}=   Random Int  min=1   max=1
     Set Suite Variable   ${parallel}
@@ -1342,13 +1373,11 @@ JD-TC-GetFileByCriteria-16
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid1}  ${wid[0]}
     ${resp}=  Add To Waitlist  ${cid}  ${ser_id2}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid2}  ${wid[0]}
     sleep   5s
@@ -1447,7 +1476,7 @@ JD-TC-GetFileByCriteria-16
     clear_provider_msgs  ${PUSERNAME_B}
 
    
-    ${resp}=  Provider Login  ${PUSERNAME_B}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -67,7 +67,7 @@ JD-TC-ProviderNotificationSettings-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -147,7 +147,7 @@ JD-TC-ProviderNotificationSettings-1
 JD-TC-ProviderNotificationSettings-2
     [Documentation]  Clear Provider Notification Settings of one provider, and verify notification settings of another provider
 
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -162,7 +162,7 @@ JD-TC-ProviderNotificationSettings-2
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings  ${resp.json()}   ${EMPTY_List}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -178,7 +178,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Notification  Settings For WAITLISTADD 
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -200,7 +200,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Notification  Settings For WAITLISTCANCEL  
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -218,7 +218,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Provider Notification-1  Settings For WAITLISTADD Without PhoneNumber 
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -237,7 +237,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Notification  Settings For WAITLISTADD Without Email 
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -257,7 +257,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Notification  Settings For WAITLISTCANCEL Without PhoneNumber
 #     ${TORF}=  Evaluate  random.choice($TORF)  random 
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -277,7 +277,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Notification  Settings For WAITLISTCANCEL Without Email 
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -296,7 +296,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Notification  Settings For WAITLISTADD Without  Phone number and Email 
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -315,7 +315,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Notification  Settings For WAITLISTCANCEL Without  Phone number and Email 
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -348,7 +348,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Notification  Settings For WAITLISTADD  Two PhoneNumber
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -369,7 +369,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Notification  Settings For WAITLISTADD  Two Email
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -390,7 +390,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Notification  Settings For WAITLISTADD  Two PhoneNumber and Two Email
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -411,7 +411,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Notification  Settings For WAITLISTCANCEL  Two PhoneNumber
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -432,7 +432,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Notification  Settings For WAITLISTCANCEL  Two Email
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -453,7 +453,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Notification  Settings For WAITLISTCANCEL  Two PhoneNumber and Two Email
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -474,7 +474,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Notification  Settings For WAITLISTADD  Two PhoneNumber But they are Same
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -488,7 +488,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Notification  Settings For WAITLISTADD  Two Email But they are Same
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -503,7 +503,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Notification  Settings For WAITLISTCANCEL  Two PhoneNumber But they are Same
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -519,7 +519,7 @@ JD-TC-ProviderNotificationSettings-2
 #     [Documentation]  Enable Notification  Settings For WAITLISTCANCEL  Two Email But they are Same
 #     ${TORF}=  Evaluate  random.choice($TORF)  random
 #     [Setup]  clear_Provider_Notification  ${PUSERNAME2}   
-#     ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Log  ${resp.status_code}
 #     Should Be Equal As Strings  ${resp.status_code}  200

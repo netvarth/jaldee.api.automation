@@ -26,7 +26,7 @@ JD-TC-Get Gallery or Logo Image-1
     ${resp}=  uploadGalleryImages   ${cookie}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get GalleryOrlogo image  gallery
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -47,7 +47,7 @@ JD-TC-Get Gallery or Logo Image-2
     ${resp}=  uploadLogoImages   ${cookie}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get GalleryOrlogo image  logo
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -56,7 +56,7 @@ JD-TC-Get Gallery or Logo Image-2
         
 JD-TC-Get Gallery or Logo Image-UH1 
     [Documentation]  Get Gallery or Logo Image  invalid input
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get GalleryOrlogo image  biju
     Should Be Equal As Strings    ${resp.status_code}   422

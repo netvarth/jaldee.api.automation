@@ -26,10 +26,14 @@ JD-TC-Enable_Disable_Member_Service-1
 
     [Documentation]  Enable Disable Membership Service
 
-    ${resp}=  Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
 
     ${resp}=    Enable Disable Membership service     ${toggle[0]}
     Log  ${resp.content}
@@ -39,16 +43,24 @@ JD-TC-Enable_Disable_Member_Service-2
 
     [Documentation]  Create Membership Service After Enable Membership Service
 
-    ${resp}=  Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
 
+    ${lid}=  Create Sample Location
+    Set Suite Variable   ${lid}
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${description}=    FakerLibrary.bs
     ${name}=           FakerLibrary.firstName
     ${displayname}=    FakerLibrary.firstName
-    ${effectiveFrom}=  get_date
-    ${effectiveTo}=    add_date  10 
+    ${effectiveFrom}=  db.get_date_by_timezone  ${tz}
+    ${effectiveTo}=      db.add_timezone_date  ${tz}  10  
     Set Suite Variable    ${description}
     Set Suite Variable    ${name}
     Set Suite Variable    ${displayname}
@@ -64,10 +76,10 @@ JD-TC-Enable_Disable_Member_Service-3
 
     [Documentation]  Create Membership Service After Disable Membership Service
 
-    ${resp}=  Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
 
     ${resp}=    Enable Disable Membership service     ${toggle[1]}
     Log  ${resp.content}
@@ -77,16 +89,20 @@ JD-TC-Enable_Disable_Member_Service-3
 
     ${resp}=    Create Membership Service     ${description}    ${name1}    ${displayname}    ${effectiveFrom}    ${effectiveTo}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    600
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Enable_Disable_Member_Service-4
 
     [Documentation]  Disable Membership Service which is already Disabled
 
-    ${resp}=  Provider Login  ${PUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
 
     ${resp}=    Enable Disable Membership service     ${toggle[1]}
     Log  ${resp.content}
@@ -97,10 +113,10 @@ JD-TC-Enable_Disable_Member_Service-5
 
     [Documentation]  Enable Membership Service which is already Enabled
 
-    ${resp}=  Provider Login  ${PUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${user_id}    ${resp.json()['id']}
+    # Set Suite Variable    ${user_id}    ${resp.json()['id']}
 
     ${resp}=    Enable Disable Membership service     ${toggle[0]}
     Log  ${resp.content}

@@ -23,7 +23,7 @@ JD-TC-DeleteItemsFromItemGroup-1
 
     [Documentation]  Create an item and add that item to an item group, then delete item from that group.
 
-    ${resp}=  Provider Login  ${PUSERNAME140}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -126,7 +126,7 @@ JD-TC-DeleteItemsFromItemGroup-2
 
     [Documentation]  Create multiple items and add that items to an item group, then delete one item from the group..
 
-    ${resp}=  Provider Login  ${PUSERNAME141}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME141}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -265,7 +265,7 @@ JD-TC-DeleteItemsFromItemGroup-3
 
     [Documentation]  delete items from the item group by passing empty list of item ids.
 
-    ${resp}=  Provider Login  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -369,7 +369,7 @@ JD-TC-DeleteItemsFromItemGroup-UH1
 
     [Documentation]  try to delete items from the item group but that item not added in the group.
 
-    ${resp}=  Provider Login  ${PUSERNAME142}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME142}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -485,7 +485,7 @@ JD-TC-DeleteItemsFromItemGroup-UH2
 
     [Documentation]  delete items from group using another providers group id.
 
-    ${resp}=  Provider Login  ${PUSERNAME144}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME144}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -569,7 +569,7 @@ JD-TC-DeleteItemsFromItemGroup-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME145}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME145}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -600,7 +600,7 @@ JD-TC-DeleteItemsFromItemGroup-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME144}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME144}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -615,7 +615,7 @@ JD-TC-DeleteItemsFromItemGroup-UH3
 
     [Documentation]  try to delete another providers items from the group.
 
-    ${resp}=  Provider Login  ${PUSERNAME143}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME143}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -649,7 +649,7 @@ JD-TC-DeleteItemsFromItemGroup-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME146}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME146}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

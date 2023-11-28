@@ -19,18 +19,24 @@ Resource          /ebs/TDD/ProviderPartnerKeywords.robot
 
 ${autoApprovalUptoAmount}    50000
 ${autoApprovalUptoAmount2}    70000
-
+${minCreditScoreRequired}            50
+${minEquifaxScoreRequired}           690
+${minCibilScoreRequired}             690
+${minAge}                            23
+${maxAge}                            60
+${minAmount}                         5000
+${maxAmount}                         300000
 *** Test Cases ***
 
 JD-TC-CreateAndUpdateAccountCDLSettings-1
                                   
     [Documentation]               Get CDL Settings
 
-    ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Create and Update Account level cdl setting    ${bool[1]}    ${autoApprovalUptoAmount}    ${bool[1]}    ${toggle[0]}    ${bool[1]}    ${empty}   ${bool[1]}    ${bool[1]}  demandPromissoryNoteRequired=${bool[1]}    securityPostDatedChequesRequired=${bool[1]}    loanNature=ConsumerDurableLoan
+    ${resp}=    Create and Update Account level cdl setting    ${bool[1]}    ${autoApprovalUptoAmount2}    ${bool[1]}    ${toggle[1]}    ${bool[1]}   ${bool[1]}    ${bool[1]}  demandPromissoryNoteRequired=${bool[1]}    securityPostDatedChequesRequired=${bool[1]}    loanNature=ConsumerDurableLoan    autoEmiDeductionRequire=${bool[1]}   partnerRequired=${bool[0]}  documentSignatureRequired=${bool[0]}   digitalSignatureRequired=${bool[1]}   emandateRequired=${bool[1]}   creditScoreRequired=${bool[1]}   equifaxScoreRequired=${bool[1]}   cibilScoreRequired=${bool[1]}   minCreditScoreRequired=${minCreditScoreRequired}   minEquifaxScoreRequired=${minEquifaxScoreRequired}   minCibilScoreRequired=${minCibilScoreRequired}   minAge=${minAge}   maxAge=${maxAge}   minAmount=${minAmount}   maxAmount=${maxAmount}   bankStatementVerificationRequired=${bool[1]}   eStamp=DIGIO 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -42,7 +48,7 @@ JD-TC-CreateAndUpdateAccountCDLSettings-UH1
                                   
     [Documentation]               Get CDL Settings where cdl settings is not created
 
-    ${resp}=   ProviderLogin  ${PUSERNAME44}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

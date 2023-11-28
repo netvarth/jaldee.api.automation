@@ -25,7 +25,7 @@ JD-TC-RemoveTaskAssignee-1
 
     [Documentation]  Create a task for a  branch then change assignee and then remove that assignee.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME21}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME21} 
@@ -47,18 +47,23 @@ JD-TC-RemoveTaskAssignee-1
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
    
-    
-    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+       
     ${resp2}=   Get Business Profile
     Log  ${resp2.json()}
     Should Be Equal As Strings    ${resp2.status_code}    200
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
@@ -159,7 +164,7 @@ JD-TC-RemoveTaskAssignee-1
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
    
 
-    ${resp}=  Provider Login  ${HLMUSERNAME21}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
@@ -176,7 +181,7 @@ JD-TC-RemoveTaskAssignee-3
 
     [Documentation]  Create a task for a user then change assignee and then remove that assignee.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME21}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME21} 
@@ -203,12 +208,14 @@ JD-TC-RemoveTaskAssignee-3
     Log  ${resp2.json()}
     Should Be Equal As Strings    ${resp2.status_code}    200
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
@@ -293,7 +300,7 @@ JD-TC-RemoveTaskAssignee-3
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -330,7 +337,7 @@ JD-TC-RemoveTaskAssignee-3
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${HLMUSERNAME21}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -344,7 +351,7 @@ JD-TC-RemoveTaskAssignee-4
 
     [Documentation]  remove the assignee of another users task of same branch.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME21}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME21}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME21} 
@@ -406,7 +413,7 @@ JD-TC-RemoveTaskAssignee-4
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -431,7 +438,7 @@ JD-TC-RemoveTaskAssignee-4
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -443,7 +450,7 @@ JD-TC-RemoveTaskAssignee-UH1
 
     [Documentation]  Create a task for a  branch and remove the assignee without assign.
 
-     ${resp}=   Provider Login  ${MUSERNAME58}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${MUSERNAME58}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -455,8 +462,13 @@ JD-TC-RemoveTaskAssignee-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -528,7 +540,7 @@ JD-TC-RemoveTaskAssignee-UH4
 
     [Documentation]  try to remove the assignee which is already removed.
 
-    ${resp}=  ProviderLogin  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -556,7 +568,7 @@ JD-TC-RemoveTaskAssignee-UH5
 
     [Documentation]  remove the assignee with invalid task id. 
 
-    ${resp}=  ProviderLogin  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -570,7 +582,7 @@ JD-TC-RemoveTaskAssignee-UH5
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -585,7 +597,7 @@ JD-TC-RemoveTaskAssignee-UH6
 
     [Documentation]  remove the assignee with another branch task id.
 
-    ${resp}=  ProviderLogin  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -599,7 +611,7 @@ JD-TC-RemoveTaskAssignee-UH6
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${MUSERNAME40}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${MUSERNAME40}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -613,7 +625,7 @@ JD-TC-RemoveTaskAssignee-10
 
     [Documentation]  remove the assignee of a subtask.
 
-    ${resp}=  ProviderLogin  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -638,7 +650,7 @@ JD-TC-RemoveTaskAssignee-11
 
     [Documentation]  remove the assignee after closing the task.
 
-    ${resp}=  ProviderLogin  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -665,7 +677,7 @@ JD-TC-RemoveTaskAssignee-12
 
     [Documentation]  remove the assignee after change the status to done.
 
-    ${resp}=  ProviderLogin  ${PUSERPH1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

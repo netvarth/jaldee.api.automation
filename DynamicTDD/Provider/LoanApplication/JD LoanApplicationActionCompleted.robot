@@ -44,7 +44,7 @@ JD-TC-Loan_Application_Action_Completed-1
     [Documentation]               Loan Application Action Completed
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME66}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -189,7 +189,7 @@ JD-TC-Loan_Application_Action_Completed-UH1
                                   
     [Documentation]               Loan Application Action Completed where note is empty
 
-    ${resp}=   ProviderLogin  ${PUSERNAME66}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -200,7 +200,7 @@ JD-TC-Loan_Application_Action_Completed-UH1
 JD-TC-Loan_Application_Action_Completed-UH2
                                   
     [Documentation]               Loan Application Action Completed where loanid is empty
-    ${resp}=   ProviderLogin  ${PUSERNAME66}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -214,7 +214,7 @@ JD-TC-Loan_Application_Action_Completed-UH2
 JD-TC-Loan_Application_Action_Completed-UH3
                                   
     [Documentation]               Loan Application Action Completed with invalid loan uid
-    ${resp}=   ProviderLogin  ${PUSERNAME66}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -241,7 +241,7 @@ JD-TC-Loan_Application_Action_Completed-UH5
                                   
     [Documentation]               Loan Application Action Completed which is created for another provider
 
-    ${resp}=   ProviderLogin  ${PUSERNAME67}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME67}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

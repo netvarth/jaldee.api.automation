@@ -26,7 +26,7 @@ JD-TC-GetItemGroupByIdforUser-1
 
     [Documentation]  Create Item Group for an existing provider and get the details.
 
-    ${resp}=  Provider Login  ${MUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -65,7 +65,7 @@ JD-TC-GetItemGroupByIdforUser-2
 
     [Documentation]  Create multiple Item Group for an existing provider.
 
-    ${resp}=  Provider Login  ${MUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -94,7 +94,7 @@ JD-TC-GetItemGroupByIdforUser-3
 
     [Documentation]  Create multiple Item Group with same name for an existing provider.
 
-    ${resp}=  Provider Login  ${MUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME19}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -143,7 +143,7 @@ JD-TC-GetItemGroupByIdforUser-4
 
     [Documentation]  Create Item Group for a provider without group decscription.
 
-    ${resp}=  Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -180,7 +180,7 @@ JD-TC-GetItemGroupByIdforUser-5
 
     [Documentation]  Create Item Group by a user and get the details.
 
-    ${resp}=  Provider Login  ${MUSERNAME145}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME145}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -261,7 +261,7 @@ JD-TC-GetItemGroupByIdforUser-5
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  Provider Login  ${BUSER_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -283,7 +283,7 @@ JD-TC-GetItemGroupByIdforUser-UH1
 
     [Documentation]  Get Item Group with invalid item group id.
 
-    ${resp}=  Provider Login  ${MUSERNAME27}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     

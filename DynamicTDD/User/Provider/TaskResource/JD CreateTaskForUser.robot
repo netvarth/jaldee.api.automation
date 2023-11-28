@@ -26,7 +26,7 @@ JD-TC-CreateTaskforUser-1
 
     [Documentation]  Create a task for a branch.
 
-    ${resp}=  Provider Login  ${MUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -37,8 +37,13 @@ JD-TC-CreateTaskforUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId10}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId10}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId10}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -85,7 +90,7 @@ JD-TC-CreateTaskforUser-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -93,21 +98,51 @@ JD-TC-CreateTaskforUser-2
     ${id}=  get_id  ${MUSERNAME_E}
     ${lid}=  Create Sample Location
     Set Suite Variable  ${lid}
+    
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${lid1}=  Create Sample Location
     Set Suite Variable  ${lid1}
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${lid2}=  Create Sample Location
     Set Suite Variable  ${lid2}
+    
+    ${resp}=   Get Location ById  ${lid2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${lid3}=  Create Sample Location
     Set Suite Variable  ${lid3}
+    
+    ${resp}=   Get Location ById  ${lid3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     
 
 
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -158,11 +193,16 @@ JD-TC-CreateTaskforUser-2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${locId}=  Create Sample Location
+
+    ${resp}=   Get Location ById  ${locId}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
 
     ${title}=  FakerLibrary.user name
@@ -177,7 +217,7 @@ JD-TC-CreateTaskforUser-3
 
     [Documentation]  Create task for multiple users of a branch.
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+3366458
@@ -210,11 +250,16 @@ JD-TC-CreateTaskforUser-3
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${locId}=  Create Sample Location
+
+    ${resp}=   Get Location ById  ${locId}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
 
     ${title}=  FakerLibrary.user name
@@ -230,11 +275,16 @@ JD-TC-CreateTaskforUser-4
 
     [Documentation]  Create same task for multiple users.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${locId}=  Create Sample Location
+
+    ${resp}=   Get Location ById  ${locId}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
 
     ${title}=  FakerLibrary.user name
@@ -244,7 +294,7 @@ JD-TC-CreateTaskforUser-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -260,7 +310,7 @@ JD-TC-CreateTaskforUser-5
 
     [Documentation]  Create task for a user with account level location id.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -282,7 +332,7 @@ JD-TC-CreateTaskforUser-6(UH)
 
     [Documentation]  Create a task for user with another users location.
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERNAME_U3}=  Evaluate  ${PUSERNAME}+3366498
@@ -315,12 +365,16 @@ JD-TC-CreateTaskforUser-6(UH)
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${locId1}=  Create Sample Location
 
+    ${resp}=   Get Location ById  ${locId1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.word 
@@ -337,7 +391,7 @@ JD-TC-CreateTaskforUser-7
 
     [Documentation]  Create task for user with another branch location.
     
-     ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -359,7 +413,7 @@ JD-TC-CreateTaskforUser-8
 
     [Documentation]  Create multiple tasks for same users of a branch with different location.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -392,7 +446,7 @@ JD-TC-CreateTaskforUser-9
     [Documentation]  Create multiple tasks for a branch with different location.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -424,7 +478,7 @@ JD-TC-CreateTaskforUser-10
 
     [Documentation]  Create multiple tasks for same users of a branch with same location.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -458,7 +512,7 @@ JD-TC-CreateTaskforUser-11
     [Documentation]  Create multiple tasks for a branch with same location.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -490,7 +544,7 @@ JD-TC-CreateTaskforUser-12
 
     [Documentation]  Create a task for a branch by giving status and priority.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${MUSERNAME2}
@@ -501,8 +555,13 @@ JD-TC-CreateTaskforUser-12
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=    Get Task Status
@@ -530,7 +589,7 @@ JD-TC-CreateTaskforUser-13
 
     [Documentation]  Create a task for a user by giving status and priority.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -563,7 +622,7 @@ JD-TC-CreateTaskforUser-14
 
     [Documentation]   Create a consumer Task  for a branch.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME2}
@@ -574,8 +633,13 @@ JD-TC-CreateTaskforUser-14
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
   
     ${resp}=  categorytype  ${p_id}
@@ -604,12 +668,16 @@ JD-TC-CreateTaskforUser-15
 
     [Documentation]   Create a consumer Task  for a user.
     
-     ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${locId1}=  Create Sample Location
 
+    ${resp}=   Get Location ById  ${locId1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.word 
@@ -624,7 +692,7 @@ JD-TC-CreateTaskforUser-16
 
     [Documentation]  Create a task without title by user.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -639,7 +707,7 @@ JD-TC-CreateTaskforUser-17
 
     [Documentation]  Create a task without description by user.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${MUSERNAME51}
@@ -655,7 +723,7 @@ JD-TC-CreateTaskforUser-UH1
 
     [Documentation]  Create a task without giving user type by user.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
@@ -672,7 +740,7 @@ JD-TC-CreateTaskforUser-UH2
 
     [Documentation]  Create a task without giving user type by branch.
 
-     ${resp}=   ProviderLogin  ${HLMUSERNAME2}  ${PASSWORD} 
+     ${resp}=   Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -691,7 +759,7 @@ JD-TC-CreateTaskforUser-UH3
 
     [Documentation]  Create a task without location by branch.
 
-    ${resp}=   ProviderLogin  ${HLMUSERNAME2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -709,12 +777,16 @@ JD-TC-CreateTaskforUser-UH4
     [Documentation]  Create a task without location by user login.
 
 
-     ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${locId1}=  Create Sample Location
 
+    ${resp}=   Get Location ById  ${locId1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.word 
@@ -733,7 +805,7 @@ JD-TC-CreateTaskforUser-UH5
 
     [Documentation]  Create a task without category by branch.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME2}
@@ -751,12 +823,16 @@ JD-TC-CreateTaskforUser-UH6
 
     [Documentation]  Create a task without category by user.
 
-     ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${locId1}=  Create Sample Location
 
+    ${resp}=   Get Location ById  ${locId1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.word 
@@ -773,7 +849,7 @@ JD-TC-CreateTaskforUser-UH7
 
     [Documentation]  Create a task without task type by branch.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME2}
@@ -791,12 +867,16 @@ JD-TC-CreateTaskforUser-UH8
 
     [Documentation]  Create a task without task type by user.
 
-     ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${locId1}=  Create Sample Location
 
+    ${resp}=   Get Location ById  ${locId1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.word 
@@ -841,7 +921,7 @@ JD-TC-CreateTaskforUser-UH11
     [Documentation]  Create a task with status as empty by user.
 
    
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id   ${HLMUSERNAME2}
@@ -861,7 +941,7 @@ JD-TC-CreateTaskforUser-UH12
 
     [Documentation]  Create a task with priority as empty by user.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U3}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -882,7 +962,7 @@ JD-TC-CreateTaskforUser-UH13
 
     [Documentation]  Create a task with status as empty by branch.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME2}

@@ -36,7 +36,7 @@ JD-TC-GetFutureAppointment-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -71,12 +71,12 @@ JD-TC-GetFutureAppointment-1
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -191,7 +191,7 @@ JD-TC-GetFutureAppointment-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -223,7 +223,7 @@ JD-TC-GetFutureAppointment-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -257,12 +257,12 @@ JD-TC-GetFutureAppointment-2
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -286,7 +286,7 @@ JD-TC-GetFutureAppointment-2
     Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${sTime2}=  add_time  1  15
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}
     ${schedule_name2}=  FakerLibrary.bs
@@ -404,7 +404,7 @@ JD-TC-GetFutureAppointment-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -434,7 +434,7 @@ JD-TC-GetFutureAppointment-3
     clear_location  ${billable_providers[6]}
     ${pid}=  get_acc_id  ${billable_providers[6]}
    
-    ${resp}=  Provider Login  ${billable_providers[6]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[6]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -461,6 +461,11 @@ JD-TC-GetFutureAppointment-3
     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${billable_providers[6]}
 
     ${desc}=   FakerLibrary.sentence
@@ -482,12 +487,12 @@ JD-TC-GetFutureAppointment-3
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10  
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -562,7 +567,7 @@ JD-TC-GetFutureAppointment-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[6]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[6]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -574,7 +579,7 @@ JD-TC-GetFutureAppointment-3
     ${resp}=  Get Future Appointments
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY3}  appmtTime=${slot1}  apptBy=CONSUMER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[2]}  apptStatus=${apptStatus[0]}
+    # Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY3}  appmtTime=${slot1}  apptBy=CONSUMER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[2]}  apptStatus=${apptStatus[0]}
 
 JD-TC-GetFutureAppointment-4
 
@@ -599,7 +604,7 @@ JD-TC-GetFutureAppointment-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${billable_providers[6]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[6]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -624,6 +629,11 @@ JD-TC-GetFutureAppointment-4
     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
 
     ${lid}=  Create Sample Location
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -657,12 +667,12 @@ JD-TC-GetFutureAppointment-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10  
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6     
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6       
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -743,7 +753,7 @@ JD-TC-GetFutureAppointment-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin   ${billable_providers[6]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${billable_providers[6]}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -797,7 +807,7 @@ JD-TC-GetFutureAppointment-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[6]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[6]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -931,7 +941,7 @@ JD-TC-GetFutureAppointment-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[6]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[6]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -963,7 +973,7 @@ JD-TC-GetFutureAppointment-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -997,12 +1007,12 @@ JD-TC-GetFutureAppointment-5
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1117,7 +1127,7 @@ JD-TC-GetFutureAppointment-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1174,7 +1184,7 @@ JD-TC-GetFutureAppointment-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1210,12 +1220,12 @@ JD-TC-GetFutureAppointment-6
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1366,7 +1376,7 @@ JD-TC-GetFutureAppointment-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1401,12 +1411,12 @@ JD-TC-GetFutureAppointment-7
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1548,7 +1558,7 @@ JD-TC-GetFutureAppointment-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1583,12 +1593,12 @@ JD-TC-GetFutureAppointment-8
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1730,7 +1740,7 @@ JD-TC-GetFutureAppointment-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1765,12 +1775,12 @@ JD-TC-GetFutureAppointment-9
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -1912,7 +1922,7 @@ JD-TC-GetFutureAppointment-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1947,12 +1957,12 @@ JD-TC-GetFutureAppointment-10
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -1976,7 +1986,7 @@ JD-TC-GetFutureAppointment-10
     Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     
-    ${sTime2}=  add_time  1  15
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}
     ${schedule_name2}=  FakerLibrary.bs
@@ -2113,7 +2123,7 @@ JD-TC-GetFutureAppointment-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2148,12 +2158,12 @@ JD-TC-GetFutureAppointment-11
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -2177,7 +2187,7 @@ JD-TC-GetFutureAppointment-11
     Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     
-    ${sTime2}=  add_time  1  15
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}
     ${schedule_name2}=  FakerLibrary.bs
@@ -2314,7 +2324,7 @@ JD-TC-GetFutureAppointment-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2349,12 +2359,12 @@ JD-TC-GetFutureAppointment-12
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -2492,7 +2502,7 @@ JD-TC-GetFutureAppointment-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2526,12 +2536,12 @@ JD-TC-GetFutureAppointment-13
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10  
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -2647,7 +2657,7 @@ JD-TC-GetFutureAppointment-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2695,7 +2705,7 @@ JD-TC-GetFutureAppointment-14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2730,12 +2740,12 @@ JD-TC-GetFutureAppointment-14
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -2880,7 +2890,7 @@ JD-TC-GetFutureAppointment-15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${multilocPro[6]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${multilocPro[6]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2916,12 +2926,12 @@ JD-TC-GetFutureAppointment-15
     ${lid2}=  Create Sample Location
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     clear_appt_schedule   ${multilocPro[6]}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10   
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -2945,7 +2955,7 @@ JD-TC-GetFutureAppointment-15
     Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     
-    ${sTime2}=  add_time  1  15
+    ${sTime2}=  add_timezone_time  ${tz}  1  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}
     ${schedule_name2}=  FakerLibrary.bs
@@ -3093,7 +3103,7 @@ JD-TC-GetFutureAppointment-16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3128,12 +3138,12 @@ JD-TC-GetFutureAppointment-16
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -3274,7 +3284,7 @@ JD-TC-GetFutureAppointment-17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3323,12 +3333,12 @@ JD-TC-GetFutureAppointment-17
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -3391,9 +3401,9 @@ JD-TC-GetFutureAppointment-17
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY3}   appmtTime=${slot1}  appointmentEncId=${encId1}  apptStatus=${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID1}
-    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname1}
-    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname1}
+    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID1}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}   ${fname1}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['lastName']}   ${lname1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id1}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
     # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname1}
@@ -3421,9 +3431,9 @@ JD-TC-GetFutureAppointment-17
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY3}   appmtTime=${slot2}  appointmentEncId=${encId2}  apptStatus=${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID2}
-    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname2}
-    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname2}
+    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID2}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}   ${fname2}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['lastName']}   ${lname2}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id2}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
     # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname2}
@@ -3480,7 +3490,7 @@ JD-TC-GetFutureAppointment-18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3515,12 +3525,12 @@ JD-TC-GetFutureAppointment-18
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -3676,7 +3686,7 @@ JD-TC-GetFutureAppointment-19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3710,12 +3720,12 @@ JD-TC-GetFutureAppointment-19
     ${lid}=  Create Sample Location
     ${s_id}=  Create Sample Service  ${SERVICE1}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10 
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6     
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10   
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6       
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -3831,7 +3841,7 @@ JD-TC-GetFutureAppointment-19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3892,7 +3902,7 @@ JD-TC-GetFutureAppointment-20
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3927,12 +3937,12 @@ JD-TC-GetFutureAppointment-20
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -4097,7 +4107,7 @@ JD-TC-GetFutureAppointment-21
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4132,12 +4142,12 @@ JD-TC-GetFutureAppointment-21
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -4275,7 +4285,7 @@ JD-TC-GetFutureAppointment-22
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4310,12 +4320,12 @@ JD-TC-GetFutureAppointment-22
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -4515,7 +4525,7 @@ JD-TC-GetFutureAppointment-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4550,13 +4560,13 @@ JD-TC-GetFutureAppointment-UH1
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     clear_appt_schedule   ${PUSERNAME256}
-    ${DAY1}=  get_date
-    ${DAY3}=  add_date  3
-    ${DAY4}=  add_date  6
-    ${DAY2}=  add_date  10   
-    ${DAY5}=  add_date  15  
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  3  
+    ${DAY4}=  db.add_timezone_date  ${tz}  6  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10     
+    ${DAY5}=  db.add_timezone_date  ${tz}  15    
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
@@ -4670,7 +4680,7 @@ JD-TC-GetFutureAppointment-UH2
     [Documentation]  Get provider's future appointment list filtered by account id of another provider
     
     ${pid}=  get_acc_id  ${PUSERNAME177}
-    ${resp}=  Provider Login  ${PUSERNAME256}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME256}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -35,7 +35,7 @@ JD-TC-UserSocialMedia-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -114,7 +114,7 @@ JD-TC-UserSocialMedia-1
 
 JD-TC-UserSocialMedia-2
     [Documentation]  Update social media info of a user without any field
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200  
     ${resp}=  Update SocialMedia Of User  ${u_id}   
     Log  ${resp.json()}
@@ -128,7 +128,7 @@ JD-TC-UserSocialMedia-2
 
 JD-TC-UserSocialMedia-3
     [Documentation]  Update social media info of a user by one field
-    ${resp}=  ProviderLogin  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${fb}=  Create SocialMedia  facebook  https://facebook.com/Jaldee    
     ${resp}=  Update SocialMedia Of User  ${u_id}   ${fb}    
@@ -161,7 +161,7 @@ JD-TC-UserSocialMedia -UH2
 
 JD-TC-UserSocialMedia-UH3
      [Documentation]  Update social media of a user with invalid id by branch login
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Update SocialMedia Of User  000   ${fb} 

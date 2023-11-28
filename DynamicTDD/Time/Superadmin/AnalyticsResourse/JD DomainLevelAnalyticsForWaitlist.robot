@@ -86,7 +86,7 @@ JD-TC-DomainLevelAnalytics-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -96,7 +96,7 @@ JD-TC-DomainLevelAnalytics-1
     Set Suite Variable  ${domain_id}  ${resp2.json()['serviceSector']['id']}
 
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -111,19 +111,22 @@ JD-TC-DomainLevelAnalytics-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
@@ -160,6 +163,7 @@ JD-TC-DomainLevelAnalytics-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -233,11 +237,12 @@ JD-TC-DomainLevelAnalytics-1
 
     comment  queue 1 for checkins
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  2  50  ${lid}  ${s_id}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -279,7 +284,6 @@ JD-TC-DomainLevelAnalytics-1
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -303,7 +307,7 @@ JD-TC-DomainLevelAnalytics-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -338,7 +342,7 @@ JD-TC-DomainLevelAnalytics-1
 JD-TC-DomainLevelAnalytics-2
     [Documentation]   take checkins teleservice for a provider and check domain level analytics
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -391,11 +395,12 @@ JD-TC-DomainLevelAnalytics-2
 
     comment  queue 1 for checkins
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  2  50  ${lid}   ${v_s1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -443,7 +448,6 @@ JD-TC-DomainLevelAnalytics-2
         ${resp}=  Provider Add To WL With Virtual Service  ${cid${a}}  ${v_s1}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService}   ${cid${a}}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -472,7 +476,7 @@ JD-TC-DomainLevelAnalytics-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -515,7 +519,7 @@ JD-TC-DomainLevelAnalytics-2
 JD-TC-DomainLevelAnalytics-3
     [Documentation]   take tokens for normal service and teleservice for a provider and check domain level analytics
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
    
@@ -544,11 +548,11 @@ JD-TC-DomainLevelAnalytics-3
 
     comment  queue 2 for tokens
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time   1  30
-    ${eTime1}=  add_time   2  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
+    ${eTime1}=  add_timezone_time  ${tz}  2  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  2  50  ${lid}  ${s_id1}  ${v_s2}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -591,7 +595,6 @@ JD-TC-DomainLevelAnalytics-3
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id1}  ${q_id2}  ${DAY1}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${token_wid${a}}  ${wid[0]}
         ${tid}=  Get Dictionary Keys  ${resp.json()}
@@ -614,7 +617,6 @@ JD-TC-DomainLevelAnalytics-3
         ${resp}=  Provider Add To WL With Virtual Service  ${cid${a}}  ${v_s2}  ${q_id2}  ${DAY1}  ${desc}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService}   ${cid${a}}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${token_wid${a}}  ${wid[0]}
         ${tid}=  Get Dictionary Keys  ${resp.json()}
@@ -647,7 +649,7 @@ JD-TC-DomainLevelAnalytics-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -690,7 +692,7 @@ JD-TC-DomainLevelAnalytics-4
     [Documentation]   take online checkins, for normal service and teleservice for a provider and check domain level analytics 
     # [Setup]  Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_appt_schedule   ${PUSERPH0}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -702,7 +704,7 @@ JD-TC-DomainLevelAnalytics-4
 
     comment  queue 1 for checkins
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id6} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id6} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id3}  ${resp.json()}
@@ -716,7 +718,7 @@ JD-TC-DomainLevelAnalytics-4
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id3}  ${DAY}  ${s_id6}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.json()}
@@ -747,7 +749,7 @@ JD-TC-DomainLevelAnalytics-4
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${consumerNote1}=   FakerLibrary.word
         ${virtualService}=  Create Dictionary   ${CallingModes[0]}=${ZOOM_id0}
         ${resp}=  Consumer Add To WL With Virtual Service  ${pid}  ${q_id1}  ${DAY}  ${v_s1}  ${consumerNote1}  ${bool[0]}  ${virtualService}   ${self} 
@@ -776,7 +778,7 @@ JD-TC-DomainLevelAnalytics-4
     # change_system_time  1  30
     sleep  02s   
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -806,7 +808,7 @@ JD-TC-DomainLevelAnalytics-5
     [Documentation]   take online checkins for prepayment services and check analytics 
     # [Setup]  Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_appt_schedule   ${PUSERPH0}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -820,7 +822,7 @@ JD-TC-DomainLevelAnalytics-5
 
     comment  queue 1 for checkins
 
-    ${resp}=  Sample Queue   ${lid}  ${s_id7} 
+    ${resp}=  Sample Queue  ${lid}  ${s_id7} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id3}  ${resp.json()}
@@ -836,7 +838,7 @@ JD-TC-DomainLevelAnalytics-5
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id3}  ${DAY}  ${s_id7}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.json()}
@@ -861,7 +863,7 @@ JD-TC-DomainLevelAnalytics-5
     # change_system_time  1  30
     sleep  02s   
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -893,7 +895,7 @@ JD-TC-DomainLevelAnalytics-6
     [Documentation]   take checkins,for a provider and check account level analytics for waitlistactions(started,cancelled)
     # [Setup]  Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service    ${PUSERPH0}  AND  clear_appt_schedule   ${PUSERPH0}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -909,11 +911,12 @@ JD-TC-DomainLevelAnalytics-6
 
     comment  queue 1 for checkins
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  2  50  ${lid}  ${s_id6}  ${s_id7}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -926,7 +929,7 @@ JD-TC-DomainLevelAnalytics-6
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id3}  ${DAY}  ${s_id6}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.json()}
@@ -954,7 +957,7 @@ JD-TC-DomainLevelAnalytics-6
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id3}  ${DAY}  ${s_id7}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.json()}
@@ -976,7 +979,7 @@ JD-TC-DomainLevelAnalytics-6
 
     Log List   ${waitlist_id}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1047,7 +1050,7 @@ JD-TC-DomainLevelAnalytics-7
     [Documentation]   take checkins,for a provider and check account level analytics for waitlistactions(Done tokens)
     # [Setup]  Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service    ${PUSERPH0}  AND  clear_appt_schedule   ${PUSERPH0}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1063,11 +1066,12 @@ JD-TC-DomainLevelAnalytics-7
 
     comment  queue 1 for checkins
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  2  50  ${lid}  ${s_id6}  ${s_id7}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1080,7 +1084,7 @@ JD-TC-DomainLevelAnalytics-7
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id3}  ${DAY}  ${s_id6}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.json()}
@@ -1102,7 +1106,7 @@ JD-TC-DomainLevelAnalytics-7
 
     Log List   ${waitlist_id}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1168,7 +1172,7 @@ JD-TC-DomainLevelAnalytics-8
     [Documentation]     take checkins, for a provider from consumer side and check domain level analytics after reschedule it
     # [Setup]  Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service    ${PUSERPH0}  AND  clear_appt_schedule   ${PUSERPH0}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1189,7 +1193,7 @@ JD-TC-DomainLevelAnalytics-8
 
     comment  queue 1 for checkins
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id6}   ${s_id7} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id6}   ${s_id7} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id3}  ${resp.json()}
@@ -1201,7 +1205,7 @@ JD-TC-DomainLevelAnalytics-8
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id3}  ${DAY}  ${s_id6}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.json()}
@@ -1225,7 +1229,7 @@ JD-TC-DomainLevelAnalytics-8
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id3}  ${DAY}  ${s_id7}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.json()}
@@ -1243,7 +1247,7 @@ JD-TC-DomainLevelAnalytics-8
 
     Log List   ${waitlist_id}
 
-    ${DAY3}=  add_date  4
+    ${DAY3}=  db.add_timezone_date  ${tz}  4  
 
     # change_system_time  1  30
     sleep  02s   
@@ -1270,7 +1274,7 @@ JD-TC-DomainLevelAnalytics-8
 
     END
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1292,7 +1296,7 @@ JD-TC-DomainLevelAnalytics-9
     [Documentation]    take donations,and check domain level analytics for donation matrics
     # [Setup]  Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service    ${PUSERPH0}  AND  clear_appt_schedule   ${PUSERPH0}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1327,7 +1331,7 @@ JD-TC-DomainLevelAnalytics-9
 
         ${con_id}=  get_id  ${CUSERNAME${a}}
         Set Test Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         ${don_amt}=   Random Int   min=1000   max=4000
         ${mod}=  Evaluate  ${don_amt}%${multiples[0]}
         ${don_amt}=  Evaluate  ${don_amt}-${mod}
@@ -1355,7 +1359,7 @@ JD-TC-DomainLevelAnalytics-9
 
     sleep  02s 
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1378,7 +1382,7 @@ JD-TC-DomainLevelAnalytics-10
     [Documentation]    take checkins for a provider and check domain level analytics for payment matrics
     # [Setup]  Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service    ${PUSERPH0}  AND  clear_appt_schedule   ${PUSERPH0}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1396,7 +1400,7 @@ JD-TC-DomainLevelAnalytics-10
 
     comment  queue 1 for checkins
 
-    ${resp}=  Sample Queue   ${lid}  ${s_id6}  ${s_id7} 
+    ${resp}=  Sample Queue  ${lid}  ${s_id6}  ${s_id7} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id3}  ${resp.json()}
@@ -1413,7 +1417,7 @@ JD-TC-DomainLevelAnalytics-10
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id3}  ${DAY}  ${s_id7}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.json()}
@@ -1437,7 +1441,7 @@ JD-TC-DomainLevelAnalytics-10
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id3}  ${DAY}  ${s_id6}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.json()}
@@ -1532,7 +1536,7 @@ JD-TC-DomainLevelAnalytics-10
     # change_system_time  1  30
     sleep  02s   
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1565,10 +1569,13 @@ JD-TC-DomainLevelAnalytics-11
     clear_service  ${PUSERNAME200}
     clear_customer   ${PUSERNAME200}
     clear_Item   ${PUSERNAME200}
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
-    Log  ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
+    # Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME200}
 
@@ -1618,16 +1625,16 @@ JD-TC-DomainLevelAnalytics-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -1710,7 +1717,7 @@ JD-TC-DomainLevelAnalytics-11
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
         
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -1752,7 +1759,7 @@ JD-TC-DomainLevelAnalytics-11
 
     comment  Add customers
 
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1779,7 +1786,7 @@ JD-TC-DomainLevelAnalytics-11
     ${walkin_order_ids}=  Create List
     FOR   ${a}  IN RANGE   9
         
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -1829,7 +1836,7 @@ JD-TC-DomainLevelAnalytics-11
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME200}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1881,10 +1888,13 @@ JD-TC-DomainLevelAnalytics-12
     clear_service  ${PUSERNAME200}
     clear_customer   ${PUSERNAME200}
     clear_Item   ${PUSERNAME200}
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
-    Log  ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
+    # Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME200}
 
@@ -1934,16 +1944,16 @@ JD-TC-DomainLevelAnalytics-12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -2019,7 +2029,7 @@ JD-TC-DomainLevelAnalytics-12
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
         
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -2061,7 +2071,7 @@ JD-TC-DomainLevelAnalytics-12
 
     comment  Add customers
 
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2088,7 +2098,7 @@ JD-TC-DomainLevelAnalytics-12
     ${order_ids1}=  Create List
     FOR   ${a}  IN RANGE   10
         
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -2205,7 +2215,7 @@ JD-TC-DomainLevelAnalytics-12
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME200}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2256,10 +2266,13 @@ JD-TC-DomainLevelAnalytics-13
     clear_service  ${PUSERNAME200}
     clear_customer   ${PUSERNAME200}
     clear_Item   ${PUSERNAME200}
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
-    Log  ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
+    # Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME200}
 
@@ -2309,16 +2322,16 @@ JD-TC-DomainLevelAnalytics-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -2394,7 +2407,7 @@ JD-TC-DomainLevelAnalytics-13
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
         
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -2436,7 +2449,7 @@ JD-TC-DomainLevelAnalytics-13
 
     comment  Add customers
 
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2463,7 +2476,7 @@ JD-TC-DomainLevelAnalytics-13
     ${order_ids1}=  Create List
     FOR   ${a}  IN RANGE   10
         
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -2580,7 +2593,7 @@ JD-TC-DomainLevelAnalytics-13
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME200}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2631,10 +2644,13 @@ JD-TC-DomainLevelAnalytics-14
     clear_service  ${PUSERNAME200}
     clear_customer   ${PUSERNAME200}
     clear_Item   ${PUSERNAME200}
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
-    Log  ${resp.json()}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
+    # Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME200}
 
@@ -2684,16 +2700,16 @@ JD-TC-DomainLevelAnalytics-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
-    ${eTime1}=  add_time   3  30   
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -2769,7 +2785,7 @@ JD-TC-DomainLevelAnalytics-14
         Log   ${resp.json()}
         Should Be Equal As Strings   ${resp.status_code}    200
         
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -2811,7 +2827,7 @@ JD-TC-DomainLevelAnalytics-14
 
     comment  Add customers
 
-    ${resp}=  ProviderLogin  ${PUSERNAME200}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2838,7 +2854,7 @@ JD-TC-DomainLevelAnalytics-14
     ${order_ids1}=  Create List
     FOR   ${a}  IN RANGE   10
         
-        ${DAY1}=  add_date   12
+        ${DAY1}=  db.add_timezone_date  ${tz}  12  
         ${C_firstName}=   FakerLibrary.first_name 
         ${C_lastName}=   FakerLibrary.name 
         ${C_num1}    Random Int  min=123456   max=999999
@@ -2955,7 +2971,7 @@ JD-TC-DomainLevelAnalytics-14
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME200}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3039,7 +3055,7 @@ JD-TC-DomainLevelAnalytics-15
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3049,7 +3065,7 @@ JD-TC-DomainLevelAnalytics-15
     Set Suite Variable  ${domain_id}  ${resp2.json()['serviceSector']['id']}
 
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -3064,19 +3080,22 @@ JD-TC-DomainLevelAnalytics-15
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
@@ -3113,6 +3132,7 @@ JD-TC-DomainLevelAnalytics-15
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -3193,11 +3213,12 @@ JD-TC-DomainLevelAnalytics-15
 
     comment  queue 1 for checkins
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  2  50  ${lid1}  ${s_id}  ${s_id1}  
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3244,7 +3265,7 @@ JD-TC-DomainLevelAnalytics-15
 
     comment  take check-ins
 
-    ${resp}=   ProviderLogin  ${PUSERPH1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3295,7 +3316,7 @@ JD-TC-DomainLevelAnalytics-15
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=   ProviderLogin  ${PUSERPH1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3306,7 +3327,7 @@ JD-TC-DomainLevelAnalytics-15
     # change_system_date  -5
     # change_bill_cycle  ${eday}
     # ${day2}=  bill_cycle
-    # ${resp}=   ProviderLogin  ${ph}  ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login  ${ph}  ${PASSWORD} 
     # Should Be Equal As Strings    ${resp.status_code}   200
     # ${resp}=  Generate Invoice  ${pid}  monthly
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -3355,7 +3376,7 @@ JD-TC-DomainLevelAnalytics-16
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3365,7 +3386,7 @@ JD-TC-DomainLevelAnalytics-16
     Set Suite Variable  ${domain_id}  ${resp2.json()['serviceSector']['id']}
 
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -3380,19 +3401,22 @@ JD-TC-DomainLevelAnalytics-16
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
@@ -3429,6 +3453,7 @@ JD-TC-DomainLevelAnalytics-16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
@@ -3509,11 +3534,12 @@ JD-TC-DomainLevelAnalytics-16
 
     comment  queue 1 for checkins
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  2  50  ${lid1}  ${s_id}  ${s_id1}  
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3565,7 +3591,7 @@ JD-TC-DomainLevelAnalytics-16
 
     comment  take check-ins
 
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3617,7 +3643,7 @@ JD-TC-DomainLevelAnalytics-16
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3628,7 +3654,7 @@ JD-TC-DomainLevelAnalytics-16
     # change_system_date  30
     # change_bill_cycle  ${eday}
     # ${day2}=  bill_cycle
-    # ${resp}=   ProviderLogin  ${ph}  ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login  ${ph}  ${PASSWORD} 
     # Should Be Equal As Strings    ${resp.status_code}   200
     # ${resp}=  Generate Invoice  ${pid}  monthly
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -3639,7 +3665,7 @@ JD-TC-DomainLevelAnalytics-17
     [Documentation]   take checkins for a provider and check domain level analytics brand new customers ios through 
 
 
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
@@ -3657,11 +3683,12 @@ JD-TC-DomainLevelAnalytics-17
 
     comment  queue 1 for checkins
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  2  50  ${lid1}  ${s_id}  ${s_id1}  
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3714,7 +3741,7 @@ JD-TC-DomainLevelAnalytics-17
 
     comment  take check-ins
 
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3766,7 +3793,7 @@ JD-TC-DomainLevelAnalytics-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERPH2}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3777,7 +3804,7 @@ JD-TC-DomainLevelAnalytics-17
     # change_system_date  30
     # change_bill_cycle  ${eday}
     # ${day2}=  bill_cycle
-    # ${resp}=   ProviderLogin  ${ph}  ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login  ${ph}  ${PASSWORD} 
     # Should Be Equal As Strings    ${resp.status_code}   200
     # ${resp}=  Generate Invoice  ${pid}  monthly
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -3811,7 +3838,7 @@ JD-TC-DomainLevelAnalytics-13
     [Setup]  Run Keywords  clear_queue  ${PUSERPH1}   AND  clear_service    ${PUSERPH1}  AND  clear_appt_schedule   ${PUSERPH1}
 
 
-    ${resp}=   ProviderLogin  ${PUSERPH1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3863,11 +3890,12 @@ JD-TC-DomainLevelAnalytics-13
 
     comment  queue 1 for checkins
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   1  30
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  1  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  2  50  ${lid1}  ${s_id}  ${s_id1}  
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3875,11 +3903,11 @@ JD-TC-DomainLevelAnalytics-13
 
     comment  queue 2 for tokens
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_time   1  30
-    ${eTime1}=  add_time   2  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
+    ${eTime1}=  add_timezone_time  ${tz}  2  30  
     ${queue_name}=  FakerLibrary.bs
     ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  2  50  ${lid1}  ${s_id2}  ${s_id3}  
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3927,7 +3955,7 @@ JD-TC-DomainLevelAnalytics-13
 
     comment  take check-ins
 
-    ${resp}=   ProviderLogin  ${PUSERPH1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

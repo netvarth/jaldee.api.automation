@@ -73,7 +73,7 @@ JD-TC-Create_CrifScore-1
     # # ...............
 
 
-#     ${resp}=   ProviderLogin  ${PUSERNAME30}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     Set Test Variable  ${provider_id}  ${resp.json()['id']}
@@ -172,7 +172,7 @@ JD-TC-Create_CrifScore-1
     ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_Z}
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
@@ -187,14 +187,20 @@ JD-TC-Create_CrifScore-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
    
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     enquiryStatus  ${account_id}
 #    leadStatus  ${account_id}
@@ -604,7 +610,7 @@ JD-TC-Create_CrifScore-1
 JD-TC-Create_CrifScore-2
     [Documentation]   again  generate  crif score  with same  lead id
     
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -758,7 +764,7 @@ JD-TC-Create_CrifScore-2
 JD-TC-Create_CrifScore-3
     [Documentation]   more than crif  generated    with same  lead id  and kycid
    
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -831,7 +837,7 @@ JD-TC-Create_CrifScore-UH1
     Log  ${unique_lnames}
     Set Suite Variable   ${unique_lnames}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -840,14 +846,20 @@ JD-TC-Create_CrifScore-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
    
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=   CrifScore  ${account_id}
@@ -995,7 +1007,7 @@ JD-TC-Create_CrifScore-UH1
 JD-TC-Create_CrifScore-UH2
     [Documentation]  crif generated invalid lead id
     
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1004,6 +1016,7 @@ JD-TC-Create_CrifScore-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
     ${INVALID_LEAD_UID}=   Replace String  ${INVALID_LEAD_UID}  {}    Lead
 
     ${resp}=   Process CRIF Inquiry with kyc    123    ${idkyc123}
@@ -1040,7 +1053,7 @@ JD-TC-Create_CrifScore-UH4
     Log  ${unique_lnames}
     Set Suite Variable   ${unique_lnames}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1049,14 +1062,20 @@ JD-TC-Create_CrifScore-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
    
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=   CrifScore  ${account_id}
@@ -1229,7 +1248,7 @@ JD-TC-Create_CrifScore-UH5
     [Documentation]   another provider login
 
     
-    ${resp}=   ProviderLogin  ${PUSERNAME28}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1260,7 +1279,7 @@ JD-TC-Create_CrifScore-UH6
 JD-TC-Create_CrifScore-UH7
     [Documentation]    create crife score invalid kyc id
     
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1274,7 +1293,7 @@ JD-TC-Create_CrifScore-UH7
 JD-TC-Create_CrifScore-UH8
     [Documentation]    create crife score empty kyc id
     
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1283,6 +1302,7 @@ JD-TC-Create_CrifScore-UH8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Process CRIF Inquiry with kyc   ${leUid123}   ${EMPTY}  
     Log  ${resp.content}
@@ -1292,7 +1312,7 @@ JD-TC-Create_CrifScore-UH8
 JD-TC-Create_CrifScore-UH9
     [Documentation]    create crife score empty lead id
     
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1301,6 +1321,7 @@ JD-TC-Create_CrifScore-UH9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Process CRIF Inquiry with kyc      ${EMPTY}   ${idkyc123}
     Log  ${resp.content}
@@ -1310,7 +1331,7 @@ JD-TC-Create_CrifScore-UH9
 JD-TC-Create_CrifScore-UH10
     [Documentation]    create crife score without passing kyc id
    
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1319,6 +1340,7 @@ JD-TC-Create_CrifScore-UH10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Process CRIF Inquiry      ${leUid123}   
     Log  ${resp.content}

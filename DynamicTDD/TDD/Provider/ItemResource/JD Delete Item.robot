@@ -54,7 +54,7 @@ JD-TC-Delete Item-UH1
 #     clear_location   ${PUSERNAME5}
 #     ${des}=  FakerLibrary.Word
 #     ${description}=  FakerLibrary.sentence
-#     ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${amount1}=   FakerLibrary.pyfloat  left_digits=2   right_digits=2    positive=True
@@ -99,19 +99,19 @@ JD-TC-Delete Item-UH1
 #     Should Be Equal As Strings  ${resp.status_code}  419    
 #     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"  
 
-# YNW-TC-Delete Item-UH3
+# JD-TC-Delete Item-UH3
 
 #     [Documentation]   Provider check to delete item  with another provider's item id
 #     ${des}=  FakerLibrary.Word
 #     ${description}=  FakerLibrary.sentence
-#     ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${amount3}=   FakerLibrary.pyfloat  left_digits=2   right_digits=2    positive=True
 #     ${resp}=  Create Item   ${item3}  ${des}   ${description}  ${amount3}  ${bool[0]} 
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Set Test Variable  ${id3}  ${resp.json()}
-#     ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=   Delete Item   ${id3}
 #     Should Be Equal As Strings  ${resp.status_code}  401
@@ -120,7 +120,7 @@ JD-TC-Delete Item-UH1
 # JD-TC-Delete Item -UH4
 
 #     [Documentation]   provider check to delete item  with invalid item id
-#     ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=   Delete Item   0
 #     Should Be Equal As Strings  ${resp.status_code}  422
@@ -156,22 +156,23 @@ JD-TC-Delete Item-UH1
 #     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
 
-#    # ${resp}=  ProviderLogin  ${PUSERNAME5}  ${PASSWORD}
+#    # ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-#     ${DAY}=  add_date  0   
+#     ${DAY}=  db.get_date_by_timezone  ${tz}   
 #     Set Suite Variable  ${DAY} 
-#     ${tomorrow}=  add_date  1   
+#     ${tomorrow}=  db.add_timezone_date  ${tz}  1     
 #     Set Suite Variable  ${tomorrow} 
 #     ${list}=  Create List  1  2  3  4  5  6  7
 #     Set Suite Variable  ${list}
     
 
-#     ${sTime}=  db.get_time
-#     ${eTime}=  add_time  0  30
+#     # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+#     ${eTime}=  add_timezone_time  ${tz}  0  30  
 #     ${city}=   FakerLibrary.state
 #     ${latti}=  get_latitude
 #     ${longi}=  get_longitude
@@ -198,13 +199,13 @@ JD-TC-Delete Item-UH1
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     ${resp}=   ProviderLogout
 #     Should Be Equal As Strings    ${resp.status_code}   200
-#     ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     # ${resp}=  Get Service   name-eq=${SERVICE2}
 #     # Log  ${resp.json()}
 #     # Should Be Equal As Strings  ${resp.status_code}  200  
    
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     Set Suite Variable  ${DAY1}  ${DAY1}
 #     ${list}=  Create List  1  2  3  4  5  6  7
 #     Set Suite Variable  ${list}  ${list}
@@ -264,7 +265,7 @@ JD-TC-Delete Item-UH1
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Set Suite Variable  ${p1_sid1}  ${resp.json()}
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${queue2}=    FakerLibrary.word
 #     ${capacity}=  FakerLibrary.Numerify  %%
 #     ${sTime1}=  add_time  2   45
@@ -275,12 +276,12 @@ JD-TC-Delete Item-UH1
 #     Set Suite Variable  ${p1_qid1}  ${resp.json()}
 
 
-#     # ${resp}=  Create Sample Queue  
+#     # ${resp}=  Create Sample Queue
 
 #     # Set Suite Variable  ${sid1}  ${resp['service_id']}
 #     # Set Suite Variable  ${qid}   ${resp['queue_id']}
 #     # Set Suite Variable  ${lid}   ${resp['location_id']} 
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${firstname}=  FakerLibrary.first_name
 #     ${lastname}=  FakerLibrary.last_name
 #     ${dob}=  FakerLibrary.Date
@@ -319,7 +320,7 @@ JD-TC-Delete Item-UH1
 #     ${des}=  FakerLibrary.Word
 #     ${description}=  FakerLibrary.sentence
 #     ${notifytype}    Random Element     ['none','pushMsg','email']
-#     ${resp}=  ProviderLogin  ${PUSERNAME225}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME225}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${amount4}=   FakerLibrary.pyfloat  left_digits=2   right_digits=2    positive=True
 #     ${resp}=  Create Item   ${item4}  ${des}  ${description}  ${amount4}  ${bool[1]}  
@@ -337,7 +338,7 @@ JD-TC-Delete Item-UH1
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-#     ${resp}=  ProviderLogin  ${PUSERNAME225}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME225}  ${PASSWORD}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=   Get Service   name-eq=${SERVICE2}
 #     Log  ${resp.json()}
@@ -348,7 +349,7 @@ JD-TC-Delete Item-UH1
 #     Set Suite Variable  ${s_id}  ${resp['service_id']}
 #     Set Suite Variable  ${qid}   ${resp['queue_id']}
 #     Set Suite Variable  ${lid}   ${resp['location_id']}    
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${resp}=  Add To Waitlist  ${cid1}   ${s_id}   ${qid}  ${DAY1}  hi  ${bool[1]}   ${cid1}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200

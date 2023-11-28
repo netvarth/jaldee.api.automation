@@ -32,7 +32,7 @@ JD-TC-Get Communication-1
 
     [Documentation]    Get Communication
 
-    ${resp}=   ProviderLogin  ${PUSERNAME77}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}   200
     Set Suite Variable    ${pid}        ${resp.json()['id']}
@@ -260,7 +260,7 @@ JD-TC-Get Communication-UH4
 
     [Documentation]    Get Communication where no communication made
 
-    ${resp}=   ProviderLogin  ${PUSERNAME72}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME72}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}   200
     Set Suite Variable    ${pid}        ${resp.json()['id']}

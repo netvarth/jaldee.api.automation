@@ -36,7 +36,7 @@ JD-TC-Get reimbursement byInvoiceId-1
     clear_reimburseReport
     clear_payment_invoice  ${PUSERNAME1}
     [Documentation]  Get reimbursement report    
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -54,9 +54,9 @@ JD-TC-Get reimbursement byInvoiceId-1
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -84,7 +84,7 @@ JD-TC-Get reimbursement byInvoiceId-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
@@ -99,7 +99,7 @@ JD-TC-Get reimbursement byInvoiceId-1
     clear_location  ${PUSERNAME1}
     clear_service   ${PUSERNAME1}
     clear_queue     ${PUSERNAME1}
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     Set Suite Variable  ${s_id2}   ${resp['service_id']}
     Set Suite Variable  ${lid}   ${resp['location_id']}
@@ -108,7 +108,6 @@ JD-TC-Get reimbursement byInvoiceId-1
     Set Suite Variable    ${waitlist_des}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  ${waitlist_des}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}  
     Sleep  2s
@@ -174,8 +173,8 @@ JD-TC-Get reimbursement byInvoiceId-1
 
     sleep  2s
 
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -227,7 +226,7 @@ JD-TC-Get reimbursement byInvoiceId-1
 JD-TC-Get reimbursement byInvoiceId-2
     
     [Documentation]     Reimburse payment of same jaldee coupon and same provider and Get reimbursement report 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${pid}=  get_acc_id  ${PUSERNAME1}
@@ -236,7 +235,6 @@ JD-TC-Get reimbursement byInvoiceId-2
     Set Suite Variable   ${des}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  ${des}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     ${resp}=  Get Bill By UUId  ${wid}
@@ -282,8 +280,8 @@ JD-TC-Get reimbursement byInvoiceId-2
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[1]} 
     sleep  04s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}  
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep  05s
@@ -332,7 +330,7 @@ JD-TC-Get reimbursement byInvoiceId-2
 JD-TC-Get reimbursement byInvoiceId-3
     [Documentation]  SA do reimuburse payment of 2 jaldeee coupon and same provider
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log   ${resp.json()} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME1}
@@ -340,7 +338,6 @@ JD-TC-Get reimbursement byInvoiceId-3
     ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  ${des}  ${bool[1]}  ${cid}
     Log    ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     ${resp}=  Get Bill By UUId  ${wid}
@@ -386,7 +383,7 @@ JD-TC-Get reimbursement byInvoiceId-3
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[1]} 
 
-    ${resp}=  Create Sample Queue  
+    ${resp}=  Create Sample Queue
     Set Suite Variable  ${qid1}   ${resp['queue_id']}
     Set Suite Variable  ${s_id1}   ${resp['service_id']}
     Set Suite Variable  ${s_name}   ${resp['service_name']}
@@ -394,7 +391,6 @@ JD-TC-Get reimbursement byInvoiceId-3
 
     ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid1}  ${DAY1}  ${des}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     ${resp}=  Get Bill By UUId  ${wid}
@@ -441,8 +437,8 @@ JD-TC-Get reimbursement byInvoiceId-3
     Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[1]} 
 
     sleep  02s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Reimburse Reports By Provider

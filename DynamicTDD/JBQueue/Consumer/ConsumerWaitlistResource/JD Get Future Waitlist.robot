@@ -21,37 +21,32 @@ ${service_duration}   5
 JD-TC-Get Future Waitlist Consumer-1
 	[Documentation]  Add To Waitlist By Consumer valid  provider
     [setup]  Run Keywords  clear_service  ${PUSERNAME204}  AND  clear_queue  ${PUSERNAME204}  AND   clear_location  ${PUSERNAME204}
-    ${resp}=  ProviderLogin  ${PUSERNAME204}  ${PASSWORD}  
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME204}  ${PASSWORD}  
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${pid}=  get_acc_id  ${PUSERNAME204}
-    Set Suite Variable  ${pid}
-    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}
 
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Change License Package  ${pkgid[0]}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${TOMORROW}=  add_date  5  
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${TOMORROW}=  db.add_timezone_date  ${tz}  5    
     Set Suite Variable  ${TOMORROW} 
-    ${TestDate}=  add_date  6
+    ${TestDate}=  db.add_timezone_date  ${tz}  6  
     Set Suite Variable  ${TestDate}
-    ${today}=  get_date
+    ${today}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${today} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time  0  30
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  30  
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -77,8 +72,8 @@ JD-TC-Get Future Waitlist Consumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_s2}  ${resp.json()}
 
-    ${sTime1}=  add_time  0  30
-    ${eTime1}=  add_time  1  00
+    ${sTime1}=  add_timezone_time  ${tz}  0  30  
+    ${eTime1}=  add_timezone_time  ${tz}  1  00  
     ${p1queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -87,8 +82,8 @@ JD-TC-Get Future Waitlist Consumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_q1}  ${resp.json()}
 
-    ${sTime2}=  add_time  1  00
-    ${eTime2}=  add_time  1  30
+    ${sTime2}=  add_timezone_time  ${tz}  1  00  
+    ${eTime2}=  add_timezone_time  ${tz}  1  30  
     ${p1queue2}=    FakerLibrary.firstname
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -97,8 +92,8 @@ JD-TC-Get Future Waitlist Consumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_q2}  ${resp.json()}
 
-    ${sTime3}=  add_time  1  30
-    ${eTime3}=  add_time  2  00
+    ${sTime3}=  add_timezone_time  ${tz}  1  30  
+    ${eTime3}=  add_timezone_time  ${tz}  2  00  
     ${p1queue3}=    FakerLibrary.lastname
     ${capacity}=  FakerLibrary.Numerify  %%%
     ${parallel}=  FakerLibrary.Numerify  %
@@ -134,7 +129,6 @@ JD-TC-Get Future Waitlist Consumer-1
 
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${TOMORROW}  ${p1_s2}  ${cnote}  ${bool[0]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${uuid2}  ${wid[0]}
 
@@ -161,7 +155,7 @@ JD-TC-Get Future Waitlist Consumer-1
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${TestDate}  ${p1_s2}  ${cnote}  ${bool[0]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME204}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME204}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${msg}=  Fakerlibrary.word
@@ -326,7 +320,7 @@ JD-TC-Get Future Waitlist Consumer-13
     ${resp}=  Consumer Login  ${CUSERNAME6}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Delete Waitlist Consumer  ${uuid2}  ${pid}
+    ${resp}=  Cancel Waitlist  ${uuid2}  ${pid}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Future Waitlist   service-eq=${p1_s2}  waitlistStatus-eq=${wl_status[4]}

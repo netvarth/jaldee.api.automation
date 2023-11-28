@@ -221,7 +221,7 @@ JD-TC-GetQuestionnaireforConsumer-1
     ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -265,7 +265,7 @@ JD-TC-GetQuestionnaireforConsumer-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}  
+    ${resp}=  Imageupload.UploadQuestionnaire   ${cookie}   ${account_id}   ${xlFile}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -280,7 +280,7 @@ JD-TC-GetQuestionnaireforConsumer-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -340,7 +340,7 @@ JD-TC-GetQuestionnaireforConsumer-2
     # Set Suite Variable   ${colnames}
     # ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[7]}
     # Log   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -433,7 +433,7 @@ JD-TC-GetQuestionnaireforConsumer-UH1
     # Set Suite Variable   ${colnames}
     # ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[7]}
     # Log   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -533,7 +533,7 @@ JD-TC-GetQuestionnaireforConsumer-UH2
     # Set Suite Variable   ${colnames}
     # ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[7]}
     # Log   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -646,7 +646,7 @@ JD-TC-GetQuestionnaireforConsumer-UH6
     [Documentation]  Get Consumer Creation questionnaire without uploading questionnaire
 
 
-    ${resp}=  Provider Login  ${PUSERNAME144}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME144}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

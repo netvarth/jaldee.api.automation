@@ -117,13 +117,14 @@ JD-TC-ResubmitQuestionnaireForAppointment-1
     Log  ${unique_snames}
     Set Suite Variable   ${unique_snames}
 
-    ${resp}=  Provider Login  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -172,7 +173,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -196,6 +197,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -209,7 +211,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-1
 
     clear_appt_schedule   ${PUSERNAME19}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -339,7 +341,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-2
 
     clear_customer   ${PUSERNAME19}
 
-    ${resp}=  Provider Login  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -372,6 +374,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -385,7 +388,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-2
 
     clear_appt_schedule   ${PUSERNAME19}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -463,7 +466,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId}  apptStatus=${apptStatus[2]}  
+    ...   appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  
 
     ${resp}=  Provider Logout
     Log  ${resp.content}
@@ -530,7 +533,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-3
 
     clear_customer   ${PUSERNAME19}
     
-    ${resp}=  Provider Login  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -554,6 +557,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -567,7 +571,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-3
 
     clear_appt_schedule   ${PUSERNAME19}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -645,12 +649,12 @@ JD-TC-ResubmitQuestionnaireForAppointment-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId}  apptStatus=${apptStatus[2]}
+    ...   appointmentEncId=${encId}  apptStatus=${apptStatus[1]}
 
     ${resp}=  Get Appointment Status   ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]} 
 
     ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid1}
     Log  ${resp.content}
@@ -732,7 +736,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-4
 
     clear_customer   ${PUSERNAME19}
     
-    ${resp}=  Provider Login  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -756,6 +760,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -769,7 +774,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-4
 
     clear_appt_schedule   ${PUSERNAME19}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -847,12 +852,12 @@ JD-TC-ResubmitQuestionnaireForAppointment-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId}  apptStatus=${apptStatus[2]}  
+    ...   appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  
 
     ${resp}=  Get Appointment Status   ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]} 
 
     ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid1}
     Log  ${resp.content}
@@ -934,7 +939,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-5
 
     clear_customer   ${PUSERNAME19}
 
-    ${resp}=  Provider Login  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -956,6 +961,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -969,7 +975,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-5
 
     clear_queue   ${PUSERNAME19}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Get Questionnaire List By Provider   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1116,7 +1122,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH1
     
     clear_customer   ${PUSERNAME19}
     
-    ${resp}=  Provider Login  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1140,6 +1146,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1153,7 +1160,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH1
 
     clear_appt_schedule   ${PUSERNAME19}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -1231,12 +1238,12 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  
-    ...   appointmentEncId=${encId}  apptStatus=${apptStatus[2]}  
+    ...   appointmentEncId=${encId}  apptStatus=${apptStatus[1]}  
 
     ${resp}=  Get Appointment Status   ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[2]} 
+    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]} 
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
@@ -1312,7 +1319,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH2
 
     clear_customer   ${PUSERNAME19}
 
-    ${resp}=  Provider Login  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1336,6 +1343,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1349,7 +1357,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH2
 
     clear_appt_schedule   ${PUSERNAME19}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -1481,7 +1489,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH3
 
     clear_customer   ${PUSERNAME19}
 
-    ${resp}=  Provider Login  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1505,6 +1513,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1518,7 +1527,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-UH3
 
     clear_appt_schedule   ${PUSERNAME19}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}
@@ -1701,13 +1710,14 @@ JD-TC-ResubmitQuestionnaireForAppointment-6
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
 
-    ${resp}=  Provider Login  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1749,7 +1759,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Provider Login  ${PUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME19}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1773,6 +1783,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1786,7 +1797,7 @@ JD-TC-ResubmitQuestionnaireForAppointment-6
 
     clear_appt_schedule   ${PUSERNAME19}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     
     ${resp}=  Create Sample Schedule   ${lid}   ${s_id}
     Log  ${resp.content}

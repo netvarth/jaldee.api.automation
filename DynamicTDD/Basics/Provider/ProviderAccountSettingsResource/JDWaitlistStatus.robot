@@ -17,7 +17,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-EnableDisableWaitlistStatus-1
     [Documentation]   Enabling waitlistStatus
 
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Waitlist Status    ${toggle[1]}
     Log  ${resp.json()}
@@ -41,7 +41,7 @@ JD-TC-EnableDisableWaitlistStatus-UH1
 JD-TC-EnableDisableWaitlistStatus-UH2
     [Documentation]  Enable already enabled waitlistStatus
 
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Waitlist Status   ${toggle[0]}
     Log  ${resp.json()}
@@ -51,7 +51,7 @@ JD-TC-EnableDisableWaitlistStatus-UH2
 JD-TC-EnableDisableWaitlistStatus-2
     [Documentation]   disabling waitlistStatus
 
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Waitlist Status   ${toggle[1]}
     Log  ${resp.json()}
@@ -64,7 +64,7 @@ JD-TC-EnableDisableWaitlistStatus-2
 JD-TC-EnableDisableWaitlistStatus-UH3 
     [Documentation]  Disable already Disabled waitlistStatus
 
-    ${resp}=  ProviderLogin  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Waitlist Status   ${toggle[1]}
     Log  ${resp.json()}

@@ -62,7 +62,7 @@ JD-TC-GetCountOfFileInFilter-1
     [Documentation]  Filter  folderName -shared file
     
     clear_customer     ${PUSERNAME77}
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -161,7 +161,7 @@ JD-TC-GetCountOfFileInFilter-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -176,7 +176,7 @@ JD-TC-GetCountOfFileInFilter-2
 
     [Documentation]  get count- Filter  owner type
 
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -189,7 +189,7 @@ JD-TC-GetCountOfFileInFilter-3
 
     [Documentation]  get count- Filter  contextType
 
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -202,7 +202,7 @@ JD-TC-GetCountOfFileInFilter-4
 
     [Documentation]   get count Filter  ownerType
 
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -215,7 +215,7 @@ JD-TC-GetCountOfFileInFilter-5
 
     [Documentation]  Filter   contextType-eq=communication
 
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -228,7 +228,7 @@ JD-TC-GetCountOfFileInFilter-6
 
      [Documentation]  Filter  folderName -shared file
 
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -243,7 +243,7 @@ JD-TC-GetCountOfFileInFilter-7
 
      [Documentation]    get count with Filter   pdf file
 
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -256,7 +256,7 @@ JD-TC-GetCountOfFileInFilter-8
 
      [Documentation]    get count Filter  gif file
 
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -271,7 +271,7 @@ JD-TC-GetCountOfFileInFilter-9
 
      [Documentation]   get count Filter  sharedType
 
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -284,7 +284,7 @@ JD-TC-GetCountOfFileInFilter-10
 
     [Documentation]   get count Filter  ownerType-Provider
 
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -297,7 +297,7 @@ JD-TC-GetCountOfFileInFilter-11
 
     [Documentation]    get jpg file from jaldeedrive by user
     
-    ${resp}=  Provider Login    ${HLMUSERNAME15}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME15} 
@@ -320,12 +320,14 @@ JD-TC-GetCountOfFileInFilter-11
     Should Be Equal As Strings    ${resp2.status_code}    200
     
     ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     sleep  2s
     ${dep_name1}=  FakerLibrary.bs
@@ -396,7 +398,7 @@ JD-TC-GetCountOfFileInFilter-11
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=    Get Locations
@@ -429,7 +431,7 @@ JD-TC-GetCountOfFileInFilter-11
     Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}        ${cid2}
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}    ${u_id} 
 
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
  
@@ -449,7 +451,7 @@ JD-TC-GetCountOfFileInFilter-12
 
     [Documentation]    upload file to uesr and get count by branch login
     
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -473,7 +475,7 @@ JD-TC-GetCountOfFileInFilter-12
     Log                                        ${resp.content}
     Should Be Equal As Strings                 ${resp.status_code}                200
  
-    ${resp}=  Provider Login  ${HLMUSERNAME15}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME15} 
@@ -488,7 +490,7 @@ JD-TC-GetCountOfFileInFilter-13
 
     [Documentation]    upload file to  branch and get count by  user login
     
-    ${resp}=  Provider Login  ${HLMUSERNAME15}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}   ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${HLMUSERNAME15} 
@@ -516,7 +518,7 @@ JD-TC-GetCountOfFileInFilter-13
     Log                                        ${resp.content}
     Should Be Equal As Strings                 ${resp.status_code}                200
  
-    ${resp}=  ProviderLogin  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -554,7 +556,7 @@ JD-TC-GetCountOfFileInFilter-UH3
 
     [Documentation]    empty filter
     
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
  
@@ -568,7 +570,7 @@ JD-TC-GetCountOfFileInFilter-UH4
 
     [Documentation]    invalid  filter
     
-    ${resp}=  Provider Login  ${PUSERNAME77}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
  
@@ -583,7 +585,7 @@ JD-TC-GetCountOfFileInFilter-UH5
      [Documentation]    another provider login filter
       
    
-    ${resp}=  Provider Login            ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login            ${PUSERNAME1}  ${PASSWORD}
     Log                                 ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}    200
 

@@ -57,7 +57,7 @@ JD-TC-Get JDN Settings-1
 
     END
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable    ${list}
@@ -78,11 +78,11 @@ JD-TC-Get JDN Settings-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERPH0}
     
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+821
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH1}${\n}
@@ -97,14 +97,16 @@ JD-TC-Get JDN Settings-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL0}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   0  15
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  15  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -157,7 +159,7 @@ JD-TC-Get JDN Settings-2
 
     END
     
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable    ${list}
@@ -178,11 +180,11 @@ JD-TC-Get JDN Settings-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERPH3}
     
-    ${resp}=  Provider Login  ${PUSERPH3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+831
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
@@ -197,14 +199,16 @@ JD-TC-Get JDN Settings-2
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time   0  15
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  15  
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
     ${parking}   Random Element   ${parkingType}
@@ -243,7 +247,7 @@ JD-TC-Get JDN Settings-2
 JD-TC-Get JDN Settings-3
     [Documentation]  Get JDN Settings of a provider after disabling JDN
 
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -265,7 +269,7 @@ JD-TC-Get JDN Settings-3
 JD-TC-Get JDN Settings-UH1
     [Documentation]  Get JDN Settings of a provider without enabling JDN
     clear_jdn  ${PUSERPH0}
-    ${resp}=  Provider Login  ${PUSERPH0}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -315,7 +319,7 @@ JD-TC-Get JDN Settings-4
     ${resp}=  Account Set Credential  ${INACTIVE_PUSER}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${INACTIVE_PUSER}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${INACTIVE_PUSER}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${disc_max}=   Random Int   min=100   max=500

@@ -118,10 +118,18 @@ Check Questions
 
         ${labelValuesVal}   getColumnValueByMultipleVals  ${sheet}  ${colnames[13]}  &{a}
         Log  ${labelValuesVal}
-        ${lv}=  Run Keyword If  '${FieldDTVal${i}}' == '${QnrDatatypes[1]}'   Strip and split string    ${labelValuesVal[0].strip()}  ,
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[2]}'   Strip and split string    ${labelValuesVal[0]}  ,
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'   Strip and split string    ${labelValuesVal[0]}  ,
-            ...    ELSE	 Set Variable    ${labelValuesVal[0]}
+        # ${lv}=  Run Keyword If  '${FieldDTVal${i}}' == '${QnrDatatypes[1]}'   Strip and split string    ${labelValuesVal[0].strip()}  ,
+        #     ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[2]}'   Strip and split string    ${labelValuesVal[0]}  ,
+        #     ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'   Strip and split string    ${labelValuesVal[0]}  ,
+        #     ...    ELSE	 Set Variable    ${labelValuesVal[0]}
+        IF  '${FieldDTVal${i}}' == '${QnrDatatypes[0]}' or '${FieldDTVal${i}}' == '${QnrDatatypes[2]}' 
+            ${lv}=  Strip and split string    ${labelValuesVal[0]}  ,
+        ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[1]}'
+            ${lv}=  Strip and split string    ${labelValuesVal[0].strip()}  ,
+        ELSE
+            ${lv}=  Set Variable    ${labelValuesVal[0]}
+        END
+
         ${type}=    Evaluate     type($lv).__name__
         Run Keyword If  '${type}' == 'list' and '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'  Set Test Variable  ${labelValuesVal${i}}   ${lv[0]}
         ...    ELSE	 Set Test Variable  ${labelValuesVal${i}}   ${lv}
@@ -147,24 +155,42 @@ Check Questions
 
         ${minVal}   getColumnValueByMultipleVals  ${sheet}  ${colnames[19]}  &{a}
         Log  ${minVal}
-        ${mnv}=  Run Keyword If  '${FieldDTVal${i}}' == '${QnrDatatypes[4]}'   Split String    ${minVal[0]}  ${SPACE}
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[5]}'  Split String    ${minVal[0]}  ${SPACE}
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'  Split String    ${minVal[0]}  ${SPACE}
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[3]}'  Split String    ${minVal[0]}  ${SPACE}
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[1]}'  Convert To Integer    ${minVal[0]}
-            ...    ELSE	 Set Variable    ${minVal[0]}
+        # ${mnv}=  Run Keyword If  '${FieldDTVal${i}}' == '${QnrDatatypes[4]}'   Split String    ${minVal[0]}  ${SPACE}
+        #     ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[5]}'  Split String    ${minVal[0]}  ${SPACE}
+        #     ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'  Split String    ${minVal[0]}  ${SPACE}
+        #     ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[3]}'  Split String    ${minVal[0]}  ${SPACE}
+        #     ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[1]}'  Convert To Integer    ${minVal[0]}
+        #     ...    ELSE	 Set Variable    ${minVal[0]}
+
+        IF   '${FieldDTVal${i}}' == '${QnrDatatypes[0]}' or '${FieldDTVal${i}}' == '${QnrDatatypes[3]}' or '${FieldDTVal${i}}' == '${QnrDatatypes[4]}' or '${FieldDTVal${i}}' == '${QnrDatatypes[5]}'
+            ${mnv}=  Split String    ${minVal[0]}  ${SPACE}
+        ELSE IF    '${FieldDTVal${i}}' == '${QnrDatatypes[1]}'
+            ${mnv}=  Convert To Integer    ${minVal[0]}
+        ELSE
+            ${mnv}=  Set Variable    ${minVal[0]}
+        END
+
         ${type}=    Evaluate     type($mnv).__name__
         Run Keyword If  '${type}' == 'list'  Set Test Variable  ${minVal${i}}   ${mnv[0]}
         ...    ELSE	 Set Test Variable  ${minVal${i}}   ${mnv}
 
         ${maxVal}   getColumnValueByMultipleVals  ${sheet}  ${colnames[20]}  &{a}
         Log  ${maxVal}
-        ${mxv}=  Run Keyword If  '${FieldDTVal${i}}' == '${QnrDatatypes[4]}'   Split String    ${maxVal[0]}  ${SPACE}
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[5]}'  Split String    ${maxVal[0]}  ${SPACE}
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'  Split String    ${maxVal[0]}  ${SPACE}
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[3]}'  Split String    ${maxVal[0]}  ${SPACE}
-            ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[1]}'  Convert To Integer    ${maxVal[0]}
-            ...    ELSE	 Set Variable    ${maxVal[0]}
+        # ${mxv}=  Run Keyword If  '${FieldDTVal${i}}' == '${QnrDatatypes[4]}'   Split String    ${maxVal[0]}  ${SPACE}
+        #     ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[5]}'  Split String    ${maxVal[0]}  ${SPACE}
+        #     ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[0]}'  Split String    ${maxVal[0]}  ${SPACE}
+        #     ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[3]}'  Split String    ${maxVal[0]}  ${SPACE}
+        #     ...    ELSE IF  '${FieldDTVal${i}}' == '${QnrDatatypes[1]}'  Convert To Integer    ${maxVal[0]}
+        #     ...    ELSE	 Set Variable    ${maxVal[0]}
+
+        IF   '${FieldDTVal${i}}' == '${QnrDatatypes[0]}' or '${FieldDTVal${i}}' == '${QnrDatatypes[3]}' or '${FieldDTVal${i}}' == '${QnrDatatypes[4]}' or '${FieldDTVal${i}}' == '${QnrDatatypes[5]}'
+            ${mxv}=  Split String    ${maxVal[0]}  ${SPACE}
+        ELSE IF    '${FieldDTVal${i}}' == '${QnrDatatypes[1]}'
+            ${mxv}=  Convert To Integer    ${maxVal[0]}
+        ELSE
+            ${mxv}=  Set Variable    ${maxVal[0]}
+        END
+
         ${type}=    Evaluate     type($mxv).__name__
         Run Keyword If  '${type}' == 'list'  Set Test Variable  ${maxVal${i}}   ${mxv[0]}
         ...    ELSE	 Set Test Variable  ${maxVal${i}}   ${mxv}
@@ -192,41 +218,44 @@ Check Questions
 
         # Run Keyword If  '${resp.json()['labels'][${i}]['question']['fieldDataType']}' != '${QnrDatatypes[5]}'
         ${value2}=    evaluate    False if $labelValuesVal${x} is None else True
-        Run Keyword If   '${resp.json()['labels'][${i}]['question']['fieldDataType']}' not in @{if_dt_list} and '${value2}' != 'False'
-        ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['labelValues']}   ${labelValuesVal${x}}
+        # Run Keyword If   '${resp.json()['labels'][${i}]['question']['fieldDataType']}' not in @{if_dt_list} and '${value2}' != 'False'
+        IF   '${resp.json()['labels'][${i}]['question']['fieldDataType']}' not in @{if_dt_list} and '${value2}' != 'False'
+            Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['labelValues']}   ${labelValuesVal${x}}
+        END
         
-        Run Keyword If  '${resp.json()['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[1]}'
-        ...    Run Keywords
-        ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[1]}']['minAnswers']}   ${minAnswersVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[1]}']['maxAnswers']}   ${maxAnswersVal${x}}
+        # Run Keyword If  '${resp.json()['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[1]}'
+        IF  '${resp.json()['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[1]}'
+        # ...    Run Keywords
+            Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[1]}']['minAnswers']}   ${minAnswersVal${x}}
+            Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[1]}']['maxAnswers']}   ${maxAnswersVal${x}}
         
-        ...    ELSE IF  '${resp.json()['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}'
-        ...    Run Keywords
-        ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['minNoOfFile']}   ${minAnswersVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['maxNoOfFile']}   ${maxAnswersVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['minSize']}   ${minVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['maxSize']}   ${maxVal${x}}
-        ...    AND  Comapre Lists without order  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['fileTypes']}   ${filetypeVal${x}}  
-        ...    AND  Comapre Lists without order  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['allowedDocuments']}   ${alloweddocVal${x}}  
+        ELSE IF  '${resp.json()['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[5]}'
+        # ...    Run Keywords
+            Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['minNoOfFile']}   ${minAnswersVal${x}}
+            Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['maxNoOfFile']}   ${maxAnswersVal${x}}
+            Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['minSize']}   ${minVal${x}}
+            Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['maxSize']}   ${maxVal${x}}
+            Comapre Lists without order  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['fileTypes']}   ${filetypeVal${x}}  
+            Comapre Lists without order  ${resp.json()['labels'][${i}]['question']['${QnrProperty[5]}']['allowedDocuments']}   ${alloweddocVal${x}}  
         
-        ...    ELSE IF  '${resp.json()['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[4]}'
-        ...    Run Keywords
-        ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[4]}']['minAnswers']}   ${minAnswersVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[4]}']['maxAnswers']}   ${maxAnswersVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[4]}']['start']}   ${minVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[4]}']['end']}   ${maxVal${x}}
+        ELSE IF  '${resp.json()['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[4]}'
+        # ...    Run Keywords
+            Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[4]}']['minAnswers']}   ${minAnswersVal${x}}
+            Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[4]}']['maxAnswers']}   ${maxAnswersVal${x}}
+            Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[4]}']['start']}   ${minVal${x}}
+            Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[4]}']['end']}   ${maxVal${x}}
 
-        ...    ELSE IF  '${resp.json()['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[0]}'
-        ...    Run Keywords
-        ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[0]}']['minNoOfLetter']}   ${minVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[0]}']['maxNoOfLetter']}   ${maxVal${x}}
+        ELSE IF  '${resp.json()['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[0]}'
+        # ...    Run Keywords
+            Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[0]}']['minNoOfLetter']}   ${minVal${x}}
+            Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[0]}']['maxNoOfLetter']}   ${maxVal${x}}
 
-        ...    ELSE IF  '${resp.json()['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[3]}'
-        ...    Run Keywords
-        ...    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[3]}']['startDate']}   ${minVal${x}}
-        ...    AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[3]}']['endDate']}   ${maxVal${x}}
+        ELSE IF  '${resp.json()['labels'][${i}]['question']['fieldDataType']}' == '${QnrDatatypes[3]}'
+        # ...    Run Keywords
+            Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[3]}']['startDate']}   ${minVal${x}}
+            AND  Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['labels'][${i}]['question']['${QnrProperty[3]}']['endDate']}   ${maxVal${x}}
 
-        
+        END
     END
 
 *** Test Cases ***
@@ -245,18 +274,20 @@ JD-TC-GetDonationServiceOptions-1
     ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
     Log   ${servicenames}
     Set Suite Variable   ${servicenames}
-    ${resp}=  Provider Login  ${PUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${lid}   ${resp.json()[0]['id']} 
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -300,7 +331,7 @@ JD-TC-GetDonationServiceOptions-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Provider Login  ${PUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -26,7 +26,7 @@ JD-TC-CreateBranchMaster-1
 
     [Documentation]   Get Branch Master Count
 
-    ${resp}=  Provider Login  ${PUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -40,8 +40,13 @@ JD-TC-CreateBranchMaster-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=    Enable Disable Branch    ACTIVE
@@ -111,7 +116,7 @@ JD-TC-CreateBranchMaster-2
 
     [Documentation]   Get Branch Master Count with id
 
-    ${resp}=  Provider Login  ${PUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -123,7 +128,7 @@ JD-TC-CreateBranchMaster-3
 
     [Documentation]   Get Branch Master Count with Branch code
 
-    ${resp}=  Provider Login  ${PUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -135,7 +140,7 @@ JD-TC-CreateBranchMaster-4
 
     [Documentation]   Get Branch Master Count with branchName
 
-    ${resp}=  Provider Login  ${PUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -147,7 +152,7 @@ JD-TC-CreateBranchMaster-5
 
     [Documentation]   Get Branch Master Count with branchAliasName
 
-    ${resp}=  Provider Login  ${PUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -159,7 +164,7 @@ JD-TC-CreateBranchMaster-6
 
     [Documentation]   Get Branch Master Count with status
 
-    ${resp}=  Provider Login  ${PUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -171,7 +176,7 @@ JD-TC-CreateBranchMaster-7
 
     [Documentation]   Get Branch Master Count with location
 
-    ${resp}=  Provider Login  ${PUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

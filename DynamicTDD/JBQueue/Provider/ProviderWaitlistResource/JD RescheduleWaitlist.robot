@@ -34,10 +34,13 @@ Multiloc and Billable Providers
     Log   ${dom_list}
      
     FOR   ${a}  IN RANGE   ${length-1}    
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${domain}=   Set Variable    ${resp.json()['sector']}
-        ${subdomain}=    Set Variable      ${resp.json()['subSector']}
+
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${domain}=   Set Variable    ${decrypted_data['sector']}
+        ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
         Log  ${dom_list}
         ${status} 	${value} = 	Run Keyword And Ignore Error  List Should Contain Value  ${dom_list}  ${domain}
         Log Many  ${status} 	${value}
@@ -70,7 +73,7 @@ JD-TC-Reschedule Waitlist-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -126,12 +129,12 @@ JD-TC-Reschedule Waitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -147,7 +150,7 @@ JD-TC-Reschedule Waitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -296,7 +299,7 @@ JD-TC-Reschedule Waitlist-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -344,12 +347,12 @@ JD-TC-Reschedule Waitlist-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -365,7 +368,7 @@ JD-TC-Reschedule Waitlist-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -412,7 +415,7 @@ JD-TC-Reschedule Waitlist-2
     ${wait_time}=  Convert To Integer   ${wait_time}
     ${hrs}  ${mins}=   Convert_hour_mins   ${wait_time}
 
-    ${sTime2}=  add_time  ${hrs}  ${mins}
+    ${sTime2}=  db.add_timezone_time  ${tz}  ${hrs}  ${mins}
     
     ${resp}=  Reschedule Consumer Checkin   ${wid}  ${DAY3}  ${q_id}
     Log   ${resp.json()}
@@ -466,7 +469,7 @@ JD-TC-Reschedule Waitlist-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -518,11 +521,11 @@ JD-TC-Reschedule Waitlist-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${queue_name1}=  FakerLibrary.bs
@@ -538,7 +541,7 @@ JD-TC-Reschedule Waitlist-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id1}   name=${queue_name1}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -643,7 +646,7 @@ JD-TC-Reschedule Waitlist-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -725,12 +728,12 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -746,7 +749,7 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -794,6 +797,7 @@ JD-TC-Reschedule Waitlist-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
 
+    sleep   2s
     ${resp}=  Get Bill By consumer  ${wid4}  ${pid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -823,7 +827,7 @@ JD-TC-Reschedule Waitlist-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${billable_providers[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -892,7 +896,7 @@ JD-TC-Reschedule Waitlist-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${billable_providers[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -965,12 +969,12 @@ JD-TC-Reschedule Waitlist-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -986,7 +990,7 @@ JD-TC-Reschedule Waitlist-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -1063,7 +1067,7 @@ JD-TC-Reschedule Waitlist-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${billable_providers[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1126,7 +1130,7 @@ JD-TC-Reschedule Waitlist-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1192,12 +1196,12 @@ JD-TC-Reschedule Waitlist-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -1213,7 +1217,7 @@ JD-TC-Reschedule Waitlist-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -1309,7 +1313,7 @@ JD-TC-Reschedule Waitlist-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1378,12 +1382,12 @@ JD-TC-Reschedule Waitlist-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -1399,7 +1403,7 @@ JD-TC-Reschedule Waitlist-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -1453,7 +1457,7 @@ JD-TC-Reschedule Waitlist-7
     ${wait_time}=  Convert To Integer   ${wait_time}
     ${hrs}  ${mins}=   Convert_hour_mins   ${wait_time}
 
-    # ${sTime2}=  add_time  ${hrs}  ${mins}
+    # ${sTime2}=  db.add_timezone_time  ${tz}  ${hrs}  ${mins}
     ${sTime2}=  add_two   ${sTime1}  ${mins}
 
     ${resp}=  Get Waitlist By Id  ${wid} 
@@ -1510,7 +1514,7 @@ JD-TC-Reschedule Waitlist-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1571,12 +1575,12 @@ JD-TC-Reschedule Waitlist-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -1592,7 +1596,7 @@ JD-TC-Reschedule Waitlist-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY3}  ${desc}  ${bool[1]}  ${cid} 
@@ -1675,7 +1679,7 @@ JD-TC-Reschedule Waitlist-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${multilocPro[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${multilocPro[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1724,11 +1728,11 @@ JD-TC-Reschedule Waitlist-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${queue_name1}=  FakerLibrary.bs
@@ -1744,7 +1748,7 @@ JD-TC-Reschedule Waitlist-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id1}   name=${queue_name1}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -1844,7 +1848,7 @@ JD-TC-Reschedule Waitlist-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1892,11 +1896,11 @@ JD-TC-Reschedule Waitlist-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${queue_name1}=  FakerLibrary.bs
@@ -1912,7 +1916,7 @@ JD-TC-Reschedule Waitlist-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id1}   name=${queue_name1}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -1996,7 +2000,7 @@ JD-TC-Reschedule Waitlist-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2044,14 +2048,14 @@ JD-TC-Reschedule Waitlist-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${d}=  FakerLibrary.Random Int  min=1  max=6
-    ${DAY3}=  add_date  ${d} 
+    ${DAY3}=  db.add_timezone_date  ${tz}  ${d} 
     ${date2}=  Convert Date  ${DAY3}  result_format=%d-%m-%Y 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -2067,7 +2071,7 @@ JD-TC-Reschedule Waitlist-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -2120,7 +2124,7 @@ JD-TC-Reschedule Waitlist-12
     [Documentation]  Consumer takes checkin for a provider and provider reschedules it to another day.
     ...  ${SPACE} Check Communication messages also
 
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2177,13 +2181,13 @@ JD-TC-Reschedule Waitlist-12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
     ${date2}=  Convert Date  ${DAY3}  result_format=%d-%m-%Y
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -2232,7 +2236,7 @@ JD-TC-Reschedule Waitlist-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2281,7 +2285,7 @@ JD-TC-Reschedule Waitlist-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME82}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME82}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2349,11 +2353,11 @@ JD-TC-Reschedule Waitlist-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${queue_name1}=  FakerLibrary.bs
@@ -2369,7 +2373,7 @@ JD-TC-Reschedule Waitlist-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id1}   name=${queue_name1}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -2441,7 +2445,7 @@ JD-TC-Reschedule Waitlist-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2489,12 +2493,12 @@ JD-TC-Reschedule Waitlist-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  14
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  14
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -2510,7 +2514,7 @@ JD-TC-Reschedule Waitlist-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -2564,7 +2568,7 @@ JD-TC-Reschedule Waitlist-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2612,11 +2616,11 @@ JD-TC-Reschedule Waitlist-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  add_date  2
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  1
+    ${DAY1}=  db.add_timezone_date  ${tz}  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  1
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -2632,7 +2636,7 @@ JD-TC-Reschedule Waitlist-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -2685,7 +2689,7 @@ JD-TC-Reschedule Waitlist-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2733,12 +2737,12 @@ JD-TC-Reschedule Waitlist-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  subtract_date  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.subtract_timezone_date  ${tz}  2
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -2754,7 +2758,7 @@ JD-TC-Reschedule Waitlist-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -2808,7 +2812,7 @@ JD-TC-Reschedule Waitlist-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2856,12 +2860,12 @@ JD-TC-Reschedule Waitlist-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -2877,7 +2881,7 @@ JD-TC-Reschedule Waitlist-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -2941,7 +2945,7 @@ JD-TC-Reschedule Waitlist-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2989,12 +2993,12 @@ JD-TC-Reschedule Waitlist-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  2
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -3010,7 +3014,7 @@ JD-TC-Reschedule Waitlist-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -3069,7 +3073,7 @@ JD-TC-Reschedule Waitlist-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3109,11 +3113,11 @@ JD-TC-Reschedule Waitlist-UH7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${queue_name1}=  FakerLibrary.bs
@@ -3133,7 +3137,7 @@ JD-TC-Reschedule Waitlist-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3181,12 +3185,12 @@ JD-TC-Reschedule Waitlist-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  2
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -3202,7 +3206,7 @@ JD-TC-Reschedule Waitlist-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -3246,7 +3250,7 @@ JD-TC-Reschedule Waitlist-UH9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3294,12 +3298,12 @@ JD-TC-Reschedule Waitlist-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  2
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -3315,7 +3319,7 @@ JD-TC-Reschedule Waitlist-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -3359,7 +3363,7 @@ JD-TC-Reschedule Waitlist-UH10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3407,12 +3411,12 @@ JD-TC-Reschedule Waitlist-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  2
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -3428,7 +3432,7 @@ JD-TC-Reschedule Waitlist-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -3474,7 +3478,7 @@ JD-TC-Reschedule Waitlist-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3522,18 +3526,18 @@ JD-TC-Reschedule Waitlist-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${d}=  FakerLibrary.Random Int  min=1  max=6
-    ${DAY3}=  add_date  ${d} 
+    ${DAY3}=  db.add_timezone_date  ${tz}  ${d} 
     ${weekday}=   get_weekday_by_date  ${DAY3}
     ${weekday}=   Convert To String  ${weekday}
     ${list}=  Create List  1  2  3  4  5  6  7
     Remove Values From List  ${list}  ${weekday}
     Log  ${list}
     ${date2}=  Convert Date  ${DAY3}  result_format=%d-%m-%Y 
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -3549,7 +3553,7 @@ JD-TC-Reschedule Waitlist-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -3593,7 +3597,7 @@ JD-TC-Reschedule Waitlist-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3641,14 +3645,14 @@ JD-TC-Reschedule Waitlist-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${d}=  FakerLibrary.Random Int  min=1  max=6
-    ${DAY3}=  add_date  ${d} 
+    ${DAY3}=  db.add_timezone_date  ${tz}  ${d} 
     ${date2}=  Convert Date  ${DAY3}  result_format=%d-%m-%Y 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -3664,7 +3668,7 @@ JD-TC-Reschedule Waitlist-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -3689,7 +3693,7 @@ JD-TC-Reschedule Waitlist-UH12
 
     ${holidayname}=   FakerLibrary.word
     # ${rand}=  FakerLibrary.Random Int  min=1  max=10
-    # ${holiday_date}=  add_date  ${rand}
+    # ${holiday_date}=  db.add_timezone_date  ${tz}  ${rand}
     ${list}=  Create List   1  2  3  4  5  6  7
     ${desc}=    FakerLibrary.word
     ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY3}  ${EMPTY}  ${sTime1}  ${eTime1}  ${desc}
@@ -3722,7 +3726,7 @@ JD-TC-Reschedule Waitlist-UH13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3770,14 +3774,14 @@ JD-TC-Reschedule Waitlist-UH13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${d}=  FakerLibrary.Random Int  min=1  max=6
-    ${DAY3}=  add_date  ${d} 
+    ${DAY3}=  db.add_timezone_date  ${tz}  ${d} 
     ${date2}=  Convert Date  ${DAY3}  result_format=%d-%m-%Y 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -3816,7 +3820,7 @@ JD-TC-Reschedule Waitlist-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3864,11 +3868,11 @@ JD-TC-Reschedule Waitlist-UH14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${queue_name1}=  FakerLibrary.bs
@@ -3908,7 +3912,7 @@ JD-TC-Reschedule Waitlist-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3956,12 +3960,12 @@ JD-TC-Reschedule Waitlist-UH14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  2
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  2
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -3998,7 +4002,7 @@ JD-TC-Reschedule Waitlist-UH15
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4046,14 +4050,14 @@ JD-TC-Reschedule Waitlist-UH15
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${d}=  FakerLibrary.Random Int  min=1  max=6
-    ${DAY3}=  add_date  ${d} 
+    ${DAY3}=  db.add_timezone_date  ${tz}  ${d} 
     ${date2}=  Convert Date  ${DAY3}  result_format=%d-%m-%Y 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -4069,7 +4073,7 @@ JD-TC-Reschedule Waitlist-UH15
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -4117,7 +4121,7 @@ JD-TC-Reschedule Waitlist-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4165,14 +4169,14 @@ JD-TC-Reschedule Waitlist-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${d}=  FakerLibrary.Random Int  min=1  max=6
-    ${DAY3}=  add_date  ${d} 
+    ${DAY3}=  db.add_timezone_date  ${tz}  ${d} 
     ${date2}=  Convert Date  ${DAY3}  result_format=%d-%m-%Y 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -4188,7 +4192,7 @@ JD-TC-Reschedule Waitlist-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -4239,7 +4243,7 @@ JD-TC-Reschedule Waitlist-UH17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4287,14 +4291,14 @@ JD-TC-Reschedule Waitlist-UH17
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${d}=  FakerLibrary.Random Int  min=1  max=6
-    ${DAY3}=  add_date  ${d} 
+    ${DAY3}=  db.add_timezone_date  ${tz}  ${d} 
     ${date2}=  Convert Date  ${DAY3}  result_format=%d-%m-%Y 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -4310,7 +4314,7 @@ JD-TC-Reschedule Waitlist-UH17
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -4353,7 +4357,7 @@ JD-TC-Reschedule Waitlist-UH18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4401,14 +4405,14 @@ JD-TC-Reschedule Waitlist-UH18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${d}=  FakerLibrary.Random Int  min=1  max=6
-    ${DAY3}=  add_date  ${d} 
+    ${DAY3}=  db.add_timezone_date  ${tz}  ${d} 
     ${date2}=  Convert Date  ${DAY3}  result_format=%d-%m-%Y 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -4424,7 +4428,7 @@ JD-TC-Reschedule Waitlist-UH18
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -4467,7 +4471,7 @@ JD-TC-Reschedule Waitlist-UH19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4515,14 +4519,14 @@ JD-TC-Reschedule Waitlist-UH19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${d}=  FakerLibrary.Random Int  min=1  max=6
-    ${DAY3}=  add_date  ${d} 
+    ${DAY3}=  db.add_timezone_date  ${tz}  ${d} 
     ${date2}=  Convert Date  ${DAY3}  result_format=%d-%m-%Y 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -4538,7 +4542,7 @@ JD-TC-Reschedule Waitlist-UH19
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -4579,7 +4583,7 @@ JD-TC-Reschedule Waitlist-UH19
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
     
-#     ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4629,14 +4633,14 @@ JD-TC-Reschedule Waitlist-UH19
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Set Test Variable  ${cid}   ${resp.json()}
 
-#     ${DAY1}=  get_date
+#     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-#     ${DAY2}=  add_date  10      
+#     ${DAY2}=  db.add_timezone_date  ${tz}  10      
 #     ${d}=  FakerLibrary.Random Int  min=1  max=6
-#     ${DAY3}=  add_date  ${d} 
+#     ${DAY3}=  db.add_timezone_date  ${tz}  ${d} 
 #     ${date2}=  Convert Date  ${DAY3}  result_format=%d-%m-%Y 
 #     ${list}=  Create List  1  2  3  4  5  6  7
-#     ${sTime1}=  db.get_time
+#     ${sTime1}=  db.get_time_by_timezone  ${tz}
 #     ${delta}=  FakerLibrary.Random Int  min=10  max=60
 #     ${eTime1}=  add_two   ${sTime1}  ${delta}
 #     ${queue_name}=  FakerLibrary.bs
@@ -4652,7 +4656,7 @@ JD-TC-Reschedule Waitlist-UH19
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-#     ${now}=   db.get_time
+#     ${now}=   db.get_time_by_timezone   ${tz}
 
 #     ${desc}=   FakerLibrary.word
 #     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -4721,7 +4725,7 @@ JD-TC-Reschedule Waitlist-UH21
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4769,11 +4773,11 @@ JD-TC-Reschedule Waitlist-UH21
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta1}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta1}
     ${queue_name1}=  FakerLibrary.bs
@@ -4789,7 +4793,7 @@ JD-TC-Reschedule Waitlist-UH21
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id1}   name=${queue_name1}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -4856,7 +4860,7 @@ JD-TC-Reschedule Waitlist-UH22
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4904,14 +4908,14 @@ JD-TC-Reschedule Waitlist-UH22
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
     ${d}=  FakerLibrary.Random Int  min=1  max=6
-    ${DAY3}=  add_date  ${d} 
+    ${DAY3}=  db.add_timezone_date  ${tz}  ${d} 
     ${date2}=  Convert Date  ${DAY3}  result_format=%d-%m-%Y 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -4927,7 +4931,7 @@ JD-TC-Reschedule Waitlist-UH22
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -4980,7 +4984,7 @@ JD-TC-Reschedule Waitlist-UH23
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5041,12 +5045,12 @@ JD-TC-Reschedule Waitlist-UH23
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -5062,7 +5066,7 @@ JD-TC-Reschedule Waitlist-UH23
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -5128,7 +5132,7 @@ JD-TC-Reschedule Waitlist-UH24
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5176,12 +5180,12 @@ JD-TC-Reschedule Waitlist-UH24
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -5197,7 +5201,7 @@ JD-TC-Reschedule Waitlist-UH24
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -5291,7 +5295,7 @@ JD-TC-Reschedule Waitlist-UH25
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5352,12 +5356,12 @@ JD-TC-Reschedule Waitlist-UH25
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -5373,7 +5377,7 @@ JD-TC-Reschedule Waitlist-UH25
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${q_id}   name=${queue_name}  queueState=${Qstate[0]}
 
-    ${now}=   db.get_time
+    ${now}=   db.get_time_by_timezone   ${tz}
 
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id}  ${q_id}  ${DAY1}  ${desc}  ${bool[1]}  ${cid} 
@@ -5429,7 +5433,7 @@ JD-TC-Reschedule Waitlist-UH26
     ...  ${SPACE} Check Communication messages also
 
 
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5486,13 +5490,13 @@ JD-TC-Reschedule Waitlist-UH26
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
     ${date2}=  Convert Date  ${DAY3}  result_format=%d-%m-%Y
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -5550,7 +5554,7 @@ JD-TC-Reschedule Waitlist-UH26
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5585,7 +5589,7 @@ JD-TC-Reschedule Waitlist-UH27
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -5642,13 +5646,13 @@ JD-TC-Reschedule Waitlist-UH27
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${date1}=  Convert Date  ${DAY1}  result_format=%d-%m-%Y
-    ${DAY2}=  add_date  10      
-    ${DAY3}=  add_date  4
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY3}=  db.add_timezone_date  ${tz}  4
     ${date2}=  Convert Date  ${DAY3}  result_format=%d-%m-%Y
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${queue_name}=  FakerLibrary.bs
@@ -5717,7 +5721,7 @@ JD-TC-Reschedule Waitlist-UH27
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME32}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

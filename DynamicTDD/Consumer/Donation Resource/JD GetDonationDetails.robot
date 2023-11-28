@@ -55,7 +55,7 @@ JD-TC-GetDonationDetails-1
 
         [Documentation]   Consumer Get Donation Payment Via Link and get the details of the donation.
 
-        ${resp}=  Provider Login  ${PUSERNAME150}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 *** comment ***
@@ -77,7 +77,12 @@ JD-TC-GetDonationDetails-1
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=   Create Sample Location
-        Set Suite Variable    ${loc_id1}    ${resp}  
+        Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
 
         ${description}=  FakerLibrary.sentence
         Set Suite Variable  ${description}
@@ -121,7 +126,7 @@ JD-TC-GetDonationDetails-1
 
         ${con_id}=  get_id  ${CUSERNAME5}
         Set Suite Variable  ${con_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
 
         ${don_amt1}=   Random Int   min=1000   max=4000

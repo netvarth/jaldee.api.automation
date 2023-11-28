@@ -18,7 +18,7 @@ Variables       /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-Get Privacy Setting-1
     [Documentation]   Get Privacy Setting of a valid provider
-    ${resp}=  ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${ph1}=  Evaluate  ${PUSERNAME}+10000101
     ${ph2}=  Evaluate  ${PUSERNAME}+20000102
@@ -53,7 +53,7 @@ JD-TC-Get Privacy Setting-1
     
 JD-TC-Get Privacy Setting-2
     [Documentation]   Get business Privacy Setting of a valid provider, provider updated privacy settings with empty values
-    ${resp}=  ProviderLogin  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200   
     ${ph1}=  Create List
     ${email}=  Create List

@@ -40,7 +40,7 @@ JD-TC-CreateUserprofile-1
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
      Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -112,7 +112,7 @@ JD-TC-CreateUserprofile-1
 JD-TC-CreateUserprofile-2
 
      [Documentation]  Create a user profile without details
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+336848
@@ -149,7 +149,7 @@ JD-TC-CreateUserprofile-2
 
 JD-TC-CreateUserprofile-3
      [Documentation]  Create a user profile with some details
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+3736849
@@ -187,7 +187,7 @@ JD-TC-CreateUserprofile-3
 
 JD-TC-CreateUserprofile-UH2
      [Documentation]  Create a user profile with invalid user id
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+336851
@@ -220,7 +220,7 @@ JD-TC-CreateUserprofile-UH2
 
 JD-TC-CreateUserprofile-UH3
      [Documentation]  Create a user profile for ASSISTANT type user
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+336852
@@ -252,7 +252,7 @@ JD-TC-CreateUserprofile-UH3
 
 JD-TC-CreateUserprofile-UH4
      [Documentation]  Create a user profile for already created user
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+336853
@@ -285,7 +285,7 @@ JD-TC-CreateUserprofile-UH4
 
 JD-TC-CreateUserprofile-UH5
      [Documentation]  Create a user profile for INACTIVE user
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+336855
@@ -345,7 +345,7 @@ JD-TC-CreateUserprofile -UH9
 
 JD-TC-CreateUserprofile-UH4
      [Documentation]  Create a user profile for defaultAdminUser=true user
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -360,7 +360,7 @@ JD-TC-CreateUserprofile-UH4
 
 JD-TC-CreateUserprofile-UH1
      [Documentation]  Create a user profile with another sub domain id
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+336823
@@ -394,7 +394,7 @@ JD-TC-CreateUserprofile-UH1
 
 JD-TC-CreateUserprofile-UH6
      [Documentation]  Create a user profile with invalid sub domain id
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+336854

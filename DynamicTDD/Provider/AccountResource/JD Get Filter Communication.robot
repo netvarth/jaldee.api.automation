@@ -77,7 +77,7 @@ JD-TC-Get Filter Communication-1
 
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME8}   ${PASSWORD}
     Log   ${resp.json()}
@@ -141,7 +141,7 @@ JD-TC-Get Filter Communication-2
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id6}  ${resp.json()['id']}
     ${account_id1}=  get_acc_id  ${PUSERNAME8}
@@ -256,7 +256,7 @@ JD-TC-Get Filter Communication-3
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME8}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${p_id6}  ${resp.json()['id']}
     ${account_id1}=  get_acc_id  ${PUSERNAME8}
@@ -338,7 +338,7 @@ JD-TC-Get Filter Communication-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${p_id}  ${resp.json()['id']}
@@ -378,12 +378,18 @@ JD-TC-Get Filter Communication-4
     Should Be Equal As Strings  ${resp.status_code}   200
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME8}
 
-    ${DAY1}=  get_date
-    ${DAY2}=  add_date  10      
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}

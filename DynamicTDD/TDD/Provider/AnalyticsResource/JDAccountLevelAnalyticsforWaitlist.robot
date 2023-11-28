@@ -94,11 +94,11 @@ JD-TC-AccountLevelAnalyticsforWaitlist-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
@@ -113,19 +113,22 @@ JD-TC-AccountLevelAnalyticsforWaitlist-1
     ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
     ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
     ${bs}=  FakerLibrary.bs
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
     ${companySuffix}=  FakerLibrary.companySuffix
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}   Random Element   ${parkingType}
     ${24hours}    Random Element    ['True','False']
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   0  45
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
@@ -156,6 +159,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
@@ -219,7 +223,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-1
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id1}  ${resp.json()}
@@ -228,7 +232,8 @@ JD-TC-AccountLevelAnalyticsforWaitlist-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -263,7 +268,6 @@ JD-TC-AccountLevelAnalyticsforWaitlist-1
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -329,7 +333,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-1
 JD-TC-AccountLevelAnalyticsforWaitlist-2
     [Documentation]   take prepayment checkin for a provider and check account level analytics for WALK_IN_TOKEN and ARRIVED_TOKEN metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -343,7 +347,8 @@ JD-TC-AccountLevelAnalyticsforWaitlist-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -369,7 +374,6 @@ JD-TC-AccountLevelAnalyticsforWaitlist-2
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id1}  ${q_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -417,7 +421,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-2
 JD-TC-AccountLevelAnalyticsforWaitlist-3
     [Documentation]   take checkin for a virtual service for a provider and check account level analytics for WALK_IN_TOKEN and ARRIVED_TOKEN metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -471,7 +475,8 @@ JD-TC-AccountLevelAnalyticsforWaitlist-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id1}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -556,7 +561,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-3
 JD-TC-AccountLevelAnalyticsforWaitlist-4
     [Documentation]   take online checkins for a provider and check account level analytics for ONLINE_TOKEN and CHECKED_IN_TOKEN metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -573,7 +578,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-4
 
     comment  queue 1 for checkins
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id4}
+    ${resp}=  Sample Queue  ${lid}   ${s_id4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id2}  ${resp.json()}
@@ -582,7 +587,8 @@ JD-TC-AccountLevelAnalyticsforWaitlist-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id2}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -606,7 +612,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-4
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id2}  ${DAY}  ${s_id4}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.content}
@@ -626,7 +632,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-4
 
     # change_system_time  1  30
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -687,7 +693,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-4
 JD-TC-AccountLevelAnalyticsforWaitlist-5
     [Documentation]   take online checkins for a prepayment service for a provider and check account level analytics for ONLINE_TOKEN and CHECKED_IN_TOKEN
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -710,7 +716,8 @@ JD-TC-AccountLevelAnalyticsforWaitlist-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${resp}=  Update Queue  ${q_id2}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
     ...  ${resp.json()['queueSchedule']['startDate']}  ${EMPTY}  ${EMPTY}  ${resp.json()['queueStartTime']}  ${resp.json()['queueEndTime']}
     ...  ${resp.json()['parallelServing']}   ${resp.json()['capacity']}  ${lid}  ${s_id4}  ${s_id5}
@@ -734,7 +741,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-5
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id2}  ${DAY}  ${s_id5}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.content}
@@ -768,7 +775,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-5
 
     END
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -829,7 +836,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-5
 JD-TC-AccountLevelAnalyticsforWaitlist-6
     [Documentation]   take online checkin for a virtual service for a provider and check account level analytics for ONLINE_TOKEN and CHECKED_IN_TOKEN metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -861,7 +868,8 @@ JD-TC-AccountLevelAnalyticsforWaitlist-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${resp}=  Update Queue  ${q_id2}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
     ...  ${resp.json()['queueSchedule']['startDate']}  ${EMPTY}  ${EMPTY}  ${resp.json()['queueStartTime']}  ${resp.json()['queueEndTime']}
     ...  ${resp.json()['parallelServing']}   ${resp.json()['capacity']}  ${lid}  ${s_id4}  ${s_id5}  ${v_s2}
@@ -917,7 +925,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-6
 
     Log List   ${vs_waitlist_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -969,7 +977,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-6
 JD-TC-AccountLevelAnalyticsforWaitlist-7
     [Documentation]   take phone-in checkins for a provider and check account level analytics for PHONE_TOKEN and CHECKED_IN_TOKEN metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -986,7 +994,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-7
 
     comment  queue 1 for checkins
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id6} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id6} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id3}  ${resp.json()}
@@ -995,7 +1003,8 @@ JD-TC-AccountLevelAnalyticsforWaitlist-7
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id3}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -1020,7 +1029,6 @@ JD-TC-AccountLevelAnalyticsforWaitlist-7
         ${resp}=  Add To Waitlist with mode  ${waitlistMode[2]}  ${cid${a}}  ${s_id6}  ${q_id3}  ${DAY1}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -1072,7 +1080,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-7
 JD-TC-AccountLevelAnalyticsforWaitlist-8
     [Documentation]   take phone-in checkins for a prepayment service for a provider and check account level analytics for PHONE_TOKEN and CHECKED_IN_TOKEN metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1091,7 +1099,8 @@ JD-TC-AccountLevelAnalyticsforWaitlist-8
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${resp}=  Update Queue  ${q_id3}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
     ...  ${resp.json()['queueSchedule']['startDate']}  ${EMPTY}  ${EMPTY}  ${resp.json()['queueStartTime']}  ${resp.json()['queueEndTime']}
     ...  ${resp.json()['parallelServing']}   ${resp.json()['capacity']}  ${lid}  ${s_id6}  ${s_id7}
@@ -1113,7 +1122,6 @@ JD-TC-AccountLevelAnalyticsforWaitlist-8
         ${resp}=  Add To Waitlist with mode  ${waitlistMode[2]}  ${cid${a}}  ${s_id7}  ${q_id3}  ${DAY1}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -1164,7 +1172,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-8
 JD-TC-AccountLevelAnalyticsforWaitlist-9
     [Documentation]   take phone-in checkin for a virtual service for a provider and check account level analytics for PHONE_TOKEN and CHECKED_IN_TOKEN metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1196,7 +1204,8 @@ JD-TC-AccountLevelAnalyticsforWaitlist-9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${resp}=  Update Queue  ${q_id3}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
     ...  ${resp.json()['queueSchedule']['startDate']}  ${EMPTY}  ${EMPTY}  ${resp.json()['queueStartTime']}  ${resp.json()['queueEndTime']}
     ...  ${resp.json()['parallelServing']}   ${resp.json()['capacity']}  ${lid}  ${s_id6}  ${s_id7}  ${v_s3}
@@ -1219,7 +1228,6 @@ JD-TC-AccountLevelAnalyticsforWaitlist-9
         ${resp}=  Provider Add To WL With Virtual Service  ${cid${a}}  ${v_s3}  ${q_id3}  ${DAY1}  ${desc}  ${bool[1]}  ${waitlistMode[2]}  ${virtualService}   ${cid${a}}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -1281,7 +1289,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-9
 JD-TC-AccountLevelAnalyticsforWaitlist-10
     [Documentation]   take token for a provider and check account level analytics for WALK_IN_TOKEN and ARRIVED_TOKEN metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -1293,7 +1301,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-10
 
     comment  queue 2 for tokens
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id8}
+    ${resp}=  Sample Queue  ${lid}   ${s_id8}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id4}  ${resp.json()}
@@ -1302,7 +1310,8 @@ JD-TC-AccountLevelAnalyticsforWaitlist-10
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id4}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -1333,7 +1342,6 @@ JD-TC-AccountLevelAnalyticsforWaitlist-10
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id8}  ${q_id4}  ${DAY1}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${token_wid${a}}  ${wid[0]}
         ${tid}=  Get Dictionary Keys  ${resp.json()}
@@ -1384,7 +1392,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-10
 JD-TC-AccountLevelAnalyticsforWaitlist-11
     [Documentation]   take prepayment token for a provider and check account level analytics for WALK_IN_TOKEN and ARRIVED_TOKEN metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -1421,7 +1429,6 @@ JD-TC-AccountLevelAnalyticsforWaitlist-11
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id9}  ${q_id4}  ${DAY1}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${token_wid${a}}  ${wid[0]}
         ${tid}=  Get Dictionary Keys  ${resp.json()}
@@ -1470,7 +1477,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-11
 JD-TC-AccountLevelAnalyticsforWaitlist-12
     [Documentation]   take token for a virtual service for a provider and check account level analytics for WALK_IN_TOKEN and ARRIVED_TOKEN metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -1497,7 +1504,8 @@ JD-TC-AccountLevelAnalyticsforWaitlist-12
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id4}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -1522,7 +1530,6 @@ JD-TC-AccountLevelAnalyticsforWaitlist-12
         ${resp}=  Provider Add To WL With Virtual Service  ${cid${a}}  ${v_s4}  ${q_id4}  ${DAY1}  ${desc}  ${bool[1]}  ${waitlistMode[0]}  ${virtualService}   ${cid${a}}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${token_wid${a}}  ${wid[0]}
         ${tid}=  Get Dictionary Keys  ${resp.json()}
@@ -1587,7 +1594,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-13
     Log List   ${vs_waitlist_ids}
     Log List   ${online_prepay_wl_ids}
     
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -1633,7 +1640,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-13
     # sleep  05s
 
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1719,7 +1726,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-13
 JD-TC-AccountLevelAnalyticsforWaitlist-14
     [Documentation]   change status from checked-in to arrived and check ARRIVED_TOKEN and CHECKED_IN_TOKEN metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -1803,7 +1810,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-14
 JD-TC-AccountLevelAnalyticsforWaitlist-15
     [Documentation]   change status from arrived to started and check STARTED_TOKEN and ARRIVED_TOKEN
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -1881,7 +1888,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-15
 JD-TC-AccountLevelAnalyticsforWaitlist-16
     [Documentation]   change status from started to done and check DONE_TOKEN and STARTED_TOKEN
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -1962,7 +1969,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-16
 JD-TC-AccountLevelAnalyticsforWaitlist-17
     [Documentation]   cancel a checkin in checked-in status and check CHECKED_IN_TOKEN and CANCELLED_TOKEN
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -2068,7 +2075,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-17
 JD-TC-AccountLevelAnalyticsforWaitlist-18
     [Documentation]   cancel a checkin in arrived status and check ARRIVED_TOKEN and CANCELLED_TOKEN
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -2177,7 +2184,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-18
 JD-TC-AccountLevelAnalyticsforWaitlist-19
     [Documentation]   Reschedule a checkin in checked-in status and check CHECKED_IN_TOKEN and RESCHEDULED_TOKEN
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -2185,6 +2192,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-19
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${SERVICE13}=    Set Variable  ${ser_names[12]}
     ${s_id10}=  Create Sample Service  ${SERVICE13}  maxBookingsAllowed=10
@@ -2192,7 +2200,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-19
 
     comment  queue 1 for checkins    
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id10} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id10} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id5}  ${resp.json()}
@@ -2201,7 +2209,8 @@ JD-TC-AccountLevelAnalyticsforWaitlist-19
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id5}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -2225,7 +2234,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-19
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${cnote}=   FakerLibrary.word
         ${resp}=  Add To Waitlist Consumers  ${pid}  ${q_id5}  ${DAY}  ${s_id10}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.content}
@@ -2243,7 +2252,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-19
 
     Log List   ${waitlist_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2296,7 +2305,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-19
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${DAY3}=  add_date  4
+        ${DAY3}=  db.add_timezone_date  ${tz}  4  
         ${resp}=  Reschedule Waitlist  ${pid}  ${cwid${a}}  ${DAY3}  ${q_id5}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -2317,7 +2326,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-19
     Log List   ${rescheduled_wl_ids}
     Set Suite Variable   ${rescheduled_wl_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2381,7 +2390,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-19
 JD-TC-AccountLevelAnalyticsforWaitlist-20
     [Documentation]   Reschedule a checkin in arrived status and check ARRIVED_TOKEN and RESCHEDULED_TOKEN
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     
@@ -2414,7 +2423,6 @@ JD-TC-AccountLevelAnalyticsforWaitlist-20
         ${resp}=  Add To Waitlist  ${cid${a}}  ${s_id11}  ${q_id5}  ${DAY1}  ${desc}  ${bool[1]}  ${cid${a}} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Test Variable  ${wid${a}}  ${wid[0]}
 
@@ -2465,7 +2473,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-20
 
     FOR   ${a}  IN RANGE   ${count}
 
-        ${DAY3}=  add_date  4
+        ${DAY3}=  db.add_timezone_date  ${tz}  4  
         ${resp}=  Reschedule Consumer Checkin   ${wid${a}}  ${DAY3}  ${q_id5}
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -2544,7 +2552,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-20
 JD-TC-AccountLevelAnalyticsforWaitlist-21
     [Documentation]   check TOTAL_ON_TOKEN, TOTAL_FOR_TOKEN, WEB_TOKENS, TOKENS_FOR_LICENSE_BILLING and BRAND_NEW_TOKENS
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2638,7 +2646,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-21
 JD-TC-AccountLevelAnalyticsforWaitlist-22
     [Documentation]   Make bill payment and check BILL_PAYMENT_COUNT and BILL_PAYMENT_TOTAL metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2722,7 +2730,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-22
 
     END
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2783,7 +2791,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-22
 JD-TC-AccountLevelAnalyticsforWaitlist-23
     [Documentation]   take phone-in checkins for a provider from consumer side and check account level analytics for PHONE_TOKEN and CHECKED_IN_TOKEN metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2800,7 +2808,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-23
 
     comment  queue 1 for checkins
 
-    ${resp}=  Sample Queue   ${lid}   ${s_id12} 
+    ${resp}=  Sample Queue  ${lid}   ${s_id12} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q_id6}  ${resp.json()}
@@ -2809,7 +2817,8 @@ JD-TC-AccountLevelAnalyticsforWaitlist-23
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${etime}=  Set Variable  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}
     ${eTime1}=  add_two   ${etime}  120
     ${resp}=  Update Queue  ${q_id6}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
@@ -2837,7 +2846,6 @@ JD-TC-AccountLevelAnalyticsforWaitlist-23
         ${resp}=  Add To Waitlist Consumers with mode  ${waitlistMode[2]}  ${pid}  ${q_id6}  ${DAY1}  ${s_id12}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid${a}}  ${wid[0]}
 
@@ -2855,7 +2863,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-23
 
     Log List   ${waitlist_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2913,7 +2921,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-23
 JD-TC-AccountLevelAnalyticsforWaitlist-24
     [Documentation]   take phone-in checkins from consumer side for a prepayment service for a provider and check account level analytics for PHONE_TOKEN and CHECKED_IN_TOKEN metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2932,7 +2940,8 @@ JD-TC-AccountLevelAnalyticsforWaitlist-24
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${resp}=  Update Queue  ${q_id6}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
     ...  ${resp.json()['queueSchedule']['startDate']}  ${EMPTY}  ${EMPTY}  ${resp.json()['queueStartTime']}  ${resp.json()['queueEndTime']}
     ...  ${resp.json()['parallelServing']}   ${resp.json()['capacity']}  ${lid}  ${s_id12}  ${s_id13}
@@ -2960,7 +2969,6 @@ JD-TC-AccountLevelAnalyticsforWaitlist-24
         ${resp}=  Add To Waitlist Consumers with mode  ${waitlistMode[2]}  ${pid}  ${q_id6}  ${DAY1}  ${s_id13}  ${cnote}  ${bool[0]}  ${self} 
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${cwid${a}}  ${wid[0]}
 
@@ -2978,7 +2986,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-24
 
     Log List   ${phonein_prepay_wl_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3035,7 +3043,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-24
 JD-TC-AccountLevelAnalyticsforWaitlist-25
     [Documentation]   take phone-in checkin from consumer side for a virtual service for a provider and check account level analytics for PHONE_TOKEN and CHECKED_IN_TOKEN metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3067,7 +3075,8 @@ JD-TC-AccountLevelAnalyticsforWaitlist-25
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-    ${time_now}=  db.get_time
+    # ${time_now}=  db.get_time_by_timezone  ${tz}
+    ${time_now}=  db.get_time_by_timezone  ${tz}
     ${resp}=  Update Queue  ${q_id6}  ${resp.json()['name']}  ${resp.json()['queueSchedule']['recurringType']}  ${resp.json()['queueSchedule']['repeatIntervals']}
     ...  ${resp.json()['queueSchedule']['startDate']}  ${EMPTY}  ${EMPTY}  ${resp.json()['queueStartTime']}  ${resp.json()['queueEndTime']}
     ...  ${resp.json()['parallelServing']}   ${resp.json()['capacity']}  ${lid}  ${s_id12}  ${s_id13}  ${v_s5}
@@ -3127,7 +3136,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-25
 
     Log List   ${vs_waitlist_ids}
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -3195,7 +3204,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-25
 JD-TC-AccountLevelAnalyticsforWaitlist-26
     [Documentation]   check account level analytics for multiple tokens with CHECKED_IN_TOKEN and ARRIVED_TOKEN metrics
 
-    ${resp}=   Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     

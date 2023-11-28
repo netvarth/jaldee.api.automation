@@ -19,7 +19,7 @@ ${self}                   0
 JD-TC-AddCustomertoGroup-1
     [Documentation]  Add provider customers to a group
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -93,7 +93,7 @@ JD-TC-AddCustomertoGroup-1
 JD-TC-AddCustomertoGroup-2
     [Documentation]  Add provider customers to multiple groups
     
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -215,7 +215,7 @@ JD-TC-AddCustomertoGroup-2
 JD-TC-AddCustomertoGroup-3
     [Documentation]  Create group of jaldee consumers added as provider customers through bookings 
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -231,11 +231,15 @@ JD-TC-AddCustomertoGroup-3
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${lid}=  Create Sample Location 
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_queue   ${PUSERNAME88}
+    clear_queue${PUSERNAME88}
 
-    ${DAY1}=  get_date
-    ${resp}=  Sample Queue   ${lid}   ${s_id}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${resp}=  Sample Queue  ${lid}   ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}  ${resp.json()}
@@ -296,7 +300,7 @@ JD-TC-AddCustomertoGroup-3
     END
 
     
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -380,7 +384,7 @@ JD-TC-AddCustomertoGroup-3
 JD-TC-AddCustomertoGroup-4
     [Documentation]  Create group of non jaldee provider customers
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -501,7 +505,7 @@ JD-TC-AddCustomertoGroup-4
 JD-TC-AddCustomertoGroup-5
     [Documentation]  Add customers to group, update the group name and add more customers.  
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -617,7 +621,7 @@ JD-TC-AddCustomertoGroup-5
 JD-TC-AddCustomertoGroup-6
     [Documentation]  Add customers to group, remove these customers and add them again. 
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -733,7 +737,7 @@ JD-TC-AddCustomertoGroup-6
 JD-TC-AddCustomertoGroup-7
     [Documentation]  Add same customers to 2 different groups.
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -848,7 +852,7 @@ JD-TC-AddCustomertoGroup-7
 JD-TC-AddCustomertoGroup-8
     [Documentation]  update name of 2nd group with old name of 1st group and add customers using old 1st group name.
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -986,7 +990,7 @@ JD-TC-AddCustomertoGroup-8
 JD-TC-AddCustomertoGroup-UH1
     [Documentation]  Add the same customers to same group again. 
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1065,7 +1069,7 @@ JD-TC-AddCustomertoGroup-UH1
 JD-TC-AddCustomertoGroup-UH2
     [Documentation]  Add customers to group without login. 
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1116,7 +1120,7 @@ JD-TC-AddCustomertoGroup-UH2
 JD-TC-AddCustomertoGroup-UH3
     [Documentation]  Add customers to group by consumer login. 
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1155,7 +1159,7 @@ JD-TC-AddCustomertoGroup-UH3
 JD-TC-AddCustomertoGroup-UH4
     [Documentation]  Add customers to group without creating a group.
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1186,7 +1190,7 @@ JD-TC-AddCustomertoGroup-UH4
 # JD-TC-AddCustomertoGroup-UH5
 #     [Documentation]  Add customers to group without groupname.
 
-#     ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1220,7 +1224,7 @@ JD-TC-AddCustomertoGroup-UH4
 JD-TC-AddCustomertoGroup-UH6
     [Documentation]  Add customers to group without customers.
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1249,7 +1253,7 @@ JD-TC-AddCustomertoGroup-UH6
 JD-TC-AddCustomertoGroup-UH7
     [Documentation]  Add customers to group when group is disabled.
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1312,7 +1316,7 @@ JD-TC-AddCustomertoGroup-UH7
 JD-TC-AddCustomertoGroup-UH8
     [Documentation]  Add customers to group with old group name after updating group name.
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1409,7 +1413,7 @@ JD-TC-AddCustomertoGroup-UH8
 JD-TC-AddCustomertoGroup-UH9
     [Documentation]  Add customers to group of another provider.
 
-    ${resp}=  Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1433,7 +1437,7 @@ JD-TC-AddCustomertoGroup-UH9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${PUSERNAME88}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME88}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

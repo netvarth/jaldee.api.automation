@@ -24,7 +24,7 @@ ${SERVICE}    physicalservice
 
 JD-TC-ConsumerDonation-1
         [Documentation]   Consumer doing a donation
-        ${resp}=  Provider Login  ${PUSERNAME206}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME206}  ${PASSWORD}
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         delete_donation_service  ${PUSERNAME206}
@@ -42,7 +42,12 @@ JD-TC-ConsumerDonation-1
         Should Be Equal As Strings  ${resp.status_code}  200
         
         ${resp}=   Create Sample Location
-        Set Suite Variable    ${loc_id1}    ${resp}  
+        Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
         ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -72,7 +77,7 @@ JD-TC-ConsumerDonation-1
         Set Suite Variable  ${con_id}
         ${acc_id}=  get_acc_id  ${PUSERNAME206}
         Set Suite Variable  ${acc_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
         ${don_amt}=   Random Int   min=1000   max=4000
         ${mod}=  Evaluate  ${don_amt}%${multiples[0]}
@@ -96,7 +101,7 @@ JD-TC-ConsumerDonation-1
 
 JD-TC-ConsumerDonation-2
         [Documentation]   Consumer doing a donation for another service
-        ${resp}=  Provider Login  ${PUSERNAME206}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME206}  ${PASSWORD}
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${description}=  FakerLibrary.sentence
@@ -142,30 +147,38 @@ JD-TC-ConsumerDonation-2
 
 JD-TC-ConsumerDonation-3
         [Documentation]   Consumer doing a donation for another service in another location
-        ${resp}=  Provider Login  ${PUSERNAME206}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME206}  ${PASSWORD}
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${city}=   FakerLibrary.state
+        # ${city}=   FakerLibrary.state
+        # Set Suite Variable  ${city}
+        # ${latti}=  get_latitude
+        # Set Suite Variable  ${latti}
+        # ${longi}=  get_longitude
+        # Set Suite Variable  ${longi}
+        # ${postcode}=  FakerLibrary.postcode
+        # Set Suite Variable  ${postcode}
+        # ${address}=  get_address
+        # Set Suite Variable  ${address}
+        ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+        ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+        Set Suite Variable  ${tz}
         Set Suite Variable  ${city}
-        ${latti}=  get_latitude
         Set Suite Variable  ${latti}
-        ${longi}=  get_longitude
         Set Suite Variable  ${longi}
-        ${postcode}=  FakerLibrary.postcode
         Set Suite Variable  ${postcode}
-        ${address}=  get_address
         Set Suite Variable  ${address}
         ${parking}    Random Element   ${parkingType}
         Set Suite Variable  ${parking}
         ${24hours}    Random Element    ${bool}
         Set Suite Variable  ${24hours}
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
     	Set Suite Variable  ${DAY}
 	${list}=  Create List  1  2  3  4  5  6  7
     	Set Suite Variable  ${list}
-        ${sTime}=  add_time  0  15
+        ${sTime}=  add_timezone_time  ${tz}  0  15  
         Set Suite Variable   ${sTime}
-        ${eTime}=  add_time   0  30
+        ${eTime}=  add_timezone_time  ${tz}  0  30  
         Set Suite Variable   ${eTime}
         ${resp}=  Get Locations
         Log  ${resp.content}
@@ -216,7 +229,7 @@ JD-TC-ConsumerDonation-3
 
 JD-TC-ConsumerDonation-4
         [Documentation]   Consumer doing a donation for same service with same amount
-        ${resp}=  Provider Login  ${PUSERNAME206}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME206}  ${PASSWORD}
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=   Consumer Login  ${CUSERNAME9}   ${PASSWORD}
@@ -313,7 +326,7 @@ JD-TC-ConsumerDonation-UH5
 JD-TC-ConsumerDonation-UH6
         [Documentation]   Consumer doing a donation For a Provider who has no donation services
         
-        ${resp}=  Provider Login  ${PUSERNAME122}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -370,7 +383,7 @@ JD-TC-ConsumerDonation-UH10
 
 JD-TC-ConsumerDonation-6
         [Documentation]   International Consumer doing a donation
-        ${resp}=  Provider Login  ${PUSERNAME206}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME206}  ${PASSWORD}
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         delete_donation_service  ${PUSERNAME206}
@@ -378,7 +391,12 @@ JD-TC-ConsumerDonation-6
         clear_queue      ${PUSERNAME206}
         clear_location   ${PUSERNAME206}
         ${resp}=   Create Sample Location
-        Set Suite Variable    ${loc_id1}    ${resp}  
+        Set Suite Variable    ${loc_id1}    ${resp} 
+
+        ${resp}=   Get Location ById  ${loc_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
         ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -417,7 +435,7 @@ JD-TC-ConsumerDonation-6
         ${resp}=  Consumer Activation  ${CUSERPH0_EMAIL}  1
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Consumer Set Credential  ${CUSERPH0_EMAIL}  ${PASSWORD}  1  countryCode=+${countryCode}
+        ${resp}=  Consumer Set Credential  ${CUSERPH0_EMAIL}  ${PASSWORD}  1  
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}  countryCode=+${countryCode}
@@ -426,16 +444,17 @@ JD-TC-ConsumerDonation-6
 
         Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
 
-        # ${resp}=   Consumer Login  ${CUSERNAME9}   ${PASSWORD}
-        # Should Be Equal As Strings    ${resp.status_code}   200
+        # # ${resp}=   Consumer Login  ${CUSERNAME9}   ${PASSWORD}
+        # # Should Be Equal As Strings    ${resp.status_code}   200
         Set Suite Variable  ${fname1}   ${resp.json()['firstName']}
         Set Suite Variable  ${lname1}   ${resp.json()['lastName']}
+
 
         ${con_id}=  get_id  ${CUSERPH0}
         Set Suite Variable  ${con_id}
         ${acc_id}=  get_acc_id  ${PUSERNAME206}
         Set Suite Variable  ${acc_id}
-        ${CUR_DAY}=  get_date
+        ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
         ${don_amt}=   Random Int   min=1000   max=4000
         ${mod}=  Evaluate  ${don_amt}%${multiples[0]}

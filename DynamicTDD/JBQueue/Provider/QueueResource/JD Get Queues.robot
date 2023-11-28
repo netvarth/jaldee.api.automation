@@ -21,27 +21,31 @@ ${SERVICE2}  Hair makeup
 
 JD-TC-Get Queues-1
 	[Documentation]  Get Queues by valid  provider
-    ${resp}=  ProviderLogin  ${PUSERNAME142}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME142}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME142}
     clear_location  ${PUSERNAME142}
     clear_queue  ${PUSERNAME142}
-    ${DAY1}=  get_date
-    Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
-    Set Suite Variable  ${DAY2}
+    
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${city}=   FakerLibrary.state
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
-    ${sTime}=  add_time  1  15
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    Set Suite Variable  ${DAY2}
+    ${sTime}=  add_timezone_time  ${tz}  1  15  
     Set Suite Variable  ${sTime}
-    ${eTime}=  add_time   1  30
+    ${eTime}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable  ${eTime}
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.json()}
@@ -51,15 +55,18 @@ JD-TC-Get Queues-1
     Set Suite Variable  ${s_id}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable  ${s_id1}
-    ${sTime3}=  add_time  3  15
+    ${sTime3}=  add_timezone_time  ${tz}  3  15  
     Set Suite Variable  ${sTime3}
-    ${eTime3}=  add_time   3  30
+    ${eTime3}=  add_timezone_time  ${tz}  3  30  
     Set Suite Variable  ${eTime3}
-    ${city1}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${city1}=   get_place
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city1}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking_type}    Random Element     ['none','free','street','privatelot','valet','paid']
     ${24hours}    Random Element    ['True','False']
     ${resp}=  Create Location  ${city1}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking_type}  ${24hours}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}
@@ -85,11 +92,11 @@ JD-TC-Get Queues-UH2
     sleep  01s
 JD-TC-Verify Get Queues-1
 	[Documentation]  Get Queues by valid  provider
-    ${resp}=  ProviderLogin  ${PUSERNAME142}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME142}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${sTime1}=  add_time  2  15
+    ${sTime1}=  add_timezone_time  ${tz}  2  15  
     Set Suite Variable  ${sTime1}
-    ${eTime1}=  add_time   2  30
+    ${eTime1}=  add_timezone_time  ${tz}  2  30  
     Set Suite Variable  ${eTime1}
     ${queue_name1}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name1}
@@ -98,9 +105,9 @@ JD-TC-Verify Get Queues-1
     Set Suite Variable  ${q_id1}  ${resp.json()}
     ${queue_name2}=  FakerLibrary.bs
     Set Suite Variable  ${queue_name2}
-    ${sTime2}=  add_time  3  15
+    ${sTime2}=  add_timezone_time  ${tz}  3  15  
     Set Suite Variable  ${sTime2}
-    ${eTime2}=  add_time   3  30
+    ${eTime2}=  add_timezone_time  ${tz}  3  30  
     Set Suite Variable  ${eTime2}
     ${token_start}=   Random Int  min=5   max=40
     ${resp}=  Create Queue With TokenStart  ${queue_name2}  Weekly  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  1  5  ${lid1}  ${token_start}  ${s_id}
@@ -131,7 +138,7 @@ JD-TC-Verify Get Queues-1
 
 JD-TC-Get Queues-2
 	[Documentation]  Get Queues after disabling a queue
-    ${resp}=  ProviderLogin  ${PUSERNAME142}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME142}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Disable Queue  ${q_id1}
     Should Be Equal As Strings  ${resp.status_code}  200

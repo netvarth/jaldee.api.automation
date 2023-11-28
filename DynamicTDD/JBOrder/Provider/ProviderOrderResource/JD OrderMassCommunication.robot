@@ -40,12 +40,15 @@ JD-TC-Order_MassCommunication-1
     clear_service  ${PUSERNAME127}
     clear_customer   ${PUSERNAME127}
     clear_Item   ${PUSERNAME127}
-    ${resp}=  ProviderLogin  ${PUSERNAME127}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    Set Suite Variable  ${pid1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid1}  ${resp.json()['id']}
     
     ${accId3}=  get_acc_id  ${PUSERNAME127}
     Set Suite Variable  ${accId3} 
@@ -131,22 +134,27 @@ JD-TC-Order_MassCommunication-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id4}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   1  00 
+    ${eTime1}=  add_timezone_time  ${tz}  1  00   
     Set Suite Variable    ${eTime1}
 
-    ${sTime2}=  add_time  1  05
+    ${sTime2}=  add_timezone_time  ${tz}  1  05  
     Set Suite Variable   ${sTime2}
-    ${eTime2}=  add_time   2  15 
+    ${eTime2}=  add_timezone_time  ${tz}  2  15   
     Set Suite Variable    ${eTime2}
 
 
@@ -256,7 +264,7 @@ JD-TC-Order_MassCommunication-1
     Should Be Equal As Strings      ${resp.status_code}  200
 
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     Set Suite Variable  ${DAY1}
     ${DATE12}=  Convert Date  ${DAY1}  result_format=%a, %d %b %Y
     Set Suite Variable  ${DATE12}
@@ -307,7 +315,7 @@ JD-TC-Order_MassCommunication-1
 
     # --------------------------------------------------------------------------
 
-    ${resp}=  ProviderLogin  ${PUSERNAME127}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -464,13 +472,13 @@ JD-TC-Order_MassCommunication-1
 JD-TC-Order_MassCommunication-2
     [Documentation]    Place an order By Provider for Home Delivery (Both ShoppingCart and ShoppingList).           
 
-    ${resp}=  ProviderLogin  ${PUSERNAME127}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_Consumermsg  ${CUSERNAME29}
     clear_Providermsg  ${PUSERNAME127}
 
-    ${DAY10}=  add_date   10
+    ${DAY10}=  db.add_timezone_date  ${tz}   10
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -520,7 +528,7 @@ JD-TC-Order_MassCommunication-2
 
     # --------------------------------------------------------------------------
 
-    ${resp}=  ProviderLogin  ${PUSERNAME127}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -690,7 +698,7 @@ JD-TC-Order_MassCommunication-3
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
     
-    ${DAY12}=  add_date   12
+    ${DAY12}=  db.add_timezone_date  ${tz}  12  
     ${DATE12}=  Convert Date  ${DAY12}  result_format=%a, %d %b %Y
     Set Suite Variable  ${DATE12}
     # ${address}=  get_address
@@ -728,7 +736,7 @@ JD-TC-Order_MassCommunication-3
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${order_no32}  ${resp.json()['orderNumber']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME127}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -901,7 +909,7 @@ JD-TC-Order_MassCommunication-4
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${DAY12}=  add_date   12
+    ${DAY12}=  db.add_timezone_date  ${tz}  12  
     ${firstname}=  FakerLibrary.first_name
     Set Test Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
     ${caption}=  FakerLibrary.Sentence   nb_words=4
@@ -931,7 +939,7 @@ JD-TC-Order_MassCommunication-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${order_no42}  ${resp.json()['orderNumber']}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME127}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
  
@@ -1103,7 +1111,7 @@ JD-TC-Order_MassCommunication-5
     clear_Consumermsg  ${CUSERNAME29}
     clear_Providermsg  ${PUSERNAME127}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME127}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1621,7 +1629,7 @@ JD-TC-Order_MassCommunication-UH2
     clear_Consumermsg  ${CUSERNAME29}
     clear_Providermsg  ${PUSERNAME127}
     clear_Providermsg  ${PUSERNAME183}
-    ${resp}=  ProviderLogin   ${PUSERNAME183}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME183}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1659,7 +1667,7 @@ JD-TC-Order_MassCommunication-UH2
 JD-TC-Order_MassCommunication-UH3
     [Documentation]  Send order comunication message using invalid Order id
     clear_Providermsg  ${PUSERNAME127}
-    ${resp}=  ProviderLogin   ${PUSERNAME127}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login   ${PUSERNAME127}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

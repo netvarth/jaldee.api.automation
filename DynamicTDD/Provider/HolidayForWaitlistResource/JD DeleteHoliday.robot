@@ -23,19 +23,19 @@ JD-TC-DeleteHoliday-1
       
     clear_location    ${PUSERNAME170}
     clear_service     ${PUSERNAME170}
-    ${resp}=  ProviderLogin  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Create Sample Queue
     Set Suite Variable   ${loc_id}   ${resp['location_id']}
     Set Suite Variable   ${ser_id}   ${resp['service_id']}
     Set Suite Variable   ${que_id}   ${resp['queue_id']}
-    ${DAY1}=  add_date  4
+    ${DAY1}=  db.add_timezone_date  ${tz}  4  
     Set Suite Variable   ${DAY1}
     ${desc}=    FakerLibrary.name
     Set Test Variable      ${desc}
-    ${CUR_TIME}=  add_time   0  46
+    ${CUR_TIME}=  add_timezone_time  ${tz}   0  46
     Set Suite Variable   ${CUR_TIME}
-    ${END_TIME}=  add_time   0  50
+    ${END_TIME}=  add_timezone_time  ${tz}  0  50  
     Set Suite Variable   ${END_TIME}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
@@ -48,30 +48,31 @@ JD-TC-DeleteHoliday-1
     ${resp}=   Delete Holiday  ${id}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Holiday By Account
+    Should Be Equal As Strings  ${resp.status_code}  200
     Should Not Contain   ${resp.json()}  "id":"${id}"
 
 JD-TC-DeleteHoliday-2
     [Documentation]  Create a holiday for all queues in an account then deleting that holiday
 
-    ${resp}=  ProviderLogin  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${CUR_DAY}=  add_date  1
+    ${CUR_DAY}=  db.add_timezone_date  ${tz}  1  
     ${q_name1}=    FakerLibrary.name
     Set Test Variable      ${q_name1}
     ${q_name2}=    FakerLibrary.name
     Set Test Variable      ${q_name2}
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${start_time1}=   add_time   2  00
-    ${end_time1}=     add_time   3  59
-    ${start_time2}=   add_time   4  00
-    ${end_time2}=     add_time   5  00
+    ${start_time1}=   add_timezone_time  ${tz}  2  00  
+    ${end_time1}=     add_timezone_time  ${tz}   3  59
+    ${start_time2}=   add_timezone_time  ${tz}  4  00  
+    ${end_time2}=     add_timezone_time  ${tz}  5  00  
     ${parl_servd}=   Random Element    ${parl_max_servd}
     ${max_servd}=    Random Element    ${parl_max_servd}
     ${resp}=  Create Queue    ${q_name1}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${start_time1}  ${end_time1}  ${parl_servd}  ${max_servd}  ${loc_id}  ${ser_id}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Create Queue    ${q_name2}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${start_time2}  ${end_time2}  ${parl_servd}  ${max_servd}  ${loc_id}  ${ser_id}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY}=  add_date  2
+    ${DAY}=  db.add_timezone_date  ${tz}  2  
     ${desc}=    FakerLibrary.name
     Set Test Variable      ${desc}
     ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${DAY}  ${DAY}  ${EMPTY}  ${start_time1}  ${end_time2}  ${desc}
@@ -83,12 +84,13 @@ JD-TC-DeleteHoliday-2
     ${resp}=   Delete Holiday  ${id}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Holiday By Account
+    Should Be Equal As Strings  ${resp.status_code}  200
     Should Not Contain   ${resp.json()}  "id":"${id}"
 
 JD-TC-DeleteHoliday-UH1
     [Documentation]  Delete holiday of a different provider
 
-    ${resp}=  ProviderLogin  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${desc}=    FakerLibrary.name
     Set Test Variable      ${desc}
@@ -101,7 +103,7 @@ JD-TC-DeleteHoliday-UH1
     Verify Response  ${resp}   description=${desc}  id=${id}     
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Delete Holiday  ${id}
     Should Be Equal As Strings  ${resp.status_code}  401
@@ -127,7 +129,7 @@ JD-TC-DeleteHoliday-UH3
 JD-TC-DeleteHoliday-UH4
     [Documentation]  Delete an invalid holiday
 
-    ${resp}=  ProviderLogin  ${PUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME170}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Delete Holiday   0
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -142,12 +144,16 @@ JD-TC-DeleteHoliday-UH5
     clear_customer   ${PUSERNAME181}
 
 
-    ${resp}=  ProviderLogin     ${PUSERNAME181}   ${PASSWORD}
+    ${resp}=  Encrypted Provider Login     ${PUSERNAME181}   ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${ACC_ID30}=  get_acc_id    ${PUSERNAME181}
     ${resp}=  Create Sample Location
     Set Test Variable    ${loc_id}   ${resp}
-    ${CUR_DAY}=  get_date
+    ${resp}=   Get Location ById  ${loc_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     Set Test Variable    ${CUR_DAY}
 
     ${ser_name}=    FakerLibrary.name
@@ -189,23 +195,25 @@ JD-TC-DeleteHoliday-UH5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Last_Day}=  add_date   3
+    ${Last_Day}=  db.add_timezone_date  ${tz}   3
 
     ${q_name}=    FakerLibrary.name
     ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   db.get_time  
-    ${end_time}=    add_time  4  00 
+    # ${strt_time}=   db.get_time_by_timezone  ${tz}  
+    ${strt_time}=   db.get_time_by_timezone  ${tz}   
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
     ${parallel}=   FakerLibrary.Random Int  min=1   max=1 
     ${capacity}=   FakerLibrary.Random Int  min=5   max=10 
-    ${endday}=   add_date  15
+    ${endday}=   db.add_timezone_date  ${tz}  15  
     ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${endday}  ${EMPTY}  ${strt_time}  ${end_time}   ${parallel}   ${capacity}    ${loc_id}  ${ser_id}  ${ser_id2}  ${ser_id3}  ${sId_4}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${q_id}   ${resp.json()}
       
-    ${cur_time}=  db.get_time  
+    # ${cur_time}=  db.get_time_by_timezone  ${tz}  
+    ${cur_time}=  db.get_time_by_timezone  ${tz}    
     ${desc1}=    FakerLibrary.name
-    ${end_time}=    add_time  2  00 
+    ${end_time}=    add_timezone_time  ${tz}  2  00   
     ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${Last_Day}  ${EMPTY}  ${cur_time}  ${end_time}  ${desc1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -334,6 +342,7 @@ JD-TC-DeleteHoliday-UH5
     ${resp}=   Delete Holiday   ${holidayId1}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Holiday By Account
+    Should Be Equal As Strings  ${resp.status_code}  200
     Should Not Contain   ${resp.json()}  "id":"${holidayId1}"
 
     ${resp}=  Get Waitlist Today  

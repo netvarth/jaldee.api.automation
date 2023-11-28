@@ -18,7 +18,7 @@ ${discount}  Disc121
 
 JD-TC-Enable Discount-1
        [Documentation]   login in a Valid provider create and Enable Discounts
-       ${resp}=   ProviderLogin   ${PUSERNAME241}   ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login   ${PUSERNAME241}   ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        clear_Discount  ${PUSERNAME241}
        ${desc}=  FakerLibrary.Sentence   nb_words=2
@@ -57,7 +57,7 @@ JD-TC-Enable Discount-UH2
 
 JD-TC-Enable Discount-UH3
        [Documentation]   Provider check to Enable Discount with another provider's discount id
-       ${resp}=   ProviderLogin   ${PUSERNAME242}   ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login   ${PUSERNAME242}   ${PASSWORD} 
        Should Be Equal As Strings  ${resp.status_code}  200       
        ${resp}=   Enable Discount    ${id1}
        Should Be Equal As Strings  ${resp.status_code}  422
@@ -65,7 +65,7 @@ JD-TC-Enable Discount-UH3
 
 JD-TC-Enable Discount-UH4
        [Documentation]   Provider check to Enable Discount with invalid discount id
-       ${resp}=   ProviderLogin   ${PUSERNAME241}   ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login   ${PUSERNAME241}   ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200       
        ${resp}=   Enable Discount   0
        Should Be Equal As Strings  ${resp.status_code}  422 

@@ -26,22 +26,26 @@ ${SERVICE8}  Threading
 
 JD-TC-GetLastComputedwaitingTime-1
     [Documentation]  Get Last Computed waitingTime
-    ${resp}=  ProviderLogin  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 *** Comment ***
     ${resp}=  Update Waitlist Settings  ${calc_mode[1]}  0  true  true  true  true  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   0  30
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
     Set Suite Variable   ${eTime1}
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     ${queue_name}=  FakerLibrary.bs
@@ -52,7 +56,8 @@ JD-TC-GetLastComputedwaitingTime-1
     ${desc}=   FakerLibrary.word
     ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${Time}=  db.get_time
+    # ${Time}=  db.get_time_by_timezone  ${tz}
+    ${Time}=  db.get_time_by_timezone  ${tz}
     ${resp}=  Get Last Computed waitingTime  ${qid}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  "${resp.json()}"  "${Time}"
@@ -73,7 +78,7 @@ JD-TC-GetLastComputedwaitingTime-UH2
 
 JD-TC-GetLastComputedwaitingTime-UH3
     [Documentation]  Get Last Computed waitingTime of another provider
-    ${resp}=  ProviderLogin  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Last Computed waitingTime  ${qid} 
     Should Be Equal As Strings  ${resp.status_code}  401

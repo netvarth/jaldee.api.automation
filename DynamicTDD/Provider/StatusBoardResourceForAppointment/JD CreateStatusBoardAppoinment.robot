@@ -21,7 +21,7 @@ ${SERVICE3}     Radio Repdca222
 JD-TC-CreateStatusBoardAppoinment-1
 
     [Documentation]    Create a StatusBoard for Appointment using service id
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME122}
     clear_location  ${PUSERNAME122}
@@ -29,14 +29,19 @@ JD-TC-CreateStatusBoardAppoinment-1
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  
-    
-    ${DAY1}=  get_date
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable  ${delta}
@@ -82,7 +87,7 @@ JD-TC-CreateStatusBoardAppoinment-1
     Set Suite Variable  ${sba_id1}  ${resp.json()}
 
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sba_id1}  
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sba_id1}  
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     Set Suite Variable  ${Data12}  ${Data}
@@ -109,14 +114,14 @@ JD-TC-CreateStatusBoardAppoinment-1
 JD-TC-CreateStatusBoardAppoinment-2
 
     [Documentation]  Create a another StatusBoard  for a appoinment queueset that has a status board 
-    ${resp}=  ProviderLogin  ${PUSERNAME137}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME137}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     ${Addon_id}=  get_statusboard_addonId
     ${resp}=  Add addon  ${Addon_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200  
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sba_id1}  
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sba_id1}  
     Log  ${matric_list}
     Set Suite Variable   ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
@@ -162,7 +167,7 @@ JD-TC-CreateStatusBoardAppoinment -UH2
 
 JD-TC-CreateStatusBoardAppoinment-UH3
     [Documentation]  Create a Appoinment StatusBoard which is already created
-    ${resp}=  ProviderLogin  ${PUSERNAME122}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME122}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Create Status Board Appointment  ${Data12[0]}  ${Data12[1]}  ${Data12[2]}  ${matric_list}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -173,7 +178,7 @@ JD-TC-CreateStatusBoardAppoinment-UH4
 
     [Documentation]  Create a StatusBoard with invalid appoinment queue set id
 
-    ${resp}=  ProviderLogin  ${PUSERNAME162}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME162}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME162}
     clear_location  ${PUSERNAME162}
@@ -187,7 +192,7 @@ JD-TC-CreateStatusBoardAppoinment-UH4
     Should Be Equal As Strings  ${resp.status_code}   200
     ${Positions}=  FakerLibrary.Words  	nb=3
     ${invalid_id}=   Random Int   min=-10   max=-1
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${invalid_id}
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${invalid_id}
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     ${resp}=  Create Status Board Appointment  ${Data[0]}  ${Data[1]}  ${Data[2]}  ${matric_list}
@@ -198,7 +203,7 @@ JD-TC-CreateStatusBoardAppoinment-UH4
 # JD-TC-CreateStatusBoardAppoinment-UH5
 
 #     [Documentation]  Create a Appoinment StatusBoard with empty metric list
-#     ${resp}=  ProviderLogin  ${PUSERNAME171}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     clear_service   ${PUSERNAME171}
 #     clear_location  ${PUSERNAME171}
@@ -208,7 +213,7 @@ JD-TC-CreateStatusBoardAppoinment-UH4
 #     ${resp}=  Add addon  ${Addon_id}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}   200  
-#     ${matric_list}=  Create Matric For Status Board  ${EMPTY}
+#     ${matric_list}=  Create Metric For Status Board  ${EMPTY}
 #     ${Data}=  FakerLibrary.Words  	nb=3
 #     ${resp}=  Create Status Board waitlist  ${Data[0]}  ${Data[1]}  ${Data[2]}  ${matric_list}
 #     Log  ${resp.json()}
@@ -218,7 +223,7 @@ JD-TC-CreateStatusBoardAppoinment-UH4
 
 JD-TC-CreateStatusBoardAppoinment-UH6
 
-    ${resp}=  ProviderLogin  ${PUSERNAME82}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME82}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME82}
     clear_location  ${PUSERNAME82}
@@ -226,14 +231,19 @@ JD-TC-CreateStatusBoardAppoinment-UH6
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  
-    
-    ${DAY1}=  get_date
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable  ${delta}
@@ -280,7 +290,7 @@ JD-TC-CreateStatusBoardAppoinment-UH6
     Set Suite Variable  ${sba_id1}  ${resp.json()}
 
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sba_id1}  
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sba_id1}  
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     
@@ -292,7 +302,7 @@ JD-TC-CreateStatusBoardAppoinment-UH6
 JD-TC-CreateStatusBoardAppoinment-UH7
 
     [Documentation]    Create a StatusBoard with empty status board layout
-     ${resp}=  ProviderLogin  ${PUSERNAME81}  ${PASSWORD} 
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME81}
     clear_location  ${PUSERNAME81}
@@ -300,14 +310,19 @@ JD-TC-CreateStatusBoardAppoinment-UH7
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  
-    
-    ${DAY1}=  get_date
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable  ${delta}
@@ -352,7 +367,7 @@ JD-TC-CreateStatusBoardAppoinment-UH7
     Set Suite Variable  ${sba_id1}  ${resp.json()}
 
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sba_id1}  
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sba_id1}  
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     
@@ -363,7 +378,7 @@ JD-TC-CreateStatusBoardAppoinment-UH7
 
 JD-TC-CreateStatusBoardAppoinment-UH8
     [Documentation]  Create a StatusBoard with empty status board display name
-    ${resp}=  ProviderLogin  ${PUSERNAME81}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME81}
     clear_location  ${PUSERNAME81}
@@ -371,14 +386,19 @@ JD-TC-CreateStatusBoardAppoinment-UH8
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  
-    
-    ${DAY1}=  get_date
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable  ${delta}
@@ -423,7 +443,7 @@ JD-TC-CreateStatusBoardAppoinment-UH8
     Set Suite Variable  ${sba_id1}  ${resp.json()}
 
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sba_id1}  
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sba_id1}  
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     ${resp}=  Create Status Board waitlist  ${Data[0]}  ${EMPTY}  ${Data[1]}  ${matric_list}

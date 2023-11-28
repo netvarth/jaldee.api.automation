@@ -55,7 +55,7 @@ JD-TC-GetReimburseReports-1
     # FOR   ${a}  IN RANGE   ${start}    ${length}    
 
     #     clear_service       ${PUSERNAME134}
-    #     ${resp}=  ProviderLogin  ${PUSERNAME134}  ${PASSWORD}
+    #     ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     #     Log   ${resp.json()}
     #     Should Be Equal As Strings  ${resp.status_code}  200
     #     ${domain}=   Set Variable    ${resp.json()['sector']}
@@ -80,7 +80,7 @@ JD-TC-GetReimburseReports-1
 
     # END
     # clear_reimburseReport
-    ${resp}=  ProviderLogin  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -108,9 +108,9 @@ JD-TC-GetReimburseReports-1
 
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -140,7 +140,7 @@ JD-TC-GetReimburseReports-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -194,9 +194,9 @@ JD-TC-GetReimburseReports-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   subtract_time  2  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  2  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time       1  45 
+    ${end_time}=    add_timezone_time  ${tz}       1  45 
     Set Suite Variable    ${end_time} 
     ${capacity}=  Random Int  min=8   max=20
     ${parallel}=  Random Int   min=1   max=2
@@ -216,7 +216,6 @@ JD-TC-GetReimburseReports-1
     Set Suite Variable  ${cnote}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  ${cnote}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     ${resp}=  Get Bill By UUId  ${wid}
@@ -270,8 +269,8 @@ JD-TC-GetReimburseReports-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[1]} 
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -300,7 +299,7 @@ JD-TC-GetReimburseReports-2
 
     [Documentation]  Consumer apply a coupon at Checkin time  and GetReimburseReports
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     clear_customer   ${PUSERNAME134}
     clear_payment_invoice  ${PUSERNAME134} 
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -318,9 +317,9 @@ JD-TC-GetReimburseReports-2
 
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2} 
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -357,7 +356,7 @@ JD-TC-GetReimburseReports-2
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -397,7 +396,7 @@ JD-TC-GetReimburseReports-2
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -461,7 +460,7 @@ JD-TC-GetReimburseReports-2
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -472,8 +471,8 @@ JD-TC-GetReimburseReports-2
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid_4}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[1]} 
 
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -498,7 +497,7 @@ JD-TC-GetReimburseReports-3
     [Documentation]  Consumer apply a coupon at Checkin time when that coupon has the rule of Combine With OtherCoupons is ${bool[0]} and GetReimburseReports
     
    
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -516,9 +515,9 @@ JD-TC-GetReimburseReports-3
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ALL
 
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -539,7 +538,7 @@ JD-TC-GetReimburseReports-3
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -572,11 +571,10 @@ JD-TC-GetReimburseReports-3
     # ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid5}  ${qid1}  ${DAY1}  ${s_id3}  ${cnote}  ${bool[0]}  ${coupons}  ${self}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Log  ${resp.json()} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -660,7 +658,7 @@ JD-TC-GetReimburseReports-3
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -671,8 +669,8 @@ JD-TC-GetReimburseReports-3
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[1]} 
 
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -700,9 +698,9 @@ JD-TC-GetReimburseReports-4
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ALL
 
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -722,7 +720,7 @@ JD-TC-GetReimburseReports-4
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -747,7 +745,7 @@ JD-TC-GetReimburseReports-4
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -798,7 +796,7 @@ JD-TC-GetReimburseReports-4
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  Settl Bill  ${wid}
@@ -809,8 +807,8 @@ JD-TC-GetReimburseReports-4
     Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[1]} 
     
     sleep  2s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -834,9 +832,9 @@ JD-TC-GetReimburseReports-5
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ALL
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2} 
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -856,7 +854,7 @@ JD-TC-GetReimburseReports-5
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -877,7 +875,7 @@ JD-TC-GetReimburseReports-5
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -940,7 +938,7 @@ JD-TC-GetReimburseReports-5
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -953,8 +951,8 @@ JD-TC-GetReimburseReports-5
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[1]} 
 
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -978,9 +976,9 @@ JD-TC-GetReimburseReports-6
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ALL
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -1001,7 +999,7 @@ JD-TC-GetReimburseReports-6
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1022,7 +1020,7 @@ JD-TC-GetReimburseReports-6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1088,7 +1086,7 @@ JD-TC-GetReimburseReports-6
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1099,8 +1097,8 @@ JD-TC-GetReimburseReports-6
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[1]} 
     sleep  2s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1126,9 +1124,9 @@ JD-TC-GetReimburseReports-UH1
     
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  
    
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -1156,7 +1154,7 @@ JD-TC-GetReimburseReports-UH1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -1174,7 +1172,6 @@ JD-TC-GetReimburseReports-UH1
     ${resp}=  Add To Waitlist  ${cid}  ${s_id4}  ${qid1}  ${DAY1}  ${cnote}  ${bool[1]}  ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${wid}  ${wid[0]}
     
@@ -1212,9 +1209,9 @@ JD-TC-GetReimburseReports-UH2
     
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}
     
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -1242,7 +1239,7 @@ JD-TC-GetReimburseReports-UH2
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${coupon10}
@@ -1261,7 +1258,7 @@ JD-TC-GetReimburseReports-UH2
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     
     ${resp}=  Get Bill By UUId  ${wid}
@@ -1307,9 +1304,9 @@ JD-TC-GetReimburseReports-UH3
     
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}
     
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -1336,7 +1333,7 @@ JD-TC-GetReimburseReports-UH3
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${coupon13}
@@ -1356,7 +1353,7 @@ JD-TC-GetReimburseReports-UH3
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     
     ${resp}=  Get Bill By UUId  ${wid}
@@ -1371,8 +1368,8 @@ JD-TC-GetReimburseReports-UH3
     Should Be Equal As Strings  ${resp.json()['netTotal']}  500.0
    
     
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1403,9 +1400,9 @@ JD-TC-GetReimburseReports-7
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ALL
     ProviderLogout
     ${licenses}=  Jaldee Coupon Target License  1  2  3  4  5  6 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -1433,7 +1430,7 @@ JD-TC-GetReimburseReports-7
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     
     ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
@@ -1460,7 +1457,6 @@ JD-TC-GetReimburseReports-7
     Set Suite Variable  ${qid1_P}  ${resp.json()}
     ${resp}=  Add To Waitlist  ${cid}  ${sId1_P}  ${qid1_P}  ${DAY1}  ${cnote}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     ${resp}=  Get Bill By UUId  ${wid}
@@ -1523,7 +1519,7 @@ JD-TC-GetReimburseReports-7
 
     Comment  second provider using jc and payment online 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${gstper}=  Random Element  ${gstpercentage}
     ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
@@ -1544,7 +1540,6 @@ JD-TC-GetReimburseReports-7
     Set Suite Variable  ${qid1}  ${resp.json()}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid1}  ${DAY1}  ${cnote}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     ${resp}=  Get Bill By UUId  ${wid}
@@ -1608,7 +1603,7 @@ JD-TC-GetReimburseReports-7
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}  ${paymentStatus[2]}
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Settl Bill  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1619,8 +1614,8 @@ JD-TC-GetReimburseReports-7
 
     Comment  check Reimburse Reports
     sleep  2s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Reimburse Reports By Provider
@@ -1637,7 +1632,7 @@ JD-TC-GetReimburseReports-7
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${pid}=  get_acc_id  ${PUSERNAME}
     ${resp}=  Get Reimburse Reports By Provider
@@ -1672,9 +1667,9 @@ JD-TC-GetReimburseReports-8
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d2}_${sd2}  ${d3}_${sd3}
     ProviderLogout
     ${licenses}=  Jaldee Coupon Target License  1  2  3  4  5  6 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1715,7 +1710,7 @@ JD-TC-GetReimburseReports-8
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     
     ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
@@ -1727,23 +1722,31 @@ JD-TC-GetReimburseReports-8
     ${cid}=  get_id  ${CUSERNAME5}
     Set Suite Variable  ${cid}
 
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${city}=   get_place
+    # ${city}=   get_place
+    # Set Suite Variable  ${city}
+    # ${latti}=  get_latitude
+    # Set Suite Variable  ${latti}
+    # ${longi}=  get_longitude
+    # Set Suite Variable  ${longi}
+    # ${postcode}=  FakerLibrary.postcode
+    # Set Suite Variable  ${postcode}
+    # ${address}=  get_address
+    # Set Suite Variable  ${address}
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     Set Suite Variable  ${city}
-    ${latti}=  get_latitude
     Set Suite Variable  ${latti}
-    ${longi}=  get_longitude
     Set Suite Variable  ${longi}
-    ${postcode}=  FakerLibrary.postcode
     Set Suite Variable  ${postcode}
-    ${address}=  get_address
     Set Suite Variable  ${address}
     ${24hours}    Random Element    ['True','False']
     Set Suite Variable  ${24hours}
-    ${sTime}=  add_time  5  15
+    ${sTime}=  add_timezone_time  ${tz}  5  15  
     Set Suite Variable   ${sTime}
-    ${eTime}=  add_time   6  30
+    ${eTime}=  add_timezone_time  ${tz}  6  30  
     Set Suite Variable   ${eTime}
 
     ${lid}=   Create Sample Location
@@ -1767,7 +1770,6 @@ JD-TC-GetReimburseReports-8
     Set Suite Variable  ${qid1_P}  ${resp.json()}
     ${resp}=  Add To Waitlist  ${cid}  ${sId1_P}  ${qid1_P}  ${DAY1}  ${cnote}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     ${resp}=  Get Bill By UUId  ${wid}
@@ -1821,7 +1823,6 @@ JD-TC-GetReimburseReports-8
     comment  second waitlist 
     ${resp}=  Add To Waitlist  ${cid}  ${sId2_P}  ${qid1_P}  ${DAY1}  ${cnote}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     ${resp}=  Get Bill By UUId  ${wid}
@@ -1874,7 +1875,7 @@ JD-TC-GetReimburseReports-8
 
     Comment  second provider using jc and payment online 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME5}
     Set Suite Variable  ${cid}
@@ -1902,7 +1903,6 @@ JD-TC-GetReimburseReports-8
 
     ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid1}  ${DAY1}  ${cnote}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     ${resp}=  Get Bill By UUId  ${wid}
@@ -1966,7 +1966,7 @@ JD-TC-GetReimburseReports-8
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}  ${paymentStatus[2]}
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Settl Bill  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1980,7 +1980,6 @@ JD-TC-GetReimburseReports-8
 
     ${resp}=  Add To Waitlist  ${cid}  ${s_id2}  ${qid1}  ${DAY1}  ${cnote}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     ${resp}=  Get Bill By UUId  ${wid}
@@ -2043,7 +2042,7 @@ JD-TC-GetReimburseReports-8
     Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Settl Bill  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2057,7 +2056,7 @@ JD-TC-GetReimburseReports-8
     Comment  3rd provider
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${gstper}=  Random Element  ${gstpercentage}
     ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
@@ -2084,7 +2083,6 @@ JD-TC-GetReimburseReports-8
     Set Suite Variable  ${qid1_P}  ${resp.json()}
     ${resp}=  Add To Waitlist  ${cid}  ${sId1_P}  ${qid1_P}  ${DAY1}  ${cnote}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     ${resp}=  Get Bill By UUId  ${wid}
@@ -2140,7 +2138,6 @@ JD-TC-GetReimburseReports-8
 
     ${resp}=  Add To Waitlist  ${cid}  ${sId2_P}  ${qid1_P}  ${DAY1}  ${cnote}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     ${resp}=  Get Bill By UUId  ${wid}
@@ -2188,8 +2185,8 @@ JD-TC-GetReimburseReports-8
 
     comment  check Reimburse Reports
     sleep  2s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2209,7 +2206,7 @@ JD-TC-GetReimburseReports-8
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
  
-    ${resp}=   ProviderLogin  ${PUSERNAME}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${pid}=  get_acc_id  ${PUSERNAME}
     ${resp}=  Get Reimburse Reports By Provider
@@ -2224,7 +2221,7 @@ JD-TC-GetReimburseReports-8
     Should Be Equal As Strings  ${resp.json()[0]['grantTotal']}  140.0
     Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[3]}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${pid}=  get_acc_id  ${PUSERNAME134}
     ${resp}=  Get Reimburse Reports By Provider
@@ -2246,12 +2243,12 @@ JD-TC-GetReimburseReports-9
     Run Keywords  clear_queue  ${PUSERNAME134}  AND  clear_payment_invoice  ${PUSERNAME134}   AND  clear_waitlist  ${PUSERNAME134}   AND  clear_payment_invoice  ${PUSERNAME134}   AND  clear_location  ${PUSERNAME134}    AND  clear_jaldeecoupon  ${cupn_codeLMTONI108}    AND  clear_service  ${PUSERNAME134}          
     # clear_reimburseReport
     
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}=  get_id  ${CUSERNAME5}
     Set Suite Variable  ${cid}
     ${pid}=  get_acc_id  ${PUSERNAME134}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     ${list}=  Create List   1  2  3  4  5  6  7
     ${lid}=   Create Sample Location
@@ -2270,7 +2267,6 @@ JD-TC-GetReimburseReports-9
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Add To Waitlist  ${cid}  ${sId1_P}  ${qid1}  ${DAY1}  ${cnote}  ${bool[0]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     ${resp}=  Get Bill By UUId  ${wid}
@@ -2305,7 +2301,7 @@ JD-TC-GetReimburseReports-9
     Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Settl Bill  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2316,8 +2312,8 @@ JD-TC-GetReimburseReports-9
 
     Comment  check Reimburse Reports
 
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}   
 
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2346,7 +2342,7 @@ JD-TC-GetReimburseReports-10
     # clear_reimburseReport
     Run Keywords  clear_queue  ${PUSERNAME134}  AND  clear_payment_invoice  ${PUSERNAME134}   AND  clear_waitlist  ${PUSERNAME134}   AND  clear_payment_invoice  ${PUSERNAME134}   AND  clear_location  ${PUSERNAME134}    AND  clear_jaldeecoupon  ${cupn_codeLMTONI108}              
     
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     
     ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
@@ -2368,7 +2364,6 @@ JD-TC-GetReimburseReports-10
     Set Suite Variable  ${qid1}  ${resp.json()}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid1}  ${DAY1}  ${cnote}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]} 
 
@@ -2403,7 +2398,7 @@ JD-TC-GetReimburseReports-10
     
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Bill By UUId  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2423,8 +2418,8 @@ JD-TC-GetReimburseReports-10
 
     Comment  check Reimburse Reports
     sleep  2s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Reimburse Reports By Provider
@@ -2446,7 +2441,7 @@ JD-TC-GetReimburseReports-11
     ${pid}=  get_acc_id  ${PUSERNAME134} 
   
            
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -2465,9 +2460,9 @@ JD-TC-GetReimburseReports-11
     ${domains}=  Jaldee Coupon Target Domains  ${domain}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${domain}_${sub_domain}
  
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
    
     Set Suite Variable  ${DAY2}  ${DAY2}
     ProviderLogout
@@ -2485,7 +2480,7 @@ JD-TC-GetReimburseReports-11
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
 
@@ -2531,7 +2526,7 @@ JD-TC-GetReimburseReports-11
     ${resp}=   Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME134}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
     
@@ -2579,8 +2574,8 @@ JD-TC-GetReimburseReports-11
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[1]}
 
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
 

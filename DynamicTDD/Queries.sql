@@ -88,4 +88,7 @@ UPDATE ynw.local_user_tbl localuser_tbl, ynw.user_profile_tbl profile_tbl SET lo
 -- Archana 06-05-2023
 -- ALTER TABLE `ynw`.`acc_coupon_tbl CHANGE COLUMN` `max_consumer_consume_limit` `max_consumer_consume_limit` BIGINT(20) NULL DEFAULT NULL ;
 
+-- Archana 26-10-2023
+UPDATE ynw.account_tbl SET timezone = 'Asia/Kolkata' WHERE (id = '1');
+
 

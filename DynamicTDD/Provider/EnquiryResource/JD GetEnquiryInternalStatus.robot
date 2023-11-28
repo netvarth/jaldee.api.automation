@@ -22,7 +22,7 @@ ${en_temp_name}   EnquiryName
 JD-TC-GetEnquiryInternalStatus-1
     [Documentation]   Get Enquiry internal status for a provider
 
-    ${resp}=   Provider Login  ${PUSERNAME26}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

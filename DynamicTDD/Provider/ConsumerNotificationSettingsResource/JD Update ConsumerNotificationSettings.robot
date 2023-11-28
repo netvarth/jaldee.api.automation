@@ -19,7 +19,7 @@ ${One_person_ahead}   1
 
 JD-TC-UpdateConsumerNotificationSettings-1
     [Documentation]   Provider updating consumer notification settings with EventType as Early
-    ${resp}=  ProviderLogin  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_consumer_notification_settings  ${PUSERNAME44}
     ${msg}=  FakerLibrary.text
@@ -47,7 +47,7 @@ JD-TC-UpdateConsumerNotificationSettings-1
 
 JD-TC-UpdateConsumerNotificationSettings-2
     [Documentation]   Provider setting consumer notification settings without commonMessage and update that settings with common msg
-    ${resp}=  ProviderLogin  ${PUSERNAME15}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_consumer_notification_settings  ${PUSERNAME15}
     ${person_ahead}=   Random Int  min=2   max=5
@@ -72,7 +72,7 @@ JD-TC-UpdateConsumerNotificationSettings-2
 
 # JD-TC-UpdateConsumerNotificationSettings-3
 #     [Documentation]   Provider setting consumer notification settings with EventType as Early, without PersonAhead and update it
-#     ${resp}=  ProviderLogin  ${PUSERNAME14}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME14}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     clear_consumer_notification_settings  ${PUSERNAME14}
 #     ${msg6}=  FakerLibrary.text
@@ -113,7 +113,7 @@ JD-TC-UpdateConsumerNotificationSettings-2
 
 JD-TC-UpdateConsumerNotificationSettings-UH1
     [Documentation]   Provider trying to update not existing notification settings(Resourcetype not exist)
-    ${resp}=  ProviderLogin  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${msg1}=  FakerLibrary.text
     Set Suite Variable  ${msg1}
@@ -126,7 +126,7 @@ JD-TC-UpdateConsumerNotificationSettings-UH1
 
 JD-TC-UpdateConsumerNotificationSettings-UH2
     [Documentation]   Provider trying to update not existing notification settings(Resource type exist but eventtype is wrong)
-    ${resp}=  ProviderLogin  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${msg1}=  FakerLibrary.text
     Set Suite Variable  ${msg1}
@@ -153,7 +153,7 @@ JD-TC-UpdateConsumerNotificationSettings -UH4
 
 JD-TC-UpdateConsumerNotificationSettings-UH5
     [Documentation]   Provider updating consumer notification settings with EventType as Early and PersonAhead below 2
-    ${resp}=  ProviderLogin  ${PUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_consumer_notification_settings  ${PUSERNAME45}
     ${msg}=  FakerLibrary.text
@@ -177,7 +177,7 @@ JD-TC-UpdateConsumerNotificationSettings-UH5
 
 JD-TC-UpdateConsumerNotificationSettings-UH6
     [Documentation]   Provider updating consumer notification settings with EventType as Early and PersonAhead as EMPTY
-    ${resp}=  ProviderLogin  ${PUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_consumer_notification_settings  ${PUSERNAME45}
     ${msg}=  FakerLibrary.text

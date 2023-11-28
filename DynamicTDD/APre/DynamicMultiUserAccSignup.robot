@@ -19,22 +19,22 @@ ${BUSER}      ${MUSERNAME}
 
 *** Test Cases ***
 
-Set Time
-    ${Time}=  db.get_time
-    ${sTime}=  add_time  0  15
-    Set Suite Variable   ${sTime}  ${sTime}
-    ${eTime}=  add_time   0  45
-    Set Suite Variable   ${eTime}  ${eTime}
+Remove Files
+    # ${Time}=  db.get_time_by_timezone   ${tz}
+    # ${sTime}=  add_time  0  15
+    # Set Suite Variable   ${sTime}  ${sTime}
+    # ${eTime}=  add_time   0  45
+    # Set Suite Variable   ${eTime}  ${eTime}
     Remove File   ${EXECDIR}/TDD/varfiles/branches.py
-    Create File   ${EXECDIR}/TDD/varfiles/branches.py
+    # Create File   ${EXECDIR}/TDD/varfiles/branches.py
     Remove File   ${EXECDIR}/TDD/varfiles/musers.py
     Create File   ${EXECDIR}/TDD/varfiles/musers.py
     Remove File   ${EXECDIR}/TDD/varfiles/branches_highestlic.py
-    Create File   ${EXECDIR}/TDD/varfiles/branches_highestlic.py
+    # Create File   ${EXECDIR}/TDD/varfiles/branches_highestlic.py
     Remove File   ${EXECDIR}/TDD/varfiles/hl_musers.py
     Create File   ${EXECDIR}/TDD/varfiles/hl_musers.py
 
-YNW-TC-Branch_Signup-1
+JD-TC-Branch_Signup-1
     [Documentation]    Create a provider with all valid attributes
     Set Global Variable  ${US}  0
     Set Global Variable  ${BR}  ${0}
@@ -71,24 +71,38 @@ YNW-TC-Branch_Signup-1
         Exit For Loop If    '${US}' == '${count}'
         License Loop  ${liclen}  ${licresp}
     END
-    Log  ${BUSER}
+    Log Many  ${BUSER}  ${count}  ${US}
 
     ${count}=  Set Variable If  ${count}==${totnods}  ${totiscorpnods}   ${branch_count}
     Log  ${count}
 
+    Log  \n${count} multiuser accounts signed up   console=yes
+
     ${BUSER}=  Evaluate  ${BUSER}-${count}
     
-    
+    sleep  01s
     FOR  ${no}  IN RANGE  ${count}
-         ${BUSER}=  Evaluate  ${BUSER}+1
-        ${resp}=  Provider Login  ${BUSER}  ${PASSWORD}
+        ${BUSER}=  Evaluate  ${BUSER}+1
+        ${resp}=  Encrypted Provider Login  ${BUSER}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Test Variable  ${sub_domain}  ${resp.json()['subSector']}
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${sub_domain}  ${decrypted_data['subSector']}
+        # Set Test Variable  ${sub_domain}  ${resp.json()['subSector']}
+        ${fname}=  Set Variable  ${decrypted_data['firstName']}
+        ${lname}=  Set Variable  ${decrypted_data['lastName']}
+
+        ${resp}=  Get Business Profile
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${account_id}  ${resp.json()['id']}
+
         ${resp}=  View Waitlist Settings
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['enabledWaitlist']}  ${bool[1]}
+
         #${resp}=  Get Queues
         #Log  ${resp.json()}
         #Should Be Equal As Strings  ${resp.status_code}  200
@@ -104,18 +118,31 @@ YNW-TC-Branch_Signup-1
         Set Test Variable  ${service_name}  ${resp.json()['features']['defaultServices'][0]['service']}
         #Set Test Variable  ${service_amt}  ${resp.json()['features']['defaultServices'][0]['amount']}
         Set Test Variable  ${service_duration}  ${resp.json()['features']['defaultServices'][0]['duration']}
-        Set Test Variable  ${service_status}  ${resp.json()['features']['defaultServices'][0]['status']}        
+        Set Test Variable  ${service_status}  ${resp.json()['features']['defaultServices'][0]['status']}  
+
         ${resp}=  Get Service
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response List   ${resp}  0  name=${service_name}  status=${service_status}  serviceDuration=${service_duration}
+        Run Keyword And Continue On Failure  Verify Response List   ${resp}  0  name=${service_name}  status=${service_status}  serviceDuration=${service_duration}
         #Verify Response List   ${resp}  0  totalAmount=${service_amt}
+
         ${resp}=   Get Appointment Settings
         Log   ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
         Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
+
+        ${resp}=  Get Order Settings by account id
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enableOrder']}     ${bool[0]}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}    ${fname}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}     ${lname}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}        ${BUSER}
     END
+
+     
     
 *** Keywords ***
 SignUp Account
@@ -144,28 +171,30 @@ SignUp Account
         # Log  ${is_corp}
         # Run Keyword If  '${is_corp}' == 'True'  Append To File  ${EXECDIR}/TDD/varfiles/branches.py  BUSERNAME${BC}= ${BUSER}${\n}
         # Run Keyword If  '${is_corp}' == 'False'  Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${PC}=${PUSERNAME}${\n}
-        Append To File  ${EXECDIR}/TDD/varfiles/branches.py  BUSERNAME${US}= ${BUSER}${\n}
-        Append To File  ${EXECDIR}/TDD/varfiles/musers.py  MUSERNAME${US}= ${BUSER}${\n}
-        Append To File  ${EXECDIR}/TDD/numbers.txt   ${BUSER}${\n}
+        # Append To File  ${EXECDIR}/TDD/varfiles/branches.py  BUSERNAME${US}= ${BUSER}${\n}
+        # Append To File  ${EXECDIR}/TDD/varfiles/musers.py  MUSERNAME${US}= ${BUSER}${\n}
+        # Append To File  ${EXECDIR}/TDD/numbers.txt   ${BUSER}${\n}
         ${highest_pkg}=  get_highest_license_pkg
         # Run Keyword If  '${pkgId}' == '${highest_pkg[0]}'   Append To File  ${EXECDIR}/TDD/varfiles/branches_highestlic.py  BHUSERNAME${BR}= ${BUSER}${\n}
         IF  '${pkgId}' == '${highest_pkg[0]}'
-        Append To File  ${EXECDIR}/TDD/varfiles/branches_highestlic.py  BHUSERNAME${BR}= ${BUSER}${\n}
+        # Append To File  ${EXECDIR}/TDD/varfiles/branches_highestlic.py  BHUSERNAME${BR}= ${BUSER}${\n}
         Append To File  ${EXECDIR}/TDD/varfiles/hl_musers.py  HLMUSERNAME${BR}= ${BUSER}${\n}
         END
         ${BR} =	Set Variable If	 '${pkgId}' == '${highest_pkg[0]}'	${BR+1}	 ${BR}
         Set Global Variable  ${BR}
-        ${resp}=  Provider Login   ${BUSER}  ${PASSWORD}
-        Should Be Equal As Strings    ${resp.status_code}    200
-        Set Test Variable  ${pid}  ${resp.json()['id']}
-        # ${Temp}=  Evaluate   ${BC}+1
-        # ${BC}=  Set Variable If   '${is_corp}' == 'True'  ${Temp}  ${BC}
-        # Set Global Variable  ${BC} 
-        # ${Temp1}=  Evaluate   ${PC}+1
-        # ${PC}=  Set Variable If   '${is_corp}' == 'False'  ${Temp1}  ${PC}
-        # Set Global Variable  ${PC} 
-        Set Test Variable  ${email_id}  ${B_Email}${BUSER}.${test_mail}
 
+        sleep  01s
+
+        ${resp}=  Encrypted Provider Login   ${BUSER}  ${PASSWORD}
+        Should Be Equal As Strings    ${resp.status_code}    200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Suite Variable  ${pid}  ${decrypted_data['id']}
+
+        Append To File  ${EXECDIR}/TDD/varfiles/musers.py  MUSERNAME${US}= ${BUSER}${\n}
+        Append To File  ${EXECDIR}/TDD/numbers.txt   ${BUSER}${\n}
+        
+        Set Test Variable  ${email_id}  ${B_Email}${BUSER}.${test_mail}
         ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
@@ -176,8 +205,8 @@ SignUp Account
         Verify Response  ${resp}  status=INCOMPLETE
         ${US} =  Evaluate  ${US}+1
         Set Global Variable  ${US} 
-        ${DAY1}=  get_date
-        Set Suite Variable  ${DAY1}  ${DAY1}
+        # ${DAY1}=  get_date
+        # Set Suite Variable  ${DAY1}  ${DAY1}
         ${list}=  Create List  1  2  3  4  5  6  7
         Set Suite Variable  ${list}  ${list}
         ${ph1}=  Evaluate   ${BUSER}+1000000000
@@ -190,14 +219,22 @@ SignUp Account
         ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
         ${emails1}=  Emails  ${name3}  Email  ${B_EMAIL}${US}.${test_mail}  ${views}
         ${bs}=  FakerLibrary.bs
+        ${companySuffix}=  FakerLibrary.companySuffix
         # ${city}=   get_place
         # ${latti}=  get_latitude
         # ${longi}=  get_longitude
         # ${latti}  ${longi}=  get_lat_long
-        ${companySuffix}=  FakerLibrary.companySuffix
         # ${postcode}=  FakerLibrary.postcode
         # ${address}=  get_address
         ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+        ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+        Set Suite Variable  ${tz}
+        ${DAY1}=  get_date_by_timezone  ${tz}
+        ${Time}=  db.get_time_by_timezone   ${tz}
+        ${sTime}=  add_timezone_time  ${tz}  0  15  
+        Set Suite Variable   ${sTime}  ${sTime}
+        ${eTime}=  add_timezone_time  ${tz}  0  45  
+        Set Suite Variable   ${eTime}  ${eTime}
 
         #${resp}=  Create Business Profile  ${bs}  ${bs} Desc   ${companySuffix}  ${city}   ${longi}  ${latti}  www.${companySuffix}.com  free  True  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}
         #Log  ${resp.json()}

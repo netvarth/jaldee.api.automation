@@ -24,7 +24,7 @@ JD-TC-GetHolidays-1
     [Documentation]  Provider create appointment schedule and today appointment is enabled then create a holiday
     
 
-    ${resp}=  Provider Login  ${PUSERNAME182}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME182}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -65,15 +65,21 @@ JD-TC-GetHolidays-1
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     clear_appt_schedule   ${PUSERNAME182}
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime1}=  db.get_time
-    ${eTime1}=  add_time   4  00
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  4  00  
     ${SERVICE1}=    FakerLibrary.Word
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
@@ -96,11 +102,11 @@ JD-TC-GetHolidays-1
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${cur_time1}=  db.get_time
+    ${cur_time1}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable  ${cur_time1}
-    ${DAY}=  add_date  3
+    ${DAY}=  db.add_timezone_date  ${tz}  3  
     Set Suite Variable  ${DAY}
-    ${eTime1}=  add_time   2  00
+    ${eTime1}=  add_timezone_time  ${tz}  2  00  
     Set Suite Variable  ${eTime1}
     ${desc1}=    FakerLibrary.name
     Set Suite Variable  ${desc1}
@@ -119,11 +125,11 @@ JD-TC-GetHolidays-1
     Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['sTime']}             ${cur_time1}  
     Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['eTime']}             ${eTime1}
   
-    ${cur_time2}=  add_time   2  00
+    ${cur_time2}=  add_timezone_time  ${tz}  2  00  
     Set Suite Variable  ${cur_time2}
-    ${DAY2}=  add_date  6
+    ${DAY2}=  db.add_timezone_date  ${tz}  6  
     Set Suite Variable  ${DAY2}
-    ${eTime2}=  add_time   4  00
+    ${eTime2}=  add_timezone_time  ${tz}  4  00  
     Set Suite Variable  ${eTime2}
     ${desc2}=    FakerLibrary.name
     Set Suite Variable  ${desc2}
@@ -163,7 +169,7 @@ JD-TC-GetHolidays-UH2
 JD-TC-Verify GetHolidays-1
     [Documentation]  Verify Get Holidays 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME182}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME182}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=   Get Holiday By Account
     Log   ${resp.json()}

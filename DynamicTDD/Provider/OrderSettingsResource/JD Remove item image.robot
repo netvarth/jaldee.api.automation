@@ -26,7 +26,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 JD-TC-Remove item Image-1
     [Documentation]  Provider check to remove item image
     clear_Item  ${PUSERNAME13}
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${displayName1}=   FakerLibrary.name 
@@ -76,7 +76,7 @@ JD-TC-Remove item Image-1
     ${resp}=   uploadItemImages   ${id}   ${boolean[1]}   ${cookie}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     ${resp}=   Get Item By Id   ${id}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -93,7 +93,7 @@ JD-TC-Remove item Image-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME13}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME13}  ${PASSWORD}
     ${resp}=   Get Item By Id   ${id}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Not Contain   ${resp.json()}   itemImages

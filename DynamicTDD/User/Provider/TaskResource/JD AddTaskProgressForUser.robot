@@ -31,7 +31,7 @@ JD-TC-AddTaskProgressForUser-1
     [Documentation]  Create a task for a  branch and get a provider task.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -42,8 +42,13 @@ JD-TC-AddTaskProgressForUser-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
     
     ${resp}=  categorytype  ${p_id}
@@ -113,7 +118,7 @@ JD-TC-AddTaskProgressForUser-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
@@ -122,9 +127,16 @@ JD-TC-AddTaskProgressForUser-2
     Set Suite Variable  ${id}
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -175,15 +187,17 @@ JD-TC-AddTaskProgressForUser-2
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p_id}=  get_acc_id  ${PUSERNAME_U1}
 
-
-
     ${locId}=  Create Sample Location
 
+    ${resp}=   Get Location ById  ${locId}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.word 
@@ -194,7 +208,6 @@ JD-TC-AddTaskProgressForUser-2
     Set Suite Variable  ${task_uid1}   ${resp.json()['uid']} 
     Set Suite Variable  ${task_id1}    ${resp.json()['id']} 
    
-
     ${note}=    FakerLibrary.sentence 
     
     ${Value}=   Evaluate    random.uniform(0.0,80)
@@ -205,7 +218,7 @@ JD-TC-AddTaskProgressForUser-2
    
     ${resp}=   Get Task By Id   ${task_uid1}
     Log   ${resp.content}
-     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}                   ${task_id1}
     Should Be Equal As Strings  ${resp.json()['taskUid']}              ${task_uid1} 
     Should Be Equal As Strings  ${resp.json()['accountId']}             ${p_id}
@@ -223,13 +236,12 @@ JD-TC-AddTaskProgressForUser-UH1
 
     [Documentation]  Create task for branch and add task progress by user
 
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${locId}=  Create Sample Location
     ${p_id1}=  get_acc_id    ${MUSERNAME_E}
     
-
     ${title}=  FakerLibrary.user name
     ${desc}=   FakerLibrary.word 
 
@@ -239,14 +251,11 @@ JD-TC-AddTaskProgressForUser-UH1
     Set Suite Variable  ${task_uid}   ${resp.json()['uid']} 
     Set Suite Variable  ${task_id}    ${resp.json()['id']} 
     
-
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p_id}=  get_acc_id  ${PUSERNAME_U1}
     
-  
-
     ${note}=    FakerLibrary.sentence 
     
     ${Value}=   Evaluate    random.uniform(0.0,80)
@@ -263,14 +272,17 @@ JD-TC-AddTaskProgressForUser-UH2
     [Documentation]  Create task for user and add task progress by branch
 
      
-    ${resp}=  ProviderLogin  ${PUSERNAME_U1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${p_id}=  get_acc_id  ${PUSERNAME_U1}
 
-
-
     ${locId}=  Create Sample Location
+
+    ${resp}=   Get Location ById  ${locId}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
 
     ${title}=  FakerLibrary.user name
@@ -282,7 +294,7 @@ JD-TC-AddTaskProgressForUser-UH2
     Set Suite Variable  ${task_uid2}   ${resp.json()['uid']} 
     Set Suite Variable  ${task_id2}    ${resp.json()['id']} 
     
-    ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -300,7 +312,7 @@ JD-TC-AddTaskProgressForUser-UH3
 
     [Documentation]  Create task for user and add task progress by another user same branch
 
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -344,8 +356,6 @@ JD-TC-AddTaskProgressForUser-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
-
     ${resp}=  SendProviderResetMail   ${PUSERNAME_U2}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -354,7 +364,7 @@ JD-TC-AddTaskProgressForUser-UH3
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -362,8 +372,8 @@ JD-TC-AddTaskProgressForUser-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     # ${locId}=  Create Sample Location
-
 
     ${title}=  FakerLibrary.user name
     Set Suite Variable  ${title}
@@ -384,7 +394,7 @@ JD-TC-AddTaskProgressForUser-UH3
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -399,15 +409,12 @@ JD-TC-AddTaskProgressForUser-UH3
     Should Be Equal As Strings  ${resp.status_code}  403
     Should Be Equal As Strings   ${resp.json()}     ${NO_PERMISSION_UPDATE_TASK}
 
-    
-
-
    
 JD-TC-AddTaskProgressForUser-UH4
 
     [Documentation]  Create task for user and add task progress by another  branch
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -416,6 +423,7 @@ JD-TC-AddTaskProgressForUser-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Create Task   ${title}  ${desc}   ${userType[0]}  ${category_id1}  ${type_id1}   ${locId}   
     Log  ${resp.content}
@@ -424,7 +432,7 @@ JD-TC-AddTaskProgressForUser-UH4
     Set Suite Variable  ${task_uid4}  ${task_id[1]}
     Set Suite Variable  ${task_id4}  ${task_id[0]}
      
-    ${resp}=  Provider Login  ${MUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -438,9 +446,6 @@ JD-TC-AddTaskProgressForUser-UH4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}    ${NO_PERMISSION}
-
-    
-
 
  
 JD-TC-AddTaskProgressForUser-UH5
@@ -462,7 +467,7 @@ JD-TC-AddTaskProgressForUser-3
     [Documentation]   create task for one user and assingee to another user same branch and add progress by first user(task creating user)
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -471,6 +476,7 @@ JD-TC-AddTaskProgressForUser-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Create Task   ${title}  ${desc}   ${userType[0]}  ${category_id1}  ${type_id1}   ${locId}   
     Log  ${resp.content}
@@ -495,7 +501,7 @@ JD-TC-AddTaskProgressForUser-4
 
     [Documentation]   create task for one user and assingee to another user same branch and add progress by another user 
     
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -504,6 +510,7 @@ JD-TC-AddTaskProgressForUser-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=    Create Task   ${title}  ${desc}   ${userType[0]}  ${category_id1}  ${type_id1}   ${locId}   
     Log  ${resp.content}
@@ -517,7 +524,7 @@ JD-TC-AddTaskProgressForUser-4
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${note}=    FakerLibrary.sentence 
@@ -545,7 +552,7 @@ JD-TC-AddTaskProgressForUser-5
 
     [Documentation]      empty note passing
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -609,7 +616,7 @@ JD-TC-AddTaskProgressForUser-UH7
 
     [Documentation]  Create task for branch and  and assingee to another user add task progress by user
 
-     ${resp}=  Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -632,7 +639,7 @@ JD-TC-AddTaskProgressForUser-UH7
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U4}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U4}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${note}=    FakerLibrary.sentence 

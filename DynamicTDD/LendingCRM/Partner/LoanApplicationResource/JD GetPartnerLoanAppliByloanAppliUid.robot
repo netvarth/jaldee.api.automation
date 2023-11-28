@@ -42,10 +42,15 @@ JD-TC-Get PartnerLoanApplicationbyloanApplicationUid-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-   ${resp}=   ProviderLogin  ${PUSERNAME28}  ${PASSWORD} 
+   ${resp}=   Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+
+*** comment ***
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -298,7 +303,7 @@ JD-TC-GetLoanApplicationbyRefNo-UH3
                                   
     [Documentation]               Create Loan Application and Get Loan Application by loanApplicationRefNo with empty uid.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME28}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -313,7 +318,7 @@ JD-TC-GetLoanApplicationbyRefNo-UH4
                                   
     [Documentation]               Create Loan Application and Get Loan Application by Another provider loanid.
 
-    ${resp}=   ProviderLogin  ${PUSERNAME38}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

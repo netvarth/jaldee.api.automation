@@ -54,7 +54,7 @@ ${zero_amt}   ${0.0}
 #         Log   ${dom_list}
 
 #         FOR   ${a}  IN RANGE   ${length-1}    
-#                 ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+#                 ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
 #                 Log   ${resp.json()}
 #                 Should Be Equal As Strings    ${resp.status_code}    200
 #                 clear_customer   ${PUSERNAME${a}}
@@ -178,7 +178,7 @@ JD-TC-CreateService-UH1
         Set Suite Variable  ${Total1}
         ${min_pre1}=  Convert To Number  ${min_pre1}  1
         ${Total1}=  Convert To Number  ${Total1}  1
-        #  ${resp}=  Provider Login  ${PUSERNAME35}  ${PASSWORD}
+        #  ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD}
         #  Should Be Equal As Strings    ${resp.status_code}    200
         ${resp}=  Create Service  ${SERVICE1}  ${description}   ${service_duration[1]}   ${status[0]}    ${btype}   ${bool[1]}    ${notifytype[1]}  ${min_pre1}  ${Total1}  ${bool[1]}  ${bool[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -221,7 +221,7 @@ JD-TC-CreateService-6
         Log  ${multilocPro}
         Set Suite Variable   ${multilocPro}
         ${len}=  Get Length  ${multilocPro}
-        ${resp}=  ProviderLogin  ${multilocPro[0]}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${multilocPro[0]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
@@ -291,18 +291,21 @@ JD-TC-CreateService-6
         Should Be Equal As Strings  ${resp.status_code}  200 
 
 
-        ${latti}=  get_latitude
-        ${longi}=  get_longitude
         ${companySuffix}=  FakerLibrary.companySuffix
-        ${postcode}=  FakerLibrary.postcode
-        ${address}=  get_address
+        # ${latti}=  get_latitude
+        # ${longi}=  get_longitude
+        # ${postcode}=  FakerLibrary.postcode
+        # ${address}=  get_address
+        ${latti}  ${longi}  ${postcode}  ${address}=  get_lat_long_add_pin
+        ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+        Set Suite Variable  ${tz}
         ${description}=  FakerLibrary.sentence
         ${snote}=  FakerLibrary.Word
         ${dis}=  FakerLibrary.Word
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${sTime}=  add_time  0  15
-        ${eTime}=  add_time   3  00
-        ${DAY}=  get_date
+        ${sTime}=  add_timezone_time  ${tz}  0  15  
+        ${eTime}=  add_timezone_time  ${tz}  3  00  
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Create Location  ${loc}  ${longi}  ${latti}  www.${companySuffix}.com  ${postcode}   ${address}  free  True  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -310,10 +313,10 @@ JD-TC-CreateService-6
 
         ${capacity}=   Random Int   min=20   max=100
         ${parallel}=   Random Int   min=1   max=2
-        ${sTime}=  add_time  0  30
-        ${eTime}=  add_time   0  60
+        ${sTime}=  add_timezone_time  ${tz}  0  30  
+        ${eTime}=  add_timezone_time  ${tz}  0  60  
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${DAY}=  get_date   
+        ${DAY}=  db.get_date_by_timezone  ${tz}   
         Set Suite Variable  ${DAY}
 
         ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid1}  ${s_id1}
@@ -333,7 +336,6 @@ JD-TC-CreateService-6
         ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid1}  ${DAY}  hi  ${bool[1]}  ${cid}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
-        
         ${wid}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${wid1}  ${wid[0]}
         sleep  02s
@@ -346,7 +348,7 @@ JD-TC-CreateService-6
 JD-TC-CreateService-7
 
         [Documentation]     Checking Service Type in before and after taking appointment
-        # ${resp}=  ProviderLogin  ${multilocPro[1]}  ${PASSWORD}
+        # ${resp}=  Encrypted Provider Login  ${multilocPro[1]}  ${PASSWORD}
         # Should Be Equal As Strings  ${resp.status_code}  200
         # ${resp}=   Billable
         # # clear_location  ${PUSERNAME_PH}
@@ -383,11 +385,11 @@ JD-TC-CreateService-7
         ${resp}=  Account Set Credential  ${PUSERNAME_Y}  ${PASSWORD}  0
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Suite Variable  ${PUSERNAME_Y}
-        ${resp}=  Provider Login  ${PUSERNAME_Y}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME_Y}  ${PASSWORD}
         Log  ${resp.json()}
       
 
-        ${DAY}=  get_date
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         Set Test Variable   ${DAY}
         ${list}=  Create List  1  2  3  4  5  6  7
         Set Suite Variable    ${list}
@@ -404,14 +406,18 @@ JD-TC-CreateService-7
         ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${PUSERPH5}  ${views}
         ${emails1}=  Emails  ${name3}  Email  ${PUSERMAIL3}  ${views}
         ${bs}=  FakerLibrary.bs
-        ${city}=   get_place
-        ${latti}=  get_latitude
-        ${longi}=  get_longitude
         ${companySuffix}=  FakerLibrary.companySuffix
-        ${postcode}=  FakerLibrary.postcode
-        ${address}=  get_address
-        ${sTime}=  db.get_time
-        ${eTime}=  add_time   0  15
+        # ${city}=   get_place
+        # ${latti}=  get_latitude
+        # ${longi}=  get_longitude
+        # ${postcode}=  FakerLibrary.postcode
+        # ${address}=  get_address
+        ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+        ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+        Set Suite Variable  ${tz}
+        # ${sTime}=  db.get_time_by_timezone  ${tz}
+        ${sTime}=  db.get_time_by_timezone  ${tz}
+        ${eTime}=  add_timezone_time  ${tz}  0  15  
         ${desc}=   FakerLibrary.sentence
         ${url}=   FakerLibrary.url
         ${parking}   Random Element   ${parkingType}
@@ -470,18 +476,21 @@ JD-TC-CreateService-7
         ${resp}=   Get Service
         Should Be Equal As Strings  ${resp.status_code}  200 
 
-        ${latti}=  get_latitude
-        ${longi}=  get_longitude
         ${companySuffix}=  FakerLibrary.companySuffix
-        ${postcode}=  FakerLibrary.postcode
-        ${address}=  get_address
+        # ${latti}=  get_latitude
+        # ${longi}=  get_longitude
+        # ${postcode}=  FakerLibrary.postcode
+        # ${address}=  get_address
+        ${latti}  ${longi}  ${postcode}  ${address}=  get_lat_long_add_pin
+        ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+        Set Suite Variable  ${tz}
         ${description}=  FakerLibrary.sentence
         ${snote}=  FakerLibrary.Word
         ${dis}=  FakerLibrary.Word
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${sTime}=  add_time  0  15
-        ${eTime}=  add_time   3  00
-        ${DAY}=  get_date
+        ${sTime}=  add_timezone_time  ${tz}  0  15  
+        ${eTime}=  add_timezone_time  ${tz}  3  00  
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Create Location  ${loc}  ${longi}  ${latti}  www.${companySuffix}.com  ${postcode}   ${address}  free  True  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -489,10 +498,10 @@ JD-TC-CreateService-7
 
         ${capacity}=   Random Int   min=20   max=100
         ${parallel}=   Random Int   min=1   max=2
-        ${sTime}=  add_time  0  30
-        ${eTime}=  add_time   0  60
+        ${sTime}=  add_timezone_time  ${tz}  0  30  
+        ${eTime}=  add_timezone_time  ${tz}  0  60  
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${DAY}=  get_date   
+        ${DAY}=  db.get_date_by_timezone  ${tz}   
         Set Suite Variable  ${DAY}
 
         ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid1}  ${s_id1}
@@ -505,13 +514,13 @@ JD-TC-CreateService-7
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
-        ${DAY1}=  get_date
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${DAY1} 
-        ${DAY2}=  add_date  10      
+        ${DAY2}=  db.add_timezone_date  ${tz}  10        
         Set Suite Variable  ${DAY2} 
         ${list}=  Create List  1  2  3  4  5  6  7
         Set Suite Variable  ${list} 
-        ${sTime1}=  add_time  1  30
+        ${sTime1}=  add_timezone_time  ${tz}  1  30  
         Set Suite Variable   ${sTime1}
         ${delta}=  FakerLibrary.Random Int  min=10  max=60
         Set Suite Variable  ${delta}
@@ -594,7 +603,7 @@ JD-TC-CreateService-7
 JD-TC-CreateService-8
 
         [Documentation]   Checking Service Type  before and after adding in queue
-        ${resp}=  ProviderLogin  ${PUSERNAME121}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
@@ -653,18 +662,21 @@ JD-TC-CreateService-8
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings   ${resp.json()['serviceType']}   ${service_type[2]}
 
-        ${latti}=  get_latitude
-        ${longi}=  get_longitude
         ${companySuffix}=  FakerLibrary.companySuffix
-        ${postcode}=  FakerLibrary.postcode
-        ${address}=  get_address
+        # ${latti}=  get_latitude
+        # ${longi}=  get_longitude
+        # ${postcode}=  FakerLibrary.postcode
+        # ${address}=  get_address
+        ${latti}  ${longi}  ${postcode}  ${address}=  get_lat_long_add_pin
+        ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+        Set Suite Variable  ${tz}
         ${description}=  FakerLibrary.sentence
         ${snote}=  FakerLibrary.Word
         ${dis}=  FakerLibrary.Word
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${sTime}=  add_time  0  15
-        ${eTime}=  add_time   3  00
-        ${DAY}=  get_date
+        ${sTime}=  add_timezone_time  ${tz}  0  15  
+        ${eTime}=  add_timezone_time  ${tz}  3  00  
+        ${DAY}=  db.get_date_by_timezone  ${tz}
         ${resp}=  Create Location  ${loc}  ${longi}  ${latti}  www.${companySuffix}.com  ${postcode}   ${address}  free  True  Weekly  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -672,10 +684,10 @@ JD-TC-CreateService-8
 
         ${capacity}=   Random Int   min=20   max=100
         ${parallel}=   Random Int   min=1   max=2
-        ${sTime}=  add_time  0  30
-        ${eTime}=  add_time   0  60
+        ${sTime}=  add_timezone_time  ${tz}  0  30  
+        ${eTime}=  add_timezone_time  ${tz}  0  60  
         ${list}=  Create List  1  2  3  4  5  6  7
-        ${DAY}=  get_date   
+        ${DAY}=  db.get_date_by_timezone  ${tz}   
         Set Suite Variable  ${DAY}
 
         ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid1}  ${s_id1}
@@ -696,7 +708,7 @@ JD-TC-CreateService-8
 JD-TC-CreateService-9
         [Documentation]   Create service for a branch in default department
 
-        ${resp}=  ProviderLogin  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -747,7 +759,7 @@ JD-TC-CreateService-9
 JD-TC-CreateService-10
         [Documentation]   Create service for a branch in custom department
 
-        ${resp}=  ProviderLogin  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -803,7 +815,7 @@ JD-TC-CreateService-10
 
 JD-TC-CreateService-11
         [Documentation]   Create service for a branch in default department & custom department
-        ${resp}=  ProviderLogin  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -858,7 +870,7 @@ JD-TC-CreateService-11
 JD-TC-CreateService-12
         [Documentation]   Create multiple services for a branch in default department
 
-        ${resp}=  ProviderLogin  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -907,7 +919,7 @@ JD-TC-CreateService-12
 
 JD-TC-CreateService-13
         [Documentation]   Create multiple services for a branch in custom department 
-        ${resp}=  ProviderLogin  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -963,7 +975,7 @@ JD-TC-CreateService-13
 JD-TC-CreateService-UH4
         [Documentation]   Create service with same name as existing service for a branch in default department
 
-        ${resp}=  ProviderLogin  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1013,7 +1025,7 @@ JD-TC-CreateService-UH4
 JD-TC-CreateService-UH5
         [Documentation]   Create multiple services with same name for a branch in default department
 
-        ${resp}=  ProviderLogin  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1074,7 +1086,7 @@ JD-TC-CreateService-14
         Log  ${multilocPro}
         Set Suite Variable   ${multilocPro}
         ${len}=  Get Length  ${multilocPro}
-        ${resp}=  ProviderLogin  ${multilocPro[0]}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${multilocPro[0]}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${ser_durtn}=   Random Int   min=2   max=10
         ${description}=  FakerLibrary.sentence
@@ -1127,7 +1139,7 @@ JD-TC-CreateService-14
 JD-TC-CreateService-15
 
         [Documentation]    create service with tax enable 
-        ${resp}=   ProviderLogin     ${PUSERNAME88}   ${PASSWORD}
+        ${resp}=   Encrypted Provider Login     ${PUSERNAME88}   ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=  Get Account Settings
@@ -1146,7 +1158,7 @@ JD-TC-CreateService-15
 JD-TC-CreateService-UH7
 
         [Documentation]   Create service for a branch in default department & custom department with same service name
-        ${resp}=  ProviderLogin  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1201,7 +1213,7 @@ JD-TC-CreateService-UH7
 JD-TC-CreateService-UH8
 
         [Documentation]   Create same service for a branch in default department & custom department
-        ${resp}=  ProviderLogin  ${MUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1253,7 +1265,7 @@ JD-TC-CreateService-16
         ...  (preparation time for provider before next booking. when trying to make a booking in less than 10 mins of start of next slot, when lead time is 10 mins
         ...  the next slot will not be shown. there should be a time difference of 10 mins from current booking time to next slot.)
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -1284,7 +1296,7 @@ JD-TC-CreateService-17
 
         [Documentation]   Create service with max bookings allowed. (one consumer can make as many bookings as specified in max bookings allowed)
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -1315,7 +1327,7 @@ JD-TC-CreateService-18
 
         [Documentation]   Create service with resoucesRequired.
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -1346,7 +1358,7 @@ JD-TC-CreateService-19
 
         [Documentation]   Create service with priceDynamic.(allows to set schedule level price rather than service charge)
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -1376,7 +1388,7 @@ JD-TC-CreateService-UH9
 
         [Documentation]   Create Service with maxBookingsAllowed as empty
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -1407,7 +1419,7 @@ JD-TC-CreateService-UH10
 
         [Documentation]   Create Service with resoucesRequired as empty
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -1437,7 +1449,7 @@ JD-TC-CreateService-UH11
 
         [Documentation]   Create Service with leadTime as empty
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -1467,7 +1479,7 @@ JD-TC-CreateService-20
 
         [Documentation]   Create Service for a user
 
-        ${resp}=  Provider Login  ${MUSERNAME4}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME4}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1514,7 +1526,7 @@ JD-TC-CreateService-20
         Should Be Equal As Strings  ${resp[0].status_code}  200
         Should Be Equal As Strings  ${resp[1].status_code}  200
         
-        ${resp}=  ProviderLogin  ${MUSERNAME4_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME4_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         ${SERVICE1}=    FakerLibrary.Word
@@ -1540,7 +1552,7 @@ JD-TC-CreateService-21
 
         clear_service    ${MUSERNAME4}
         
-        ${resp}=  ProviderLogin  ${MUSERNAME4_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME4_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${u_id1}  ${resp.json()['id']}
 
@@ -1588,7 +1600,7 @@ JD-TC-CreateService-UH12
 
         clear_service    ${MUSERNAME4}
 
-        ${resp}=  ProviderLogin  ${MUSERNAME4_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME4_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${u_id1}  ${resp.json()['id']}
 
@@ -1614,14 +1626,14 @@ JD-TC-CreateService-UH13
 
         [Documentation]   Create Service for a user from another account 
 
-        ${resp}=  ProviderLogin  ${MUSERNAME4_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME4_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${u_id1}  ${resp.json()['id']}
 
         ${resp}=  ProviderLogout   
         Should Be Equal As Strings  ${resp.status_code}  200
 
-        ${resp}=  Provider Login  ${MUSERNAME5}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME5}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1656,7 +1668,7 @@ JD-TC-CreateService-UH14
 
         [Documentation]   Create Service for an invalid department id 
 
-        ${resp}=  ProviderLogin  ${MUSERNAME4_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME4_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${u_id1}  ${resp.json()['id']}
 
@@ -1681,7 +1693,7 @@ JD-TC-CreateService-UH15
 
         [Documentation]   Create Service with department id as empty
 
-        ${resp}=  ProviderLogin  ${MUSERNAME4_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME4_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${u_id1}  ${resp.json()['id']}
 
@@ -1706,7 +1718,7 @@ JD-TC-CreateService-UH16
 
         [Documentation]   Create Service with user id as empty
 
-        ${resp}=  ProviderLogin  ${MUSERNAME4_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME4_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${u_id1}  ${resp.json()['id']}
 
@@ -1731,7 +1743,7 @@ JD-TC-CreateService-UH17
 
         [Documentation]   Create Service for user without department
 
-        ${resp}=  ProviderLogin  ${MUSERNAME4_U1}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME4_U1}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${u_id1}  ${resp.json()['id']}
 
@@ -1756,7 +1768,7 @@ JD-TC-CreateService-22
 
         [Documentation]   Create service with supportInternationalConsumer as true and set internationalAmount with prepayment. (service charge for international consumers)
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -1785,7 +1797,7 @@ JD-TC-CreateService-23
 
         [Documentation]   Create service with supportInternationalConsumer as true and set internationalAmount without prepayment. (service charge for international consumers)
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -1814,7 +1826,7 @@ JD-TC-CreateService-24
 
         [Documentation]   Create service with supportInternationalConsumer as true but without internationalAmount. (service charge for international consumers)
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -1844,7 +1856,7 @@ JD-TC-CreateService-25
 
         [Documentation]   Create service with supportInternationalConsumer as false but with internationalAmount. (cannot set internationalAmount when supportInternationalConsumer is false)
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -1873,7 +1885,7 @@ JD-TC-CreateService-26
 
         [Documentation]   Create service with supportInternationalConsumer as true but with internationalAmount as empty. (service charge for international consumers)
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -1903,7 +1915,7 @@ JD-TC-CreateService-27
 
         [Documentation]   Create service with supportInternationalConsumer as true but with internationalAmount as less than service charge. (service charge for international consumers)
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -1932,7 +1944,7 @@ JD-TC-CreateService-28
 
         [Documentation]   Create service with supportInternationalConsumer and prePaymentType as percentage
 
-        ${resp}=  ProviderLogin  ${PUSERNAME27}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 
         clear_service   ${PUSERNAME27}
@@ -1972,7 +1984,7 @@ Billable
     FOR   ${a}  IN RANGE  ${start}   ${length}
             
         # clear_service       ${PUSERNAME${a}}
-        ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${domain}=   Set Variable    ${resp.json()['sector']}
         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
@@ -2004,7 +2016,7 @@ Non Billable
 
      FOR    ${a}   IN RANGE  ${start1}    ${length}
         # clear_service       ${PUSERNAME${a}}
-        ${resp}=  Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${domain}=   Set Variable    ${resp.json()['sector']}
         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
@@ -2041,7 +2053,7 @@ Disable Services
 
 # *** Keywords ***
 wlsettings
-        ${resp}=  ProviderLogin  ${PUSERNAME35}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME35}  ${PASSWORD}
         Should Be Equal As Strings  ${resp.status_code}  200
 	${resp}=  View Waitlist Settings
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -2066,7 +2078,7 @@ wlsettings
 
 # #      FOR    ${a}   IN RANGE    ${length}
 # #         clear_service       ${PUSERNAME${a}}
-# #         ${resp}=  Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+# #         ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
 # #         Should Be Equal As Strings    ${resp.status_code}    200
 # #         ${domain}=   Set Variable    ${resp.json()['sector']}
 # #         ${subdomain}=    Set Variable      ${resp.json()['subSector']}

@@ -28,7 +28,7 @@ ${item1}  item1
 JD-TC-Upload item Image-1
 
     [Documentation]   Provider check to upload item image
-    ${resp}=  ProviderLogin  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 # JD-TC-Upload item Image-1
@@ -36,7 +36,7 @@ JD-TC-Upload item Image-1
 #     [Documentation]   Provider check to upload item image
 #     ${des}=  FakerLibrary.Word
 #     ${description}=  FakerLibrary.sentence
-#     ${resp}=  ProviderLogin  ${PUSERNAME22}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     ${amount11}=   FakerLibrary.pyfloat  left_digits=2   right_digits=2    positive=True
    
@@ -52,7 +52,7 @@ JD-TC-Upload item Image-1
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 #     # Should Be Equal As Strings  ${resp[1]}  200
-#     ${resp}=  ProviderLogin  ${PUSERNAME22}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
 #     ${resp}=   Get Item By Id   ${id}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Should Not Be Equal As Strings  ${resp.json()['picBig']}   ${EMPTY}  

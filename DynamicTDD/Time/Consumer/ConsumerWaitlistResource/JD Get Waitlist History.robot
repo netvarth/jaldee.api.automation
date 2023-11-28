@@ -33,26 +33,25 @@ JD-TC-Get Waitlist history-1
     clear_location   ${PUSERNAME154}
     clear_service    ${PUSERNAME154}
 
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${pid}=  get_acc_id  ${PUSERNAME154}
     Set Suite Variable  ${pid} 
     
-    ${DAY}=  get_date  
-    ${DAY1}=  add_date  1
+    ${DAY}=  db.get_date_by_timezone  ${tz}  
+    ${DAY1}=  db.add_timezone_date  ${tz}  1  
     Set Suite Variable  ${DAY}
     Set Suite Variable  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}
-    ${sTime}=  db.get_time
-    ${eTime}=  add_time  0  30
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    # ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${sTime}=  db.get_time_by_timezone  ${tz}
+    ${eTime}=  add_timezone_time  ${tz}  0  30  
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -61,13 +60,11 @@ JD-TC-Get Waitlist history-1
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Suite Variable  ${lid}  ${resp.json()} 
 
-    ${sTime1}=  add_time   1  00
-    ${eTime1}=  add_time   3  30
-    ${city}=   get_place
-    ${latti}=  get_latitude
-    ${longi}=  get_longitude
-    ${postcode}=  FakerLibrary.postcode
-    ${address}=  get_address
+    ${sTime1}=  add_timezone_time  ${tz}  1  00  
+    ${eTime1}=  add_timezone_time  ${tz}  3  30  
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
@@ -90,9 +87,9 @@ JD-TC-Get Waitlist history-1
 
     ${q_name}=    FakerLibrary.name
     Set Suite Variable    ${q_name}
-    ${strt_time}=   subtract_time  2  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  2  00
     Set Suite Variable    ${strt_time}
-    ${end_time}=    add_time       0  20 
+    ${end_time}=    add_timezone_time  ${tz}       0  20 
     Set Suite Variable    ${end_time} 
     ${capacity}=  Random Int  min=8   max=20
     ${parallel}=  Random Int   min=1   max=2
@@ -155,7 +152,7 @@ JD-TC-Get Waitlist history-1
     ${resp}=  Consumer Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME154}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME154}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

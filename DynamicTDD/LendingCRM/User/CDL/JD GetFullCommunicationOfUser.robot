@@ -48,10 +48,12 @@ JD-TC-GetFullCommunicationOfUser-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME55}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME55}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -62,15 +64,15 @@ JD-TC-GetFullCommunicationOfUser-1
 
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    ${resp}=  Send Message   ${user[2]}  ${comm_msg}  ${provider_id1}  ${userType[0]}  ${consumer_id}  ${userType[3]}  ${messageType[0]}  
+    ${resp}=  Send Message   ${user[2]}  ${comm_msg}  ${provider_id}  ${userType[0]}  ${consumer_id}  ${userType[3]}  ${messageType[0]}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.content}   []
 
-    ${resp}=   Get Full Communication Of User  ${user[2]}  ${provider_id1}
+    ${resp}=   Get Full Communication Of User  ${user[2]}  ${provider_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['message'][0]['owner']['id']}              ${provider_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['message'][0]['owner']['id']}              ${provider_id}
     Should Be Equal As Strings  ${resp.json()[0]['message'][0]['owner']['userType']}        ${userType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['message'][0]['msg']}                      ${comm_msg}
     Should Be Equal As Strings  ${resp.json()[0]['message'][0]['receiver']['userType']}     ${userType[8]}
@@ -95,10 +97,12 @@ JD-TC-GetFullCommunicationOfUser-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME60}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -109,15 +113,15 @@ JD-TC-GetFullCommunicationOfUser-2
 
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    ${resp}=  Send Message   ${user[2]}  ${comm_msg}  ${provider_id1}  ${userType[0]}  ${consumer_id}  ${userType[3]}  ${messageType[1]}  
+    ${resp}=  Send Message   ${user[2]}  ${comm_msg}  ${provider_id}  ${userType[0]}  ${consumer_id}  ${userType[3]}  ${messageType[1]}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.content}   []
 
-    ${resp}=   Get Full Communication Of User  ${user[2]}  ${provider_id1}
+    ${resp}=   Get Full Communication Of User  ${user[2]}  ${provider_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['message'][0]['owner']['id']}              ${provider_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['message'][0]['owner']['id']}              ${provider_id}
     Should Be Equal As Strings  ${resp.json()[0]['message'][0]['owner']['userType']}        ${userType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['message'][0]['msg']}                      ${comm_msg}
     Should Be Equal As Strings  ${resp.json()[0]['message'][0]['receiver']['userType']}     ${userType[8]}
@@ -142,10 +146,12 @@ JD-TC-GetFullCommunicationOfUser-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME61}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME61}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -156,15 +162,15 @@ JD-TC-GetFullCommunicationOfUser-3
 
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    ${resp}=  Send Message   ${user[2]}  ${comm_msg}  ${provider_id1}  ${userType[0]}  ${consumer_id}  ${userType[3]}  ${messageType[2]}  
+    ${resp}=  Send Message   ${user[2]}  ${comm_msg}  ${provider_id}  ${userType[0]}  ${consumer_id}  ${userType[3]}  ${messageType[2]}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.content}   []
 
-    ${resp}=   Get Full Communication Of User  ${user[2]}  ${provider_id1}
+    ${resp}=   Get Full Communication Of User  ${user[2]}  ${provider_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['message'][0]['owner']['id']}              ${provider_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['message'][0]['owner']['id']}              ${provider_id}
     Should Be Equal As Strings  ${resp.json()[0]['message'][0]['owner']['userType']}        ${userType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['message'][0]['msg']}                      ${comm_msg}
     Should Be Equal As Strings  ${resp.json()[0]['message'][0]['receiver']['userType']}     ${userType[8]}
@@ -189,10 +195,12 @@ JD-TC-GetFullCommunicationOfUser-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME62}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -203,15 +211,15 @@ JD-TC-GetFullCommunicationOfUser-4
 
     ${comm_msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    ${resp}=  Send Message   ${user[2]}  ${comm_msg}  ${provider_id1}  ${userType[0]}  ${consumer_id}  ${userType[3]}  ${messageType[3]}  
+    ${resp}=  Send Message   ${user[2]}  ${comm_msg}  ${provider_id}  ${userType[0]}  ${consumer_id}  ${userType[3]}  ${messageType[3]}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.content}   []
 
-    ${resp}=   Get Full Communication Of User  ${user[2]}  ${provider_id1}
+    ${resp}=   Get Full Communication Of User  ${user[2]}  ${provider_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['message'][0]['owner']['id']}              ${provider_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['message'][0]['owner']['id']}              ${provider_id}
     Should Be Equal As Strings  ${resp.json()[0]['message'][0]['owner']['userType']}        ${userType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['message'][0]['msg']}                      ${comm_msg}
     Should Be Equal As Strings  ${resp.json()[0]['message'][0]['receiver']['userType']}     ${userType[8]}
@@ -236,10 +244,12 @@ JD-TC-GetFullCommunicationOfUser-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME21}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -274,12 +284,14 @@ JD-TC-GetFullCommunicationOfUser-6
 
     [Documentation]   verify communication details without sending any msg.
 
-    ${resp}=  Provider Login  ${MUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME56}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
-    ${resp}=   Get Full Communication Of User  ${user[2]}  ${provider_id1}
+    ${resp}=   Get Full Communication Of User  ${user[2]}  ${provider_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.content}   []
@@ -300,10 +312,12 @@ JD-TC-GetFullCommunicationOfUser-7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME25}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -350,10 +364,12 @@ JD-TC-GetFullCommunicationOfUser-8
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -400,10 +416,12 @@ JD-TC-GetFullCommunicationOfUser-9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME27}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -450,10 +468,12 @@ JD-TC-GetFullCommunicationOfUser-10
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME28}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -507,10 +527,12 @@ JD-TC-GetFullCommunicationOfUser-11
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Login  ${MUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -555,10 +577,12 @@ JD-TC-GetFullCommunicationOfUser-12
     ...   then verify the communication details.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME37}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -612,10 +636,12 @@ JD-TC-GetFullCommunicationOfUser-13
     ...   then verify the communication details.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -668,10 +694,12 @@ JD-TC-GetFullCommunicationOfUser-14
     ...   then verify the communication details.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME33}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -767,17 +795,19 @@ JD-TC-GetFullCommunicationOfUser-14
     Should Be Equal As Strings  ${resp.json()[0]['consumerId']}                             ${partid1}
     Should Be Equal As Strings  ${resp.json()[0]['message'][0]['attachmentList'][0]['caption']}           ${caption}
 
-
+*** comment ***
 JD-TC-GetFullCommunicationOfUser-15
 
     [Documentation]   Provider send a message(enquiry) to a partner with one attachment
     ...   then verify the communication details.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -880,10 +910,12 @@ JD-TC-GetFullCommunicationOfUser-16
     ...   then verify the communication details.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME54}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME54}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
@@ -986,10 +1018,12 @@ JD-TC-GetFullCommunicationOfUser-17
     ...   then verify the communication details.
 
 
-    ${resp}=  Provider Login  ${MUSERNAME55}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME55}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}

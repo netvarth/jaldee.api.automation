@@ -3,7 +3,7 @@ import random
 try:
     from io import StringIO  ## for Python 3
 except ImportError:
-    from StringIO import StringIO ## for Python 2
+    from StringIO import StringIO   ## for Python 2
 import json
 import datetime
 import requests

@@ -47,7 +47,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-1
     clear_reimburseReport
     [Documentation]  Consumer apply a coupon at self payment and check get jaldee coupon stats
     clear_payment_invoice  ${PUSERNAME1}
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Get Active License
@@ -62,9 +62,9 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-1
     ${domains}=  Jaldee Coupon Target Domains  ${d1}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -94,7 +94,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-1
     Set Suite Variable  ${enabled_count}  ${resp.json()['enabledCount']}
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Enable Jaldee Coupon By Provider   ${cupn_codeAA}
     Log   ${resp.json()}
@@ -110,7 +110,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-1
     Set Suite Variable  ${pid}
     ${cid}=  get_id  ${CUSERNAME5}
     Set Suite Variable  ${cid}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
 
     ${companySuffix}=  FakerLibrary.companySuffix
@@ -204,7 +204,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  paymentStatus=FullyPaid 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Jaldee Coupon Stats By Coupon_code  ${cupn_codeAA}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -219,8 +219,8 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-1
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  Settled 
     sleep  03s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200    
     ${resp}=  Get Reimburse Reports By Provider
@@ -305,9 +305,9 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-2
     ${domains}=  Jaldee Coupon Target Domains  ${d1}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -335,7 +335,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-2
     Set Suite Variable  ${enabled_count2}  ${resp.json()['enabledCount']}
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_codeBB}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -360,7 +360,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-2
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Bill By UUId  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -394,7 +394,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  paymentStatus=FullyPaid 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Settl Bill  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -403,8 +403,8 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-2
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  Settled 
     sleep  02s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Reimburse Reports By Provider
@@ -506,9 +506,9 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-3
     ${domains}=  Jaldee Coupon Target Domains  ${d1}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -527,7 +527,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-3
     Set Suite Variable  ${enabled_count3}  ${resp.json()['enabledCount']}
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_codeDD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -548,7 +548,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-3
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Bill By UUId  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -586,7 +586,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-3
     ${resp}=  Get consumer Waitlist By Id  ${wid}  ${pid}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  paymentStatus=FullyPaid 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Settl Bill  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -595,8 +595,8 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-3
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  Settled 
     sleep  02s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Reimburse Reports By Provider
@@ -712,9 +712,9 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-4
     ${domains}=  Jaldee Coupon Target Domains  ${d1}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -729,7 +729,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-4
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_codeEE}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -746,7 +746,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-4
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Bill By UUId  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -769,7 +769,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-4
     ${resp}=  Get consumer Waitlist By Id  ${wid}  ${pid}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  paymentStatus=FullyPaid 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Settl Bill  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -778,8 +778,8 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-4
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  Settled 
     sleep  02s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Get Reimburse Reports By Provider
@@ -841,7 +841,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-5
     Set Test Variable  ${sd2}  ${resp.json()[0]['subDomains'][1]['subDomain']}
     Set Test Variable  ${sd3}  ${resp.json()[1]['subDomains'][0]['subDomain']}
     Set Test Variable  ${sd4}  ${resp.json()[1]['subDomains'][1]['subDomain']}
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${d5}  ${resp.json()['sector']}
     Set Test Variable  ${sd5}  ${resp.json()['subSector']}
@@ -850,9 +850,9 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-5
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}  ${d5}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}  ${d5}_${sd5}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${account_id}=  get_acc_id  ${PUSERNAME1}
     ${account_id}=  Create List  ${account_id}
@@ -870,7 +870,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-5
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code05}
        
@@ -886,7 +886,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-5
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Bill By UUId  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -908,7 +908,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-5
     ${resp}=  Get consumer Waitlist By Id  ${wid}  ${pid}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  paymentStatus=FullyPaid 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Settl Bill  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -918,8 +918,8 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-5
     Should Be Equal As Strings  ${resp.json()['billStatus']}  Settled 
 
     sleep  02s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5
     
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -940,9 +940,9 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-5
 JD-TC-GetJaldeeCouponStatsBySuperadmin-6
     [Documentation]  Consumer apply a coupon at Checkin time when that coupon as always enabled and check its status
     
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -956,7 +956,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-6
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
       
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code07}
@@ -972,7 +972,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-6
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Bill By UUId  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -996,7 +996,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  paymentStatus=FullyPaid 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Settl Bill  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1006,8 +1006,8 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-6
     Should Be Equal As Strings  ${resp.json()['billStatus']}  Settled 
 
     sleep  02s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5    
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5    
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1027,11 +1027,11 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-6
 
 JD-TC-GetJaldeeCouponStatsBySuperadmin-UH1
     [Documentation]  create reimburse report again and agian then check values in get jaldee coupon stats are same
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     sleep  02s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5    
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5    
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1048,9 +1048,9 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-UH1
 
 JD-TC-GetJaldeeCouponStatsBySuperadmin-UH2
     [Documentation]  Consumer apply a coupon at Checkin time.but minBillAmount is not satisfied and check its status
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1065,7 +1065,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code08}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1080,7 +1080,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-UH2
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Bill By UUId  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1103,7 +1103,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  paymentStatus=FullyPaid 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Settl Bill  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1112,8 +1112,8 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-UH2
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  Settled 
     sleep  02s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5    
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5    
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1143,9 +1143,9 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-UH3
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
     Set Suite Variable  ${DAY2}  ${DAY2}
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1156,7 +1156,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Jaldee Coupons By Coupon_code  Coupon09
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1171,7 +1171,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-UH3
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Bill By UUId  ${wid}
     Log   ${resp.json()} 
@@ -1191,7 +1191,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-UH3
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
 
-    ${resp}=   ProviderLogin  ${PUSERNAME1}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Bill By UUId  ${wid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1211,8 +1211,8 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin-UH3
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}    
     Should Be Equal As Strings  ${resp.json()['billStatus']}  Settled 
     sleep  02s
-    ${end}=  add_time24  0  0
-    ${start}=  add_time24  0  -5    
+    ${end}=  db.add_tz_time24  ${tz}   0  0
+    ${start}=  db.add_tz_time24  ${tz}   0  -5    
     ${resp}=  Create Reimburse Reports By Provider  ${start}  ${end}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -1244,7 +1244,7 @@ JD-TC-GetJaldeeCouponStatsBySuperadmin -UH8
 
 JD-TC-GetJaldeeCouponStatsBySuperadmin -UH9
     [Documentation]   Another Provider disable a Jaldee Coupon
-    ${resp}=   ProviderLogin  ${PUSERNAME3}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${resp}=  Get Jaldee Coupon Stats By Coupon_code  Coupon12
     

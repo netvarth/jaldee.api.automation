@@ -39,12 +39,15 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-1
     clear_service  ${PUSERNAME192}
     clear_customer   ${PUSERNAME192}
     clear_Item   ${PUSERNAME192}
-    ${resp}=  ProviderLogin  ${PUSERNAME192}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME192}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    Set Suite Variable  ${pid1}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid1}  ${decrypted_data['id']}
+    # Set Suite Variable  ${pid1}  ${resp.json()['id']}
     
     ${accId3}=  get_acc_id  ${PUSERNAME192}
     Set Suite Variable  ${accId3} 
@@ -117,17 +120,22 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${item_id4}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${resp}=   Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  15      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     Set Suite Variable   ${sTime1}
-    ${eTime1}=  add_time   1  00 
+    ${eTime1}=  add_timezone_time  ${tz}  1  00   
     Set Suite Variable    ${eTime1}
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -213,7 +221,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${firstname}=  FakerLibrary.first_name
     Set Suite Variable  ${email}  ${firstname}${CUSERNAME19}.${test_mail}
 
@@ -235,7 +243,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  ProviderLogin  ${PUSERNAME192}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME192}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -279,7 +287,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY10}=  add_date   10
+    ${DAY10}=  db.add_timezone_date  ${tz}   10
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -308,7 +316,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME192}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME192}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
   
@@ -349,7 +357,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${mem_id}  ${resp.json()}
 
-    ${DAY10}=  add_date   10
+    ${DAY10}=  db.add_timezone_date  ${tz}   10
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME19}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -374,7 +382,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY10}=  add_date   10
+    ${DAY10}=  db.add_timezone_date  ${tz}   10
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME21}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -411,7 +419,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${TODAY}=  get_date
+    ${TODAY}=  db.get_date_by_timezone  ${tz}
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME21}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -437,7 +445,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY1}=  add_date   1
+    ${DAY1}=  db.add_timezone_date  ${tz}  1
     ${cookie19}  ${resp}=  Imageupload.conLogin  ${CUSERNAME19}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -481,7 +489,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY5}=  add_date   5
+    ${DAY5}=  db.add_timezone_date  ${tz}   5
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME19}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -506,7 +514,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY6}=  add_date   6
+    ${DAY6}=  db.add_timezone_date  ${tz}   6
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME19}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -524,7 +532,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME192}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME192}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -553,11 +561,15 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-8
 JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-9
     [Documentation]   place an order by consumer  without phone number.
     
-    ${resp}=  ProviderLogin  ${PUSERNAME192}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME192}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${domain}    ${resp.json()['sector']}
-    Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    # Set Suite Variable  ${pid1}  ${decrypted_data['id']}
+    Set Suite Variable   ${domain}    ${decrypted_data['sector']}
+    Set Suite Variable   ${subDomain}    ${decrypted_data['subSector']}
 
     ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -566,9 +578,9 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-9
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
     ${licenses}=  Jaldee Coupon Target License  ${lic1}
     Set Suite Variable   ${licenses}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  30
+    ${DAY2}=  db.add_timezone_date  ${tz}  30
     Set Suite Variable  ${DAY2}
 
 
@@ -611,7 +623,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-9
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME192}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME192}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -659,7 +671,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-9
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY6}=  add_date   6
+    ${DAY6}=  db.add_timezone_date  ${tz}   6
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME19}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -677,7 +689,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME192}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME192}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -704,7 +716,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY2}=  add_date   2
+    ${DAY2}=  db.add_timezone_date  ${tz}   2
     ${C_firstName}=   FakerLibrary.first_name 
     ${C_lastName}=   FakerLibrary.name 
     ${C_num1}    Random Int  min=123456   max=999999
@@ -736,7 +748,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${OrderDate}=  add_date  35
+    ${OrderDate}=  db.add_timezone_date  ${tz}  35
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME19}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -756,7 +768,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${OrderDate}=  subtract_date   2
+    ${OrderDate}=  db.subtract_timezone_date  ${tz}    2
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME19}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -783,7 +795,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-UH4
     ${resp}=   Upload ShoppingList Image for HomeDelivery    ${cookie}   ${accId3}   ${caption}   ${self}    ${CatalogId1}   ${bool[1]}   ${address}   ${EMPTY}    ${sTime1}    ${eTime1}    ${CUSERNAME19}    ${email} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  "${resp.json()}"    "${ORDER_DATE_NEEDED}"
+    Should Be Equal As Strings  "${resp.json()}"    "${DELIVERY_DATE_NOT_SUPPORTED}"
 
 
 JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-UH5
@@ -792,7 +804,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY4}=  add_date  4
+    ${DAY4}=  db.add_timezone_date  ${tz}  4  
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME19}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -808,7 +820,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-UH5
 JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-UH6
     [Documentation]   place an order by provider without enable order settings.
 
-    ${resp}=  ProviderLogin  ${PUSERNAME192}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME192}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -821,7 +833,7 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${DAY4}=  add_date  4
+    ${DAY4}=  db.add_timezone_date  ${tz}  4  
     ${cookie}  ${resp}=  Imageupload.conLogin  ${CUSERNAME19}   ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -882,16 +894,16 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${item_id1}  ${resp.json()}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  10      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
 
-    ${startDate1}=  add_date   11
-    ${endDate1}=  add_date  15      
+    ${startDate1}=  db.add_timezone_date  ${tz}  11  
+    ${endDate1}=  db.add_timezone_date  ${tz}  15        
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    # ${sTime1}=  add_time  0  15
-    # ${eTime1}=  add_time   3  30   
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    # ${eTime1}=  add_timezone_time  ${tz}  3  30     
     ${list}=  Create List  1  2  3  4  5  6  7
   
     ${deliveryCharge}=  Random Int  min=1   max=100
@@ -963,9 +975,9 @@ JD-TC-Upload_ShoppingList_Image_for_HomeDelivery-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}    200
    
-    ${DAY1}=  add_date   12
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
     ${address}=  get_address
-    ${sTime1}=  add_time  0  15
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=90
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity}   max=${maxQuantity}

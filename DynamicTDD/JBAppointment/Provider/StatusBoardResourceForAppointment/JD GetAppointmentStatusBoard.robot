@@ -20,7 +20,7 @@ ${SERVICE3}     Radio Repdca222
 *** Test Cases ***
 JD-TC-GetAppointmentStatusBoard-1
     [Documentation]   Create  Appointment StatusBoards and get status boards
-    ${resp}=  ProviderLogin  ${PUSERNAME119}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME119}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
     clear_service   ${PUSERNAME119}
     clear_location  ${PUSERNAME119}
@@ -30,14 +30,19 @@ JD-TC-GetAppointmentStatusBoard-1
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable  ${s_id2}
     ${lid1}=  Create Sample Location  
-    
-    ${DAY1}=  get_date
+
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2} 
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list} 
-    ${sTime1}=  add_time  1  30
+    ${sTime1}=  add_timezone_time  ${tz}  1  30  
     Set Suite Variable   ${sTime1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     Set Suite Variable  ${delta}
@@ -99,7 +104,7 @@ JD-TC-GetAppointmentStatusBoard-1
 
 
     ${Positions}=  FakerLibrary.Words  	nb=3
-    ${matric_list}=  Create Matric For Status Board  ${Positions[0]}  ${sba_id1}  
+    ${matric_list}=  Create Metric For Status Board  ${Positions[0]}  ${sba_id1}  
     Log  ${matric_list}
     ${Data}=  FakerLibrary.Words  	nb=3
     ${resp}=   Create Status Board Appointment    ${Data[0]}  ${Data[1]}  ${Data[2]}  ${matric_list}
@@ -108,7 +113,7 @@ JD-TC-GetAppointmentStatusBoard-1
     Set Suite Variable  ${sb_id}  ${resp.json()}
 
     ${Positions1}=  FakerLibrary.Words  	nb=3
-    ${matric_list1}=  Create Matric For Status Board  ${Positions1[0]}  ${sba_id2}
+    ${matric_list1}=  Create Metric For Status Board  ${Positions1[0]}  ${sba_id2}
     Log  ${matric_list1}
     ${Data1}=  FakerLibrary.Words  	nb=3
 

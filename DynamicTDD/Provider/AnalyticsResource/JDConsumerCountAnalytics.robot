@@ -31,7 +31,7 @@ ${CUSERPH}      ${CUSERNAME}
 #     [Documentation]   WEB_NEW_CONSUMER_COUNT metrics
 
 #     clear_customer   ${PUSERNAME152}
-#     ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -45,7 +45,7 @@ ${CUSERPH}      ${CUSERNAME}
 #         Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
 #         Set Test Variable   ${CUSERPH0}   
 
-#         ${DAY1}=  get_date
+#         ${DAY1}=  db.get_date_by_timezone  ${tz}
 #         ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
 #         ${firstname}=  FakerLibrary.first_name
 #         ${lastname}=  FakerLibrary.last_name
@@ -82,7 +82,7 @@ ${CUSERPH}      ${CUSERNAME}
 
 #     END
 
-#     ${resp}=  Provider Login  ${PUSERNAME152}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200   
 
@@ -124,12 +124,12 @@ JD-TC-WEB_NEW_CONSUMER_COUNT-1
     [Documentation]   WEB_NEW_CONSUMER_COUNT metrics
 
     clear_customer   ${PUSERNAME153}
-    ${resp}=  ProviderLogin  ${PUSERNAME153}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME153}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${pid}=  get_acc_id  ${PUSERNAME153}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
 
     FOR   ${a}  IN RANGE   ${count}
             
@@ -164,7 +164,7 @@ JD-TC-WEB_NEW_CONSUMER_COUNT-1
 #     [Documentation]   WEB_NEW_CONSUMER_COUNT metrics
 
 #     clear_customer   ${PUSERNAME152}
-#     ${resp}=  ProviderLogin  ${PUSERNAME152}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -178,7 +178,7 @@ JD-TC-WEB_NEW_CONSUMER_COUNT-1
 #         Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
 #         Set Test Variable   ${CUSERPH0}   
 
-#         ${DAY1}=  get_date
+#         ${DAY1}=  db.get_date_by_timezone  ${tz}
 #         ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
 #         ${firstname}=  FakerLibrary.first_name
 #         ${lastname}=  FakerLibrary.last_name
@@ -215,7 +215,7 @@ JD-TC-WEB_NEW_CONSUMER_COUNT-1
 
 #     END
 
-#     ${resp}=  Provider Login  ${PUSERNAME152}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200   
 

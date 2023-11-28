@@ -114,11 +114,13 @@ JD-TC-RedirectLeadStatus-1
     Set Suite Variable   ${unique_lnames}
 
 
-    ${resp}=  Provider Login  ${MUSERNAME39}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Suite Variable  ${prov_fname11}  ${resp.json()['firstName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Suite Variable  ${prov_fname11}  ${decrypted_data['firstName']}
 
     ${highest_package}=  get_highest_license_pkg
     ${resp}=   Change License Package  ${highest_package[0]}
@@ -146,8 +148,13 @@ JD-TC-RedirectLeadStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=   Get Location ById  ${locId1}
@@ -418,9 +425,16 @@ JD-TC-RedirectLeadStatus-1
     
     ${bs}=  FakerLibrary.bs
     Set Suite Variable  ${bs}
-    ${resp}=  Toggle Department Enable
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     sleep  2s
     ${resp}=  Get Departments
     Log   ${resp.json()}
@@ -455,11 +469,13 @@ JD-TC-RedirectLeadStatus-1
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
-    ${resp}=  ProviderLogin  ${PUSERNAME_U2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${first_name1}  ${resp.json()['firstName']}
-    Set Suite Variable  ${user_name1}  ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${first_name1}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${user_name1}  ${decrypted_data['userName']}
 
 #    enquiry create
 
@@ -762,7 +778,7 @@ JD-TC-RedirectLeadStatus-1
     Should Be Equal As Strings  ${resp.json()['status']['id']}   ${status_Lid2}
 
 
-*** comment ***
+
 
 
 
@@ -804,7 +820,8 @@ JD-TC-RedirectLeadStatus-1
 
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
-    ${PUSERNAME_Z}=  Evaluate  ${PUSERNAME}+87887726          
+    ${PUSERNAME_Z}=  Evaluate  ${PUSERNAME}+87887726   
+    Set Suite Variable     ${PUSERNAME_Z}      
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_Z}${\n}
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERNAME_Z}   ${pkg_id[0]}
@@ -816,7 +833,7 @@ JD-TC-RedirectLeadStatus-1
     ${resp}=  Account Set Credential  ${PUSERNAME_Z}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME_Z}
-    ${resp}=  Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
  
@@ -824,6 +841,7 @@ JD-TC-RedirectLeadStatus-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   CrifScore  ${account_id}
     
@@ -842,6 +860,7 @@ JD-TC-RedirectLeadStatus-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
 
     ${resp}=  categorytype   ${account_id}
@@ -1010,18 +1029,25 @@ JD-TC-RedirectLeadStatus-1
     
     
 
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypt_data['id']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME12}  
@@ -1290,25 +1316,32 @@ JD-TC-RedirectLeadStatus-1
     Should Be Equal As Strings  ${resp.json()['kycCreated']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['status']['id']}   ${status_id8}
 
-*** comment ***
+# *** comment ***
   
 JD-TC-RedirectLeadStatus-2
 
     [Documentation]  redirect lead status Crif generated to kyc update
 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypt_data['id']}
 
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     IF   '${resp.content}' == '${emptylist}'
         ${locId}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME12}  
@@ -1476,10 +1509,12 @@ JD-TC-RedirectLeadStatus-3
 
     [Documentation]  redirect lead status  sales varification  to crif generated
    
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${provider_id}  ${decrypt_data['id']}
    
     ${resp}=   Process CRIF Inquiry with kyc   ${leUid12}    ${idkyc}
     Log  ${resp.content}
@@ -1531,7 +1566,7 @@ JD-TC-RedirectLeadStatus-4
 
     [Documentation]  redirect lead status login varified to login 
    
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
@@ -1573,10 +1608,9 @@ JD-TC-RedirectLeadStatus-5
 
     [Documentation]  redirect lead status  credit recommendation to login varified 
    
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
   
 
     ${resp}=    Change Status Lead   ${status_id8}    ${leUid12} 
@@ -1616,10 +1650,9 @@ JD-TC-RedirectLeadStatus-6
 
     [Documentation]  redirect lead status  credit recommendation to login varified 
    
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
   
 
     ${resp}=    Change Status Lead   ${status_id10}    ${leUid12} 
@@ -1659,10 +1692,9 @@ JD-TC-RedirectLeadStatus-7
 
     [Documentation]  redirect lead status   loan sanction to credit recommendation 
    
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
   
 
     ${resp}=    Change Status Lead   ${status_id11}    ${leUid12} 
@@ -1702,10 +1734,9 @@ JD-TC-RedirectLeadStatus-8
 
     [Documentation]  redirect lead status  Loan Disbursement to loan sanction 
 
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
   
 
     ${resp}=    Change Status Lead   ${status_id12}    ${leUid12} 
@@ -1744,10 +1775,9 @@ JD-TC-RedirectLeadStatus-9
 
     [Documentation]  redirect lead status   loan sanction to credit recommendation 
    
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
   
     ${resp}=    Change Status Lead   ${status_id13}    ${leUid12} 
     Log  ${resp.content}
@@ -1799,10 +1829,9 @@ JD-TC-RedirectLeadStatus-UH3
     [Documentation]  redirect lead status   with invalid lead id
    
    
-    ${resp}=   ProviderLogin  ${PUSERNAME_Z}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${provider_id}  ${resp.json()['id']}
   
  
     ${resp}=   Redirect lead   $355554    ${status_id10}   ${note1}
