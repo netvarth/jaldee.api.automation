@@ -38,11 +38,17 @@ JD-TC-GetPayableCountWithFilter-1
 
     [Documentation]  Create a Payable then Get PaymentsIn Count With Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -207,7 +213,7 @@ JD-TC-GetPayableCountWithFilter-2
 
     [Documentation]  GetPayableCountWithFilter with paymentsInOutCategoryId.
 
-    ${resp}=  Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -228,7 +234,7 @@ JD-TC-GetPayableCountWithFilter-3
 
     [Documentation]  GetPayableCountWithFilter with payInOutUuid and  PaymentsInOutStatus.
 
-    ${resp}=  Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
@@ -260,7 +266,7 @@ JD-TC-GetPayableCountWithFilter-4
 
     [Documentation]  GetPayableCountWithFilter with paidDate and  paymentLabel.
 
-    ${resp}=  Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
@@ -301,7 +307,7 @@ JD-TC-GetPayableCountWithFilter-5
 
     [Documentation]  GetPayableCountWithFilter with amount .
 
-    ${resp}=  Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -354,7 +360,7 @@ JD-TC-GetPayableCountWithFilter-6
 
     [Documentation]  GetPayableCountWithFilter with category id and category name.
 
-    ${resp}=  Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -372,7 +378,7 @@ JD-TC-GetPayableCountWithFilter-7
 
     [Documentation]  GetPayableCountWithFilter with vendor id.
 
-    ${resp}=  Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -391,7 +397,7 @@ JD-TC-GetPayableCountWithFilter-8
 
     [Documentation]  GetPayableCountWithFilter with user id.
 
-    ${resp}=  Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -409,7 +415,7 @@ JD-TC-GetPayableCountWithFilter-9
 
     [Documentation]  GetPayableCountWithFilter with PaymentMode .
 
-    ${resp}=  Provider Login  ${PUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -493,9 +499,9 @@ JD-TC-GetPayableCountWithFilter-UH1
 
 JD-TC-GetPayableCountWithFilter-UH2
 
-    [Documentation]  Get PaymentsIn Count With Filter using another provider login
+    [Documentation]  Get PaymentsIn Count With Filter using another Encrypted Provider Login
 
-    ${resp}=  Provider Login  ${PUSERNAME136}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME136}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

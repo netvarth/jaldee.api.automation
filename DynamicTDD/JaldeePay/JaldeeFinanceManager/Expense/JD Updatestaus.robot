@@ -45,9 +45,17 @@ JD-TC-Update Expense Status-1
 
     [Documentation]  Update Expense Status-.
 
-    ${resp}=  Provider Login  ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -229,7 +237,7 @@ JD-TC-Update Expense Status-UH1
 
     [Documentation]  Update Expense Status-with already updated status.
 
-    ${resp}=  Provider Login  ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -306,9 +314,9 @@ JD-TC-Update Expense Status--UH2
 
 JD-TC-Update Expense Status--UH3
 
-    [Documentation]   Update Expense Status- using another provider login.
+    [Documentation]   Update Expense Status- using another Encrypted Provider Login.
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${userName}  ${resp.json()['userName']}
@@ -336,9 +344,9 @@ JD-TC-Update Expense Status--UH3
 
 JD-TC-Update Expense Status--UH4
 
-    [Documentation]   Update Expense Status- using another provider login.
+    [Documentation]   Update Expense Status- using another Encrypted Provider Login.
 
-    ${resp}=  Provider Login  ${PUSERNAME66}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

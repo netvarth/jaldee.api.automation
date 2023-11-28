@@ -37,11 +37,17 @@ JD-TC-Get PaymentsIn-1
 
     [Documentation]  Get PaymentsIn.
 
-    ${resp}=  Provider Login  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -201,7 +207,7 @@ JD-TC-Get PaymentsIn-2
 
     [Documentation]  Update PaymentIn and Get PaymentsIn By Id
 
-    ${resp}=  Provider Login  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
@@ -237,7 +243,7 @@ JD-TC-Get PaymentsIn-3
 
     [Documentation]  Update PaymentsIn Status and Get PaymentsIn By Id
 
-    ${resp}=  Provider Login  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
@@ -281,7 +287,7 @@ JD-TC-Get PaymentsIn-4
 
     [Documentation]  Create  PaymentsIn with empty payableLabel and  Get PaymentsIn By Id .
 
-    ${resp}=  Provider Login  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -355,7 +361,7 @@ JD-TC-Get PaymentsIn-UH1
 
     [Documentation]   Get PaymentsIn By Id with invalid id.
 
-    ${resp}=  Provider Login  ${PUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -377,9 +383,9 @@ JD-TC-Get PaymentsIn-UH2
 
 JD-TC-Get PaymentsIn-UH3
 
-    [Documentation]   Get PaymentsIn By Id using another provider login
+    [Documentation]   Get PaymentsIn By Id using another Encrypted Provider Login
 
-    ${resp}=  Provider Login  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -32,9 +32,17 @@ JD-TC-GetExpenseWithCountFilter-1
 
     [Documentation]  Create Expense for an SP,Get Expense With count filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -206,7 +214,7 @@ JD-TC-GetExpenseWithCountFilter-2
 
     [Documentation]   update expense and get expense by id.
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -273,7 +281,7 @@ JD-TC-GetExpenseWithCountFilter-3
 
     [Documentation]  Create Expense for an SP With empty expensefor and GetExpenseWithFilter.
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -339,7 +347,7 @@ JD-TC-GetExpenseWithCountFilter-4
 
     [Documentation]  GetExpenseWithFilter with expensfor filter
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -405,7 +413,7 @@ JD-TC-GetExpenseWithCountFilter-5
 
     [Documentation]  GetExpenseWithFilter with amount filter
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -474,7 +482,7 @@ JD-TC-GetExpenseWithCountFilter-6
 
     [Documentation]  GetExpenseWithFilter with amount filter
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -543,7 +551,7 @@ JD-TC-GetExpenseWithCountFilter-7
 
     [Documentation]  GetExpenseWithFilter with referenceNo filter
 
-    ${resp}=  Provider Login  ${PUSERNAME64}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME64}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -620,7 +628,7 @@ JD-TC-GetExpenseWithCountFilter-UH2
 
     [Documentation]  GetExpenseWithFilter  with another login.
 
-    ${resp}=  Provider Login  ${PUSERNAME128}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME128}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -34,10 +34,17 @@ JD-TC-UploadAttachment-1
 
     [Documentation]  Create Category and upload a attachment with all valid details.(categoryType is Vendor)
 
-    ${resp}=  Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -169,10 +176,10 @@ JD-TC-UploadAttachment-UH1
 
     [Documentation]  Create Category and upload a attachment with invalid Vendor id.
 
-    ${resp}=  Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+
 
      ${invalid}=  Random Int  min=500  max=1000
 
@@ -218,10 +225,10 @@ JD-TC-UploadAttachment-UH5
 
     [Documentation]  Upload finance vendor attachment with empty attachment.
 
-    ${resp}=  Provider Login  ${PUSERNAME80}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+
 
      ${invalid}=  Random Int  min=500  max=1000
 
@@ -235,12 +242,19 @@ JD-TC-UploadAttachment-UH5
 
 JD-TC-UploadAttachment-UH6
 
-    [Documentation]   upload a attachment using another provider login.
+    [Documentation]   upload a attachment using another Encrypted Provider Login.
 
-    ${resp}=   Provider Login  ${PUSERNAME81}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}

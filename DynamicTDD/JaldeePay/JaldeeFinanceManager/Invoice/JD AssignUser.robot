@@ -22,9 +22,17 @@ JD-TC-Assign User-1
 
     [Documentation]  Create a invoice then assign the invoice to a user.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
     
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -224,7 +232,7 @@ JD-TC-Assign User-UH1
 
     [Documentation]  Assign User with invalid user id.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -238,7 +246,7 @@ JD-TC-Assign User-UH2
 
     [Documentation]  Assign User with already assigned one.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -259,9 +267,9 @@ JD-TC-Assign User-UH3
 
 JD-TC-Assign User-UH4
 
-    [Documentation]  Assign User with another provider login.
+    [Documentation]  Assign User with another Encrypted Provider Login.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -293,7 +301,7 @@ JD-TC-Assign User-UH5
 
     [Documentation]  Assign User with invalid user id.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

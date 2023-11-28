@@ -66,11 +66,17 @@ JD-TC-UploadReceivableAttachment-1
 
     [Documentation]  Create a Receivable then Upload Receivable Attachment.
 
-    ${resp}=  Provider Login  ${PUSERNAME33}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME33}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 *** comment ***
 
     ${resp}=  Get Business Profile

@@ -32,9 +32,17 @@ JD-TC-CreateExpense-1
 
     [Documentation]  Create Expense for an SP With all data.
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -196,7 +204,7 @@ JD-TC-CreateExpense-2
 
     [Documentation]  Create Expense for an SP With empty expensefor.
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -251,7 +259,7 @@ JD-TC-CreateExpense-3
 
     [Documentation]  Create Expense for an SP With empty vendor uid.
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -308,7 +316,7 @@ JD-TC-CreateExpense-4
 
     [Documentation]  Create Expense for an SP With empty description.
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -364,7 +372,7 @@ JD-TC-CreateExpense-5
 
     [Documentation]  Create Expense for an SP With empty reference number.
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -420,7 +428,7 @@ JD-TC-CreateExpense-6
 
     [Documentation]  Create Expense for an SP With empty employeename.
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -475,7 +483,7 @@ JD-TC-CreateExpense-7
 
     [Documentation]  Create Expense for an SP With empty itemlist.
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -531,7 +539,7 @@ JD-TC-CreateExpense-8
 
     [Documentation]  Create Expense for an SP With aempty department list.
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -587,7 +595,7 @@ JD-TC-CreateExpense-9
 
     [Documentation]  Create Expense for an SP With empty uploaddocument.
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -643,7 +651,7 @@ JD-TC-CreateExpense-9
 JD-TC-CreateExpense-10
     [Documentation]  Create Expense for an SP With previous expense date.
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -698,7 +706,7 @@ JD-TC-CreateExpense-UH1
 
     [Documentation]  Create Expense for an SP With vendor category id.
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -754,7 +762,7 @@ JD-TC-CreateExpense-UH2
 
     [Documentation]  Create Expense for an SP With PaymentInOut category id.
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -814,7 +822,7 @@ JD-TC-CreateExpense-UH3
 
     [Documentation]  Create Expense for an SP With Invoice category id.
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -874,7 +882,7 @@ JD-TC-CreateExpense-UH4
 
     [Documentation]  Create Expense for an SP With empty amount.
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -930,7 +938,7 @@ JD-TC-CreateExpense-UH5
 
     [Documentation]  Create Expense for an SP With empty category id.
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -985,7 +993,7 @@ JD-TC-CreateExpense-UH5
 JD-TC-CreateExpense-UH6
     [Documentation]  Create Expense for an SP With iempty expense date.
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1041,7 +1049,7 @@ JD-TC-CreateExpense-UH6
 JD-TC-CreateExpense-UH7
     [Documentation]  Create Expense for an SP With past expense date.
 
-    ${resp}=  Provider Login  ${PUSERNAME60}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

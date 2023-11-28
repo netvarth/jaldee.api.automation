@@ -36,11 +36,17 @@ JD-TC-GetPayableCountWithFilter-1
 
     [Documentation]  Create a Payable then Get PaymentsOut Count With Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -177,7 +183,7 @@ JD-TC-GetPayableCountWithFilter-2
 
     [Documentation]  GetPayableCountWithFilter with paymentsInOutCategoryId.
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -213,11 +219,10 @@ JD-TC-GetPayableCountWithFilter-3
 
     [Documentation]  GetPayableCountWithFilter with payInOutUuid and  PaymentsInOutStatus.
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
     
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -272,11 +277,10 @@ JD-TC-GetPayableCountWithFilter-4
 
     [Documentation]  GetPayableCountWithFilter with paidDate and  paymentLabel.
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
 
     ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[2]} 
     Log  ${resp.json()}
@@ -318,7 +322,7 @@ JD-TC-GetPayableCountWithFilter-5
 
     [Documentation]  GetPayableCountWithFilter with amount and  referenceNo. .
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -353,7 +357,7 @@ JD-TC-GetPayableCountWithFilter-6
 
     [Documentation]  GetPayableCountWithFilter with category id and category name.
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -371,7 +375,7 @@ JD-TC-GetPayableCountWithFilter-7
 
     [Documentation]  GetPayableCountWithFilter with vendor id.
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -390,7 +394,7 @@ JD-TC-GetPayableCountWithFilter-8
 
     [Documentation]  GetPayableCountWithFilter with user id.
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -408,7 +412,7 @@ JD-TC-GetPayableCountWithFilter-9
 
     [Documentation]  GetPayableCountWithFilter with PaymentMode.
 
-    ${resp}=  Provider Login  ${PUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -451,9 +455,9 @@ JD-TC-GetPayableCountWithFilter-UH1
 
 JD-TC-GetPayableCountWithFilter-UH2
 
-    [Documentation]   Get PaymentsOut By Id using another provider login
+    [Documentation]   Get PaymentsOut By Id using another Encrypted Provider Login
 
-    ${resp}=  Provider Login  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

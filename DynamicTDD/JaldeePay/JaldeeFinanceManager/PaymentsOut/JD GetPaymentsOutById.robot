@@ -36,11 +36,17 @@ JD-TC-Get PaymentsOut-1
 
     [Documentation]  Create a Payable.
 
-    ${resp}=  Provider Login  ${PUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -181,11 +187,17 @@ JD-TC-Get PaymentsOut-2
 
     [Documentation]  Update PaymentOut and Get PaymentsOut By Id
 
-    ${resp}=  Provider Login  ${PUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
     
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -258,11 +270,10 @@ JD-TC-Get PaymentsOut-3
 
     [Documentation]  Update PaymentsOut Status and Get PaymentsOut By Id
 
-    ${resp}=  Provider Login  ${PUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
 
     ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[2]} 
     Log  ${resp.json()}
@@ -320,7 +331,7 @@ JD-TC-Get PaymentsOut-4
 
     [Documentation]  Create a Payable with empty payableLabel and  Get PaymentsOut By Id .
 
-    ${resp}=  Provider Login  ${PUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -359,7 +370,7 @@ JD-TC-Get PaymentsOut-UH1
 
     [Documentation]   Get PaymentsOut By Id with invalid id.
 
-    ${resp}=  Provider Login  ${PUSERNAME49}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -381,11 +392,20 @@ JD-TC-Get PaymentsOut-UH2
 
 JD-TC-Get PaymentsOut-UH3
 
-    [Documentation]   Get PaymentsOut By Id using another provider login
+    [Documentation]   Get PaymentsOut By Id using another Encrypted Provider Login
 
-    ${resp}=  Provider Login  ${PUSERNAME133}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}

@@ -37,10 +37,17 @@ JD-TC-Create status-1
 
     [Documentation]  Create Status as proceed.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Test Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -80,7 +87,7 @@ JD-TC-Create status-2
 
     [Documentation]  Create Status as Unassign    .
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -93,7 +100,7 @@ JD-TC-Create status-3
 
     [Documentation]  Create Status as Block   .
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -105,7 +112,7 @@ JD-TC-Create status-4
 
     [Documentation]  Create Status as   Delete .
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -117,7 +124,7 @@ JD-TC-Create status-5
 
     [Documentation]  Create Status as    Remove.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -152,7 +159,7 @@ JD-TC-Create status-UH3
 
     [Documentation]  Create Status with name as empty.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -168,7 +175,7 @@ JD-TC-Create status-UH4
 
     [Documentation]  Create Status without enable jaldee finance.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -198,7 +205,7 @@ JD-TC-Create status-UH5
 
     [Documentation]  Create same status multiple times.
 
-    ${resp}=  Provider Login  ${PUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

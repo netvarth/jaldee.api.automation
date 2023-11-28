@@ -95,9 +95,17 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -334,10 +342,10 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     Set Suite Variable    ${jaldee_amt}    ${resp.json()['discountValue']}  
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    
+    ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
     ${resp}=  Enable Jaldee Coupon By Provider  ${cup_code}
     Log   ${resp.json()}

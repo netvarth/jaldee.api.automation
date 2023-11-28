@@ -37,11 +37,17 @@ JD-TC-Create PaymentsIn-1
 
     [Documentation]  Create a PaymentIn.
 
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -194,7 +200,7 @@ JD-TC-Create PaymentsIn-2
 
     [Documentation]  Create a PaymentIn with an attchment contain drive id.
 
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -289,7 +295,7 @@ JD-TC-Create PaymentsIn-UH1
 
     [Documentation]  Create a Payable with empty category id..
 
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -307,7 +313,7 @@ JD-TC-Create PaymentsIn-UH2
 
     [Documentation]  Create a Payable with empty received date.
 
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -357,7 +363,7 @@ JD-TC-Create PaymentsIn-UH5
 
     [Documentation]  Create Paymentout with empty  amount.
 
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -375,7 +381,7 @@ JD-TC-Create PaymentsIn-UH6
 
     [Documentation]  Create a Payable with empty vendor id.
 
-    ${resp}=  Provider Login  ${PUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME20}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

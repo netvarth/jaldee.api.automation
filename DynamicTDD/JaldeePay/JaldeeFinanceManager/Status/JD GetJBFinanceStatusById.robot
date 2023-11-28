@@ -39,10 +39,17 @@ JD-TC-Get status-1
 
     [Documentation]  Create Status as New and get status byid.
 
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Test Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -84,7 +91,7 @@ JD-TC-Get status-2
 
     [Documentation]  Add new status for Vendor and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -107,7 +114,7 @@ JD-TC-Get status-3
 
     [Documentation]  Update Vendor status and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -129,7 +136,7 @@ JD-TC-Get status-4
 
     [Documentation]  Update Status With not created categoryType and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -174,7 +181,7 @@ JJD-TC-Get status-UH3
 
     [Documentation]   Get Category by Id Using another provisders status id.
 
-    ${resp}=  Provider Login  ${PUSERNAME12}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

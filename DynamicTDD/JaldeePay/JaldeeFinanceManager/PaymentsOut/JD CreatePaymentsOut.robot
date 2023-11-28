@@ -36,7 +36,7 @@ JD-TC-Create PaymentsOut-1
 
     [Documentation]  Create a Payable.
 
-    # ${resp}=  Encrypted Provider Login    ${PUSERNAME47}  ${PASSWORD}
+    # ${resp}=  Encrypted Encrypted Provider Login    ${PUSERNAME47}  ${PASSWORD}
     # Log  ${resp.json()}         
     # Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -48,11 +48,17 @@ JD-TC-Create PaymentsOut-1
     # Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     # Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -194,7 +200,7 @@ JD-TC-Create PaymentsOut-2
 
     [Documentation]  Create a Payable with empty payableLabel.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -233,7 +239,7 @@ JD-TC-Create PaymentsOut-3
 
     [Documentation]  Create a Payable with empty reference number.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -275,7 +281,7 @@ JD-TC-Create PaymentsOut-4
 
     [Documentation]  Create a Payable with empty status id.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -314,7 +320,7 @@ JD-TC-Create PaymentsOut-5
 
     [Documentation]  Create a Payable where payment status is success and payment mode is cc.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -389,7 +395,7 @@ JD-TC-Create PaymentsOut-6
 
     [Documentation]  Create a Payable where payment status is success and payment mode is DC.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -441,7 +447,7 @@ JD-TC-Create PaymentsOut-7
 
     [Documentation]  Create a Payable where payment status is success and payment mode is NB.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -493,7 +499,7 @@ JD-TC-Create PaymentsOut-8
 
     [Documentation]  Create a Payable where payment status is success and payment mode is UPI.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -545,7 +551,7 @@ JD-TC-Create PaymentsOut-9
 
     [Documentation]  Create a Payable where payment status is success and payment mode is other.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -597,7 +603,7 @@ JD-TC-Create PaymentsOut-10
 
     [Documentation]  Create a Payable where payment status is success and payment mode is Store credit.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -649,7 +655,7 @@ JD-TC-Create PaymentsOut-11
 
     [Documentation]  Create a Payable where payment status is success and payment mode is PAYLATER.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -701,7 +707,7 @@ JD-TC-Create PaymentsOut-12
 
     [Documentation]  Create a Payable where payment status is success and payment mode is offline.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -753,7 +759,7 @@ JD-TC-Create PaymentsOut-13
 
     [Documentation]  Create a Payable where payment status is success and payment mode is Wallet.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -805,7 +811,7 @@ JD-TC-Create PaymentsOut-14
 
     [Documentation]  Create a Payable where payment status is success and payment mode is PayLater.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -857,7 +863,7 @@ JD-TC-Create PaymentsOut-15
 
     [Documentation]  Create a Payable where payment status is success and payment mode is PAYTM_PostPaid.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -910,7 +916,7 @@ JD-TC-Create PaymentsOut-16
 
     [Documentation]  Create a Payable where payment status is success and payment mode is EMI.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -962,7 +968,7 @@ JD-TC-Create PaymentsOut-17
 
     [Documentation]  Create a Payable where payment status is success and payment mode is Bank_Transfer.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1015,7 +1021,7 @@ JD-TC-Create PaymentsOut-18
 
     [Documentation]  Create a Payable with payment status as failed and payment mode is cash.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1055,7 +1061,7 @@ JD-TC-Create PaymentsOut-19
 
     [Documentation]  Create a Payable where payment status is failed and payment mode is cc.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1107,7 +1113,7 @@ JD-TC-Create PaymentsOut-20
 
     [Documentation]  Create a Payable where payment status is failed and payment mode is DC.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1159,7 +1165,7 @@ JD-TC-Create PaymentsOut-21
 
     [Documentation]  Create a Payable where payment status is failed and payment mode is NB.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1211,7 +1217,7 @@ JD-TC-Create PaymentsOut-22
 
     [Documentation]  Create a Payable where payment status is failed and payment mode is UPI.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1263,7 +1269,7 @@ JD-TC-Create PaymentsOut-23
 
     [Documentation]  Create a Payable where payment status is failed and payment mode is other.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1315,7 +1321,7 @@ JD-TC-Create PaymentsOut-24
 
     [Documentation]  Create a Payable where payment status is failed and payment mode is Store credit.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1367,7 +1373,7 @@ JD-TC-Create PaymentsOut-25
 
     [Documentation]  Create a Payable where payment status is failed and payment mode is PAYLATER.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1419,7 +1425,7 @@ JD-TC-Create PaymentsOut-26
 
     [Documentation]  Create a Payable where payment status is failed and payment mode is offline.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1471,7 +1477,7 @@ JD-TC-Create PaymentsOut-27
 
     [Documentation]  Create a Payable where payment status is failed and payment mode is Wallet.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1523,7 +1529,7 @@ JD-TC-Create PaymentsOut-28
 
     [Documentation]  Create a Payable where payment status is failed and payment mode is PayLater.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1575,7 +1581,7 @@ JD-TC-Create PaymentsOut-29
 
     [Documentation]  Create a Payable where payment status is failed and payment mode is PAYTM_PostPaid.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1628,7 +1634,7 @@ JD-TC-Create PaymentsOut-30
 
     [Documentation]  Create a Payable where payment status is failed and payment mode is EMI.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1680,7 +1686,7 @@ JD-TC-Create PaymentsOut-31
 
     [Documentation]  Create a Payable where payment status is failed and payment mode is Bank_Transfer.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1733,7 +1739,7 @@ JD-TC-Create PaymentsOut-32
 
     [Documentation]  Create a Payable with payment status as incomplete and payment mode is cash.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1772,7 +1778,7 @@ JD-TC-Create PaymentsOut-33
 
     [Documentation]  Create a Payable where payment status is incomplete and payment mode is cc.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1824,7 +1830,7 @@ JD-TC-Create PaymentsOut-34
 
     [Documentation]  Create a Payable where payment status is incomplete and payment mode is DC.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1876,7 +1882,7 @@ JD-TC-Create PaymentsOut-35
 
     [Documentation]  Create a Payable where payment status is incomplete and payment mode is NB.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1928,7 +1934,7 @@ JD-TC-Create PaymentsOut-36
 
     [Documentation]  Create a Payable where payment status is incomplete and payment mode is UPI.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1980,7 +1986,7 @@ JD-TC-Create PaymentsOut-37
 
     [Documentation]  Create a Payable where payment status is incomplete and payment mode is other.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2032,7 +2038,7 @@ JD-TC-Create PaymentsOut-38
 
     [Documentation]  Create a Payable where payment status is incomplete and payment mode is Store credit.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2084,7 +2090,7 @@ JD-TC-Create PaymentsOut-39
 
     [Documentation]  Create a Payable where payment status is incomplete and payment mode is PAYLATER.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2136,7 +2142,7 @@ JD-TC-Create PaymentsOut-40
 
     [Documentation]  Create a Payable where payment status is incomplete and payment mode is offline.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2188,7 +2194,7 @@ JD-TC-Create PaymentsOut-41
 
     [Documentation]  Create a Payable where payment status is incomplete and payment mode is Wallet.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2240,7 +2246,7 @@ JD-TC-Create PaymentsOut-42
 
     [Documentation]  Create a Payable where payment status is incomplete and payment mode is PayLater.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2292,7 +2298,7 @@ JD-TC-Create PaymentsOut-43
 
     [Documentation]  Create a Payable where payment status is incomplete and payment mode is PAYTM_PostPaid.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2345,7 +2351,7 @@ JD-TC-Create PaymentsOut-44
 
     [Documentation]  Create a Payable where payment status is incomplete and payment mode is EMI.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2397,7 +2403,7 @@ JD-TC-Create PaymentsOut-45
 
     [Documentation]  Create a Payable where payment status is incomplete and payment mode is Bank_Transfer.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2449,7 +2455,7 @@ JD-TC-Create PaymentsOut-46
 
     [Documentation]  Create a Payable with payment status as VOID and payment mode is cash.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2489,7 +2495,7 @@ JD-TC-Create PaymentsOut-47
 
     [Documentation]  Create a Payable where payment status is VOID and payment mode is cc.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2541,7 +2547,7 @@ JD-TC-Create PaymentsOut-48
 
     [Documentation]  Create a Payable where payment status is VOID and payment mode is DC.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2593,7 +2599,7 @@ JD-TC-Create PaymentsOut-49
 
     [Documentation]  Create a Payable where payment status is VOID and payment mode is NB.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2645,7 +2651,7 @@ JD-TC-Create PaymentsOut-50
 
     [Documentation]  Create a Payable where payment status is VOID and payment mode is UPI.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2697,7 +2703,7 @@ JD-TC-Create PaymentsOut-51
 
     [Documentation]  Create a Payable where payment status is VOID and payment mode is other.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2749,7 +2755,7 @@ JD-TC-Create PaymentsOut-52
 
     [Documentation]  Create a Payable where payment status is VOID and payment mode is Store credit.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2801,7 +2807,7 @@ JD-TC-Create PaymentsOut-53
 
     [Documentation]  Create a Payable where payment status is VOID and payment mode is PAYLATER.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2853,7 +2859,7 @@ JD-TC-Create PaymentsOut-54
 
     [Documentation]  Create a Payable where payment status is VOID and payment mode is offline.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2904,7 +2910,7 @@ JD-TC-Create PaymentsOut-54
 JD-TC-Create PaymentsOut-55
     [Documentation]  Create a Payable where payment status is VOID and payment mode is Wallet.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2956,7 +2962,7 @@ JD-TC-Create PaymentsOut-56
 
     [Documentation]  Create a Payable where payment status is VOID and payment mode is PayLater.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3008,7 +3014,7 @@ JD-TC-Create PaymentsOut-57
 
     [Documentation]  Create a Payable where payment status is VOID and payment mode is PAYTM_PostPaid.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3061,7 +3067,7 @@ JD-TC-Create PaymentsOut-58
 
     [Documentation]  Create a Payable where payment status is VOID and payment mode is EMI.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3113,7 +3119,7 @@ JD-TC-Create PaymentsOut-59
 
     [Documentation]  Create a Payable where payment status is VOID and payment mode is Bank_Transfer.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3166,7 +3172,7 @@ JD-TC-Create PaymentsOut-UH1
 
     [Documentation]  Create a Payable with empty category id..
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3191,7 +3197,7 @@ JD-TC-Create PaymentsOut-UH2
 
     [Documentation]  Create a Payable with empty due date.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3263,7 +3269,7 @@ JD-TC-Create PaymentsOut-UH5
 
     [Documentation]  Create Paymentout with empty  amount.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3288,7 +3294,7 @@ JD-TC-Create PaymentsOut-UH6
 
     [Documentation]  Create a Payable with empty vendor id.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3313,7 +3319,7 @@ JD-TC-Create PaymentsOut-UH7
 
     [Documentation]  Create a Payable where payment mode is upi but upiId is empty.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3337,7 +3343,7 @@ JD-TC-Create PaymentsOut-UH8
 
     [Documentation]  Create a Payable where payment mode is cc but details is empty.
 
-    ${resp}=  Provider Login  ${PUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

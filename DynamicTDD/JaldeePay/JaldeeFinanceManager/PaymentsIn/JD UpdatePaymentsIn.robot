@@ -37,11 +37,17 @@ JD-TC-Update PaymentIn-1
 
     [Documentation]  Create a PaymentIn and update.
 
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -214,11 +220,17 @@ JD-TC-Update PaymentIn-2
 
     [Documentation]  Update PaymentIn with payableLabel,reference  date and amount
 
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
     
 
     ${payableLabel}=   FakerLibrary.word
@@ -248,7 +260,8 @@ JD-TC-Update PaymentIn-2
     Set Suite Variable   ${pancardNo}
     ${bankCheckNo}=   FakerLibrary.word
     Set Suite Variable   ${bankCheckNo}
-    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[1]}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo} 
+
+    ${ }=    Create Dictionary   paymentMode=${finance_payment_modes[1]}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo} 
 
 
     ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
@@ -290,11 +303,10 @@ JD-TC-Update PaymentIn-3
 
     [Documentation]  Update PaymentIn with  with empty category id
 
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
     
 
     ${payableLabel}=   FakerLibrary.word
@@ -332,11 +344,10 @@ JD-TC-Update PaymentIn-UH1
 
     [Documentation]  Update PaymentIn with  invalid payment uid
 
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
     
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -407,11 +418,10 @@ JD-TC-Update PaymentIn-UH4
 
     [Documentation]  Update PaymentIn with  vendor_uid is empty
 
-    ${resp}=  Provider Login  ${PUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME21}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
     
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}

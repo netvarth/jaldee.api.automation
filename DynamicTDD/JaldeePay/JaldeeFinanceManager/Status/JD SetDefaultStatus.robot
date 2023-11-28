@@ -36,10 +36,19 @@ JD-TC-Set Default status-1
 
     [Documentation]  Create statuses,and set default staus .
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
+
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -93,7 +102,7 @@ JD-TC-Set Default status-2
 
     [Documentation]  Create Status as Proceed and Set default status as new.
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}}
@@ -121,7 +130,7 @@ JD-TC-Set Default status-3
 
     [Documentation]  Create Status as  Unassign   and set default staus ..
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -147,7 +156,7 @@ JD-TC-Set Default status-4
 
     [Documentation]  Create Status as  Block  and set default staus ..
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -172,7 +181,7 @@ JD-TC-Set Default status-5
 
     [Documentation]  Create Status as  Remove and set default staus ..
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -197,7 +206,7 @@ JD-TC-Set Default status-6
 
     [Documentation]  Create Status as Remove and set default staus ..
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -245,7 +254,7 @@ JD-TC-Set Default status-UH3
 
     [Documentation]  Set Default status where status id is invalid.
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -261,7 +270,7 @@ JD-TC-Set Default status-UH4
 
     [Documentation]  Set Default status without enable jaldee finance.
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -292,7 +301,7 @@ JD-TC-Set Default status-UH5
 
     [Documentation]  try to set same status for default again.
 
-    ${resp}=  Provider Login  ${PUSERNAME120}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME120}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

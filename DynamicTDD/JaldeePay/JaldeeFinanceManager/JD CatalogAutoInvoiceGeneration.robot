@@ -20,9 +20,18 @@ JD-TC-AutoInvoiceGeneration-1
 
     [Documentation]  Auto Invoice Generation for Catalog - Enable.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -82,7 +91,7 @@ JD-TC-AutoInvoiceGeneration-2
 
     [Documentation]  Try to Enable Auto Invoice Generation for Catalog without jaldee finance enable.
 
-    ${resp}=  Provider Login  ${PUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

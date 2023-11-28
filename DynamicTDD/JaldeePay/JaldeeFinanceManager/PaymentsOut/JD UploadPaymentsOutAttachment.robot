@@ -37,11 +37,17 @@ JD-TC-UploadPayableAttachment-1
 
     [Documentation]  Create a Payable then Upload Payable Attachment.
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -187,10 +193,10 @@ JD-TC-UploadPayableAttachment-UH1
 
     [Documentation]  Create PaymentsOut and upload a attachment with invalid Paymentout id.
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+
 
      ${invalid}=  Random Int  min=500  max=1000
 
@@ -210,7 +216,7 @@ JD-TC-UploadPayableAttachment-UH3
     ${resp}=   ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
 
     ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
     Log  ${Attachments}
@@ -236,10 +242,10 @@ JD-TC-UploadPayableAttachment-UH5
 
     [Documentation]  Upload finance vendor attachment with empty attachment.
 
-    ${resp}=  Provider Login  ${PUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+
 
      ${invalid}=  Random Int  min=500  max=1000
 
@@ -253,12 +259,19 @@ JD-TC-UploadPayableAttachment-UH5
 
 JD-TC-UploadPayableAttachment-UH6
 
-    [Documentation]   upload a attachment using another provider login.
+    [Documentation]   upload a attachment using another Encrypted Provider Login.
 
-    ${resp}=   Provider Login  ${PUSERNAME30}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}

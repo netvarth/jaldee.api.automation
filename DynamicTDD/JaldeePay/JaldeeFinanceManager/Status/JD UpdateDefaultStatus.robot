@@ -28,10 +28,19 @@ JD-TC-Update default status-1
 
     [Documentation]   Update default status .
 
-    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
+
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -87,7 +96,7 @@ JD-TC-Update default status-UH6
 
     [Documentation]   update default status as paymentinout.
 
-    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}}
@@ -131,7 +140,7 @@ JD-TC-Update default status-UH3
 
     [Documentation]   update default status where status id is invalid.
 
-    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -147,7 +156,7 @@ JD-TC-Update default status-UH4
 
     [Documentation]  update default status without enable jaldee finance.
 
-    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -178,7 +187,7 @@ JD-TC-Update default status-UH5
 
     [Documentation]  try to set same status for default again.
 
-    ${resp}=  Provider Login  ${PUSERNAME10}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -108,9 +108,17 @@ JD-TC-Apply Item Level Discount-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -414,7 +422,7 @@ JD-TC-Apply Item Level Discount-2
     [Documentation]   Apply Item  Level Discount(created discount value).
 
 
-  ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

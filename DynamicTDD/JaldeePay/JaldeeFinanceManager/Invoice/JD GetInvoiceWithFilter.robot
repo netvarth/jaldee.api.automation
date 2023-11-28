@@ -37,11 +37,17 @@ JD-TC-Get Invoice With Filter -1
 
     [Documentation]  Get Invoice With Filter .
 
-    ${resp}=  Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -250,7 +256,7 @@ JD-TC-Get Invoice With Filter -2
 
     [Documentation]  Create multiple invoice using multiple provider consumers and GetInvoicewithFilter.
 
-    ${resp}=  Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -331,7 +337,7 @@ JD-TC-Get Invoice With Filter -3
 
     [Documentation]   GetInvoiceCountwithFilter using invoiceCategoryId.
 
-    ${resp}=  Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -376,7 +382,7 @@ JD-TC-Get Invoice With Filter -4
 
     [Documentation]   GetInvoiceCountwithFilter using categoryName.
 
-    ${resp}=  Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -420,7 +426,7 @@ JD-TC-Get Invoice With Filter -5
 
     [Documentation]   GetInvoiceCountwithFilter using invoiceDate.
 
-    ${resp}=  Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -464,7 +470,7 @@ JD-TC-Get Invoice With Filter -6
 
     [Documentation]   GetInvoiceCountwithFilter using invoiceLabel.
 
-    ${resp}=  Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -508,7 +514,7 @@ JD-TC-Get Invoice With Filter -7
 
     [Documentation]   GetInvoiceCountwithFilter using billedTo.
 
-    ${resp}=  Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -552,7 +558,7 @@ JD-TC-Get Invoice With Filter -8
 
     [Documentation]   GetInvoiceCountwithFilter using invoiceUid.
 
-    ${resp}=  Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -577,7 +583,7 @@ JD-TC-Get Invoice With Filter -9
 
     [Documentation]   GetInvoiceCountwithFilter using invoiceStatus.
 
-    ${resp}=  Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

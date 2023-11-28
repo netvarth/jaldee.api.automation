@@ -39,9 +39,18 @@ JD-TC-EnableDisableFinanceManagerStatus-1
 
     [Documentation]  Create one status and Disable that status.
 
-    ${resp}=  Provider Login  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -97,7 +106,7 @@ JD-TC-EnableDisableFinanceManagerStatus-2
 
     [Documentation]   Disable that status again.
 
-    ${resp}=  Provider Login  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -112,7 +121,7 @@ JD-TC-EnableDisableFinanceManagerStatus-3
 
     [Documentation]   update the disabled status  then status change to enabled.
 
-    ${resp}=  Provider Login  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -142,7 +151,7 @@ JD-TC-EnableDisableFinanceManagerStatus-4
 
     [Documentation]   Create new status and disable all.
 
-    ${resp}=  Provider Login  ${PUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

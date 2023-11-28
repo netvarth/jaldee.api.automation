@@ -32,9 +32,17 @@ JD-TC-GetExpenseById-1
 
     [Documentation]  Create Expense for an SP and Get that Expense By id.
 
-    ${resp}=  Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -213,7 +221,7 @@ JD-TC-GetExpenseById-2
 
     [Documentation]   update expense and get expense by id.
 
-    ${resp}=  Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -284,7 +292,7 @@ JD-TC-GetExpenseById-3
   
   [Documentation]   update expense with empty reference number aet expense by id.
 
-    ${resp}=  Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -354,7 +362,7 @@ JD-TC-GetExpenseById-4
 
     [Documentation]  Create Expense for an SP then update the description and  GetExpenseById.
 
-    ${resp}=  Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -431,7 +439,7 @@ JD-TC-GetExpenseById-UH1
 JD-TC-GetExpenseById-UH2
     [Documentation]  GetExpenseById  with another login.
 
-    ${resp}=  Provider Login  ${PUSERNAME128}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME128}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -459,7 +467,7 @@ JD-TC-GetExpenseById-UH2
 JD-TC-GetExpenseById-UH3
     [Documentation]  GetExpenseById  with invalid id
 
-    ${resp}=  Provider Login  ${PUSERNAME62}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

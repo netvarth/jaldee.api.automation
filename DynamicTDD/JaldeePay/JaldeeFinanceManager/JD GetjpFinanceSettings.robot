@@ -23,9 +23,18 @@ JD-TC-GetJPFinanceSettings-1
 
     [Documentation]  GetJPFinanceSettings.
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -48,7 +57,7 @@ JD-TC-GetJPFinanceSettings-2
 
     [Documentation]  disable jaldee finance and GetJPFinanceSettings.
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -83,7 +92,7 @@ JD-TC-GetJPFinanceSettings-3
 
     [Documentation]  enable jaldee finance  which is disabled and GetJPFinanceSettings.
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -125,7 +134,7 @@ JD-TC-GetJPFinanceSettings-UH1
 
     [Documentation]  enable already enabled jaldee finance and GetJPFinanceSettings.
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -183,7 +192,7 @@ JD-TC-GetJPFinanceSettings-UH4
 
     [Documentation]  disable jaldee finance which is already disabled and GetJPFinanceSettings.
 
-    ${resp}=  Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

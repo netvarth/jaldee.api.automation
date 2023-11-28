@@ -20,7 +20,7 @@ JD-TC-AutoInvoiceGeneration-1
 
     [Documentation]  Auto Invoice Generation for service - Enable.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -57,7 +57,7 @@ JD-TC-AutoInvoiceGeneration-2
 
     [Documentation]  Auto Invoice Generation for service - Disable.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

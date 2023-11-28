@@ -95,7 +95,7 @@ JD-TC-RemoveProviderCouponforwaitlist-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   ProviderLogin  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 

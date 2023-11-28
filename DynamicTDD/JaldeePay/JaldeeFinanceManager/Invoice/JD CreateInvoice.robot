@@ -38,9 +38,17 @@ JD-TC-CreateInvoice-1
 
     [Documentation]  Create a invoice with valid details.
 
-    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -252,7 +260,7 @@ JD-TC-CreateInvoice-2
 
     [Documentation]  Create multiple invoice using multiple provider consumers.
 
-    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -326,7 +334,7 @@ JD-TC-CreateInvoice-3
 
     [Documentation]  Create  invoice using service list,item list and status.
 
-    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -386,7 +394,7 @@ JD-TC-CreateInvoice-UH1
 
     [Documentation]  Create a invoice with EMPTY invoiceCategoryId.
 
-    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -418,7 +426,7 @@ JD-TC-CreateInvoice-UH2
 
     [Documentation]  Create a invoice with EMPTY invoiceDate.
 
-    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -450,7 +458,7 @@ JD-TC-CreateInvoice-UH3
 
     [Documentation]  Create a invoice with EMPTY service list,itemlist and adhoc list.
 
-    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

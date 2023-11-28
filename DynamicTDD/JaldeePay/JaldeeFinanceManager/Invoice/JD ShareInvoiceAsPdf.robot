@@ -39,10 +39,17 @@ JD-TC-Share invoice as pdf-1
 
     [Documentation]  Create a invoice and Share invoice as pdf.
 
-    ${resp}=  Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}

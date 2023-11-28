@@ -43,9 +43,17 @@ JD-TC-Apply JaldeeCoupon-1
 
     [Documentation]  Apply Jaldee coupon to invoice.
 
-    ${resp}=  Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
     
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
@@ -233,7 +241,7 @@ JD-TC-Apply JaldeeCoupon-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  ProviderLogin  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -287,7 +295,7 @@ JD-TC-Apply JaldeeCoupon-1
 
 #     [Documentation]  Create a invoice and assign the invoice to a user then unassign that user.
 
-#     ${resp}=  Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 

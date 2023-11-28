@@ -36,7 +36,7 @@ JD-TC-MakePaymentByCash-1
 
     [Documentation]  provider takes waitlist and accept payment then consumer get details
     
-    ${resp}=  Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

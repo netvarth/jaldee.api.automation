@@ -39,10 +39,18 @@ JD-TC-GetstatusListfilter-1
 
     [Documentation]  Create Status as New for Vendor then get with status list filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -83,7 +91,7 @@ JD-TC-GetstatusListfilter-2
 
     [Documentation]  Create Two Status for Vendor then get with status list filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -103,7 +111,7 @@ JD-TC-GetstatusListfilter-3
 
     [Documentation]  Create Status as New and get with status list filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
@@ -125,7 +133,7 @@ JD-TC-GetstatusListfilter-4
 
     [Documentation]  Add new status for Vendor and get with status list filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -145,7 +153,7 @@ JD-TC-GetstatusListfilter-5
 
     [Documentation]  Update Vendor status and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -170,7 +178,7 @@ JD-TC-GetstatusListfilter-6
 
     [Documentation]  Update Status With not created categoryType and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME6}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

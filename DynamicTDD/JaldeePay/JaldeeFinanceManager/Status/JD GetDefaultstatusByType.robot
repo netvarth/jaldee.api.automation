@@ -41,10 +41,18 @@ JD-TC-Get default status by type-1
 
     [Documentation]  Get default status by type .
 
-    ${resp}=  Provider Login  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -98,7 +106,7 @@ JD-TC-Get default status by type-2
 
     [Documentation]  Create Status as proceed  and Get default status by type.
 
-    ${resp}=  Provider Login  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}}
@@ -126,7 +134,7 @@ JD-TC-Get default status by type-3
 
     [Documentation]  Create Status as unassign and Get default status by type..
 
-    ${resp}=  Provider Login  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -152,7 +160,7 @@ JD-TC-Get default status by type-4
 
     [Documentation]  Create Status as block and Get default status by type ..
 
-    ${resp}=  Provider Login  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -177,7 +185,7 @@ JD-TC-Get default status by type-5
 
     [Documentation]  Create Status as Remove and Get default status by type ..
 
-    ${resp}=  Provider Login  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -202,7 +210,7 @@ JD-TC-Get default status by type-6
 
     [Documentation]  Create Status as Remove and Get default status by type ..
 
-    ${resp}=  Provider Login  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -250,7 +258,7 @@ JD-TC-Get default status by type-UH3
 
     [Documentation]   Get default status by type without enable jaldee finance.
 
-    ${resp}=  Provider Login  ${PUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME9}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

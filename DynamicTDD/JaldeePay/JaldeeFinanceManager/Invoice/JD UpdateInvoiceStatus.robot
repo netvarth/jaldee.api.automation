@@ -43,11 +43,18 @@ JD-TC-UpdateInvoiceStatus-1
 
     [Documentation]  Create a invoice  and update it status.
 
-    ${resp}=  Provider Login  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+ 
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
 
 
@@ -225,7 +232,7 @@ JD-TC-UpdateInvoiceStatus-UH1
 
     [Documentation]  UpdateInvoiceStatus with invalid status id.
 
-    ${resp}=  Provider Login  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -240,7 +247,7 @@ JD-TC-UpdateInvoiceStatus-UH2
 
     [Documentation]  UpdateInvoiceStatus with invalid invoice id.
 
-    ${resp}=  Provider Login  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -255,7 +262,7 @@ JD-TC-UpdateInvoiceStatus-UH3
 
     [Documentation]  UpdateInvoiceStatus with with already updated one..
 
-    ${resp}=  Provider Login  ${PUSERNAME46}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -38,9 +38,17 @@ JD-TC-GetInvoice by uid-1
 
     [Documentation]  Create a invoice with valid details  and GetInvoice by uid.
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -228,7 +236,7 @@ JD-TC-GetInvoice by uid-2
 
     [Documentation]  Create multiple invoice using multiple provider consumers and GetInvoice by uid.
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -297,7 +305,7 @@ JD-TC-GetInvoice by uid-3
 
     [Documentation]  update invoice and GetInvoice by uid.
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -324,7 +332,7 @@ JD-TC-GetInvoice by uid-UH1
 
     [Documentation]   GetInvoice by invalid uid.
 
-    ${resp}=  Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -350,7 +358,7 @@ JD-TC-GetInvoice by uid-UH3
 
     [Documentation]   GetInvoice by  uid using another login.
 
-    ${resp}=  Provider Login  ${PUSERNAME137}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME137}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

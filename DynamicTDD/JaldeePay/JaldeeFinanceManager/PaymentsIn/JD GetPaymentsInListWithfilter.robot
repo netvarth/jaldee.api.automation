@@ -38,11 +38,17 @@ JD-TC-GetPayableWithFilter-1
 
     [Documentation]  Create a Paymentin then Get PaymentsIn With Filter.
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -212,7 +218,7 @@ JD-TC-GetPayableWithFilter-2
 
     [Documentation]  Get PaymentsIn With Filter with category id and category name.
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -236,7 +242,7 @@ JD-TC-GetPayableWithFilter-3
 
     [Documentation]  Get PaymentsIn With Filter with vendor uid.
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -260,7 +266,7 @@ JD-TC-GetPayableWithFilter-4
 
     [Documentation]  Get PaymentsIn With Filter with paymentsInOutCategoryId.
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -364,7 +370,7 @@ JD-TC-GetPayableWithFilter-5
 
     [Documentation]  Get PaymentsIn With Filter  with payInOutUuid and  PaymentsInOutStatus.
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
@@ -425,7 +431,7 @@ JD-TC-GetPayableWithFilter-6
 
     [Documentation]  Get PaymentsIn With Filter  with receivedDate and  paymentLabel.
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${pid}  ${resp.json()['id']}
@@ -481,7 +487,7 @@ JD-TC-GetPayableWithFilter-7
 
     [Documentation]   Get PaymentsIn With Filter with amount .
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -547,7 +553,7 @@ JD-TC-GetPayableWithFilter-8
 
     [Documentation]  Get PaymentsIn With Filter with user id.
 
-    ${resp}=  Provider Login  ${PUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -577,9 +583,9 @@ JD-TC-GetPayableWithFilter-UH1
 
 JD-TC-GetPayableWithFilter-UH2
 
-    [Documentation]   Get PaymentsOut By Id using another provider login
+    [Documentation]   Get PaymentsOut By Id using another Encrypted Provider Login
 
-    ${resp}=  Provider Login  ${PUSERNAME134}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

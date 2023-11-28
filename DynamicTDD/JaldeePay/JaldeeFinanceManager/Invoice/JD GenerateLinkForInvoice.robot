@@ -36,9 +36,17 @@ JD-TC-GenerateLinkForInvoice-1
 
     [Documentation]  Create a invoice with valid details.
 
-    ${resp}=  Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}

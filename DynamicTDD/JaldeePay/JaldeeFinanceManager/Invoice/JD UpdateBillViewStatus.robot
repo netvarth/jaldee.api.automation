@@ -60,7 +60,7 @@ JD-TC-UpdateBillViewStatus-1
     ${pid}=  get_acc_id  ${billable_providers[2]}
     ${cid}=  get_id  ${CUSERNAME32}
 
-    ${resp}=  Provider Login  ${billable_providers[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 #-------------------------- Dev deleted this url from finance--------------------------------
@@ -210,7 +210,7 @@ JD-TC-UpdateBillViewStatus-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin   ${billable_providers[2]}  ${PASSWORD} 
+    ${resp}=   Encrypted Encrypted Provider Login   ${billable_providers[2]}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

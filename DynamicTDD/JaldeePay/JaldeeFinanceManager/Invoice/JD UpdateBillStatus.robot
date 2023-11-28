@@ -61,9 +61,18 @@ JD-TC-UpdateBillStatus-1
     ${pid}=  get_acc_id  ${billable_providers[2]}
     ${cid}=  get_id  ${CUSERNAME32}
 
-    ${resp}=  Provider Login  ${billable_providers[2]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[2]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -219,7 +228,7 @@ JD-TC-UpdateBillStatus-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   ProviderLogin   ${billable_providers[2]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${billable_providers[2]}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

@@ -32,9 +32,17 @@ JD-TC-UpdateExpense-1
 
     [Documentation]  Create Expense for an SP then update the amount.
 
-    ${resp}=  Provider Login  ${PUSERNAME61}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -212,7 +220,7 @@ JD-TC-UpdateExpense-2
 
     [Documentation]  Create Expense for an SP then update the description.
 
-    ${resp}=  Provider Login  ${PUSERNAME61}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -282,7 +290,7 @@ JD-TC-UpdateExpense-3
 
     [Documentation]   update expense with different reference number,amount,expenseDate,expenseFor,employeeName,Itemlist and document upload.
 
-    ${resp}=  Provider Login  ${PUSERNAME61}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -352,7 +360,7 @@ JD-TC-UpdateExpense-4
 
     [Documentation]   update expense with empty reference number.
 
-    ${resp}=  Provider Login  ${PUSERNAME61}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -422,7 +430,7 @@ JD-TC-UpdateExpense-UH1
 
     [Documentation]  Update expense with invalid expense uid.
 
-    ${resp}=  Provider Login  ${PUSERNAME61}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -487,7 +495,7 @@ JD-TC-UpdateExpense-UH2
 
     [Documentation]  Update expense with empty expense date.
 
-    ${resp}=  Provider Login  ${PUSERNAME61}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -606,7 +614,7 @@ JD-TC-UpdateExpense-UH4
 
     [Documentation]  Update expense with another provider  login.
 
-    ${resp}=  Provider Login  ${PUSERNAME138}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME138}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -680,7 +688,7 @@ JD-TC-UpdateExpense-UH5
 
     [Documentation]   update expense with empty amount
 
-    ${resp}=  Provider Login  ${PUSERNAME61}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -736,7 +744,7 @@ JD-TC-UpdateExpense-UH6
 
     [Documentation]   update expense with empty category id.
 
-    ${resp}=  Provider Login  ${PUSERNAME61}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -39,10 +39,18 @@ JD-TC-Getstatuscount-1
 
     [Documentation]  Create Status as Proceed  for Vendor then Get status count.
 
-    ${resp}=  Provider Login  ${PUSERNAME121}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME121}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${userName}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -85,7 +93,7 @@ JD-TC-Getstatuscount-2
 
     [Documentation]  Create Two Status for Vendor then Get status count.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -130,7 +138,7 @@ JD-TC-Getstatuscount-3
 
     [Documentation]  Create Status as    Block and Get status count.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable  ${userName}  ${resp.json()['userName']}
@@ -155,7 +163,7 @@ JD-TC-Getstatuscount-4
 
     [Documentation]  Add new status for Vendor and Get status count.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -179,7 +187,7 @@ JD-TC-Getstatuscount-5
 
     [Documentation]  Update Vendor status and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -208,7 +216,7 @@ JD-TC-Getstatuscount-6
 
     [Documentation]  Update Status With not created categoryType and verify.
 
-    ${resp}=  Provider Login  ${PUSERNAME8}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
