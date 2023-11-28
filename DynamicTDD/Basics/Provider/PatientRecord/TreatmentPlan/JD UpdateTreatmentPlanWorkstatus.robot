@@ -233,7 +233,7 @@ JD-TC-Update Treatment Plan Work status-UH1
     ${resp}=    Update Treatment Plan Work status    ${treatmentId}  ${workId}  ${WorkStatus[2]}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}  422
-    Should Be Equal As Strings    ${resp.json()}   ${STATUS_COMPLETE}
+    Should Be Equal As Strings    ${resp.json()}   ${ALREADY_UPDATED_STATUS}
 
 JD-TC-Update Treatment Plan Work status-UH2
 

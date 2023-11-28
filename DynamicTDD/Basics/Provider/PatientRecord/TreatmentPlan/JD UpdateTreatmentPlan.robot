@@ -352,6 +352,116 @@ JD-TC-Update Treatment Plan-4
     Should Be Equal As Strings    ${resp.json()['works'][0]['createdDate']}     ${DAY1}
     Should Be Equal As Strings    ${resp.json()['status']}     ${PRStatus[1]}
 
+JD-TC-Update Treatment Plan-5
+
+    [Documentation]    Create a treatment plan with assignee then update that assignee.
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+     ${resp}=    Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${accoun_Id}        ${resp.json()['id']}  
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+
+    ${dep_name1}=  FakerLibrary.bs
+    ${dep_code1}=   Random Int  min=100   max=999
+    ${dep_desc1}=   FakerLibrary.word  
+    ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Test Variable  ${dep_id}  ${resp1.json()}
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${u_id}=  Create Sample User
+    Set Suite Variable  ${u_id}
+
+    ${resp}=  Get User By Id      ${u_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Suite Variable      ${PUSERNAME_U1}     ${resp.json()['mobileNo']}
+    Set Suite Variable      ${sam_email}     ${resp.json()['email']}
+
+    ${resp}=  SendProviderResetMail   ${sam_email}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    @{resp}=  ResetProviderPassword  ${sam_email}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
+    Should Be Equal As Strings  ${resp[0].status_code}  200
+    Should Be Equal As Strings  ${resp[1].status_code}  200
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME15}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${treatment}=  FakerLibrary.name
+    ${work}=  FakerLibrary.name
+    ${one}=  Create Dictionary  work=${work}   status=${PRStatus[0]}
+    ${works}=  Create List   ${one}
+    ${assignee}=  Create List   ${u_id}
+
+    ${resp}=    Create Treatment Plan    ${caseUId}    ${id1}  ${treatment}  ${works}  assignees=${assignee}
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+    Set Test Variable    ${treatmentId}        ${resp.json()}
+
+    ${resp}=    Get Treatment Plan By Id   ${treatmentId}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['caseDto']['uid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['consumer']['firstName']}     ${proconfname} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['consumer']['lastName']}     ${proconlname} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['doctor']['id']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['doctor']['firstName']}     ${pdrfname} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['doctor']['lastName']}     ${pdrlname}
+    Should Be Equal As Strings    ${resp.json()['caseDto']['type']['id']}     ${type_id} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['category']['id']}     ${category_id} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['createdDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()['treatment']}     ${treatment}
+    Should Be Equal As Strings    ${resp.json()['assignees'][0]}     ${u_id}
+
+    ${u_id1}=  Create Sample User
+    Set Suite Variable  ${u_id1}
+
+    ${assignee}=  Create List   ${u_id1}
+
+
+    ${resp}=    Update Treatment Plan   ${treatmentId}  ${treatment}  ${PRStatus[1]}    assignees=${assignee}
+    Log   ${resp.json()}
+    Should Be Equal As Strings              ${resp.status_code}   200
+  
+
+    ${resp}=    Get Treatment Plan By Id   ${treatmentId}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['caseDto']['uid']}     ${caseUId} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['consumer']['firstName']}     ${proconfname} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['consumer']['lastName']}     ${proconlname} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['doctor']['id']}     ${pid} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['doctor']['firstName']}     ${pdrfname} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['doctor']['lastName']}     ${pdrlname}
+    Should Be Equal As Strings    ${resp.json()['caseDto']['type']['id']}     ${type_id} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['category']['id']}     ${category_id} 
+    Should Be Equal As Strings    ${resp.json()['caseDto']['createdDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()['treatment']}     ${treatment}
+    Should Be Equal As Strings    ${resp.json()['works'][0]['status']}     ${PRStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['works'][0]['createdDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()['status']}     ${PRStatus[1]}
+    Should Be Equal As Strings    ${resp.json()['assignees'][0]}     ${u_id1}
+
 JD-TC-Update Treatment Plan-UH1
 
     [Documentation]    Update Treatment Plan using another provider login

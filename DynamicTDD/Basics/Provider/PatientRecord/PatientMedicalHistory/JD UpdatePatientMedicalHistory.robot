@@ -315,13 +315,13 @@ JD-TC-Update Patient Medical History-5
 
 JD-TC-Update Patient Medical History-6
 
-    [Documentation]    Update Provider Consumer Medical history where title contains 255 words.
+    [Documentation]    Update Provider Consumer Medical history where title contains 250 words.
 
      ${resp}=  Encrypted Provider Login    ${PUSERNAME12}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${title1}=  FakerLibrary.Text        max_nb_chars=255
+    ${title1}=  FakerLibrary.Text        max_nb_chars=250
     ${description1}=  FakerLibrary.name     	
     ${users1}=   Create List  
     

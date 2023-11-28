@@ -158,11 +158,11 @@ JD-TC-Get Patient Medical History-1
 
 JD-TC-Get Patient Medical History-2
 
-    [Documentation]    Adding Provider consumer Medical history where title contain 255 words and get that details using Provider consumer id
+    [Documentation]    Adding Provider consumer Medical history where title contain 250 words and get that details using Provider consumer id
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME13}  ${PASSWORD}
 
-    ${title}=  FakerLibrary.Text     	max_nb_chars=255
+    ${title}=  FakerLibrary.Text     	max_nb_chars=250
     ${caption}=  FakerLibrary.name
     ${description}=  FakerLibrary.last_name
     ${users}=   Create List  
