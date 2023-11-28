@@ -34,11 +34,11 @@ ${description1}    &^7gsdkqwrrf
 
 *** Test Cases ***
 
-JD-TC-Update MR Case-1
+JD-TC-Get Case Count Filter-1
 
-    [Documentation]    Update MR Case
+    [Documentation]   Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -64,16 +64,16 @@ JD-TC-Update MR Case-1
     Set Suite Variable    ${name}
     ${aliasName}=  FakerLibrary.name
     Set Suite Variable    ${aliasName}
-    ${DAY1}=  get_date
-    Set Suite Variable    ${DAY1}
-    
+
+     ${DAY1}=  get_date
+    Set Suite Variable  ${DAY1}  
+
     ${resp}=    Create Case Category    ${name}  ${aliasName}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${category_id}    ${resp.json()['id']} 
 
     ${category}=  Create Dictionary  id=${category_id}  
-    Set Suite Variable    ${category}
 
     ${resp}=    Create Case Type    ${name}  ${aliasName}
     Log   ${resp.content}
@@ -81,17 +81,13 @@ JD-TC-Update MR Case-1
     Set Suite Variable    ${type_id}    ${resp.json()['id']}  
 
     ${type}=  Create Dictionary  id=${type_id}  
-    Set Suite Variable    ${type}
-
     ${doctor}=  Create Dictionary  id=${pid} 
-    Set Suite Variable    ${doctor}
-
     ${title}=  FakerLibrary.name
     Set Suite Variable    ${title}
     ${description}=  FakerLibrary.last_name
     Set Suite Variable    ${description}
 
-    ${firstName}=  FakerLibrary.name
+     ${firstName}=  FakerLibrary.name
     Set Suite Variable    ${firstName}
     ${lastName}=  FakerLibrary.last_name
     Set Suite Variable    ${lastName}
@@ -128,19 +124,17 @@ JD-TC-Update MR Case-1
 
     
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${consumer}=  Create Dictionary  id=${cid} 
-    Set Suite Variable    ${consumer}
 
-    ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
+     ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
     Set Suite Variable    ${caseId}        ${resp.json()['id']}
     Set Suite Variable    ${caseUId}    ${resp.json()['uid']}
-
 
     ${title1}=  FakerLibrary.name
 
@@ -148,18 +142,39 @@ JD-TC-Update MR Case-1
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=    Get MR Case By UID   ${caseUId}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}  200
+    Set Suite Variable    ${referenceNo}            ${resp.json()['referenceNo']}
+    Set Suite Variable    ${spInternalStatus}            ${resp.json()['spInternalStatus']}
+
+
+    ${resp}=   Get Case Count Filter    uid-eq=${caseUId}   referenceNo-eq=${referenceNo}   title-eq=${title1}   consumerId-eq=${cid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description} 
+    Should Be Equal As Strings    ${resp.json()[0]['updatedByName']}     ${pdrname}
+    Should Be Equal As Strings    ${resp.json()[0]['updatedBy']}     ${pid}
+    Should Be Equal As Strings    ${resp.json()[0]['updatedDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['createdByName']}     ${pdrname}
+    Should Be Equal As Strings    ${resp.json()[0]['createdBy']}     ${pid}
+    Should Be Equal As Strings    ${resp.json()[0]['createdDate']}     ${DAY1}
+    Should Be Equal As Strings    ${resp.json()[0]['spInternalStatus']}     ${PRStatus[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['spInternalStatus']}     ${PRStatus[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumer']['firstName']}     ${proconfname}
+    Should Be Equal As Strings    ${resp.json()[0]['consumer']['lastName']}     ${proconlname}
+    Should Be Equal As Strings    ${resp.json()[0]['doctor']['firstName']}     ${pdrfname}
+    Should Be Equal As Strings    ${resp.json()[0]['doctor']['lastName']}     ${pdrlname}
+    Should Be Equal As Strings    ${resp.json()[0]['type']['id']}     ${type_id}
 
-JD-TC-Update MR Case-2
 
-    [Documentation]    Update MR Case title contain 250 words
+JD-TC-Get Case Count Filter-2
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    [Documentation]    Update MR Case title contain 250 words and Get Case Count Filter
+
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -169,18 +184,18 @@ JD-TC-Update MR Case-2
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Count Filter   uid-eq=${caseUId}   consumerFirstName-eq=${proconfname}   consumerLastName-eq=${proconlname}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description} 
 
-JD-TC-Update MR Case-3
+JD-TC-Get Case Count Filter-3
 
-    [Documentation]    Update MR Case description contain 250 words
+    [Documentation]    Update MR Case description contain 250 words  and Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -191,18 +206,18 @@ JD-TC-Update MR Case-3
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Count Filter   doctorId-eq=${pid}   doctorFirstName-eq=${pdrfname}   doctorLastName-eq=${pdrlname}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
 
-JD-TC-Update MR Case-4
+JD-TC-Get Case Count Filter-4
 
-    [Documentation]    Update MR Case title contain numbers
+    [Documentation]    Update MR Case title contain numbers  and Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -213,18 +228,18 @@ JD-TC-Update MR Case-4
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Count Filter  category-eq=${category_id}   categoryName-eq=${name}   type-eq=${type_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
 
-JD-TC-Update MR Case-5
+JD-TC-Get Case Count Filter-5
 
-    [Documentation]    Update MR Case description contain numbers
+    [Documentation]    Update MR Case description contain numbers  and Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -235,39 +250,39 @@ JD-TC-Update MR Case-5
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Count Filter   uid-eq=${caseUId}  typeName-eq=${name}   spInternalStatus-eq=${spInternalStatus}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
 
-JD-TC-Update MR Case-7
+JD-TC-Get Case Count Filter-6
 
-    [Documentation]    Update MR Case title is empty
+    [Documentation]    Update MR Case title is empty  and Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-   ${description}=  FakerLibrary.Text      
+   ${description}=  FakerLibrary.Text      max_nb_chars=250
 
     ${resp}=    Update MR Case    ${caseUId}  ${empty}  ${description}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Count Filter  createdDate-eq=${DAY1}  updatedDate-eq=${DAY1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${empty} 
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${description}
 
-JD-TC-Update MR Case-8
+JD-TC-Get Case Count Filter-7
 
-    [Documentation]    Update MR Case from user login
+    [Documentation]    Update MR Case from user login and Get Case Count Filter
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME14}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
@@ -319,116 +334,36 @@ JD-TC-Update MR Case-8
 
 
     ${title1}=  FakerLibrary.name
-    ${description}=  FakerLibrary.Text      max_nb_chars=250
+   ${description}=  FakerLibrary.Text      max_nb_chars=250
 
     ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${empty}  
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   
+    ${resp}=   Get Case Count Filter    uid-eq=${caseUId}   title-eq=${title1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
     Should Be Equal As Strings    ${resp.json()[0]['title']}     ${title1} 
     Should Be Equal As Strings    ${resp.json()[0]['description']}     ${empty}
 
-JD-TC-Update MR Case-9
+JD-TC-Get Case Count Filter-UH1
 
-    [Documentation]    Create a MR Case with Assign Then Update MR Case Assignee with another user.
+    [Documentation]    Get Case Count Filter- without login
 
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${u_id2}=  Create Sample User
-    Set Test Variable  ${u_id2}
-
-    ${usr}=  Create List      ${u_id}
-
-    ${resp}=    Create MR Case    ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  assignees=${usr}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}  200
-    Set Test Variable    ${caseUId1}    ${resp.json()['uid']}
-
-    ${resp}=    Get MR Case By UID   ${caseUId1}    
+    ${resp}=   Get Case Count Filter   uid-eq=${caseUId}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  200
-    Should Be Equal As Strings    ${resp.json()['consumer']['id']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname} 
-    Should Be Equal As Strings    ${resp.json()['doctor']['id']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()['createdDate']}     ${DAY1}
-    Should Be Equal As Strings    ${resp.json()['title']}     ${title}
-    Should Be Equal As Strings    ${resp.json()['description']}     ${description}
-    Should Be Equal As Strings    ${resp.json()['assignees'][0]}     ${u_id}
-    Should Be Equal As Strings    ${resp.json()['assignees'][1]}     ${pid}
-
-    ${title1}=  FakerLibrary.name
-    ${description}=  FakerLibrary.Text      max_nb_chars=250
-
-    ${usr}=  Create List      ${u_id2}
-
-    ${resp}=    Update MR Case    ${caseUId1}  ${title1}  ${description}   assignees=${usr} 
-    Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   200
-
-    ${resp}=    Get MR Case By UID   ${caseUId1}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  200
-    Should Be Equal As Strings    ${resp.json()['consumer']['id']}     ${cid} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['firstName']}     ${proconfname} 
-    Should Be Equal As Strings    ${resp.json()['consumer']['lastName']}     ${proconlname} 
-    Should Be Equal As Strings    ${resp.json()['doctor']['id']}     ${pid} 
-    Should Be Equal As Strings    ${resp.json()['createdDate']}     ${DAY1}
-    Should Be Equal As Strings    ${resp.json()['title']}     ${title1}
-    Should Be Equal As Strings    ${resp.json()['description']}     ${description}
-    Should Be Equal As Strings    ${resp.json()['assignees'][0]}     ${u_id2}
-    Should Be Equal As Strings    ${resp.json()['assignees'][1]}     ${pid}
-
-JD-TC-Update MR Case-UH1
-
-    [Documentation]    Update MR Case description contain more than 255 words
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME21}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${title1}=  FakerLibrary.name
-   ${description}=  FakerLibrary.Text      max_nb_chars=400
-
-    ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings              ${resp.status_code}   422
-    Should Be Equal As Strings  ${resp.json()}    ${CASE_DESCRIPTION_NOT_EXCEED_250CHAR}
-
-
-JD-TC-Update MR Case-UH2
-
-    [Documentation]    Update MR Case using another provider login
-
-    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME12}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${title1}=  FakerLibrary.name
-   ${description}=  FakerLibrary.Text      max_nb_chars=400
-
-    ${resp}=    Update MR Case    ${caseUId}  ${title1}  ${description}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}
-
-JD-TC-Update MR Case-UH3
-
-    [Documentation]    Update MR Case without login
-
-    ${resp}=    Update MR Case    ${caseUId}  ${title}  ${description}  
-    Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
+D-TC-Get Case Filter-UH2
 
+    [Documentation]    Get Case Count Filter- with another provider login
+    ${resp}=  Encrypted Provider Login    ${HLMUSERNAME13}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
 
-
-   
-   
+    ${resp}=   Get Case Count Filter   uid-eq=${caseUId}   
+    Log   ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}    []
