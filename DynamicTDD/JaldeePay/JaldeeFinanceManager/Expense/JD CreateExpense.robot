@@ -32,7 +32,7 @@ JD-TC-CreateExpense-1
 
     [Documentation]  Create Expense for an SP With all data.
 
-    ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME60}  ${PASSWORD} 
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

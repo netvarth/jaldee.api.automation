@@ -290,6 +290,7 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
+    Set Suite Variable   ${apptid1}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.json()}
@@ -366,3 +367,15 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
     Should Be Equal As Strings  ${resp.json()['netRate']}                  ${netRate}
     Should Be Equal As Strings  ${resp.json()['amountDue']}                  ${netRate}
+
+JD-TC-ApplyServiceLevelDiscountForAppointmnet-UH
+    [Documentation]   Apply Service Level Discount For Appointmnet with invalid coupon code.
+
+    ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=   Apply Jaldee Coupon for Appointment    ${apptid1}    sdgjbsdjvbskhadbvgf 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+   
