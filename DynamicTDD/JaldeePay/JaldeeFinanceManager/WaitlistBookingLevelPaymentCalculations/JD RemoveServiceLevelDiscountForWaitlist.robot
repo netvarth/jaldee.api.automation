@@ -148,10 +148,17 @@ JD-TC-RemoveServiceLevelDiscountforwaitlist-1
       Log   ${resp.json()}
       Should Be Equal As Strings      ${resp.status_code}  200
      
-      ${CUR_DAY}=  get_date
-      Set Suite Variable  ${CUR_DAY}
-      ${resp}=   Create Sample Location
+      ${resp}=  Create Sample Location  
       Set Suite Variable    ${loc_id1}    ${resp}  
+
+      ${resp}=   Get Location ById  ${loc_id1}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+      Set Suite Variable  ${CUR_DAY}
+  
       ${resp}=   Create Sample Service  ${SERVICE1}
       Set Suite Variable    ${ser_id1}    ${resp}  
       ${resp}=   Create Sample Service  ${SERVICE2}
@@ -162,9 +169,9 @@ JD-TC-RemoveServiceLevelDiscountforwaitlist-1
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7
       Set Suite Variable    ${list}
-      ${strt_time}=   add_time  1  00
+      ${strt_time}=   db.add_timezone_time     ${tz}  1  00
       Set Suite Variable    ${strt_time}
-      ${end_time}=    add_time  3  00 
+      ${end_time}=    db.add_timezone_time     ${tz}  3  00 
       Set Suite Variable    ${end_time}   
       ${parallel}=   Random Int  min=1   max=1
       Set Suite Variable   ${parallel}

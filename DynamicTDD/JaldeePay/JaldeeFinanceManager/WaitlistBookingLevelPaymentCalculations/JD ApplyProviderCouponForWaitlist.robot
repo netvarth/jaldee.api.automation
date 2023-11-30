@@ -147,10 +147,17 @@ JD-TC-ApplyProviderCouponforwaitlist-1
       Log   ${resp.json()}
       Should Be Equal As Strings      ${resp.status_code}  200
      
-      ${CUR_DAY}=  get_date
-      Set Suite Variable  ${CUR_DAY}
-      ${resp}=   Create Sample Location
+      ${resp}=  Create Sample Location  
       Set Suite Variable    ${loc_id1}    ${resp}  
+
+      ${resp}=   Get Location ById  ${loc_id1}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+      Set Suite Variable  ${CUR_DAY}
+
       ${resp}=   Create Sample Service  ${SERVICE1}
       Set Suite Variable    ${ser_id1}    ${resp}  
       ${resp}=   Create Sample Service  ${SERVICE2}
@@ -161,9 +168,9 @@ JD-TC-ApplyProviderCouponforwaitlist-1
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7
       Set Suite Variable    ${list}
-      ${strt_time}=   add_time  1  00
+      ${strt_time}=   db.add_timezone_time     ${tz}  1  00
       Set Suite Variable    ${strt_time}
-      ${end_time}=    add_time  3  00 
+      ${end_time}=    db.add_timezone_time     ${tz}  3  00 
       Set Suite Variable    ${end_time}   
       ${parallel}=   Random Int  min=1   max=1
       Set Suite Variable   ${parallel}
@@ -201,9 +208,9 @@ JD-TC-ApplyProviderCouponforwaitlist-1
     Set Suite Variable  ${cupn_code}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime}=  subtract_time  0  15
-    ${eTime}=  add_time   0  45
-    ${ST_DAY}=  get_date
-    ${EN_DAY}=  add_date   10
+    ${eTime}=  db.add_timezone_time     ${tz}   0  45
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=90   max=100
     ${max_disc_val}=   Random Int   min=90  max=100
     ${max_prov_use}=   Random Int   min=10   max=20
