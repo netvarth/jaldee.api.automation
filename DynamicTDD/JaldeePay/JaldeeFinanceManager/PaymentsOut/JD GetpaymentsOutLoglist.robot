@@ -71,6 +71,14 @@ JD-TC-Get PaymentsOut Log List-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
@@ -160,14 +168,14 @@ JD-TC-Get PaymentsOut Log List-1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${DAY}
-    ${time_now}=    Get Current Date
+    ${time_now}=    db.get_time_by_timezone  ${tz}
     ${time_now}=    DateTime.Convert Date    ${time_now}    result_format=%H:%M:%S  
     Set Suite Variable    ${time_now}
 
@@ -201,7 +209,7 @@ JD-TC-Get PaymentsOut Log List-2
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word

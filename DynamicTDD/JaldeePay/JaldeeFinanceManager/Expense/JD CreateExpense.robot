@@ -65,6 +65,14 @@ JD-TC-CreateExpense-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
@@ -160,7 +168,7 @@ JD-TC-CreateExpense-1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -215,7 +223,7 @@ JD-TC-CreateExpense-2
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -271,7 +279,7 @@ JD-TC-CreateExpense-3
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -328,7 +336,7 @@ JD-TC-CreateExpense-4
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -384,7 +392,7 @@ JD-TC-CreateExpense-5
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -439,7 +447,7 @@ JD-TC-CreateExpense-6
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -495,7 +503,7 @@ JD-TC-CreateExpense-7
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -551,7 +559,7 @@ JD-TC-CreateExpense-8
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -608,7 +616,7 @@ JD-TC-CreateExpense-9
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -716,7 +724,7 @@ JD-TC-CreateExpense-UH1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -772,7 +780,7 @@ JD-TC-CreateExpense-UH2
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -832,7 +840,7 @@ JD-TC-CreateExpense-UH3
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -893,7 +901,7 @@ JD-TC-CreateExpense-UH4
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -949,7 +957,7 @@ JD-TC-CreateExpense-UH5
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -1004,7 +1012,7 @@ JD-TC-CreateExpense-UH6
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -1047,7 +1055,7 @@ JD-TC-CreateExpense-UH6
 
 
 JD-TC-CreateExpense-UH7
-    [Documentation]  Create Expense for an SP With past expense date.
+    [Documentation]  Create Expense for an SP With future expense date.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}

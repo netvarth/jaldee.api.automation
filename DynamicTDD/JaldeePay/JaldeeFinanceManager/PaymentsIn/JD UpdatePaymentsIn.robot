@@ -70,6 +70,14 @@ JD-TC-Update PaymentIn-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
@@ -156,7 +164,7 @@ JD-TC-Update PaymentIn-1
 
 
     ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
 
@@ -234,7 +242,7 @@ JD-TC-Update PaymentIn-2
     
 
     ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${merchantId}=   FakerLibrary.word
@@ -261,7 +269,7 @@ JD-TC-Update PaymentIn-2
     ${bankCheckNo}=   FakerLibrary.word
     Set Suite Variable   ${bankCheckNo}
 
-    ${ }=    Create Dictionary   paymentMode=${finance_payment_modes[1]}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo} 
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[1]}    merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo} 
 
 
     ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
@@ -310,7 +318,7 @@ JD-TC-Update PaymentIn-3
     
 
     ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${fakeid}=   FakerLibrary.Random Number
@@ -355,7 +363,7 @@ JD-TC-Update PaymentIn-UH1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${fakeid}=   FakerLibrary.Random Number
@@ -378,7 +386,7 @@ JD-TC-Update PaymentIn-UH2
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${fakeid}=   FakerLibrary.Random Number
@@ -403,7 +411,7 @@ JD-TC-Update PaymentIn-UH3
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${fakeid}=   FakerLibrary.Random Number
@@ -429,7 +437,7 @@ JD-TC-Update PaymentIn-UH4
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
 

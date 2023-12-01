@@ -81,6 +81,14 @@ JD-TC-Create PaymentsOut-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
@@ -171,7 +179,7 @@ JD-TC-Create PaymentsOut-1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -210,7 +218,7 @@ JD-TC-Create PaymentsOut-2
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -250,7 +258,7 @@ JD-TC-Create PaymentsOut-3
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -291,7 +299,7 @@ JD-TC-Create PaymentsOut-4
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -330,7 +338,7 @@ JD-TC-Create PaymentsOut-5
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -405,7 +413,7 @@ JD-TC-Create PaymentsOut-6
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -457,7 +465,7 @@ JD-TC-Create PaymentsOut-7
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -509,7 +517,7 @@ JD-TC-Create PaymentsOut-8
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -561,7 +569,7 @@ JD-TC-Create PaymentsOut-9
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -613,7 +621,7 @@ JD-TC-Create PaymentsOut-10
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -665,7 +673,7 @@ JD-TC-Create PaymentsOut-11
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -717,7 +725,7 @@ JD-TC-Create PaymentsOut-12
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -769,7 +777,7 @@ JD-TC-Create PaymentsOut-13
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -821,7 +829,7 @@ JD-TC-Create PaymentsOut-14
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -873,7 +881,7 @@ JD-TC-Create PaymentsOut-15
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -926,7 +934,7 @@ JD-TC-Create PaymentsOut-16
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -978,7 +986,7 @@ JD-TC-Create PaymentsOut-17
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1031,7 +1039,7 @@ JD-TC-Create PaymentsOut-18
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1071,7 +1079,7 @@ JD-TC-Create PaymentsOut-19
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1123,7 +1131,7 @@ JD-TC-Create PaymentsOut-20
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1175,7 +1183,7 @@ JD-TC-Create PaymentsOut-21
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1227,7 +1235,7 @@ JD-TC-Create PaymentsOut-22
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1279,7 +1287,7 @@ JD-TC-Create PaymentsOut-23
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1331,7 +1339,7 @@ JD-TC-Create PaymentsOut-24
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1383,7 +1391,7 @@ JD-TC-Create PaymentsOut-25
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1435,7 +1443,7 @@ JD-TC-Create PaymentsOut-26
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1487,7 +1495,7 @@ JD-TC-Create PaymentsOut-27
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1539,7 +1547,7 @@ JD-TC-Create PaymentsOut-28
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1591,7 +1599,7 @@ JD-TC-Create PaymentsOut-29
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1644,7 +1652,7 @@ JD-TC-Create PaymentsOut-30
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1696,7 +1704,7 @@ JD-TC-Create PaymentsOut-31
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1749,7 +1757,7 @@ JD-TC-Create PaymentsOut-32
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1788,7 +1796,7 @@ JD-TC-Create PaymentsOut-33
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1840,7 +1848,7 @@ JD-TC-Create PaymentsOut-34
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1892,7 +1900,7 @@ JD-TC-Create PaymentsOut-35
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1944,7 +1952,7 @@ JD-TC-Create PaymentsOut-36
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -1996,7 +2004,7 @@ JD-TC-Create PaymentsOut-37
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2048,7 +2056,7 @@ JD-TC-Create PaymentsOut-38
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2100,7 +2108,7 @@ JD-TC-Create PaymentsOut-39
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2152,7 +2160,7 @@ JD-TC-Create PaymentsOut-40
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2204,7 +2212,7 @@ JD-TC-Create PaymentsOut-41
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2256,7 +2264,7 @@ JD-TC-Create PaymentsOut-42
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2308,7 +2316,7 @@ JD-TC-Create PaymentsOut-43
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2361,7 +2369,7 @@ JD-TC-Create PaymentsOut-44
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2413,7 +2421,7 @@ JD-TC-Create PaymentsOut-45
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2465,7 +2473,7 @@ JD-TC-Create PaymentsOut-46
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2505,7 +2513,7 @@ JD-TC-Create PaymentsOut-47
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2557,7 +2565,7 @@ JD-TC-Create PaymentsOut-48
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2609,7 +2617,7 @@ JD-TC-Create PaymentsOut-49
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2661,7 +2669,7 @@ JD-TC-Create PaymentsOut-50
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2713,7 +2721,7 @@ JD-TC-Create PaymentsOut-51
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2765,7 +2773,7 @@ JD-TC-Create PaymentsOut-52
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2817,7 +2825,7 @@ JD-TC-Create PaymentsOut-53
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2869,7 +2877,7 @@ JD-TC-Create PaymentsOut-54
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2920,7 +2928,7 @@ JD-TC-Create PaymentsOut-55
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -2972,7 +2980,7 @@ JD-TC-Create PaymentsOut-56
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -3024,7 +3032,7 @@ JD-TC-Create PaymentsOut-57
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -3077,7 +3085,7 @@ JD-TC-Create PaymentsOut-58
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -3129,7 +3137,7 @@ JD-TC-Create PaymentsOut-59
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -3182,7 +3190,7 @@ JD-TC-Create PaymentsOut-UH1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -3208,7 +3216,7 @@ JD-TC-Create PaymentsOut-UH2
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -3229,7 +3237,7 @@ JD-TC-Create PaymentsOut-UH3
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -3254,7 +3262,7 @@ JD-TC-Create PaymentsOut-UH4
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -3279,7 +3287,7 @@ JD-TC-Create PaymentsOut-UH5
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -3305,7 +3313,7 @@ JD-TC-Create PaymentsOut-UH6
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -3329,7 +3337,7 @@ JD-TC-Create PaymentsOut-UH7
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word
@@ -3353,7 +3361,7 @@ JD-TC-Create PaymentsOut-UH8
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${payableLabel}=   FakerLibrary.word
-    ${dueDate}=   db.get_date
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
      ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentsOutStatus}=   FakerLibrary.word

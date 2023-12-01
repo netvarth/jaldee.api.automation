@@ -71,6 +71,14 @@ JD-TC-Get PaymentsOut Log List-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
@@ -155,7 +163,7 @@ JD-TC-Get PaymentsOut Log List-1
     Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
 
     ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${paymentsOutStatus}=   FakerLibrary.word
     ${paymentStatus}=   FakerLibrary.word
@@ -180,9 +188,9 @@ JD-TC-Get PaymentsOut Log List-1
     Set Suite Variable    ${uploadedDocuments}
 
      
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${DAY}
-    ${time_now}=    Get Current Date
+    ${time_now}=    db.get_time_by_timezone  ${tz}
     ${time_now}=    DateTime.Convert Date    ${time_now}    result_format=%H:%M:%S  
     ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
     ${resp}=  Create PaymentsIn   ${amount}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}       ${paymentMode}    uploadedDocuments=${uploadedDocuments}

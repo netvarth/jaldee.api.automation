@@ -67,6 +67,14 @@ JD-TC-UploadAttachment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
@@ -162,7 +170,7 @@ JD-TC-UploadAttachment-1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -237,7 +245,7 @@ JD-TC-UploadAttachment-UH1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+
 
     ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
     Log  ${Attachments}
@@ -255,7 +263,7 @@ JD-TC-UploadAttachment-UH3
     ${resp}=   ConsumerLogin  ${CUSERNAME8}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
 
     ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
     Log  ${Attachments}
@@ -284,7 +292,7 @@ JD-TC-UploadAttachment-UH5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME139}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -317,7 +325,7 @@ JD-TC-UploadAttachment-UH6
     ${resp}=  Encrypted Provider Login  ${PUSERNAME65}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${userName}  ${resp.json()['userName']}
+
 
     ${Attachments}=    Create Dictionary  
     Log  ${Attachments}

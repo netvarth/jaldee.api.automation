@@ -71,6 +71,14 @@ JD-TC-UploadPaymentInAttachment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
@@ -157,7 +165,7 @@ JD-TC-UploadPaymentInAttachment-1
     
     ${payableLabel}=   FakerLibrary.word
     Set Suite Variable  ${payableLabel}   
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${receivedDate}  
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1

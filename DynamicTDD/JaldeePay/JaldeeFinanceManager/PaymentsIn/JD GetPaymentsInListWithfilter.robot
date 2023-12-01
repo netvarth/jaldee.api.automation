@@ -71,6 +71,14 @@ JD-TC-GetPayableWithFilter-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
@@ -164,7 +172,7 @@ JD-TC-GetPayableWithFilter-1
     
     ${payableLabel}=   FakerLibrary.word
     Set Suite Variable  ${payableLabel}   
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${receivedDate}  
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
@@ -278,7 +286,7 @@ JD-TC-GetPayableWithFilter-4
     Set Test Variable  ${description}  
     ${payableLabel}=   FakerLibrary.word
     Set Test Variable  ${payableLabel}  
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     Set Test Variable  ${receivedDate}  
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
@@ -373,8 +381,7 @@ JD-TC-GetPayableWithFilter-5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
     
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -384,7 +391,7 @@ JD-TC-GetPayableWithFilter-5
     Set Test Variable  ${description}  
     ${payableLabel}=   FakerLibrary.word
     Set Test Variable  ${payableLabel}     
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     Set Test Variable  ${receivedDate}  
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
@@ -434,8 +441,7 @@ JD-TC-GetPayableWithFilter-6
     ${resp}=  Encrypted Provider Login  ${PUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
 
     ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[2]} 
     Log  ${resp.json()}
@@ -450,7 +456,7 @@ JD-TC-GetPayableWithFilter-6
     Set Test Variable  ${description}  
     ${payableLabel}=   FakerLibrary.word
     Set Test Variable  ${payableLabel}     
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     Set Test Variable  ${receivedDate}  
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
@@ -495,7 +501,7 @@ JD-TC-GetPayableWithFilter-7
 
     ${payableLabel}=   FakerLibrary.word
     Set Test Variable  ${payableLabel}     
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     Set Test Variable  ${receivedDate}  
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1

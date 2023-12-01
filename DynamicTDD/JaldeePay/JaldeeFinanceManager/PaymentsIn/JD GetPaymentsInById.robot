@@ -70,6 +70,14 @@ JD-TC-Get PaymentsIn-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
@@ -156,7 +164,7 @@ JD-TC-Get PaymentsIn-1
 
 
     ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
 
@@ -210,11 +218,10 @@ JD-TC-Get PaymentsIn-2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
     
     ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
@@ -246,8 +253,7 @@ JD-TC-Get PaymentsIn-3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${pid}  ${resp.json()['id']}
-    Set Suite Variable  ${userName}  ${resp.json()['userName']}
+
 
     ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[2]} 
     Log  ${resp.json()}
@@ -255,7 +261,7 @@ JD-TC-Get PaymentsIn-3
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
     ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
@@ -292,7 +298,7 @@ JD-TC-Get PaymentsIn-4
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${payableLabel}=   FakerLibrary.word
-    ${receivedDate}=   db.get_date
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${merchantId}=   FakerLibrary.word

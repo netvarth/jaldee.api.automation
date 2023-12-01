@@ -65,6 +65,14 @@ JD-TC-UpdateExpense-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
@@ -160,7 +168,7 @@ JD-TC-UpdateExpense-1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -231,7 +239,7 @@ JD-TC-UpdateExpense-2
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -301,7 +309,7 @@ JD-TC-UpdateExpense-3
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
     ${quantity}=   Random Int  min=5  max=10
@@ -371,7 +379,7 @@ JD-TC-UpdateExpense-4
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
     ${quantity}=   Random Int  min=5  max=10
@@ -441,7 +449,7 @@ JD-TC-UpdateExpense-UH1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -506,7 +514,7 @@ JD-TC-UpdateExpense-UH2
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -566,7 +574,7 @@ JD-TC-UpdateExpense-UH3
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -640,7 +648,7 @@ JD-TC-UpdateExpense-UH4
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
@@ -699,7 +707,7 @@ JD-TC-UpdateExpense-UH5
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
     ${quantity}=   Random Int  min=5  max=10
@@ -755,7 +763,7 @@ JD-TC-UpdateExpense-UH6
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${expenseFor}=   FakerLibrary.word
-    ${expenseDate}=   db.get_date
+    ${expenseDate}=   db.get_date_by_timezone  ${tz}
     ${employeeName}=   FakerLibrary.name
     ${item}=   FakerLibrary.word
     ${quantity}=   Random Int  min=5  max=10
