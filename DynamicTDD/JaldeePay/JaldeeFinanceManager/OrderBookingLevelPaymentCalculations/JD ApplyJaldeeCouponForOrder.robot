@@ -193,7 +193,13 @@ JD-TC-ApplyJaldeeCouponForOrder-1
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${lid}=  Create Sample Location
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -221,21 +227,21 @@ JD-TC-ApplyJaldeeCouponForOrder-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${promotionalPrice}   ${resp.json()['promotionalPrice']}
 
-    ${startDate}=  get_date
-    ${endDate}=  add_date  9      
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  9      
 
-    ${startDate1}=  get_date
-    ${endDate1}=  add_date  10  
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  10  
 
-    ${startDate2}=  get_date
-    ${endDate2}=  add_date  20     
+    ${startDate2}=  db.get_date_by_timezone  ${tz}
+    ${endDate2}=  db.add_timezone_date  ${tz}  20     
    
 
     ${noOfOccurance}=  Random Int  min=0   max=0
 
-    ${sTime3}=  add_time  0  15
+    ${sTime3}=  db.add_timezone_time     ${tz}  0  15
     Set Suite Variable   ${sTime3}
-    ${eTime3}=  add_time   1  00 
+    ${eTime3}=  db.add_timezone_time     ${tz}   1  00 
     Set Suite Variable    ${eTime3}
     ${list}=  Create List  1  2  3  4  5  6  7
   
@@ -390,9 +396,9 @@ JD-TC-ApplyJaldeeCouponForOrder-1
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}  
     ${licenses}=  Jaldee Coupon Target License  ${licid}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
-    ${DAY2}=  add_date  10
+    ${DAY2}=  db.add_timezone_date  ${tz}  10
     Set Suite Variable  ${DAY2}  
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
