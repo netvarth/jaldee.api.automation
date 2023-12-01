@@ -1017,7 +1017,7 @@ JD-TC-UpdateVendor-19
     ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}                ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable            ${userName}            ${resp.json()['userName']}
+
 
 
     ${bank_accno1}=    db.Generate_random_value    size=11    chars=${digits} 
