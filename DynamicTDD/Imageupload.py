@@ -89,24 +89,16 @@ clinicalnotespty='/ebs/TDD/clinicalnotes.json'
 # Service Provider Login
 def spLogin(phno,pswd,countrycode=91):
     s = requests.Session()
-<<<<<<< HEAD
-    url = BASE_URL+'/provider/login'
-=======
     # url = BASE_URL+'/provider/login'
     url = BASE_URL+'/provider/login/encrypt'
->>>>>>> refs/remotes/origin/master
     try:
         headers = {
                 'Content-type': "application/json",
                 'Accept': "application/json",
             }
-<<<<<<< HEAD
-        data = json.dumps({"loginId": str(phno), "password":str(pswd), "countryCode":str(countrycode)})
-=======
         jsondata = json.dumps({"loginId": str(phno), "password":str(pswd), "countryCode":str(countrycode)})
         encrypted_data=  ecrypt_data(jsondata)
         data= json.dumps(encrypted_data)
->>>>>>> refs/remotes/origin/master
         r = s.post(url, data=data, headers=headers)
         # print s.cookies
         # print "--------------"
