@@ -108,6 +108,14 @@ JD-TC-Apply JaldeeCoupon-1
         Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     END
 
+
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
@@ -214,9 +222,9 @@ JD-TC-Apply JaldeeCoupon-1
     Set Suite Variable   ${sub_domains}
     ${licenses}=  Jaldee Coupon Target License  ${licid}
     Set Suite Variable   ${licenses}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
-    ${DAY2}=  add_date  10
+    ${DAY2}=   db.add_timezone_date  ${tz}  10     
     Set Suite Variable  ${DAY2}  
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.json()}
@@ -258,7 +266,7 @@ JD-TC-Apply JaldeeCoupon-1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
-    ${invoiceDate}=   db.get_date
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word

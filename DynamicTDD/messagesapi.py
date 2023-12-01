@@ -2096,7 +2096,7 @@ INVALID_FM_USER_ID="Invalid User Id"
 LINE_ITEMS_CANNOT_EMPTY="Line Items cannot be empty"
 PAYMENT_GATEWAY_CANNOT_BE_EMPTY="Payment Gateway cannot be empty"
 financehtml= "<html style=\"width: 210mm; height: 297mm; font-size: 1rem; font-family: 'Poppins', sans-serif !important;\"><head><title></title></head><body ><div><h1>INVOICE</h1><p>Sample Invoice PDF</p></div></body></html>"
-
+NEED_BILL_AMOUNT_HIGHER_THAN_DISCOUNT="To apply the discount , bill amount needs to be higher than the discount"
 
 
 

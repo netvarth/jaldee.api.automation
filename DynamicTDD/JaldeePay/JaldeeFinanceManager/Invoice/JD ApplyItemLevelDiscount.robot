@@ -233,6 +233,14 @@ JD-TC-Apply Item Level Discount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
 
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
@@ -331,7 +339,7 @@ JD-TC-Apply Item Level Discount-1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
-    ${invoiceDate}=   db.get_date
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
     ${invoiceId}=   FakerLibrary.word
@@ -419,6 +427,43 @@ JD-TC-Apply Item Level Discount-1
 
 JD-TC-Apply Item Level Discount-2
 
+    [Documentation]  Apply item level discount where discount price is empty.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Apply Item Level Discount-3
+
+    [Documentation]  Apply item level discount where private note  is empty.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Apply Item Level Discount-4
+
+    [Documentation]  Apply item level discount where display note is empty.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Apply Item Level Discount-5
+
+    [Documentation]  Apply item level discount where private note and display note is empty.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+JD-TC-Apply Item Level Discount-UH1
+
     [Documentation]   Apply Item  Level Discount(created discount value).
 
 
@@ -433,6 +478,53 @@ JD-TC-Apply Item Level Discount-2
     ${resp}=   Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${itemId}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${DISCOUNT_ALREADY_USED}
+
+JD-TC-Apply Item Level Discount-UH2
+
+    [Documentation]  Create an invoice with itemlist and apply discount to invoice then try to apply same discount in item level.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Apply Item Level Discount-UH3
+
+    [Documentation]  Apply item level discount where Invoice uid is wrong.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Apply Item Level Discount-UH4
+
+    [Documentation]  Apply item level discount where discount id is empty.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Apply Item Level Discount-UH5
+
+    [Documentation]  Apply item level discount where Item list is empty.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Apply Item Level Discount-UH6
+
+    [Documentation]  Apply item level discount using another provider login.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
 
 
 
