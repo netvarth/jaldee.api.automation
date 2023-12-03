@@ -244,6 +244,14 @@ JD-TC-Assign User-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+JD-TC-Assign User-3
+
+    [Documentation]  create two invoice and assign with same users.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
 JD-TC-Assign User-UH1
 
     [Documentation]  Assign User with invalid user id.
@@ -315,7 +323,7 @@ JD-TC-Assign User-UH4
 
 JD-TC-Assign User-UH5
 
-    [Documentation]  Assign User with invalid user id.
+    [Documentation]  Assign User with invalid invoice  id.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}

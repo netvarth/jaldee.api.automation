@@ -75,6 +75,15 @@ JD-TC-Remove Discount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
@@ -172,7 +181,7 @@ JD-TC-Remove Discount-1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
-    ${invoiceDate}=   db.get_date
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${invoiceId}=   FakerLibrary.word
 
        ${itemName}=    FakerLibrary.word
@@ -240,8 +249,76 @@ JD-TC-Remove Discount-UH1
 
 
     ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
-    Log  ${resp.json()}
-    Set Suite Variable   ${rmvid}   ${resp.json()}   
+    Log  ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
 
-    ${resp}=  Get Invoice By Id  ${invoice_uid}
+JD-TC-Remove Discount-UH2
+
+    [Documentation]  remove discount using invalid invoice id .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${invoice}=   FakerLibrary.word
+
+    ${resp}=   Remove Discount   ${invoice}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings   ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
+
+JD-TC-Remove Discount-UH3
+
+    [Documentation]  remove discount using empty discount id .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+
+    ${resp}=   Remove Discount   ${invoice_uid}   ${EMPTY}    ${discountprice}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
+
+JD-TC-Remove Discount-UH4
+
+    [Documentation]  remove discount where private note and display note is empty .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+
+    ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
+
+JD-TC-Remove Discount-UH5
+
+    [Documentation]  remove discount its applied in any invoice .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+
+    # ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+    # Log  ${resp.json()}  
+    # Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings   ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
+
+

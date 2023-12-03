@@ -70,6 +70,14 @@ JD-TC-Get Invoice With Filter -1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${name}=   FakerLibrary.word
     Set Suite Variable   ${name}
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
@@ -182,7 +190,7 @@ JD-TC-Get Invoice With Filter -1
 
     ${invoiceLabel}=   FakerLibrary.word
     Set Suite Variable  ${invoiceLabel}
-    ${invoiceDate}=   db.get_date
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${invoiceDate}
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1

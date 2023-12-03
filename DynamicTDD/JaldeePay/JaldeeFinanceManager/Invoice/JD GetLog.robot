@@ -79,6 +79,14 @@ JD-TC-Get Log-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${name}=   FakerLibrary.word
     Set Suite Variable   ${name}
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
@@ -190,7 +198,7 @@ JD-TC-Get Log-1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
-    ${invoiceDate}=   db.get_date
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${invoiceId}=   FakerLibrary.word
 
     ${item1}=     FakerLibrary.word
@@ -219,9 +227,9 @@ JD-TC-Get Log-1
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
 
-    ${DAY}=  get_date
+    ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${DAY}
-    ${time_now}=    Get Current Date
+    ${time_now}=    db.get_time_by_timezone  ${tz}
     ${time_now}=    DateTime.Convert Date    ${time_now}    result_format=%H:%M:%S  
     Set Suite Variable    ${time_now}
 
@@ -244,3 +252,27 @@ JD-TC-Get Log-1
     Should Be Equal As Strings  ${resp.json()['invoiceStateList'][0]['time']}  ${time_now}
     Should Be Equal As Strings  ${resp.json()['invoiceStateList'][0]['userType']}  ${userType[0]}
     Should Be Equal As Strings  ${resp.json()['invoiceStateList'][0]['localUserId']}  ${pid}
+
+JD-TC-Get Log-2
+
+    [Documentation]  Update invoice and get log.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Get Log-UH1
+
+    [Documentation]   get log with another login.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Get Log-UH2
+
+    [Documentation]   get log where invoice id is invalid.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200

@@ -69,6 +69,14 @@ JD-TC-GenerateLinkForInvoice-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${name}=   FakerLibrary.word
     Set Suite Variable   ${name}
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
@@ -180,7 +188,7 @@ JD-TC-GenerateLinkForInvoice-1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
-    ${invoiceDate}=   db.get_date
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${invoiceId}=   FakerLibrary.word
 
     ${item}=   Random Int  min=5  max=10
@@ -228,6 +236,87 @@ JD-TC-GenerateLinkForInvoice-1
     ${vendor_phn}=  Evaluate  ${PUSERNAME}+${PO_Number}
     Set Test Variable  ${email}  ${vender_name}${vendor_phn}.${test_mail}
 
-    ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${vendor_phn}    ${email}    ${boolean[0]}    ${boolean[0]}
+    ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${vendor_phn}    ${email}    ${boolean[1]}    ${boolean[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-GenerateLinkForInvoice-2
+
+    [Documentation]  Generate Link For Invoice that already shared.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-GenerateLinkForInvoice-3
+
+    [Documentation]  Generate Link For Invoice where email is only given.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-GenerateLinkForInvoice-4
+
+    [Documentation]  Generate Link For where phone number is only given.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-GenerateLinkForInvoice-UH1
+
+    [Documentation]  Generate Link For Invoice with invalid invoice id.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-GenerateLinkForInvoice-UH2
+
+    [Documentation]  Generate Link For Invoice with empty vendor phone.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-GenerateLinkForInvoice-UH3
+
+    [Documentation]  Generate Link For Invoice with empty email.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-GenerateLinkForInvoice-UH4
+
+    [Documentation]  Generate Link For Invoice where sms and email notification is off.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${PO_Number}    Generate random string    5    123456789
+    ${vendor_phn}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    Set Test Variable  ${email}  ${vender_name}${vendor_phn}.${test_mail}
+
+    ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${vendor_phn}    ${email}    ${boolean[0]}    ${boolean[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${ENTER_EMAIL_OR_PHONE}
+
+JD-TC-GenerateLinkForInvoice-UH5
+
+    [Documentation]  Generate Link For Invoice where phone number is invalid.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-GenerateLinkForInvoice-UH6
+
+    [Documentation]  Generate Link For Invoice where email id is invalid.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200

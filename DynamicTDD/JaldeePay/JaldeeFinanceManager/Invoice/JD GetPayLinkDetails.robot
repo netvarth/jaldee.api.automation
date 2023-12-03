@@ -49,6 +49,8 @@ JD-TC-GetPayLinkDetails-1
     Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
+*** comment ***
+
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -221,6 +223,6 @@ JD-TC-GetPayLinkDetails-1
     ${vendor_phn}=  Evaluate  ${PUSERNAME}+${PO_Number}
     Set Test Variable  ${email}  ${vender_name}${vendor_phn}.${test_mail}
 
-    ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${vendor_phn}    ${email}    ${bool[0]}    ${bool[0]}
+    ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${vendor_phn}    ${email}    ${bool[1]}    ${bool[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
