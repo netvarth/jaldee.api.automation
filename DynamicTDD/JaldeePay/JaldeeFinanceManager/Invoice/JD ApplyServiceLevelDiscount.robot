@@ -401,9 +401,10 @@ JD-TC-Apply Service Level Discount-2
     [Documentation]   Apply discount with empty private note and display note.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${discount1}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
@@ -412,7 +413,7 @@ JD-TC-Apply Service Level Discount-2
     Set Suite Variable   ${discountprice}
     ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
     Log  ${resp.json()}
-    Set Test Variable   ${discountId}   ${resp.json()}   
+    Set Suite Variable   ${discountId1}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Discounts 
@@ -425,20 +426,20 @@ JD-TC-Apply Service Level Discount-2
 
 
 
-    ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${EMPTY}  ${EMPTY}  ${sid1}
+    ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${discountId1}    ${discountprice}   ${EMPTY}  ${EMPTY}  ${sid1}
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['discounts'][1]['id']}  ${discountId}
-    Should Be Equal As Strings  ${resp.json()['discounts'][1]['name']}  ${discount1}
-    Should Be Equal As Strings  ${resp.json()['discounts'][1]['discountType']}  ${disctype[0]}
-    Should Be Equal As Strings  ${resp.json()['discounts'][1]['discountValue']}  ${discountprice}
-    Should Be Equal As Strings  ${resp.json()['discounts'][1]['calculationType']}  ${calctype[1]}
-    Should Be Equal As Strings  ${resp.json()['discounts'][1]['privateNote']}  ${EMPTY}
-    Should Be Equal As Strings  ${resp.json()['discounts'][1]['displayNote']}  ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][1]['id']}  ${discountId1}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][1]['name']}  ${discount1}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][1]['discountType']}  ${disctype[0]}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][1]['discountValue']}  ${discountprice}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][1]['calculationType']}  ${calctype[1]}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][1]['privateNote']}  ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][1]['displayNote']}  ${EMPTY}
 
 
 JD-TC-Apply Service Level Discount--3
@@ -446,19 +447,22 @@ JD-TC-Apply Service Level Discount--3
     [Documentation]   create discount and remove that then apply discount.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
 
     ${resp}=   Get Discounts 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+
+
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
 
-    ${resp}=  Remove Service Level Discount   ${invoice_uid}   ${discountId}    ${discountValue1}   ${privateNote}  ${displayNote}   ${sid1}
+    ${resp}=  Remove Service Level Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}   ${sid1}
     Log  ${resp.json()}  
     Set Suite Variable   ${rmvid}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -481,25 +485,66 @@ JD-TC-Apply Service Level Discount--3
     ${resp}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['discounts'][1]['id']}  ${discountId}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][1]['id']}  ${discountId}
 
 JD-TC-Apply Service Level Discount-4
 
     [Documentation]   create percentage type discount apply discount.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${discount1}=     FakerLibrary.word
+    ${desc}=   FakerLibrary.word
+    ${discountprice1}=     Random Int   min=50   max=100
+    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    Set Suite Variable   ${discountprice}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[0]}  ${disctype[0]}
+    Log  ${resp.json()}
+    Set Test Variable   ${discountId}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Discounts 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${discountValue1}=     Random Int   min=50   max=100
+    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+
+
+
+    ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${EMPTY}  ${EMPTY}  ${sid1}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['id']}  ${discountId}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['name']}  ${discount1}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['discountType']}  ${disctype[0]}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['discountValue']}  ${discountprice}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['calculationType']}  ${calctype[0]}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['privateNote']}  ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['displayNote']}  ${EMPTY}
 
 JD-TC-Apply Service Level Discount-5
 
     [Documentation]   Apply 2 discount and remove from of them and then get invoice details.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+    ${resp}=   Get Discounts 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-Apply Service Level Discount-UH1
 
@@ -524,9 +569,9 @@ JD-TC-Apply Service Level Discount-UH2
     [Documentation]   Discount is higher than invoice amount.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${discount1}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
@@ -558,9 +603,9 @@ JD-TC-Apply Service Level Discount-UH3
     [Documentation]   Apply discount with discount price is empty.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
@@ -573,12 +618,11 @@ JD-TC-Apply Service Level Discount-UH3
 
 JD-TC-Apply Service Level Discount-UH4
 
-    [Documentation]   Apply discount where invoice_uid is empty.
+    [Documentation]   Apply discount where invoice_uid is wrong.
 
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
@@ -592,39 +636,40 @@ JD-TC-Apply Service Level Discount-UH4
 
 JD-TC-Apply Service Level Discount-UH5
 
-    [Documentation]   Apply discount where discountid is empty.
+    [Documentation]   Apply discount where discountid is wrong.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
+    ${discount}=   FakerLibrary.RandomNumber
 
 
-    ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${EMPTY}    ${discountprice}   ${privateNote}  ${displayNote}  ${sid1}
+    ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${discount}    ${discountprice}   ${privateNote}  ${displayNote}  ${sid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}    ${INCORRECT_DISCOUNT_ID}
 
 JD-TC-Apply Service Level Discount-UH6
 
-    [Documentation]   Apply Service Level Discount where service list is empty.
+    [Documentation]   Apply Service Level Discount where service id is wrong.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
+    ${serviceid}=   FakerLibrary.RandomNumber
 
-
-    ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${EMPTY}    ${discountprice}   ${privateNote}  ${displayNote}  ${EMPTY}
+    ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${EMPTY}    ${discountprice}   ${privateNote}  ${displayNote}  ${serviceid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}    ${INCORRECT_DISCOUNT_ID}
+    Should Be Equal As Strings  ${resp.json()}    ${SERVICE_NOT}
 
 
 

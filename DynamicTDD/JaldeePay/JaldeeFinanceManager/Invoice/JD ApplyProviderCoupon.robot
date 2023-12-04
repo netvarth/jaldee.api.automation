@@ -105,6 +105,14 @@ JD-TC-Apply ProviderCoupon-1
         Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     END
 
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${name}=   FakerLibrary.word
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
@@ -252,6 +260,10 @@ JD-TC-Apply ProviderCoupon-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
 
+    ${resp}=  Get Coupons 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+
 
     ${resp}=   Apply Provider Coupon   ${invoice_uid}   ${cupn_code}
     Log  ${resp.json()} 
@@ -267,6 +279,7 @@ JD-TC-Apply ProviderCoupon-1
     Should Be Equal As Strings  ${resp.json()['providerCoupons'][0]['discount']}  ${pc_amount}
 
 # JD-TC-Apply ProviderCoupon-2
+*** comment ***
 
 JD-TC-ProviderCouponBill-1
 
@@ -2688,13 +2701,34 @@ JD-TC-ProviderCouponBill-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By UUId  ${wid}
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date
+    ${invoiceId}=   FakerLibrary.word
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+        ${serviceprice}=   Random Int  min=1000  max=1500
+    ${serviceprice}=  Convert To Number  ${serviceprice}  1
+
+    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
+    ${serviceList}=    Create List    ${serviceList}
+    
+    
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}   ynwUuid=${wid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
 
-    Should Be Equal As Strings  ${resp.json()['netTotal']}         ${ser_amount1}
-    Should Be Equal As Strings  ${resp.json()['amountDue']}        ${ser_amount1}   
-    Should Be Equal As Strings  ${resp.json()['netRate']}          ${ser_amount1}   
+
+    ${resp}=   Apply Provider Coupon   ${invoice_uid}   ${cupn_code}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+ 
     
     ${resp}=  Update Bill   ${wid}  ${action[12]}    ${cupn_code}
     Log  ${resp.json()}

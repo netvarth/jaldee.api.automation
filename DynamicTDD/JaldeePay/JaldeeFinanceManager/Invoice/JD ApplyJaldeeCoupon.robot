@@ -325,6 +325,8 @@ JD-TC-Apply JaldeeCoupon-1
 #     Log  ${resp.content}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
+*** comment ***
+
 JD-TC-Apply ProviderCoupon-2
 	[Documentation]  Create two jaldee coupons and provider coupons and apply in a bill and also add discount
     

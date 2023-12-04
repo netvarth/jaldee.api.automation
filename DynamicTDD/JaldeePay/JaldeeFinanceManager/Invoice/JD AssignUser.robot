@@ -238,19 +238,43 @@ JD-TC-Assign User-1
 
 JD-TC-Assign User-2
 
-    [Documentation]  assign same invoice to multiple users.
+    [Documentation]  Assign another user to  created invoice.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Assign User-3
+    ${ph1}=  Evaluate  ${HLMUSERNAME19}+1000410223
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+    ${address}=  get_address
+    ${dob}=  FakerLibrary.Date
+    ${pin}=  get_pincode
+    
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[1]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${u_id1}  ${resp.json()}
 
-    [Documentation]  create two invoice and assign with same users.
+    ${resp}=  Get User
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
+    ${resp}=  Assign User   ${invoice_uid}  ${u_id1}  
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp1}=  Get Invoice With Filter  
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    # Should Be Equal As Strings  ${resp1.json()[0]['accountId']}  ${account_id1}
+    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceCategoryId']}  ${category_id2}
+    # Should Be Equal As Strings  ${resp1.json()[0]['categoryName']}  ${name1}
+    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
+    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
+    # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
+    # Should Be Equal As Strings  ${resp1.json()[0]['assignedUserId']}  ${u_id}
+
 
 JD-TC-Assign User-UH1
 
@@ -275,7 +299,7 @@ JD-TC-Assign User-UH2
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  Assign User   ${invoice_uid}  ${u_id}  
+    ${resp}=  Assign User   ${invoice_uid}  ${u_id1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${ALREADY_ASSIGNED_USER}

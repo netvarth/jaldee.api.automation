@@ -70,7 +70,7 @@ JD-TC-Apply Item Level Discount-1
     [Documentation]  Apply Item  Level Discount.
 
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3381838
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3481838
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -425,6 +425,7 @@ JD-TC-Apply Item Level Discount-1
     Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][0]['privateNote']}  ${privateNote}
     Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][0]['displayNote']}  ${displayNote}
 
+
 JD-TC-Apply Item Level Discount-2
 
     [Documentation]  Apply item level discount where discount price is empty.
@@ -433,6 +434,39 @@ JD-TC-Apply Item Level Discount-2
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+    ${discount1}=     FakerLibrary.word
+    ${desc}=   FakerLibrary.word
+    ${discountprice1}=     Random Int   min=50   max=100
+    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    Set Suite Variable   ${discountprice}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    Log  ${resp.json()}
+    Set Test Variable   ${discountId}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Discounts 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${EMPTY}   ${privateNote}  ${displayNote}   ${itemId}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][1]['id']}  ${discountId}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][1]['name']}  ${discount1}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][1]['discountType']}  ${disctype[0]}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][1]['discountValue']}  ${discountprice}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][1]['calculationType']}  ${calctype[1]}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][1]['privateNote']}  ${privateNote}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][1]['displayNote']}  ${displayNote}
 
 JD-TC-Apply Item Level Discount-3
 
@@ -443,6 +477,38 @@ JD-TC-Apply Item Level Discount-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+    ${discount1}=     FakerLibrary.word
+    ${desc}=   FakerLibrary.word
+    ${discountprice1}=     Random Int   min=50   max=100
+    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    Set Suite Variable   ${discountprice}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    Log  ${resp.json()}
+    Set Test Variable   ${discountId}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Discounts 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${EMPTY}   ${EMPTY}  ${displayNote}   ${itemId}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][2]['id']}  ${discountId}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][2]['name']}  ${discount1}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][2]['discountType']}  ${disctype[0]}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][2]['discountValue']}  ${discountprice}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][2]['calculationType']}  ${calctype[1]}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][2]['privateNote']}  ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][2]['displayNote']}  ${displayNote}
+
 JD-TC-Apply Item Level Discount-4
 
     [Documentation]  Apply item level discount where display note is empty.
@@ -452,6 +518,36 @@ JD-TC-Apply Item Level Discount-4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+   ${discount1}=     FakerLibrary.word
+    ${desc}=   FakerLibrary.word
+    ${discountprice1}=     Random Int   min=50   max=100
+    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    Set Suite Variable   ${discountprice}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    Log  ${resp.json()}
+    Set Test Variable   ${discountId}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Discounts 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${privateNote}=     FakerLibrary.word
+
+
+    ${resp}=  Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${EMPTY}   ${privateNote}  ${EMPTY}   ${itemId}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][3]['id']}  ${discountId}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][3]['name']}  ${discount1}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][3]['discountType']}  ${disctype[0]}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][3]['discountValue']}  ${discountprice}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][3]['calculationType']}  ${calctype[1]}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][3]['privateNote']}  ${privateNote}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][3]['displayNote']}  ${EMPTY}
+
 JD-TC-Apply Item Level Discount-5
 
     [Documentation]  Apply item level discount where private note and display note is empty.
@@ -460,6 +556,35 @@ JD-TC-Apply Item Level Discount-5
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${discount1}=     FakerLibrary.word
+    ${desc}=   FakerLibrary.word
+    ${discountprice1}=     Random Int   min=50   max=100
+    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    Set Suite Variable   ${discountprice}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    Log  ${resp.json()}
+    Set Test Variable   ${discountId}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Discounts 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${EMPTY}   ${EMPTY}  ${EMPTY}   ${itemId}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][4]['id']}  ${discountId}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][4]['name']}  ${discount1}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][4]['discountType']}  ${disctype[0]}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][4]['discountValue']}  ${discountprice}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][4]['calculationType']}  ${calctype[1]}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][4]['privateNote']}  ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts'][4]['displayNote']}  ${EMPTY}
 
 
 JD-TC-Apply Item Level Discount-UH1
@@ -484,9 +609,233 @@ JD-TC-Apply Item Level Discount-UH2
     [Documentation]  Create an invoice with itemlist and apply discount to invoice then try to apply same discount in item level.
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
+    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
+    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
+    
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+    Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
+    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
+    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    
+    sleep  2s
+    ${resp}=  Get Departments
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+
+
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${name}=   FakerLibrary.word
+    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${category_id}   ${resp.json()}
+
+
+    ${name1}=   FakerLibrary.word
+    Set Suite Variable   ${name1}
+    ${resp}=  Create Category   ${name1}  ${categoryType[3]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${category_id2}   ${resp.json()}
+
+    ${vender_name}=   FakerLibrary.firstname
+    ${contactPersonName}=   FakerLibrary.lastname
+    ${owner_name}=   FakerLibrary.lastname
+    ${vendorId}=   FakerLibrary.word
+    ${PO_Number}    Generate random string    5    123456789
+    ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
+     ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
+    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    ${address}=  FakerLibrary.city
+    Set Suite Variable  ${address}
+    ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
+    ${branch}=   db.get_place
+    ${ifsc_code}=   db.Generate_ifsc_code
+    # ${gst_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
+
+    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
+
+    ${state}=    Evaluate     "${state}".title()
+    ${state}=    String.RemoveString  ${state}    ${SPACE}
+    Set Suite Variable    ${state}
+    Set Suite Variable    ${district}
+    Set Suite Variable    ${pin}
+    ${vendor_phno}=   Create List  ${vendor_phno}
+    Set Suite Variable    ${vendor_phno}
+    
+    ${email}=   Create List  ${email}
+    Set Suite Variable    ${email}
+
+    ${bankIfsc}    Random Number 	digits=5 
+    ${bankIfsc}=    Evaluate    f'{${bankIfsc}:0>7d}'
+    Log  ${bankIfsc}
+    Set Suite Variable  ${bankIfsc}  55555${bankIfsc} 
+
+    ${bankName}     FakerLibrary.name
+    Set Suite Variable    ${bankName}
+
+    ${upiId}     FakerLibrary.name
+    Set Suite Variable  ${upiId}
+
+    ${pan}    Random Number 	digits=5 
+    ${pan}=    Evaluate    f'{${pan}:0>5d}'
+    Log  ${pan}
+    Set Suite Variable  ${pan}  55555${pan}
+
+    ${branchName}=    FakerLibrary.name
+    Set Suite Variable  ${branchName}
+    ${gstin}    Random Number 	digits=5 
+    ${gstin}=    Evaluate    f'{${gstin}:0>8d}'
+    Log  ${gstin}
+    Set Test Variable  ${gstin}  55555${gstin}
+    
+    ${preferredPaymentMode}=    Create List    ${jaldeePaymentmode[0]}
+    ${bankInfo}=    Create Dictionary     bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}     branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
+    ${bankInfo}=    Create List         ${bankInfo}
+    
+    ${resp}=  Create Vendor  ${category_id}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${vendor_uid1}   ${resp.json()['uid']}
+    Set Test Variable   ${vendor_id1}   ${resp.json()['id']}
+
+    ${resp}=  Get Vendor By Id   ${vendor_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
+    Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
+    # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
+
+    ${resp1}=  AddCustomer  ${CUSERNAME11}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Test Variable  ${pcid18}   ${resp1.json()}
+
+
+    ${providerConsumerIdList}=  Create List  ${pcid18}
+    Set Test Variable  ${providerConsumerIdList}  
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+
+    ${invoiceId}=   FakerLibrary.word
+
+
+    ${itemName}=    FakerLibrary.word
+    Set Test Variable  ${itemName}
+     ${item1}=     FakerLibrary.word
+    ${itemCode1}=     FakerLibrary.word
+    ${price1}=     Random Int   min=400   max=500
+    ${price}=  Convert To Number  ${price1}  1
+    Set Test Variable  ${price} 
+    ${resp}=  Create Sample Item   ${itemName}   ${item1}  ${itemCode1}  ${price}  ${bool[1]} 
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${itemId}  ${resp.json()}
+
+    ${resp}=   Get Item By Id  ${itemId}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${promotionalPrice}   ${resp.json()['promotionalPrice']}
+
+
+    ${quantity}=   Random Int  min=500  max=1000
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  price=${promotionalPrice}
+
+    
+    
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   ${itemList}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
+
+    ${discount1}=     FakerLibrary.word
+    ${desc}=   FakerLibrary.word
+    ${discountprice1}=     Random Int   min=50   max=100
+    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    Set Test Variable   ${discountprice}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    Log  ${resp.json()}
+    Set Test Variable   ${discountId}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Discounts 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${discountValue1}=     Random Int   min=50   max=100
+    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+
+    ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['id']}  ${discountId}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['name']}  ${discount1}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['discountType']}  ${disctype[0]}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['discountValue']}  ${discountprice}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['calculationType']}  ${calctype[1]}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['privateNote']}  ${privateNote}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['displayNote']}  ${displayNote}
+
+
+    ${resp}=  Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${EMPTY}   ${privateNote}  ${displayNote}   ${itemId}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-Apply Item Level Discount-UH3
 
@@ -497,32 +846,66 @@ JD-TC-Apply Item Level Discount-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${invoice}=   FakerLibrary.word
+
+
+    ${resp}=   Apply Item Level Discount   ${invoice}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${itemId}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+
 JD-TC-Apply Item Level Discount-UH4
 
-    [Documentation]  Apply item level discount where discount id is empty.
+    [Documentation]  Apply item level discount where discount id is wrong.
 
 
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${discount}=   FakerLibrary.RandomNumber
+
+    ${resp}=   Apply Item Level Discount   ${invoice_uid}   ${discount}    ${discountprice}   ${privateNote}  ${displayNote}  ${itemId}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
 
 JD-TC-Apply Item Level Discount-UH5
 
-    [Documentation]  Apply item level discount where Item list is empty.
+    [Documentation]  Apply item level discount where Item id is wrong.
 
 
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${item}=  FakerLibrary.RandomNumber
+
+
+    ${resp}=   Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${item}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${NO_ITEM_FOUND}
 
 JD-TC-Apply Item Level Discount-UH6
 
     [Documentation]  Apply item level discount using another provider login.
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+
+    ${resp}=   Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${itemId}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
 
 
 
