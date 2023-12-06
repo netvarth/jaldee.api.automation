@@ -234,7 +234,8 @@ JD-TC-GenerateLinkForInvoice-1
 
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phn}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phn}.${test_mail}
+    Set Suite Variable  ${vendor_phn} 
+    Set Suite Variable  ${email}  ${vender_name}${vendor_phn}.${test_mail}
 
     ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${vendor_phn}    ${email}    ${boolean[1]}    ${boolean[0]}
     Log  ${resp.content}
@@ -248,6 +249,15 @@ JD-TC-GenerateLinkForInvoice-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${vendor_phn}    ${email}    ${boolean[1]}    ${boolean[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+
 JD-TC-GenerateLinkForInvoice-3
 
     [Documentation]  Generate Link For Invoice where email is only given.
@@ -255,6 +265,11 @@ JD-TC-GenerateLinkForInvoice-3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${EMPTY}    ${email}    ${boolean[1]}    ${boolean[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-GenerateLinkForInvoice-4
 
@@ -264,6 +279,11 @@ JD-TC-GenerateLinkForInvoice-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+
+    ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${vendor_phn}    ${EMPTY}    ${boolean[0]}    ${boolean[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
 JD-TC-GenerateLinkForInvoice-UH1
 
     [Documentation]  Generate Link For Invoice with invalid invoice id.
@@ -272,21 +292,61 @@ JD-TC-GenerateLinkForInvoice-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${vender_name}=   FakerLibrary.firstname
+    ${contactPersonName}=   FakerLibrary.lastname
+    ${owner_name}=   FakerLibrary.lastname
+    ${vendorId}=   FakerLibrary.words
+    ${vendor_phn}=  FakerLibrary.RandomNumber
+    Set Test Variable  ${email}  ${vender_name}${vendor_phn}.${test_mail}
+    ${invoice}=     FakerLibrary.RandomNumber
+
+    ${resp}=  Generate Link For Invoice  ${invoice}   ${vendor_phn}    ${email}    ${boolean[0]}    ${boolean[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
 JD-TC-GenerateLinkForInvoice-UH2
 
-    [Documentation]  Generate Link For Invoice with empty vendor phone.
+    [Documentation]  Generate Link For Invoice where notifications are off..
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${vender_name}=   FakerLibrary.firstname
+    ${contactPersonName}=   FakerLibrary.lastname
+    ${owner_name}=   FakerLibrary.lastname
+    ${vendorId}=   FakerLibrary.word
+    ${PO_Number}    Generate random string    5    123456789
+    ${vendor_phn}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    Set Test Variable  ${email}  ${vender_name}${vendor_phn}.${test_mail}
+
+    ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${EMPTY}    ${email}    ${boolean[0]}    ${boolean[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${ENTER_EMAIL_OR_PHONE}
 
 JD-TC-GenerateLinkForInvoice-UH3
 
-    [Documentation]  Generate Link For Invoice with empty email.
+    [Documentation]  Generate Link For Invoice where phone number is there but sms notification is off.email is empty and email notification is on...
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${vender_name}=   FakerLibrary.firstname
+    ${contactPersonName}=   FakerLibrary.lastname
+    ${owner_name}=   FakerLibrary.lastname
+    ${vendorId}=   FakerLibrary.word
+    ${PO_Number}    Generate random string    5    123456789
+    ${vendor_phn}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    Set Test Variable  ${email}  ${vender_name}${vendor_phn}.${test_mail}
+
+    ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${vendor_phn}    ${EMPTY}    ${boolean[1]}    ${boolean[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${ENTER_EMAIL_OR_PHONE}
 
 JD-TC-GenerateLinkForInvoice-UH4
 
@@ -296,6 +356,11 @@ JD-TC-GenerateLinkForInvoice-UH4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+
+    ${vender_name}=   FakerLibrary.firstname
+    ${contactPersonName}=   FakerLibrary.lastname
+    ${owner_name}=   FakerLibrary.lastname
+    ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phn}=  Evaluate  ${PUSERNAME}+${PO_Number}
     Set Test Variable  ${email}  ${vender_name}${vendor_phn}.${test_mail}
@@ -313,6 +378,17 @@ JD-TC-GenerateLinkForInvoice-UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${vender_name}=   FakerLibrary.firstname
+    ${contactPersonName}=   FakerLibrary.lastname
+    ${owner_name}=   FakerLibrary.lastname
+    ${vendorId}=   FakerLibrary.word
+    ${vendor_phn}=  FakerLibrary.RandomNumber
+    Set Test Variable  ${email}  ${vender_name}${vendor_phn}.${test_mail}
+
+    ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${vendor_phn}    ${email}    ${boolean[0]}    ${boolean[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
 JD-TC-GenerateLinkForInvoice-UH6
 
     [Documentation]  Generate Link For Invoice where email id is invalid.
@@ -320,3 +396,15 @@ JD-TC-GenerateLinkForInvoice-UH6
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${vender_name}=   FakerLibrary.firstname
+    ${contactPersonName}=   FakerLibrary.lastname
+    ${owner_name}=   FakerLibrary.lastname
+    ${vendorId}=   FakerLibrary.word
+    ${PO_Number}    Generate random string    5    123456789
+    ${vendor_phn}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${email}=   FakerLibrary.word
+
+    ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${vendor_phn}    ${email}    ${boolean[0]}    ${boolean[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422

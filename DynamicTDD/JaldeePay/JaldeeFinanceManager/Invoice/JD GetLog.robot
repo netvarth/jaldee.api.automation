@@ -230,7 +230,7 @@ JD-TC-Get Log-1
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${DAY}
     ${time_now}=    db.get_time_by_timezone  ${tz}
-    ${time_now}=    DateTime.Convert Date    ${time_now}    result_format=%H:%M:%S  
+    # ${time_now}=    DateTime.Convert Date    ${time_now}    result_format=%H:%M:%S  
     Set Suite Variable    ${time_now}
 
     
@@ -261,13 +261,45 @@ JD-TC-Get Log-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+   ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable    ${DAY}
+    # ${time_now}=    db.get_time_by_timezone  ${tz}  result_format=%H:%M:%S
+    Set Test Variable    ${time_now}
+
+    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep  02s
+ 
+
+    ${resp}=  Get Invoice Log List UId   ${invoice_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['account']}  ${account_id1}
+    Should Be Equal As Strings  ${resp.json()['invoiceUid']}  ${invoice_uid}
+    Should Be Equal As Strings  ${resp.json()['invoiceStateList'][0]['date']}  ${DAY}
+    Should Be Equal As Strings  ${resp.json()['invoiceStateList'][0]['time']}  ${time_now}
+    Should Be Equal As Strings  ${resp.json()['invoiceStateList'][0]['userType']}  ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()['invoiceStateList'][0]['localUserId']}  ${pid}
+
+
+
 JD-TC-Get Log-UH1
 
     [Documentation]   get log with another login.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Invoice Log List UId   ${invoice_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
 
 JD-TC-Get Log-UH2
 
@@ -276,3 +308,10 @@ JD-TC-Get Log-UH2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${invoice}=  FakerLibrary.RandomNumber
+
+    ${resp}=  Get Invoice Log List UId   ${invoice}
+    Log  ${resp1.json()}
+    Should Be Equal As Strings  ${resp1.status_code}  422
+    Should Be Equal As Strings  ${resp1.json()}   ${INVALID_FM_INVOICE_ID}

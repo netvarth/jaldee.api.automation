@@ -186,7 +186,7 @@ JD-TC-Remove Discount-1
 
        ${itemName}=    FakerLibrary.word
     Set Suite Variable  ${itemName}
-    ${price}=   Random Int  min=10  max=15
+    ${price}=   Random Int  min=100  max=1500
     ${price}=  Convert To Number  ${price}  1
 
     ${quantity}=   Random Int  min=5  max=10
@@ -268,7 +268,7 @@ JD-TC-Remove Discount-UH2
     ${resp}=   Remove Discount   ${invoice}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
     Log  ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  422
-    # Should Be Equal As Strings   ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
 
 JD-TC-Remove Discount-UH3
 
@@ -298,17 +298,22 @@ JD-TC-Remove Discount-UH4
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
 
+    ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${empty}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()}
+    Set Suite Variable   ${discountId1}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+
+    ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${EMPTY}  ${EMPTY}
     Log  ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
 
 JD-TC-Remove Discount-UH5
 
-    [Documentation]  remove discount its applied in any invoice .
+    [Documentation]  remove discount using another login .
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -316,9 +321,61 @@ JD-TC-Remove Discount-UH5
     ${displayNote}=   FakerLibrary.word
 
 
-    # ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
-    # Log  ${resp.json()}  
-    # Should Be Equal As Strings  ${resp.status_code}  422
+    ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  422
     # Should Be Equal As Strings   ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
 
+JD-TC-Remove Discount-UH6
+       [Documentation]   Consumer check to delete Discount 
+       ${resp}=   ConsumerLogin  ${CUSERNAME2}  ${PASSWORD} 
+       Should Be Equal As Strings    ${resp.status_code}   200
+
+        ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+    ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()}  
+       Should Be Equal As Strings  ${resp.status_code}  401
+       Should Be Equal As Strings  "${resp.json()}"   "${LOGIN_NO_ACCESS_FOR_URL}"
+              
+JD-TC-Remove Discount-UH7
+       [Documentation]   Without login,remove discount
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()}  
+       Should Be Equal As Strings  ${resp.status_code}  419
+       Should Be Equal As Strings  "${resp.json()}"   "${SESSION_EXPIRED}"
+
+JJD-TC-Remove Discount-UH8
+
+    [Documentation]  remove discount where private note and display note is empty .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+        ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+
+
+   ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   billStatus=${billStatus[1]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+    ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${empty}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()}
+    Set Suite Variable   ${discountId1}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${EMPTY}  ${EMPTY}
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  422
 

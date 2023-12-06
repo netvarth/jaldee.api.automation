@@ -67,7 +67,7 @@ Get Non Billable Subdomain
 
 JD-TC-Apply Service Level Discount-1
 
-    [Documentation]  Remove Service Level Discount.
+    [Documentation]  Apply Service Level Discount.
 
 
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3381834
@@ -532,19 +532,10 @@ JD-TC-Apply Service Level Discount-4
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['privateNote']}  ${EMPTY}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['displayNote']}  ${EMPTY}
 
-JD-TC-Apply Service Level Discount-5
-
-    [Documentation]   Apply 2 discount and remove from of them and then get invoice details.
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
 
 
-    ${resp}=   Get Discounts 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-Apply Service Level Discount-UH1
 
@@ -668,6 +659,34 @@ JD-TC-Apply Service Level Discount-UH6
 
     ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${EMPTY}    ${discountprice}   ${privateNote}  ${displayNote}  ${serviceid}
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}    ${SERVICE_NOT}
+
+JD-TC-Apply Service Level Discount-UH7
+
+    [Documentation]   Apply one service thats not added to any invoice then try to remove apply itemlevel discount using this service id.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+    ${resp}=   Get Discounts 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${SERVICE2}=    FakerLibrary.word
+    Set Suite Variable  ${SERVICE2}
+    ${desc}=   FakerLibrary.sentence
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${resp}=  Create Service  ${SERVICE2}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sid}  ${resp.json()} 
+
+    ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${EMPTY}  ${EMPTY}  ${sid}
+    Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}    ${SERVICE_NOT}
 
