@@ -133,8 +133,8 @@ JD-TC-Share invoice as pdf-1
     ${vendor_phno}=   Create List  ${vendor_phno}
     Set Suite Variable    ${vendor_phno}
     
-    ${email}=   Create List  ${email1}
-    Set Suite Variable    ${email}
+    # ${email}=   Create List  ${email1}
+    # Set Suite Variable    ${email}
 
     ${bankIfsc}    Random Number 	digits=5 
     ${bankIfsc}=    Evaluate    f'{${bankIfsc}:0>7d}'

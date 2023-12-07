@@ -452,6 +452,122 @@ JD-TC-Apply Discount-UH5
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}    ${INCORRECT_DISCOUNT_ID}
 
+JD-TC-Apply Discount-UH6
+
+    [Documentation]  create invoice as settiled bill status then try to apply  discount .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+    ${resp1}=  AddCustomer  ${CUSERNAME10}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable  ${pcid10}   ${resp1.json()}
+
+
+    ${providerConsumerIdList}=  Create List  ${pcid10}
+    Set Suite Variable  ${providerConsumerIdList}  
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+    ${invoiceId}=   FakerLibrary.word
+
+       ${itemName}=    FakerLibrary.word
+    Set Suite Variable  ${itemName}
+    ${price}=   Random Int  min=100  max=1500
+    ${price}=  Convert To Number  ${price}  1
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
+    ${adhocItemList}=    Create List    ${adhocItemList}
+    
+    
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}    billStatus=${billStatus[1]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]} 
+
+
+    ${resp}=   Apply Discount   ${invoice_uid1}   ${discountId}    ${empty}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${YOU_CANNOT_UPDATE_FINANCE}
+    
+JD-TC-Apply Discount-UH7
+
+    [Documentation]  update bill status as cancel then try to apply discount .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+        ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+    ${resp1}=  AddCustomer  ${CUSERNAME9}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable  ${pcid9}   ${resp1.json()}
+
+
+    ${providerConsumerIdList}=  Create List  ${pcid9}
+    Set Suite Variable  ${providerConsumerIdList}  
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+    ${invoiceId}=   FakerLibrary.word
+
+       ${itemName}=    FakerLibrary.word
+    Set Suite Variable  ${itemName}
+    ${price}=   Random Int  min=100  max=1500
+    ${price}=  Convert To Number  ${price}  1
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
+    ${adhocItemList}=    Create List    ${adhocItemList}
+    
+    
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid2}   ${resp.json()['uidList'][0]} 
+
+
+
+    ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[2]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=   Apply Discount   ${invoice_uid2}   ${discountId}    ${empty}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()}
+    Set Suite Variable   ${discountId1}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${YOU_CANNOT_UPDATE_FINANCE_CANCEL}
+
+
+
 
 
 

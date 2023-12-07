@@ -303,6 +303,8 @@ JD-TC-GenerateLinkForInvoice-UH1
     ${resp}=  Generate Link For Invoice  ${invoice}   ${vendor_phn}    ${email}    ${boolean[0]}    ${boolean[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_YNWUUID}
+    
 
 JD-TC-GenerateLinkForInvoice-UH2
 

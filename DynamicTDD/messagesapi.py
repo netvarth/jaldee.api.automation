@@ -2099,7 +2099,8 @@ financehtml= "<html style=\"width: 210mm; height: 297mm; font-size: 1rem; font-f
 NEED_BILL_AMOUNT_HIGHER_THAN_DISCOUNT="To apply the discount , bill amount needs to be higher than the discount"
 NO_ITEM_FOUND="No Item found"
 SERVICE_NOT="No Service found"
-
+YOU_CANNOT_UPDATE_FINANCE="You cannot Update the Finance Invoice i.e The Bill Status is Settled "
+YOU_CANNOT_UPDATE_FINANCE_CANCEL="You cannot Update the Finance Invoice i.e The Bill Status is Cancel "
 
 
 
