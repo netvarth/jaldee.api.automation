@@ -299,7 +299,7 @@ JD-TC-Get Log-UH1
     ${resp}=  Get Invoice Log List UId   ${invoice_uid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+    Should Be Equal As Strings  ${resp.json()}   ${JALDEE_FINANCE_DISABLED}
 
 JD-TC-Get Log-UH2
 
@@ -311,7 +311,7 @@ JD-TC-Get Log-UH2
 
     ${invoice}=  FakerLibrary.RandomNumber
 
-    ${resp}=  Get Invoice Log List UId   ${invoice}
+    ${resp1}=  Get Invoice Log List UId   ${invoice}
     Log  ${resp1.json()}
     Should Be Equal As Strings  ${resp1.status_code}  422
     Should Be Equal As Strings  ${resp1.json()}   ${INVALID_FM_INVOICE_ID}

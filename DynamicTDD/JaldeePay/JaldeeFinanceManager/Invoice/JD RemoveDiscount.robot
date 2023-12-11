@@ -292,6 +292,8 @@ JD-TC-Remove Discount-3
     ${quantity}=  Convert To Number  ${quantity}  1
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}
+    ${netTotal}=  Evaluate  ${quantity} * ${price}
+    Set Suite Variable   ${netTotal}
     
     
     ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}   
@@ -319,6 +321,44 @@ JD-TC-Remove Discount-3
     Log  ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings   ${resp.json()}   ${YOU_CANNOT_UPDATE_FINANCE_CANCEL}
+
+JD-TC-Remove Discount-4
+
+    [Documentation]  share invoice as pdf then try to remove discount .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+    ${resp}=   Apply Discount   ${invoice_uid3}   ${discountId}    ${empty}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()}
+    Set Suite Variable   ${discountId1}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${netRate}=   Evaluate  ${netTotal}-${discountprice}
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid3}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.json()['discounts'][0]['id']}   ${discountId}
+    Should Be Equal As Strings  ${resp1.json()['netTotal']}     ${netTotal}
+    Should Be Equal As Strings  ${resp1.json()['netRate']}     ${netRate}
+
+    ${resp}=  Share invoice as pdf   ${invoice_uid3}   ${boolean[1]}    ${email}   ${html}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=   Remove Discount   ${invoice_uid3}   ${discountId}    ${discountprice}   ${EMPTY}  ${EMPTY}
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid3}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.json()['discounts']}   []
+    Should Be Equal As Strings  ${resp1.json()['netRate']}     ${netTotal}
 
 
 JD-TC-Remove Discount-UH1
@@ -571,29 +611,6 @@ JD-TC-Remove Discount-UH9
 
 
 
-JD-TC-Remove Discount-UH11
-
-    [Documentation]  share invoice as pdf then try to remove discount .
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${privateNote}=     FakerLibrary.word
-    ${displayNote}=   FakerLibrary.word
-
-    ${resp}=   Apply Discount   ${invoice_uid3}   ${discountId}    ${empty}   ${privateNote}  ${displayNote}
-    Log  ${resp.json()}
-    Set Suite Variable   ${discountId1}   ${resp.json()}   
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Share invoice as pdf   ${invoice_uid3}   ${boolean[1]}    ${email}   ${html}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-
-    ${resp}=   Remove Discount   ${invoice_uid3}   ${discountId}    ${discountprice}   ${EMPTY}  ${EMPTY}
-    Log  ${resp.json()}  
-    Should Be Equal As Strings  ${resp.status_code}  422
 
