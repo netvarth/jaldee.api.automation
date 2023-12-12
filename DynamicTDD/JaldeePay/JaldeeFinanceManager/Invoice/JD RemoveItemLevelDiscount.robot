@@ -445,11 +445,11 @@ JD-TC-Remove Item Level Discount-1
     Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['totalPrice']}   ${servicenetRate}
     Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['netRate']}   ${servicenetRate}
     Should Be Equal As Strings  ${resp1.json()['amountTotal']}     ${rate}
-    Should Be Equal As Strings  ${resp1.json()['amountDue']}     ${amounttotal}
+    Should Be Equal As Strings  ${resp1.json()['amountDue']}     ${netTotal}
     Should Be Equal As Strings  ${resp1.json()['taxableTotal']}     ${total_amt_with_tax}
     Should Be Equal As Strings  ${resp1.json()['nonTaxableTotal']}     ${servicenetRate}
     Should Be Equal As Strings  ${resp1.json()['netTaxAmount']}     ${netTaxAmount}
-    Should Be Equal As Strings  ${resp1.json()['temporaryTotalAmount']}     ${netTotal}
+    Should Be Equal As Strings  ${resp1.json()['temporaryTotalAmount']}     ${rate}
 
     ${resp}=  Remove Item Level Discount   ${invoice_uid}   ${discountId}    ${discountValue1}   ${privateNote}  ${displayNote}   ${itemId}
     Log  ${resp.json()}  
@@ -464,7 +464,7 @@ JD-TC-Remove Item Level Discount-1
 
 
 
-JD-TC-Remove Item Level Discount-5
+JD-TC-Remove Item Level Discount-2
 
     [Documentation]  login another user who have no admin privilage and check jaldee finance is enabled ,
 
@@ -761,7 +761,7 @@ JD-TC-Remove Item Level Discount-5
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
 
-JD-TC-Remove Item Level Discount-6
+JD-TC-Remove Item Level Discount-3
 
     [Documentation]  remove item level discount after sharing invoice,
 
@@ -807,6 +807,137 @@ JD-TC-Remove Item Level Discount-6
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts']}   []
     Should Be Equal As Strings  ${resp1.json()['netRate']}     ${netTotal}
+
+JD-TC-Remove Item Level Discount-4
+
+    [Documentation]  Account is taxable,item is  taxable-Create new invoice.
+
+
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+        ${gstper}=  Random Element  ${gstpercentage}
+        ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
+        ${resp}=  Update Tax Percentage  ${gstper}  ${GST_num}
+        Should Be Equal As Strings    ${resp.status_code}   200
+        ${resp}=  Enable Tax
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+        ${resp}=  Get Tax Percentage
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200  
+        Set Test Variable  ${tax_per}  ${resp.json()['taxPercentage']}
+
+   ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+
+    ${invoiceId}=   FakerLibrary.word
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+     ${item1}=     FakerLibrary.word
+    ${itemCode1}=     FakerLibrary.word
+    ${price1}=     Random Int   min=400   max=500
+    ${price}=  Convert To Number  ${price1}  1
+    Set Suite Variable  ${price} 
+    ${resp}=  Create Sample Item   ${DisplayName1}   ${item1}  ${itemCode1}  ${price}  ${bool[1]} 
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${itemId2}  ${resp.json()}
+
+    ${resp}=   Get Item By Id  ${itemId2}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${promotionalPrice}   ${resp.json()['promotionalPrice']}
+
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${itemList}=  Create Dictionary  itemId=${itemId2}   quantity=${quantity}  price=${promotionalPrice}
+    ${netTotal1}=  Evaluate  ${quantity} * ${promotionalPrice}
+    Set Suite Variable   ${netTotal1}
+    
+    
+    ${resp}=  Create Invoice   ${category_id3}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid2}   ${invoiceId}    ${providerConsumerIdList}   ${itemList}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid3}   ${resp.json()['uidList'][0]} 
+
+    ${discount1}=     FakerLibrary.word
+    ${desc}=   FakerLibrary.word
+    ${discountprice1}=     Random Int   min=50   max=100
+    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    Set Test Variable   ${discountprice}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    Log  ${resp.json()}
+    Set Test Variable   ${discountId1}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Apply Item Level Discount   ${invoice_uid3}   ${discountId1}    ${discountprice}   ${privateNote}  ${displayNote}   ${itemId2}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${netRate}=  Evaluate  ${netTotal1} - ${discountprice}
+    Set Test Variable   ${netRate}
+
+
+        ${netTaxAmount}=  Evaluate  ${netRate}*(${tax_per}/100)
+        ${netTaxAmount}=  Convert To Number  ${netTaxAmount}   2
+        ${total_amt_with_tax}=  Evaluate  ${netRate}+${netTaxAmount}
+        ${total_amt_with_tax}=  Convert To Number  ${total_amt_with_tax}   2
+        ${netTotal}=  Evaluate  ${total_amt_with_tax}+${netRate}
+        ${netTotal}=  Convert To Number  ${netTotal}   2
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid3}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts'][0]['id']}   ${discountId1}
+    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts'][0]['discountValue']}   ${discountprice}
+    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts'][0]['privateNote']}   ${privateNote}
+    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts'][0]['displayNote']}   ${displayNote}
+    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discountTotal']}   ${discountprice}
+    Should Be Equal As Strings  ${resp1.json()['netTotal']}     ${netRate}
+    Should Be Equal As Strings  ${resp1.json()['netRate']}     ${total_amt_with_tax}
+    Should Be Equal As Strings  ${resp1.json()['amountDue']}     ${total_amt_with_tax}
+    Should Be Equal As Strings  ${resp1.json()['amountTotal']}     ${netRate}
+    Should Be Equal As Strings  ${resp1.json()['taxableTotal']}     ${total_amt_with_tax}
+    # Should Be Equal As Strings  ${resp1.json()['amountDue']}     ${netRate}
+    # Should Be Equal As Strings  ${resp1.json()['temporaryTotalAmount']}     ${rate}
+    # Should Be Equal As Strings  ${resp1.json()['itemList'][0]['totalPrice']}   ${servicenetRate}
+    # Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['netRate']}   ${netRate}
+
+
+
+    # Should Be Equal As Strings  ${resp1.json()['nonTaxableTotal']}     ${netRate}
+    # Should Be Equal As Strings  ${resp1.json()['temporaryTotalAmount']}     ${netRate}
+
+    ${resp}=  Remove Item Level Discount   ${invoice_uid3}   ${discountId1}    ${EMPTY}   ${EMPTY}  ${EMPTY}   ${itemId2}
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+        ${netTaxAmount1}=  Evaluate  ${netTotal1}*(${tax_per}/100)
+        ${netTaxAmount1}=  Convert To Number  ${netTaxAmount1}   2
+        ${total_amt_with_tax1}=  Evaluate  ${netTotal1}+${netTaxAmount1}
+        ${total_amt_with_tax1}=  Convert To Number  ${total_amt_with_tax1}   2
+        ${netTotal1}=  Evaluate  ${total_amt_with_tax1}+${netTotal1}
+        ${netTotal1}=  Convert To Number  ${netTotal1}   2
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts']}  []
+    Should Be Equal As Strings  ${resp1.json()['netTotal']}     ${netTotal1}
+    Should Be Equal As Strings  ${resp1.json()['netRate']}     ${total_amt_with_tax1}
+    Should Be Equal As Strings  ${resp1.json()['amountDue']}     ${total_amt_with_tax1}
+    Should Be Equal As Strings  ${resp1.json()['amountTotal']}     ${netTotal1}
+    Should Be Equal As Strings  ${resp1.json()['taxableTotal']}     ${total_amt_with_tax1}
+
+
 
 JD-TC-Remove Item Level Discount-UH1
 

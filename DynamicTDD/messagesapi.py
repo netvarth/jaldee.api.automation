@@ -2101,6 +2101,7 @@ NO_ITEM_FOUND="No Item found"
 SERVICE_NOT="No Service found"
 YOU_CANNOT_UPDATE_FINANCE="You cannot Update the Finance Invoice i.e The Bill Status is Settled "
 YOU_CANNOT_UPDATE_FINANCE_CANCEL="You cannot Update the Finance Invoice i.e The Bill Status is Cancel "
+NO_INVOICE_GENERATED="No invoices generated with given ynwuuid : {}"
 
 
 

@@ -12422,3 +12422,8 @@ Create Appointment Reminder Settings
     ${resp}=    POST On Session   ynw    /provider/consumerNotification/settings   data=${data}  expected_status=any
     [Return]  ${resp}
 
+Get Bookings Invoices
+     [Arguments]      ${ynwuuid}  
+    Check And Create YNW Session
+    ${resp}=    GET On Session  ynw   /provider/jp/finance/invoice/ynwuid/${ynwuuid}    expected_status=any
+    [Return]  ${resp}
