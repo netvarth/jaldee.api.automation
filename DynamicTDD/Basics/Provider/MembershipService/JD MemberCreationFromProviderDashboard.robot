@@ -27,7 +27,7 @@ JD-TC-Member_Creation_From_Provider_Dashboard-1
 
     [Documentation]  Member Creation From Provider Dashboard
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -35,7 +35,7 @@ JD-TC-Member_Creation_From_Provider_Dashboard-1
     Log  ${decrypted_data}
     Set Suite Variable  ${user_id}  ${decrypted_data['id']}
 
-    ${accountId}=    get_acc_id       ${PUSERNAME56}
+    ${accountId}=    get_acc_id       ${PUSERNAME5}
     Set Suite Variable    ${accountId}
 
     ${lid}=  Create Sample Location
@@ -92,7 +92,7 @@ JD-TC-Member_Creation_From_Provider_Dashboard-UH1
 
     [Documentation]  Member Creation From Provider Dashboard - same mobile number
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -105,7 +105,7 @@ JD-TC-Member_Creation_From_Provider_Dashboard-UH2
 
     [Documentation]  Member Creation From Provider Dashboard - invalid mobile number
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -120,7 +120,7 @@ JD-TC-Member_Creation_From_Provider_Dashboard-UH3
 
     [Documentation]  Member Creation From Provider Dashboard - invalid Member service Id 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -138,7 +138,7 @@ JD-TC-Member_Creation_From_Provider_Dashboard-UH4
 
     [Documentation]  Member Creation From Provider Dashboard - EMPTY Member service Id 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -155,7 +155,7 @@ JD-TC-Member_Creation_From_Provider_Dashboard-UH5
 
     [Documentation]  Member Creation From Provider Dashboard - firstname is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -171,7 +171,7 @@ JD-TC-Member_Creation_From_Provider_Dashboard-UH6
 
     [Documentation]  Member Creation From Provider Dashboard - lastname is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -187,7 +187,7 @@ JD-TC-Member_Creation_From_Provider_Dashboard-UH7
 
     [Documentation]  Member Creation From Provider Dashboard - country code is empty
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

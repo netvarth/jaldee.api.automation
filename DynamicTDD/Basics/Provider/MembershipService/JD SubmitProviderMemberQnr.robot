@@ -139,8 +139,8 @@ JD-TC-Submit_Member_QNR-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length  ${resp.json()}
     FOR  ${i}  IN RANGE   ${len}
-      ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[12]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[0]}'  Set Variable  ${resp.json()[${i}]['id']} 
-      ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[12]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[1]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[0]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
+      ${id}  Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[12]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[0]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[0]}'  Set Variable  ${resp.json()[${i}]['id']} 
+      ${qnrid}   Run Keyword If   '${resp.json()[${i}]['transactionType']}' == '${QnrTransactionType[12]}' and '${resp.json()[${i}]['channel']}' == '${QnrChannel[0]}' and '${resp.json()[${i}]['captureTime']}' == '${QnrcaptureTime[0]}'  Set Variable  ${resp.json()[${i}]['questionnaireId']}
       Exit For Loop If   '${id}' != '${None}'
     END
     Set Suite Variable   ${id}
@@ -173,7 +173,7 @@ JD-TC-Submit_Member_QNR-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable     ${memberid1}    ${resp.json()}
 
-    ${respo}=    Get Before Questionnaire Membership    ${accountId}    ${memberserviceid}    ${QnrChannel[1]}
+    ${respo}=    Get Before Questionnaire Membership    ${accountId}    ${memberserviceid}    ${QnrChannel[0]}
     Log  ${qns.content}
     Should Be Equal As Strings  ${qns.status_code}  200
     Set Suite Variable    ${qid}     ${respo.json()['questionnaireId']}
@@ -217,3 +217,28 @@ JD-TC-Submit_Member_QNR-1
     ${resp}=    Submit Provider Member Qnr    ${memberid1}   ${data}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-Submit_Member_QNR-UH1
+
+    [Documentation]  Submit Member QNR where member id is invalid or wrong 
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Submit Provider Member Qnr    548   ${data}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_UID}
+
+JD-TC-Submit_Member_QNR-UH2
+
+    [Documentation]  Submit Member QNR without login 
+
+    ${resp}=    Submit Provider Member Qnr    ${memberid1}   ${data}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    
+
+

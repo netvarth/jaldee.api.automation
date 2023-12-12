@@ -10628,6 +10628,23 @@ Submit Provider Member Qnr
     ${resp}=    POST On Session  ynw  /provider/membership/questionnaire/submit/${memberId}    data=${data}       expected_status=any
     [Return]  ${resp}
 
+Resubmit Provider Member Qnr
+
+    [Arguments]    ${memberId}  ${data}
+
+    Check And Create YNW Session
+    ${resp}=    POST On Session  ynw  /provider/membership/questionnaire/resubmit/${memberId}    data=${data}       expected_status=any
+    [Return]  ${resp}
+
+Get Provider Member Qnr
+
+    [Arguments]    ${memberId}
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session  ynw  /provider/membership/questionnaire/${memberId}        expected_status=any
+    [Return]  ${resp}
+
+
 # ........Finance Manager.............
 
 
