@@ -53,6 +53,7 @@ ${sample}                     4452135820
 *** Test Cases ***
 
 JD-TC-ApplyJaldeeCouponforwaitlist-1
+
       [Documentation]   Apply Jaldee Coupon for waitlist.
 
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33784531
@@ -97,6 +98,10 @@ JD-TC-ApplyJaldeeCouponforwaitlist-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${resp}=   Get Active License
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${lic1}  ${resp.json()['accountLicense']['licPkgOrAddonId']}
+
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -130,14 +135,6 @@ JD-TC-ApplyJaldeeCouponforwaitlist-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
-
-    # ${resp}=    Get Bill Settings
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=    Enable Disable bill    ${boolean[1]}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
 
       ${resp}=  AddCustomer  ${CUSERNAME1}
       Log   ${resp.json()}
@@ -265,3 +262,238 @@ JD-TC-ApplyJaldeeCouponforwaitlist-1
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
     Should Be Equal As Strings  ${resp.json()['netRate']}                  ${netRate}
     Should Be Equal As Strings  ${resp.json()['amountDue']}                  ${netRate}
+
+  
+JD-TC-ApplyJaldeeCoupon-UH1
+
+    [Documentation]   After validity period of a coupon, provider trying to apply that coupon
+    
+    ${domains}=  Jaldee Coupon Target Domains  ALL
+    ${sub_domains}=  Jaldee Coupon Target SubDomains  ALL
+    ${loc1}=  Jaldee Coupon Target Locations  ${longi}  ${latti}  5
+    ${loc2}=  Jaldee Coupon Target Locations  ${longi1}  ${latti1}  2
+    ${locations}=  Create List  ${loc1}  ${loc2}
+    ${licenses}=  Jaldee Coupon Target License  ${lic1}
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY3}=  db.add_timezone_date  ${tz}  1  
+    ${cupn_code06}=   FakerLibrary.word
+    Set Suite Variable   ${cupn_code06}
+    ${cupn_name}=   FakerLibrary.word
+    Set Suite Variable   ${cupn_name}   Coupon_${cupn_name}
+    clear_jaldeecoupon  ${cupn_code06}
+    ${resp}=  Create Jaldee Coupon  ${cupn_code06}  ${cupn_name}  ${cup_des}  ${age_group[0]}  ${DAY1}  ${DAY3}  ${discountType[0]}  50  100  ${bool[0]}  ${bool[0]}  0  100  1000  5  2  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${c_des}  ${p_des}  ${domains}  ${sub_domains}  ALL  ${licenses}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Push Jaldee Coupon  ${cupn_code06}  ${cupn_name}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  SuperAdmin Logout
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_code06}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code06}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['couponState']}  ${couponState[1]}
+    
+    change_system_date  2
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    # ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+    # Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
+    # Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+
+    # ${resp}=   Get jaldeeIntegration Settings
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  AddCustomer  ${CUSERNAME2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${cid}  ${resp.json()}
+
+    ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code06}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['couponState']}   ${couponState[2]}
+
+    # ${cid}=  get_id  ${CUSERNAME2}
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid}  ${wid[0]}
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${ser_id1}
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE1}
+
+    ${resp}=  Apply Jaldee Coupon By Provider  ${cupn_code06}  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${JALDEE_COUPON_NOT_VALID}"
+
+
+
+
+
+
+
+
+
+JD-TC-ApplyJaldeeCoupon-UH2
+
+    [Documentation]   Provider trying to apply a coupon after maxProviderUseLimit, and check an alert get to appropriate  provider
+    
+    ${domains}=  Jaldee Coupon Target Domains  ALL
+    ${sub_domains}=  Jaldee Coupon Target SubDomains  ALL
+    ${loc1}=  Jaldee Coupon Target Locations  ${longi}  ${latti}  5
+    ${loc2}=  Jaldee Coupon Target Locations  ${longi1}  ${latti1}  2
+    ${locations}=  Create List  ${loc1}  ${loc2}
+
+    ${licenses}=  Jaldee Coupon Target License  ${lic1}
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${cupn_code07}=   FakerLibrary.word
+    Set Suite Variable   ${cupn_code07}
+
+    ${cupn_name}=   FakerLibrary.word
+    Set Suite Variable   ${cupn_name}   Coupon_${cupn_name}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
+    Set Suite Variable  ${DAY2}  
+    
+    clear_jaldeecoupon  ${cupn_code07}
+    ${resp}=  Create Jaldee Coupon  ${cupn_code07}  ${cupn_name}  ${cup_des}  ${age_group[0]}  ${DAY1}  ${DAY2}  ${discountType[0]}  50  100  ${bool[0]}  ${bool[0]}  0  100  1  5  1  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${c_des}  ${p_des}  ${domains}  ${sub_domains}  ALL  ${licenses}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Push Jaldee Coupon  ${cupn_code07}  ${cupn_name}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  SuperAdmin Logout
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_code07}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${cid}=  get_id  ${CUSERNAME2}
+    ${id}=  get_acc_id  ${PUSERPH0}
+    clear_Alert  ${id}
+
+    ${resp}=  Add To Waitlist  ${cid}  ${ser_id2}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid}  ${wid[0]}
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${ser_id2}
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE2}
+
+    ${resp}=  Apply Jaldee Coupon By Provider  ${cupn_code07}  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Add To Waitlist  ${cid}  ${ser_id3}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid}  ${wid[0]}
+    ${resp}=  Get Bill By UUId  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}
+    Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${ser_id3}
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE3}
+    
+    ${resp}=  Apply Jaldee Coupon By Provider  ${cupn_code07}  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  409
+    Should Be Equal As Strings  "${resp.json()}"  "${JALDEE_COUPON_EXCEEDS_APPLY_LIMIT}"
+    
+    ${resp}=  Get Alerts
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['text']}   ${cupn_code07} ,will not be available as it has reached the maximum apply limit
+
+
+
+
+
+JD-TC-ApplyJaldeeCoupon-UH3
+
+    [Documentation]   Apply a jaldee coupon when no bill
+    
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Get Active License
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${lic1}  ${resp.json()['accountLicense']['licPkgOrAddonId']}
+
+    ${resp}=   ProviderLogout
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${domains}=  Jaldee Coupon Target Domains  ALL
+    ${sub_domains}=  Jaldee Coupon Target SubDomains  ALL
+    ${loc1}=  Jaldee Coupon Target Locations  ${longi}  ${latti}  5
+    ${loc2}=  Jaldee Coupon Target Locations  ${longi1}  ${latti1}  2
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
+    Set Suite Variable  ${DAY2}  
+    ${locations}=  Create List  ${loc1}  ${loc2}
+    ${licenses}=  Jaldee Coupon Target License  ${lic1}
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${cupn_code0112}=   FakerLibrary.word
+    Set Suite Variable   ${cupn_code0112}
+    ${cupn_name}=   FakerLibrary.word
+    Set Suite Variable   ${cupn_name}   Coupon_${cupn_name}
+   
+    clear_jaldeecoupon  ${cupn_code0112}
+    ${resp}=  Create Jaldee Coupon  ${cupn_code0112}  ${cupn_name}  ${cup_des}  ${age_group[0]}  ${DAY1}  ${DAY2}  ${discountType[0]}  50  100  ${bool[0]}  ${bool[0]}  0  1000  10  5  2  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${c_des}  ${p_des}  ${domains}  ${sub_domains}  ALL  ${licenses}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Push Jaldee Coupon  ${cupn_code0112}  ${cup_des}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  SuperAdmin Logout
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Enable Jaldee Coupon By Provider  ${cupn_code0112}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Add To Waitlist  ${cid}  ${s_id1}  ${qid1}  ${DAY2}  ${des}  ${bool[1]}  ${cid}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid}  ${wid[0]}
+    ${resp}=  Apply Jaldee Coupon By Provider  ${cupn_code0112}  ${wid}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${NO_BILL_FOUND}"
