@@ -53,8 +53,8 @@ ${self}         0
 
 *** Test Cases ***
 
-JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
-      [Documentation]   Apply Service Level Discount For Appointmnet.
+JD-TC-ApplyProviderCouponForAppointmnet-1
+      [Documentation]   Provider a Create Coupon (service based on coupon),apply for Appointment(ONLINE)
 
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33888341
     Set Suite Variable   ${PUSERPH0}
@@ -114,6 +114,7 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
     ${pid}=  get_acc_id  ${PUSERPH0}
+    Set Suite Variable  ${pid}
     ${cid}=  get_id  ${CUSERNAME32}
 
     ${DAY1}=  get_date
@@ -219,7 +220,7 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[1]}  ${bool[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
-    Set Test Variable  ${s_id}  ${resp.json()}
+    Set Suite Variable  ${s_id}  ${resp.json()}
 
 
     clear_appt_schedule   ${PUSERPH0}
@@ -235,12 +236,15 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${DAY2}=  db.add_timezone_date  ${tz}  10  
+    Set Suite Variable  ${DAY2}
+
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  db.add_timezone_time     ${tz}  0  15
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
+    Set Suite Variable  ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
@@ -248,7 +252,7 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    Set Suite Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
@@ -258,9 +262,9 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${jdconID}   ${resp.json()['id']}
-    Set Test Variable  ${fname}   ${resp.json()['firstName']}
-    Set Test Variable  ${lname}   ${resp.json()['lastName']}
+    Set Suite Variable  ${jdconID}   ${resp.json()['id']}
+    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
     ${resp}=  Get Appointment Schedules Consumer  ${pid}
     Log   ${resp.json()}
@@ -291,6 +295,7 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
+    Set Suite Variable  ${apptid1}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.json()}
@@ -307,14 +312,6 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-
-    Set Suite Variable  ${pid}  ${decrypted_data['id']}
-    Set Suite Variable    ${pdrname}    ${decrypted_data['userName']}
-    Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
-    Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
     ${resp}=  Get Coupons 
     Log  ${resp.json()}
@@ -339,7 +336,7 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     ${coupn_based}=  Create List   ${couponBasedOn[0]}
     ${tc}=  FakerLibrary.sentence
     ${services}=   Create list     ${s_id}    
-    ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
+    ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[1]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${couponId}  ${resp.json()}
@@ -362,4 +359,328 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
+JD-TC-ApplyProviderCouponForAppointmnet-2
+    [Documentation]   Take Appointment for Future then apply provider coupon(ONLINE).
 
+    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Appointment Schedules Consumer  ${pid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id}   ${pid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${pid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j}=  Random Int  max=${num_slots-3}
+    Set Test Variable   ${slot1}   ${slots[${j}]}
+
+    ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${cnote}=   FakerLibrary.name
+    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY2}  ${cnote}   ${apptfor}    location=${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
+    Set Suite Variable  ${apptid1}
+
+    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Verify Response    ${resp}     uid=${apptid1}   appmtDate=${DAY2}   appmtTime=${slot1}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
+    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}  ${apptStatus[0]}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
+
+    ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=   Apply Provider Coupon for Appointment    ${apptid1}    ${cupn_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+    ${resp}=   Get Appointment level Bill Details      ${apptid1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+JD-TC-ApplyProviderCouponForAppointmnet-3
+    [Documentation]   Provider a Create Coupon (service based on coupon),apply for Appointment(WALK-IN).
+
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    clear_Coupon   ${PUSERPH0}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+
+    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}   ${resp.json()}
+    
+    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+    
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Test Variable  ${apptid1}  ${apptid[0]}
+
+    # ${resp}=  Get Appointment EncodedID   ${apptid1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${encId}=  Set Variable   ${resp.json()}
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid1}
+    # Should Be Equal As Strings  ${resp.json()['appointmentEncId']}   ${encId}
+    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
+    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
+    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
+    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
+    Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
+
+    ${resp}=   Apply Provider Coupon for Appointment    ${apptid1}    ${cupn_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+    ${resp}=   Get Appointment level Bill Details      ${apptid1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+*** comment ***
+JD-TC-ApplyProviderCouponForAppointmnet-2
+    [Documentation]   Provider Create Coupon  with Percentage Calculation Type,Then apply for Appointment.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    clear_Coupon   ${PUSERPH0}
+    
+    ${resp}=  Get Business Profile
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${coupon}=    FakerLibrary.word
+    ${desc}=  FakerLibrary.Sentence   nb_words=2
+    ${amount}=  Random Int   min=10  max=50
+    ${cupn_code}=   FakerLibrary.word
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
+    ${min_bill_amount}=   Random Int   min=100   max=1000
+    ${max_disc_val}=   Random Int   min=100   max=500
+    ${max_prov_use}=   Random Int   min=10   max=20
+    ${book_channel}=   Create List   ${bookingChannel[0]}    ${bookingChannel[1]}
+    ${coupn_based}=  Create List   ${couponBasedOn[0]}
+    ${tc}=  FakerLibrary.sentence
+    ${services}=   Create list   ${s_id}   
+    ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${amount}  ${calctype[0]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[1]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${coupon_id1}  ${resp.json()}
+    
+    ${resp}=  Get Coupon By Id  ${coupon_id1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+
+    # ${discAmt}=    Evaluate  ${ser_amount2}-${amount}
+
+    ${resp}=   Apply Provider Coupon for Appointment    ${apptid1}    ${cupn_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+    ${resp}=   Get Appointment level Bill Details      ${apptid1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+JD-TC-ApplyProviderCouponForAppointmnet-3
+    [Documentation]   Provider a Create Coupon with online booking channel,Then apply for Appointment.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    clear_Coupon   ${PUSERPH0}
+
+
+    ${coupon1}=    FakerLibrary.word
+    ${desc}=  FakerLibrary.Sentence   nb_words=2
+    ${amount}=  Random Int   min=10  max=50
+    ${cupn_code}=   FakerLibrary.word
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
+    ${min_bill_amount}=   Random Int   min=100   max=1000
+    ${max_disc_val}=   Random Int   min=100   max=500
+    ${max_prov_use}=   Random Int   min=10   max=20
+    ${book_channel}=   Create List   ${bookingChannel[1]}
+    ${coupn_based}=  Create List   ${couponBasedOn[0]}
+    ${tc}=  FakerLibrary.sentence
+    ${services}=   Create list   ${s_id}   
+    ${resp}=  Create Provider Coupon   ${coupon1}  ${desc}  ${amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[1]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}   ${tc}  services=${services} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${coupon_id1}  ${resp.json()}
+    
+    ${resp}=  Get Coupon By Id  ${coupon_id1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+
+    # ${discAmt}=    Evaluate  ${ser_amount2}-${amount}
+
+    ${resp}=   Apply Provider Coupon for Appointment    ${apptid1}    ${cupn_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+    ${resp}=   Get Appointment level Bill Details      ${apptid1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+JD-TC-ApplyProviderCouponForAppointmnet-4
+    [Documentation]   Provider a Create Coupon with online booking channel,Then apply for Appointment.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    clear_Coupon   ${PUSERPH0}
+    
+    ${coupon1}=    FakerLibrary.word
+    ${desc}=  FakerLibrary.Sentence   nb_words=2
+    ${amount}=  Random Int   min=10  max=50
+    ${cupn_code}=   FakerLibrary.word
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
+    ${min_bill_amount}=   Random Int   min=100   max=1000
+    ${max_disc_val}=   Random Int   min=100   max=500
+    ${max_prov_use}=   Random Int   min=10   max=20
+    ${book_channel}=   Create List   ${bookingChannel[2]}
+    ${coupn_based}=  Create List   ${couponBasedOn[0]}
+    ${tc}=  FakerLibrary.sentence
+    ${services}=   Create list   ${s_id}
+    ${resp}=  Create Provider Coupon   ${coupon1}  ${desc}  ${amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[1]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${coupon_id1}  ${resp.json()}
+    
+    ${resp}=  Get Coupon By Id  ${coupon_id1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+
+    # ${discAmt}=    Evaluate  ${ser_amount2}-${amount}
+
+    ${resp}=   Apply Provider Coupon for Appointment    ${apptid1}    ${cupn_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+    ${resp}=   Get Appointment level Bill Details      ${apptid1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+JD-TC-ApplyProviderCouponForAppointmnet-5
+    [Documentation]   Provider a Create Coupon with whatsapp booking channel,Then apply for Appointment.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    clear_Coupon   ${PUSERPH0}
+
+    ${coupon1}=    FakerLibrary.word
+    ${desc}=  FakerLibrary.Sentence   nb_words=2
+    ${amount}=  Random Int   min=10  max=50
+    ${cupn_code}=   FakerLibrary.word
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
+    ${min_bill_amount}=   Random Int   min=100   max=1000
+    ${max_disc_val}=   Random Int   min=100   max=500
+    ${max_prov_use}=   Random Int   min=10   max=20
+    ${book_channel}=   Create List   ${bookingChannel[2]}
+    ${coupn_based}=  Create List   ${couponBasedOn[0]}
+    ${tc}=  FakerLibrary.sentence
+    ${services}=   Create list   ${s_id}   
+    ${resp}=  Create Provider Coupon   ${coupon1}  ${desc}  ${amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[1]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${coupon_id1}  ${resp.json()}
+    
+    ${resp}=  Get Coupon By Id  ${coupon_id1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+
+    # ${discAmt}=    Evaluate  ${ser_amount2}-${amount}
+
+    ${resp}=   Apply Provider Coupon for Appointment    ${apptid1}    ${cupn_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+    ${resp}=   Get Appointment level Bill Details      ${apptid1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
