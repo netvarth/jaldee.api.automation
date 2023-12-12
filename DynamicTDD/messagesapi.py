@@ -2133,3 +2133,6 @@ COUNTRY_CODE_INVALID_FOR_TERTIARY_NO = "Invalid tertiary phone No country code."
 
 appmntReminder_Consumer_APP= "[consumer],\n[appttime] reminder for your appointment with\n[provider],\n[time],[date]\n[service]"
 
+CUSTOMER_FIRST_NAME_REQUIRED= "Please enter the first name"
+CUSTOMER_LAST_NAME_REQUIRED= "Please enter the last name"
+

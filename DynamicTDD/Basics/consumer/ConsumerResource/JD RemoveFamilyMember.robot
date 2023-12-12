@@ -192,9 +192,9 @@ JD-TC-RemoveFamilyMember-UH1
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  DeleteFamilyMember  ${fid}
       Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  422
-      Should Be Equal As Strings  "${resp.json()}"   "${FAMILY_MEMEBR_NOT_FOUND}"
-      # Should Be Equal As Strings  "${resp.json()}"    "${NO_PERMISSION_TO_DELETE_MEMBER}"
+      Should Be Equal As Strings  ${resp.status_code}  401
+      # Should Be Equal As Strings  "${resp.json()}"   "${FAMILY_MEMEBR_NOT_FOUND}"
+      Should Be Equal As Strings  "${resp.json()}"    "${NO_PERMISSION_TO_DELETE_MEMBER}"
      
 JD-TC-RemoveFamilyMember-UH2
       [Documentation]  Consumer Remove provider side Waitlisted family member  after cancel a waitlist  
@@ -242,9 +242,9 @@ JD-TC-RemoveFamilyMember-UH2
 
       ${resp}=  DeleteFamilyMember  ${fid}
       Log  ${resp.json()}
-      Should Be Equal As Strings  ${resp.status_code}  422
-      Should Be Equal As Strings  "${resp.json()}"   "${FAMILY_MEMEBR_NOT_FOUND}"
-      # Should Be Equal As Strings  "${resp.json()}"    "${NO_PERMISSION_TO_DELETE_MEMBER}"
+      Should Be Equal As Strings  ${resp.status_code}  401
+      # Should Be Equal As Strings  "${resp.json()}"   "${FAMILY_MEMEBR_NOT_FOUND}"
+      Should Be Equal As Strings  "${resp.json()}"    "${NO_PERMISSION_TO_DELETE_MEMBER}"
 
 JD-TC-RemoveFamilyMember-UH3
       [Documentation]  Delete a family member without login
