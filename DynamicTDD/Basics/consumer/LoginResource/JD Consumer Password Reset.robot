@@ -380,7 +380,7 @@ JD-TC-ResetPassword-4
     ${resp}=  Send Verify Login   ${PUSEREMAIL6}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Verify Login   ${PUSEREMAIL6}  4
+    ${resp}=  Verify Login   ${PUSEREMAIL6}  ${OtpPurpose['ProviderVerifyEmail']}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Provider Logout
@@ -393,7 +393,7 @@ JD-TC-ResetPassword-4
     ${resp}=  Send Reset Email   ${PUSEREMAIL6}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  Reset Password  ${PUSEREMAIL6}  ${NewPASSWORD}  3
+    @{resp}=  Reset Password  ${PUSEREMAIL6}  ${NewPASSWORD}  ${OtpPurpose['ConsumerResetPassword']}
     Log  ${resp}
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
@@ -409,7 +409,7 @@ JD-TC-ResetPassword-7
     ${resp}=  Send Reset Email   ${PUSEREMAIL6}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  Reset Password  ${PUSEREMAIL6}  ${PASSWORD}  3
+    @{resp}=  Reset Password  ${PUSEREMAIL6}  ${PASSWORD}  ${OtpPurpose['ConsumerResetPassword']}
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
     ${resp}=  Consumer Login  ${PUSEREMAIL6}  ${NewPASSWORD}

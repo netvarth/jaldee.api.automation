@@ -22,6 +22,7 @@ EMAIL_FAILED= "Unable to send email message. Please enter a valid email for noti
 
 PLEASE_ENTER_FIRST_NAME= "Please enter the first name"
 PLEASE_ENTER_LAST_NAME= "Please enter the last name"
+FIRST_NAME_REQUIRED= "Please enter First Name"
 
 PHONE_AND_FIRST_NAME_OR_LAST_NAME_REQUIRED= "Both first name and last name or phone number required for searching"
 EMAIL_PHONE_NO_CANT_REPEAT= "Alert! The email id  you have entered is already registered with Jaldee. Try again with different email id.In case, you have forgotten your password,try retrieving the same."
@@ -293,7 +294,7 @@ PRIMARY_PHONENO_REQUIRED= "Please enter your contact number."
 COUNTRY_CODEREQUIRED= "Country code required."
 
 
-FIRST_NAMEREQUIRED= "First name required."
+# FIRST_NAMEREQUIRED= "First name required."
 INVAID_EMAILFORMAT= "Please enter a valid email address for notification."
 INVAID_DATE_FORMAT= "Incorrect date format"
 FNAMEREQUIRED= "First name required"

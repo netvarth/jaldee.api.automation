@@ -23,7 +23,7 @@ JD-TC-ResetPassword-1
     ${resp}=  Send Reset Email   ${CUSERNAME3}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  Reset Password  ${CUSERNAME3}  ${NewPASSWORD}  3
+    @{resp}=  Reset Password  ${CUSERNAME3}  ${NewPASSWORD}  ${OtpPurpose['ConsumerResetPassword']}
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
     ${resp}=  Consumer Login  ${CUSERNAME3}  ${NewPASSWORD}
@@ -34,7 +34,7 @@ JD-TC-ResetPassword-2
     [Documentation]    verify user is not able to login using old password
     ${resp}=  Send Reset Email   ${CUSERNAME3}
     Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  Reset Password  ${CUSERNAME3}  ${PASSWORD}  3
+    @{resp}=  Reset Password  ${CUSERNAME3}  ${PASSWORD}  ${OtpPurpose['ConsumerResetPassword']}
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
     ${resp}=  Consumer Login  ${CUSERNAME3}  ${NewPASSWORD}
@@ -47,7 +47,7 @@ JD-TC-ResetPassword-3
     [Documentation]    Reset consumer login password with email and new valid password
     ${resp}=  Send Reset Email   ${CUSERNAME5}
     Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  Reset Password  ${CUSERNAME5}  ${NewPASSWORD}  3
+    @{resp}=  Reset Password  ${CUSERNAME5}  ${NewPASSWORD}  ${OtpPurpose['ConsumerResetPassword']}
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
     ${resp}=  Consumer Login  ${CUSERNAME5}  ${NewPASSWORD}
@@ -59,7 +59,7 @@ JD-TC-ResetPassword-3
 
 JD-TC-ResetPassword-UH1
     [Documentation]   Reuse the generated sharedkey
-    @{resp}=  Reset Password  ${CUSERNAME3}  ${NewPASSWORD}  3
+    @{resp}=  Reset Password  ${CUSERNAME3}  ${NewPASSWORD}  ${OtpPurpose['ConsumerResetPassword']}
     Should Be Equal As Strings  ${resp[0].status_code}  404
     Should Be Equal As Strings  ${resp[1].status_code}  404
 
@@ -74,7 +74,7 @@ JD-TC-ResetPassword-UH3
     [Documentation]    Reset provider login  password with valid userid and empty password
     ${resp}=  Send Reset Email  ${CUSERNAME3}
     Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  Reset Password  ${CUSERNAME3}  ${EMPTY}  3
+    @{resp}=  Reset Password  ${CUSERNAME3}  ${EMPTY}  ${OtpPurpose['ConsumerResetPassword']}
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  422
     Should Be Equal As Strings  ${resp[1].json()}    ${PASSWORD_EMPTY}
@@ -150,10 +150,10 @@ JD-TC-ResetPassword-4
     # Should Be Equal As Strings    ${resp.status_code}    422
     # Should Be Equal As Strings  ${resp.json()}    ${INVALID_PHONE}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Activation  ${CUSERPH3_EMAIL}  1
+    ${resp}=  Consumer Activation  ${CUSERPH3_EMAIL}  ${OtpPurpose['ConsumerSignUp']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Set Credential  ${CUSERPH3_EMAIL}  ${PASSWORD}  1   countryCode=+${country_code}
+    ${resp}=  Consumer Set Credential  ${CUSERPH3_EMAIL}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}   countryCode=+${country_code}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -169,7 +169,7 @@ JD-TC-ResetPassword-4
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    @{resp}=  Reset Password  ${CUSERPH3}  ${NewPASSWORD}  3  countryCode=+${country_code}
+    @{resp}=  Reset Password  ${CUSERPH3}  ${NewPASSWORD}  ${OtpPurpose['ConsumerResetPassword']}  countryCode=+${country_code}
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
@@ -214,10 +214,10 @@ JD-TC-ResetPassword-UH6
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH4}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${EMPTY}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Activation  ${CUSERPH4}  1
+    ${resp}=  Consumer Activation  ${CUSERPH4}  ${OtpPurpose['ConsumerSignUp']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Set Credential  ${CUSERPH4}  ${PASSWORD}  1
+    ${resp}=  Consumer Set Credential  ${CUSERPH4}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -241,7 +241,7 @@ JD-TC-ResetPassword-UH6
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    @{resp}=  Reset Password  ${CUSERPH4}  ${NewPASSWORD}  3  
+    @{resp}=  Reset Password  ${CUSERPH4}  ${NewPASSWORD}  ${OtpPurpose['ConsumerResetPassword']}  
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
@@ -281,10 +281,10 @@ JD-TC-ResetPassword-6
     # Should Be Equal As Strings    ${resp.status_code}    422
     # Should Be Equal As Strings  ${resp.json()}    ${INVALID_PHONE}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Activation  ${email}  1
+    ${resp}=  Consumer Activation  ${email}  ${OtpPurpose['ConsumerSignUp']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  1   countryCode=+${country_code}
+    ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}   countryCode=+${country_code}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Consumer Login  ${CUSERPH5}  ${PASSWORD}  countryCode=+${country_code}
@@ -302,7 +302,7 @@ JD-TC-ResetPassword-6
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    @{resp}=  Reset Password  ${CUSERPH5}  ${NewPASSWORD}  3  countryCode=+${country_code}
+    @{resp}=  Reset Password  ${CUSERPH5}  ${NewPASSWORD}  ${OtpPurpose['ConsumerResetPassword']}  countryCode=+${country_code}
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
@@ -335,10 +335,10 @@ JD-TC-ResetPassword-7
     # Should Be Equal As Strings    ${resp.status_code}    422
     # Should Be Equal As Strings  ${resp.json()}    ${INVALID_PHONE}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Activation  ${email}  1
+    ${resp}=  Consumer Activation  ${email}  ${OtpPurpose['ConsumerSignUp']}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  1   countryCode=+${country_code}
+    ${resp}=  Consumer Set Credential  ${email}  ${PASSWORD}  ${OtpPurpose['ConsumerSignUp']}   countryCode=+${country_code}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Consumer Login  ${CUSERPH5}  ${PASSWORD}  countryCode=+${country_code}
@@ -360,7 +360,7 @@ JD-TC-ResetPassword-7
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    @{resp}=  Reset Password  ${CUSERPH5}  ${NewPASSWORD}  3  countryCode=+${country_code}
+    @{resp}=  Reset Password  ${CUSERPH5}  ${NewPASSWORD}  ${OtpPurpose['ConsumerResetPassword']}  countryCode=+${country_code}
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
