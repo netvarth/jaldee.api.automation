@@ -342,14 +342,6 @@ JD-TC-ApplyJaldeeCoupon-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${JALDEE_COUPON_NOT_VALID}"
 
-
-
-
-
-
-
-
-
 JD-TC-ApplyJaldeeCoupon-UH2
 
     [Documentation]   Provider trying to apply a coupon after maxProviderUseLimit, and check an alert get to appropriate  provider
@@ -434,10 +426,6 @@ JD-TC-ApplyJaldeeCoupon-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['text']}   ${cupn_code07} ,will not be available as it has reached the maximum apply limit
-
-
-
-
 
 JD-TC-ApplyJaldeeCoupon-UH3
 
