@@ -1472,7 +1472,7 @@ JD-TC-Update Account Contact information-15
     ${firstname1}=  FakerLibrary.first_name
     ${lastname1}=  FakerLibrary.last_name
     Set Test Variable  ${email}  ${firstname1}${PUSERNAME0}${C_Email}.${test_mail}
-    ${resp}=  Update Account contact information   ${PUSERNAME0}   ${email}  ${PUSERNAME0}   ${None}  ${email}  ${salutation}  ${firstname1}  ${lastname1}   ${country_code}  ${country_code}  ${country_code}
+    ${resp}=  Update Account contact information   ${PUSERNAME0}   ${email}  ${PUSERNAME0}   ${None}  ${email}  ${salutation}  ${firstname1}  ${lastname1}   ${country_code}  ${None}  ${country_code}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Get Account contact information
@@ -1512,7 +1512,7 @@ JD-TC-Update Account Contact information-15
     Should Be Equal As Strings  ${resp.json()['basicInfo']['id']}              ${pro_id0}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['firstName']}       ${firstname2}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['lastName']}        ${lastname2}
-    Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}          ${PUSERNAME0}
+    Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}          ${PUSERNAME_1}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['email']}           ${email_n}
     # Should Be Equal As Strings  ${resp.json()['basicInfo']['emailVerified']}   ${bool[1]} 
     # Should Be Equal As Strings  ${resp.json()['basicInfo']['phoneVerified']}   ${bool[1]} 

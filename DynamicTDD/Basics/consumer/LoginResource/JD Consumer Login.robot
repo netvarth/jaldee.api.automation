@@ -66,7 +66,8 @@ JD-TC-Consumer Login-UH5
     
 JD-TC-Consumer Login-UH6
     [Documentation]    Login using valid  userid and  sql injection in password
-    ${resp}=   Consumer Login  ${CUSERNAME0}    '' or '1'='1'
+    ${sql_cond}=  Set Variable   '' or '1'='1'
+    ${resp}=   Consumer Login  ${CUSERNAME0}    ${sql_cond}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings  ${resp.json()}     ${LOGIN_INVALID_USERID_PASSWORD}
     

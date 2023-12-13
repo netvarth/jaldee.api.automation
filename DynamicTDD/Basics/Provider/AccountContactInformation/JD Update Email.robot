@@ -734,7 +734,7 @@ JD-TC-Update Email-5
     ${resp}=  Get User By Id  ${u_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id}  firstName=${firstname2}  lastName=${lastname2}  address=${address2}  mobileNo=${PUSERNAME_U1}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${location2}  state=${state2}  deptId=${dep_id}  subdomain=${sub_domain_id}
+    Verify Response  ${resp}  id=${u_id}  firstName=${firstname2}  lastName=${lastname2}  address=${address2}  mobileNo=${PUSERNAME_U1}  dob=${dob2}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  pincode=${pin2}  deptId=${dep_id}  subdomain=${sub_domain_id}
 
     ${resp}=  Get Account contact information
     Log  ${resp.json()}

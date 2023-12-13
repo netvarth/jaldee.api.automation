@@ -180,7 +180,7 @@ JD-TC-CustomViewAPIS-1
     ${state2} = 	Convert To Lower Case 	${resp.json()['state']}
     Should Be Equal As Strings   ${state1}  ${state2}
     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${BUSER0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${BUSER0}.${test_mail}  
-    ...  deptId=${depid02}  subdomain=${userSubDomain}  
+    ...  deptId=${depid02}  subdomain=${userSubDomain}  pincode=${pin}
     # ...  address=${address}  city=${district}  locationName=${city}  state=${state}  
     
     

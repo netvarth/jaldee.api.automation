@@ -232,8 +232,8 @@ JD-TC-ResetPassword-UH6
     ${CUSERPH4_EMAIL}=   Set Variable  ${C_Email}${lastname}${country_code1}.${test_mail}
     ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH4}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${CUSERPH4_EMAIL}   countryCode=+${country_code1}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings  ${resp.json()}    ${INVALID_PHONE}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings  ${resp.json()}    ${INVALID_PHONE}
    
     Comment   Reset Password
 

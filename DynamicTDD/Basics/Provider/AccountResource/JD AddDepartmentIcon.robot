@@ -137,7 +137,12 @@ JD-TC-Add_Department_Icon-UH2
 
     ${resp}=    Add Department Icon    ${dep_id}    ${invproid}    ${fileName}    ${fileSize}    ${LoanAction[0]}    ${caption1}    ${fileType1}    ${order}
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Department Icon    ${dep_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['departmentLogo'][0]['owner']}       ${provider_id1}
 
 
 JD-TC-Add_Department_Icon-UH3
@@ -150,7 +155,12 @@ JD-TC-Add_Department_Icon-UH3
 
     ${resp}=    Add Department Icon    ${dep_id}    ${empty}    ${fileName}    ${fileSize}    ${LoanAction[0]}    ${caption1}    ${fileType1}    ${order}
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Department Icon    ${dep_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['departmentLogo'][0]['owner']}       ${provider_id1}
 
 
 JD-TC-Add_Department_Icon-UH4

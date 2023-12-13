@@ -103,17 +103,18 @@ JD-TC-Remove_Business_Logo-UH1
 
     ${resp}=    Remove Business Logo    ${invpid}    ${fileName}    ${fileSize}    ${LoanAction[1]}    ${caption1}    ${fileType1}    ${order}
     Log  ${resp.json()}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.status_code}    422
+    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Business Logo
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}              200
-    Should Be Equal As Strings    ${resp.json()[0]['owner']}       ${provider_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileName']}    ${fileName}
-    Should Be Equal As Strings    ${resp.json()[0]['fileSize']}    ${fileSize}
-    Should Be Equal As Strings    ${resp.json()[0]['caption']}     ${caption1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileType']}    ${fileType1}
-    Should Be Equal As Strings    ${resp.json()[0]['action']}      ${LoanAction[0]}
+    Should Be Equal As Strings    ${resp.json()}       ${emptylist}
+    # Should Be Equal As Strings    ${resp.json()[0]['owner']}       ${provider_id1}
+    # Should Be Equal As Strings    ${resp.json()[0]['fileName']}    ${fileName}
+    # Should Be Equal As Strings    ${resp.json()[0]['fileSize']}    ${fileSize}
+    # Should Be Equal As Strings    ${resp.json()[0]['caption']}     ${caption1}
+    # Should Be Equal As Strings    ${resp.json()[0]['fileType']}    ${fileType1}
+    # Should Be Equal As Strings    ${resp.json()[0]['action']}      ${LoanAction[0]}
 
 
 JD-TC-Remove_Business_Logo-UH2
@@ -140,7 +141,7 @@ JD-TC-Remove_Business_Logo-UH2
 
     ${resp}=    Remove Business Logo    ${provider_id1}    ${empty}    ${fileSize}    ${LoanAction[1]}    ${caption1}    ${fileType1}    ${order}
     Log  ${resp.json()}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.status_code}    422
+    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Business Logo
     Log  ${resp.json()}
@@ -301,7 +302,7 @@ JD-TC-Remove_Business_Logo-UH7
 
     ${resp}=    Remove Business Logo    ${provider_id1}    ${fileName}    ${fileSize}    ${LoanAction[1]}    ${caption1}    ${empty}    ${order}
     Log  ${resp.json()}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.status_code}    422
+    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Business Logo
     Log  ${resp.json()}

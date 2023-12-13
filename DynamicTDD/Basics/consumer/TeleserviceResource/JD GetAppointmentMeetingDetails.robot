@@ -248,7 +248,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-1
     Set Test Variable  ${ModeId1}          ${PUSERPH_id0}
     Set Test Variable  ${ModeStatus1}      ACTIVE
     ${Description1}=    FakerLibrary.sentence
-    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Description1}
+    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Description1}
     ${virtualCallingModes1}=  Create List  ${VScallingMode1}
     ${Total1}=   Random Int   min=100   max=500
     ${Total1}=  Convert To Number  ${Total1}  1
@@ -257,7 +257,6 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-1
     # ${vstype}=  Evaluate  random.choice($vservicetype)  random
     Set Test Variable  ${vstype}  ${vservicetype[0]}
     ${resp}=  Create virtual Service  ${SERVICE1}   ${description}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes1}
-    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${S_id1}  ${resp.json()} 

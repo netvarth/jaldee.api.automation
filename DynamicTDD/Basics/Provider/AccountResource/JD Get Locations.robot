@@ -52,6 +52,7 @@ JD-TC-GetLocations-1
       ${tz}=   db.get_Timezone_by_lat_long   ${latti1}  ${longi1}
       Set Suite Variable  ${tz}
       Set Suite Variable  ${address1}
+      Set Suite Variable  ${city1}
       ${parking_type1}    Random Element     ['none','free','street','privatelot','valet','paid']
       Set Suite Variable  ${parking_type1}
       ${24hours1}    Random Element    ['True','False']
