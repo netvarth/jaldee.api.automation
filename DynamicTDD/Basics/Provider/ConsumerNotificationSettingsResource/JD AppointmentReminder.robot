@@ -175,7 +175,7 @@ JD-TC-ConsumerNotificationSettings-1
     ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[date] 	${DAY1}
     ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[service] 	${SERVICE1}
     ${service_format_date}=   DateTime.Convert Date    ${DAY1}   result_format="%a, %d %b %Y"
-    ${service_format}=  ${SERVICE1}${SPACE}on${SPACE}${service_format_date}
+    ${service_format}=  Set Variable  ${SERVICE1}${SPACE}on${SPACE}${service_format_date}
     
     ${resp}=  Get Consumer Communications
     Log   ${resp.json()}
