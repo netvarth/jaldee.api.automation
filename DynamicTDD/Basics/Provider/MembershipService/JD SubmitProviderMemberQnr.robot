@@ -43,6 +43,7 @@ JD-TC-Submit_Member_QNR-1
     Set Suite Variable   ${colnames}
     ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
     Log   ${servicenames}
+    ${servicenames}=    Remove Duplicates    ${servicenames}
     Set Suite Variable   ${servicenames}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME76}  ${PASSWORD}
@@ -66,16 +67,16 @@ JD-TC-Submit_Member_QNR-1
     
     ${description}=    FakerLibrary.bs
     ${name}=           FakerLibrary.firstName
-    ${displayname}=    FakerLibrary.firstName
+    ${displaynamememb}=    FakerLibrary.firstName
     ${effectiveFrom}=  db.get_date_by_timezone  ${tz}
     ${effectiveTo}=      db.add_timezone_date  ${tz}  10   
     Set Suite Variable    ${description}
     Set Suite Variable    ${name}
-    Set Suite Variable    ${displayname}
+    Set Suite Variable    ${displaynamememb}
     Set Suite Variable    ${effectiveFrom}
     Set Suite Variable    ${effectiveTo}
 
-    ${resp}=    Create Membership Service     ${description}    ${servicenames[0]}    ${displayname}    ${effectiveFrom}    ${effectiveTo}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}
+    ${resp}=    Create Membership Service     ${description}    ${servicenames[1]}    ${displaynamememb}    ${effectiveFrom}    ${effectiveTo}    ${MembershipApprovalType[0]}    ${boolean[1]}    ${MembershipServiceStatus[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${memberserviceid}    ${resp.json()}
@@ -116,15 +117,22 @@ JD-TC-Submit_Member_QNR-1
     END
 
     FOR  ${i}  IN RANGE   1  ${j}
-        ${resp}=  Change Status of Questionnaire   ${accountId}  ${status[0]}  ${qid11}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
 
         ${qns}   Get Questionnaire By Id  ${accountId}  ${qid11}  
         Log  ${qns.json()}
         Should Be Equal As Strings  ${qns.status_code}  200
+        Set Suite Variable   ${Qnr_Status}   ${qns.json()['status']}
+
+        IF   '${Qnr_Status}' == '${status[1]}'
+            ${resp}=  Change Status of Questionnaire   ${accountId}  ${status[0]}  ${qid11}
+            Log  ${resp.json()}
+            Should Be Equal As Strings  ${resp.status_code}  200
+        END
+        ${qns}   Get Questionnaire By Id  ${accountId}  ${qid11}  
+        Log  ${qns.json()}
+        Should Be Equal As Strings  ${qns.status_code}  200
         Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
-    END 
+    END  
     
     ${resp}=  Get Questionnaire List   ${accountId}  
     Log  ${resp.json()}

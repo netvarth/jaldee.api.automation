@@ -109,7 +109,7 @@ JD-TC-Member_Creation_From_Provider_Dashboard-UH2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${inv}=  FakerLibrary.Random Number   
+    ${inv}=     Generate random string    5     3456789     
 
     ${resp}=    Member Creation From Provider Dashboard  ${memberserviceid}  ${firstName}  ${lastName}  ${inv}  ${countryCodes[0]}
     Log  ${resp.content}
@@ -124,7 +124,7 @@ JD-TC-Member_Creation_From_Provider_Dashboard-UH3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${inv}=  FakerLibrary.Random Number   
+    ${inv}=      Generate random string    5     3456789  
     ${phone2}    Generate random string    10    3456789
     ${phone2}    Convert To Integer  ${phone2}
     Set Suite Variable    ${phone2}

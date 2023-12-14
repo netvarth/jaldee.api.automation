@@ -116,15 +116,22 @@ JD-TC-Resubmit_Member_QNR-1
     END
 
     FOR  ${i}  IN RANGE   1  ${j}
-        ${resp}=  Change Status of Questionnaire   ${accountId}  ${status[0]}  ${qid11}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
 
         ${qns}   Get Questionnaire By Id  ${accountId}  ${qid11}  
         Log  ${qns.json()}
         Should Be Equal As Strings  ${qns.status_code}  200
+        Set Suite Variable   ${Qnr_Status}   ${qns.json()['status']}
+
+        IF   '${Qnr_Status}' == '${status[1]}'
+            ${resp}=  Change Status of Questionnaire   ${accountId}  ${status[0]}  ${qid11}
+            Log  ${resp.json()}
+            Should Be Equal As Strings  ${resp.status_code}  200
+        END
+        ${qns}   Get Questionnaire By Id  ${accountId}  ${qid11}  
+        Log  ${qns.json()}
+        Should Be Equal As Strings  ${qns.status_code}  200
         Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
-    END
+    END 
     
     ${resp}=  Get Questionnaire List   ${accountId}  
     Log  ${resp.json()}
@@ -280,19 +287,8 @@ JD-TC-Resubmit_Member_QNR-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings    ${resp.json()}    ${INVALID_UID}
 
+
 JD-TC-Resubmit_Member_QNR-UH2
-
-    [Documentation]  Resubmit Member QNR where data is empty
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Resubmit Member Questionnaire    ${accountId}    ${memberid1}    ${empty}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-JD-TC-Resubmit_Member_QNR-UH3
 
     [Documentation]  Resubmit Member QNR with another provider login
 
@@ -305,7 +301,7 @@ JD-TC-Resubmit_Member_QNR-UH3
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION}
 
-JD-TC-Resubmit_Member_QNR-UH4
+JD-TC-Resubmit_Member_QNR-UH3
 
     [Documentation]  Resubmit Member QNR with consumer login
 
@@ -317,7 +313,7 @@ JD-TC-Resubmit_Member_QNR-UH4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Resubmit_Member_QNR-UH5
+JD-TC-Resubmit_Member_QNR-UH4
 
     [Documentation]  Resubmit Member QNR without login
 

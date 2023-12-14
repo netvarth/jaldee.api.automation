@@ -116,10 +116,17 @@ JD-TC-Change_Release_Status_Member_QNR-1
     END
 
     FOR  ${i}  IN RANGE   1  ${j}
-        ${resp}=  Change Status of Questionnaire   ${accountId}  ${status[0]}  ${qid11}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
 
+        ${qns}   Get Questionnaire By Id  ${accountId}  ${qid11}  
+        Log  ${qns.json()}
+        Should Be Equal As Strings  ${qns.status_code}  200
+        Set Suite Variable   ${Qnr_Status}   ${qns.json()['status']}
+
+        IF   '${Qnr_Status}' == '${status[1]}'
+            ${resp}=  Change Status of Questionnaire   ${accountId}  ${status[0]}  ${qid11}
+            Log  ${resp.json()}
+            Should Be Equal As Strings  ${resp.status_code}  200
+        END
         ${qns}   Get Questionnaire By Id  ${accountId}  ${qid11}  
         Log  ${qns.json()}
         Should Be Equal As Strings  ${qns.status_code}  200
@@ -201,9 +208,9 @@ JD-TC-Change_Release_Status_Member_QNR-1
     Set Suite Variable     ${memberid1}    ${resp.json()}
 
     ${respo}=    Get Before Questionnaire Membership    ${accountId}    ${membershipid}    ${QnrChannel[1]}
-    Log  ${qns.content}
-    Should Be Equal As Strings  ${qns.status_code}  200
-    Set Suite Variable    ${qid}     ${respo.json()['questionnaireId']}
+    Log  ${respo.content}
+    Should Be Equal As Strings  ${respo.status_code}  200
+    # Set Suite Variable    ${qid}     ${respo.json()['questionnaireId']}
     Set Suite Variable    ${Quid}     ${respo.json()['id']}
     
     ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME41}   ${PASSWORD}
@@ -310,6 +317,7 @@ JD-TC-Change_Release_Status_Member_QNR-UH1
     ${resp}=    Change Release Status Of Member Questionnaire    ${QnrReleaseStatus[2]}    ${fakemem}    ${Quid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${MEMBER_NOT_EXISTS}
 
 JD-TC-Change_Release_Status_Member_QNR-UH2
 
