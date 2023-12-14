@@ -635,7 +635,8 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${CUR_DAY}=  db.add_timezone_date  ${tz}  2   
     ${date}=  Convert Date  ${CUR_DAY}  result_format=%d-%m-%Y

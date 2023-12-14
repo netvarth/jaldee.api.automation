@@ -2901,6 +2901,7 @@ JD-TC-AccountLevelAnalytics-19
         
         ${reason}=  Random Element  ${cancelReason}
         ${msg}=   FakerLibrary.sentence
+        Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=    Provider Cancel Appointment  ${apptid${a}}  ${reason}  ${msg}  ${DAY1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -3436,6 +3437,7 @@ JD-TC-AccountLevelAnalytics-21
         
         ${reason}=  Random Element  ${cancelReason}
         ${msg}=   FakerLibrary.sentence
+        Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=    Provider Cancel Appointment  ${apptid${a}}  ${reason}  ${msg}  ${DAY1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -3645,6 +3647,7 @@ JD-TC-AccountLevelAnalytics-22
         
         ${reason}=  Random Element  ${cancelReason}
         ${msg}=   FakerLibrary.sentence
+        Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=    Reject Appointment  ${apptid${a}}  ${reason}  ${msg}  ${DAY1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -3844,6 +3847,7 @@ JD-TC-AccountLevelAnalytics-23
         
         ${reason}=  Random Element  ${cancelReason}
         ${msg}=   FakerLibrary.sentence
+        Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=   Reject Appointment  ${apptid${a}}  ${reason}  ${msg}  ${DAY1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -4326,6 +4330,7 @@ JD-TC-AccountLevelAnalytics-25
         
         ${reason}=  Random Element  ${cancelReason}
         ${msg}=   FakerLibrary.sentence
+        Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=    Provider Cancel Appointment  ${apptid${a}}  ${reason}  ${msg}  ${DAY1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -4608,6 +4613,7 @@ JD-TC-AccountLevelAnalytics-26
         
         ${reason}=  Random Element  ${cancelReason}
         ${msg}=   FakerLibrary.sentence
+        Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=    Provider Cancel Appointment  ${apptid${a}}  ${reason}  ${msg}  ${DAY1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -4895,6 +4901,7 @@ JD-TC-AccountLevelAnalytics-27
         
         ${reason}=  Random Element  ${cancelReason}
         ${msg}=   FakerLibrary.sentence
+        Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=    Provider Cancel Appointment  ${apptid${a}}  ${reason}  ${msg}  ${DAY1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -5225,6 +5232,7 @@ JD-TC-AccountLevelAnalytics-28
         
         ${reason}=  Random Element  ${cancelReason}
         ${msg}=   FakerLibrary.sentence
+        Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=    Reject Appointment  ${apptid${a}}  ${reason}  ${msg}  ${DAY1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200

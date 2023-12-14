@@ -69,6 +69,7 @@ JD-TC-Communication provider with consumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${cookie} 
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence   
 
     ${resp}=  Imageupload.GeneralCommunicationWithConsumer   ${cookie}   ${c_id}  ${msg}  ${messageType[0]}  ${caption}   ${EMPTY}  ${jpgfile}
@@ -156,6 +157,7 @@ JD-TC-Communication provider with consumer-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${cookie} 
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence   
 
     ${resp}=  Imageupload.GeneralCommunicationWithConsumer   ${cookie}   ${c_id}  ${msg}  ${messageType[0]}  ${caption}   ${EMPTY}  ${pngfile}
@@ -179,6 +181,7 @@ JD-TC-Communication provider with consumer-2
 JD-TC-Communication provider with consumer-UH1
     [Documentation]   Provider communicates with consumer using invalid consumer id
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
 
     ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME6}   ${PASSWORD}
@@ -201,6 +204,7 @@ JD-TC-Communication provider with consumer-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.GeneralCommunicationWithConsumer   ${cookie}   ${c_id}  ${msg}  ${messageType[0]}  ${caption}   ${EMPTY}

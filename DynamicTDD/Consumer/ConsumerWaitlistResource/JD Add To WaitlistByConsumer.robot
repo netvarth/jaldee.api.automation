@@ -322,6 +322,7 @@ JD-TC-Add To WaitlistByConsumer-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid1}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -1094,6 +1095,7 @@ JD-TC-Add To WaitlistByConsumer-17
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid25}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2817,6 +2819,7 @@ JD-TC-Add To WaitlistByConsumer-23
     Should Be Equal As Strings  ${resp.status_code}  200    
     
     ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid2}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

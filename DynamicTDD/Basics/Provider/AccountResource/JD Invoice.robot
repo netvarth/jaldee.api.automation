@@ -258,6 +258,19 @@ JD-TC-Invoice-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_S}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${pid1}=  get_acc_id  ${ph}
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+	Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Enable Disable Invoice Generartion   ${pid1}    ${bool[1]}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  SuperAdminLogout
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -444,6 +457,20 @@ JD-TC-Invoice-UH3
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
+    ${pid1}=  get_acc_id  ${ph}
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+	Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Enable Disable Invoice Generartion   ${pid1}    ${bool[1]}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  SuperAdminLogout
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['accStatus']}       ${status[3]}

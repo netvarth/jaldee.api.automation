@@ -1589,6 +1589,7 @@ JD-TC-GetAppointmentTodayCount-8
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid1}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1785,6 +1786,7 @@ JD-TC-GetAppointmentTodayCount-9
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Reject Appointment  ${apptid1}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -4365,6 +4367,7 @@ JD-TC-GetAppointmentTodayCount-20
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid2}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -5213,6 +5216,7 @@ JD-TC-GetAppointmentTodayCount-24
 
     ${reason1}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid1}  ${reason1}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -5228,6 +5232,7 @@ JD-TC-GetAppointmentTodayCount-24
         Exit For Loop If  "${reason2}" != "${reason1}"
     END  
     ${msg}=   FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid2}  ${reason2}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

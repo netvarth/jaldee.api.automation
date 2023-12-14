@@ -177,8 +177,6 @@ JD-TC-Get Prescription Count By Filter-1
     Set Suite Variable    ${proconlname}    ${resp.json()['lastName']} 
     Set Suite Variable    ${fullname}       ${proconfname}${space}${proconlname}
 
-    
-
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200

@@ -255,7 +255,8 @@ JD-TC-Consumer-Payment-Transaction-1
     ${cid1}=  get_id  ${CUSERNAME4}
     Set Suite Variable   ${cid1}
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -362,7 +363,8 @@ JD-TC-Consumer-Payment-Transaction-2
     ${resp}=  Consumer Login  ${CUSERNAME4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_qid}  ${DAY}  ${p1_sid2}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -440,7 +442,8 @@ JD-TC-Consumer-Payment-Transaction-3
     ${cid2}=  get_id  ${CUSERNAME6}
     Set Suite Variable   ${cid2}
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_qid}  ${DAY}  ${p1_sid2}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -512,7 +515,8 @@ JD-TC-Consumer-Payment-Transaction-4
     ${resp}=  Consumer Login  ${CUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -671,7 +675,8 @@ JD-TC-Consumer-Payment-Transaction-6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist  ${cid}  ${p1_sid2}  ${p1_qid}  ${DAY}  ${msg}  ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

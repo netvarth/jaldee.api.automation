@@ -1269,6 +1269,7 @@ JD-TC-CreateVacation-UH16
 
     
     ${msg}=  FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  db.add_timezone_date  ${tz}  7  
     ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${DAY}  ${s_id}  ${msg}  ${bool[0]}  ${p1_id}  0

@@ -202,7 +202,8 @@ JD-TC-ConsumerMassCommunication-1
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid2}  ${wid[0]}
     sleep   5s
-    ${msg}=  FakerLibrary.sentence
+    ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     Set Suite Variable  ${msg}
 
     # ${resp}=  Get bsconf Messages
@@ -482,9 +483,11 @@ JD-TC-ConsumerMassCommunication-3
     ${caption3}=  Fakerlibrary.Sentence
     ${filecap_dict3}=  Create Dictionary   file=${pdffile}   caption=${caption3}
     ${fileswithcaption}=  Create List   ${filecap_dict1}   ${filecap_dict2}  ${filecap_dict3}
-    #${msg}=  FakerLibrary.sentence
+    #${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
    
-    # ${msg}=  FakerLibrary.sentence
+    # ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
    
     ${resp}=  Consumer Mass Communication   ${cookie}  ${bool[1]}  ${bool[1]}  ${bool[1]}   ${bool[1]}  ${msg}    ${fileswithcaption}    ${wid1}  ${wid2}
     Log   ${resp.json()}

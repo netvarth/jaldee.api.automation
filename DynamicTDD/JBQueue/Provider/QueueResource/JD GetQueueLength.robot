@@ -208,6 +208,7 @@ JD-TC-GetQueueLength-3
       Should Be Equal As Strings  ${resp.status_code}  200
       Should Be Equal As Strings  ${resp.json()}  2
       ${msg}=  FakerLibrary.word
+      Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
       ${resp}=  Waitlist Action Cancel  ${waitlist_id1}  ${waitlist_cancl_reasn[4]}  ${msg}
       ${resp}=  Get Queue Length  ${qid1}  ${DAY1}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -236,6 +237,7 @@ JD-TC-GetQueueLength-4
       Should Be Equal As Strings  ${resp.status_code}  200
       Should Be Equal As Strings  ${resp.json()}  2
       ${msg}=  FakerLibrary.word
+      Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
       ${resp}=  Waitlist Action Cancel  ${waitlist_id1}  ${waitlist_cancl_reasn[4]}  ${msg}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  Get Queue Length  ${qid1}  ${DAY1}

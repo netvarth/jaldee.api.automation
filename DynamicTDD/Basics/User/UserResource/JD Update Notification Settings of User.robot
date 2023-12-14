@@ -633,7 +633,8 @@ JD-TC-Update_Notification_Settings_of_User-8
     Should Be Equal As Strings  ${resp.status_code}  200
     ${cid}=  get_id  ${CUSERNAME1}
     
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${CUR_DAY}=  db.add_timezone_date  ${tz}  7   
     ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${CUR_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${u_id1}  ${self}
@@ -832,6 +833,7 @@ JD-TC-Update_Notification_Settings_of_User-9
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid1}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

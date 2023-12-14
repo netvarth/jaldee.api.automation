@@ -36,6 +36,7 @@ JD-TC-Get Unread Message Count-INDEPENDENT_SP-1
     ${c_id}=  get_id  ${CUSERNAME1}
     clear_Consumermsg  ${CUSERNAME1}
     ${msg}=  FakerLibrary.text
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     # ${resp}=  General Communication with Provider   ${msg}   ${a_id}
     # Should Be Equal As Strings  ${resp.status_code}  200
@@ -64,6 +65,7 @@ JD-TC-Get Unread Message Count-INDEPENDENT_SP-2
     ${c_id}=  get_id  ${CUSERNAME1}
     clear_Consumermsg  ${CUSERNAME1}
     ${msg}=  FakerLibrary.text
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     # ${resp}=  General Communication with Provider   ${msg}   ${a_id}
     # Should Be Equal As Strings  ${resp.status_code}  200 

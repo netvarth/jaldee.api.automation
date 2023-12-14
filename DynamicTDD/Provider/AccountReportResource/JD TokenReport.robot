@@ -175,6 +175,7 @@ JD-TC-Token_Report-1
     Set Suite Variable   ${C8_fname}   ${family_fname} ${family_lname}
 
     ${msg}=  FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${DAY}  ${p1_s1}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -390,6 +391,7 @@ JD-TC-Token_Report-2
     ${Add_DAY1}=  db.add_timezone_date  ${tz}  1  
     ${Date1} =	Convert Date	${Add_DAY1}	result_format=%d/%m/%Y
     ${msg}=  FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${Add_DAY1}  ${p1_s1}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -1322,6 +1324,7 @@ JD-TC-Token_Report-5
     ${Date1} =	Convert Date	${Add_DAY1}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date1}
     ${msg}=  FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${Add_DAY1}  ${p1_s1}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -1906,6 +1909,7 @@ JD-TC-Token_Report-7
     ${Date6} =	Convert Date	${Add_DAY6}	result_format=%d/%m/%Y
     Set Suite Variable  ${Date6}
     ${msg}=  FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${Add_DAY6}  ${p1_s1}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -2390,6 +2394,7 @@ JD-TC-Token_Report-9
     ${Add_DAY1}=  db.add_timezone_date  ${tz}  1  
     Set Suite Variable  ${Add_DAY1}
     ${msg}=  FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${Add_DAY1}  ${p1_s1}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -3553,6 +3558,7 @@ JD-TC-Token_Report-13
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${msg}=  FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${p0_id}  ${p1_qid}  ${DAY1}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -3799,7 +3805,8 @@ JD-TC-Verify-3-Token_Report-13
     Log   ${resp.json()} 
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${msg}=  Fakerlibrary.word
+    ${msg}=  FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${cwid}  ${waitlist_cancl_reasn[2]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -4000,6 +4007,7 @@ JD-TC-Token_Report-14
 
     
         ${msg}=  FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable  ${CUR_DAY}
         ${resp}=  Add To Waitlist Consumer For User  ${pid_B28}  ${que_id28}  ${CUR_DAY}  ${s_id}  ${msg}  ${bool[0]}  ${u_id}  0
@@ -4428,6 +4436,7 @@ JD-TC-Token_Report-15
         ${virtualService}=  Create Dictionary  ${CallingModes[0]}=${ZOOM_id}
     
         ${msg}=  FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
         Set Suite Variable   ${CUR_DAY}
         ${resp}=  Consumer Add To WL With Virtual Service For User  ${pid_B5}  ${que_id32}  ${CUR_DAY}  ${VS_id1}  ${msg}  ${bool[0]}  ${virtualService}   ${u_id32}  0
@@ -4588,7 +4597,8 @@ JD-TC-Verify-2-Token_Report-15
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         
-        ${msg}=  Fakerlibrary.word
+        ${msg}=  FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=  Waitlist Action Cancel  ${cwid_C27}  ${waitlist_cancl_reasn[2]}   ${msg}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200

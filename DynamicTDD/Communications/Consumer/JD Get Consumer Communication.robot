@@ -58,6 +58,7 @@ JD-TC-GetConsumerCommunication-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable    ${cookie} 
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile}   
@@ -110,6 +111,7 @@ JD-TC-GetConsumerCommunication-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${pngfile} 
@@ -163,6 +165,7 @@ JD-TC-GetConsumerCommunication-3
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${pdffile} 
@@ -215,6 +218,7 @@ JD-TC-GetConsumerCommunication-4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpegfile} 
@@ -319,6 +323,7 @@ JD-TC-GetConsumerCommunication-6
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
   
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${EMPTY}  ${EMPTY}  ${jpgfile}    
     Log  ${resp.json()}
@@ -369,6 +374,7 @@ JD-TC-GetConsumerCommunication-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${giffile} 
@@ -486,6 +492,7 @@ JD-TC-GetConsumerCommunication-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${docfile} 
@@ -539,6 +546,7 @@ JD-TC-GetConsumerCommunication-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${shfile} 
@@ -577,6 +585,7 @@ JD-TC-GetConsumerCommunication-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${txtfile} 
