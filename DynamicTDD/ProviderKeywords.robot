@@ -12086,7 +12086,7 @@ Update Bill Status
 
     [Arguments]   ${invoiceUid}    ${billStatus}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw   /provider/jp/finance/invoice/${invoiceUid}//billstatus/${billStatus}    expected_status=any
+    ${resp}=  PUT On Session  ynw   /provider/jp/finance/invoice/${invoiceUid}/billstatus/${billStatus}    expected_status=any
     [Return]  ${resp}
 
 Apply Provider Coupon for waitlist
