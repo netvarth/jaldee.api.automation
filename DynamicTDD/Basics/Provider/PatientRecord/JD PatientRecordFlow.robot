@@ -108,7 +108,7 @@ JD-TC-Patient Record Flow-1
     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
     Set Suite Variable  ${ser_id}  ${resp.json()['departments'][0]['serviceIds'][0]}
 
-     
+    ${lid}=  Create Sample Location
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}

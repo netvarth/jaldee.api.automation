@@ -104,6 +104,8 @@ JD-TC-Create Prescription-1
     # Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     # Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
+    ${lid}=  Create Sample Location
+
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200

@@ -32,25 +32,25 @@ JD-TC-Create Sections-1
     [Documentation]    Create Sections with valid details.
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
-     Log  ${iscorp_subdomains}
-     Set Suite Variable  ${iscorp_subdomains}
-     Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
-     Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
-     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-     ${firstname_A}=  FakerLibrary.first_name
-     Set Suite Variable  ${firstname_A}
-     ${lastname_A}=  FakerLibrary.last_name
-     Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9658802
-     ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E}  0
-     Log   ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
-     Should Be Equal As Strings    ${resp.status_code}    200
+    Log  ${iscorp_subdomains}
+    Set Suite Variable  ${iscorp_subdomains}
+    Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
+    Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
+    Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
+    ${firstname_A}=  FakerLibrary.first_name
+    Set Suite Variable  ${firstname_A}
+    ${lastname_A}=  FakerLibrary.last_name
+    Set Suite Variable  ${lastname_A}
+    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9658802
+    ${highest_package}=  get_highest_license_pkg
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -64,29 +64,31 @@ JD-TC-Create Sections-1
     Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
-     Set Suite Variable  ${MUSERNAME_E}
-     ${id}=  get_id  ${MUSERNAME_E}
-     Set Suite Variable  ${id}
-     ${bs}=  FakerLibrary.bs
-     Set Suite Variable  ${bs}
+    Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Set Suite Variable  ${MUSERNAME_E}
+    ${id}=  get_id  ${MUSERNAME_E}
+    Set Suite Variable  ${id}
+    ${bs}=  FakerLibrary.bs
+    Set Suite Variable  ${bs}
 
-     ${resp}=  Toggle Department Enable
-     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     sleep  2s
-     ${resp}=  Get Departments
-     Log   ${resp.json()}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    ${resp}=  Toggle Department Enable
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    sleep  2s
+    ${resp}=  Get Departments
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
-     ${resp}=  View Waitlist Settings
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-     ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-     Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
+    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
+    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${lid}=  Create Sample Location
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
