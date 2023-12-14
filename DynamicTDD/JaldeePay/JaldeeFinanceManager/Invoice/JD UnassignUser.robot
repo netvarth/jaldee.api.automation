@@ -243,6 +243,51 @@ JD-TC-UnAssign User-1
     Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
     # Should Be Equal As Strings  ${resp1.json()[0]['assignedUserId']}  ${EMPTY}
 
+JD-TC-UnAssign User-2
+
+    [Documentation]  Create a user and try to assign that user to already assigned invoice,then unassign that user.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${ph1}=  Evaluate  ${HLMUSERNAME18}+1000411234
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+    ${address}=  get_address
+    ${dob}=  FakerLibrary.Date
+    ${pin}=  get_pincode
+    
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${u_id1}  ${resp.json()}
+
+    ${resp}=  Get User
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Assign User   ${invoice_uid}  ${u_id1}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp1}=  Get Invoice With Filter  
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()[0]['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()[0]['invoiceCategoryId']}  ${category_id2}
+    Should Be Equal As Strings  ${resp1.json()[0]['assignedUserId']}  ${u_id1}
+
+    ${resp}=  UnAssign User   ${invoice_uid}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp1}=  Get Invoice With Filter  
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Not Contain   ${resp1.json()[0]}   assignedUserId
+
+
 JD-TC-UnAssign User-UH1
 
     [Documentation]  UnAssign User with invalid invoice id.
@@ -308,3 +353,38 @@ JD-TC-UnAssign User-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+
+JD-TC-UnAssign User-UH5
+
+    [Documentation]  Create a user ,that not assigned to invoice and then try to unassign that user .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${ph1}=  Evaluate  ${HLMUSERNAME18}+1000411244
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+    ${address}=  get_address
+    ${dob}=  FakerLibrary.Date
+    ${pin}=  get_pincode
+    
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${u_id1}  ${resp.json()}
+
+    ${resp}=  Get User
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+ 
+    ${resp}=  UnAssign User   ${invoice_uid}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${ALREADY_UNASSIGNED_USER}
+
+    ${resp1}=  Get Invoice With Filter  
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Not Contain   ${resp1.json()[0]}   assignedUserId

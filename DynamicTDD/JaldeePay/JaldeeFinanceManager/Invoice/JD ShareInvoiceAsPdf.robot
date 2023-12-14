@@ -115,7 +115,7 @@ JD-TC-Share invoice as pdf-1
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno1}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno1}
-    Set Test Variable  ${email1}  ${vender_name}${vendor_phno1}.${test_mail}
+    Set Suite Variable  ${email1}  ${vender_name}${vendor_phno1}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
@@ -133,8 +133,8 @@ JD-TC-Share invoice as pdf-1
     ${vendor_phno}=   Create List  ${vendor_phno}
     Set Suite Variable    ${vendor_phno}
     
-    # ${email}=   Create List  ${email1}
-    # Set Suite Variable    ${email}
+    ${email}=   Create List  ${email1}
+    Set Suite Variable    ${email}
 
     ${bankIfsc}    Random Number 	digits=5 
     ${bankIfsc}=    Evaluate    f'{${bankIfsc}:0>7d}'
@@ -237,3 +237,121 @@ JD-TC-Share invoice as pdf-1
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     # Should Be Equal As Strings  ${resp1.json()['shared']}   ${boolean[1]} 
+
+JD-TC-Share invoice as pdf-2
+
+    [Documentation]  Share invoice that already shared.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Share invoice as pdf   ${invoice_uid}   ${boolean[1]}    ${email1}   ${html}
+    Log  ${resp.content} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Share invoice as pdf-3
+
+    [Documentation]  update invoice and Share invoice .
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Share invoice as pdf   ${invoice_uid}   ${boolean[1]}    ${email1}   ${html}
+    Log  ${resp.content} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${itemName1}=    FakerLibrary.word
+    Set Suite Variable  ${itemName1}
+    ${price}=   Random Int  min=10  max=15
+    ${price1}=  Convert To Number  ${price}  1
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+
+    ${adhocItemList1}=  Create Dictionary  itemName=${itemName1}   quantity=${quantity}   price=${price1}
+    ${adhocItemList1}=    Create List    ${adhocItemList1}
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+    ${invoiceId}=   FakerLibrary.word
+
+
+    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   adhocItemList=${adhocItemList1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Share invoice as pdf   ${invoice_uid}   ${boolean[1]}    ${email1}   ${html}
+    Log  ${resp.content} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-Share invoice as pdf-UH1
+
+    [Documentation]  Share invoice as pdf where email notification is false.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Share invoice as pdf   ${invoice_uid}   ${boolean[0]}    ${email1}   ${html}
+    Log  ${resp.content} 
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_SHARING_INFO}
+
+JD-TC-Share invoice as pdf-UH2
+
+    [Documentation]  Share invoice as pdf where email id is incorrect.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${mail}=     FakerLibrary.word
+
+    ${resp}=  Share invoice as pdf   ${invoice_uid}   ${boolean[1]}    ${mail}   ${html}
+    Log  ${resp.content} 
+    Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings  ${resp.json()}   ${INVALID_SHARING_INFO}
+
+JD-TC-Share invoice as pdf-UH3
+
+    [Documentation]  Share invoice as pdf where Invoice uid is wrong.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${invoice}=   FakerLibrary.word
+
+    ${resp}=  Share invoice as pdf   ${invoice}   ${boolean[1]}    ${email1}   ${html}
+    Log  ${resp.content} 
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+
+JD-TC-Share invoice as pdf-UH4
+
+    [Documentation]  Share invoice as pdf using another provider login.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${invoice}=   FakerLibrary.word
+
+    ${resp}=  Share invoice as pdf   ${invoice_uid}   ${boolean[1]}    ${email1}   ${html}
+    Log  ${resp.content} 
+    Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+    Should Be Equal As Strings  ${resp.json()}   ${CAP_JALDEE_FINANCE_DISABLED}

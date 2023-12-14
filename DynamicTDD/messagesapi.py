@@ -2102,6 +2102,10 @@ SERVICE_NOT="No Service found"
 YOU_CANNOT_UPDATE_FINANCE="You cannot Update the Finance Invoice i.e The Bill Status is Settled "
 YOU_CANNOT_UPDATE_FINANCE_CANCEL="You cannot Update the Finance Invoice i.e The Bill Status is Cancel "
 NO_INVOICE_GENERATED="No invoices generated with given ynwuuid : {}"
+CAP_JALDEE_FINANCE_DISABLED="Jaldee Finance Disabled"
+INVALID_SHARING_INFO="Invalid sharing info"
+BILL_STATUS_IS_ALREADY_SETTILED="Bill Status is already Settled"
+BILL_STATUS_IS_ALREADY_CANCELLED="Bill Status is already Cancel"
 
 
 

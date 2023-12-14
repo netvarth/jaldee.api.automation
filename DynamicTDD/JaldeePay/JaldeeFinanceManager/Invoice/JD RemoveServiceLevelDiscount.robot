@@ -341,6 +341,7 @@ JD-TC-Remove Service Level Discount-1
     Set Suite Variable  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -348,11 +349,11 @@ JD-TC-Remove Service Level Discount-1
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
-        ${serviceprice}=   Random Int  min=1000  max=1500
-    ${serviceprice}=  Convert To Number  ${serviceprice}  1
-    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
+    #     ${serviceprice}=   Random Int  min=1000  max=1500
+    # ${serviceprice}=  Convert To Number  ${serviceprice}  1
+    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${servicecharge}
     ${serviceList}=    Create List    ${serviceList}
-    ${servicenetRate}=  Evaluate  ${quantity} * ${serviceprice}
+    ${servicenetRate}=  Evaluate  ${quantity} * ${servicecharge}
     ${servicenetRate}=  Convert To Number  ${servicenetRate}   2
     Set Suite Variable   ${servicenetRate}
     
@@ -564,6 +565,7 @@ JD-TC-Remove Service Level Discount-3
     Set Suite Variable  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -571,11 +573,11 @@ JD-TC-Remove Service Level Discount-3
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
-        ${serviceprice}=   Random Int  min=1000  max=1500
-    ${serviceprice}=  Convert To Number  ${serviceprice}  1
-    ${serviceList}=  Create Dictionary  serviceId=${sid2}   quantity=${quantity}  price=${serviceprice}
+    #     ${serviceprice}=   Random Int  min=1000  max=1500
+    # ${serviceprice}=  Convert To Number  ${serviceprice}  1
+    ${serviceList}=  Create Dictionary  serviceId=${sid2}   quantity=${quantity}  price=${servicecharge}
     ${serviceList}=    Create List    ${serviceList}
-    ${servicenetRate}=  Evaluate  ${quantity} * ${serviceprice}
+    ${servicenetRate}=  Evaluate  ${quantity} * ${servicecharge}
     ${servicenetRate}=  Convert To Number  ${servicenetRate}   2
     Set Test Variable   ${servicenetRate}
     
@@ -668,6 +670,7 @@ JD-TC-Remove Service Level Discount-4
     Set Suite Variable  ${SERVICE2}
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
     ${resp}=  Create Service  ${SERVICE2}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -675,11 +678,11 @@ JD-TC-Remove Service Level Discount-4
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
-        ${serviceprice}=   Random Int  min=1000  max=1500
-    ${serviceprice}=  Convert To Number  ${serviceprice}  1
-    ${serviceList}=  Create Dictionary  serviceId=${sid3}   quantity=${quantity}  price=${serviceprice}
+    #     ${serviceprice}=   Random Int  min=1000  max=1500
+    # ${serviceprice}=  Convert To Number  ${serviceprice}  1
+    ${serviceList}=  Create Dictionary  serviceId=${sid3}   quantity=${quantity}  price=${servicecharge}
     ${serviceList}=    Create List    ${serviceList}
-    ${servicenetRate}=  Evaluate  ${quantity} * ${serviceprice}
+    ${servicenetRate}=  Evaluate  ${quantity} * ${servicecharge}
     ${servicenetRate}=  Convert To Number  ${servicenetRate}   2
     Set Test Variable   ${servicenetRate}
     
@@ -797,7 +800,7 @@ JD-TC-Remove Service Level Discount-5
 
     ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id}
     Log  ${resp.json()}
@@ -941,6 +944,18 @@ JD-TC-Remove Service Level Discount-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     clear_appt_schedule   ${PUSERPH0}
+
+    ${SERVICE1}=    FakerLibrary.word
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1 
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[1]}  ${bool[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -948,13 +963,18 @@ JD-TC-Remove Service Level Discount-6
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${SERVICE1}=    FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-    Set Test Variable  ${s_id}
+
+    ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=   Get Service By Id  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
     Set Test Variable   ${tot_amt}   ${resp.json()['totalAmount']}
+
+
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -996,7 +1016,7 @@ JD-TC-Remove Service Level Discount-6
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
-    Set Test Variable  ${apptid1}  ${apptid[0]}
+    Set Test Variable  ${apptid1}  ${apptid[1]}
 
     ${resp}=  Get Appointment EncodedID   ${apptid1}
     Log   ${resp.json()}
@@ -1076,12 +1096,21 @@ JD-TC-Remove Service Level Discount-7
 
     ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[1]}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
 
     ${resp}=   Get Service By Id  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[0]}
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+
+    ${serviceList}=  Create Dictionary  serviceId=${s_id}   quantity=${quantity}  price=${servicecharge}
+    ${serviceList}=    Create List    ${serviceList}
+    ${servicenetRate}=  Evaluate  ${quantity} * ${servicecharge}
+    ${servicenetRate}=  Convert To Number  ${servicenetRate}   2
+    Set Test Variable   ${servicenetRate}
 
 
     clear_appt_schedule   ${PUSERPH0}
@@ -1193,7 +1222,7 @@ JD-TC-Remove Service Level Discount-7
 
     
     
-    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ynwUuid=${apptid1}
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    serviceList=${serviceList}   ynwUuid=${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]} 
@@ -1201,10 +1230,266 @@ JD-TC-Remove Service Level Discount-7
     ${resp1}=  Get Invoice By Id  ${invoice_uid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['discounts']}  []
-    Should Be Equal As Strings  ${resp1.json()['netTotal']}     ${servicecharge}
-    Should Be Equal As Strings  ${resp1.json()['netRate']}     ${servicecharge}
-    Should Be Equal As Strings  ${resp1.json()['amountDue']}     ${servicecharge}
-    Should Be Equal As Strings  ${resp1.json()['amountTotal']}     ${servicecharge}
+    Should Not Contain    ${resp1.json()['serviceList'][0]}   discounts
+    # Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['discounts']}  []
+    Should Be Equal As Strings  ${resp1.json()['netTotal']}     ${servicenetRate}
+    Should Be Equal As Strings  ${resp1.json()['netRate']}     ${servicenetRate}
+    Should Be Equal As Strings  ${resp1.json()['amountDue']}     ${servicenetRate}
+    Should Be Equal As Strings  ${resp1.json()['amountTotal']}     ${servicenetRate}
     # Should Be Equal As Strings  ${resp1.json()['taxableTotal']}     ${servicecharge}
 
+
+
+
+
+JD-TC-Remove Service Level Discount-UH1
+
+    [Documentation]   Remove Service Level Discount that already removed..
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+        ${discountValue1}=     Random Int   min=50   max=100
+    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+
+    ${resp}=   Remove Service Level Discount   ${invoice_uid1}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${sid2}
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
+
+JD-TC-Remove Service Level Discount-UH2
+
+    [Documentation]  Remove Service Level Discount where Invoice uid is wrong.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${invoice}=   FakerLibrary.word
+
+    ${resp}=   Remove Service Level Discount   ${invoice}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${sid3}
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+
+JD-TC-Remove Service Level Discount-UH3
+
+    [Documentation]  Remove Service Level Discount where discount id is wrong.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${discount}=   FakerLibrary.RandomNumber
+
+    ${resp}=   Remove Service Level Discount   ${invoice_uid2}   ${discount}    ${discountprice}   ${privateNote}  ${displayNote}  ${sid3}
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
+
+JD-TC-Remove Service Level Discount-UH4
+
+    [Documentation]  Remove Service Level Discount where serviceid is wrong.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${item}=  FakerLibrary.RandomNumber
+
+
+    ${resp}=   Remove Service Level Discount   ${invoice_uid2}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${item}
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${SERVICE_NOT}
+
+JD-TC-Remove Service Level Discount-UH5
+
+    [Documentation]  Remove Service Level Discount using another provider login.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+    ${resp}=   Remove Service Level Discount   ${invoice_uid2}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${sid3}
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+    Should Be Equal As Strings  ${resp.json()}   ${CAP_JALDEE_FINANCE_DISABLED}
+
+JD-TC-Remove Service Level Discount-UH6
+
+    [Documentation]   Service auto invoice generation is off by default,then took one appointment from consumer side  and check  invoice is not created there .
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+    Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+
+    ${pid}=  get_acc_id  ${PUSERPH0}
+    ${cid}=  get_id  ${CUSERNAME32}
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    # Set Suite Variable  ${CUR_DAY}
+  
+    ${SERVICE1}=    FakerLibrary.word
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1 
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[1]}  ${bool[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+    # ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[1]}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  422
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[0]}
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+
+    ${serviceList}=  Create Dictionary  serviceId=${s_id}   quantity=${quantity}  price=${servicecharge}
+    ${serviceList}=    Create List    ${serviceList}
+    ${servicenetRate}=  Evaluate  ${quantity} * ${servicecharge}
+    ${servicenetRate}=  Convert To Number  ${servicenetRate}   2
+    Set Test Variable   ${servicenetRate}
+
+
+    clear_appt_schedule   ${PUSERPH0}
+
+    ${resp}=  Get Appointment Schedules
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Appointment Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.add_timezone_time     ${tz}  0  15
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${maxval}=  Convert To Integer   ${delta/2}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
+
+    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    Set Test Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=  Get Appointment Schedules Consumer  ${pid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id}   ${pid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${pid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j}=  Random Int  max=${num_slots-3}
+    Set Test Variable   ${slot1}   ${slots[${j}]}
+
+    ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${cnote}=   FakerLibrary.name
+    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
+    Set Suite Variable   ${apptid1}
+
+    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Verify Response    ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
+    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}  ${apptStatus[0]}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
+
+    sleep  02s
+
+    ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    sleep  02s
+     ${NO_INVOICE_GENERATED}=  format String   ${NO_INVOICE_GENERATED}   ${apptid1}
+    ${resp1}=  Get Bookings Invoices  ${apptid1}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  422
+    Should Be Equal As Strings  ${resp1.json()}   ${NO_INVOICE_GENERATED}
