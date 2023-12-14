@@ -24,7 +24,7 @@ ${globaluser}         0
 
 *** Test Cases ***
 
-JD-TC-ConsumerNotificationSettings-1
+JD-TC-AppointmentReminder-1
 
     [Documentation]   Provider setting consumer notification settings
 
@@ -168,11 +168,13 @@ JD-TC-ConsumerNotificationSettings-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${date}=  Convert Date  ${DAY1}  result_format="%a, %d %b %Y"
+    ${converted_slot1}=  convert_slot_12hr  ${slot1} 
     ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[consumer] 	${userName}
     ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[appttime] 	First
     ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[provider] 	${businessName}
-    ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[time] 	${slot1}
-    ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[date] 	${DAY1}
+    ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[time] 	${converted_slot1}
+    ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[date] 	${date}
     ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[service] 	${SERVICE1}
     ${service_format_date}=   DateTime.Convert Date    ${DAY1}   result_format="%a, %d %b %Y"
     ${service_format}=  Set Variable  ${SERVICE1}${SPACE}on${SPACE}${service_format_date}

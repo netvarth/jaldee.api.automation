@@ -53,6 +53,10 @@ JD-TC-GetLocations-1
       Set Suite Variable  ${tz}
       Set Suite Variable  ${address1}
       Set Suite Variable  ${city1}
+      Set Suite Variable  ${latti1}
+      Set Suite Variable  ${longi1}
+      Set Suite Variable  ${postcode1}
+      Set Suite Variable  ${address1}
       ${parking_type1}    Random Element     ['none','free','street','privatelot','valet','paid']
       Set Suite Variable  ${parking_type1}
       ${24hours1}    Random Element    ['True','False']

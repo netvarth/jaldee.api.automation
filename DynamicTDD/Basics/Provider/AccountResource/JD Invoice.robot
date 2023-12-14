@@ -32,6 +32,20 @@ JD-TC-Invoice-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_T}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${pid1}=  get_acc_id  ${PUSERNAME_T}
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+	Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Enable Disable Invoice Generartion   ${pid1}    ${bool[1]}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  SuperAdminLogout
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_T}  ${PASSWORD}
     Log  ${resp.json()}
@@ -93,6 +107,10 @@ JD-TC-Invoice-1
     ${resp}=  Update Specialization  ${spec}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Enable Appointment
     Log   ${resp.json()}

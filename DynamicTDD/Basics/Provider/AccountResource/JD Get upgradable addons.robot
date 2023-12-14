@@ -114,7 +114,7 @@ Upgradable Addons
        Should Be Equal As Strings    ${resp.status_code}   200
        ${upgradable_addons}=   Get upgradable addons
        Should Be Equal As Strings    ${upgradable_addons.status_code}   200
-       Set Suite Variable  ${upgradable_addons.json()}
+       Set Suite Variable  ${upgradable_addons}
        ${upgrade_len}=  Get Length  ${upgradable_addons.json()}
        ${upgradeaddonslist}=  Create List
        FOR  ${index}  IN RANGE  ${upgrade_len}

@@ -109,11 +109,19 @@ JD-TC-DonationBill-1
         Should Be Equal As Strings  ${resp.json()['service'][0]['netRate']}  0.0 
         Should Be Equal As Strings  ${resp.json()['service'][0]['minDonationAmount']}  ${min_don_amt}
         Should Be Equal As Strings  ${resp.json()['service'][0]['maxDonationAmount']}  ${max_don_amt}
-        Should Be Equal As Strings  ${resp.json()['customer']['userProfile']['id']}  ${con_id}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['customer']['userProfile']['id']}  ${con_id}
 
         ${resp}=  Encrypted Provider Login  ${PUSERNAME28}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
+
+        ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME8}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${resp}=  GetCustomer
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
         ${resp}=  Get Bill By UUId  ${don_id}
         Log  ${resp.json()}
