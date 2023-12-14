@@ -370,7 +370,13 @@ JD-TC-ApplyProviderCouponforwaitlist-6
       [Documentation]  Apply provider coupon to waitlist through online that waitlist details from provider side.
 
 JD-TC-ApplyProviderCouponforwaitlist-UH1
-      [Documentation]  Apply provider coupon to waitlist where service price is not match with coupon amount.
+    [Documentation]  Apply provider coupon to waitlist where service price is not match with coupon amount.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    
 
 JD-TC-ApplyProviderCouponforwaitlist-UH2
       [Documentation]  Apply provider coupon to waitlist where service is not applicable for this coupon.
