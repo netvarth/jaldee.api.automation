@@ -48,6 +48,7 @@ ${SERVICE4}               SERVICE4004
 ${SERVICE5}               SERVICE3005
 ${SERVICE6}               SERVICE4006
 ${sample}                     4452135820
+@{service_duration}  10  20  30   40   50
 
 *** Test Cases ***
 
@@ -158,12 +159,8 @@ JD-TC-ApplyProviderCouponforwaitlist-1
       ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${CUR_DAY}
 
-      ${resp}=   Create Sample Service  ${SERVICE1}
-      Set Suite Variable    ${ser_id1}    ${resp}  
-      ${resp}=   Create Sample Service  ${SERVICE2}
-      Set Suite Variable    ${ser_id2}    ${resp}  
-      ${resp}=   Create Sample Service  ${SERVICE3}
-      Set Suite Variable    ${ser_id3}    ${resp}  
+      ${resp}=   Create Sample Service  ${SERVICE1} 
+      Set Suite Variable    ${ser_id1}    ${resp}
       ${q_name}=    FakerLibrary.name
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7
@@ -176,7 +173,7 @@ JD-TC-ApplyProviderCouponforwaitlist-1
       Set Suite Variable   ${parallel}
       ${capacity}=  Random Int   min=10   max=20
       Set Suite Variable   ${capacity}
-      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  ${ser_id2}  ${ser_id3}
+      ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${que_id1}   ${resp.json()}
@@ -239,5 +236,153 @@ JD-TC-ApplyProviderCouponforwaitlist-1
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${fullAmount}
     # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+JD-TC-ApplyProviderCouponforwaitlist-2
+    [Documentation]  Apply provider coupon to waitlist having non taxable service.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=10   max=50
+    ${Total}=   Random Int   min=100   max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${Total}=  Convert To Number  ${Total}  1
+    ${resp}=  Create Service  ${SERVICE2}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[0]} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sid}  ${resp.json()}
+
+    ${q_name}=    FakerLibrary.name
+    Set Suite Variable    ${q_name}
+    ${list}=  Create List   1  2  3  4  5  6  7
+    Set Suite Variable    ${list}
+    ${strt_time}=   db.add_timezone_time     ${tz}  1  00
+    Set Suite Variable    ${strt_time}
+    ${end_time}=    db.add_timezone_time     ${tz}  3  00 
+    Set Suite Variable    ${end_time}   
+    ${parallel}=   Random Int  min=1   max=1
+    Set Suite Variable   ${parallel}
+    ${capacity}=  Random Int   min=10   max=20
+    Set Suite Variable   ${capacity}
+    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${sid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${que_id2}   ${resp.json()}
+    ${desc}=   FakerLibrary.word
+    Set Suite Variable  ${desc}
+    ${resp}=  Add To Waitlist  ${cid}  ${sid}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${wid}  ${wid[0]}
+
+    ${resp}=  Get Waitlist By Id  ${wid} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby}   personsAhead=0
+    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE2}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${sid}
+    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
+    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
+    Should Be Equal As Strings  ${resp.json()['paymentStatus']}         ${paymentStatus[0]}
+    Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}         
+
+    ${netRate}=    Evaluate  ${fullAmount}-${pc_amount}
+
+    ${resp}=   Apply Provider Coupon for waitlist    ${wid}    ${cupn_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['netTotal']}                  ${fullAmount}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${netRate}
+    Should Be Equal As Strings  ${resp.json()['amountDue']}                  ${netRate}
+
+JD-TC-ApplyProviderCouponforwaitlist-3
+    [Documentation]  Apply provider coupon to waitlist having  taxable service.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=10   max=50
+    ${Total}=   Random Int   min=100   max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${Total}=  Convert To Number  ${Total}  1
+    ${resp}=  Create Service  ${SERVICE3}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[1]} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sid}  ${resp.json()}
+
+    ${q_name}=    FakerLibrary.name
+    Set Suite Variable    ${q_name}
+    ${list}=  Create List   1  2  3  4  5  6  7
+    Set Suite Variable    ${list}
+    ${strt_time}=   db.add_timezone_time     ${tz}  1  00
+    Set Suite Variable    ${strt_time}
+    ${end_time}=    db.add_timezone_time     ${tz}  3  00 
+    Set Suite Variable    ${end_time}   
+    ${parallel}=   Random Int  min=1   max=1
+    Set Suite Variable   ${parallel}
+    ${capacity}=  Random Int   min=10   max=20
+    Set Suite Variable   ${capacity}
+    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${sid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${que_id2}   ${resp.json()}
+    ${desc}=   FakerLibrary.word
+    Set Suite Variable  ${desc}
+    ${resp}=  Add To Waitlist  ${cid}  ${sid}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${wid}  ${wid[0]}
+
+    ${resp}=  Get Waitlist By Id  ${wid} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby}   personsAhead=0
+    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE3}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${sid}
+    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
+    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
+    Should Be Equal As Strings  ${resp.json()['paymentStatus']}         ${paymentStatus[0]}
+    Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}         
+
+    ${netRate}=    Evaluate  ${fullAmount}-${pc_amount}
+
+    ${resp}=   Apply Provider Coupon for waitlist    ${wid}    ${cupn_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['netTotal']}                  ${fullAmount}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${netRate}
+    Should Be Equal As Strings  ${resp.json()['amountDue']}                  ${netRate}
+    
+JD-TC-ApplyProviderCouponforwaitlist-4
+      [Documentation]  Apply provider coupon to waitlist having  taxable service (account is also tax enabled).
+
+JD-TC-ApplyProviderCouponforwaitlist-5
+      [Documentation]  Apply provider coupon to waitlist from consumer side and check that waitlist details from provider side.
+
+
+JD-TC-ApplyProviderCouponforwaitlist-6
+      [Documentation]  Apply provider coupon to waitlist through online that waitlist details from provider side.
+
+JD-TC-ApplyProviderCouponforwaitlist-UH1
+      [Documentation]  Apply provider coupon to waitlist where service price is not match with coupon amount.
+
+JD-TC-ApplyProviderCouponforwaitlist-UH2
+      [Documentation]  Apply provider coupon to waitlist where service is not applicable for this coupon.
+
+JD-TC-ApplyProviderCouponforwaitlist-UH3
+      [Documentation]  Create provider coupon only for walkin bookings and then try to apply that coupon via online.
+
+JD-TC-ApplyProviderCouponforwaitlist-UH4
+      [Documentation]  Apply provider coupon from another provider login.
+
+
+JD-TC-ApplyProviderCouponforwaitlist-UH5
+      [Documentation]  Apply provider coupon without login.
 
 
