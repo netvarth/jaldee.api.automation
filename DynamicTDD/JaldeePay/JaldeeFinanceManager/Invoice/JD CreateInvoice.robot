@@ -397,6 +397,74 @@ JD-TC-CreateInvoice-3
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['price']}  ${promotionalPrice}
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['netRate']}  ${netRate}
 
+JD-TC-CreateInvoice-4
+
+    [Documentation]  Service price is zero(so auto invoice generation flag is disbled)-then create invoice .
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get upgradable license 
+       Log   ${resp.json()}
+       Should Be Equal As Strings    ${resp.status_code}   200
+       ${len}=  Get Length  ${resp.json()}
+       ${len}=  Evaluate  ${len}-1
+       Set Test Variable  ${licId1}  ${resp.json()[${len}]['pkgId']}
+       ${resp}=  Change License Package  ${licId1}
+       Should Be Equal As Strings    ${resp.status_code}   200
+     
+
+    ${SERVICE1}=    FakerLibrary.word
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    # ${servicecharge}=    0
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${order}  ${bool[1]}  ${bool[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+
+    ${serviceList}=  Create Dictionary  serviceId=${s_id}   quantity=${quantity}  price=${order}
+    ${serviceList}=    Create List    ${serviceList}
+
+    ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+    ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+    ${invoiceId}=   FakerLibrary.word
+
+    ${resp1}=  AddCustomer  ${CUSERNAME12}
+    Log  ${resp1.json()}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable   ${pcid12}   ${resp1.json()}
+
+    ${providerConsumerIdList}=  Create List  ${pcid12} 
+    Set Test Variable  ${providerConsumerIdList}   
+
+
+    
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   $serviceList=${serviceList}     
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid3}   ${resp.json()['uidList'][0]}  
 
 
 JD-TC-CreateInvoice-UH1

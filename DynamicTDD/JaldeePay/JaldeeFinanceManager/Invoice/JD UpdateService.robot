@@ -256,6 +256,7 @@ JD-TC-UpdateService-1
 
 
     ${serviceList1}=  Create Dictionary  serviceId=${sid2}   quantity=${quantity1}   price=${serviceprice}
+    Set Suite Variable  ${serviceList1}  
     
 
 
@@ -271,3 +272,88 @@ JD-TC-UpdateService-1
     Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceId']}  ${sid2}
     Should Be Equal As Strings  ${resp.json()['serviceList'][1]['serviceName']}  ${SERVICE2}
     Should Be Equal As Strings  ${resp.json()['serviceList'][1]['quantity']}  ${quantity1}
+
+
+JD-TC-UpdateService-UH1
+
+    [Documentation]  Update Item with invalid invoice id.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+     ${invoice}=    FakerLibrary.word
+
+     ${resp}=  Update Finance Service  ${invoice}   ${serviceList1}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+
+JD-TC-UpdateService-UH2
+
+    [Documentation]  Update Item with empty itemlist.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+     ${invoice}=    FakerLibrary.word
+    ${service}=  Create Dictionary  
+
+
+     ${resp}=  Update Finance Service  ${invoice_uid}   ${service}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${PRICE_CANNOT_BE_EMPTY}
+
+JD-TC-UpdateService-UH3
+    [Documentation]   Update item Without login
+
+     ${resp}=  Update Finance Service  ${invoice_uid}   ${serviceList1}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
+
+
+    
+JD-TC-UpdateService-UH4
+    [Documentation]   Login as consumer and Update item
+    ${resp}=   Consumer Login  ${CUSERNAME16}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Update Finance Service  ${invoice_uid}   ${serviceList1}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}" 
+
+
+
+JD-TC-UpdateService-UH5
+    [Documentation]   A provider try to Update another providers item
+
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME201}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+   ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+     ${resp}=  Update Finance Service  ${invoice_uid}   ${serviceList1}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}

@@ -12427,3 +12427,10 @@ Get Bookings Invoices
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw   /provider/jp/finance/invoice/ynwuid/${ynwuuid}    expected_status=any
     [Return]  ${resp}
+
+Update Invoice Status
+
+    [Arguments]    ${InvoiceUid}     ${userId}     
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${InvoiceUid}/${userId}     expected_status=any    headers=${headers}
+    [Return]  ${resp}

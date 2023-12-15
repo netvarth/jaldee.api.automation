@@ -263,5 +263,73 @@ JD-TC-MakePaymentByCash-1
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()['amountDue']}  ${balance}
-    Should Be Equal As Strings  ${resp1.json()['amountPaid']}  10
+    Should Be Equal As Strings  ${resp1.json()['amountPaid']}  10.0
+
+JD-TC-MakePaymentByCash-2
+
+    [Documentation]  Make payment by cash with different note.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${note}=    FakerLibrary.word
+    ${resp}=  Make Payment By Cash For Invoice   ${invoice_uid}  ${payment_modes[0]}  10  ${note}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-MakePaymentByCash-UH1
+
+    [Documentation]  Make payment by cash with invalid invoice id.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${note}=    FakerLibrary.word
+    ${invoice}=    FakerLibrary.word
+    ${resp}=  Make Payment By Cash For Invoice   ${invoice}  ${payment_modes[0]}  10  ${note}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${RECORD_NOT_FOUND}" 
+
+
+
+JD-TC-MakePaymentByCash-UH2
+
+    [Documentation]  Make payment by cash without login
+    ${note}=    FakerLibrary.word
+    ${resp}=  Make Payment By Cash For Invoice   ${invoice_uid}  ${payment_modes[0]}  10  ${note}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
+
+JD-TC-MakePaymentByCash-UH3
+
+    [Documentation]  Make payment by cash with another provider login
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME204}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+
+    ${note}=    FakerLibrary.word
+    ${resp}=  Make Payment By Cash For Invoice   ${invoice_uid}  ${payment_modes[0]}  10  ${note}
+    Log  ${resp.json()}
+   Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}" 
+
     

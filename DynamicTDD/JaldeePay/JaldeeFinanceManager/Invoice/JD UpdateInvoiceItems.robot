@@ -247,6 +247,7 @@ JD-TC-UpdateInvoiceItem-1
     ${quantity1}=  Convert To Number  ${quantity1}  1
 
     ${itemList1}=  Create Dictionary  itemId=${itemId1}   quantity=${quantity1}   price=${promotionalPrice}
+    Set Suite Variable   ${itemList1}   
 
     ${resp}=  Update Invoice Items  ${invoice_uid}   ${itemList1}   
     Log  ${resp.content}
@@ -263,3 +264,88 @@ JD-TC-UpdateInvoiceItem-1
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
     Should Be Equal As Strings  ${resp1.json()['itemList'][1]['itemName']}  ${item2}
     Should Be Equal As Strings  ${resp1.json()['itemList'][1]['itemId']}  ${itemId1}
+
+
+JD-TC-UpdateInvoiceItem-UH1
+
+    [Documentation]  Update Item with invalid invoice id.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+     ${invoice}=    FakerLibrary.word
+
+    ${resp}=  Update Invoice Items  ${invoice}   ${itemList1}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+
+JD-TC-UpdateInvoiceItem-UH2
+
+    [Documentation]  Update Item with empty itemlist.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+     ${invoice}=    FakerLibrary.word
+    ${item}=  Create Dictionary  
+
+
+    ${resp}=  Update Invoice Items  ${invoice_uid}   ${item}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${PRICE_CANNOT_BE_EMPTY}
+
+JD-TC-UpdateInvoiceItem-UH3
+    [Documentation]   Update item Without login
+
+    ${resp}=  Update Invoice Items  ${invoice_uid}   ${itemList1}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
+
+
+    
+JD-TC-UpdateInvoiceItem-UH4
+    [Documentation]   Login as consumer and Update item
+    ${resp}=   Consumer Login  ${CUSERNAME16}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Update Invoice Items  ${invoice_uid}   ${itemList1}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  "${resp.json()}"  "${LOGIN_NO_ACCESS_FOR_URL}" 
+
+
+
+JD-TC-UpdateInvoiceItem-UH5
+    [Documentation]   A provider try to Update another providers item
+
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+   ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+    ${resp}=  Update Invoice Items  ${invoice_uid}   ${itemList1}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}

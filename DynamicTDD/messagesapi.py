@@ -2106,6 +2106,10 @@ CAP_JALDEE_FINANCE_DISABLED="Jaldee Finance Disabled"
 INVALID_SHARING_INFO="Invalid sharing info"
 BILL_STATUS_IS_ALREADY_SETTILED="Bill Status is already Settled"
 BILL_STATUS_IS_ALREADY_CANCELLED="Bill Status is already Cancel"
+PRICE_CANNOT_BE_EMPTY=" Price cannot be empty" 
+NO_SUCH_SERVICE_AVAILABLE="No such service is available for the said account." 
+CATALOG_NOT_FOUND="Catalog not found" 
+RECORD_NOT_FOUND="Record not found"
 
 
 

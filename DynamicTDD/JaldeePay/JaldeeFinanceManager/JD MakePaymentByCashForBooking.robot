@@ -97,11 +97,20 @@ JD-TC-MakePaymentByCashForBooking-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+
     ${resp}=  Get Business Profile
-    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
-    Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+
+
+      ${resp}=  Create Sample Location  
+      Set Suite Variable    ${loc_id1}    ${resp}  
+
+      ${resp}=   Get Location ById  ${loc_id1}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Enable Waitlist
     Log   ${resp.json()}
@@ -148,10 +157,9 @@ JD-TC-MakePaymentByCashForBooking-1
       Log   ${resp.json()}
       Should Be Equal As Strings      ${resp.status_code}  200
      
-      ${CUR_DAY}=  get_date
+      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       Set Suite Variable  ${CUR_DAY}
-      ${resp}=   Create Sample Location
-      Set Suite Variable    ${loc_id1}    ${resp}  
+
       ${resp}=   Create Sample Service  ${SERVICE1}
       Set Suite Variable    ${ser_id1}    ${resp}  
       ${resp}=   Create Sample Service  ${SERVICE2}
@@ -162,9 +170,9 @@ JD-TC-MakePaymentByCashForBooking-1
       Set Suite Variable    ${q_name}
       ${list}=  Create List   1  2  3  4  5  6  7
       Set Suite Variable    ${list}
-      ${strt_time}=   add_time  1  00
+      ${strt_time}=   db.add_timezone_time     ${tz}  1  00
       Set Suite Variable    ${strt_time}
-      ${end_time}=    add_time  3  00 
+      ${end_time}=    db.add_timezone_time     ${tz}  3  00 
       Set Suite Variable    ${end_time}   
       ${parallel}=   Random Int  min=1   max=1
       Set Suite Variable   ${parallel}
@@ -181,7 +189,7 @@ JD-TC-MakePaymentByCashForBooking-1
       Should Be Equal As Strings  ${resp.status_code}  200
       
       ${wid}=  Get Dictionary Values  ${resp.json()}
-      Set Test Variable  ${wid}  ${wid[0]}
+      Set Suite Variable  ${wid}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid} 
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -202,6 +210,7 @@ JD-TC-MakePaymentByCashForBooking-1
     ${balance}=    evaluate    ${fullAmount}-10
 
     ${note}=    FakerLibrary.word
+    Set Suite Variable  ${note}   
     ${resp}=  Make Payment By Cash   ${wid}  ${payment_modes[0]}  10  ${note}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -213,12 +222,84 @@ JD-TC-MakePaymentByCashForBooking-1
     Should Be Equal As Strings  ${resp.json()['amountPaid']}  10.0
     # Should Be Equal As Strings  ${resp.json()['token']}  ${wid}
     Should Be Equal As Strings  ${resp.json()['date']}  ${CUR_DAY}
-    Should Be Equal As Strings  ${resp.json()['providerAccount']['id']}  ${account_id1}
+    Should Be Equal As Strings  ${resp.json()['providerAccount']['id']}  ${account_id}
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}  ${cid}
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${ser_id1}
     Should Be Equal As Strings  ${resp.json()['service']['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['waitlistStatus']}  ${wl_status[1]}
     Should Be Equal As Strings  ${resp.json()['ynwUuid']}  ${wid}
     Should Be Equal As Strings  ${resp.json()['paymentStatus']}  ${paymentStatus[1]}
-    Should Be Equal As Strings  ${resp.json()['netRate']}  ${balance}
+    Should Be Equal As Strings  ${resp.json()['netRate']}  ${fullAmount}
     
+JD-TC-MakePaymentByCashForBooking-2
+
+    [Documentation]  Make payment by cash with different note.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+    ${note}=    FakerLibrary.word
+    ${resp}=  Make Payment By Cash   ${wid}  ${payment_modes[0]}  10  ${note}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-MakePaymentByCashForBooking-UH1
+
+    [Documentation]  Make payment by cash with invalid waitlist id.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+    ${note}=    FakerLibrary.word
+    ${wid}=    FakerLibrary.word
+    ${resp}=  Make Payment By Cash   ${wid}  ${payment_modes[0]}  10  ${note}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${RECORD_NOT_FOUND}" 
+
+
+
+JD-TC-MakePaymentByCashForBooking-UH2
+
+    [Documentation]  Make payment by cash without login
+
+
+
+    ${note}=    FakerLibrary.word
+    ${wid}=    FakerLibrary.word
+    ${resp}=  Make Payment By Cash   ${wid}  ${payment_modes[0]}  10  ${note}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
+
+JD-TC-MakePaymentByCashForBooking-UH3
+
+    [Documentation]  Make payment by cash with another provider login
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME203}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+
+    ${note}=    FakerLibrary.word
+    ${resp}=  Make Payment By Cash   ${wid}  ${payment_modes[0]}  10  ${note}
+    Log  ${resp.json()}
+   Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}" 
+
+
