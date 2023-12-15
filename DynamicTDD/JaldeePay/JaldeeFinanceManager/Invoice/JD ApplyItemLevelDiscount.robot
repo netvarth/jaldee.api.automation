@@ -377,7 +377,7 @@ JD-TC-Apply Item Level Discount-1
     Set Suite Variable   ${promotionalPrice}   ${resp.json()['promotionalPrice']}
 
 
-    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=   Random Int  min=500  max=1000
     ${quantity}=  Convert To Number  ${quantity}  1
     ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  price=${promotionalPrice}
     
