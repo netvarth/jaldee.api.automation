@@ -12434,3 +12434,9 @@ Update Invoice Status
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${InvoiceUid}/${userId}     expected_status=any    headers=${headers}
     [Return]  ${resp}
+
+Get next invoice Id
+    [Arguments]   ${locationId}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/${locationId}/nextInvoiceId     expected_status=any
+    [Return]  ${resp}

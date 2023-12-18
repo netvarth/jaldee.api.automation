@@ -193,7 +193,10 @@ JD-TC-CreateInvoice-1
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     # ${invoiceDate}=   Get Current Date    result_format=%Y/%m/%d
-    ${invoiceId}=   FakerLibrary.word
+    ${resp}=   Get next invoice Id   ${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoiceId}   ${resp.json()}
 
     ${item1}=     FakerLibrary.word
     ${itemCode1}=     FakerLibrary.word
@@ -280,7 +283,10 @@ JD-TC-CreateInvoice-2
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
-    ${invoiceId}=   FakerLibrary.word
+    ${resp}=   Get next invoice Id   ${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${invoiceId}   ${resp.json()}
 
     ${resp1}=  AddCustomer  ${CUSERNAME10}
     Log  ${resp1.json()}
@@ -356,7 +362,10 @@ JD-TC-CreateInvoice-3
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
-    ${invoiceId}=   FakerLibrary.word
+    ${resp}=   Get next invoice Id   ${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${invoiceId}   ${resp.json()}
 
     ${resp1}=  AddCustomer  ${CUSERNAME12}
     Log  ${resp1.json()}
@@ -438,7 +447,7 @@ JD-TC-CreateInvoice-4
 
     ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
@@ -449,9 +458,12 @@ JD-TC-CreateInvoice-4
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${amount}=   Random Int  min=500  max=2000
     ${amount}=     roundval    ${amount}   1
-    ${invoiceId}=   FakerLibrary.word
+    ${resp}=   Get next invoice Id   ${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${invoiceId}   ${resp.json()}
 
-    ${resp1}=  AddCustomer  ${CUSERNAME12}
+    ${resp1}=  AddCustomer  ${CUSERNAME13}
     Log  ${resp1.json()}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable   ${pcid12}   ${resp1.json()}
@@ -482,7 +494,10 @@ JD-TC-CreateInvoice-UH1
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
-    ${invoiceId}=   FakerLibrary.word
+    ${resp}=   Get next invoice Id   ${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${invoiceId}   ${resp.json()}
 
     ${itemName}=    FakerLibrary.word
     Set Suite Variable  ${itemName}
@@ -514,7 +529,10 @@ JD-TC-CreateInvoice-UH2
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
-    ${invoiceId}=   FakerLibrary.word
+    ${resp}=   Get next invoice Id   ${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${invoiceId}   ${resp.json()}
 
     ${itemName}=    FakerLibrary.word
     Set Suite Variable  ${itemName}
@@ -547,7 +565,10 @@ JD-TC-CreateInvoice-UH3
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
 
-    ${invoiceId}=   FakerLibrary.word
+    ${resp}=   Get next invoice Id   ${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${invoiceId}   ${resp.json()}
     
     ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${EMPTY}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}
     Log  ${resp.json()}
