@@ -467,7 +467,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH3
     ${min_bill_amount}=   Random Int   min=90   max=100
     ${max_disc_val}=   Random Int   min=90  max=100
     ${max_prov_use}=   Random Int   min=10   max=20
-    ${book_channel}=   Create List     ${bookingChannel[0]}
+    ${book_channel}=   Create List     ${bookingChannel[1]}
     ${coupn_based}=  Create List   ${couponBasedOn[0]}
     ${tc}=  FakerLibrary.sentence
     ${services}=   Create list     ${ser_id1}   ${sid}  ${sid1}
@@ -515,10 +515,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH3
     ${resp}=   Apply Provider Coupon for waitlist    ${wid}    ${cupn_code}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()['netTotal']}                  ${fullAmount}
-    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
-    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${netRate}
-    Should Be Equal As Strings  ${resp.json()['amountDue']}                  ${netRate}
+    Should Be Equal As Strings  "${resp.json()}"  "${PROVIDER_COUPON_NOT_APLICABLE_FOR_WALKIN}"  
 
 
 JD-TC-ApplyProviderCouponforwaitlist-UH4

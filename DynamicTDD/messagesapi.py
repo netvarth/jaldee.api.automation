@@ -2110,6 +2110,8 @@ PRICE_CANNOT_BE_EMPTY=" Price cannot be empty"
 NO_SUCH_SERVICE_AVAILABLE="No such service is available for the said account." 
 CATALOG_NOT_FOUND="Catalog not found" 
 RECORD_NOT_FOUND="Record not found"
+PROVIDER_COUPON_NOT_APLICABLE_FOR_WALKIN="Provider coupon not applicable for this booking mode Walk in"
+Coupon_not_found="Coupon not found"
 
 
 

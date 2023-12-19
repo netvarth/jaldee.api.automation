@@ -51,6 +51,7 @@ ${SERVICE4}               SERVICE4004
 ${SERVICE5}               SERVICE3005
 ${SERVICE6}               SERVICE4006
 ${sample}                     4452135820
+@{service_duration}  10  20  30   40   50
 
 *** Test Cases ***
 
@@ -190,7 +191,7 @@ JD-TC-RemoveProviderCouponforwaitlist-1
       Should Be Equal As Strings  ${resp.status_code}  200
       
       ${wid}=  Get Dictionary Values  ${resp.json()}
-      Set Test Variable  ${wid}  ${wid[0]}
+      Set Suite Variable  ${wid}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid} 
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -246,5 +247,141 @@ JD-TC-RemoveProviderCouponforwaitlist-1
     Should Be Equal As Strings  ${resp.json()['amountDue']}                  ${fullAmount}
 
 
+JD-TC-RemoveProviderCouponforwaitlist-UH1
+      [Documentation]  Coupon applicable for online-Apply coupon to walkin bookings then remove that coupon from that booking.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${SERVICE2}=  FakerLibrary.sentence
+    ${description}=  FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=10   max=50
+    ${Total}=   Random Int   min=100   max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${Total}=  Convert To Number  ${Total}  1
+    ${resp}=  Create Service  ${SERVICE2}   ${description}   ${service_duration[1]}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[1]}   ${bool[1]} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sid}  ${resp.json()}   
+
+    
+    ${coupon}=    FakerLibrary.word
+    ${desc}=  FakerLibrary.Sentence   nb_words=2
+    ${pc_amount}=   Random Int   min=10  max=50
+    ${pc_amount}=  Convert To Number  ${pc_amount}  1
+    Set Test Variable  ${pc_amount}
+    ${cupn_code}=   FakerLibrary.word
+    Set Test Variable  ${cupn_code}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime}=  subtract_time  0  15
+    ${eTime}=  db.add_timezone_time     ${tz}   0  45
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
+    ${min_bill_amount}=   Random Int   min=90   max=100
+    ${max_disc_val}=   Random Int   min=90  max=100
+    ${max_prov_use}=   Random Int   min=10   max=20
+    ${book_channel}=   Create List     ${bookingChannel[1]}
+    ${coupn_based}=  Create List   ${couponBasedOn[0]}
+    ${tc}=  FakerLibrary.sentence
+    ${services}=   Create list        ${sid}  
+    ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${couponId}  ${resp.json()}
+
+   ${q_name}=    FakerLibrary.name
+    Set Test Variable    ${q_name}
+    ${list}=  Create List   1  2  3  4  5  6  7
+    Set Test Variable    ${list}
+    ${strt_time}=   db.add_timezone_time     ${tz}  1  00
+    Set Test Variable    ${strt_time}
+    ${end_time}=    db.add_timezone_time     ${tz}  3  00 
+    Set Test Variable    ${end_time}   
+    ${parallel}=   Random Int  min=1   max=1
+    Set Test Variable   ${parallel}
+    ${capacity}=  Random Int   min=10   max=20
+    Set Test Variable   ${capacity}
+    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${sid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${que_id2}   ${resp.json()}
+
+    ${resp}=  Add To Waitlist  ${cid}  ${sid}  ${que_id2}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${wid}  ${wid[0]}
+
+    ${resp}=  Get Waitlist By Id  ${wid} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby}   personsAhead=0
+    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE2}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${sid}
+    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
+    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
+    Should Be Equal As Strings  ${resp.json()['paymentStatus']}         ${paymentStatus[0]}
+    Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}         
+
+    ${netRate}=    Evaluate  ${fullAmount}-${pc_amount}
+
+    ${resp}=   Apply Provider Coupon for waitlist    ${wid}    ${cupn_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${PROVIDER_COUPON_NOT_APLICABLE_FOR_WALKIN}"  
+
+    ${resp}=   Remove Provider Coupon for waitlist    ${wid}    ${cupn_code}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${Coupon_not_found}" 
+    
+JD-TC-RemoveProviderCouponforwaitlist-UH2
+      [Documentation]  Remove Provider coupon thats already removed.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+    ${resp}=   Remove Provider Coupon for waitlist    ${wid}    ${cupn_code}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${Coupon_not_found}" 
+
+JD-TC-RemoveProviderCouponforwaitlist-UH3
+      [Documentation]  Remove Provider coupon using invalid coupon name.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+   ${q_name}=    FakerLibrary.name
+
+    ${resp}=   Remove Provider Coupon for waitlist    ${wid}    ${q_name}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${JALDEE_COOUPON_NOT_TARGETED}" 
+    
+JD-TC-RemoveProviderCouponforwaitlist-UH4
+      [Documentation]  Remove Provider coupon using another provider login.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+    ${resp}=   Remove Provider Coupon for waitlist    ${wid}    ${cupn_code}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"  
+
+JD-TC-RemoveProviderCouponforwaitlist-UH5
+      [Documentation]  Remove Provider coupon without login.
+
+    ${resp}=   Remove Provider Coupon for waitlist    ${wid}    ${cupn_code}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  "${resp.json()}"    "${SESSION_EXPIRED}" 
+    
 
 

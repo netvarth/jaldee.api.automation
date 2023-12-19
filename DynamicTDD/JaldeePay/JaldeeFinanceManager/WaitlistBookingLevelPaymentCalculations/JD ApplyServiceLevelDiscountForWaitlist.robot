@@ -157,7 +157,7 @@ JD-TC-Applyserviceleveldiscount-1
         Should Be Equal As Strings    ${resp.status_code}   200
 
 
-        ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${boolean[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      
@@ -254,7 +254,7 @@ JD-TC-Applyserviceleveldiscount-1
       Should Be Equal As Strings  ${resp.status_code}  200
       
       ${wid}=  Get Dictionary Values  ${resp.json()}
-      Set Test Variable  ${wid}  ${wid[0]}
+      Set Suite Variable  ${wid}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid} 
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -264,7 +264,7 @@ JD-TC-Applyserviceleveldiscount-1
       Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
       Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
       Should Be Equal As Strings  ${resp.json()['paymentStatus']}         ${paymentStatus[0]}
-      Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}         
+      Set Suite Variable   ${fullAmount}  ${resp.json()['fullAmt']}         
 
 
 
@@ -291,7 +291,7 @@ JD-TC-Applyserviceleveldiscount-1
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
 
-JD-TC-Applyserviceleveldiscount-1
+JD-TC-Applyserviceleveldiscount-2
     [Documentation]   Apply service level discount for future waitlist.(online)
 
 
@@ -312,6 +312,7 @@ JD-TC-Applyserviceleveldiscount-1
     ${resp}=  Get consumer Waitlist By Id   ${wid2}  ${pid0}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}   
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log   ${resp.json()}
@@ -322,5 +323,102 @@ JD-TC-Applyserviceleveldiscount-1
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Test Variable  ${cid2}  ${resp.json()[0]['id']}
 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${discount1}=     FakerLibrary.word
+    ${discAmt}=    Evaluate  ${fullAmount}-${discountprice}
+
+    ${resp}=   Apply Service Level Discount for waitlist    ${wid2}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+JD-TC-Applyserviceleveldiscount-3
+
+    [Documentation]   Apply service level discount,where discount price is empty.
+
+    ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${discount2}=     FakerLibrary.word
+    Set Suite Variable   ${discount2}
+
+    ${desc}=   FakerLibrary.word
+    ${discountprice1}=     Random Int   min=50   max=100
+    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    Set Test Variable   ${discountprice}
+    ${resp}=   Create Discount  ${discount2}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    Log  ${resp.json()}
+    Set Suite Variable   ${discountId2}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Discounts 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Get Waitlist By Id  ${wid} 
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}   
+
+    ${discAmt}=    Evaluate  ${fullAmount}-${discountprice}
+
+    ${resp}=   Apply Service Level Discount for waitlist    ${wid}    ${discountId2}   ${EMPTY}    ${discount2}    ${discount2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+JD-TC-Applyserviceleveldiscount-4
+
+    [Documentation]   Apply service level discount,where both note is empty.
+
+    ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${discount2}=     FakerLibrary.word
+    ${desc}=   FakerLibrary.word
+    ${discountprice1}=     Random Int   min=50   max=100
+    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    Set Suite Variable   ${discountprice}
+    ${resp}=   Create Discount  ${discount2}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    Log  ${resp.json()}
+    Set Suite Variable   ${discountId1}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Discounts 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Get Waitlist By Id  ${wid} 
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}   
+
+    ${discAmt}=    Evaluate  ${fullAmount}-${discountprice}
+
+    ${resp}=   Apply Service Level Discount for waitlist     ${wid}    ${discountId1}   ${discountprice}    ${EMPTY}    ${EMPTY}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
   
+JD-TC-Applyserviceleveldiscount-UH1
+
+    [Documentation]   Apply service level discount for same waitlist and same discount.
+
+    ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${discount1}=     FakerLibrary.word
+
+    ${resp}=   Apply Service Level Discount for waitlist    ${wid}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}                  ${DISCOUNT_ALREADY_USED}

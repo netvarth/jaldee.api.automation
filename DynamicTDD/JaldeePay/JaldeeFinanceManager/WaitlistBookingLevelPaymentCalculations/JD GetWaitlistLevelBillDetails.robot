@@ -188,7 +188,7 @@ JD-TC-ApplyJaldeeCouponforwaitlist-1
       Should Be Equal As Strings  ${resp.status_code}  200
       
       ${wid}=  Get Dictionary Values  ${resp.json()}
-      Set Test Variable  ${wid}  ${wid[0]}
+      Set Suite Variable  ${wid}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid} 
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -269,3 +269,37 @@ JD-TC-ApplyJaldeeCouponforwaitlist-1
     ${resp}=   Get Waitlist level Bill Details      ${wid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-ApplyJaldeeCouponforwaitlist-UH1
+      [Documentation]  Get bill details with invalid waitlist id.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${wid}=   FakerLibrary.word
+
+    ${resp}=   Get Waitlist level Bill Details      ${wid} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-ApplyJaldeeCouponforwaitlist-UH2
+      [Documentation]  Get bill details using another provider login.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+    ${resp}=   Get Waitlist level Bill Details      ${wid} 
+    Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  401
+      Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"  
+
+JD-TC-ApplyJaldeeCouponforwaitlist-UH3
+      [Documentation]  Get bill details withoout login.
+
+    ${resp}=   Get Waitlist level Bill Details      ${wid} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  "${resp.json()}"    "${SESSION_EXPIRED}" 

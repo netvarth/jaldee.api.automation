@@ -73,12 +73,18 @@ JD-TC-CreateInvoice-1
 
 
     ${resp}=  Create Sample Location  
-    Set Suite Variable    ${lid}    ${resp}  
+    Set Suite Variable    ${lid1}    ${resp}  
 
-    ${resp}=   Get Location ById  ${lid}
+    ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${lid}   ${resp.json()[1]['id']}
 
     ${name}=   FakerLibrary.word
     Set Suite Variable   ${name}
@@ -283,6 +289,12 @@ JD-TC-CreateInvoice-2
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${lid}   ${resp.json()[1]['id']}
+
     ${resp}=   Get next invoice Id   ${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

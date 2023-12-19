@@ -49,6 +49,7 @@ ${SERVICE4}               SERVICE4004
 ${SERVICE5}               SERVICE3005
 ${SERVICE6}               SERVICE4006
 ${sample}                     4452135820
+${self}                   0
 
 *** Test Cases ***
 
@@ -97,11 +98,79 @@ JD-TC-RemoveServiceLevelDiscountforwaitlist-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+       ${pid0}=  get_acc_id  ${PUSERPH0}
+    Set Suite Variable  ${pid0}
+
+  
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${ph1}=  Evaluate  ${PUSERPH0}+15566122
+    ${ph2}=  Evaluate  ${PUSERPH0}+25566122
+    ${views}=  Random Element    ${Views}
+    ${name1}=  FakerLibrary.name
+    ${name2}=  FakerLibrary.name
+    ${name3}=  FakerLibrary.name
+    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}183.${test_mail}  ${views}
+    ${bs}=  FakerLibrary.bs
+    ${companySuffix}=  FakerLibrary.companySuffix
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ${bool}
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+
+      
+        ${fields}=   Get subDomain level Fields  ${d1}  ${sd1}
+        Log  ${fields.json()}
+        Should Be Equal As Strings    ${fields.status_code}   200
+        ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+        ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sd1}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${resp}=  Get specializations Sub Domain  ${d1}  ${sd1}
+        Log  ${resp.json()}
+        Should Be Equal As Strings    ${resp.status_code}   200
+        ${spec}=  get_Specializations  ${resp.json()}
+        ${resp}=  Update Specialization  ${spec}
+        Log  ${resp.json()}
+        Should Be Equal As Strings    ${resp.status_code}   200
+
+
+     
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+     Log   ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+
 
     ${resp}=  Enable Waitlist
     Log   ${resp.json()}
@@ -188,7 +257,7 @@ JD-TC-RemoveServiceLevelDiscountforwaitlist-1
       Should Be Equal As Strings  ${resp.status_code}  200
       
       ${wid}=  Get Dictionary Values  ${resp.json()}
-      Set Test Variable  ${wid}  ${wid[0]}
+      Set Suite Variable  ${wid}  ${wid[0]}
       ${resp}=  Get Waitlist By Id  ${wid} 
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -228,3 +297,152 @@ JD-TC-RemoveServiceLevelDiscountforwaitlist-1
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
 
+JD-TC-RemoveServiceLevelDiscountforwaitlist-2
+    [Documentation]   Apply service level discount for future waitlist.(online) and then remove that discount
+
+
+    ${resp}=  Consumer Login  ${CUSERNAME13}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200   
+     Set Test Variable  ${cid}  ${resp.json()}     
+
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${Start_DAY}=  db.add_timezone_date  ${tz}  1 
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id1}  ${Start_DAY}  ${ser_id2}  ${cnote}  ${bool[0]}  ${self}   location=${loc_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${wid2}  ${wid[0]}
+    ${resp}=  Get consumer Waitlist By Id   ${wid2}  ${pid0}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}   
+
+    ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME13}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${cid2}  ${resp.json()[0]['id']}
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${discount1}=     FakerLibrary.word
+    ${discAmt}=    Evaluate  ${fullAmount}-${discountprice}
+
+    ${resp}=   Apply Service Level Discount for waitlist    ${wid2}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+    ${resp}=   Remove Service Level Discount for waitlist    ${wid2}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${fullAmount}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+JD-TC-RemoveServiceLevelDiscountforwaitlist-3
+
+    [Documentation]   Apply service level discount,where discount price is empty and remove that discount.
+
+    ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${discount2}=     FakerLibrary.word
+    Set Suite Variable   ${discount2}
+
+    ${desc}=   FakerLibrary.word
+    ${discountprice1}=     Random Int   min=50   max=100
+    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    Set Test Variable   ${discountprice}
+    ${resp}=   Create Discount  ${discount2}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    Log  ${resp.json()}
+    Set Suite Variable   ${discountId2}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Discounts 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Get Waitlist By Id  ${wid} 
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}   
+
+    ${discAmt}=    Evaluate  ${fullAmount}-${discountprice}
+
+    ${resp}=   Apply Service Level Discount for waitlist    ${wid}    ${discountId2}   ${EMPTY}    ${discount2}    ${discount2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+    ${resp}=   Remove Service Level Discount for waitlist    ${wid}    ${discountId2}   ${discountprice}    ${discount2}    ${discount2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${fullAmount}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+JD-TC-RemoveServiceLevelDiscountforwaitlist-4
+
+    [Documentation]   remove service level discount,where both note is empty.
+
+    ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${discount2}=     FakerLibrary.word
+    ${desc}=   FakerLibrary.word
+    ${discountprice1}=     Random Int   min=50   max=100
+    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    Set Test Variable   ${discountprice}
+    ${resp}=   Create Discount  ${discount2}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    Log  ${resp.json()}
+    Set Test Variable   ${discountId1}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Discounts 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Get Waitlist By Id  ${wid} 
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${fullAmount}  ${resp.json()['fullAmt']}   
+
+    ${discAmt}=    Evaluate  ${fullAmount}-${discountprice}
+
+    ${resp}=   Apply Service Level Discount for waitlist     ${wid}    ${discountId1}   ${discountprice}    ${EMPTY}    ${EMPTY}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+    ${resp}=   Remove Service Level Discount for waitlist    ${wid}    ${discountId1}   ${discountprice}    ${EMPTY}    ${EMPTY}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${fullAmount}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+  
+JD-TC-RemoveServiceLevelDiscountforwaitlist-UH1
+
+    [Documentation]   Remove service level discount for same waitlist and same discount.
+
+    ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${discount1}=     FakerLibrary.word
+
+    ${resp}=   Remove Service Level Discount for waitlist   ${wid}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}                  ${INCORRECT_DISCOUNT_ID}
