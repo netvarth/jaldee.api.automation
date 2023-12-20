@@ -11764,3 +11764,136 @@ Create Appointment Reminder Settings
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /provider/consumerNotification/settings   data=${data}  expected_status=any
     [Return]  ${resp}
+
+
+# ................ LOS Lead ....................
+
+
+Create Lead Status LOS
+    [Arguments]      ${name}  
+
+    ${data}=  Create Dictionary    name=${name}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/los/lead/status  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Get Lead Status by id LOS
+    [Arguments]      ${id}  
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/los/lead/status/${id}  expected_status=any
+    [Return]  ${resp}
+
+Update Lead Status LOS
+    [Arguments]      ${id}   ${name}   ${status}
+
+    ${data}=  Create Dictionary    name=${name}  status=${status}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/status/${id}  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Get Lead Status LOS
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/los/lead/status  expected_status=any
+    [Return]  ${resp}
+
+Create Lead Progress LOS
+    [Arguments]      ${name}  
+
+    ${data}=  Create Dictionary    name=${name}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/los/lead/progress  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Get Lead Progress by id LOS
+    [Arguments]      ${id}  
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/los/lead/progress/${id}  expected_status=any
+    [Return]  ${resp}
+
+Update Lead Progress LOS
+    [Arguments]      ${id}   ${name}   ${status}
+
+    ${data}=  Create Dictionary    name=${name}  status=${status}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/progress/${id}  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Get Lead Progress LOS
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/los/lead/progress  expected_status=any
+    [Return]  ${resp}
+
+Create Lead Credit Status LOS 
+    [Arguments]      ${name}  
+
+    ${data}=  Create Dictionary    name=${name}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/los/lead/creditstatus  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Get Lead Credit Status by id LOS
+    [Arguments]      ${id}  
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/los/lead/creditstatus/${id}  expected_status=any
+    [Return]  ${resp}
+
+Update Lead Credit Status LOS
+    [Arguments]      ${id}   ${name}   ${status}
+
+    ${data}=  Create Dictionary    name=${name}  status=${status}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/creditstatus/${id}  data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Get Lead Credit Status LOS
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/los/lead/creditstatus  expected_status=any
+    [Return]  ${resp}
+
+Create Lead LOS     
+    [Arguments]     ${channel}   ${losProduct}   ${statusid}   ${statusname}    ${progressid}   ${progressname}   ${requestedAmount}   ${description}   ${consumerId}   ${consumerFirstName}   ${consumerLastName}   ${dob}   ${gender}   ${consumerPhoneCode}   ${consumerPhone}   ${consumerEmail}   ${aadhaar}   ${pan}   ${bankAccountNo}   ${bankIfsc}   ${permanentAddress1}   ${permanentAddress2}   ${permanentDistrict}   ${permanentState}   ${permanentPin}   ${nomineeType}   ${nomineeName}
+
+    Check And Create YNW Session
+    ${status}=  Create Dictionary  id=${statusid}  name=${statusname}
+    ${progress}=  Create Dictionary  id=${progressid}  name=${progressname}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${consumerPhoneCode}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
+    ${data}=  Create Dictionary  losProduct=${losProduct}  status=${status}  progress=${progress}  requestedAmount=${requestedAmount}  description=${description}  consumerKyc=${consumerKyc}
+    ${data}=    json.dumps    ${data}
+    ${resp}=  POST On Session  ynw  /provider/los/lead/channel/${channel}   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Get Lead LOS 
+    [Arguments]      ${uid}  
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/los/lead/${uid}  expected_status=any
+    [Return]  ${resp}
+
+Updtae Lead LOS    
+    [Arguments]     ${uid}   ${losProduct}   ${requestedAmount}   ${description}   ${consumerId}   ${consumerFirstName}   ${consumerLastName}   ${id}   ${dob}   ${gender}   ${consumerPhoneCode}   ${consumerPhone}   ${consumerEmail}   ${aadhaar}   ${pan}   ${bankAccountNo}   ${bankIfsc}   ${permanentAddress1}   ${permanentAddress2}   ${permanentDistrict}   ${permanentState}   ${permanentPin}   ${nomineeType}   ${nomineeName}
+
+    Check And Create YNW Session
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  id=${id}  dob=${dob}  gender=${gender}  consumerPhoneCode=${consumerPhoneCode}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
+    ${data}=  Create Dictionary  losProduct=${losProduct}  requestedAmount=${requestedAmount}  description=${description}  consumerKyc=${consumerKyc}
+    ${data}=    json.dumps    ${data}
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Get Lead By Filter LOS
+    [Arguments]   &{param}
+
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/los/lead   params=${param}   expected_status=any
+    [Return]  ${resp}
