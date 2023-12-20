@@ -426,3 +426,14 @@ JD-TC-ApplyProviderCouponForOrder-1
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
 
+
+JD-TC-ApplyProviderCouponForOrder-2
+    [Documentation]   Apply provider coupon for Order where coupon is already applied  
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Apply Provider Coupon for Order    ${orderid1}    ${cupn_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200

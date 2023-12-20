@@ -414,3 +414,36 @@ JD-TC-GetOrderBillDetails-1
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
 
+JD-TC-GetOrderBillDetails-2
+    [Documentation]   Get Order Bill Details where order id is empty 
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Get Order level Bill Details    ${empty}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   422
+    Should Be Equal As Strings  ${resp.json()}      ${ORDER_NOT_FOUND}
+
+
+JD-TC-GetOrderBillDetails-3
+    [Documentation]   Get Order Bill Details with another provider login 
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Get Order level Bill Details    ${orderid1}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   422
+    Should Be Equal As Strings  ${resp.json()}      ${ORDER_NOT_FOUND}
+
+
+JD-TC-GetOrderBillDetails-4
+    [Documentation]   Get Order Bill Details without login
+
+    ${resp}=   Get Order level Bill Details    ${orderid1}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   419
+    Should Be Equal As Strings  ${resp.json()}      ${SESSION_EXPIRED}

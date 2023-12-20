@@ -394,8 +394,11 @@ JD-TC-ApplyJaldeeCouponForOrder-1
     Set Test Variable  ${sd3}  ${resp.json()[1]['subDomains'][0]['subDomain']}
     Set Test Variable  ${sd4}  ${resp.json()[1]['subDomains'][1]['subDomain']}
     ${domains}=  Jaldee Coupon Target Domains  ${d1}  ${d2}
+    Set Suite Variable      ${domains}
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}  ${d1}_${sd2}  ${d2}_${sd3}  ${d2}_${sd4}  
+    Set Suite Variable      ${sub_domains}
     ${licenses}=  Jaldee Coupon Target License  ${licid}
+    Set Suite Variable      ${licenses}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
     ${DAY2}=  db.add_timezone_date  ${tz}  10
@@ -452,3 +455,65 @@ JD-TC-ApplyJaldeeCouponForOrder-1
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
 
+JD-TC-ApplyJaldeeCouponForOrder-UH1
+    [Documentation]   apply jaldee coupon for Order twice
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Apply Jaldee Coupon for Order    ${orderid1}    ${cup_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}      ${COUPON_ALREADY_USED} 
+
+
+JD-TC-ApplyJaldeeCouponForOrder-UH2
+    [Documentation]   apply jaldee coupon for Order where order id is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Apply Jaldee Coupon for Order    ${empty}    ${cup_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}      ${ORDER_NOT_FOUND}
+
+JD-TC-ApplyJaldeeCouponForOrder-UH3
+    [Documentation]   apply jaldee coupon for Order where order id is invalid
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${invcup_code}=  Random Int  min=114  max=124
+
+    ${resp}=   Apply Jaldee Coupon for Order    ${orderid1}    ${invcup_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}      ${JALDEE_COUPON_NOT_VALID}
+
+
+JD-TC-ApplyJaldeeCouponForOrder-UH4
+    [Documentation]   apply jaldee coupon for Order where order id is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${invcup_code}=  Random Int  min=114  max=124
+
+    ${resp}=   Apply Jaldee Coupon for Order    ${orderid1}    ${empty}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}      ${JALDEE_COUPON_NOT_VALID}
+
+
+JD-TC-ApplyJaldeeCouponForOrder-UH5
+    [Documentation]   apply jaldee coupon for Order without login
+
+    ${resp}=   Apply Jaldee Coupon for Order    ${orderid1}    ${cup_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  ${resp.json()}      ${SESSION_EXPIRED}

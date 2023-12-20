@@ -55,8 +55,8 @@ ${coupon}          wheat
 
 *** Test Cases ***
 
-JD-TC-ApplyDiscountForOrder-1
-      [Documentation]   Create order by provider for Home Delivery when payment type is NONE (No Advancepayment),then apply discount for Order.
+JD-TC-RemoveDiscountForOrder-1
+      [Documentation]   Remove Discount For Order
 
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33885330
     Set Suite Variable   ${PUSERPH0}
@@ -384,6 +384,7 @@ JD-TC-ApplyDiscountForOrder-1
     Should Be Equal As Strings  ${resp.json()['storePickup']}             ${bool[0]} 
 
     ${discount1}=     FakerLibrary.word
+    Set Suite Variable      ${discount1}
     ${desc}=   FakerLibrary.word
     ${discountprice1}=     Random Int   min=50   max=100
     ${discountprice}=  Convert To Number  ${discountprice1}  1
@@ -414,3 +415,122 @@ JD-TC-ApplyDiscountForOrder-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['netRate']}                  ${item_amt}
 
+
+JD-TC-RemoveDiscountForOrder-2
+    [Documentation]   Remove Discount For Order which one is already removed 
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Remove Discount for Order    ${orderid1}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}    ${INCORRECT_DISCOUNT_ID}
+
+
+JD-TC-RemoveDiscountForOrder-3
+    [Documentation]   Remove Discount For Order where orderid is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Remove Discount for Order    ${empty}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}    ${ORDER_NOT_FOUND}
+
+
+JD-TC-RemoveDiscountForOrder-4
+    [Documentation]   Remove Discount For Order where discount id is invalid
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${invdiscid}=      Random Int  min=555   max=3333
+
+    ${resp}=   Remove Discount for Order    ${orderid1}    ${invdiscid}   ${discountprice}    ${discount1}    ${discount1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}    ${INCORRECT_DISCOUNT_ID}
+
+
+JD-TC-RemoveDiscountForOrder-5
+    [Documentation]   Remove Discount For Order where discount id is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Remove Discount for Order    ${orderid1}    ${empty}   ${discountprice}    ${discount1}    ${discount1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}    ${INCORRECT_DISCOUNT_ID}
+
+
+JD-TC-RemoveDiscountForOrder-6
+    [Documentation]   Remove Discount For Order where discount price is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Apply Discount for Order    ${orderid1}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Remove Discount for Order    ${orderid1}    ${discountId}   ${empty}    ${discount1}    ${discount1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-RemoveDiscountForOrder-7
+    [Documentation]   Remove Discount For Order where discount price is wrong
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Apply Discount for Order    ${orderid1}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${invprice}=      Random Int  min=555   max=3333
+
+    ${resp}=   Remove Discount for Order    ${orderid1}    ${discountId}   ${invprice}    ${discount1}    ${discount1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-RemoveDiscountForOrder-8
+    [Documentation]   Remove Discount For Order where private note is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Apply Discount for Order    ${orderid1}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Remove Discount for Order    ${orderid1}    ${discountId}   ${discountprice}    ${empty}    ${discount1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-RemoveDiscountForOrder-9
+    [Documentation]   Remove Discount For Order where display note is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Apply Discount for Order    ${orderid1}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Remove Discount for Order    ${orderid1}    ${discountId}   ${discountprice}    ${discount1}    ${empty}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200

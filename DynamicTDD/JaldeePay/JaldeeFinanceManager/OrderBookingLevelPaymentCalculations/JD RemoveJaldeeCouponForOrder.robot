@@ -458,3 +458,77 @@ JD-TC-RemoveJaldeeCouponForOrder-1
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
 
+JD-TC-RemoveJaldeeCouponForOrder-2
+    [Documentation]   Remove provider coupon for Order twice 
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Remove Jaldee Coupon for Order    ${orderid1}    ${cup_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}    ${Coupon_not_found}
+
+
+JD-TC-RemoveJaldeeCouponForOrder-3
+    [Documentation]   Remove provider coupon for Order where order id is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Remove Jaldee Coupon for Order    ${empty}    ${cup_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}    ${ORDER_NOT_FOUND}
+
+
+JD-TC-RemoveJaldeeCouponForOrder-4
+    [Documentation]   Remove provider coupon for Order where coupon code is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Remove Jaldee Coupon for Order    ${orderid1}    ${empty}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}    ${JALDEE_COUPON_NOT_VALID}
+
+
+JD-TC-RemoveJaldeeCouponForOrder-5
+    [Documentation]   Remove provider coupon for Order where coupon code is invalid
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${inv_couponid}=    Random Int  min=123456   max=999999
+
+    ${resp}=   Remove Jaldee Coupon for Order    ${orderid1}    ${inv_couponid}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}    ${JALDEE_COUPON_NOT_VALID}
+
+
+JD-TC-RemoveJaldeeCouponForOrder-6
+    [Documentation]   Remove provider coupon for Order without login
+
+    ${resp}=   Remove Jaldee Coupon for Order    ${orderid1}    ${cup_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  ${resp.json()}    ${SESSION_EXPIRED}
+
+
+JD-TC-RemoveJaldeeCouponForOrder-7
+    [Documentation]   Remove provider coupon for Order with another provider login
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME10}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Remove Jaldee Coupon for Order    ${orderid1}    ${cup_code}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  ${resp.json()}    ${NO_PERMISSION}
