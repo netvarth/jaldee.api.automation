@@ -1100,6 +1100,32 @@ JD-TC-Remove Item Level Discount-UH6
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
 
+JD-TC-Remove Item Level Discount-UH7
+
+    [Documentation]   update bill status as settiled and try to remove item level discount.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[1]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+        ${discountValue1}=     Random Int   min=50   max=100
+    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+
+    ${resp}=  Remove Item Level Discount   ${invoice_uid1}   ${discountId}    ${discountValue1}   ${privateNote}  ${displayNote}   ${itemId1}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_SETTLED}
+
+
 *** comment ***
 JD-TC-Remove Item Level Discount-3
 

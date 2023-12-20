@@ -451,6 +451,33 @@ JD-TC-UpdateInvoice-UH3
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${INVALID_VENDOR}
 
+JD-TC-UpdateInvoice-UH4
+
+    [Documentation]  Update bill status as settled then try to update invoice.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+ 
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.Add Date  -70
+    ${invoiceId}=   FakerLibrary.word
+
+    ${amount1}=   Random Int  min=500  max=2000
+    ${amount1}=     roundval    ${amount1}   1
+
+
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
+
+    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_SETTLED}
+
 
 
 

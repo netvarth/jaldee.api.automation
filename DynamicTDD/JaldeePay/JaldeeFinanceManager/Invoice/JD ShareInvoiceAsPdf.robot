@@ -226,9 +226,22 @@ JD-TC-Share invoice as pdf-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}    
 
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable   ${bill_stat}   ${resp1.json()['billStatus']}
 
 
-    ${resp}=  Share invoice as pdf   ${invoice_uid}   ${boolean[1]}    ${email1}   ${html}
+
+
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  billStatus=${billStatus[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]}    
+
+
+
+    ${resp}=  Share invoice as pdf   ${invoice_uid1}   ${boolean[1]}    ${email1}   ${html}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -247,7 +260,7 @@ JD-TC-Share invoice as pdf-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Share invoice as pdf   ${invoice_uid}   ${boolean[1]}    ${email1}   ${html}
+    ${resp}=  Share invoice as pdf   ${invoice_uid1}   ${boolean[1]}    ${email1}   ${html}
     Log  ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -259,10 +272,6 @@ JD-TC-Share invoice as pdf-3
     ${resp}=   Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Share invoice as pdf   ${invoice_uid}   ${boolean[1]}    ${email1}   ${html}
-    Log  ${resp.content} 
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${itemName1}=    FakerLibrary.word
     Set Suite Variable  ${itemName1}
@@ -283,13 +292,32 @@ JD-TC-Share invoice as pdf-3
     ${invoiceId}=   FakerLibrary.word
 
 
-    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   adhocItemList=${adhocItemList1}
+    ${resp}=  Update Invoice   ${invoice_uid1}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   adhocItemList=${adhocItemList1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Share invoice as pdf   ${invoice_uid}   ${boolean[1]}    ${email1}   ${html}
+    ${resp}=  Share invoice as pdf   ${invoice_uid1}   ${boolean[1]}    ${email1}   ${html}
     Log  ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-Share invoice as pdf-4
+
+    [Documentation]  update invoice status as settled then share invoice .
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[1]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Share invoice as pdf   ${invoice_uid1}   ${boolean[1]}    ${email1}   ${html}
+    Log  ${resp.content} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
 
 
 JD-TC-Share invoice as pdf-UH1
@@ -355,3 +383,19 @@ JD-TC-Share invoice as pdf-UH4
     Should Be Equal As Strings  ${resp.status_code}  422
     # Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
     Should Be Equal As Strings  ${resp.json()}   ${CAP_JALDEE_FINANCE_DISABLED}
+
+JD-TC-Share invoice as pdf-UH5
+
+    [Documentation]  update invoice status as settled then share invoice .
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${bill_stat}
+
+    ${resp}=  Share invoice as pdf   ${invoice_uid}   ${boolean[1]}    ${email1}   ${html}
+    Log  ${resp.content} 
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_STATUS}

@@ -1292,7 +1292,7 @@ JD-TC-Remove Service Level Discount-UH3
     ${displayNote}=   FakerLibrary.word
     ${discount}=   FakerLibrary.RandomNumber
 
-    ${resp}=   Remove Service Level Discount   ${invoice_uid2}   ${discount}    ${discountprice}   ${privateNote}  ${displayNote}  ${sid3}
+    ${resp}=   Remove Service Level Discount   ${invoice_uid1}   ${discount}    ${discountprice}   ${privateNote}  ${displayNote}  ${sid2}
     Log  ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
@@ -1493,3 +1493,25 @@ JD-TC-Remove Service Level Discount-UH6
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  422
     Should Be Equal As Strings  ${resp1.json()}   ${NO_INVOICE_GENERATED}
+
+JD-TC-Remove Service Level Discount-UH7
+
+    [Documentation]  update bill status and try to Remove Service Level Discount .
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[1]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+    ${resp}=   Remove Service Level Discount   ${invoice_uid2}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${sid3}
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_SETTLED}

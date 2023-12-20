@@ -23,13 +23,13 @@ ${jpgfile2}      /ebs/TDD/small.jpg
 ${gif}      /ebs/TDD/sample.gif
 ${xlsx}      /ebs/TDD/qnr.xlsx
 
-${order}    0
+${order}    0.0
 ${fileSize}  0.00458
 
-@{status}    New     Pending    Assigned     Approved    Rejected
+@{status}   ACTIVE   INACTIVE
 @{New_status}    Proceed     Unassign    Block     Delete    Remove
 ${DisplayName1}   item1_DisplayName
-
+${service_duration}     30
 
 *** Test Cases ***
 
@@ -334,6 +334,100 @@ JD-TC-GetInvoice by uid-3
     Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
+
+JD-TC-GetInvoice by uid-4
+
+    [Documentation]  Create one service with zero service price and second service have amount that added to invoice then get invoice by uid
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+   ${resp}=  Get upgradable license 
+       Log   ${resp.json()}
+       Should Be Equal As Strings    ${resp.status_code}   200
+       ${len}=  Get Length  ${resp.json()}
+       ${len}=  Evaluate  ${len}-2
+       Set Test Variable  ${licId}  ${resp.json()[${len}]['pkgId']}
+       ${resp}=  Change License Package  ${licId}
+       Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${desc}=   FakerLibrary.sentence
+     ${SERVICE1}=    FakerLibrary.word
+    Set Suite Variable  ${SERVICE1}
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sid2}  ${resp.json()} 
+
+    ${SERVICE2}=    FakerLibrary.word
+    Set Suite Variable  ${SERVICE2}
+    ${resp}=  Create Service  ${SERVICE2}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${order}  ${bool[0]}  ${bool[0]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sid3}  ${resp.json()} 
+
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    #     ${serviceprice}=   Random Int  min=1000  max=1500
+    # ${serviceprice}=  Convert To Number  ${serviceprice}  1
+    ${servicenetRate1}=  Evaluate  ${quantity} * ${order}
+    ${servicenetRate}=  Evaluate  ${quantity} * ${servicecharge}
+    ${add}=  Evaluate  ${servicenetRate1} + ${servicenetRate}
+    ${servicenetRate}=  Convert To Number  ${add}   2
+    Set Suite Variable   ${servicenetRate}
+    ${serviceList}=  Create Dictionary  serviceId=${sid3}   quantity=${quantity}  price=${order}
+    ${serviceList1}=  Create Dictionary  serviceId=${sid2}   quantity=${quantity}  price=${servicecharge}
+    ${serviceList}=    Create List    ${serviceList}  ${serviceList1}
+
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+    ${invoiceId}=   FakerLibrary.word
+
+
+
+    ${resp}=  Create Finance Status   ${New_status[2]}  ${categoryType[3]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${status_id1}   ${resp.json()}
+
+    
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}     invoiceStatus=${status_id1}   serviceList=${serviceList}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
+    Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}    
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
+    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
+    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['serviceId']}  ${sid3}
+    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['price']}  ${order}
+    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['netRate']}  ${servicenetRate1}
+    Should Be Equal As Strings  ${resp1.json()['serviceList'][1]['serviceId']}  ${sid2}
+    Should Be Equal As Strings  ${resp1.json()['serviceList'][1]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp1.json()['serviceList'][1]['price']}  ${servicecharge}
+    Should Be Equal As Strings  ${resp1.json()['serviceList'][1]['netRate']}  ${servicenetRate}
+    Should Be Equal As Strings  ${resp1.json()['amountDue']}  ${servicenetRate}
+    Should Be Equal As Strings  ${resp1.json()['amountTotal']}  ${servicenetRate}
+    Should Be Equal As Strings  ${resp1.json()['netTotal']}  ${servicenetRate}
+    Should Be Equal As Strings  ${resp1.json()['netRate']}  ${servicenetRate}
+    Should Be Equal As Strings  ${resp1.json()['nonTaxableTotal']}  ${servicenetRate}
+    Should Be Equal As Strings  ${resp1.json()['temporaryTotalAmount']}  ${servicenetRate}
 
 
 JD-TC-GetInvoice by uid-UH1

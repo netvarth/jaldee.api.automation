@@ -296,7 +296,7 @@ JD-TC-UpdateInvoiceItem-UH2
     ${resp}=  Update Invoice Items  ${invoice_uid}   ${item}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${PRICE_CANNOT_BE_EMPTY}
+    Should Be Equal As Strings  ${resp.json()}   ${quantity_cannot_empty}
 
 JD-TC-UpdateInvoiceItem-UH3
     [Documentation]   Update item Without login
@@ -349,3 +349,21 @@ JD-TC-UpdateInvoiceItem-UH5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+
+JD-TC-UpdateInvoiceItem-UH6
+
+    [Documentation]  update bill status as settled then try to update Item .
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
+
+    ${resp}=  Update Invoice Items  ${invoice_uid}   ${itemList1}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_SETTLED}

@@ -337,6 +337,24 @@ JD-TC-UploadInvoiceAttachement-UH2
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${FILE_NAME_NOT_FOUND}
 
+JD-TC-UploadInvoiceAttachement-UH3
+
+    [Documentation]  update bill status as settiled then try to UploadInvoiceAttachement .
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[1]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
+
+    ${resp}=  Upload Finance Invoice Attachment   ${invoice_uid2}     ${Attachments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_SETTLED}
+
 
 
 

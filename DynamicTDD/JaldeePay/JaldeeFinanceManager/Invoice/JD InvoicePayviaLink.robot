@@ -31,12 +31,26 @@ ${service_duration}     30
 @{New_status}    Proceed     Unassign    Block     Delete    Remove
 ${DisplayName1}   item1_DisplayName
 
+*** Keywords ***
+
+Get Service payment modes
+    [Arguments]  ${accountId}   ${serviceId}   ${paymentPurpose}
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /consumer/payment/modes/service/${accountId}/${serviceId}/${paymentPurpose}    expected_status=any
+    [Return]  ${resp}
+    
+Get payment modes
+    [Arguments]  ${accountId}   ${serviceId}   ${paymentPurpose}
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /consumer/payment/modes/service/${accountId}/${serviceId}/${paymentPurpose}    expected_status=any
+    [Return]  ${resp}
+
 *** Test Cases ***
 
 
-JD-TC-CreateInvoice-1
+JD-TC-Invoice pay via link-1
 
-    [Documentation]  Create a invoice with valid details.
+    [Documentation]  Create a invoice with valid details and pay amount via link.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
@@ -70,6 +84,11 @@ JD-TC-CreateInvoice-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+    ${resp}=   Get payment profiles  
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${Profileid}  ${resp.json()[0]['profileId']}
 
 
     ${resp}=  Create Sample Location  
@@ -178,7 +197,7 @@ JD-TC-CreateInvoice-1
     ${name}     FakerLibrary.word
     Set Test Variable  ${email2}   ${name}.${test_mail}
 
-    ${resp1}=  AddCustomer  ${CUSERNAME11}  
+    ${resp1}=  AddCustomer  ${CUSERNAME15}  
     Log  ${resp1.json()}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable   ${pcid18}   ${resp1.json()}
@@ -187,7 +206,7 @@ JD-TC-CreateInvoice-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME11}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
@@ -277,9 +296,9 @@ JD-TC-CreateInvoice-1
     Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['itemName']}  ${itemName}
     Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['quantity']}  ${quantity}
     Should Be Equal As Strings  ${resp1.json()['adhocItemList'][0]['price']}  ${price}
-    Set Test Variable  ${amount}  ${resp1.json()['amountDue']}     
+    Set Suite Variable  ${amount}  ${resp1.json()['amountDue']}     
 
-    # ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD}
+    # ${resp}=  Consumer Login  ${CUSERNAME15}  ${PASSWORD}
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200   
     #  Set Test Variable  ${cid}  ${resp.json()['id']}     
@@ -292,8 +311,203 @@ JD-TC-CreateInvoice-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=    Get Service payment modes    ${pid}    ${sid1}    ${purpose[6]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[0]['isJaldeeBank']}    ${bool[1]}
+    Set Suite Variable    ${proid}  ${resp.json()[0]['profileId']}
+
     ${source}=   FakerLibrary.word
 
     ${resp1}=  Invoice pay via link  ${invoice_uid}  ${amount}   ${purpose[6]}    ${source}  ${pid}   ${finance_payment_modes[8]}  ${bool[0]}   ${sid1}   ${pcid18}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
+
+
+JD-TC-Invoice pay via link-2
+
+    [Documentation]  Invoice pay via link-using upi payment mode.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${source}=   FakerLibrary.word
+
+    ${resp1}=  Invoice pay via link  ${invoice_uid}  ${amount}   ${purpose[6]}    ${source}  ${pid}   ${finance_payment_modes[6]}  ${bool[0]}   ${sid1}   ${pcid18}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+
+JD-TC-Invoice pay via link-3
+
+    [Documentation]  Invoice pay via link-using cc payment mode.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${source}=   FakerLibrary.word
+
+    ${resp1}=  Invoice pay via link  ${invoice_uid}  ${amount}   ${purpose[6]}    ${source}  ${pid}   ${finance_payment_modes[1]}  ${bool[0]}   ${sid1}   ${pcid18}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+
+JD-TC-Invoice pay via link-4
+
+    [Documentation]  Invoice pay via link-using DC payment mode.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${source}=   FakerLibrary.word
+
+    ${resp1}=  Invoice pay via link  ${invoice_uid}  ${amount}   ${purpose[6]}    ${source}  ${pid}   ${finance_payment_modes[12]}  ${bool[0]}   ${sid1}   ${pcid18}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+
+JD-TC-Invoice pay via link-5
+
+    [Documentation]  Invoice pay via link-using WALLET payment mode.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${source}=   FakerLibrary.word
+
+    ${resp1}=  Invoice pay via link  ${invoice_uid}  ${amount}   ${purpose[6]}    ${source}  ${pid}   ${finance_payment_modes[10]}  ${bool[0]}   ${sid1}   ${pcid18}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+
+JD-TC-Invoice pay via link-6
+
+    [Documentation]  Invoice pay via link-using PAYLATER payment mode.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${source}=   FakerLibrary.word
+
+    ${resp1}=  Invoice pay via link  ${invoice_uid}  ${amount}   ${purpose[6]}    ${source}  ${pid}   ${finance_payment_modes[4]}  ${bool[0]}   ${sid1}   ${pcid18}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+
+
+
+JD-TC-Invoice pay via link-UH1
+
+    [Documentation]  Invoice pay via link-with invalid mercahnt id.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${source}=   FakerLibrary.word
+
+    ${resp1}=  Invoice pay via link  ${invoice_uid}  ${amount}   ${purpose[6]}    ${source}  ${pid}   ${finance_payment_modes[5]}  ${bool[0]}   ${sid1}   ${pcid18}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  422
+    Should Be Equal As Strings  ${resp1.json()}   ${INVALID_MERCHANT_ID}
+
+JD-TC-Invoice pay via link-UH2
+
+    [Documentation]  Invoice pay via link-using another provider login.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${source}=   FakerLibrary.word
+
+    ${resp1}=  Invoice pay via link  ${invoice_uid}  ${amount}   ${purpose[6]}    ${source}  ${pid}   ${finance_payment_modes[5]}  ${bool[0]}   ${sid1}   ${pcid18}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  422
+    # Should Be Equal As Strings  ${resp1.json()}   ${INVALID_MERCHANT_ID}
+
+JD-TC-Invoice pay via link-UH3
+
+    [Documentation]  Invoice pay via link-without login.
+
+    ${source}=   FakerLibrary.word
+
+    ${resp1}=  Invoice pay via link  ${invoice_uid}  ${amount}   ${purpose[6]}    ${source}  ${pid}   ${finance_payment_modes[5]}  ${bool[0]}   ${sid1}   ${pcid18}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  419
+    Should Be Equal As Strings  "${resp1.json()}"     "${SESSION_EXPIRED}"
+
+JD-TC-Invoice pay via link-UH4
+
+    [Documentation]  Invoice pay via link-with amount is zero.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${source}=   FakerLibrary.word
+
+    ${resp1}=  Invoice pay via link  ${invoice_uid}  ${order}   ${purpose[6]}    ${source}  ${pid}   ${finance_payment_modes[1]}  ${bool[0]}   ${sid1}   ${pcid18}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  422
+    Should Be Equal As Strings  "${resp1.json()}"     "${INVALID_AMOUNT}"
+
+JD-TC-Invoice pay via link-UH5
+
+    [Documentation]  Invoice pay via link-where purpose is Billpayment
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${source}=   FakerLibrary.word
+
+    ${resp1}=  Invoice pay via link  ${invoice_uid}  ${amount}   ${purpose[1]}    ${source}  ${pid}   ${finance_payment_modes[1]}  ${bool[0]}   ${sid1}   ${pcid18}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  422
+
+
+JD-TC-Invoice pay via link-UH6
+
+    [Documentation]  Invoice pay via link-where customer id is invalid.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${source}=   FakerLibrary.word
+
+
+    ${resp1}=  Invoice pay via link  ${invoice_uid}  ${amount}   ${purpose[6]}    ${source}  ${pid}   ${finance_payment_modes[1]}  ${bool[0]}   ${sid1}   ${source}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  422
+
+JD-TC-Invoice pay via link-UH7
+
+    [Documentation]  Invoice pay via link-where purpose is prepayment.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${source}=   FakerLibrary.word
+
+    ${resp1}=  Invoice pay via link  ${invoice_uid}  ${amount}   ${purpose[0]}    ${source}  ${pid}   ${finance_payment_modes[1]}  ${bool[0]}   ${sid1}   ${pcid18}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  422
+
+
+JD-TC-Invoice pay via link-UH8
+
+    [Documentation]  Invoice pay via link-where purpose is donation.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${source}=   FakerLibrary.word
+
+    ${resp1}=  Invoice pay via link  ${invoice_uid}  ${amount}   ${purpose[5]}    ${source}  ${pid}   ${finance_payment_modes[1]}  ${bool[0]}   ${sid1}   ${pcid18}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  422
+

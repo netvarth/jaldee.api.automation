@@ -43,7 +43,7 @@ ${DisplayName1}   item1_DisplayName
 
 JD-TC-UpdateService-1
 
-    [Documentation]  Apply provider coupon.
+    [Documentation]  update service
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log  ${resp.json()}
@@ -291,7 +291,7 @@ JD-TC-UpdateService-UH1
 
 JD-TC-UpdateService-UH2
 
-    [Documentation]  Update Item with empty itemlist.
+    [Documentation]  Update Item with empty service list.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
@@ -304,7 +304,7 @@ JD-TC-UpdateService-UH2
      ${resp}=  Update Finance Service  ${invoice_uid}   ${service}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${PRICE_CANNOT_BE_EMPTY}
+    Should Be Equal As Strings  ${resp.json()}  ${quantity_cannot_empty}
 
 JD-TC-UpdateService-UH3
     [Documentation]   Update item Without login
@@ -317,7 +317,7 @@ JD-TC-UpdateService-UH3
 
     
 JD-TC-UpdateService-UH4
-    [Documentation]   Login as consumer and Update item
+    [Documentation]   Login as consumer and Update service
     ${resp}=   Consumer Login  ${CUSERNAME16}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -330,7 +330,7 @@ JD-TC-UpdateService-UH4
 
 
 JD-TC-UpdateService-UH5
-    [Documentation]   A provider try to Update another providers item
+    [Documentation]   A provider try to Update another providers service
 
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME201}  ${PASSWORD}
@@ -357,3 +357,21 @@ JD-TC-UpdateService-UH5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+
+JD-TC-UpdateService-UH6
+
+    [Documentation]  update bill status as settled then try to update service .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
+
+     ${resp}=  Update Finance Service  ${invoice_uid}   ${serviceList1}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_SETTLED}

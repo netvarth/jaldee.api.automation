@@ -277,3 +277,22 @@ JD-TC-Remove ProviderCoupon-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['providerCoupons']}  []
+
+JD-TC-Remove ProviderCoupon-UH1
+
+    [Documentation]  Remove provider coupon after updating bill status as settiled.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
+
+
+    ${resp}=   Remove Provider Coupon   ${invoice_uid}   ${cupn_code}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_SETTLED}

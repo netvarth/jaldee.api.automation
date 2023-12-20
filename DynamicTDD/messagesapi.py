@@ -2112,8 +2112,11 @@ CATALOG_NOT_FOUND="Catalog not found"
 RECORD_NOT_FOUND="Record not found"
 PROVIDER_COUPON_NOT_APLICABLE_FOR_WALKIN="Provider coupon not applicable for this booking mode Walk in"
 Coupon_not_found="Coupon not found"
-
-
+INVALID_MERCHANT_ID="Invalid merchant id"
+INVALID_AMOUNT="Invalid Amount"
+INVOICE_SETTLED="This invoice cannot be updated since the invoice status has been set to '{}'"
+quantity_cannot_empty=" Quantity cannot be empty"
+INVOICE_STATUS="This invoice is in the '{} 'status" 
 
 
 # ........Membership  ...............

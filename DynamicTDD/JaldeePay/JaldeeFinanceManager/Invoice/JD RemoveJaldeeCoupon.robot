@@ -234,6 +234,7 @@ JD-TC-Remove JaldeeCoupon-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${cupn_code2023}=    FakerLibrary.word
+    Set Suite Variable  ${cupn_code2023}  
     ${Jamount1}=    Random Int   min=10  max=50
     ${Jamount1}=  Convert To Number  ${Jamount1}  1
     ${cupn_name}=   FakerLibrary.name
@@ -252,7 +253,7 @@ JD-TC-Remove JaldeeCoupon-1
     ${resp}=  SuperAdmin Logout 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -304,3 +305,22 @@ JD-TC-Remove JaldeeCoupon-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['jaldeeCoupons']}  []
 
+
+JD-TC-RemoveJaldeeCoupon-UH1
+
+    [Documentation]  Remove jaldeecoupon after updating bill status as settiled.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
+
+
+    ${resp}=   Remove Jaldee Coupon   ${invoice_uid}   ${cupn_code2023}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_SETTLED}
