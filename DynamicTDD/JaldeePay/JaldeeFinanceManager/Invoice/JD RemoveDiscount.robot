@@ -195,7 +195,7 @@ JD-TC-Remove Discount-1
     ${adhocItemList}=    Create List    ${adhocItemList}
     
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}   
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}    billStatus=${billStatus[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
@@ -296,7 +296,7 @@ JD-TC-Remove Discount-3
     Set Suite Variable   ${netTotal}
     
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}   
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}    billStatus=${billStatus[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid3}   ${resp.json()['uidList'][0]} 
@@ -488,11 +488,11 @@ JJD-TC-Remove Discount-UH7
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
 
-
+    ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
     ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${EMPTY}  ${EMPTY}
     Log  ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${YOU_CANNOT_UPDATE_FINANCE}
+    Should Be Equal As Strings   ${resp.json()}   ${INVOICE_SETTLED}
 
 
 JD-TC-Remove Discount-UH8
@@ -532,18 +532,18 @@ JD-TC-Remove Discount-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]} 
 
-
+    ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
     ${resp}=   Apply Discount   ${invoice_uid1}   ${discountId}    ${empty}   ${privateNote}  ${displayNote}
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${YOU_CANNOT_UPDATE_FINANCE}
+    Should Be Equal As Strings   ${resp.json()}   ${INVOICE_SETTLED}
     
 
 
     ${resp}=   Remove Discount   ${invoice_uid1}   ${discountId}    ${discountprice}   ${EMPTY}  ${EMPTY}
     Log  ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${YOU_CANNOT_UPDATE_FINANCE}
+    Should Be Equal As Strings   ${resp.json()}   ${INVOICE_SETTLED}
 
 JD-TC-Remove Discount-UH9
 
