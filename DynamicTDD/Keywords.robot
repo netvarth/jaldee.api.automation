@@ -54,7 +54,7 @@ ${bType}                  Waitlist
 @{jaldee_reimburse_for}	  JBANK  JC  JCASH  TOTAL  
 @{jaldeePaymentmode}      CASH	CHEQUE
 @{couponStatus}			  DRAFT  ACTIVE  CANCELLED  DISABLE  EXPIRED 
-@{Genderlist}             female  male
+@{Genderlist}             female  male  others
 @{SystemNote}             SELF_PAY_REQUIRED  NO_OTHER_COUPONS_ALLOWED  COUPON_APPLIED  CANT_COMBINE_WITH_OTHER_COUPONES  COUPON_EXPIRED_OR_PASSIVE  ONLINE_CHECKIN_REQUIRED  ONLY_WHEN_FITST_CHECKIN  ONLY_WHEN_FITST_CHECKIN_ON_PROVIDER  MINIMUM_BILL_AMT_REQUIRED  EXCEEDS_APPLY_LIMIT
 @{jdn_disc_percentage}    5.0  10.0   20.0
 @{jdn_disc_max}           100   200   300
@@ -246,6 +246,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{PRStatus}                         OPEN  CLOSED  COMPLETED 
 @{RateType}                         Diminishing  Flat
 @{WorkStatus}                       OPEN  CANCELED  COMPLETE
+@{leadchannel}                      DIRECT  WHATSAPP  TELEGRAM  IVR  BRANDEDAPP
 
 
 *** Keywords ***
