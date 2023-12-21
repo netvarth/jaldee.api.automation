@@ -33,8 +33,12 @@ JD-TC-GetLeadsCountforSP-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
-    Set Suite Variable  ${prov_fname1}  ${resp.json()['firstName']}
+    # Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
+    # Set Suite Variable  ${prov_fname1}  ${resp.json()['firstName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${prov_id1}  ${decrypted_data['id']}
+    Set Test Variable  ${prov_fname1}  ${decrypted_data['firstName']}
 
     ${p_id1}=  get_acc_id  ${PUSERNAME15}
 

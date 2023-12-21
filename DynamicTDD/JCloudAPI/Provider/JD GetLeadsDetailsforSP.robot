@@ -32,9 +32,14 @@ JD-TC-GetLeadDetailsForSP-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${prov_id1}  ${resp.json()['id']}
-    Set Test Variable  ${prov_fname1}  ${resp.json()['firstName']}
-    Set Test Variable  ${prov_uname1}  ${resp.json()['userName']}
+    # Set Test Variable  ${prov_id1}  ${resp.json()['id']}
+    # Set Test Variable  ${prov_fname1}  ${resp.json()['firstName']}
+    # Set Test Variable  ${prov_uname1}  ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${prov_id1}  ${decrypted_data['id']}
+    Set Test Variable  ${prov_fname1}  ${decrypted_data['firstName']}
+    Set Test Variable  ${prov_uname1}  ${decrypted_data['userName']}
 
     ${p_id1}=  get_acc_id  ${PUSERNAME34}
 

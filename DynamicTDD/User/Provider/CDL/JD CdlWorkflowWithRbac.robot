@@ -76,10 +76,16 @@ Account with Multiple Users in NBFC
     FOR   ${a}  ${start}   IN RANGE   ${length}   
         ${resp}=  Encrypted Provider Login  ${MUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Test Variable  ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
-        Set Test Variable  ${Dom}   ${resp.json()['sector']}
-        Set Test Variable  ${SubDom}   ${resp.json()['subSector']}
-        ${name}=  Set Variable  ${resp.json()['accountLicenseDetails']['accountLicense']['name']}
+        # Set Test Variable  ${pkgId}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+        # Set Test Variable  ${Dom}   ${resp.json()['sector']}
+        # Set Test Variable  ${SubDom}   ${resp.json()['subSector']}
+        # ${name}=  Set Variable  ${resp.json()['accountLicenseDetails']['accountLicense']['name']}
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        Set Test Variable  ${pkgId}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
+        Set Test Variable  ${Dom}  ${decrypted_data['sector']}
+        Set Test Variable  ${SubDom}  ${decrypted_data['subSector']}
+        ${name}=  Set Variable  ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
 
         Continue For Loop If  '${Dom}' != "finance"
         Continue For Loop If  '${SubDom}' != "nbfc"

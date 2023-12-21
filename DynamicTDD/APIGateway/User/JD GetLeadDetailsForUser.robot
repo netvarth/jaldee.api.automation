@@ -33,8 +33,12 @@ JD-TC-GetLeadDetailsForUser-1
     ${resp}=  Encrypted Provider Login  ${MUSERNAME27}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
-    Set Suite Variable  ${prov_name1}  ${resp.json()['userName']}
+    # Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
+    # Set Suite Variable  ${prov_name1}  ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${prov_id1}  ${decrypted_data['id']}
+    Set Test Variable  ${prov_name1}  ${decrypted_data['firstName']}
 
     clear_customer   ${MUSERNAME27}
 
