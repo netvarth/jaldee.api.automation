@@ -242,6 +242,11 @@ JD-TC-UpdateService-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
 
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${SERVICE2}=    FakerLibrary.word
     Set Suite Variable  ${SERVICE2}
     ${desc1}=   FakerLibrary.sentence

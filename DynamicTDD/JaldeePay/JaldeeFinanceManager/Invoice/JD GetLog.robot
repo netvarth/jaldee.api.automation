@@ -199,7 +199,6 @@ JD-TC-Get Log-1
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
-    ${invoiceId}=   FakerLibrary.word
 
     ${item1}=     FakerLibrary.word
     ${itemCode1}=     FakerLibrary.word
@@ -226,6 +225,11 @@ JD-TC-Get Log-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
 
+   ${resp}=   Get next invoice Id   ${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${invoiceId}   ${resp.json()}
+
 
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${DAY}
@@ -234,7 +238,7 @@ JD-TC-Get Log-1
     Set Suite Variable    ${time_now}
 
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}   billStatus=${billStatus[0]}   locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}   
@@ -299,7 +303,7 @@ JD-TC-Get Log-UH1
     ${resp}=  Get Invoice Log List UId   ${invoice_uid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${JALDEE_FINANCE_DISABLED}
+    Should Be Equal As Strings  ${resp.json()}   ${CAP_JALDEE_FINANCE_DISABLED}
 
 JD-TC-Get Log-UH2
 
@@ -315,3 +319,64 @@ JD-TC-Get Log-UH2
     Log  ${resp1.json()}
     Should Be Equal As Strings  ${resp1.status_code}  422
     Should Be Equal As Strings  ${resp1.json()}   ${INVALID_FM_INVOICE_ID}
+
+
+JD-TC-Get Log-UH3
+
+    [Documentation]   bill status is in draft and try to get log .
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+    ${invoiceId}=   FakerLibrary.word
+
+    ${item1}=     FakerLibrary.word
+    ${itemCode1}=     FakerLibrary.word
+    ${price1}=     Random Int   min=400   max=500
+    ${price}=  Convert To Number  ${price1}  1
+    Set Test Variable  ${price} 
+    ${resp}=  Create Sample Item   ${DisplayName1}   ${item1}  ${itemCode1}  ${price}  ${bool[1]} 
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${itemId}  ${resp.json()}
+
+    ${resp}=   Get Item By Id  ${itemId}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${promotionalPrice}   ${resp.json()['promotionalPrice']}
+
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}    price=${promotionalPrice}
+    # ${itemList}=    Create List    ${itemList}
+
+    ${resp}=  Create Finance Status   ${New_status[3]}  ${categoryType[3]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${status_id1}   ${resp.json()}
+
+
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    Set Test Variable    ${DAY}
+    ${time_now}=    db.get_time_by_timezone  ${tz}
+    # ${time_now}=    DateTime.Convert Date    ${time_now}    result_format=%H:%M:%S  
+    Set Test Variable    ${time_now}
+
+    
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]}  
+
+    ${resp1}=  Get Invoice Log List UId   ${invoice_uid1}
+    Log  ${resp1.json()}
+    Should Be Equal As Strings  ${resp1.status_code}  422
+    Should Be Equal As Strings  ${resp1.json()}   ${Draft_status}

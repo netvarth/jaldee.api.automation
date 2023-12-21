@@ -191,7 +191,7 @@ JD-TC-UploadInvoiceAttachement-1
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}   billStatus=${billStatus[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}    
@@ -268,7 +268,7 @@ JD-TC-UploadInvoiceAttachement-2
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}
 
-    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}   billStatus=${billStatus[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]}  
@@ -348,12 +348,64 @@ JD-TC-UploadInvoiceAttachement-UH3
     ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
+    ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}
 
     ${resp}=  Upload Finance Invoice Attachment   ${invoice_uid2}     ${Attachments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_SETTLED}
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_STATUS}
+
+
+JD-TC-UploadInvoiceAttachement-UH4
+
+    [Documentation]  bill status is in draft stage then try to UploadInvoiceAttachement .
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+    ${invoiceId}=   FakerLibrary.word
+
+    ${resp1}=  AddCustomer  ${CUSERNAME10}
+    Log  ${resp1.json()}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable   ${pcid10}   ${resp1.json()}
+
+    ${resp1}=  AddCustomer  ${CUSERNAME9}
+    Log  ${resp1.json()}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable   ${pcid9}   ${resp1.json()}
+
+    ${providerConsumerIdList}=  Create List  ${pcid10}  ${pcid9}
+    Set Test Variable  ${providerConsumerIdList}   
+
+        ${itemName}=    FakerLibrary.word
+    Set Suite Variable  ${itemName}
+    ${price}=   Random Int  min=10  max=15
+    ${price}=  Convert To Number  ${price}  1
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
+    ${adhocItemList}=    Create List    ${adhocItemList}
+
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}   billStatus=${billStatus[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid3}   ${resp.json()['uidList'][2]}  
+
+
+    ${resp}=  Upload Finance Invoice Attachment   ${invoice_uid3}     ${Attachments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${Draft_status}
 
 
 

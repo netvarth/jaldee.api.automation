@@ -215,7 +215,7 @@ JD-TC-GenerateLinkForInvoice-1
     Set Test Variable   ${status_id1}   ${resp.json()}
 
     
-    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}   billStatus=${billStatus[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
@@ -348,7 +348,7 @@ JD-TC-GenerateLinkForInvoice-UH3
     ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${vendor_phn}    ${EMPTY}    ${boolean[1]}    ${boolean[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${ENTER_EMAIL_OR_PHONE}
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_EMAIL_ID}
 
 JD-TC-GenerateLinkForInvoice-UH4
 
@@ -410,3 +410,118 @@ JD-TC-GenerateLinkForInvoice-UH6
     ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${vendor_phn}    ${email}    ${boolean[0]}    ${boolean[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
+
+JD-TC-GenerateLinkForInvoice-UH7
+
+    [Documentation]  update bill status as settiled and Generate Link .
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}
+
+    ${vender_name}=   FakerLibrary.firstname
+    ${contactPersonName}=   FakerLibrary.lastname
+    ${owner_name}=   FakerLibrary.lastname
+    ${vendorId}=   FakerLibrary.word
+    ${PO_Number}    Generate random string    5    123456789
+    ${vendor_phn}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${email}=   FakerLibrary.word
+
+    ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${vendor_phn}    ${email}    ${boolean[1]}    ${boolean[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_STATUS}
+
+JD-TC-GenerateLinkForInvoice-UH8
+
+    [Documentation]  ubill status is in draft stage and Generate Link .
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+    ${invoiceId}=   FakerLibrary.word
+
+    ${item}=   Random Int  min=5  max=10
+    ${quantity}=   Random Int  min=5  max=10
+    ${rate}=   Random Int  min=50  max=1000
+
+    ${itemdata}=   FakerLibrary.words    	nb=4
+
+    ${displayName1}=   FakerLibrary.user name    
+    ${price1}=  Evaluate    random.uniform(50.0,300) 
+    ${itemName1}=   Set Variable     ${itemdata[0]} 
+    ${itemCode1}=   Set Variable     ${itemdata[1]}
+    ${resp}=  Create Sample Item   ${displayName1}   ${itemName1}  ${itemCode1}  ${price1}  ${bool[0]}     
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${item_id1}  ${resp.json()}
+
+
+    ${itemList}=  Create Dictionary  itemId=${item_id1}   quantity=${quantity}   price=${price1}  
+    # ${itemList}=    Create List    ${itemList}
+
+    ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[3]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${status_id1}   ${resp.json()}
+
+    
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]}   
+
+
+    ${vender_name}=   FakerLibrary.firstname
+    ${contactPersonName}=   FakerLibrary.lastname
+    ${owner_name}=   FakerLibrary.lastname
+    ${vendorId}=   FakerLibrary.word
+    ${PO_Number}    Generate random string    5    123456789
+    ${vendor_phn}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${email}=   FakerLibrary.word
+
+    ${resp}=  Generate Link For Invoice  ${invoice_uid1}   ${vendor_phn}    ${email}    ${boolean[1]}    ${boolean[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${Draft_status}
+
+JD-TC-GenerateLinkForInvoice-UH9
+
+    [Documentation]  update bill status as cancelled and Generate Link .
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[2]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${apptStatus[4]}
+
+    ${vender_name}=   FakerLibrary.firstname
+    ${contactPersonName}=   FakerLibrary.lastname
+    ${owner_name}=   FakerLibrary.lastname
+    ${vendorId}=   FakerLibrary.word
+    ${PO_Number}    Generate random string    5    123456789
+    ${vendor_phn}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${email}=   FakerLibrary.word
+
+    ${resp}=  Generate Link For Invoice  ${invoice_uid1}   ${vendor_phn}    ${email}    ${boolean[1]}    ${boolean[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_STATUS}

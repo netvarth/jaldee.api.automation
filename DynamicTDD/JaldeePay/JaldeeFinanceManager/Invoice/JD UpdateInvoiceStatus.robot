@@ -211,7 +211,7 @@ JD-TC-UpdateInvoiceStatus-1
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}   
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}    billStatus=${billStatus[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}  
@@ -241,7 +241,7 @@ JD-TC-UpdateInvoiceStatus-1
 
 JD-TC-UpdateInvoiceStatus-2
 
-    [Documentation]  create invoice with bill status as settiled then try to update the invoice status.
+    [Documentation]  create invoice with bill status as draft then try to update the invoice status.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Log  ${resp.content}
@@ -268,24 +268,24 @@ JD-TC-UpdateInvoiceStatus-2
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}   billStatus=${billStatus[1]} 
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}  
+    Set Suite Variable   ${invoice_uid3}   ${resp.json()['uidList'][0]}  
 
-    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    ${resp1}=  Get Invoice By Id  ${invoice_uid3}
     Log  ${resp1.content}
 
     ${resp}=  Create Finance Status   ${New_status[1]}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${status_id3}   ${resp.json()}
+    Set suite Variable   ${status_id4}   ${resp.json()}
 
-    ${resp}=  Update Invoice Status   ${invoice_uid}    ${status_id3}
+    ${resp}=  Update Invoice Status   ${invoice_uid3}    ${status_id4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    ${resp1}=  Get Invoice By Id  ${invoice_uid3}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
@@ -340,4 +340,23 @@ JD-TC-UpdateInvoiceStatus-UH3
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${ALREADY_IN_GIVEN_STATUS}
 
+
+JD-TC-UpdateInvoiceStatus-UH4
+
+    [Documentation]  update bill status as settiled then try to update the invoice status.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=  Update bill status   ${invoice_uid3}    ${billStatus[1]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}
+
+    ${resp}=  Update Invoice Status   ${invoice_uid3}    ${status_id4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_STATUS}
 

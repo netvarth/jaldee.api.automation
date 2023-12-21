@@ -247,7 +247,7 @@ JD-TC-Invoice pay via link-1
     ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}   price=${promotionalPrice}
     # ${itemList}=    Create List    ${itemList}
 
-    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 
+    ${resp}=  Create Finance Status   ${New_status[2]}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
@@ -275,8 +275,12 @@ JD-TC-Invoice pay via link-1
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}
 
+    ${resp}=   Get next invoice Id   ${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${invoiceId}   ${resp.json()}
     
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}   adhocItemList=${adhocItemList}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}   adhocItemList=${adhocItemList}    billStatus=${billStatus[0]}   locationId=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
@@ -510,4 +514,94 @@ JD-TC-Invoice pay via link-UH8
     ${resp1}=  Invoice pay via link  ${invoice_uid}  ${amount}   ${purpose[5]}    ${source}  ${pid}   ${finance_payment_modes[1]}  ${bool[0]}   ${sid1}   ${pcid18}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  422
+
+JD-TC-Invoice pay via link-UH9
+
+    [Documentation]  update bill status as settled and then Invoice pay via link-.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
+
+    ${source}=   FakerLibrary.word
+
+    ${resp1}=  Invoice pay via link  ${invoice_uid}  ${amount}   ${purpose[5]}    ${source}  ${pid}   ${finance_payment_modes[1]}  ${bool[0]}   ${sid1}   ${pcid18}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_SETTLED}
+
+JD-TC-Invoice pay via link-UH10
+
+    [Documentation]  bill status is in draft stage and then Invoice pay via link-.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+    # ${invoiceDate}=   Get Current Date    result_format=%Y/%m/%d
+    ${resp}=   Get next invoice Id   ${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoiceId}   ${resp.json()}
+
+    ${item1}=     FakerLibrary.word
+    ${itemCode1}=     FakerLibrary.word
+    ${price1}=     Random Int   min=400   max=500
+    ${price}=  Convert To Number  ${price1}  1
+    Set Suite Variable  ${price} 
+    ${resp}=  Create Sample Item   ${DisplayName1}   ${item1}  ${itemCode1}  ${price}  ${bool[1]} 
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${itemId}  ${resp.json()}
+
+    ${resp}=   Get Item By Id  ${itemId}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${promotionalPrice}   ${resp.json()['promotionalPrice']}
+
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}   price=${promotionalPrice}
+    # ${itemList}=    Create List    ${itemList}
+
+    ${resp}=  Create Finance Status   ${New_status[2]}  ${categoryType[3]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${status_id1}   ${resp.json()}
+
+
+
+    ${itemName}=    FakerLibrary.word
+    Set Suite Variable  ${itemName}
+    ${price}=   Random Int  min=10  max=15
+    ${price}=  Convert To Number  ${price}  1
+    ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
+    ${adhocItemList}=    Create List    ${adhocItemList}
+
+    
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}       adhocItemList=${adhocItemList}    locationId=${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
+    Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]} 
+
+    ${source}=   FakerLibrary.word
+
+    ${resp1}=  Invoice pay via link  ${invoice_uid1}  ${amount}   ${purpose[5]}    ${source}  ${pid}   ${finance_payment_modes[1]}  ${bool[0]}   ${sid1}   ${pcid18}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${Draft_status}
+
 

@@ -2116,7 +2116,9 @@ INVALID_MERCHANT_ID="Invalid merchant id"
 INVALID_AMOUNT="Invalid Amount"
 INVOICE_SETTLED="This invoice cannot be updated since the invoice status has been set to '{}'"
 quantity_cannot_empty=" Quantity cannot be empty"
-INVOICE_STATUS="This invoice is in the '{} 'status" 
+INVOICE_STATUS="This invoice is in the '{}' status"
+INVALID_EMAIL_ID="Invalid Email Id" 
+Draft_status="This invoice is in the 'Draft 'status" 
 
 
 # ........Membership  ...............

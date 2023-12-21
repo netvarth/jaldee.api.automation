@@ -386,7 +386,7 @@ JD-TC-Share invoice as pdf-UH4
 
 JD-TC-Share invoice as pdf-UH5
 
-    [Documentation]  update invoice status as settled then share invoice .
+    [Documentation]  bill status is in darft stage then share invoice .
 
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD} 
@@ -398,4 +398,24 @@ JD-TC-Share invoice as pdf-UH5
     ${resp}=  Share invoice as pdf   ${invoice_uid}   ${boolean[1]}    ${email1}   ${html}
     Log  ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_STATUS}
+    Should Be Equal As Strings  ${resp.json()}   ${Draft_status}
+
+JD-TC-Share invoice as pdf-UH6
+
+    [Documentation]  update invoice status as cancelled then share invoice .
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[2]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}
+
+    ${resp}=  Share invoice as pdf   ${invoice_uid}   ${boolean[1]}    ${email1}   ${html}
+    Log  ${resp.content} 
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${billStatus[1]}
