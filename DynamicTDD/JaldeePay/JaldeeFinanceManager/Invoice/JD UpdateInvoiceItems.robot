@@ -358,6 +358,10 @@ JD-TC-UpdateInvoiceItem-UH6
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[0]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

@@ -497,11 +497,11 @@ JD-TC-Apply Discount-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]} 
 
-
+    ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}
     ${resp}=   Apply Discount   ${invoice_uid1}   ${discountId}    ${empty}   ${privateNote}  ${displayNote}
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${YOU_CANNOT_UPDATE_FINANCE}
+    Should Be Equal As Strings   ${resp.json()}   ${INVOICE_STATUS}
     
 JD-TC-Apply Discount-UH7
 
@@ -559,12 +559,12 @@ JD-TC-Apply Discount-UH7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-
+    ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${apptStatus[4]}
     ${resp}=   Apply Discount   ${invoice_uid2}   ${discountId}    ${empty}   ${privateNote}  ${displayNote}
     Log  ${resp.json()}
     Set Suite Variable   ${discountId1}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${YOU_CANNOT_UPDATE_FINANCE_CANCEL}
+    Should Be Equal As Strings   ${resp.json()}   ${INVOICE_STATUS}
 
 
 

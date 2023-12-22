@@ -339,11 +339,15 @@ JD-TC-UploadInvoiceAttachement-UH2
 
 JD-TC-UploadInvoiceAttachement-UH3
 
-    [Documentation]  update bill status as settiled then try to UploadInvoiceAttachement .
+    [Documentation]  update bill status as new then settiled then try to UploadInvoiceAttachement .
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[0]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[1]}   
     Log  ${resp.json()}
@@ -373,7 +377,7 @@ JD-TC-UploadInvoiceAttachement-UH4
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${invoiceId}=   FakerLibrary.word
 
-    ${resp1}=  AddCustomer  ${CUSERNAME10}
+    ${resp1}=  AddCustomer  ${CUSERNAME14}
     Log  ${resp1.json()}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable   ${pcid10}   ${resp1.json()}

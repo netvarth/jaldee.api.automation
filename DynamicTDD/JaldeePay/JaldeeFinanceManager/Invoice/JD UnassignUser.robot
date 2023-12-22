@@ -469,11 +469,11 @@ JD-TC-UnAssign User-UH7
     Set Suite Variable   ${invoice_uid1}   ${resp.json()['uidList'][0]} 
 
 
-    ${resp}=  Assign User   ${invoice_uid}  ${u_id2}  
+    ${resp}=  Assign User   ${invoice_uid1}  ${u_id2}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
 
-    ${resp}=  UnAssign User   ${invoice_uid}  
+    ${resp}=  UnAssign User   ${invoice_uid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${Draft_status}

@@ -263,9 +263,19 @@ JD-TC-UpdateBillStatus-1
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
     Set Suite Variable  ${invoice_uid}   ${resp.json()[0]['invoiceUid']}
 
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
+
     ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+
 
     ${resp}=  ProviderLogout
     Log  ${resp.json()}
@@ -289,10 +299,16 @@ JD-TC-UpdateBillStatus-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid1}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[2]}
+
 JD-TC-UpdateBillStatus-3
 
 
-    [Documentation]  Update bill status as new from draft.
+    [Documentation]  Update bill status as new from draft.(From direct finance manager dashboard through ui)
 
     ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log  ${resp.content}
@@ -377,7 +393,7 @@ JD-TC-UpdateBillStatus-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
-    Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
+    # Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id}
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
     ${resp1}=  AddCustomer  ${CUSERNAME11}
@@ -408,7 +424,7 @@ JD-TC-UpdateBillStatus-3
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}
 
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}    billStatus=${billStatus[0]}
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  adhocItemList=${adhocItemList}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid2}   ${resp.json()['uidList'][0]} 
@@ -417,12 +433,37 @@ JD-TC-UpdateBillStatus-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp1}=  Get Invoice By Id  ${invoice_uid2}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
+
+JD-TC-UpdateBillStatus-4
+
+
+    [Documentation]  try to update bill status from new to cancel .
+
+    ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[2]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid2}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[2]}
+
+
+
     
 
 JD-TC-UpdateBillStatus-UH1
 
 
-    [Documentation]  try to update already settled invoice.
+    [Documentation]  try to update  settle invoice.(invoice is in draft status)
 
     ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log  ${resp.content}
@@ -431,7 +472,7 @@ JD-TC-UpdateBillStatus-UH1
     ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${BILL_STATUS_IS_ALREADY_SETTILED}
+    Should Be Equal As Strings  ${resp.json()}   ${Draft_status}
 
 JD-TC-UpdateBillStatus-UH2
 

@@ -361,21 +361,26 @@ JD-TC-Assign User-UH5
 
 JD-TC-Assign User-UH6
 
-    [Documentation]  update bill status as settiled and then try to assign user.
+    [Documentation]  update bill status as settled and then try to assign user.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
+
     ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}
+
 
     ${resp}=  Assign User   ${invoice_uid}  ${u_id}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_STATUS}
+    Should Be Equal As Strings  ${resp.json()}   ${Draft_status}
 
 JD-TC-Assign User-UH7
 

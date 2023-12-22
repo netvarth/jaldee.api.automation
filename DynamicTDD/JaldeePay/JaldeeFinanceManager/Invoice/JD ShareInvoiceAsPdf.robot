@@ -246,7 +246,7 @@ JD-TC-Share invoice as pdf-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    ${resp1}=  Get Invoice By Id  ${invoice_uid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     # Should Be Equal As Strings  ${resp1.json()['shared']}   ${boolean[1]} 

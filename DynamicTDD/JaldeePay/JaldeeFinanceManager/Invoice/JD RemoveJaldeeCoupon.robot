@@ -308,19 +308,19 @@ JD-TC-Remove JaldeeCoupon-1
 
 JD-TC-RemoveJaldeeCoupon-UH1
 
-    [Documentation]  Remove jaldeecoupon after updating bill status as settiled.
+    [Documentation]  Remove jaldeecoupon after updating bill status as cancelled.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[2]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
+    ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${apptStatus[4]}
 
 
     ${resp}=   Remove Jaldee Coupon   ${invoice_uid}   ${cupn_code2023}
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_SETTLED}
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_STATUS}

@@ -259,7 +259,7 @@ JD-TC-Remove Discount-2
 
 JD-TC-Remove Discount-3
 
-    [Documentation]  generate link and then try to remove discount .
+    [Documentation]  generate link(cant generate link in bill draft stage) and then try to remove discount .
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
@@ -314,7 +314,8 @@ JD-TC-Remove Discount-3
 
     ${resp}=  Generate Link For Invoice  ${invoice_uid3}   ${vendor_phn}    ${email}    ${boolean[1]}    ${boolean[0]}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${Draft_status}
 
 
     ${resp}=   Remove Discount   ${invoice_uid3}   ${discountId}    ${discountprice}   ${EMPTY}  ${EMPTY}
@@ -324,7 +325,7 @@ JD-TC-Remove Discount-3
 
 JD-TC-Remove Discount-4
 
-    [Documentation]  share invoice as pdf then try to remove discount .
+    [Documentation]  share invoice as pdf(cant share pdf in bill draft stage) then try to remove discount .
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
@@ -348,7 +349,8 @@ JD-TC-Remove Discount-4
 
     ${resp}=  Share invoice as pdf   ${invoice_uid3}   ${boolean[1]}    ${email}   ${html}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${Draft_status}
 
 
     ${resp}=   Remove Discount   ${invoice_uid3}   ${discountId}    ${discountprice}   ${EMPTY}  ${EMPTY}
@@ -475,7 +477,7 @@ JJD-TC-Remove Discount-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   
+    ${resp}=  Update Invoice   ${invoice_uid}    ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   billStatus=${billStatus[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

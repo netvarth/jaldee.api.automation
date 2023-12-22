@@ -1503,6 +1503,14 @@ JD-TC-Remove Service Level Discount-UH7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp1}=  Get Invoice By Id  ${invoice_uid2}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+
+    ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[0]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

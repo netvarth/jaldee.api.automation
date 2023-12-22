@@ -70,7 +70,7 @@ JD-TC-Remove Item Level Discount-1
     [Documentation]  Remove Item Level Discount where account is taxable(service non taxable and item is taxable).
 
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3381738
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3381538
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -624,7 +624,7 @@ JD-TC-Remove Item Level Discount-2
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
-    ${resp1}=  AddCustomer  ${CUSERNAME1}
+    ${resp1}=  AddCustomer  ${CUSERNAME15}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${pcid18}   ${resp1.json()}

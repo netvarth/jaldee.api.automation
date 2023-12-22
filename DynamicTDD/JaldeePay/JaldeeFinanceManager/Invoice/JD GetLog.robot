@@ -290,38 +290,7 @@ JD-TC-Get Log-2
     Should Be Equal As Strings  ${resp.json()['invoiceStateList'][0]['userType']}  ${userType[0]}
     Should Be Equal As Strings  ${resp.json()['invoiceStateList'][0]['localUserId']}  ${pid}
 
-
-
-JD-TC-Get Log-UH1
-
-    [Documentation]   get log with another login.
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Invoice Log List UId   ${invoice_uid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${CAP_JALDEE_FINANCE_DISABLED}
-
-JD-TC-Get Log-UH2
-
-    [Documentation]   get log where invoice id is invalid.
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${invoice}=  FakerLibrary.RandomNumber
-
-    ${resp1}=  Get Invoice Log List UId   ${invoice}
-    Log  ${resp1.json()}
-    Should Be Equal As Strings  ${resp1.status_code}  422
-    Should Be Equal As Strings  ${resp1.json()}   ${INVALID_FM_INVOICE_ID}
-
-
-JD-TC-Get Log-UH3
+JD-TC-Get Log-3
 
     [Documentation]   bill status is in draft and try to get log .
 
@@ -378,5 +347,42 @@ JD-TC-Get Log-UH3
 
     ${resp1}=  Get Invoice Log List UId   ${invoice_uid1}
     Log  ${resp1.json()}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['invoiceUid']}  ${invoice_uid1}
+    Should Be Equal As Strings  ${resp.json()['invoiceStateList'][0]['date']}  ${DAY}
+    Should Be Equal As Strings  ${resp.json()['invoiceStateList'][0]['time']}  ${time_now}
+    Should Be Equal As Strings  ${resp.json()['invoiceStateList'][0]['userType']}  ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()['invoiceStateList'][0]['localUserId']}  ${pid}
+
+
+
+
+JD-TC-Get Log-UH1
+
+    [Documentation]   get log with another login.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Invoice Log List UId   ${invoice_uid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${CAP_JALDEE_FINANCE_DISABLED}
+
+JD-TC-Get Log-UH2
+
+    [Documentation]   get log where invoice id is invalid.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME70}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${invoice}=  FakerLibrary.RandomNumber
+
+    ${resp1}=  Get Invoice Log List UId   ${invoice}
+    Log  ${resp1.json()}
     Should Be Equal As Strings  ${resp1.status_code}  422
-    Should Be Equal As Strings  ${resp1.json()}   ${Draft_status}
+    Should Be Equal As Strings  ${resp1.json()}   ${INVALID_FM_INVOICE_ID}
+
+
