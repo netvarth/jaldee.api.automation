@@ -95,7 +95,7 @@ JD-TC-CreateLead-1
     ${dob}=    FakerLibrary.Date
     ${permanentAddress1}=  FakerLibrary.address
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${email}  ${C_Email}${PH_Number}.${test_mail}
+    Set Test Variable  ${email}  ${C_Email}${consumerPhone}.${test_mail}
 
     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${email}   
     Log   ${resp.json()}
@@ -193,22 +193,6 @@ JD-TC-CreateLead-2
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable    ${consumerPhone}  555${PH_Number}
-    # ${consumerFirstName}=   FakerLibrary.first_name
-    # ${consumerLastName}=    FakerLibrary.last_name  
-    # ${dob}=    FakerLibrary.Date
-    # ${address}=  FakerLibrary.address
-    # ${gender}=  Random Element    ${Genderlist}
-    # Set Test Variable  ${email}  ${C_Email}${PH_Number}.${test_mail}
-
-    # ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${address}   gender=${gender}  dob=${dob}  email=${email}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings      ${resp.status_code}  200
-    # Set Suite Variable  ${consumerId}  ${resp.json()[0]['id']}
-
     ${requestedAmount}=     Random Int  min=30000  max=600000
     ${description}=         FakerLibrary.bs
     ${consumerFirstName}=   FakerLibrary.first_name
@@ -216,7 +200,7 @@ JD-TC-CreateLead-2
     ${dob}=    FakerLibrary.Date
     ${address}=  FakerLibrary.address
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${PH_Number}.${test_mail}   
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}   
     ${permanentAddress1}=   FakerLibrary.address
     ${permanentAddress2}=   FakerLibrary.address  
     ${nomineeName}=     FakerLibrary.first_name
