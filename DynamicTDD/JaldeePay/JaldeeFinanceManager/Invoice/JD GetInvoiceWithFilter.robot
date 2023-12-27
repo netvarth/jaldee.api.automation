@@ -316,7 +316,7 @@ JD-TC-Get Invoice With Filter -2
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
     # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
     Should Be Equal As Strings  ${resp1.json()[0]['vendorUid']}  ${vendor_uid1}
-    Should Be Equal As Strings  ${resp1.json()[0]['invoiceUid']}  ${invoice_uid2}
+    Should Be Equal As Strings  ${resp1.json()[0]['invoiceUid']}  ${invoice_uid1}
     # Should Be Equal As Strings  ${resp1.json()[0]['invoiceId']}  ${invoice_id}
     Should Be Equal As Strings  ${resp1.json()[0]['providerConsumerId']}  ${pcid9}
     Should Be Equal As Strings  ${resp1.json()[1]['accountId']}  ${account_id1}

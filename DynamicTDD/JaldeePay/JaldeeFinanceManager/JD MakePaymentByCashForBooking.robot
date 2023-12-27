@@ -96,7 +96,7 @@ JD-TC-MakePaymentByCashForBooking-1
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-
+    clear_customer   ${PUSERPH0}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200

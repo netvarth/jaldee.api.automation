@@ -639,7 +639,7 @@ JD-TC-Apply Service Level Discount-UH5
     ${discount}=   FakerLibrary.RandomNumber
 
 
-    ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${discount}    ${discountprice}   ${privateNote}  ${displayNote}  ${sid1}
+    ${resp}=   Apply Service Level Discount   ${invoice}   ${discount}    ${discountprice}   ${privateNote}  ${displayNote}  ${sid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}    ${INCORRECT_DISCOUNT_ID}

@@ -36,9 +36,10 @@ JD-TC-MakePaymentByCash-1
 
     [Documentation]  provider takes waitlist and accept payment then consumer get details
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    clear_customer   ${PUSERNAME44}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -269,7 +270,7 @@ JD-TC-MakePaymentByCash-2
 
     [Documentation]  Make payment by cash with different note.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -283,7 +284,7 @@ JD-TC-MakePaymentByCash-UH1
 
     [Documentation]  Make payment by cash with invalid invoice id.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

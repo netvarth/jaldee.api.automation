@@ -753,12 +753,7 @@ JD-TC-ApplyProviderCouponForAppointmnet-5
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-
 JD-TC-ApplyProviderCouponForAppointmnet-6
-    [Documentation]   Create one appointment and then share that link through email and sms.then check the invoice details.
-
-
-JD-TC-ApplyProviderCouponForAppointmnet-7
     [Documentation]   Took one appointment and apply provider coupon then share invoice via link ,then pay via cash that time given notes and get the details using get url.
     
 
@@ -828,14 +823,6 @@ JD-TC-ApplyProviderCouponForAppointmnet-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid1}
 
-    ${resp1}=  Get Bookings Invoices  ${apptid1}
-    Log  ${resp1.content}
-    Should Be Equal As Strings  ${resp1.status_code}  200
-    # Should Be Equal As Strings  ${resp1.json()[0]['netTotal']}     ${tot_amt}
-    # Should Be Equal As Strings  ${resp1.json()[0]['netRate']}     ${tot_amt}
-    # Should Be Equal As Strings  ${resp1.json()[0]['amountDue']}     ${tot_amt}
-    # Should Be Equal As Strings  ${resp1.json()[0]['amountTotal']}     ${tot_amt}
-
     ${discAmt}=    Evaluate  ${servicecharge1}-${pc_amount1}
 
     ${resp}=   Apply Provider Coupon for Appointment    ${apptid1}    ${cupn_code1}   
@@ -848,11 +835,34 @@ JD-TC-ApplyProviderCouponForAppointmnet-7
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Test Variable  ${invoice_uid}  ${resp1.json()[0]['invoiceUid']}
+    # Should Be Equal As Strings  ${resp1.json()[0]['netTotal']}     ${tot_amt}
+    # Should Be Equal As Strings  ${resp1.json()[0]['netRate']}     ${tot_amt}
+    # Should Be Equal As Strings  ${resp1.json()[0]['amountDue']}     ${tot_amt}
+    # Should Be Equal As Strings  ${resp1.json()[0]['amountTotal']}     ${tot_amt}
 
     ${resp}=   Get Appointment level Bill Details      ${apptid1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+
+    ${resp}=  Get Bill By UUId  ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # Should Be Equal As Strings  ${resp.json()['netTotal']}         ${ser_amount1}
+    # Should Be Equal As Strings  ${resp.json()['amountDue']}        ${ser_amount1}   
+    # Should Be Equal As Strings  ${resp.json()['netRate']}          ${ser_amount1}   
+    
+    ${resp}=  Update Bill   ${apptid1}  ${action[12]}    ${cupn_code1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200   
+
+    # ${total_amount}=  Evaluate  ${ser_amount1} - ${amount}
+    # ${total_amount}=  Convert To Number  ${total_amount}  2
+
+    ${resp}=  Get Bill By UUId  ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phn}=  Evaluate  ${PUSERNAME}+${PO_Number}
@@ -868,56 +878,103 @@ JD-TC-ApplyProviderCouponForAppointmnet-7
 
 
 
-JD-TC-ApplyProviderCouponForAppointmnet-8
-    [Documentation]   Create one appt,then cancel appt.then check the quantity using get url.then reconfirm that appt and check the amount and quantity details.
+JD-TC-ApplyProviderCouponForAppointmnet-7
+    [Documentation]   Create one appt then took appointment and apply provider coupon,then cancel appt.then check the quantity using get url.then reconfirm that appt and check the amount and quantity details.
 
-JD-TC-ApplyProviderCouponForAppointmnet-9
-    [Documentation]   Take one appointment having a service enabled auto invoice generation.then disable finance and check the service details whether the service auto invoice generation flag is off.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name}  apptState=${Qstate[0]}
 
-JD-TC-ApplyProviderCouponForAppointmnet-10
-    [Documentation]   Service autogeneration is on.then create one appointment,then check invoice is generated or not.
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY2}  ${ser_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id1}
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-JD-TC-ApplyProviderCouponForAppointmnet-11
-    [Documentation]   Create teleservices and add to appointment and create invoice.
+    ${resp}=  AddCustomer  ${CUSERNAME13}  firstName=${fname}   lastName=${lname}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}   ${resp.json()}
+    
+    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+    
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${ser_id1}  ${sch_id1}  ${DAY2}  ${cnote}  ${apptfor}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Test Variable  ${apptid1}  ${apptid[0]}
 
-JD-TC-ApplyProviderCouponForAppointmnet-12
-    [Documentation]   ervice price is zero.then create one booking,then cancel that appointment and edit that service price from zero to higher value then again reconfirm that booking and get that invoice details (service autoinvoice generation flag is on).
+    ${resp}=  Get Appointment EncodedID   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${encId}=  Set Variable   ${resp.json()}
 
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid1}
 
+    ${discAmt}=    Evaluate  ${servicecharge1}-${pc_amount1}
 
+    ${resp}=   Apply Provider Coupon for Appointment    ${apptid1}    ${cupn_code1}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
+    ${resp}=  Get Appointment Status   ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]} 
 
+    ${reason}=  Random Element  ${cancelReason}
+    ${msg}=   FakerLibrary.word
+    ${resp}=    Provider Cancel Appointment  ${apptid1}  ${reason}  ${msg}  ${DAY2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Appointment Status   ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Contain  "${resp.json()}"  ${apptStatus[4]}
 
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${ser_id1}  ${sch_id1}  ${DAY2}  ${cnote}  ${apptfor}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Suite Variable  ${apptid1}  ${apptid[0]}
 
+    ${resp}=  Get Appointment EncodedID   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${encId}=  Set Variable   ${resp.json()}
 
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid1}
 
+JD-TC-ApplyProviderCouponForAppointmnet-7
+    [Documentation]   Apply provider coupon with empty coupon code.
 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    ${resp}=   Apply Provider Coupon for Appointment    ${apptid1}    ${EMPTY}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}    ${JALDEE_COUPON_NOT_VALID}
 
 *** comment ***
 JD-TC-ApplyProviderCouponForAppointmnet-2
@@ -1108,3 +1165,20 @@ JD-TC-ApplyProviderCouponForAppointmnet-5
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
     # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
+
+JD-TC-ApplyProviderCouponForAppointmnet-6
+    [Documentation]   Create one appointment and then share that link through email and sms.then check the invoice details.
+
+
+JD-TC-ApplyProviderCouponForAppointmnet-9
+    [Documentation]   Take one appointment having a service enabled auto invoice generation.then disable finance and check the service details whether the service auto invoice generation flag is off.
+
+
+JD-TC-ApplyProviderCouponForAppointmnet-10
+    [Documentation]   Service autogeneration is on.then create one appointment,then check invoice is generated or not.
+
+JD-TC-ApplyProviderCouponForAppointmnet-11
+    [Documentation]   Create teleservices and add to appointment and create invoice.
+
+JD-TC-ApplyProviderCouponForAppointmnet-12
+    [Documentation]   Service price is zero.then create one booking,then cancel that appointment and edit that service price from zero to higher value then again reconfirm that booking and get that invoice details (service autoinvoice generation flag is on).
