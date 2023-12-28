@@ -40,7 +40,7 @@ ${DisplayName1}   item1_DisplayName
 
 JD-TC-Apply ProviderCoupon-1
 
-    [Documentation]  Apply provider coupon.
+    [Documentation]  Apply provider coupon to invoice having non taxable service.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
     Log  ${resp.json()}
@@ -248,7 +248,148 @@ JD-TC-Apply ProviderCoupon-1
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
-        ${serviceprice}=   Random Int  min=1000  max=1500
+    ${serviceprice}=   Random Int  min=1000  max=1500
+    ${serviceprice}=  Convert To Number  ${serviceprice}  1
+
+    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
+    ${serviceList}=    Create List    ${serviceList}
+    
+    
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
+
+    ${resp}=  Get Coupons 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+
+    sleep  02s
+    ${resp}=   Apply Provider Coupon   ${invoice_uid}   ${cupn_code}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['providerCoupons'][0]['couponCode']}  ${cupn_code}
+    Should Be Equal As Strings  ${resp.json()['providerCoupons'][0]['date']}  ${ST_DAY}
+    Should Be Equal As Strings  ${resp.json()['providerCoupons'][0]['discount']}  ${pc_amount}
+
+# JD-TC-Apply ProviderCoupon-2
+
+JD-TC-ProviderCouponBill-2
+
+    [Documentation]  Apply provider coupon to bill having non taxable service, then remove the service from bill, add another service to bill  check the amount.
+
+    # clear_queue      ${PUSERNAME114}
+    # clear_location   ${PUSERNAME114}
+    # clear_service    ${PUSERNAME114}
+    # clear_customer   ${PUSERNAME114}
+    # clear_Coupon     ${PUSERNAME114}
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${description1}=  FakerLibrary.sentence
+    ${ser_durtn1}=   Random Int   min=2   max=10
+    ${ser_amount}=   Random Int   min=150   max=1000
+    ${ser_amount2}=   Convert To Number   ${ser_amount}
+    ${SERVICE2}=    FakerLibrary.word
+    ${resp}=  Create Service  ${SERVICE2}   ${description1}   ${ser_durtn1}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount2}  ${bool[0]}   ${bool[0]}   department=${dep_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Set Test Variable  ${sid2}  ${resp.json()}
+    
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${q_name}=    FakerLibrary.name
+    ${list}=  Create List   1  2  3  4  5  6  7
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
+    ${end_time}=    add_timezone_time  ${tz}  4  00   
+    ${parallel}=   Random Int  min=1   max=1
+    ${capacity}=  Random Int   min=10   max=20
+
+    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${lid}  ${sid1}  ${sid2}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${que_id1}   ${resp.json()}  
+
+    ${coupon}=    FakerLibrary.word
+    ${desc}=  FakerLibrary.Sentence   nb_words=2
+    ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
+    ${cupn_code}=   FakerLibrary.word
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
+    ${min_bill_amount}=   Random Int   min=100   max=150
+    ${max_disc_val}=   Random Int   min=10   max=50
+    ${max_prov_use}=   Random Int   min=10   max=20
+    ${book_channel}=   Create List   ${bookingChannel[0]}
+    ${coupn_based}=  Create List   ${couponBasedOn[0]}
+    ${tc}=  FakerLibrary.sentence
+    ${services}=   Create list   ${sid1}   
+    ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${coupon_id1}  ${resp.json()}
+    
+    ${resp}=  Get Coupon By Id  ${coupon_id1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp1}=  AddCustomer  ${CUSERNAME12}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable  ${cid}   ${resp1.json()}
+    
+    ${desc}=   FakerLibrary.word
+    ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${wid}  ${wid[0]}
+
+    ${resp}=  Get Waitlist By Id  ${wid} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Get Bill By UUId  ${wid}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    # Should Be Equal As Strings  ${resp.json()['netTotal']}         ${ser_amount1}
+    # Should Be Equal As Strings  ${resp.json()['amountDue']}        ${ser_amount1}   
+    # Should Be Equal As Strings  ${resp.json()['netRate']}          ${ser_amount1}   
+    
+    # ${resp}=  Update Bill   ${wid}  ${action[12]}    ${cupn_code}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200   
+
+    # ${total_amount}=  Evaluate  ${ser_amount1} - ${amount}
+    # ${total_amount}=  Convert To Number  ${total_amount}  2
+
+    # ${resp}=  Get Bill By UUId  ${wid}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    # Should Be Equal As Strings  ${resp.json()['netTotal']}         ${ser_amount1}
+    # Should Be Equal As Strings  ${resp.json()['amountDue']}        ${total_amount}   
+    # Should Be Equal As Strings  ${resp.json()['netRate']}          ${total_amount} 
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date
+    ${invoiceId}=   FakerLibrary.word
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${serviceprice}=   Random Int  min=1000  max=1500
     ${serviceprice}=  Convert To Number  ${serviceprice}  1
 
     ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
@@ -278,299 +419,6 @@ JD-TC-Apply ProviderCoupon-1
     Should Be Equal As Strings  ${resp.json()['providerCoupons'][0]['date']}  ${ST_DAY}
     Should Be Equal As Strings  ${resp.json()['providerCoupons'][0]['discount']}  ${pc_amount}
 
-# JD-TC-Apply ProviderCoupon-2
-*** comment ***
-
-JD-TC-ProviderCouponBill-1
-
-    [Documentation]  Apply provider coupon to bill having non taxable service.
-
-    clear_queue      ${PUSERNAME101}
-    clear_location   ${PUSERNAME101}
-    clear_service    ${PUSERNAME101}
-    clear_customer   ${PUSERNAME101}
-    clear_Coupon     ${PUSERNAME101}
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}   200
-
-    ${resp}=  View Waitlist Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}   200
-
-    ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
-    Log    ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
-
-    ${resp}=  AddCustomer  ${CUSERNAME1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
-
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    
-    ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}  
-
-    ${resp}=   Get Location ById  ${loc_id1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
-
-    ${description}=  FakerLibrary.sentence
-    ${ser_durtn}=   Random Int   min=2   max=10
-    ${ser_amount}=   Random Int   min=150   max=1000
-    ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.name
-    ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Test Variable  ${sid1}  ${resp.json()}
-
-    ${description1}=  FakerLibrary.sentence
-    ${ser_durtn1}=   Random Int   min=2   max=10
-    ${ser_amount}=   Random Int   min=150   max=1000
-    ${ser_amount2}=   Convert To Number   ${ser_amount}
-    ${SERVICE2}=    FakerLibrary.word
-    ${resp}=  Create Service  ${SERVICE2}   ${description1}   ${ser_durtn1}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount2}  ${bool[0]}   ${bool[0]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Test Variable  ${sid2}  ${resp.json()}
-    
-    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
-    ${q_name}=    FakerLibrary.name
-    ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
-    ${end_time}=    add_timezone_time  ${tz}  4  00   
-    ${parallel}=   Random Int  min=1   max=1
-    ${capacity}=  Random Int   min=10   max=20
-
-    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${sid1}  ${sid2}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${que_id1}   ${resp.json()}  
-
-    ${coupon}=    FakerLibrary.word
-    ${desc}=  FakerLibrary.Sentence   nb_words=2
-    ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
-    ${cupn_code}=   FakerLibrary.word
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
-    ${eTime}=  add_timezone_time  ${tz}  0  45  
-    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
-    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
-    ${min_bill_amount}=   Random Int   min=100   max=150
-    ${max_disc_val}=   Random Int   min=10   max=50
-    ${max_prov_use}=   Random Int   min=10   max=20
-    ${book_channel}=   Create List   ${bookingChannel[0]}
-    ${coupn_based}=  Create List   ${couponBasedOn[0]}
-    ${tc}=  FakerLibrary.sentence
-    ${services}=   Create list   ${sid1}   
-    ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${coupon_id1}  ${resp.json()}
-    
-    ${resp}=  Get Coupon By Id  ${coupon_id1} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    
-    ${desc}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${wid}=  Get Dictionary Values  ${resp.json()}
-    Set Test Variable  ${wid}  ${wid[0]}
-
-    ${resp}=  Get Waitlist By Id  ${wid} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Bill By UUId  ${wid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    Should Be Equal As Strings  ${resp.json()['netTotal']}         ${ser_amount1}
-    Should Be Equal As Strings  ${resp.json()['amountDue']}        ${ser_amount1}   
-    Should Be Equal As Strings  ${resp.json()['netRate']}          ${ser_amount1}   
-    
-    ${resp}=  Update Bill   ${wid}  ${action[12]}    ${cupn_code}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
-
-    ${total_amount}=  Evaluate  ${ser_amount1} - ${amount}
-    ${total_amount}=  Convert To Number  ${total_amount}  2
-
-    ${resp}=  Get Bill By UUId  ${wid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    Should Be Equal As Strings  ${resp.json()['netTotal']}         ${ser_amount1}
-    Should Be Equal As Strings  ${resp.json()['amountDue']}        ${total_amount}   
-    Should Be Equal As Strings  ${resp.json()['netRate']}          ${total_amount} 
-
-JD-TC-ProviderCouponBill-2
-
-    [Documentation]  Apply provider coupon to bill having non taxable service, then remove the service from bill, add another service to bill  check the amount.
-
-    clear_queue      ${PUSERNAME114}
-    clear_location   ${PUSERNAME114}
-    clear_service    ${PUSERNAME114}
-    clear_customer   ${PUSERNAME114}
-    clear_Coupon     ${PUSERNAME114}
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME114}  ${PASSWORD}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}   200
-
-    ${resp}=  View Waitlist Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}   200
-
-    ${resp}=  Update Waitlist Settings  ${calc_mode[0]}  ${EMPTY}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${EMPTY}
-    Log    ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
-
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
-
-    ${resp}=  AddCustomer  ${CUSERNAME10}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${cid}  ${resp.json()}
-
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME10}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    
-    ${resp}=   Create Sample Location
-    Set Test Variable    ${loc_id1}    ${resp}  
-
-    ${resp}=   Get Location ById  ${loc_id1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
-
-    ${description}=  FakerLibrary.sentence
-    ${ser_durtn}=   Random Int   min=2   max=10
-    ${ser_amount}=   Random Int   min=150   max=1000
-    ${ser_amount1}=   Convert To Number   ${ser_amount}
-    ${SERVICE1}=    FakerLibrary.firstname
-    ${resp}=  Create Service  ${SERVICE1}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Test Variable  ${sid1}  ${resp.json()}
-
-    ${description1}=  FakerLibrary.sentence
-    ${ser_durtn1}=   Random Int   min=2   max=10
-    ${ser_amount}=   Random Int   min=150   max=1000
-    ${ser_amount2}=   Convert To Number   ${ser_amount}
-    ${SERVICE2}=    FakerLibrary.word
-    ${resp}=  Create Service  ${SERVICE2}   ${description1}   ${ser_durtn1}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount2}  ${bool[0]}   ${bool[0]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200  
-    Set Test Variable  ${sid2}  ${resp.json()}
-    
-    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
-    ${q_name}=    FakerLibrary.name
-    ${list}=  Create List   1  2  3  4  5  6  7
-    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  55
-    ${end_time}=    add_timezone_time  ${tz}  4  00   
-    ${parallel}=   Random Int  min=1   max=1
-    ${capacity}=  Random Int   min=10   max=20
-
-    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${sid1}  ${sid2}  
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${que_id1}   ${resp.json()}  
-
-    ${coupon}=    FakerLibrary.word
-    ${desc}=  FakerLibrary.Sentence   nb_words=2
-    ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
-    ${cupn_code}=   FakerLibrary.word
-    ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
-    ${eTime}=  add_timezone_time  ${tz}  0  45  
-    ${ST_DAY}=  db.get_date_by_timezone  ${tz}
-    ${EN_DAY}=  db.add_timezone_date  ${tz}   10
-    ${min_bill_amount}=   Random Int   min=100   max=150
-    ${max_disc_val}=   Random Int   min=10   max=50
-    ${max_prov_use}=   Random Int   min=10   max=20
-    ${book_channel}=   Create List   ${bookingChannel[0]}
-    ${coupn_based}=  Create List   ${couponBasedOn[0]}
-    ${tc}=  FakerLibrary.sentence
-    ${services}=   Create list   ${sid1}   
-    ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${coupon_id1}  ${resp.json()}
-    
-    ${resp}=  Get Coupon By Id  ${coupon_id1} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200 
-    
-    ${desc}=   FakerLibrary.word
-    ${resp}=  Add To Waitlist  ${cid}  ${sid1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${wid}=  Get Dictionary Values  ${resp.json()}
-    Set Test Variable  ${wid}  ${wid[0]}
-
-    ${resp}=  Get Waitlist By Id  ${wid} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Bill By UUId  ${wid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    Should Be Equal As Strings  ${resp.json()['netTotal']}         ${ser_amount1}
-    Should Be Equal As Strings  ${resp.json()['amountDue']}        ${ser_amount1}   
-    Should Be Equal As Strings  ${resp.json()['netRate']}          ${ser_amount1}   
-    
-    ${resp}=  Update Bill   ${wid}  ${action[12]}    ${cupn_code}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200   
-
-    ${total_amount}=  Evaluate  ${ser_amount1} - ${amount}
-    ${total_amount}=  Convert To Number  ${total_amount}  2
-
-    ${resp}=  Get Bill By UUId  ${wid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    Should Be Equal As Strings  ${resp.json()['netTotal']}         ${ser_amount1}
-    Should Be Equal As Strings  ${resp.json()['amountDue']}        ${total_amount}   
-    Should Be Equal As Strings  ${resp.json()['netRate']}          ${total_amount} 
-
     ${reason}=   FakerLibrary.word
     ${service}=  Service Bill  ${reason}  ${sid1}  1 
     ${resp}=  Update Bill   ${wid}  ${action[2]}    ${service}
@@ -590,7 +438,8 @@ JD-TC-ProviderCouponBill-2
     Should Be Equal As Strings  ${resp.json()['netTotal']}         ${ser_amount2}
     Should Be Equal As Strings  ${resp.json()['amountDue']}        ${ser_amount2}   
     Should Be Equal As Strings  ${resp.json()['netRate']}          ${ser_amount2}   
- 
+
+*** comment ***
 JD-TC-ProviderCouponBill-3
 
     [Documentation]  Apply two provider coupon to bill having non taxable service.

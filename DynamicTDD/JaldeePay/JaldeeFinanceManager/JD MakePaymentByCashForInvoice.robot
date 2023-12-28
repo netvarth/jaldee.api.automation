@@ -197,7 +197,7 @@ JD-TC-MakePaymentByCash-1
     ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}   price=${promotionalPrice}
     # ${itemList}=    Create List    ${itemList}
 
-    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 
+    ${resp}=  Create Finance Status   ${New_status[3]}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}
