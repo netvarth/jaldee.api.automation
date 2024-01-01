@@ -11928,6 +11928,13 @@ Change Lead Status LOS
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/status/${id}   expected_status=any
     [Return]  ${resp}
 
+Change Lead Credit Status LOS
+    [Arguments]     ${uid}  ${id}
+
+    Check And Create YNW Session  
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/creditstatus/${id}   expected_status=any
+    [Return]  ${resp}
+
 Change Lead Progress LOS
     [Arguments]     ${uid}  ${id}
 

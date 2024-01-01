@@ -1709,7 +1709,7 @@ TASK_ALREADY_COMPLETED="You do not have permission to update the activity. Activ
 TEMPLATE_NAME_REQUIRED= "Template Name required"
 INVALID_CONSUMER_ID= "Invalid consumer id"
 NO_PERMISSION_TO_UPDATE= "You do not have permission to update the lead."
-INVALID_LEAD_ID= "Invalid Lead ID"
+# INVALID_LEAD_ID= "Invalid Lead ID"
 LEAD_ALREDY_ENABLED= "Lead already enabled"
 LEAD_ALREDY_DISABLED= "Lead already disabled"
 ATTACHMENT_NOT_FOUND= "attachment not found"
@@ -1826,6 +1826,9 @@ UNABLE_TO_CHANGE_INTERNAL_STATUS= "Unable to change internal status. Current Loa
 NOMINEE_NAME_REQUIRED= "Nominee Name required"
 LOAN_APPLICATION_REF_REQ= "Loan Application Reference Required"
 ALREADY_APPROVAL_REQUESTED= "Loan Application already rejected."
+
+Invalid_Progress_ID= "Invalid Progress ID"
+
 #jaldee drive
 
 UPLOAD_ATLEAST_ONEFILE= "Need to upload atleast one file"
