@@ -22,11 +22,11 @@ Variables          /ebs/TDD/varfiles/hl_musers.py
 
 *** Test Cases ***
 
-JD-TC-GetLeadStatu-1
+JD-TC-GetLeadStatus-1
 
     [Documentation]             Get Lead Status
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -51,3 +51,24 @@ JD-TC-GetLeadStatu-1
     Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
     Should Be Equal As Strings    ${resp.json()[0]['name']}         ${name}
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+JD-TC-GetLeadStatus-UH1
+
+    [Documentation]             Get lead Status without login
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-GetLeadStatus-UH2
+
+    [Documentation]             Get lead Status with another provider login
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME61}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200

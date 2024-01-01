@@ -30,7 +30,7 @@ JD-TC-GetLeadCountByFilter-1
 
     [Documentation]             Get Lead Count By Filter
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -151,7 +151,7 @@ JD-TC-GetLeadCountByFilter-2
 
     [Documentation]             Get Lead Count By Filter with uid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -164,7 +164,7 @@ JD-TC-GetLeadCountByFilter-3
 
     [Documentation]             Get Lead Count By Filter with referenceNo
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -177,7 +177,7 @@ JD-TC-GetLeadCountByFilter-4
 
     [Documentation]             Get Lead Count By Filter with losProduct
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -190,7 +190,7 @@ JD-TC-GetLeadCountByFilter-5
 
     [Documentation]             Get Lead Count By Filter with internalProgress
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -203,7 +203,7 @@ JD-TC-GetLeadCountByFilter-6
 
     [Documentation]             Get Lead Count By Filter with internalStatus
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -216,7 +216,7 @@ JD-TC-GetLeadCountByFilter-7
 
     [Documentation]             Get Lead Count By Filter with consumerId
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -229,7 +229,7 @@ JD-TC-GetLeadCountByFilter-8
 
     [Documentation]             Get Lead Count By Filter with consumerFirstName
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -242,7 +242,7 @@ JD-TC-GetLeadCountByFilter-9
 
     [Documentation]             Get Lead Count By Filter with consumerLastName
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -255,7 +255,7 @@ JD-TC-GetLeadCountByFilter-10
 
     [Documentation]             Get Lead Count By Filter with createdDate
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -268,7 +268,7 @@ JD-TC-GetLeadCountByFilter-11
 
     [Documentation]             Get Lead Count By Filter with isConverted
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -281,7 +281,7 @@ JD-TC-GetLeadCountByFilter-12
 
     [Documentation]             Get Lead Count By Filter with isRejected
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME50}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

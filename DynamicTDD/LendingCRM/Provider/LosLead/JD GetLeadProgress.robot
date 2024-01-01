@@ -26,7 +26,7 @@ JD-TC-GetLeadProgress-1
 
     [Documentation]             Get lead Progress
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME56}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -51,3 +51,24 @@ JD-TC-GetLeadProgress-1
     Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
     Should Be Equal As Strings    ${resp.json()[0]['name']}         ${name}
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+JD-TC-GetLeadProgress-UH1
+
+    [Documentation]             Get lead Progress without login
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-GetLeadProgress-UH2
+
+    [Documentation]             Get lead Progress with another provider login
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME57}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200

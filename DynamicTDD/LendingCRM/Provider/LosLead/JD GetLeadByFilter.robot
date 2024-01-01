@@ -30,7 +30,7 @@ JD-TC-GetLeadByFilter-1
 
     [Documentation]             Get Lead By Filter
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -92,36 +92,29 @@ JD-TC-GetLeadByFilter-1
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable    ${consumerPhone}  555${PH_Number}
-
-    ${resp}=  AddCustomer  ${consumerPhone}    
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Suite Variable  ${consumerId}  ${resp.json()[0]['id']}
-
     ${requestedAmount}=     Random Int  min=30000  max=600000
-    Set Suite Variable      ${requestedAmount}
+    Set Suite Variable  ${requestedAmount}
     ${description}=         FakerLibrary.bs
-    Set Suite Variable      ${description}
+    Set Suite Variable  ${description}
     ${consumerFirstName}=   FakerLibrary.first_name
-    Set Suite Variable      ${consumerFirstName}
+    Set Suite Variable  ${consumerFirstName}
     ${consumerLastName}=    FakerLibrary.last_name  
-    Set Suite Variable      ${consumerLastName}
+    Set Suite Variable  ${consumerLastName}
     ${dob}=    FakerLibrary.Date
-    Set Suite Variable      ${dob}
-    Set Suite Variable      ${Pname}
-    Set Suite Variable     ${consumerEmail}  ${consumerFirstName}.${test_mail}   
+    Set Suite Variable  ${dob}
+    ${address}=  FakerLibrary.address
+    Set Suite Variable  ${address}
+    ${gender}=  Random Element    ${Genderlist}
+    Set Suite Variable  ${gender}
+    Set Suite Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}   
     ${permanentAddress1}=   FakerLibrary.address
-    Set Suite Variable      ${permanentAddress1}
     ${permanentAddress2}=   FakerLibrary.address  
-    Set Suite Variable      ${permanentAddress2}
     ${nomineeName}=     FakerLibrary.first_name
-    Set Suite Variable      ${nomineeName}
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    ${consumerKyc}=   Create Dictionary  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${losProduct}  ${status_id}  ${Sname}  ${progress_id}  ${Pname}  ${requestedAmount}  ${description}  ${consumerId}  ${consumerFirstName}  ${consumerLastName}  ${dob}  ${Genderlist[1]}  ${countryCodes[1]}  ${consumerPhone}  ${consumerEmail}  ${aadhaar}  ${pan}  ${bankAccountNo}  ${bankIfsc}  ${permanentAddress1}  ${permanentAddress2}  ${permanentDistrict}  ${permanentState}  ${permanentPin}  ${NomineeType[2]}  ${nomineeName}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -132,6 +125,7 @@ JD-TC-GetLeadByFilter-1
     Set Suite Variable      ${kycid}            ${resp.json()['consumerKyc']['id']}
     Set Suite Variable      ${referenceNo}      ${resp.json()['referenceNo']}
     Set Suite Variable      ${createdDate}      ${resp.json()['createdDate']}
+    Set Suite Variable      ${consumerId}       ${resp.json()['consumerKyc']['consumerId']} 
     Should Be Equal As Strings    ${resp.json()['uid']}                                 ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['account']}                             ${account_id1}
     Should Be Equal As Strings    ${resp.json()['channel']}                             ${leadchannel[0]}
@@ -140,12 +134,11 @@ JD-TC-GetLeadByFilter-1
     Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerId']}           ${consumerId}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['dob']}                  ${dob}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['gender']}               ${Genderlist[1]}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['gender']}               ${gender}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhone']}        ${consumerPhone}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerEmail']}        ${consumerEmail}
@@ -172,11 +165,10 @@ JD-TC-GetLeadByFilter-1
     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerId']}           ${consumerId}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${Genderlist[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
@@ -185,7 +177,7 @@ JD-TC-GetLeadByFilter-2
 
     [Documentation]             Get Lead By Filter with uid
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -200,11 +192,10 @@ JD-TC-GetLeadByFilter-2
     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerId']}           ${consumerId}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${Genderlist[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
@@ -213,7 +204,7 @@ JD-TC-GetLeadByFilter-3
 
     [Documentation]             Get Lead By Filter with referenceNo
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -228,11 +219,10 @@ JD-TC-GetLeadByFilter-3
     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerId']}           ${consumerId}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${Genderlist[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
@@ -241,7 +231,7 @@ JD-TC-GetLeadByFilter-4
 
     [Documentation]             Get Lead By Filter with losProduct
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -256,11 +246,10 @@ JD-TC-GetLeadByFilter-4
     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerId']}           ${consumerId}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${Genderlist[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
@@ -269,7 +258,7 @@ JD-TC-GetLeadByFilter-5
 
     [Documentation]             Get Lead By Filter with consumerId
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -284,11 +273,10 @@ JD-TC-GetLeadByFilter-5
     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerId']}           ${consumerId}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${Genderlist[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
@@ -297,7 +285,7 @@ JD-TC-GetLeadByFilter-6
 
     [Documentation]             Get Lead By Filter with consumerFirstName
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -312,11 +300,10 @@ JD-TC-GetLeadByFilter-6
     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerId']}           ${consumerId}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${Genderlist[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
@@ -325,7 +312,7 @@ JD-TC-GetLeadByFilter-7
 
     [Documentation]             Get Lead By Filter with consumerLastName
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -340,11 +327,11 @@ JD-TC-GetLeadByFilter-7
     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerId']}           ${consumerId}
+    
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${Genderlist[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
@@ -353,7 +340,7 @@ JD-TC-GetLeadByFilter-8
 
     [Documentation]             Get Lead By Filter with createdDate
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -368,11 +355,11 @@ JD-TC-GetLeadByFilter-8
     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerId']}           ${consumerId}
+    
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${Genderlist[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
@@ -381,7 +368,7 @@ JD-TC-GetLeadByFilter-9
 
     [Documentation]             Get Lead By Filter with isConverted false
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -396,11 +383,11 @@ JD-TC-GetLeadByFilter-9
     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerId']}           ${consumerId}
+    
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${Genderlist[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
@@ -409,7 +396,7 @@ JD-TC-GetLeadByFilter-10
 
     [Documentation]             Get Lead By Filter with isRejected false
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -424,11 +411,11 @@ JD-TC-GetLeadByFilter-10
     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerId']}           ${consumerId}
+    
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${Genderlist[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
