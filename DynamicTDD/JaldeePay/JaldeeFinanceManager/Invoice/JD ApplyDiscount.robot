@@ -16,6 +16,17 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/musers.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
 
+*** Variables ***
+${waitlistedby}           PROVIDER
+${SERVICE1}               SERVICE1001
+${SERVICE2}               SERVICE2002
+${SERVICE3}               SERVICE3003
+${SERVICE4}               SERVICE4004
+${SERVICE5}               SERVICE3005
+${SERVICE6}               SERVICE4006
+${sample}                     4452135820
+${self}                   0
+
 
 
 *** Test Cases ***
@@ -513,7 +524,7 @@ JD-TC-Apply Discount-UH7
 
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
-        ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
 
     ${privateNote}=     FakerLibrary.word
@@ -537,7 +548,7 @@ JD-TC-Apply Discount-UH7
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${invoiceId}=   FakerLibrary.word
 
-       ${itemName}=    FakerLibrary.word
+    ${itemName}=    FakerLibrary.word
     Set Suite Variable  ${itemName}
     ${price}=   Random Int  min=100  max=1500
     ${price}=  Convert To Number  ${price}  1
@@ -568,9 +579,133 @@ JD-TC-Apply Discount-UH7
 
 
 
+JD-TC-Apply Discount-
+
+    [Documentation]  Create a waitlist for a provider then apply a Discout.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  AddCustomer  ${CUSERNAME1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${cid}  ${resp.json()}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+     
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${CUR_DAY}
+
+    ${resp}=   Create Sample Service  ${SERVICE1}   department=${dep_id}
+    Set Suite Variable    ${ser_id1}    ${resp}  
+    ${resp}=   Create Sample Service  ${SERVICE2}   department=${dep_id}
+    Set Suite Variable    ${ser_id2}    ${resp}  
+    ${resp}=   Create Sample Service  ${SERVICE3}   department=${dep_id}
+    Set Suite Variable    ${ser_id3}    ${resp}  
+    ${q_name}=    FakerLibrary.name
+    Set Suite Variable    ${q_name}
+    ${list}=  Create List   1  2  3  4  5  6  7
+    Set Suite Variable    ${list}
+    ${strt_time}=   db.add_timezone_time     ${tz}  1  00
+    Set Suite Variable    ${strt_time}
+    ${end_time}=    db.add_timezone_time     ${tz}  3  00 
+    Set Suite Variable    ${end_time}   
+    ${parallel}=   Random Int  min=1   max=1
+    Set Suite Variable   ${parallel}
+    ${capacity}=  Random Int   min=10   max=20
+    Set Suite Variable   ${capacity}
+    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  ${ser_id2}  ${ser_id3}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${que_id1}   ${resp.json()}
+    ${desc}=   FakerLibrary.word
+    Set Suite Variable  ${desc}
+    ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+      
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid}  ${wid[0]}
+    ${resp}=  Get Waitlist By Id  ${wid} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  date=${CUR_DAY}  waitlistStatus=${wl_status[1]}  partySize=1  appxWaitingTime=0  waitlistedBy=${waitlistedby}   personsAhead=0
+    Should Be Equal As Strings  ${resp.json()['service']['name']}                 ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id1}
+    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${cid}
+    Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${cid}
+    Should Be Equal As Strings  ${resp.json()['paymentStatus']}         ${paymentStatus[0]}
+    Set Suite Variable   ${fullAmount}  ${resp.json()['fullAmt']}            
 
 
+    ${providerConsumerIdList}=  Create List  ${cid}
+    Set Suite Variable  ${providerConsumerIdList}  
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+    ${invoiceId}=   FakerLibrary.word
+
+    # ${itemName}=    FakerLibrary.word
+    # Set Suite Variable  ${itemName}
+    # ${price}=   Random Int  min=100  max=1500
+    # ${price}=  Convert To Number  ${price}  1
+
+    # ${quantity}=   Random Int  min=5  max=10
+    # ${quantity}=  Convert To Number  ${quantity}  1
+    # ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
+    # ${adhocItemList}=    Create List    ${adhocItemList}
+    
+    ${quantity}=   Random Int  min=500  max=1000
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${servicecharge}=   Random Int  min=5  max=10
 
 
+    ${serviceList}=  Create Dictionary  serviceId=${ser_id1}   quantity=${quantity}  price=${servicecharge}
+    ${serviceList}=    Create List    ${serviceList}
+    ${servicenetRate}=  Evaluate  ${quantity} * ${servicecharge}
+    ${servicenetRate}=  Convert To Number  ${servicenetRate}   2
+    Set Test Variable   ${servicenetRate}
+    
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}   ynwUuid=${wid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid3}   ${resp.json()['uidList'][0]} 
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+    ${resp}=   Apply Discount   ${invoice_uid3}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 
+    ${resp}=  Get Invoice By Id  ${invoice_uid3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['id']}  ${discountId}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['name']}  ${discount1}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['discountType']}  ${disctype[0]}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['discountValue']}  ${discountprice}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['calculationType']}  ${calctype[1]}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['privateNote']}  ${privateNote}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['displayNote']}  ${displayNote}
