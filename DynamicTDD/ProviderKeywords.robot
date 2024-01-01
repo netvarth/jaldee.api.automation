@@ -12439,7 +12439,6 @@ Create Appointment Reminder Settings
     ${resp}=    POST On Session   ynw    /provider/consumerNotification/settings   data=${data}  expected_status=any
     [Return]  ${resp}
 
-<<<<<<< HEAD
 Get Bookings Invoices
      [Arguments]      ${ynwuuid}  
     Check And Create YNW Session
@@ -12457,7 +12456,8 @@ Get next invoice Id
     [Arguments]   ${locationId}    
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/${locationId}/nextInvoiceId     expected_status=any
-=======
+
+
 Validate phone number
     [Arguments]     ${countryCode}  ${phoneNumber}
     Check And Create YNW Session
@@ -12633,5 +12633,4 @@ Change Lead Progress LOS
 
     Check And Create YNW Session  
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/progress/${id}   expected_status=any
->>>>>>> refs/remotes/origin/master
     [Return]  ${resp}
