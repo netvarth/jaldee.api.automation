@@ -2140,3 +2140,19 @@ appmntReminder_Consumer_APP= "[consumer],\n[appttime] reminder for your appointm
 CUSTOMER_FIRST_NAME_REQUIRED= "Please enter the first name"
 CUSTOMER_LAST_NAME_REQUIRED= "Please enter the last name"
 
+# Los
+
+CONSUMER_REQUIRED = "Consumer required."
+CONSUMER_FIRST_NAME_REQUIRED = "Consumer first name required."
+CONSUMER_FIRST_NAME_LENGTH_EXCEED ="Consumer first name should not exceed 250 chars"
+CONSUMER_LAST_NAME_REQUIRED = "Consumer last name required."
+CONSUMER_LAST_NAME_LENGTH_EXCEED ="Consumer last name should not exceed 250 chars"
+CONSUMER_DOB_REQUIRED = "Consumer DOB required."
+CONSUMER_GENDER_REQUIRED = "Consumer gender required."
+CONSUMER_PHONE_NO_REQUIRED = "Consumer phone number required."
+EMAIL_ID_REQUIRED = "Email Id required"
+AADHAAR_NUMBER_REQUIRED =  "Aadhaar number required."
+INVALID_AADHAAR_NUMBER =  "Invalid Aadhaar number."
+PAN_REQUIRED = "PAN required"
+INVALID_PAN = "Invalid PAN"
+

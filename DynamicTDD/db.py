@@ -2925,7 +2925,7 @@ def convert_slot_12hr(slot):
             # print t2
             t2=t2.strftime('%I:%M %p')
             # print t2
-            return t1+" - "+t2
+            return t1+ " - " +t2
         except Exception as e:
             print ("Exception:", e)
             print ("Exception at line no:", e.__traceback__.tb_lineno)

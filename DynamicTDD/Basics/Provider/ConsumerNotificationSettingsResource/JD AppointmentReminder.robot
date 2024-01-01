@@ -170,6 +170,7 @@ JD-TC-AppointmentReminder-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${date}=  Convert Date  ${DAY1}  result_format="%a, %d %b %Y"
+    ${date}=         evaluate       '${date}'.replace('"','')
     ${converted_slot1}=  convert_slot_12hr  ${slot1} 
     ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[consumer] 	${userName}
     ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[appttime] 	First
@@ -178,7 +179,7 @@ JD-TC-AppointmentReminder-1
     ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[date] 	${date}
     ${appmntReminder_Consumer_APP} = 	Replace String 	${appmntReminder_Consumer_APP} 	[service] 	${SERVICE1}
     ${service_format_date}=   DateTime.Convert Date    ${DAY1}   result_format="%a, %d %b %Y"
-    ${service_format}=  Set Variable  ${SERVICE1}${SPACE}on${SPACE}${service_format_date}
+    ${service_format}=  Set Variable  ${SERVICE1}${SPACE}on${SPACE}"${service_format_date}"
     
     ${resp}=  Get Consumer Communications
     Log   ${resp.json()}

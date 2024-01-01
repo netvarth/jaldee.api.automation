@@ -2281,7 +2281,7 @@ JD-TC-Appointment_Report-UH8
 
 
 JD-TC-Appointment_Report-UH9
-    [Documentation]  Generate Appointment_report of a provider when DATE_RANGE is greater than 90_days
+    [Documentation]  Generate Appointment_report of a provider when DATE_RANGE is greater than 180_days (limit increased to 180 from 90)
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD}
     Log  ${resp.content}
@@ -2290,7 +2290,7 @@ JD-TC-Appointment_Report-UH9
     Set Test Variable  ${status-eq}              SUCCESS
     Set Test Variable  ${reportType}             APPOINTMENT
     Set Test Variable  ${reportDateCategory1}    DATE_RANGE
-    ${Add_DAY91}=  db.add_timezone_date  ${tz}  92
+    ${Add_DAY91}=  db.add_timezone_date  ${tz}  182
     Set Suite Variable  ${Add_DAY91}
     ${filter}=  Create Dictionary   apptForId-eq=${jid_c6}   date-ge=${TODAY}   date-le=${Add_DAY91}
     ${resp}=  Generate Report REST details  ${reportType}  ${reportDateCategory1}  ${filter}

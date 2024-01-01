@@ -506,7 +506,7 @@ JD-TC-Payment_Report-2
     Set Test Variable  ${reportDateCategory}      TODAY
     # ${don_amt11}=  Convert To String  ${don_amt} 
     ${filter2}=  Create Dictionary   
-    ${resp}=  Generate Report REST details  ${reportType[4]}  ${reportDateCategory}  ${filter2}
+    ${resp}=  Generate Report REST details  ${reportType[3]}  ${reportDateCategory}  ${filter2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${token_id}   ${resp.json()}
@@ -514,7 +514,7 @@ JD-TC-Payment_Report-2
     ${resp}=  Get Report Status By Token Id  ${token_id}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  reportType=${Report_Types[2]}   reportResponseType=${ReportResponseType[0]}   status=${Report_Status[0]}
+    Verify Response  ${resp}  reportType=${Report_Types[3]}   reportResponseType=${ReportResponseType[0]}   status=${Report_Status[0]}
     Set Suite Variable  ${ReportId1_c8}      ${resp.json()['reportRequestId']}
     Should Be Equal As Strings  Today       ${resp.json()['reportContent']['reportHeader']['Time Period']}
     Should Be Equal As Strings  Donation Report         ${resp.json()['reportContent']['reportName']}
