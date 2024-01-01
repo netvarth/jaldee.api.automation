@@ -223,7 +223,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-1
     ${instructions2}=   FakerLibrary.sentence
 
     ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=ACTIVE    instructions=${instructions1} 
-    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH0}   status=ACTIVE    instructions=${instructions2} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH0}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
     ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
     ${resp}=  Update Virtual Calling Mode   ${vcm1}
@@ -248,7 +248,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-1
     Set Test Variable  ${ModeId1}          ${PUSERPH_id0}
     Set Test Variable  ${ModeStatus1}      ACTIVE
     ${Description1}=    FakerLibrary.sentence
-    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Description1}
+    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Description1}
     ${virtualCallingModes1}=  Create List  ${VScallingMode1}
     ${Total1}=   Random Int   min=100   max=500
     ${Total1}=  Convert To Number  ${Total1}  1
@@ -257,7 +257,6 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-1
     # ${vstype}=  Evaluate  random.choice($vservicetype)  random
     Set Test Variable  ${vstype}  ${vservicetype[0]}
     ${resp}=  Create virtual Service  ${SERVICE1}   ${description}   5   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${Total1}  ${bool[0]}   ${bool[0]}   ${vstype}   ${virtualCallingModes1}
-    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${S_id1}  ${resp.json()} 
@@ -416,6 +415,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-1
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid1}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -492,6 +492,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-2
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid2}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -580,6 +581,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-UH1
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid3}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -698,6 +700,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-3
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid4}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -802,6 +805,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-4
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid5}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -908,6 +912,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-UH2
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid6}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1013,6 +1018,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-5
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid7}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1103,6 +1109,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-6
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid8}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1299,7 +1306,7 @@ JD-TC-GetAppointmentMeetingDetails-(Non billable Subdomain)-7
     ${instructions2}=   FakerLibrary.sentence
 
     ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id2}   status=ACTIVE    instructions=${instructions1} 
-    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH2}   status=ACTIVE    instructions=${instructions2} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH2}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
     ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
     ${resp}=  Update Virtual Calling Mode   ${vcm1}

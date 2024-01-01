@@ -171,12 +171,31 @@ JD-TC-Remove_Department_Icon-UH1
     ${resp}=    Get Department Icon    ${dep_id}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['departmentName']}                   ${dep_name1}
+    Should Be Equal As Strings    ${resp.json()['departmentId']}                     ${dep_id}
+    Should Be Equal As Strings    ${resp.json()['departmentCode']}                   ${dep_code1}
+    Should Be Equal As Strings    ${resp.json()['departmentDescription']}            ${dep_desc1}
+    Should Be Equal As Strings    ${resp.json()['departmentStatus']}                 ${status[0]}
+    Should Be Equal As Strings    ${resp.json()['departmentLogo'][0]['owner']}       ${provider_id1}
+    Should Be Equal As Strings    ${resp.json()['departmentLogo'][0]['fileName']}    ${fileName}
+    Should Be Equal As Strings    ${resp.json()['departmentLogo'][0]['fileSize']}    ${fileSize}
+    Should Be Equal As Strings    ${resp.json()['departmentLogo'][0]['caption']}     ${caption1}
+    Should Be Equal As Strings    ${resp.json()['departmentLogo'][0]['fileType']}    ${fileType1}
+    Should Be Equal As Strings    ${resp.json()['departmentLogo'][0]['action']}      ${LoanAction[0]}
 
-    ${invdep}=    FakerLibrary.Random Number
+    ${invdep}=    Random Int  min=100000  max=200000
 
     ${resp}=    Remove Department Icon    ${invdep}    ${provider_id1}    ${fileName}    ${fileSize}    ${LoanAction[0]}    ${caption1}    ${fileType1}    ${order}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
+
+    ${resp}=    Get Department Icon    ${dep_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['departmentName']}                   ${dep_name1}
+    Should Be Equal As Strings    ${resp.json()['departmentId']}                     ${dep_id}
+    Should Be Equal As Strings    ${resp.json()['departmentLogo'][0]['owner']}       ${provider_id1}
+    Should Be Equal As Strings    ${resp.json()['departmentLogo'][0]['fileName']}    ${fileName}
 
 
 JD-TC-Remove_Department_Icon-UH2
@@ -191,7 +210,12 @@ JD-TC-Remove_Department_Icon-UH2
 
     ${resp}=    Remove Department Icon    ${dep_id}    ${invprdid}    ${fileName}    ${fileSize}    ${LoanAction[0]}    ${caption1}    ${fileType1}    ${order}
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Department Icon    ${dep_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.content}   ${emptylist}
 
 
 JD-TC-Remove_Department_Icon-UH3
@@ -204,7 +228,15 @@ JD-TC-Remove_Department_Icon-UH3
 
     ${resp}=    Remove Department Icon    ${dep_id}    ${provider_id1}    ${empty}    ${fileSize}    ${LoanAction[0]}    ${caption1}    ${fileType1}    ${order}
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Department Icon    ${dep_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['departmentName']}                   ${dep_name1}
+    Should Be Equal As Strings    ${resp.json()['departmentId']}                     ${dep_id}
+    Should Be Equal As Strings    ${resp.json()['departmentLogo'][0]['owner']}       ${provider_id1}
+    Should Be Equal As Strings    ${resp.json()['departmentLogo'][0]['fileName']}    ${fileName}
 
 
 JD-TC-Remove_Department_Icon-UH4
@@ -268,7 +300,15 @@ JD-TC-Remove_Department_Icon-UH8
 
     ${resp}=    Remove Department Icon    ${dep_id}    ${provider_id1}    ${fileName}    ${fileSize}    ${LoanAction[0]}    ${caption1}    ${empty}    ${order}
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=    Get Department Icon    ${dep_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['departmentName']}                   ${dep_name1}
+    Should Be Equal As Strings    ${resp.json()['departmentId']}                     ${dep_id}
+    Should Be Equal As Strings    ${resp.json()['departmentLogo'][0]['owner']}       ${provider_id1}
+    Should Be Equal As Strings    ${resp.json()['departmentLogo'][0]['fileName']}    ${fileName}
 
 
 JD-TC-Remove_Department_Icon-UH9

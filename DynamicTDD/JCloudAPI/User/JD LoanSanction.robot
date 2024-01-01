@@ -100,8 +100,12 @@ JD-TC-LoanSanction-1
 
 # .....commented bcoz the loan sanction flow changed.......
 
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Suite Variable  ${prov_fname11}  ${resp.json()['firstName']}
+    # Set Test Variable  ${provider_id1}  ${resp.json()['id']}
+    # Set Suite Variable  ${prov_fname11}  ${resp.json()['firstName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Test Variable  ${prov_fname11}  ${decrypted_data['firstName']}
 
     ${resp}=  Consumer Login  ${CUSERNAME21}  ${PASSWORD}
     Log  ${resp.content}

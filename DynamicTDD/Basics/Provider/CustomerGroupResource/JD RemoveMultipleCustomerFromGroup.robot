@@ -1011,7 +1011,7 @@ JD-TC-RemoveMultipleCustomerFromGroup-UH6
     ${resp}=  Remove Multiple Customer from Group   ${groupName}  @{cust ids1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${INVALID_ID}"
+    Should Be Equal As Strings  "${resp.json()}"  "${INVALID_CONS_ID}"
 
 
 JD-TC-RemoveMultipleCustomerFromGroup-UH7

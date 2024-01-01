@@ -293,6 +293,7 @@ JD-TC-Get User communications-1
 
     ${cid}=  get_id  ${CUSERNAME25}
     ${msg}=  FakerLibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${CUR_DAY}=  db.add_timezone_date  ${tz}  2   
     ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${CUR_DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${u_id1}  ${self}
@@ -326,6 +327,7 @@ JD-TC-Get User communications-1
     Should Be Equal As Strings  ${resp.status_code}  200 
 
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Imageupload.providerWLCom   ${cookie}  ${cwid0}  ${msg}  ${messageType[0]}  ${caption}   ${EMPTY}  ${EMPTY}
     Log  ${resp.json()}
@@ -449,6 +451,7 @@ JD-TC-Get User communications-2
     Should Be Equal As Strings  ${resp.status_code}  200 
 
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Imageupload.providerWLCom   ${cookie}  ${cwid0}  ${msg}  ${messageType[0]}  ${caption}   ${EMPTY}  ${EMPTY}
     Log  ${resp.json()}

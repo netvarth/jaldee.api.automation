@@ -284,7 +284,9 @@ JD-TC-ConsumerAppointmentCommunication-1
 
     # @{fileswithcaption}=  Create List   ${EMPTY}
     # ${msg}=  Fakerlibrary.sentence
+    # Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Imageupload.CAppmntcomm   ${cookie}   ${apptid1}  ${pid}   ${msg}  ${messageType[0]}  ${EMPTY}  ${EMPTY}  ${EMPTY}  
     Log  ${resp}
@@ -368,6 +370,7 @@ JD-TC-ConsumerAppointmentCommunication-2
 
     ${caption}=  Fakerlibrary.sentence
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.CAppmntcomm   ${cookie}  ${apptid1}  ${pid}   ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -454,6 +457,7 @@ JD-TC-ConsumerAppointmentCommunication-3
     @{fileswithcaption}=  Create List   ${filecap_dict1}   ${filecap_dict2}  ${filecap_dict3}
 
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.CAppmntCommMultiFile   ${cookie}  ${apptid1}  ${pid}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -526,6 +530,7 @@ JD-TC-ConsumerAppointmentCommunication-4
     @{fileswithcaption}=  Create List   ${filecap_dict1}
 
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.CAppmntcomm   ${cookie}  ${apptid1}  ${pid}   ${msg}  ${messageType[0]}  ${EMPTY}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -622,6 +627,7 @@ JD-TC-ConsumerAppointmentCommunication-5
     @{fileswithcaption}=  Create List   ${filecap_dict1}
 
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     Set Suite Variable   ${msg}
     ${resp}=  Imageupload.CAppmntcomm   ${cookie}   ${apptid2}   ${pid}   ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
@@ -767,6 +773,7 @@ JD-TC-ConsumerAppointmentCommunication-8
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.CAppmntcomm   ${cookie}   ${apptid1}  ${pid}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -966,6 +973,7 @@ JD-TC-ConsumerAppointmentCommunication-9
 #     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
 #     @{fileswithcaption}=  Create List   ${filecap_dict1}
 #     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
 #     ${resp}=  Imageupload.CAppmntcomm   ${cookie}   ${apptid1}  ${pid}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
 #     Log  ${resp}
 #     Should Be Equal As Strings  ${resp.status_code}    419
@@ -983,6 +991,7 @@ JD-TC-ConsumerAppointmentCommunication-UH2
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.CAppmntcomm   ${cookie}   ${apptid1}  ${pid}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}    403
@@ -1000,6 +1009,7 @@ JD-TC-ConsumerAppointmentCommunication-UH3
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${p_id5}=    Random Int   min=1000    max=2000
     ${resp}=  Imageupload.CAppmntcomm    ${cookie}   ${apptid1}  ${p_id5}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
@@ -1018,6 +1028,7 @@ JD-TC-ConsumerAppointmentCommunication-UH4
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.CAppmntcomm   ${cookie}   ${apptid1}  ${pid}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}    403

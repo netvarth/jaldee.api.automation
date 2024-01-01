@@ -257,7 +257,8 @@ JD-TC-Payment By Consumer-1
     ${cid1}=  get_id  ${CUSERNAME15}
     Set Suite Variable   ${cid1}
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -573,7 +574,8 @@ JD-TC-Payment By Consumer-2
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${cid1for}   ${resp.json()}
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid1}  ${p4_qid}  ${DAY}  ${p4_sid1}  ${msg}  ${bool[0]}  ${cid1for}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -702,7 +704,8 @@ JD-TC-Payment By Consumer-3
     # ${cid2}=  get_id  ${CUSERNAME16}
     # Set Suite Variable   ${cid2}
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p2_qid}  ${DAY}  ${p2_sid1}  ${msg}  ${bool[0]}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -852,7 +855,8 @@ JD-TC-Payment By Consumer-4
     # ${cid1}=  get_id  ${CUSERNAME15}
     # Set Test Variable   ${cid1}
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -1017,7 +1021,8 @@ JD-TC-Payment By Consumer-5
     ${cid1}=  get_id  ${CUSERNAME15}
     Set Test Variable   ${cid1}
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -1216,7 +1221,8 @@ JD-TC-Payment By Consumer-6
     # ${cid2}=  get_id  ${CUSERNAME16}
     # Set Test Variable   ${cid2}
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid11}  ${p2_qid}  ${DAY}  ${p2_sid2}  ${msg}  ${bool[0]}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -1376,7 +1382,8 @@ JD-TC-Payment By Consumer-UH1
     ${cid1}=  get_id  ${CUSERNAME15}
     Set Test Variable   ${cid1}
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -1639,7 +1646,8 @@ JD-TC-Payment By Consumer-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid2}  ${resp.json()[0]['id']}
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist  ${cid2}  ${p2_sid3}  ${p2_qid}  ${DAY}  ${msg}  ${bool[1]}  ${cid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1679,7 +1687,8 @@ JD-TC-Payment By Consumer-UH6
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${DAY2}=  db.add_timezone_date  ${tz}  3  
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist  ${cid2}  ${p2_sid3}  ${p2_qid}  ${DAY2}  ${msg}  ${bool[1]}  ${cid2}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1754,7 +1763,8 @@ JD-TC-Payment By Consumer-UH9
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${cid1for}   ${resp.json()}
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid1}  ${p4_qid}  ${DAY}  ${p4_sid1}  ${msg}  ${bool[0]}  ${cid1for}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -1930,7 +1940,8 @@ JD-TC-Payment By Consumer-UH11
     ${cid1}=  get_id  ${CUSERNAME15}
     Set Suite Variable   ${cid1}
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -2066,7 +2077,8 @@ JD-TC-Payment By Consumer-UH12
     ${cid1}=  get_id  ${CUSERNAME15}
     Set Suite Variable   ${cid1}
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${coupons}=  Create List  ${cupn_code}  
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
     Log   ${resp.content}
@@ -2552,7 +2564,8 @@ JD-TC-Payment By Consumer-UH13
     ${cid1}=  get_id  ${CUSERNAME15}
     Set Suite Variable   ${cid1}
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${coupons}=  Create List  ${cupn_code}   ${jcoupon1}
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
     Log   ${resp.content}
@@ -2561,7 +2574,8 @@ JD-TC-Payment By Consumer-UH13
     Set Suite Variable  ${cwid}  ${wid[0]} 
     
 
-    # ${msg}=  FakerLibrary.word
+    # ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     # ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200 
@@ -2739,7 +2753,8 @@ JD-TC-Payment By Consumer-1
     ${cid1}=  get_id  ${CUSERNAME15}
     Set Suite Variable   ${cid1}
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -3065,7 +3080,8 @@ JD-TC-Payment By Consumer-2
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${cid1for}   ${resp.json()}
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid1}  ${p4_qid}  ${DAY}  ${p4_sid1}  ${msg}  ${bool[0]}  ${cid1for}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 

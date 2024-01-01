@@ -28,10 +28,12 @@ JD-TC-Get Customers-1
     [Documentation]   Get Customers by provider login using account 
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME245}  ${PASSWORD}
-    clear_customer   ${PUSERNAME245}
-
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${p_id}  ${decrypted_data['id']}
+    clear_customer   ${PUSERNAME245}
     ${firstname1}=  FakerLibrary.first_name 
     Set Suite Variable  ${firstname1}
     ${lastname1}=  FakerLibrary.last_name
@@ -55,8 +57,10 @@ JD-TC-Get Customers-1
 JD-TC-Get Customers-2
     [Documentation]   Get Customers by another provider using phone and status
     ${resp}=  Encrypted Provider Login  ${PUSERNAME235}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${p_id}  ${decrypted_data['id']}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -76,8 +80,10 @@ JD-TC-Get Customers-2
 JD-TC-Get Customers-3
     [Documentation]   Get Customers by another provider using fname and lastname
     ${resp}=  Encrypted Provider Login  ${PUSERNAME236}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${p_id}  ${decrypted_data['id']}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date

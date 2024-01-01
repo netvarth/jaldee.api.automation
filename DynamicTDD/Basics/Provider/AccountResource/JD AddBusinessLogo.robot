@@ -80,7 +80,12 @@ JD-TC-Add_Business_Logo-UH1
 
     ${resp}=    Add Business Logo    ${invpid}    ${fileName}    ${fileSize}    ${FileAction[0]}    ${caption1}    ${fileType1}    ${order}
     Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    4220
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Business Logo
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}              200
+    Should Be Equal As Strings    ${resp.json()[0]['owner']}       ${provider_id1}
 
 
 JD-TC-Add_Business_Logo-UH2

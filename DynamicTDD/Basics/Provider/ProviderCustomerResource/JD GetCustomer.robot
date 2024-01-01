@@ -364,6 +364,7 @@ JD-TC-Get Customers-7
     # Set Suite Variable    ${cookie} 
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile}  
     Log  ${resp.json()}

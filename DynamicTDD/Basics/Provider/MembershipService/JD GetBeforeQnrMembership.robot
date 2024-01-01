@@ -117,15 +117,22 @@ JD-TC-Get_Before_Member_QNR-1
     END
 
     FOR  ${i}  IN RANGE   1  ${j}
-        ${resp}=  Change Status of Questionnaire   ${accountId}  ${status[0]}  ${qid11}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
 
         ${qns}   Get Questionnaire By Id  ${accountId}  ${qid11}  
         Log  ${qns.json()}
         Should Be Equal As Strings  ${qns.status_code}  200
+        Set Suite Variable   ${Qnr_Status}   ${qns.json()['status']}
+
+        IF   '${Qnr_Status}' == '${status[1]}'
+            ${resp}=  Change Status of Questionnaire   ${accountId}  ${status[0]}  ${qid11}
+            Log  ${resp.json()}
+            Should Be Equal As Strings  ${resp.status_code}  200
+        END
+        ${qns}   Get Questionnaire By Id  ${accountId}  ${qid11}  
+        Log  ${qns.json()}
+        Should Be Equal As Strings  ${qns.status_code}  200
         Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
-    END
+    END 
     
     ${resp}=  Get Questionnaire List   ${accountId}  
     Log  ${resp.json()}

@@ -30,6 +30,9 @@ ${longi1}    ${68.031759}
 
 Testing py fn
 
+    
+    Log  ${TEST NAME}
+    Log  ${SUITE NAME}
     db.get_Host_name_IP
     ${rand_ph}=  FakerLibrary.Phone Number
     ${Locale} =  FakerLibrary.Locale

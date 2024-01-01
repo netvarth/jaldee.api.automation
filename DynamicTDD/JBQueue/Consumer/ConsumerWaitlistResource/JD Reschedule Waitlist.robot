@@ -4537,6 +4537,7 @@ JD-TC-Reschedule Waitlist-UH11
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${q_id}
 
     ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid1}  ${waitlist_cancl_reasn[1]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

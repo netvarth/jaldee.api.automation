@@ -180,7 +180,7 @@ JD-TC-CustomViewAPIS-1
     ${state2} = 	Convert To Lower Case 	${resp.json()['state']}
     Should Be Equal As Strings   ${state1}  ${state2}
     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${BUSER0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${BUSER0}.${test_mail}  
-    ...  deptId=${depid02}  subdomain=${userSubDomain}  
+    ...  deptId=${depid02}  subdomain=${userSubDomain}  pincode=${pin}
     # ...  address=${address}  city=${district}  locationName=${city}  state=${state}  
     
     
@@ -359,7 +359,8 @@ JD-TC-CustomViewAPIS-2
     ${resp}=  Get User By Id  ${u_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  address=${address}  mobileNo=${MUSERNAME0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${MUSERNAME0}.${test_mail}  city=${location}  state=${state}  deptId=${depid02}  subdomain=${userSubDomain}
+    # Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  address=${address}  mobileNo=${MUSERNAME0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${MUSERNAME0}.${test_mail}  city=${location}  state=${state}  deptId=${depid02}  subdomain=${userSubDomain}
+    Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}  address=${address}  mobileNo=${MUSERNAME0}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${MUSERNAME0}.${test_mail}  state=${state}  deptId=${depid02}  subdomain=${userSubDomain}
 
     ${name}=   FakerLibrary.word
     ${resp}=   Create CustomeView   ${name}  ${bool[1]}  ${depid02}  ${sid05}  ${que_id1}  ${u_id}

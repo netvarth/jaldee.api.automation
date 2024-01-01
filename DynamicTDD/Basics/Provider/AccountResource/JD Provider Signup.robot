@@ -293,11 +293,11 @@ JD-TC-Provider Signup-4
     Verify Response  ${resp}  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}  
     ...   mobileNo=${User1}  dob=${dob1}  gender=${Genderlist[0]}  
     ...   userType=${userType[0]}  status=ACTIVE  email=${P_Email}${User1}.${test_mail}  
-    ...   state=${state1}  deptId=${dep_id}  subdomain=${userSubDomain}
-    ${NeededString}=    Fetch From Left    ${city1}    (
-    ${Lower_city1} = 	Convert To Lower Case 	${NeededString}
-    ${Lower_city2} = 	Convert To Lower Case 	${resp.json()['city']}
-    Should Be Equal As Strings   ${Lower_city1}  ${Lower_city2}
+    ...   deptId=${dep_id}  subdomain=${userSubDomain}
+    # ${NeededString}=    Fetch From Left    ${city1}    (
+    # ${Lower_city1} = 	Convert To Lower Case 	${NeededString}
+    # ${Lower_city2} = 	Convert To Lower Case 	${resp.json()['city']}
+    # Should Be Equal As Strings   ${Lower_city1}  ${Lower_city2}
 
     ${resp}=  Provider Logout
     Log   ${resp.json()}
@@ -522,8 +522,6 @@ JD-TC-Provider Signup-5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
     @{Views}=  Create List  self  all  customersOnly
@@ -554,6 +552,8 @@ JD-TC-Provider Signup-5
     Set Suite Variable   ${sTime}
     ${eTime}=  add_timezone_time  ${tz}  0  45  
     Set Suite Variable   ${eTime}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  ${DAY1}
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200

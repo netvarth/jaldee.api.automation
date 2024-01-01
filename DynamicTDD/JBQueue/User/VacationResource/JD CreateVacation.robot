@@ -1737,7 +1737,8 @@ JD-TC-CreateVacation-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${consid1}  ${resp.json()['id']}
     
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${DAY}=  db.add_timezone_date  ${tz}  7  
     ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${DAY}  ${s_id}  ${msg}  ${bool[0]}  ${u_id}  0

@@ -607,6 +607,7 @@ JD-TC-WaitlistAttachment-7
     Should Be Equal As Strings  ${resp.json()['hasAttachment']}    ${bool[0]}
 
     ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid1}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

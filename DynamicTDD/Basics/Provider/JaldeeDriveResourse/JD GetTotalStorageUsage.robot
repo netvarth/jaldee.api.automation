@@ -84,6 +84,7 @@ JD-TC-GetTotalStorageUsage-1
    
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${pdffile}  
     Log  ${resp.json()}
@@ -211,6 +212,7 @@ JD-TC-GetTotalStorageUsage-2
 
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile}  
     Log  ${resp.json()}

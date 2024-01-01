@@ -22,6 +22,7 @@ EMAIL_FAILED= "Unable to send email message. Please enter a valid email for noti
 
 PLEASE_ENTER_FIRST_NAME= "Please enter the first name"
 PLEASE_ENTER_LAST_NAME= "Please enter the last name"
+FIRST_NAME_REQUIRED= "Please enter First Name"
 
 PHONE_AND_FIRST_NAME_OR_LAST_NAME_REQUIRED= "Both first name and last name or phone number required for searching"
 EMAIL_PHONE_NO_CANT_REPEAT= "Alert! The email id  you have entered is already registered with Jaldee. Try again with different email id.In case, you have forgotten your password,try retrieving the same."
@@ -293,7 +294,7 @@ PRIMARY_PHONENO_REQUIRED= "Please enter your contact number."
 COUNTRY_CODEREQUIRED= "Country code required."
 
 
-FIRST_NAMEREQUIRED= "First name required."
+# FIRST_NAMEREQUIRED= "First name required."
 INVAID_EMAILFORMAT= "Please enter a valid email address for notification."
 INVAID_DATE_FORMAT= "Incorrect date format"
 FNAMEREQUIRED= "First name required"
@@ -1708,7 +1709,7 @@ TASK_ALREADY_COMPLETED="You do not have permission to update the activity. Activ
 TEMPLATE_NAME_REQUIRED= "Template Name required"
 INVALID_CONSUMER_ID= "Invalid consumer id"
 NO_PERMISSION_TO_UPDATE= "You do not have permission to update the lead."
-INVALID_LEAD_ID= "Invalid Lead ID"
+# INVALID_LEAD_ID= "Invalid Lead ID"
 LEAD_ALREDY_ENABLED= "Lead already enabled"
 LEAD_ALREDY_DISABLED= "Lead already disabled"
 ATTACHMENT_NOT_FOUND= "attachment not found"
@@ -1825,6 +1826,9 @@ UNABLE_TO_CHANGE_INTERNAL_STATUS= "Unable to change internal status. Current Loa
 NOMINEE_NAME_REQUIRED= "Nominee Name required"
 LOAN_APPLICATION_REF_REQ= "Loan Application Reference Required"
 ALREADY_APPROVAL_REQUESTED= "Loan Application already rejected."
+
+Invalid_Progress_ID= "Invalid Progress ID"
+
 #jaldee drive
 
 UPLOAD_ATLEAST_ONEFILE= "Need to upload atleast one file"
@@ -2193,4 +2197,7 @@ COUNTRY_CODE_INVALID_FOR_SECONDARY_NO = "Invalid secondary phone No country code
 COUNTRY_CODE_INVALID_FOR_TERTIARY_NO = "Invalid tertiary phone No country code."
 
 appmntReminder_Consumer_APP= "[consumer],\n[appttime] reminder for your appointment with\n[provider],\n[time],[date]\n[service]"
+
+CUSTOMER_FIRST_NAME_REQUIRED= "Please enter the first name"
+CUSTOMER_LAST_NAME_REQUIRED= "Please enter the last name"
 

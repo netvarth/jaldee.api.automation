@@ -124,8 +124,12 @@ JD-TC-GetLeadsWithFilterForUser-1
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Suite Variable  ${prov_fname11}  ${resp.json()['firstName']}
+    # Set Test Variable  ${provider_id1}  ${resp.json()['id']}
+    # Set Suite Variable  ${prov_fname11}  ${resp.json()['firstName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Test Variable  ${prov_fname11}  ${decrypted_data['firstName']}
 
     clear_customer   ${HLMUSERNAME4}
 
@@ -811,8 +815,12 @@ JD-TC-GetLeadsWithFilterForUser-17
     ${resp}=  Encrypted Provider Login  ${MUSERNAME41}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${provider_id1}  ${resp.json()['id']}
-    Set Suite Variable  ${prov_fname11}  ${resp.json()['firstName']}
+    # Set Test Variable  ${provider_id1}  ${resp.json()['id']}
+    # Set Suite Variable  ${prov_fname11}  ${resp.json()['firstName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id1}  ${decrypted_data['id']}
+    Set Test Variable  ${prov_fname11}  ${decrypted_data['firstName']}
 
     ${highest_package}=  get_highest_license_pkg
     ${resp}=   Change License Package  ${highest_package[0]}

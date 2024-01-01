@@ -412,6 +412,7 @@ JD-TC-ProviderOrderCommunication-1
     ${filecap_dict1}=  Create Dictionary   file=${EMPTY}   caption=${EMPTY}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.providerOrderCommunication   ${cookie}  ${orderid11}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -503,6 +504,7 @@ JD-TC-ProviderOrderCommunication-2
     ${filecap_dict1}=  Create Dictionary   file=${pdffile}   caption=${caption1}
     ${fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
 
     ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERNAME67}  ${PASSWORD}
     Log  ${resp.json()}
@@ -615,6 +617,7 @@ JD-TC-ProviderOrderCommunication-3
     ${filecap_dict3}=  Create Dictionary   file=${pdffile}   caption=${caption3}
     @{fileswithcaption}=  Create List   ${filecap_dict1}   ${filecap_dict2}  ${filecap_dict3}
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.providerOrderCommunication   ${cookie}  ${orderid11}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption}
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -763,6 +766,7 @@ JD-TC-ProviderOrderCommunication-4
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${EMPTY}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.providerOrderCommunication   ${cookie}  ${orderid11}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -871,6 +875,7 @@ JD-TC-ProviderOrderCommunication-7
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.providerOrderCommunication   ${cookie}  ${orderid22}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption}
     
     ${resp}=  Get Appointment Messages

@@ -165,7 +165,6 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -220,8 +219,6 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  onlineCheckIns=${bool[1]}
 
-
-
     # ${resp}=  Enable Disable Virtual Service  Enable
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
@@ -233,7 +230,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     ${instructions2}=   FakerLibrary.sentence
 
     ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=ACTIVE    instructions=${instructions1} 
-    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH0}   status=ACTIVE    instructions=${instructions2} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH0}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
     ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
     ${resp}=  Update Virtual Calling Mode   ${vcm1}
@@ -253,17 +250,12 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['status']}          ACTIVE
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['instructions']}    ${instructions2}
 
-
-
-
-    
-    
     ${PUSERPH_id0}=  Evaluate  ${PUSERNAME}+50505
     Set Test Variable  ${callingMode1}     ${CallingModes[1]}
     Set Test Variable  ${ModeId1}          ${PUSERPH_id0}
     Set Test Variable  ${ModeStatus1}      ACTIVE
     ${Description1}=    FakerLibrary.sentence
-    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Description1}
+    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Description1}
     ${virtualCallingModes1}=  Create List  ${VScallingMode1}
 
     ${Total1}=   Random Int   min=100   max=500
@@ -281,7 +273,6 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Log  ${resp.json()}
     Verify Response  ${resp}  name=${SERVICE1}  description=${description}  serviceDuration=5   notification=${bool[1]}   notificationType=${notifytype[2]}   totalAmount=${Total1}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}  serviceType=virtualService   virtualServiceType=${vstype}
     
-
     ${ZOOM_Pid0}=  Format String  ${ZOOM_url}  ${PUSERPH_id0}
     Set Suite Variable   ${ZOOM_Pid0}
 
@@ -291,7 +282,6 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     ${Description2}=    FakerLibrary.sentence
     ${VScallingMode2}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   status=${ModeStatus2}   instructions=${Description2}
     ${virtualCallingModes2}=  Create List  ${VScallingMode2}
-
 
     ${Total2}=   Random Int   min=100   max=500
     ${Total2}=  Convert To Number  ${Total2}  1
@@ -308,7 +298,6 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Log  ${resp.json()}
     Verify Response  ${resp}  name=${SERVICE2}  description=${description2}  serviceDuration=5   notification=${bool[1]}   notificationType=${notifytype[2]}   totalAmount=${Total2}  status=${status[0]}  bType=${btype}  isPrePayment=${bool[0]}  serviceType=virtualService   virtualServiceType=${vstype2}
     
-  
     ${resp}=  Get Service
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -319,7 +308,6 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Set Suite Variable   ${P1SERVICE1}   ${resp.json()[1]['name']}
     Set Suite Variable   ${p1_s3}   ${resp.json()[2]['id']}
     Set Suite Variable   ${P1SERVICE3}   ${resp.json()[2]['name']}
-
 
     ${resp}=    Get Locations
     Log   ${resp.json()}
@@ -366,7 +354,6 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${pcid0}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${pcid0}
 
-
     ${resp}=  Create Waitlist Meeting Request   ${wid1}   ${CallingModes[1]}   ${waitlistedby[1]}  ${waitlistedby[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -374,7 +361,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  ProviderLogout
+    ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Consumer Login  ${CUSERNAME0}  ${PASSWORD}
@@ -393,14 +380,13 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid1}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
 
 
 JD-TC-TeleserviceWaitlist-(Billable Subdomain)-2
@@ -467,6 +453,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-2
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid2}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -522,7 +509,6 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${VIRTUAL_CALLING_MODES_INVALID}"
 
-
     ${resp}=  Create Waitlist Meeting Request   ${wid3}   ${CallingModes[1]}   ${waitlistedby[1]}  ${waitlistedby[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -539,7 +525,6 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${VIRTUAL_CALLING_MODES_INVALID}"
 
-
     ${resp}=  Create Waitlist Meeting Request   ${wid3}   ${CallingModes[3]}   ${waitlistedby[1]}  ${waitlistedby[0]}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${VIRTUAL_CALLING_MODES_INVALID}"
@@ -549,7 +534,6 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${VIRTUAL_CALLING_MODES_INVALID}"
     
-
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -569,6 +553,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid3}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -605,11 +590,9 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-3
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcid0}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
-
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
 
     ${resp}=  Create Waitlist Meeting Request   ${wid4}   ${CallingModes[1]}   ${waitlistedby[1]}  ${waitlistedby[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -618,7 +601,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-     ${resp}=  ProviderLogout
+    ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Consumer Login  ${CUSERNAME0}  ${PASSWORD}
@@ -637,6 +620,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-3
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid4}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -687,11 +671,9 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-4
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
-
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
 
     ${resp}=  Create Waitlist Meeting Request   ${wid5}   ${CallingModes[0]}   ${waitlistedby[1]}  ${waitlistedby[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -719,6 +701,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-4
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid5}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -756,11 +739,9 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH2
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
 
-
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
 
     ${resp}=  Create Waitlist Meeting Request   ${wid6}   ${CallingModes[0]}   ${waitlistedby[1]}  ${waitlistedby[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -797,6 +778,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH2
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid6}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -831,7 +813,6 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-5
     Should Be Equal As Strings  ${resp.json()['jaldeeConsumer']['id']}  ${cid}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${queueId}
-
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
@@ -874,6 +855,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-5
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid7}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -952,6 +934,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-6
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid8}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1128,7 +1111,7 @@ JD-TC-TeleserviceWaitlist-(Non billable Subdomain)-7
     ${instructions2}=   FakerLibrary.sentence
 
     ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id2}   status=ACTIVE    instructions=${instructions1} 
-    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH2}   status=ACTIVE    instructions=${instructions2} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH2}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
     ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
     ${resp}=  Update Virtual Calling Mode   ${vcm1}

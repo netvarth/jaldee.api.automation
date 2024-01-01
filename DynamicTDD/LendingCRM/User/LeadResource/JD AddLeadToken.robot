@@ -1102,7 +1102,8 @@ JD-TC-AddLeadToken-5
     Set Suite Variable   ${cid1}
     ${DAY5}=  db.add_timezone_date  ${tz}  5  
 
-    ${msg}=  FakerLibrary.word
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid1}  ${que_id}  ${DAY5}  ${s_id3}  ${msg}  ${bool[0]}  ${cidfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
