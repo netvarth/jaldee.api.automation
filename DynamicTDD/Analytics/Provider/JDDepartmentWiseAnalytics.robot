@@ -830,7 +830,7 @@ JD-TC-DepartmentWiseAnalytics-3
     ${instructions2}=   FakerLibrary.sentence
 
     ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=ACTIVE    instructions=${instructions1} 
-    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_U2}   status=ACTIVE    instructions=${instructions2} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERNAME_U2}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
     ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
     # ${resp}=  Update Virtual Calling Mode   ${CallingModes[0]}  ${ZOOM_id0}   ACTIVE  ${instructions1}   ${CallingModes[1]}  ${PUSERNAME_U2}   ACTIVE   ${instructions2}

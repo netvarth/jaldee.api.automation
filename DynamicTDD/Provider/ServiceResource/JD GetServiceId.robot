@@ -202,7 +202,7 @@ JD-TC-GetServiceId-6-pre_info_&_post_info
         ${ZOOM_Pid1}=  Format String  ${ZOOM_url}  ${PUSERPH_id}
 
         ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_Pid1}   status=ACTIVE    instructions=${Desc1} 
-        ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH_id}   status=ACTIVE    instructions=${Desc1} 
+        ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH_id}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${Desc1} 
         ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
         ${resp}=  Update Virtual Calling Mode   ${vcm1}

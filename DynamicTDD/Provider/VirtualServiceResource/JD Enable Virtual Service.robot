@@ -144,7 +144,7 @@ JD-TC-EnableVirtualService-(Billable Subdomain)-1
     ${instructions2}=   FakerLibrary.sentence
 
     ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=ACTIVE    instructions=${instructions1} 
-    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH0}   status=ACTIVE    instructions=${instructions2} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH0}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
     ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
     ${resp}=  Update Virtual Calling Mode   ${vcm1}
@@ -268,7 +268,7 @@ JD-TC-EnableVirtualService-(Non-Billable Subdomain)-2
     ${instructions2}=   FakerLibrary.sentence
 
     ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=ACTIVE    instructions=${instructions1} 
-    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH2}   status=ACTIVE    instructions=${instructions2} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH2}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
     ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
     ${resp}=  Update Virtual Calling Mode   ${vcm1}
@@ -337,7 +337,7 @@ JD-TC-EnableVirtualService-(Billable Subdomain)-UH3
     ${instructions2}=   FakerLibrary.sentence
 
     ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=ACTIVE    instructions=${instructions1} 
-    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH0}   status=ACTIVE    instructions=${instructions2} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH0}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
     ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
     ${resp}=  Update Virtual Calling Mode   ${vcm1}
@@ -367,7 +367,7 @@ JD-TC-EnableVirtualService-(Non-Billable Subdomain)-UH4
     ${instructions2}=   FakerLibrary.sentence
 
     ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=ACTIVE    instructions=${instructions1} 
-    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH2}   status=ACTIVE    instructions=${instructions2} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH2}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
     ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
     ${resp}=  Update Virtual Calling Mode   ${vcm1}
