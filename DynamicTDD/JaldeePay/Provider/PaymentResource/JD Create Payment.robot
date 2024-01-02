@@ -500,7 +500,7 @@ JD-TC-Create Payment-2
     Set Suite Variable  ${consumer_id3}  ${resp.json()['id']} 
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${coupons}=  Create List  ${cup_code}
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid0}  ${p1_q1}  ${DAY}  ${p1_s2}  ${desc}  ${bool[0]}  ${coupons}  ${self}
     Log  ${resp.json()}

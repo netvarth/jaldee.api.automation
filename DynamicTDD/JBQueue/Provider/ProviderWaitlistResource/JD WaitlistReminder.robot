@@ -66,7 +66,7 @@ JD-TC-ConsumerNotificationSettings-1
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${reminder_time}=  Random Int   min=5   max=5
 
     ${resp}=  Create Consumer Notification Settings  ${NotificationResourceType[0]}  ${EventType[6]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  

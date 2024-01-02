@@ -168,7 +168,7 @@ JD-TC-AppointmentCommunication-1
 
     @{fileswithcaption}=  Create List   ${EMPTY}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.PAppmntComm   ${cookie}  ${apptid1}  ${msg}  ${messageType[0]}  ${EMPTY}  ${EMPTY}  ${EMPTY}  
     Log  ${resp}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -380,7 +380,7 @@ JD-TC-AppointmentCommunication-2
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.PAppmntComm   ${cookie}  ${apptid1}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -593,7 +593,7 @@ JD-TC-AppointmentCommunication-3
     @{fileswithcaption}=  Create List   ${filecap_dict1}   ${filecap_dict2}  ${filecap_dict3}
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.PAppmntCommMultiFile   ${cookie}  ${apptid1}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption}
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -821,7 +821,7 @@ JD-TC-AppointmentCommunication-4
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${EMPTY}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.PAppmntComm   ${cookie}  ${apptid1}  ${msg}  ${messageType[0]}  ${EMPTY}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1041,7 +1041,7 @@ JD-TC-AppointmentCommunication-5
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.PAppmntComm   ${cookie}  ${apptid1}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1259,7 +1259,7 @@ JD-TC-AppointmentCommunication-6
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.PAppmntComm   ${cookie}  ${apptid1}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1477,7 +1477,7 @@ JD-TC-AppointmentCommunication-7
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.PAppmntComm   ${cookie}  ${apptid1}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1727,7 +1727,7 @@ JD-TC-AppointmentCommunication-8
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.PAppmntComm   ${cookie}  ${apptid1}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2224,7 +2224,7 @@ JD-TC-AppointmentCommunication-9
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.PAppmntComm   ${cookie}  ${apptid1}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -2273,7 +2273,7 @@ JD-TC-AppointmentCommunication-9
 #     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
 #     @{fileswithcaption}=  Create List   ${filecap_dict1}
 #     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
 #     ${resp}=  Imageupload.PAppmntComm   ${cookie}  ${apptid1}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
 #     Log  ${resp}
 #     Should Be Equal As Strings  ${resp.status_code}  419
@@ -2290,7 +2290,7 @@ JD-TC-AppointmentCommunication-UH2
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.PAppmntComm   ${cookie}  ${apptid1}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  403
@@ -2306,7 +2306,7 @@ JD-TC-AppointmentCommunication-UH3
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.PAppmntComm   ${cookie}  000000abcd  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  404
@@ -2323,7 +2323,7 @@ JD-TC-AppointmentCommunication-UH4
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.PAppmntComm   ${cookie}  ${apptid1}  ${msg}  ${messageType[0]}  ${caption1}  ${EMPTY}  ${jpgfile}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  401

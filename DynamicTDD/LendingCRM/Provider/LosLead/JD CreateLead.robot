@@ -91,12 +91,13 @@ JD-TC-CreateLead-1
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
     ${permanentAddress1}=  FakerLibrary.address
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
 
     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
     Log   ${resp.json()}
@@ -194,6 +195,7 @@ JD-TC-CreateLead-2
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${requestedAmount}=     Random Int  min=30000  max=600000
     ${description}=         FakerLibrary.bs
     ${consumerFirstName}=   FakerLibrary.first_name
@@ -201,7 +203,7 @@ JD-TC-CreateLead-2
     ${dob}=    FakerLibrary.Date
     ${address}=  FakerLibrary.address
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}   
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}   
     ${permanentAddress1}=   FakerLibrary.address
     ${permanentAddress2}=   FakerLibrary.address  
     ${nomineeName}=     FakerLibrary.first_name
@@ -288,12 +290,13 @@ JD-TC-CreateLead-3
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
     ${permanentAddress1}=  FakerLibrary.address
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
 
     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
     Log   ${resp.json()}
@@ -394,12 +397,13 @@ JD-TC-CreateLead-4
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
     ${permanentAddress1}=  FakerLibrary.address
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
 
     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
     Log   ${resp.json()}
@@ -500,12 +504,13 @@ JD-TC-CreateLead-5
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
     ${permanentAddress1}=  FakerLibrary.address
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
 
     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
     Log   ${resp.json()}
@@ -605,12 +610,13 @@ JD-TC-CreateLead-6
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
     ${permanentAddress1}=  FakerLibrary.address
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
 
     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
     Log   ${resp.json()}
@@ -712,12 +718,13 @@ JD-TC-CreateLead-7
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
     ${permanentAddress1}=  FakerLibrary.address
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
 
     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
     Log   ${resp.json()}
@@ -817,12 +824,13 @@ JD-TC-CreateLead-8
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
     ${permanentAddress1}=  FakerLibrary.address
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
 
     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
     Log   ${resp.json()}
@@ -841,7 +849,7 @@ JD-TC-CreateLead-8
     ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
     ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
 #     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}
+    ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}
 
     # ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${losProduct}  ${status_id}  ${Sname}  ${progress_id}  ${Pname}  ${requestedAmount}  ${description}  ${consumerId}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${aadhaar}  ${pan}  ${bankAccountNo}  ${bankIfsc}  ${permanentAddress1}  ${permanentAddress2}  ${permanentDistrict}  ${permanentState}  ${permanentPin}  ${NomineeType[2]}  ${nomineeName}
     ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
@@ -858,6 +866,1110 @@ JD-TC-CreateLead-8
     ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
+
+
+JD-TC-CreateLead-9
+
+    [Documentation]  create lead using EMPTY consumerEmail
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id1}  ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${EMPTY}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
+
+    ${resp}=    Get Lead LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-CreateLead-10
+
+    [Documentation]  create lead using EMPTY Aadhar card details.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id1}  ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  aadhaar=${EMPTY}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
+
+    ${resp}=    Get Lead LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-CreateLead-11
+
+    [Documentation]  create lead using EMPTY pan card details.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id1}  ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  pan=${EMPTY}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
+
+    ${resp}=    Get Lead LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-CreateLead-12
+
+    [Documentation]  create lead using EMPTY bankAccountNo details.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id1}  ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  bankAccountNo=${EMPTY}  bankIfsc=${bankIfsc}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
+
+    ${resp}=    Get Lead LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-CreateLead-13
+
+    [Documentation]  create lead using EMPTY bankIfsc details.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id1}  ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  bankAccountNo=${bankAccountNo}  bankIfsc=${EMPTY}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
+
+    ${resp}=    Get Lead LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+
+JD-TC-CreateLead-14
+
+    [Documentation]  create lead without bankIfsc details.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id1}  ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  bankAccountNo=${bankAccountNo}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
+
+    ${resp}=    Get Lead LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-CreateLead-15
+
+    [Documentation]  create lead using EMPTY permanentAddress1.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id1}  ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  permanentAddress1=${EMPTY}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
+
+    ${resp}=    Get Lead LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-CreateLead-16
+
+    [Documentation]  create lead using EMPTY permanentAddress2.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id1}  ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  permanentAddress2=${EMPTY}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
+
+    ${resp}=    Get Lead LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+
+JD-TC-CreateLead-17
+
+    [Documentation]  create lead using EMPTY permanentDistrict.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id1}  ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  permanentDistrict=${EMPTY}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
+
+    ${resp}=    Get Lead LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+
+JD-TC-CreateLead-18
+
+    [Documentation]  create lead using EMPTY permanentState.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id1}  ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  permanentState=${EMPTY}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
+
+    ${resp}=    Get Lead LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+
+JD-TC-CreateLead-19
+
+    [Documentation]  create lead using EMPTY permanentPin.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id1}  ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  permanentPin=${EMPTY}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
+
+    ${resp}=    Get Lead LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
 
 
@@ -925,12 +2037,13 @@ JD-TC-CreateLead-UH1
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
     ${permanentAddress1}=  FakerLibrary.address
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
 
     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
     Log   ${resp.json()}
@@ -948,10 +2061,1035 @@ JD-TC-CreateLead-UH1
     ${nomineeName}=     FakerLibrary.first_name
     ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
     ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-#     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${NONE}
 
     # ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${losProduct}  ${status_id}  ${Sname}  ${progress_id}  ${Pname}  ${requestedAmount}  ${description}  ${consumerId}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${aadhaar}  ${pan}  ${bankAccountNo}  ${bankIfsc}  ${permanentAddress1}  ${permanentAddress2}  ${permanentDistrict}  ${permanentState}  ${permanentPin}  ${NomineeType[2]}  ${nomineeName}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_FIRST_NAME_REQUIRED}
+
+
+JD-TC-CreateLead-UH2
+
+    [Documentation]  Create Lead without login
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${resp}=  Provider Logout
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    # ${permanentAddress1}=   FakerLibrary.address
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    
+    # ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${losProduct}  ${status_id}  ${Sname}  ${progress_id}  ${Pname}  ${requestedAmount}  ${description}  ${consumerId}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${aadhaar}  ${pan}  ${bankAccountNo}  ${bankIfsc}  ${permanentAddress1}  ${permanentAddress2}  ${permanentDistrict}  ${permanentState}  ${permanentPin}  ${NomineeType[2]}  ${nomineeName}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings  ${resp.json()}  ${SESSION_EXPIRED}
+
+    # ${resp}=    Get Lead LOS   ${lead_uid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-CreateLead-UH3
+
+    [Documentation]  Consumer creates a lead
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${resp}=  Provider Logout
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    # ${permanentAddress1}=   FakerLibrary.address
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    
+    # ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${losProduct}  ${status_id}  ${Sname}  ${progress_id}  ${Pname}  ${requestedAmount}  ${description}  ${consumerId}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${aadhaar}  ${pan}  ${bankAccountNo}  ${bankIfsc}  ${permanentAddress1}  ${permanentAddress2}  ${permanentDistrict}  ${permanentState}  ${permanentPin}  ${NomineeType[2]}  ${nomineeName}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings    ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}
+
+    # ${resp}=    Get Lead LOS   ${lead_uid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-CreateLead-UH4
+
+    [Documentation]  Provider Customer creates a lead
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${account_id1}  ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${resp}=  Provider Logout
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${account_id1}   alternateLoginId=${consumerEmail}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer SignUp    ${consumerFirstName}  ${consumerLastName}  ${consumerEmail}  ${consumerPhone}  ${account_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=  Customer Logout   
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token   ${consumerPhone}  ${account_id1}  ${token}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    # ${permanentAddress1}=   FakerLibrary.address
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    
+    # ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${losProduct}  ${status_id}  ${Sname}  ${progress_id}  ${Pname}  ${requestedAmount}  ${description}  ${consumerId}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${aadhaar}  ${pan}  ${bankAccountNo}  ${bankIfsc}  ${permanentAddress1}  ${permanentAddress2}  ${permanentDistrict}  ${permanentState}  ${permanentPin}  ${NomineeType[2]}  ${nomineeName}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings    ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}
+
+    # ${resp}=    Get Lead LOS   ${lead_uid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+
+
+
+JD-TC-CreateLead-UH5
+
+    [Documentation]  create lead using another provider's customer
+
+    
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+    
+    ${PH_Number}    Random Number   digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${resp}=  Provider Logout
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${account_id1}  ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    # ${permanentAddress1}=   FakerLibrary.address
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    
+    # ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${losProduct}  ${status_id}  ${Sname}  ${progress_id}  ${Pname}  ${requestedAmount}  ${description}  ${consumerId}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${aadhaar}  ${pan}  ${bankAccountNo}  ${bankIfsc}  ${permanentAddress1}  ${permanentAddress2}  ${permanentDistrict}  ${permanentState}  ${permanentPin}  ${NomineeType[2]}  ${nomineeName}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION}
+
+
+
+JD-TC-CreateLead-UH6
+
+    [Documentation]  create lead using invalid provider customer id
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${invalid_cust_id}=  Random Int  min=1000   max=5000
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${invalid_cust_id}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_NOT_FOUND}
+
+
+JD-TC-CreateLead-UH7
+
+    [Documentation]  create lead using empty consumerKyc
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${NONE}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_REQUIRED}
+
+
+JD-TC-CreateLead-UH8
+
+    [Documentation]  create lead using empty consumer firstname
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${EMPTY}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_FIRST_NAME_REQUIRED}
+
+
+JD-TC-CreateLead-UH9
+
+    [Documentation]  create lead using empty consumer lastname
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${EMPTY}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_LAST_NAME_REQUIRED}
+
+
+JD-TC-CreateLead-UH10
+
+    [Documentation]  Add customer without customer details and create lead only using consumer id
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_FIRST_NAME_REQUIRED}
+
+
+JD-TC-CreateLead-UH11
+
+    [Documentation]  create lead using empty nominee name
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  nomineeType=${nomineeType[2]}  nomineeName=${EMPTY}
+
     ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -961,13 +3099,405 @@ JD-TC-CreateLead-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    comment  There should be no change in the existing customer details even if different details are provided when creating lead.
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+
+
+JD-TC-CreateLead-UH12
+
+    [Documentation]  create lead using empty customer dob
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${EMPTY}  gender=${gender}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_DOB_REQUIRED}
+
+
+JD-TC-CreateLead-UH13
+
+    [Documentation]  create lead using empty customer consumerPhone
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${EMPTY}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_PHONE_NO_REQUIRED}
+
+
+JD-TC-CreateLead-UH14
+
+    [Documentation]  create lead using customer consumerPhone without consumerPhoneCode
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhone=${consumerPhone}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
+
+    ${resp}=    Get Lead LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
 
+JD-TC-CreateLead-UH15
+
+    [Documentation]  create lead using customer consumerPhone and EMPTY consumerPhoneCode
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${account_id1}  ${resp.json()['id']}
+
+    FOR    ${i}    IN RANGE  0  3
+        ${pin}=  get_pincode
+        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
+        IF    '${kwstatus}' == 'FAIL'
+                Continue For Loop
+        ELSE IF    '${kwstatus}' == 'PASS'
+                Exit For Loop
+        END
+    END
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
+    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
+    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
+
+    ${Sname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Status LOS  ${Sname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${status_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${Pname}=    FakerLibrary.name
+
+    ${resp}=    Create Lead Progress LOS  ${Pname}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${progress_id}      ${resp.json()['id']}
+
+    ${resp}=    Get Lead Progress LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    ${consumerFirstName}=   FakerLibrary.first_name
+    ${consumerLastName}=    FakerLibrary.last_name  
+    ${dob}=    FakerLibrary.Date
+    ${permanentAddress1}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+
+    ${requestedAmount}=     Random Int  min=30000  max=600000
+    ${description}=         FakerLibrary.bs
+    ${permanentAddress2}=   FakerLibrary.address  
+    ${nomineeName}=     FakerLibrary.first_name
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhone=${consumerPhone}  consumerPhoneCode=${EMPTY}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}    ${COUNTRY_CODEREQUIRED}
+
+
+
+***COMMENT***
 # ######################### channel is part of url so invalid case also channel is enum so glitch
 # JD-TC-CreateLead-UH2
 
@@ -1033,12 +3563,13 @@ JD-TC-CreateLead-UH1
 #     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
 #     Log  ${PH_Number}
 #     Set Test Variable    ${consumerPhone}  555${PH_Number}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
 #     ${consumerFirstName}=   FakerLibrary.first_name
 #     ${consumerLastName}=    FakerLibrary.last_name  
 #     ${dob}=    FakerLibrary.Date
 #     ${permanentAddress1}=  FakerLibrary.address
 #     ${gender}=  Random Element    ${Genderlist}
-#     Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
+#     Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
 
 #     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
 #     Log   ${resp.json()}
@@ -1141,12 +3672,13 @@ JD-TC-CreateLead-UH1
 #     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
 #     Log  ${PH_Number}
 #     Set Test Variable    ${consumerPhone}  555${PH_Number}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
 #     ${consumerFirstName}=   FakerLibrary.first_name
 #     ${consumerLastName}=    FakerLibrary.last_name  
 #     ${dob}=    FakerLibrary.Date
 #     ${permanentAddress1}=  FakerLibrary.address
 #     ${gender}=  Random Element    ${Genderlist}
-#     Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
+#     Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
 
 #     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
 #     Log   ${resp.json()}
@@ -1244,12 +3776,13 @@ JD-TC-CreateLead-UH1
 #     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
 #     Log  ${PH_Number}
 #     Set Test Variable    ${consumerPhone}  555${PH_Number}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
 #     ${consumerFirstName}=   FakerLibrary.first_name
 #     ${consumerLastName}=    FakerLibrary.last_name  
 #     ${dob}=    FakerLibrary.Date
 #     ${permanentAddress1}=  FakerLibrary.address
 #     ${gender}=  Random Element    ${Genderlist}
-#     Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
+#     Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
 
 #     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
 #     Log   ${resp.json()}
@@ -1279,953 +3812,6 @@ JD-TC-CreateLead-UH1
 #     ${resp}=    Get Lead LOS   ${lead_uid}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
-
-
-JD-TC-CreateLead-UH5
-
-    [Documentation]  Create Lead without login
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}  200
-    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${resp}=  Provider Logout
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    # ${permanentAddress1}=   FakerLibrary.address
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    
-    # ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${losProduct}  ${status_id}  ${Sname}  ${progress_id}  ${Pname}  ${requestedAmount}  ${description}  ${consumerId}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${aadhaar}  ${pan}  ${bankAccountNo}  ${bankIfsc}  ${permanentAddress1}  ${permanentAddress2}  ${permanentDistrict}  ${permanentState}  ${permanentPin}  ${NomineeType[2]}  ${nomineeName}
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   419
-    Should Be Equal As Strings  ${resp.json()}  ${SESSION_EXPIRED}
-
-#     ${resp}=    Get Lead LOS   ${lead_uid}
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-
-
-JD-TC-CreateLead-UH6
-
-    [Documentation]  Consumer creates a lead
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}  200
-    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${resp}=  Provider Logout
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Consumer Login  ${CUSERNAME20}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    # ${permanentAddress1}=   FakerLibrary.address
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    
-    # ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${losProduct}  ${status_id}  ${Sname}  ${progress_id}  ${Pname}  ${requestedAmount}  ${description}  ${consumerId}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${aadhaar}  ${pan}  ${bankAccountNo}  ${bankIfsc}  ${permanentAddress1}  ${permanentAddress2}  ${permanentDistrict}  ${permanentState}  ${permanentPin}  ${NomineeType[2]}  ${nomineeName}
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   401
-    Should Be Equal As Strings    ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}
-
-#     ${resp}=    Get Lead LOS   ${lead_uid}
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-
-
-JD-TC-CreateLead-UH7
-
-    [Documentation]  Provider Customer creates a lead
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${account_id1}  ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${resp}=  Provider Logout
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Send Otp For Login    ${consumerPhone}    ${account_id1}   alternateLoginId=${consumerEmail}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
-
-    ${resp}=    ProviderConsumer SignUp    ${consumerFirstName}  ${consumerLastName}  ${consumerEmail}  ${consumerPhone}  ${account_id1}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200    
-
-    ${resp}=  Customer Logout   
-    Should Be Equal As Strings    ${resp.status_code}    200
-   
-    ${resp}=    ProviderConsumer Login with token   ${consumerPhone}  ${account_id1}  ${token}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    # ${permanentAddress1}=   FakerLibrary.address
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    
-    # ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${losProduct}  ${status_id}  ${Sname}  ${progress_id}  ${Pname}  ${requestedAmount}  ${description}  ${consumerId}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${aadhaar}  ${pan}  ${bankAccountNo}  ${bankIfsc}  ${permanentAddress1}  ${permanentAddress2}  ${permanentDistrict}  ${permanentState}  ${permanentPin}  ${NomineeType[2]}  ${nomineeName}
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   401
-    Should Be Equal As Strings    ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}
-
-#     ${resp}=    Get Lead LOS   ${lead_uid}
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-
-
-
-
-JD-TC-CreateLead-UH8
-
-    [Documentation]  create lead using another provider's customer
-
-    
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME31}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-    
-    ${PH_Number}    Random Number   digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${resp}=  Provider Logout
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${account_id1}  ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    # ${permanentAddress1}=   FakerLibrary.address
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    
-    # ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${losProduct}  ${status_id}  ${Sname}  ${progress_id}  ${Pname}  ${requestedAmount}  ${description}  ${consumerId}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${aadhaar}  ${pan}  ${bankAccountNo}  ${bankIfsc}  ${permanentAddress1}  ${permanentAddress2}  ${permanentDistrict}  ${permanentState}  ${permanentPin}  ${NomineeType[2]}  ${nomineeName}
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   401
-    Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION}
-
-#     ${resp}=    Get Lead LOS   ${lead_uid}
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-
-
-JD-TC-CreateLead-UH9
-
-    [Documentation]  create lead using invalid provider customer id
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}  200
-    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${invalid_cust_id}=  Random Int  min=1000   max=5000
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${invalid_cust_id}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
-
-    ${resp}=    Get Lead LOS   ${lead_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-
-
-JD-TC-CreateLead-UH10
-
-    [Documentation]  create lead using empty consumerKyc
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}  200
-    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${NONE}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
-
-    ${resp}=    Get Lead LOS   ${lead_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-
-
-JD-TC-CreateLead-UH11
-
-    [Documentation]  create lead using empty consumer firstname
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}  200
-    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${EMPTY}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}
-
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_FIRST_NAME_REQUIRED}
-
-
-JD-TC-CreateLead-UH12
-
-    [Documentation]  create lead using empty consumer lastname
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}  200
-    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${EMPTY}  dob=${dob}  gender=${gender}
-
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_LAST_NAME_REQUIRED}
-
-
-JD-TC-CreateLead-UH13
-
-    [Documentation]  Add customer without customer details and create lead only using consumer id
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}  200
-    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}
-
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
-
-    ${resp}=    Get Lead LOS   ${lead_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
 
 
 # ##################################################nominee type is enum so glitch
@@ -2293,12 +3879,13 @@ JD-TC-CreateLead-UH13
 #     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
 #     Log  ${PH_Number}
 #     Set Test Variable    ${consumerPhone}  555${PH_Number}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
 #     ${consumerFirstName}=   FakerLibrary.first_name
 #     ${consumerLastName}=    FakerLibrary.last_name  
 #     ${dob}=    FakerLibrary.Date
 #     ${permanentAddress1}=  FakerLibrary.address
 #     ${gender}=  Random Element    ${Genderlist}
-#     Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
+#     Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
 
 #     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
 #     Log   ${resp.json()}
@@ -2330,204 +3917,6 @@ JD-TC-CreateLead-UH13
 #     ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings      ${resp.status_code}  200
-
-
-JD-TC-CreateLead-UH15
-
-    [Documentation]  create lead using empty nominee name
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}  200
-    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  nomineeType=${nomineeType[2]}  nomineeName=${EMPTY}
-
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
-
-    ${resp}=    Get Lead LOS   ${lead_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-
-
-JD-TC-CreateLead-UH16
-
-    [Documentation]  create lead using empty customer dob
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}  200
-    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${EMPTY}  gender=${gender}
-
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_DOB_REQUIRED}
 
 
 # ##################################Gender is enum so glitch
@@ -2595,12 +3984,13 @@ JD-TC-CreateLead-UH16
 #     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
 #     Log  ${PH_Number}
 #     Set Test Variable    ${consumerPhone}  555${PH_Number}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
 #     ${consumerFirstName}=   FakerLibrary.first_name
 #     ${consumerLastName}=    FakerLibrary.last_name  
 #     ${dob}=    FakerLibrary.Date
 #     ${permanentAddress1}=  FakerLibrary.address
 #     ${gender}=  Random Element    ${Genderlist}
-#     Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
+#     Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
 
 #     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
 #     Log   ${resp.json()}
@@ -2624,995 +4014,5 @@ JD-TC-CreateLead-UH16
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   422
 #     Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_GENDER_REQUIRED}
-
-
-JD-TC-CreateLead-UH18
-
-    [Documentation]  create lead using empty customer consumerPhone
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}  200
-    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  consumerPhone=${EMPTY}
-
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_PHONE_NO_REQUIRED}
-
-
-JD-TC-CreateLead-UH19
-
-    [Documentation]  create lead using customer consumerPhone without consumerPhoneCode
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}  200
-    Set Test Variable                    ${account_id1}       ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhone=${consumerPhone}
-
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
-
-    ${resp}=    Get Lead LOS   ${lead_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-
-
-JD-TC-CreateLead-UH20
-
-    [Documentation]  create lead using customer consumerPhone and EMPTY consumerPhoneCode
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id1}  ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhone=${consumerPhone}  consumerPhoneCode=${EMPTY}
-
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
-
-    ${resp}=    Get Lead LOS   ${lead_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-
-
-JD-TC-CreateLead-UH21
-
-    [Documentation]  create lead using EMPTY consumerEmail
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id1}  ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerEmail=${EMPTY}
-
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}    ${EMAIL_ID_REQUIRED}
-
-
-JD-TC-CreateLead-UH22
-
-    [Documentation]  create lead using EMPTY Aadhar card details.
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id1}  ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  aadhaar=${EMPTY}
-
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}    ${INVALID_AADHAAR_NUMBER}
-
-
-JD-TC-CreateLead-UH23
-
-    [Documentation]  create lead using EMPTY pan card details.
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id1}  ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  pan=${EMPTY}
-
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}    ${INVALID_PAN}
-
-
-JD-TC-CreateLead-UH24
-
-    [Documentation]  create lead using EMPTY bankAccountNo details.
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id1}  ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  bankAccountNo=${EMPTY}  bankIfsc=${bankIfsc}
-
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}    ${INVALID_AADHAAR_NUMBER}
-
-
-JD-TC-CreateLead-UH25
-
-    [Documentation]  create lead using EMPTY bankIfsc details.
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id1}  ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  bankAccountNo=${bankAccountNo}  bankIfsc=${EMPTY}
-
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
-
-    ${resp}=    Get Lead LOS   ${lead_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-
-
-JD-TC-CreateLead-UH26
-
-    [Documentation]  create lead without bankIfsc details.
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id1}  ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  bankAccountNo=${bankAccountNo}
-
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
-
-    ${resp}=    Get Lead LOS   ${lead_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-
-
-JD-TC-CreateLead-UH27
-
-    [Documentation]  create lead using EMPTY permanentAddress1.
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id1}  ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${Sname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Status LOS  ${Sname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${status_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${status_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Sname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${Pname}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Progress LOS  ${Pname}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${progress_id}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Progress LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${progress_id}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${permanentAddress1}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}
-
-    ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
-
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
-    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    # ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}  consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  bankAccountNo=${bankAccountNo}
-
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
-
-    ${resp}=    Get Lead LOS   ${lead_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
 
 

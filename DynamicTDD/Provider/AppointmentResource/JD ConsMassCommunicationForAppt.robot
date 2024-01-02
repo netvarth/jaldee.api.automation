@@ -160,7 +160,7 @@ JD-TC-ConsMassCommunicationForAppt-1
     ${filecap_dict3}=  Create Dictionary   file=${pdffile}   caption=${caption3}
     @{fileswithcaption}=  Create List   ${filecap_dict1}   ${filecap_dict2}  ${filecap_dict3}
     ${msg}=  FakerLibrary.text
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     Set Suite Variable  ${msg}
     ${resp}=  Consumer Mass Communication for Appt  ${cookie}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${msg}    ${fileswithcaption}      ${apptid1}  
     Log   ${resp.json()}
