@@ -20,7 +20,7 @@ JD-TC-Get specializations Sub Domain -1
        Should Be Equal As Strings    ${resp.status_code}   200
 
        Should Contain    "${resp.json()}"  Allergists 
-       Should Contain    "${resp.json()}"  Anaesthesiology 
+       Should Contain    "${resp.json()}"  Anesthesiologist 
        Should Contain    "${resp.json()}"  Andrology
        Should Contain    "${resp.json()}"  Audiology
        Should Contain    "${resp.json()}"  BariatricSurgery
@@ -68,7 +68,7 @@ JD-TC-Get specializations Sub Domain -2
        Should Be Equal As Strings    ${resp.status_code}   200
 
        Should Contain    "${resp.json()}"  Allergists 
-       Should Contain    "${resp.json()}"  Anaesthesiology 
+       Should Contain    "${resp.json()}"  Anesthesiologist 
        Should Contain    "${resp.json()}"  Andrology
        Should Contain    "${resp.json()}"  Audiology
        Should Contain    "${resp.json()}"  BariatricSurgery
@@ -116,7 +116,7 @@ JD-TC-Get specializations Sub Domain -3
        Should Be Equal As Strings    ${resp.status_code}   200
      
        Should Contain    "${resp.json()}"  Allergists 
-       Should Contain    "${resp.json()}"  Anaesthesiology 
+       Should Contain    "${resp.json()}"  Anesthesiologist 
        Should Contain    "${resp.json()}"  Andrology
        Should Contain    "${resp.json()}"  Audiology
        Should Contain    "${resp.json()}"  BariatricSurgery

@@ -18,7 +18,10 @@ JD-TC-Get Provider Communication-1
     clear_provider_msgs  ${PUSERNAME5}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
     ${a_id}=  get_acc_id  ${PUSERNAME5}
     ${id}=  get_id  ${CUSERNAME2} 
     Set Suite Variable  ${id}  ${id}

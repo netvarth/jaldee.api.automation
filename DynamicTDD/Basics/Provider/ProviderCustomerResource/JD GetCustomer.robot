@@ -334,7 +334,7 @@ JD-TC-Get Customers-7
     
 
 
-   ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -415,21 +415,24 @@ JD-TC-Get Customers-7
 
 JD-TC-Get Customers-8
     [Documentation]  Add a new valid customer ang get that customer using secondary phone number filter
-     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${p_id}  ${resp.json()['id']}
-     ${firstname}=  FakerLibrary.first_name
-     ${lastname}=  FakerLibrary.last_name
-     ${ph2}=  Evaluate  ${PUSERNAME23}+73009
-     ${dob}=  FakerLibrary.Date
-     ${gender}=  Random Element    ${Genderlist}
-     ${resp}=  AddCustomer  ${phone1}   firstName=${firstname}   lastName=${lastname}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Log  ${resp.json()}
-     Set Test Variable  ${cid}  ${resp.json()}
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    #  Set Test Variable  ${p_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
+    ${firstname}=  FakerLibrary.first_name
+    ${lastname}=  FakerLibrary.last_name
+    ${ph2}=  Evaluate  ${PUSERNAME23}+73009
+    ${dob}=  FakerLibrary.Date
+    ${gender}=  Random Element    ${Genderlist}
+    ${resp}=  AddCustomer  ${phone1}   firstName=${firstname}   lastName=${lastname}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Log  ${resp.json()}
+    Set Test Variable  ${cid}  ${resp.json()}
+    Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
 
-     ${resp}=  GetCustomer    secondaryPhoneNo-eq=${ph2}    status-eq=ACTIVE
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Verify Response List  ${resp}  0  firstName=${firstname}  lastName=${lastname}  phoneNo=${phone1}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}
+    ${resp}=  GetCustomer    secondaryPhoneNo-eq=${ph2}    status-eq=ACTIVE
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response List  ${resp}  0  firstName=${firstname}  lastName=${lastname}  phoneNo=${phone1}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}
 

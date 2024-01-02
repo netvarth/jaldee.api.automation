@@ -194,7 +194,7 @@ JD-TC-GetServiceId-6-pre_info_&_post_info
         Set Test Variable  ${ModeId1}          ${PUSERPH_id}
         Set Test Variable  ${ModeStatus1}      ACTIVE
         ${Desc1}=    FakerLibrary.sentence
-        ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}
+        ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Desc1}
         ${virtualCallingModes2}=  Create List  ${VirtualcallingMode1}
         Set Test Variable  ${virtualCallingModes2}
         Set Suite Variable  ${vstype}  ${vservicetype[0]}

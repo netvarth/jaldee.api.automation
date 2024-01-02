@@ -246,7 +246,7 @@ JD-TC-TeleserviceAppointment-(Billable Subdomain)-1
     Set Test Variable  ${ModeId1}          ${PUSERPH_id0}
     Set Test Variable  ${ModeStatus1}      ACTIVE
     ${Description1}=    FakerLibrary.sentence
-    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Description1}
+    ${VScallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Description1}
     ${virtualCallingModes1}=  Create List  ${VScallingMode1}
     ${Total1}=   Random Int   min=100   max=500
     ${Total1}=  Convert To Number  ${Total1}  1
@@ -1184,7 +1184,7 @@ JD-TC-TeleserviceAppointment-(Non billable Subdomain)-7
     Set Test Variable  ${callingMode2}     ${CallingModes[1]}
     Set Test Variable  ${ModeId2}          ${PUSERPH_id2}
     Set Test Variable  ${ModeStatus2}      ACTIVE
-    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   status=${ModeStatus2}   instructions=${Description1}
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   countryCode=${countryCodes[0]}  status=${ModeStatus2}   instructions=${Description1}
     ${virtualCallingModes2}=  Create List  ${VirtualcallingMode2}
     ${SERVICE2}=    FakerLibrary.word
     ${description2}=    FakerLibrary.word
