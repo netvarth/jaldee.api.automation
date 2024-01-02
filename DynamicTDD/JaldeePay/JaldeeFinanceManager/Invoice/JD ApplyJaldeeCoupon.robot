@@ -216,7 +216,7 @@ JD-TC-Apply JaldeeCoupon-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()} 
 
-       ${domains}=  Jaldee Coupon Target Domains  ${d1} 
+    ${domains}=  Jaldee Coupon Target Domains  ${d1} 
     Set Suite Variable   ${domains} 
     ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sub_domain_id} 
     Set Suite Variable   ${sub_domains}
@@ -325,95 +325,15 @@ JD-TC-Apply JaldeeCoupon-1
 #     Log  ${resp.content}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
-*** comment ***
+# *** comment ***
 
 JD-TC-Apply ProviderCoupon-2
 	[Documentation]  Create two jaldee coupons and provider coupons and apply in a bill and also add discount
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${domain}    ${resp.json()['sector']}
-    Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get Active License
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${lic1}  ${resp.json()['accountLicense']['licPkgOrAddonId']}
-    ${domains}=  Jaldee Coupon Target Domains   ${domain}    
-    ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
-    ${licenses}=  Jaldee Coupon Target License  ${lic1}
-
-    ${resp}=  Get Account Payment Settings
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
-
-    ${resp}=  Get Account Payment Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${DAY}=  db.get_date_by_timezone  ${tz}   
-    Set Suite Variable  ${DAY}
-
-    ${gstper}=  Random Element  ${gstpercentage}
-    Set Suite Variable    ${gstper}
-    ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
-    ${resp}=  Update Tax Percentage  ${gstper}  ${GST_num}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${resp}=  Enable Tax
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${resp}=   Get Tax Percentage 
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings   ${resp.json()['taxPercentage']}   ${gstper}
-    Should Be Equal As Strings   ${resp.json()['gstNumber']}   ${GST_num}
-    
-    ${desc}=  FakerLibrary.sentence
-    set Suite Variable   ${desc}
-    ${ser_durtn}=   Random Int   min=2   max=10
-    ${ser_amount}=   Random Int   min=500   max=1000
-    ${ser_amount1}=   Convert To Number   ${ser_amount}
-    Set Suite Variable   ${ser_amount1}
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${ser_durtn}   ${status[0]}  ${btype}   ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}  ${bool[1]}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sId_1}  ${resp.json()}
-
-    ${desc}=  FakerLibrary.sentence
-    set Suite Variable   ${desc}
-    ${ser_durtn}=   Random Int   min=2   max=10
-    ${min_pre}=     Random Int   min=20   max=90
-    ${min_pre1}=    Convert To Number  ${min_pre} 
-    ${ser_amount}=   Random Int   min=100   max=1000
-    ${ser_amount2}=   Convert To Number   ${ser_amount}
-    Set Suite Variable   ${ser_amount2}
-    ${resp}=  Create Service  ${SERVICE2}  ${desc}   ${ser_durtn}   ${status[0]}  ${btype}   ${bool[1]}   ${notifytype[2]}  ${min_pre1}  ${ser_amount2}  ${bool[1]}  ${bool[1]}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sId_2}  ${resp.json()}
-
-    ${desc}=  FakerLibrary.sentence
-    set Suite Variable   ${desc}
-    ${ser_durtn}=   Random Int   min=2   max=10
-    ${ser_amount}=   Random Int   min=100   max=1000
-    ${ser_amount3}=   Convert To Number   ${ser_amount}
-    Set Suite Variable   ${ser_amount3}
-    ${resp}=  Create Service  ${SERVICE3}  ${desc}   ${ser_durtn}   ${status[0]}  ${btype}   ${bool[1]}   ${notifytype[2]}  ${EMPTY}  ${ser_amount3}  ${bool[0]}  ${bool[1]}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sId_3}  ${resp.json()}
-
-    ${desc}=  FakerLibrary.sentence
-    set Suite Variable   ${desc}
-    ${ser_durtn}=   Random Int   min=2   max=10
-    ${min_pre}=     Random Int   min=20   max=90
-    ${min_pre2}=    Convert To Number  ${min_pre} 
-    ${ser_amount}=   Random Int   min=100   max=1000
-    ${ser_amount4}=   Convert To Number   ${ser_amount}
-    Set Suite Variable   ${ser_amount4}
-    ${resp}=  Create Service  ${SERVICE4}  ${desc}   ${ser_durtn}   ${status[0]}  ${btype}   ${bool[1]}   ${notifytype[2]}  ${min_pre1}  ${ser_amount1}  ${bool[1]}  ${bool[1]}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sId_4}  ${resp.json()}
-  
     sleep  2s
 
     ${resp}=    Get Locations
@@ -421,17 +341,28 @@ JD-TC-Apply ProviderCoupon-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid1}  ${resp.json()[0]['id']}
 
-    Sleep  4s
+    ${resp}=  Auto Invoice Generation For Service   ${sid1}    ${toggle[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${sid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
+
+    Sleep  1s
     ${list}=  Create List  1  2  3  4  5  6  7
     ${capacity}=   Random Int   min=20   max=100
     ${parallel}=   Random Int   min=1   max=2
-    ${sTime}=  add_timezone_time  ${tz}  0  30  
-    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    ${sTime}=  add_timezone_time  ${tz}  0  3  
+    ${eTime}=  add_timezone_time  ${tz}  0  15  
+    ${queue1}=    FakerLibrary.name
 
-    ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid1}  ${sId_1}  ${sId_2}  ${sId_3}  ${sId_4}  
+    ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid1}  ${sid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${q1_l1}   ${resp.json()}
+
     ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${lic1}  ${resp.json()['accountLicense']['licPkgOrAddonId']}
@@ -476,9 +407,10 @@ JD-TC-Apply ProviderCoupon-2
     ${resp}=  SuperAdmin Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    clear_customer   ${PUSERNAME134}
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    clear_customer   ${HLMUSERNAME5}
 
     ${resp}=  AddCustomer  ${CUSERNAME4}
     Log   ${resp.json()}
@@ -491,7 +423,7 @@ JD-TC-Apply ProviderCoupon-2
     # Set Test Variable  ${id}  ${resp.json()[0]['id']}
 
 
-    ${resp}=  Add To Waitlist  ${id}  ${sId_1}  ${q1_l1}  ${DAY}  hi  ${bool[1]}  ${id}
+    ${resp}=  Add To Waitlist  ${id}  ${sid1}  ${q1_l1}  ${DAY}  hi  ${bool[1]}  ${id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -499,7 +431,7 @@ JD-TC-Apply ProviderCoupon-2
     ${resp}=  Get Bill By UUId  ${wid1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${wid1}  netTotal=${ser_amount1}   billStatus=New  billViewStatus=Notshow    billPaymentStatus=NotPaid  totalAmountPaid=0.0    taxableTotal=${ser_amount1}
-    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${sId_1}
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${sid1}
     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE1} 
     Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
     Should Be Equal As Strings  ${resp.json()['service'][0]['GSTpercentage']}   ${gstper} 
@@ -519,7 +451,7 @@ JD-TC-Apply ProviderCoupon-2
     ${resp}=  Get Bill By UUId  ${wid1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${wid1}  netTotal=${ser_amount1}   billStatus=New  billViewStatus=Notshow   billPaymentStatus=NotPaid  totalAmountPaid=0.0 
-    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${sId_1}
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${sid1}
     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE1} 
     Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
     Should Be Equal As Strings  ${resp.json()['service'][0]['GSTpercentage']}   ${gstper} 
@@ -550,7 +482,7 @@ JD-TC-Apply ProviderCoupon-2
     ${book_channel}=   Create List   ${bookingChannel[0]}
     ${coupn_based}=  Create List   ${couponBasedOn[0]}
     ${tc}=  FakerLibrary.sentence
-    ${services}=   Create list   ${sId_1}   ${sId_2}
+    ${services}=   Create list   ${sid1}   
     ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -566,7 +498,7 @@ JD-TC-Apply ProviderCoupon-2
     ${resp}=  Get Bill By UUId  ${wid1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${wid1}  netTotal=${ser_amount1}   billStatus=New  billViewStatus=Notshow    billPaymentStatus=NotPaid  totalAmountPaid=0.0 
-    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${sId_1}
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${sid1}
     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE1} 
     Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
     Should Be Equal As Strings  ${resp.json()['service'][0]['GSTpercentage']}   ${gstper}
@@ -584,7 +516,7 @@ JD-TC-Apply ProviderCoupon-2
     ${resp}=   Create Discount  ${discount}   ${desc}    ${disc_amount}   ${calctype[1]}  ${disctype[0]}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${discountId}   ${resp.json()}
-    ${service}=  Service Bill  service forme  ${sId_1}  1  ${discountId}
+    ${service}=  Service Bill  service forme  ${sid1}  1  ${discountId}
     ${resp}=  Update Bill   ${wid1}  addServiceLevelDiscount   ${service}  
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -600,7 +532,7 @@ JD-TC-Apply ProviderCoupon-2
     ${resp}=  Get Bill By UUId  ${wid1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${wid1}  netTotal=${netTotal1}   billStatus=New  billViewStatus=Notshow    billPaymentStatus=NotPaid  totalAmountPaid=0.0   amountDue=${netrate2} 
-    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${sId_1}
+    Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${sid1}
     Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE1} 
     Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
     Should Be Equal As Strings  ${resp.json()['service'][0]['GSTpercentage']}   ${gstper} 
@@ -614,6 +546,24 @@ JD-TC-Apply ProviderCoupon-2
     Should Be Equal As Strings  ${resp.json()['service'][0]['discount'][0]['id']}  ${discountId}  
     Should Be Equal As Strings  ${resp.json()['service'][0]['discount'][0]['discountValue']}  ${disc_amount}  
 
+    sleep  02s
+    ${resp1}=  Get Bookings Invoices  ${wid1}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable  ${invoice_waitlist_uid}  ${resp1.json()[0]['invoiceUid']}
+
+    ${resp}=   Apply Jaldee Coupon   ${invoice_waitlist_uid}   ${cupn_code2023}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Invoice By Id  ${invoice_waitlist_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['jaldeeCoupons'][0]['couponCode']}  ${cupn_code2023}
+    Should Be Equal As Strings  ${resp.json()['jaldeeCoupons'][0]['discount']}  ${Jamount1}
+    Should Be Equal As Strings  ${resp.json()['jaldeeCoupons'][0]['date']}  ${DAY1}
+
+*** comment ***
 JD-TC-Apply ProviderCoupon-3
 
     [Documentation]   using jaldee coupon in different payment status with adding service quantity

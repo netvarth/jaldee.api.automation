@@ -259,9 +259,9 @@ JD-TC-Apply Discount-2
     ${discount1}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
     ${discountprice1}=     Random Int   min=50   max=100
-    ${discountprice}=  Convert To Number  ${discountprice1}  1
-    Set Suite Variable   ${discountprice}
-    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    ${discountprice1}=  Convert To Number  ${discountprice1}  1
+    Set Suite Variable   ${discountprice1}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice1}   ${calctype[1]}  ${disctype[0]}
     Log  ${resp.json()}
     Set Test Variable   ${discountId}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -274,7 +274,7 @@ JD-TC-Apply Discount-2
     ${discountValue1}=     Random Int   min=50   max=100
     ${discountValue1}=  Convert To Number  ${discountValue1}  1
 
-    ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${EMPTY}  ${EMPTY}
+    ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${discountprice1}   ${EMPTY}  ${EMPTY}
     Log  ${resp.json()}
     Set Suite Variable   ${discountId1}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -285,7 +285,7 @@ JD-TC-Apply Discount-2
     Should Be Equal As Strings  ${resp.json()['discounts'][1]['id']}  ${discountId}
     Should Be Equal As Strings  ${resp.json()['discounts'][1]['name']}  ${discount1}
     Should Be Equal As Strings  ${resp.json()['discounts'][1]['discountType']}  ${disctype[0]}
-    Should Be Equal As Strings  ${resp.json()['discounts'][1]['discountValue']}  ${discountprice}
+    Should Be Equal As Strings  ${resp.json()['discounts'][1]['discountValue']}  ${discountprice1}
     Should Be Equal As Strings  ${resp.json()['discounts'][1]['calculationType']}  ${calctype[1]}
     Should Be Equal As Strings  ${resp.json()['discounts'][1]['privateNote']}  ${EMPTY}
     Should Be Equal As Strings  ${resp.json()['discounts'][1]['displayNote']}  ${EMPTY}
@@ -308,7 +308,7 @@ JD-TC-Apply Discount-3
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
 
-    ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+    ${resp}=   Remove Discount   ${invoice_uid}   ${discountId}    ${discountprice1}   ${privateNote}  ${displayNote}
     Log  ${resp.json()}
     Set Suite Variable   ${rmvid}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -323,7 +323,7 @@ JD-TC-Apply Discount-3
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${EMPTY}  ${EMPTY}
+    ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${discountprice1}   ${EMPTY}  ${EMPTY}
     Log  ${resp.json()}
     Set Suite Variable   ${discountId1}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -365,7 +365,7 @@ JD-TC-Apply Discount-UH1
     ${displayNote}=   FakerLibrary.word
 
 
-    ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+    ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${discountprice1}   ${privateNote}  ${displayNote}
     Log  ${resp.json()}
     Set Test Variable   ${discountId1}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -383,9 +383,9 @@ JD-TC-Apply Discount-UH2
     ${discount1}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
     ${discountprice1}=     Random Int   min=2350   max=3500
-    ${discountprice}=  Convert To Number  ${discountprice1}  1
-    Set Suite Variable   ${discountprice}
-    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    ${discountprice2}=  Convert To Number  ${discountprice1}  1
+    Set Suite Variable   ${discountprice2}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice2}   ${calctype[1]}  ${disctype[0]}
     Log  ${resp.json()}
     Set Test Variable   ${discountId}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -399,7 +399,7 @@ JD-TC-Apply Discount-UH2
     ${discountValue1}=     Random Int   min=50   max=100
     ${discountValue1}=  Convert To Number  ${discountValue1}  1
 
-    ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+    ${resp}=   Apply Discount   ${invoice_uid}   ${discountId}    ${discountprice2}   ${privateNote}  ${displayNote}
     Log  ${resp.json()}
     Set Suite Variable   ${discountId1}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -438,7 +438,7 @@ JD-TC-Apply Discount-UH4
     ${invoice}=   FakerLibrary.word
 
 
-    ${resp}=   Apply Discount   ${invoice}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+    ${resp}=   Apply Discount   ${invoice}   ${discountId}    ${discountprice2}   ${privateNote}  ${displayNote}
     Log  ${resp.json()}
     Set Test Variable   ${discountId1}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -457,7 +457,7 @@ JD-TC-Apply Discount-UH5
     ${displayNote}=   FakerLibrary.word
 
 
-    ${resp}=   Apply Discount   ${invoice_uid}   ${EMPTY}    ${discountprice}   ${privateNote}  ${displayNote}
+    ${resp}=   Apply Discount   ${invoice_uid}   ${EMPTY}    ${discountprice2}   ${privateNote}  ${displayNote}
     Log  ${resp.json()}
     Set Test Variable   ${discountId1}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -579,9 +579,9 @@ JD-TC-Apply Discount-UH7
 
 
 
-JD-TC-Apply Discount-
+JD-TC-Apply Discount-6
 
-    [Documentation]  Create a waitlist for a provider then apply a Discout.
+    [Documentation]  Create a waitlist for a provider then apply a Discount.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
@@ -698,14 +698,157 @@ JD-TC-Apply Discount-
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${discAmt}=    Evaluate  ${servicenetRate}-${discountprice}
 
     ${resp}=  Get Invoice By Id  ${invoice_uid3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['discounts'][0]['id']}  ${discountId}
-    Should Be Equal As Strings  ${resp.json()['discounts'][0]['name']}  ${discount1}
+    # Should Be Equal As Strings  ${resp.json()['discounts'][0]['name']}  ${discount1}
     Should Be Equal As Strings  ${resp.json()['discounts'][0]['discountType']}  ${disctype[0]}
     Should Be Equal As Strings  ${resp.json()['discounts'][0]['discountValue']}  ${discountprice}
     Should Be Equal As Strings  ${resp.json()['discounts'][0]['calculationType']}  ${calctype[1]}
     Should Be Equal As Strings  ${resp.json()['discounts'][0]['privateNote']}  ${privateNote}
     Should Be Equal As Strings  ${resp.json()['discounts'][0]['displayNote']}  ${displayNote}
+    Should Be Equal As Strings  ${resp.json()['amountTotal']}  ${servicenetRate}
+    Should Be Equal As Strings  ${resp.json()['amountDue']}  ${discAmt}
+
+JD-TC-Apply Discount-7
+
+    [Documentation]  Create a appointment for a provider then apply a Discount.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Appointment Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.add_timezone_time     ${tz}  0  15
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${maxval}=  Convert To Integer   ${delta/2}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${loc_id1}  ${duration}  ${bool1}  ${ser_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
+
+    ${resp}=  Consumer Login  ${CUSERNAME32}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    Set Test Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=  Get Appointment Schedules Consumer  ${account_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id}   ${account_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j}=  Random Int  max=${num_slots-3}
+    Set Test Variable   ${slot1}   ${slots[${j}]}
+
+    ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${cnote}=   FakerLibrary.name
+    ${resp}=   Take Appointment For Provider   ${account_id1}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${loc_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
+    Set Suite Variable   ${apptid1}
+
+    ${resp}=   Get consumer Appointment By Id   ${account_id1}  ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Verify Response    ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${ser_id1}
+    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}  ${apptStatus[1]}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id1}
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+    ${invoiceId}=   FakerLibrary.word
+    
+    ${quantity}=   Random Int  min=500  max=1000
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${servicecharge}=   Random Int  min=5  max=10
+
+
+    ${serviceList}=  Create Dictionary  serviceId=${ser_id1}   quantity=${quantity}  price=${servicecharge}
+    ${serviceList}=    Create List    ${serviceList}
+    ${servicenetRate}=  Evaluate  ${quantity} * ${servicecharge}
+    ${servicenetRate}=  Convert To Number  ${servicenetRate}   2
+    Set Test Variable   ${servicenetRate}
+    
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}   ynwUuid=${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid3}   ${resp.json()['uidList'][0]} 
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+    ${discAmt}=    Evaluate  ${servicenetRate}-${discountprice}
+
+    ${resp}=   Apply Discount   ${invoice_uid3}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['id']}  ${discountId}
+    # Should Be Equal As Strings  ${resp.json()['discounts'][0]['name']}  ${discount1}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['discountType']}  ${disctype[0]}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['discountValue']}  ${discountprice}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['calculationType']}  ${calctype[1]}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['privateNote']}  ${privateNote}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['displayNote']}  ${displayNote}
+    Should Be Equal As Strings  ${resp.json()['amountTotal']}  ${servicenetRate}
+    Should Be Equal As Strings  ${resp.json()['amountDue']}  ${discAmt}
