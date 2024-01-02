@@ -74,11 +74,12 @@ JD-TC-JaldeeIDformat-2
     Set Test Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
     ${gender}=  Random Element    ${Genderlist}
     ${dob}=  FakerLibrary.Date
-    ${m_jid}=  Random Int  min=10  max=50
+    # ${m_jid}=  Random Int  min=10  max=50
+    ${m_jid}=  Generate Random String  3  [LETTERS][NUMBERS] 
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${ph2}  ${m_jid}
-    Set Test Variable  ${cid}  ${resp.json()}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}  ${resp.json()}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
     ${resp}=  GetCustomer ById  ${cid}
     Log  ${resp.json()}
