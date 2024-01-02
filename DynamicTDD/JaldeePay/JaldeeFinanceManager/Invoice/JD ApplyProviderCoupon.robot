@@ -34,8 +34,31 @@ ${service_duration}     30
 @{New_status}    Proceed     Unassign    Block     Delete    Remove
 ${DisplayName1}   item1_DisplayName
 
+# *** Keywords ***
+
+# Create Provider Coupons 
+#     [Arguments]  ${name}   ${description}   ${amount}   ${calculationType}  ${couponCode}  ${rt}  ${ri}    ${sDate}  ${eDate}   ${noo}  ${firstCheckinOnly}  ${minBillAmount}  ${maxDiscountValue}  ${isproviderAcceptCoupon}  ${maxProviderUseLimit}  ${bookingChannel}  ${couponBasedOn}  ${tc}  &{kwargs}
+#     ${validTimeRange}=  TimeSpecs  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}   
+#     ${policies}=  Create Dictionary  
+#     ${policie}=  Get Dictionary items  ${kwargs}
+#     FOR  ${key}  ${value}  IN  @{policie}
+#         Set To Dictionary  ${policies}   ${key}=${value}
+#     END
+#     Log  ${policies}  
+#     ${validTimeRange}=  Create List  ${validTimeRange}
+#     ${couponRules}=  Create Dictionary  startDate=${sDate}  endDate=${eDate}  firstCheckinOnly=${firstCheckinOnly}  minBillAmount=${minBillAmount}  maxDiscountValue=${maxDiscountValue}  isproviderAcceptCoupon=${isproviderAcceptCoupon}  maxProviderUseLimit=${maxProviderUseLimit}  validTimeRange=${validTimeRange}  policies=${policies}
+#     ${data}=  Create Dictionary   name=${name}  amount=${amount}  description=${description}   calculationType=${calculationType}  couponCode=${couponCode}  couponRules=${couponRules}  bookingChannel=${bookingChannel}  couponBasedOn=${couponBasedOn}  termsConditions=${tc}
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  POST On Session  ynw  /provider/bill/coupons   data=${data}  expected_status=any
+#     [Return]  ${resp}
 
 
+# TimeSpecs
+#     [Arguments]  ${rectype}  ${rint}  ${startDate}  ${endDate}  ${noocc}     
+#     ${terminator}=  Create Dictionary  endDate=${endDate}  noOfOccurance=${noocc}
+#     ${ts}=  Create Dictionary  recurringType=${rectype}  repeatIntervals=${rint}  startDate=${startDate}  terminator=${terminator}  
+#     [Return]  ${ts}
 *** Test Cases ***
 
 JD-TC-Apply ProviderCoupon-1
@@ -232,7 +255,8 @@ JD-TC-Apply ProviderCoupon-1
     ${coupn_based}=  Create List   ${couponBasedOn[0]}
     ${tc}=  FakerLibrary.sentence
     ${services}=   Create list     ${sid1}    
-    ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
+    # ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}  ${sTime}  ${eTime}  ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
+    ${resp}=  Create Provider Coupon   ${coupon}  ${desc}  ${pc_amount}  ${calctype[1]}  ${cupn_code}  ${recurringtype[1]}  ${list}    ${ST_DAY}  ${EN_DAY}  ${EMPTY}  ${bool[0]}  ${min_bill_amount}  ${max_disc_val}  ${bool[1]}  ${max_prov_use}  ${book_channel}  ${coupn_based}  ${tc}  services=${services}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${couponId}  ${resp.json()}
