@@ -86,6 +86,8 @@ JD-TC-AccountLevelAnalytics-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERPH0}${\n}
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7

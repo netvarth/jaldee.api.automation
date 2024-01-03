@@ -105,7 +105,7 @@ JD-TC-BookingHistoryDetailsOfProviderConsumer-1
     ${DAY2}=  db.add_timezone_date  ${tz}  10   
     # ${sTime}=  db.get_time_by_timezone   ${tz}
     ${sTime}=  db.get_time_by_timezone  ${tz}
-    ${delta}=  FakerLibrary.Random Int  min=15  max=60
+    ${delta}=  FakerLibrary.Random Int  min=${ser_duratn}  max=60
     ${eTime}=  add_two   ${sTime}  ${delta}
     ${capacity}=  Random Int  min=20   max=40
     ${parallel}=  Random Int   min=1   max=2

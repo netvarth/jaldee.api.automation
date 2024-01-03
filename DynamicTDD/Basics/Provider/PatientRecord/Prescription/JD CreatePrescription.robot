@@ -69,6 +69,7 @@ JD-TC-Create Prescription-1
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${id}=  get_id  ${MUSERNAME_E}
      Set Suite Variable  ${id}

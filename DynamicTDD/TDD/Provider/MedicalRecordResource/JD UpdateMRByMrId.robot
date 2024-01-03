@@ -1353,6 +1353,7 @@ JD-TC-UpdateMR-8
     # Set Suite Variable    ${id3}    ${resp.json()['id']} 
     # Set Suite Variable    ${userName3}    ${resp.json()['userName']}  
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
     Set Suite Variable  ${MUSERNAME_E}
     
     

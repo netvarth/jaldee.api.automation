@@ -130,6 +130,7 @@ JD-TC-LinkProfile-1
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${id}=  get_id  ${MUSERNAME_E}
      Set Suite Variable  ${id}
@@ -268,6 +269,7 @@ JD-TC-LinkProfile-2
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${id}=  get_id  ${MUSERNAME_E}
      Set Suite Variable  ${id}
@@ -425,6 +427,7 @@ JD-TC-LinkProfile-UH1
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${id}=  get_id  ${MUSERNAME_E}
      Set Suite Variable  ${id}
@@ -558,6 +561,7 @@ JD-TC-LinkProfile-3
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${id}=  get_id  ${MUSERNAME_E}
      Set Suite Variable  ${id}
@@ -687,6 +691,7 @@ JD-TC-LinkProfile-4
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${id}=  get_id  ${MUSERNAME_E}
      Set Suite Variable  ${id}
@@ -850,6 +855,7 @@ JD-TC-LinkProfile-UH5
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${id}=  get_id  ${MUSERNAME_E}
      Set Suite Variable  ${id}
@@ -985,6 +991,7 @@ JD-TC-LinkProfile-6
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${id}=  get_id  ${MUSERNAME_E}
      Set Suite Variable  ${id}
@@ -1036,6 +1043,7 @@ JD-TC-LinkProfile-6
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${id}=  get_id  ${MUSERNAME_E}
      Set Suite Variable  ${id}
@@ -1173,6 +1181,7 @@ JD-TC-LinkProfile-UH6
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${id}=  get_id  ${MUSERNAME_E}
      Set Suite Variable  ${id}

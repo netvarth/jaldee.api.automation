@@ -55,6 +55,7 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${MUSERNAME_E}=  Evaluate  ${PUSERNAME}+${PO_Number}
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
     ${firstname_A}=  FakerLibrary.name
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
@@ -73,6 +74,7 @@ JD-TC-UserLevelAnalyticsForWaitlistForWaitlist-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
     Set Suite Variable  ${MUSERNAME_E}
     ${accid}=   get_acc_id   ${MUSERNAME_E}
     Set Suite Variable  ${accid}
@@ -1277,6 +1279,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-7
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${accid}=   get_acc_id   ${MUSERNAME_E}
      Set Suite Variable  ${accid}

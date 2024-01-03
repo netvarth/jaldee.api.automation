@@ -42,25 +42,26 @@ JD-TC-Create Sections-1
     [Documentation]    Create Sections with valid details.
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
-     Log  ${iscorp_subdomains}
-     Set Suite Variable  ${iscorp_subdomains}
-     Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
-     Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
-     Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-     ${firstname_A}=  FakerLibrary.first_name
-     Set Suite Variable  ${firstname_A}
-     ${lastname_A}=  FakerLibrary.last_name
-     Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9777802
-     ${highest_package}=  get_highest_license_pkg
-     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
-     Log  ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Activation  ${MUSERNAME_E}  0
-     Log   ${resp.json()}
-     Should Be Equal As Strings    ${resp.status_code}    200
-     ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
-     Should Be Equal As Strings    ${resp.status_code}    200
+    Log  ${iscorp_subdomains}
+    Set Suite Variable  ${iscorp_subdomains}
+    Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
+    Set Suite Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
+    Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
+    ${firstname_A}=  FakerLibrary.first_name
+    Set Suite Variable  ${firstname_A}
+    ${lastname_A}=  FakerLibrary.last_name
+    Set Suite Variable  ${lastname_A}
+    ${PH_Number}    Random Number 	digits=5
+    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+${PH_Number}
+    ${highest_package}=  get_highest_license_pkg
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Activation  ${MUSERNAME_E}  0
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Set Credential  ${MUSERNAME_E}  ${PASSWORD}  0
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -75,6 +76,8 @@ JD-TC-Create Sections-1
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${id}=  get_id  ${MUSERNAME_E}
      Set Suite Variable  ${id}

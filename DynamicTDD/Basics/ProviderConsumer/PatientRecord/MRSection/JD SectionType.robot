@@ -43,7 +43,8 @@ JD-TC-Create Sections-1
      Set Suite Variable  ${firstname_A}
      ${lastname_A}=  FakerLibrary.last_name
      Set Suite Variable  ${lastname_A}
-     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+9766802
+     ${PH_Number}    Random Number 	digits=5
+     ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+${PH_Number}
      ${highest_package}=  get_highest_license_pkg
      ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
      Log  ${resp.json()}
@@ -67,6 +68,8 @@ JD-TC-Create Sections-1
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${id}=  get_id  ${MUSERNAME_E}
      Set Suite Variable  ${id}

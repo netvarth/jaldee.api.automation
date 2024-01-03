@@ -91,6 +91,8 @@ JD-TC-AccountLevelAnalyticsAccToConfig-1
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERPH0}${\n}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${user_count}=  Evaluate  ${user_count}+1
