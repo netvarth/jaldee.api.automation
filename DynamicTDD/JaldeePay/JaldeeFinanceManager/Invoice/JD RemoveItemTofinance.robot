@@ -63,20 +63,6 @@ Get Non Billable Subdomain
     [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
 
 
-AddItemToFinance
-
-   [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
-    ${ItemLists}=  Create List     ${ItemLists}
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Append To List  ${ItemLists}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${ItemLists}  
-
-   Check And Create YNW Session
-   ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/addItems    data=${data}  expected_status=any  
-   [Return]  ${resp} 
-
-
 *** Test Cases ***
 
 JD-TC-Remove Item to Finance-1
@@ -390,7 +376,7 @@ JD-TC-Remove Item to Finance-1
 
 
 
-    ${itemList1}=  Create Dictionary  itemId=${itemId1}   quantity=${quantity}  price=${promotionalPrice1}
+    ${itemList1}=  Create Dictionary  itemId=${itemId2}   quantity=${quantity}  price=${promotionalPrice1}
     ${netTotal1}=  Evaluate  ${quantity} * ${promotionalPrice1}
     Set Suite Variable   ${netTotal1}
 
@@ -398,3 +384,11 @@ JD-TC-Remove Item to Finance-1
     ${resp}=  AddItemToFinance   ${invoice_uid}   ${itemList1}    
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${itemList2}=  Create Dictionary  itemId=${itemId2}      price=${promotionalPrice1} 
+
+    ${resp}=  RemoveServiceToFinance   ${invoice_uid}   ${itemList2}    
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+

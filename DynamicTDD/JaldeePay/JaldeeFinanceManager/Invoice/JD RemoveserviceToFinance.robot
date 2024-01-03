@@ -63,33 +63,6 @@ Get Non Billable Subdomain
     [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
 
 
-AddServiceToFinance
-
-   [Arguments]  ${uuid}   ${serviceList}  &{kwargs}
-    ${serviceLists}=  Create List     ${serviceList}
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Append To List  ${serviceLists}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${serviceLists}  
-
-   Check And Create YNW Session
-   ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/addservices    data=${data}  expected_status=any  
-   [Return]  ${resp} 
-
-RemoveServiceToFinance
-
-   [Arguments]  ${uuid}   ${serviceList}  &{kwargs}
-    ${serviceLists}=  Create List     ${serviceList}
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Append To List  ${serviceLists}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${serviceLists}  
-
-   Check And Create YNW Session
-   ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/removeservices    data=${data}  expected_status=any  
-   [Return]  ${resp} 
-
-
 *** Test Cases ***
 
 JD-TC-Remove Service to Finance-1

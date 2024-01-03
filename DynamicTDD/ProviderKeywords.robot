@@ -12634,3 +12634,56 @@ Change Lead Progress LOS
     Check And Create YNW Session  
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/progress/${id}   expected_status=any
     [Return]  ${resp}
+
+
+AddItemToFinance
+
+   [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
+    ${ItemLists}=  Create List     ${ItemLists}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Append To List  ${ItemLists}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${ItemLists}  
+
+   Check And Create YNW Session
+   ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/addItems    data=${data}  expected_status=any  
+   [Return]  ${resp} 
+
+AddServiceToFinance
+
+   [Arguments]  ${uuid}   ${serviceList}  &{kwargs}
+    ${serviceLists}=  Create List     ${serviceList}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Append To List  ${serviceLists}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${serviceLists}  
+
+   Check And Create YNW Session
+   ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/addservices    data=${data}  expected_status=any  
+   [Return]  ${resp} 
+
+RemoveServiceToFinance
+
+   [Arguments]  ${uuid}   ${serviceList}  &{kwargs}
+    ${serviceLists}=  Create List     ${serviceList}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Append To List  ${serviceLists}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${serviceLists}  
+
+   Check And Create YNW Session
+   ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/removeservices    data=${data}  expected_status=any  
+   [Return]  ${resp} 
+
+RemoveItemToFinance
+
+   [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
+    ${ItemLists}=  Create List     ${ItemLists}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Append To List  ${ItemLists}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${ItemLists}  
+
+   Check And Create YNW Session
+   ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/removeitems    data=${data}  expected_status=any  
+   [Return]  ${resp} 

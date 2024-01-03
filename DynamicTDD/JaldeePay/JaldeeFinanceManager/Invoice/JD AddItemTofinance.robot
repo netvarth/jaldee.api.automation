@@ -63,23 +63,11 @@ Get Non Billable Subdomain
     [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
 
 
-AddItemToFinance
-
-   [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
-    ${ItemLists}=  Create List     ${ItemLists}
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Append To List  ${ItemLists}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${ItemLists}  
-
-   Check And Create YNW Session
-   ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/addItems    data=${data}  expected_status=any  
-   [Return]  ${resp} 
 
 
 *** Test Cases ***
 
-JD-TC-Apply Service to Finance-1
+JD-TC-Apply Item to Finance-1
 
     [Documentation]  Apply Service Level Discount.
 
