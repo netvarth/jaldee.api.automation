@@ -41,14 +41,14 @@ JD-TC-GetTeamById-2
      Should Be Equal As Strings    ${resp.status_code}    200
 
      ${resp}=  View Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
+     Log  ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}    200
+     IF  ${resp.json()['filterByDept']}==${bool[0]}
+          ${resp}=  Toggle Department Enable
+          Log  ${resp.content}
+          Should Be Equal As Strings  ${resp.status_code}  200
 
-    END
+     END
      
      sleep  2s
      ${resp}=  Get Departments
@@ -56,18 +56,22 @@ JD-TC-GetTeamById-2
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      ${resp2}=   Get Business Profile
-    Log  ${resp2.json()}
-    Should Be Equal As Strings    ${resp2.status_code}    200
-    Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
+     Log  ${resp2.json()}
+     Should Be Equal As Strings    ${resp2.status_code}    200
+     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
      ${u_id}=  Create Sample User
      Set Suite Variable  ${u_id}
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get User By Id  ${u_id}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Suite Variable  ${PUSERNAME_U1}  ${resp.json()['mobileNo']}
+     ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
+     Should Be Equal As Strings  ${resp[0].status_code}  200
+     Should Be Equal As Strings  ${resp[1].status_code}  200
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+     Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get Team By Id  ${t_id1}
      Log   ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200

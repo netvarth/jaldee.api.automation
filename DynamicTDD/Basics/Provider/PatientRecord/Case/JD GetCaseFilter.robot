@@ -55,6 +55,7 @@ JD-TC-Get Case Filter-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${accountId}        ${resp.json()['id']}
     Set Suite Variable    ${accountName}      ${resp.json()['businessName']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -65,7 +66,7 @@ JD-TC-Get Case Filter-1
     ${aliasName}=  FakerLibrary.name
     Set Suite Variable    ${aliasName}
 
-     ${DAY1}=  get_date
+     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
 
     ${resp}=    Create Case Category    ${name}  ${aliasName}

@@ -198,8 +198,16 @@ JD-TC-Create Department-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
   
-    ${resp}=  Toggle Department Enable
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     ${dep_name}=  FakerLibrary.bs
     ${dep_code}=   Random Int  min=100   max=999
     ${resp}=  Create Department  ${dep_name}  ${dep_code}  ${dep_desc1}    ${sid1}

@@ -35,14 +35,19 @@ JD-TC-Get Communication-1
     ${resp}=   Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings          ${resp.status_code}   200
-    Set Suite Variable    ${pid}        ${resp.json()['id']}
-    Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    # Set Suite Variable    ${pid}        ${resp.json()['id']}
+    # Set Suite Variable    ${pdrname}    ${resp.json()['userName']}
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
+    Set Suite Variable  ${pdrname}  ${decrypted_data['userName']}
 
     ${resp}=    Get Business Profile
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${accountId}        ${resp.json()['id']}
     Set Suite Variable    ${accountName}      ${resp.json()['businessName']}
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}

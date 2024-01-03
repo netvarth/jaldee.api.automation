@@ -583,11 +583,17 @@ JD-TC-GetNotificationSettings_of_User-9
     # Should Be Equal As Strings   ${resp.json()[1]['id']}   ${u_id1}
     # Should Be Equal As Strings   ${resp.json()[1]['mobileNo']}   ${PUSERNAME_U1}
 
-    Variable Should Exist   ${resp.json()['id']}   ${u_id2}
-    Variable Should Exist   ${resp.json()['mobileNo']}   ${PUSERNAME_U2}
+    # Variable Should Exist   ${resp.json()['id']}   ${u_id2}
+    # Variable Should Exist   ${resp.json()['mobileNo']}   ${PUSERNAME_U2}
 
-    Variable Should Exist   ${resp.json()['id']}   ${u_id1}
-    Variable Should Exist   ${resp.json()['mobileNo']}   ${PUSERNAME_U1}
+    # Variable Should Exist   ${resp.json()['id']}   ${u_id1}
+    # Variable Should Exist   ${resp.json()['mobileNo']}   ${PUSERNAME_U1}
+
+    Should Contain    ${resp.json()}  ${u_id1}
+    Should Contain    ${resp.json()}  ${PUSERNAME_U1}
+
+    Should Contain    ${resp.json()}  ${u_id2}
+    Should Contain    ${resp.json()}  ${PUSERNAME_U2}
 
     ${resp}=  Get Notification Settings of User  ${u_id1}   
     Log  ${resp.json()}

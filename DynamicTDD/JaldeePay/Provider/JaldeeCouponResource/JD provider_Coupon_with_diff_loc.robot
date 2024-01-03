@@ -207,7 +207,7 @@ JD-TC-provider_Coupon_with_diff_loc-1
     ${list}=  Create List  1  2  3  4  5  6  7
     # ${sTime}=  subtract_time  0  15
     # ${eTime}=  add_time   0  45
-    # ${ST_DAY}=  get_date
+    # ${ST_DAY}=  db.get_date_by_timezone  ${tz}
 
     ${EN_DAY}=  db.add_timezone_date  ${NZ_tz}  10
     ${min_bill_amount}=   Random Int   min=90   max=100
