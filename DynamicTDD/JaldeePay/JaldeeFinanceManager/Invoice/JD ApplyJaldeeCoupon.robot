@@ -36,6 +36,22 @@ ${service_duration}     30
 ${DisplayName1}   item1_DisplayName
 
 
+${SERVICE1}  Note Book1102
+${SERVICE2}  boots102
+${SERVICE3}  pen102
+${SERVICE5}  boots13101
+${queue1}  morning
+${LsTime}   08:00 AM
+${LeTime}   09:00 AM
+
+${sTime}    09:00 PM
+${eTime}    11:00 PM
+${longi}        89.524764
+${latti}        86.524764
+${Coupon19}     Coupon1912
+${numbers}  0123456789
+${self}   0
+
 
 *** Test Cases ***
 
@@ -59,9 +75,26 @@ JD-TC-Apply JaldeeCoupon-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${d1}  ${resp.json()['serviceSector']['domain']}
-    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['subDomain']}
+    Set Suite Variable  ${sd1}  ${resp.json()['serviceSubSector']['subDomain']}
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
     Set Suite Variable  ${licid}  ${resp.json()['licensePkgID']}
+
+    # ${licid}  ${licname}=  get_highest_license_pkg
+    # Log  ${licid}
+    # Log  ${licname}
+    # Set Suite Variable   ${licid}
+    # ${domresp}=  Get BusinessDomainsConf
+    # Log   ${domresp.json()}
+    # Should Be Equal As Strings  ${domresp.status_code}  200
+    # ${dlen}=  Get Length  ${domresp.json()}
+    # FOR  ${pos}  IN RANGE  ${dlen}  
+    #     Set Suite Variable  ${d1}  ${domresp.json()[${pos}]['domain']}
+    #     ${sd1}  ${check}=  Get Billable Subdomain  ${d1}  ${domresp}  ${pos}  
+    #     Set Suite Variable   ${sd1}
+    #     Exit For Loop IF     '${check}' == '${bool[1]}'
+    # END
+    # Log  ${d1}
+    # Log  ${sd1}
 
 
     ${resp}=  View Waitlist Settings
@@ -122,6 +155,10 @@ JD-TC-Apply JaldeeCoupon-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id}   ${resp.json()}
 
+    ${sTime}=   db.add_timezone_time     ${tz}  1  00
+    Set Suite Variable    ${sTime}
+    ${eTime}=    db.add_timezone_time     ${tz}  3  00 
+    Set Suite Variable    ${eTime}   
 
     ${name1}=   FakerLibrary.word
     Set Suite Variable   ${name1}
@@ -218,7 +255,7 @@ JD-TC-Apply JaldeeCoupon-1
 
     ${domains}=  Jaldee Coupon Target Domains  ${d1} 
     Set Suite Variable   ${domains} 
-    ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sub_domain_id} 
+    ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1} 
     Set Suite Variable   ${sub_domains}
     ${licenses}=  Jaldee Coupon Target License  ${licid}
     Set Suite Variable   ${licenses}
@@ -326,7 +363,265 @@ JD-TC-Apply JaldeeCoupon-1
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
 # *** comment ***
+JD-TC-ApplyJaldeeCoupon-2
+    [Documentation]    Provider trying to apply default enabled coupon
 
+    ${domains}=  Jaldee Coupon Target Domains  ${d1}
+    ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}
+    ${loc1}=  Jaldee Coupon Target Locations  ${longi}  ${latti}  5
+    ${loc2}=  Jaldee Coupon Target Locations  ${longi1}  ${latti1}  2
+    ${locations}=  Create List  ${loc1}  ${loc2}
+    ${licenses}=  Jaldee Coupon Target License  ${licid}
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${cupn_code03}=   FakerLibrary.word
+    Set Suite Variable   ${cupn_code03}
+    ${cupn_name}=   FakerLibrary.name
+    Set Suite Variable   ${cupn_name}
+    ${cupn_des}=   FakerLibrary.name
+
+    ${Jamount1}=    Random Int   min=10  max=50
+    ${Jamount1}=  Convert To Number  ${Jamount1}  1
+    ${cupn_name}=   FakerLibrary.name
+    ${cupn_des}=   FakerLibrary.sentence
+    ${c_des}=   FakerLibrary.sentence
+    ${p_des}=   FakerLibrary.sentence
+    ${list}=  Create List   1  2  3  4  5  6  7
+    Set Suite Variable    ${list}
+
+    clear_jaldeecoupon  ${cupn_code03}
+    ${resp}=  Create Jaldee Coupon  ${cupn_code03}  ${cupn_name}  ${cupn_des}  ${age_group[0]}  ${DAY1}  ${DAY2}  ${discountType[0]}  100  100  ${bool[1]}  ${bool[0]}  0  100  1000  5  2  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${c_des}  ${p_des}  ${domains}  ${sub_domains}  ALL  ${licenses}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Push Jaldee Coupon  ${cupn_code03}  ${cupn_name}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  SuperAdmin Logout
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code03}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['couponState']}  ${couponState[1]}
+
+
+    ${SERVICE1}=    FakerLibrary.name
+    ${description}=    FakerLibrary.name
+
+    ${resp}=  Create Service  ${SERVICE1}  ${description}   2  ${status[0]}  ${bType}  ${bool[1]}  ${notifytype[2]}  50  500  ${bool[1]}  ${bool[1]}  department=${dep_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${s_id1}  ${resp.json()}
+    
+    ${queue1}=    FakerLibrary.name
+    ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  1  100  ${lid}  ${s_id1}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${qid1}  ${resp.json()}
+    
+
+    ${resp}=  Auto Invoice Generation For Service   ${s_id1}    ${toggle[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
+
+    ${resp}=  AddCustomer  ${CUSERNAME3}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${id}  ${resp.json()}
+    # ${cid}=  get_id  ${CUSERNAME3}
+    ${des}=   FakerLibrary.sentence
+    Set Suite Variable   ${des}
+    ${resp}=  Add To Waitlist  ${id}  ${s_id1}  ${qid1}  ${DAY1}  ${des}  ${bool[1]}  ${id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid}  ${wid[0]}
+
+    sleep  02s
+    ${resp1}=  Get Bookings Invoices  ${wid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable  ${invoice_appt_uid}  ${resp1.json()[0]['invoiceUid']}
+
+    ${resp}=  Get Invoice By Id  ${invoice_appt_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Get Bill By UUId  ${wid}
+    # Log  ${resp.json()} 
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}
+    # Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    # Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${s_id1}
+    # Should Be Equal As Strings  ${resp.json()['service'][0]['price']}  500.0
+    # Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE1}
+    # Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
+    # Should Be Equal As Strings  ${resp.json()['netTotal']}  500.0
+    # Should Be Equal As Strings  ${resp.json()['netRate']}  590.0
+    # Should Be Equal As Strings  ${resp.json()['amountDue']}  590.0
+
+
+    ${resp}=   Apply Jaldee Coupon   ${invoice_appt_uid}   ${cupn_code03}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Get Invoice By Id  ${invoice_appt_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Get Bill By UUId  ${wid}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.json()['jCoupon']['${cupn_code03}']['value']}  100.0
+    # Should Contain  ${resp.json()['jCoupon']['${cupn_code03}']['systemNote']}  ${SystemNote[1]}
+    # Should Contain  ${resp.json()['jCoupon']['${cupn_code03}']['systemNote']}  ${SystemNote[2]}
+    # Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}
+    # Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${s_id1}
+    # Should Be Equal As Strings  ${resp.json()['service'][0]['price']}  500.0
+    # Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE1}
+    # Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
+    # Should Be Equal As Strings  ${resp.json()['netTotal']}  500.0
+    # Should Be Equal As Strings  ${resp.json()['netRate']}   472.0
+    # Should Be Equal As Strings  ${resp.json()['amountDue']}  472.0
+
+    # ${resp}=  Accept Payment  ${wid}  ${acceptPaymentBy[0]}  472.0
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Payment By UUId  ${wid}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${wid}
+    # Should Be Equal As Strings  ${resp.json()[0]['status']}  ${cupnpaymentStatus[0]}
+    # Should Be Equal As Strings  ${resp.json()[0]['acceptPaymentBy']}  ${acceptPaymentBy[0]}
+    # Should Be Equal As Strings  ${resp.json()[0]['amount']}  472.0
+
+    # ${resp}=  Get Jaldee Coupon Stats By Coupon_code  ${cupn_code03}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['providerUsage']['usageAmt']}  100.0
+    # Should Be Equal As Strings  ${resp.json()['providerUsage']['usageCount']}  1
+    # Should Be Equal As Strings  ${resp.json()['providerUsage']['reimbursed']}  0.0
+
+
+JD-TC-ApplyJaldeeCoupon-3
+    [Documentation]    Provider trying to apply always enabled coupon (Taxable is false)
+
+    ${domains}=  Jaldee Coupon Target Domains  ${d1}
+    ${sub_domains}=  Jaldee Coupon Target SubDomains  ${d1}_${sd1}
+    ${loc1}=  Jaldee Coupon Target Locations  ${longi}  ${latti}  5
+    ${loc2}=  Jaldee Coupon Target Locations  ${longi1}  ${latti1}  2
+    ${locations}=  Create List  ${loc1}  ${loc2}
+    ${licenses}=  Jaldee Coupon Target License  ${licid}
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${cupn_code04}=   FakerLibrary.word
+    Set Suite Variable   ${cupn_code04}
+    ${cupn_name}=   FakerLibrary.word
+    Set Suite Variable   ${cupn_name}
+    ${cupn_des}=   FakerLibrary.word
+    ${c_des}=   FakerLibrary.word
+    ${p_des}=   FakerLibrary.word
+
+    clear_jaldeecoupon  ${cupn_code04}
+    ${resp}=  Create Jaldee Coupon  ${cupn_code04}  ${cupn_name}  ${cupn_des}  ${age_group[0]}  ${DAY1}  ${DAY2}  ${discountType[0]}  50  100  ${bool[1]}  ${bool[1]}  0  100  1000  5  2  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${c_des}  ${p_des}  ${domains}  ${sub_domains}  ALL  ${licenses}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Push Jaldee Coupon  ${cupn_code04}  ${cupn_name}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  SuperAdmin Logout
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get Jaldee Coupons By Coupon_code  ${cupn_code04}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['couponState']}  ${couponState[1]}
+
+    ${resp}=  AddCustomer  ${CUSERNAME1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${id1}  ${resp.json()}
+    # ${cid}=  get_id  ${CUSERNAME1}
+    ${resp}=  Add To Waitlist  ${id1}  ${s_id1}  ${qid1}  ${DAY1}  ${des}  ${bool[1]}  ${id1}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${wid}  ${wid[0]}
+
+    sleep  02s
+    ${resp1}=  Get Bookings Invoices  ${wid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable  ${invoice_appt_uid}  ${resp1.json()[0]['invoiceUid']}
+
+    ${resp}=  Get Invoice By Id  ${invoice_appt_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Get Bill By UUId  ${wid}
+    # Log  ${resp.json()} 
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid}
+    # Should Be Equal As Strings  ${resp.json()['billStatus']}  ${billStatus[0]}
+    # Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}  ${s_id1}
+    # Should Be Equal As Strings  ${resp.json()['service'][0]['price']}  500.0
+    # Should Be Equal As Strings  ${resp.json()['service'][0]['serviceName']}  ${SERVICE1}
+    # Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}  1.0
+    # Should Be Equal As Strings  ${resp.json()['netTotal']}  500.0
+    # Should Be Equal As Strings  ${resp.json()['netRate']}  590.0
+    # Should Be Equal As Strings  ${resp.json()['amountDue']}  590.0
+
+
+    ${resp}=   Apply Jaldee Coupon   ${invoice_appt_uid}   ${cupn_code03}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Invoice By Id  ${invoice_appt_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*** comment ***
 JD-TC-Apply ProviderCoupon-2
 	[Documentation]  Create two jaldee coupons and provider coupons and apply in a bill and also add discount
     
@@ -350,12 +645,12 @@ JD-TC-Apply ProviderCoupon-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
 
-    Sleep  1s
+    Sleep  2s
     ${list}=  Create List  1  2  3  4  5  6  7
     ${capacity}=   Random Int   min=20   max=100
     ${parallel}=   Random Int   min=1   max=2
-    ${sTime}=  add_timezone_time  ${tz}  0  3  
-    ${eTime}=  add_timezone_time  ${tz}  0  15  
+    ${sTime}=  add_timezone_time  ${tz}  0  43  
+    ${eTime}=  add_timezone_time  ${tz}  0  55  
     ${queue1}=    FakerLibrary.name
 
     ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid1}  ${sid1}  
