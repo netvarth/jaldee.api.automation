@@ -521,7 +521,8 @@ JD-TC-Update_Notification_Settings_of_User-7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Notification Settings of User  ${p2_id}   
+    # ${resp}=  Get Notification Settings of User  ${p2_id}  
+    ${resp}=  Get Notification Settings of User  ${id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   WAITLISTADD
@@ -861,7 +862,7 @@ JD-TC-Update_Notification_Settings_of_User-10
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    Should Be Equal As Strings   ${resp.json()[0]['id']}   ${p2_id}
+    Should Be Equal As Strings   ${resp.json()[0]['id']}   ${u_id2}
     Should Be Equal As Strings   ${resp.json()[0]['mobileNo']}   ${PUSERNAME_U2}
 
     Should Be Equal As Strings   ${resp.json()[1]['id']}   ${u_id1}
@@ -1622,7 +1623,8 @@ JD-TC-Update_Notification_Settings_of_User-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Notification Settings of User  ${p2_id}   
+    # ${resp}=  Get Notification Settings of User  ${p2_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   WAITLISTADD
@@ -1643,7 +1645,7 @@ JD-TC-Update_Notification_Settings_of_User-UH6
     ${PushMSG_Num_list}=  create List  ${PushMSG1}  ${PushMSG2}
     Set Suite Variable  @{PushMSG_Num_list}
 
-    ${resp}=  Update Notification Settings of User  ${p2_id}  ${NotificationResourceType[0]}  ${EventType[0]}  ${PUSERNAME_U14_list}  ${PUser14_EMAIL_list}  ${PushMSG_Num_list}
+    ${resp}=  Update Notification Settings of User  ${u_id2}  ${NotificationResourceType[0]}  ${EventType[0]}  ${PUSERNAME_U14_list}  ${PUser14_EMAIL_list}  ${PushMSG_Num_list}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     ${LOGIN_Number_NOT_FOUND}=  Format String       ${LOGIN_NOT_FOUND}   ${countryCode_CC0}${INVALID_NUM1}
@@ -1654,13 +1656,13 @@ JD-TC-Update_Notification_Settings_of_User-UH6
     ${PushMSG_Num_list}=  create List  ${PushMSG1}  ${PushMSG3}  ${PushMSG2}
     Set Suite Variable  @{PushMSG_Num_list}
 
-    ${resp}=  Update Notification Settings of User  ${p2_id}  ${NotificationResourceType[0]}  ${EventType[0]}  ${PUSERNAME_U14_list}  ${PUser14_EMAIL_list}  ${PushMSG_Num_list}
+    ${resp}=  Update Notification Settings of User  ${u_id2}  ${NotificationResourceType[0]}  ${EventType[0]}  ${PUSERNAME_U14_list}  ${PUser14_EMAIL_list}  ${PushMSG_Num_list}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     ${LOGIN_Number_NOT_FOUND}=  Format String       ${LOGIN_NOT_FOUND}   ${countryCode_CC0}${INVALID_NUM2}
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_Number_NOT_FOUND}
     
-    ${resp}=  Get Notification Settings of User  ${p2_id}   
+    ${resp}=  Get Notification Settings of User  ${u_id2}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     comment   WAITLISTADD-updated

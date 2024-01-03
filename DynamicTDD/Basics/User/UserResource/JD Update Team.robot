@@ -53,14 +53,14 @@ JD-TC-UpdateTeam-2
      Should Be Equal As Strings    ${resp.status_code}    200
 
      ${resp}=  View Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
+     Log  ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}    200
+     IF  ${resp.json()['filterByDept']}==${bool[0]}
+          ${resp}=  Toggle Department Enable
+          Log  ${resp.content}
+          Should Be Equal As Strings  ${resp.status_code}  200
 
-    END
+     END
 
      sleep  2s
      ${resp}=  Get Departments
@@ -68,18 +68,22 @@ JD-TC-UpdateTeam-2
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      ${resp2}=   Get Business Profile
-    Log  ${resp2.json()}
-    Should Be Equal As Strings    ${resp2.status_code}    200
-    Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
+     Log  ${resp2.json()}
+     Should Be Equal As Strings    ${resp2.status_code}    200
+     Set Suite Variable  ${sub_domain_id}  ${resp2.json()['serviceSubSector']['id']}
      ${u_id}=  Create Sample User  admin=${bool[1]}
      Set Suite Variable  ${u_id}
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  Get User By Id  ${u_id}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Suite Variable  ${PUSERNAME_U1}  ${resp.json()['mobileNo']}
+     ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
+     Should Be Equal As Strings  ${resp[0].status_code}  200
+     Should Be Equal As Strings  ${resp[1].status_code}  200
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+     Should Be Equal As Strings  ${resp.status_code}  200
      ${team_name2}=  FakerLibrary.name
      ${desc2}=   FakerLibrary.sentence
      ${resp}=  Create Team For User  ${team_name2}  ${empty}  ${desc2}
@@ -107,12 +111,12 @@ JD-TC-UpdateTeam-3
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      ${PUSERNAME_U5}=  Evaluate  ${PUSERNAME}+330064
-    clear_users  ${PUSERNAME_U5}
-    ${firstname3}=  FakerLibrary.name
-    ${lastname3}=  FakerLibrary.last_name
-    ${address3}=  get_address
-    ${dob3}=  FakerLibrary.Date
-    # ${pin3}=  get_pincode
+     clear_users  ${PUSERNAME_U5}
+     ${firstname3}=  FakerLibrary.name
+     ${lastname3}=  FakerLibrary.last_name
+     ${address3}=  get_address
+     ${dob3}=  FakerLibrary.Date
+     # ${pin3}=  get_pincode
      # ${resp}=  Get LocationsByPincode     ${pin3}
      FOR    ${i}    IN RANGE    3
         ${pin3}=  get_pincode
@@ -134,13 +138,13 @@ JD-TC-UpdateTeam-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${u_id3}  ${resp.json()}
 
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U5}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U5}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U5}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200
+     ${resp}=  SendProviderResetMail   ${PUSERNAME_U5}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     @{resp}=  ResetProviderPassword  ${PUSERNAME_U5}  ${PASSWORD}  2
+     Should Be Equal As Strings  ${resp[0].status_code}  200
+     Should Be Equal As Strings  ${resp[1].status_code}  200
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U5}  ${PASSWORD}
+     Should Be Equal As Strings  ${resp.status_code}  200
      ${team_name2}=  FakerLibrary.name
      ${desc2}=   FakerLibrary.sentence
      ${resp}=  Create Team For User  ${team_name2}  ${empty}  ${desc2}
