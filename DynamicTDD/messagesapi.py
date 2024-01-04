@@ -2217,4 +2217,5 @@ AADHAAR_NUMBER_REQUIRED =  "Aadhaar number required."
 INVALID_AADHAAR_NUMBER =  "Invalid Aadhaar number."
 PAN_REQUIRED = "PAN required"
 INVALID_PAN = "Invalid PAN"
-
+AGE_MONTH_INVALID = "The given number of months in age is invalid"
+AGE_YEAR_INVALID = "The given age is invalid"
