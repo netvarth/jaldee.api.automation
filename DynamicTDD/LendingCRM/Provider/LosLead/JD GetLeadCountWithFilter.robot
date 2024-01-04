@@ -91,37 +91,25 @@ JD-TC-GetLeadCountByFilter-1
     ${PH_Number}    Random Number 	       digits=5 
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
-    Set Suite Variable    ${consumerPhone}  555${PH_Number}
-
-    ${resp}=  AddCustomer  ${consumerPhone}    
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Suite Variable  ${consumerId}  ${resp.json()[0]['id']}
-
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
     ${requestedAmount}=     Random Int  min=30000  max=600000
-    Set Suite Variable      ${requestedAmount}
     ${description}=         FakerLibrary.bs
-    Set Suite Variable      ${description}
     ${consumerFirstName}=   FakerLibrary.first_name
     Set Suite Variable      ${consumerFirstName}
     ${consumerLastName}=    FakerLibrary.last_name  
     Set Suite Variable      ${consumerLastName}
     ${dob}=    FakerLibrary.Date
-    Set Suite Variable      ${dob}
-    Set Suite Variable      ${Pname}
-    Set Suite Variable     ${consumerEmail}  ${consumerFirstName}.${test_mail}   
+    ${address}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}   
     ${permanentAddress1}=   FakerLibrary.address
-    Set Suite Variable      ${permanentAddress1}
     ${permanentAddress2}=   FakerLibrary.address  
-    Set Suite Variable      ${permanentAddress2}
     ${nomineeName}=     FakerLibrary.first_name
-    Set Suite Variable      ${nomineeName}
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    ${consumerKyc}=   Create Dictionary  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${losProduct}  ${status_id}  ${Sname}  ${progress_id}  ${Pname}  ${requestedAmount}  ${description}  ${consumerId}  ${consumerFirstName}  ${consumerLastName}  ${dob}  ${Genderlist[1]}  ${countryCodes[1]}  ${consumerPhone}  ${consumerEmail}  ${aadhaar}  ${pan}  ${bankAccountNo}  ${bankIfsc}  ${permanentAddress1}  ${permanentAddress2}  ${permanentDistrict}  ${permanentState}  ${permanentPin}  ${NomineeType[2]}  ${nomineeName}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -132,9 +120,37 @@ JD-TC-GetLeadCountByFilter-1
     Set Suite Variable      ${kycid}                ${resp.json()['consumerKyc']['id']}
     Set Suite Variable      ${referenceNo}          ${resp.json()['referenceNo']}
     Set Suite Variable      ${createdDate}          ${resp.json()['createdDate']}
+    Set Suite Variable      ${consumerId}           ${resp.json()['consumerKyc']['consumerId']} 
     Set Suite Variable      ${internalProgress}     ${resp.json()['internalProgress']}
     Set Suite Variable      ${internalStatus}       ${resp.json()['internalStatus']}
-    Should Be Equal As Strings  ${resp.json()['isConverted']}   ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhone']}        ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerEmail']}        ${consumerEmail}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentAddress1']}    ${permanentAddress1}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentAddress2']}    ${permanentAddress2}
+    Should Be Equal As StringS    ${resp.json()['consumerKyc']['permanentDistrict']}    ${permanentDistrict}  
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentState']}       ${permanentState}  
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentPin']}         ${permanentPin}  
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['aadhaar']}              ${aadhaar}  
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['pan']}                  ${pan}  
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankAccountNo']}        ${bankAccountNo}  
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankIfsc']}             ${bankIfsc}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeType']}          ${NomineeType[2]}  
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeName']}          ${nomineeName}
+
 
     ${resp}=    Get Lead By Filter LOS
     Log  ${resp.content}

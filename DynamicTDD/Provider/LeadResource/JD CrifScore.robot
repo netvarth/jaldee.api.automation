@@ -1252,12 +1252,12 @@ JD-TC-Create_CrifScore-UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
-    ${INVALID_ENQUIRE_ID}=   Replace String  ${INVALID_ENQUIRE_ID}  {}   KYC
+    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   KYC
 
     ${resp}=   Process CRIF Inquiry with kyc    ${leUid1}    ${idkyc}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVALID_ENQUIRE_ID}
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_X_ID}
 
 
 
@@ -1283,12 +1283,12 @@ JD-TC-Create_CrifScore-UH7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
-    ${INVALID_ENQUIRE_ID}=   Replace String  ${INVALID_ENQUIRE_ID}  {}   KYC
+    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   KYC
 
     ${resp}=   Process CRIF Inquiry with kyc   ${leUid1}   25
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVALID_ENQUIRE_ID}
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_X_ID}
 
 JD-TC-Create_CrifScore-UH8
     [Documentation]    create crife score empty kyc id

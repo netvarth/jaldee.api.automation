@@ -6473,3 +6473,20 @@ def endtime_conversion(time1,time2):
         return str(time1), str(time2)
     else:
         return str(time1), str(time2)
+
+
+def calculate_age_years_months(birth_date,current_date):
+
+    birth_date = datetime.datetime.strptime(birth_date, '%Y-%m-%d')
+    print (birth_date)
+
+    # Get the current date
+    current_date = datetime.datetime.now()
+    print (current_date)
+
+    # Calculate the difference in years and months
+    age_years = current_date.year - birth_date.year
+
+    age_months = age_years * 12 + current_date.month - birth_date.month
+
+    return age_years, age_months

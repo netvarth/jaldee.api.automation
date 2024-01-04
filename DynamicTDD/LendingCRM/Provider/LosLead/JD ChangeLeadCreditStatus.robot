@@ -88,21 +88,6 @@ JD-TC-ChangeLeadCreditStatus-1
     Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Pname}
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
 
-    ${name}=    FakerLibrary.name
-
-    ${resp}=    Create Lead Credit Status LOS  ${name}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable      ${creditstatus}      ${resp.json()['id']}
-
-    ${resp}=    Get Lead Credit Status LOS
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${creditstatus}
-    Should Be Equal As Strings    ${resp.json()[0]['account']}      ${account_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${name}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
     ${PH_Number}    Random Number 	       digits=5 
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
@@ -146,23 +131,99 @@ JD-TC-ChangeLeadCreditStatus-1
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
 
-    ${name2}=    FakerLibrary.name
+    ${Cname}=    FakerLibrary.name
 
-    ${resp}=    Create Lead Credit Status LOS  ${name2}
+    ${resp}=    Create Lead Credit Status LOS  ${Cname}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable      ${creditstatus2}      ${resp.json()['id']}
+    Set Suite Variable      ${creditstatus}      ${resp.json()['id']}
 
     ${resp}=    Get Lead Credit Status LOS
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${creditstatus2}
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${creditstatus}
     Should Be Equal As Strings    ${resp.json()[0]['account']}      ${account_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${name2}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${Cname}
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-    Should Be Equal As Strings    ${resp.json()[1]['id']}           ${creditstatus}
-    Should Be Equal As Strings    ${resp.json()[1]['account']}      ${account_id1}
-    Should Be Equal As Strings    ${resp.json()[1]['name']}         ${name}
-    Should Be Equal As Strings    ${resp.json()[1]['status']}       ${toggle[0]}
 
-    ${resp}=    Change Lead Credit Status LOS   ${lead_uid}  ${creditstatus2} 
+    ${resp}=    Change Lead Credit Status LOS   ${lead_uid}  ${creditstatus} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead By Filter LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['creditStatus']['id']}                  ${creditstatus}
+    Should Be Equal As Strings    ${resp.json()[0]['creditStatus']['name']}                ${Cname}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
+
+
+JD-TC-ChangeLeadCreditStatus-UH1
+
+    [Documentation]             Change Lead Credit Status where lead_uid is invalid 
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${fake}=    Random Int  min=300  max=999
+
+    ${INVALID_LEAD_ID}=   Replace String  ${INVALID_LEAD_ID}  {}  Lead
+
+    ${resp}=    Change Lead Credit Status LOS  ${fake}  ${creditstatus} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${INVALID_LEAD_ID}
+
+JD-TC-ChangeLeadCreditStatus-UH2
+
+    [Documentation]             Change Lead Credit Status where progress is invalid 
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${fake}=    Random Int  min=300  max=999
+
+    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   Credit Status
+
+    ${resp}=    Change Lead Credit Status LOS  ${lead_uid}  ${fake} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${INVALID_X_ID}
+
+JD-TC-ChangeLeadCreditStatus-UH3
+
+    [Documentation]             Change Lead Credit Status without login
+
+    ${resp}=    Change Lead Credit Status LOS  ${lead_uid}  ${creditstatus} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
+
+JD-TC-ChangeLeadCreditStatus-UH4
+
+    [Documentation]             Change Lead Credit Status using another provider login
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME39}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Change Lead Credit Status LOS  ${lead_uid}  ${creditstatus} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${NO_PERMISSION}
