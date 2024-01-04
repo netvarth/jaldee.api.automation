@@ -1,8 +1,8 @@
 import os, shutil, re, pymysql, json
 
 
-filename="numbers.txt"
-panfile="pan.txt"
+filename="TDD_Logs/numbers.txt"
+panfile="TDD_Logs/pan.txt"
 timefile="time.txt"
 dir="varfiles"
 dirpath=os.path.realpath('../Docker/')

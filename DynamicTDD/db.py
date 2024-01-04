@@ -56,7 +56,7 @@ loclist=[]
 
 
 addressfile='/ebs/TDD/locations.csv'
-fname='/ebs/TDD/TDD_Logs/pan.txt'
+panfile='/ebs/TDD/TDD_Logs/pan.txt'
 licjson='/ebs/ynwconf/licenseConfig.json'
 bizjson= '/ebs/ynwconf/businessDomainConfig.json'
 def_profile='/ebs/TDD/defaultpaymentprofile.txt'
@@ -2060,11 +2060,12 @@ def Generate_random_value(size=1, chars=string.ascii_uppercase + string.digits) 
     # Generate a random alphanumeric value based on upper case alphabets and digits of the given size
     return (''.join(random.choice(chars) for _ in range(size)))
 
-def Compare_data_from_file(val,fname) :
+def Compare_data_from_file(val,file) :
     # Compare passed data with contents of file.
     try:
-        f=open(fname,"a+")
-        contents=f.readline()
+        # f=open(panfile,"a+")
+        with open(file,"a+") as f:
+            contents=f.readline()
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
@@ -2077,7 +2078,7 @@ def Compare_data_from_file(val,fname) :
                     return True
             else:
                     return False
-    f.close
+    # f.close
 
 def Generate_pan_number() :
     # Generates unique pan number in comparison to values in pan.txt, stores it in pan.txt and returns pan number
@@ -2088,14 +2089,15 @@ def Generate_pan_number() :
         random_val2= Generate_random_value(4,string.digits)
         checksum= Generate_random_value(1,string.ascii_uppercase)
         pan= str(random_val1)+str(stat)+str(namefl)+str(random_val2)+str(checksum)
-        if os.path.isfile(fname) and os.access(fname, os.R_OK):
-            val_exists= Compare_data_from_file(pan,fname)            
+        if os.path.isfile(panfile) and os.access(panfile, os.R_OK):
+            val_exists= Compare_data_from_file(pan,panfile)            
         else:
             val_exists= True
         if val_exists:
-                f=open(fname,'a+')
-                f.write(pan+"\n")
-                f.close
+                # f=open(panfile,'a+')
+                with open(panfile,"a+") as f:
+                    f.write(pan+"\n")
+                # f.close
                 return (pan)
         else:
                 Generate_pan_number()
