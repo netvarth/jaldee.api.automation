@@ -269,7 +269,7 @@ JD-TC-High Level Test Case-2
 	[Documentation]  Checking the appxWaitingTime when calculation mode as Fixed and considerpartysize for calculation is true
     
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+10901
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
     Set Suite Variable   ${PUSERPH2}
     
     ${max_party}=  get_maxpartysize_subdomain
@@ -305,9 +305,9 @@ JD-TC-High Level Test Case-2
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+305
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+306
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
     ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name

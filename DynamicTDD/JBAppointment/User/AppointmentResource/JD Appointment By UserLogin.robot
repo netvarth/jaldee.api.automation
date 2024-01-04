@@ -44,7 +44,7 @@ JD-TC-AppointmentByUserLogin-1
      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
     Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
 
@@ -3963,7 +3963,7 @@ JD-TC-AppointmentByUserLogin-25
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+201
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
@@ -4092,7 +4092,7 @@ JD-TC-AppointmentByUserLogin-26
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+211
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
@@ -6932,7 +6932,7 @@ JD-TC-AppointmentByUserLogin-UH1
     Set Suite Variable  ${userName}  ${decrypted_data['userName']}
     # Set Suite Variable    ${id}    ${resp.json()['id']} 
     # Set Suite Variable    ${userName}    ${resp.json()['userName']}         
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Suite Variable  ${PUSERNAME_A}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
@@ -9604,7 +9604,7 @@ JD-TC-AppointmentByUserLogin-UH29
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+221
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name

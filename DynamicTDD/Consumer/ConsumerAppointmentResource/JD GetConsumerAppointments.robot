@@ -800,7 +800,7 @@ JD-TC-GetConsumerAppointments-9
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
     Set Suite Variable  ${PUSERNAME_D}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}

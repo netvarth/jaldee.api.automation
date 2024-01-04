@@ -984,7 +984,7 @@ JD-TC-Confirm Blocked Appointment-6
     ${PO_Number}    Generate random string    4    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERPH0}  firstName=${fname}  lastName=${lname}

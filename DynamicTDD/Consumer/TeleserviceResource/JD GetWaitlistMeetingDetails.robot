@@ -110,7 +110,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  "${resp.json()}"    "true"
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
 
     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
     Log   ${resp.json()}
@@ -1039,7 +1039,7 @@ JD-TC-TeleserviceWaitlist-(Non billable Subdomain)-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  "${resp.json()}"    "true"
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
 
     ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  0
     Log   ${resp.json()}

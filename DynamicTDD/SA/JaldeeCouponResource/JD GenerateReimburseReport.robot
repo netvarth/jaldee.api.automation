@@ -1582,7 +1582,7 @@ JD-TC-GenerateReimburseReport-9
 
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+154686
     Set Suite Variable   ${CUSERPH1}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -1604,7 +1604,7 @@ JD-TC-GenerateReimburseReport-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
 
     Set Suite Variable  ${jaldee_id1}  ${resp.json()['id']}
     Set Test Variable  ${fname}  ${resp.json()['firstName']}

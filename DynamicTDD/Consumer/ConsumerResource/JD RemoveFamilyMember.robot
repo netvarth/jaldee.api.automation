@@ -350,7 +350,7 @@ JD-TC-RemoveFamilyMember-3
       Should Be Equal As Strings  ${resp.status_code}  200
       ${CUSERPH1}=  Evaluate  ${CUSERNAME}+100100401
       Set Suite Variable   ${CUSERPH1}
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
       ${dob}=  FakerLibrary.Date

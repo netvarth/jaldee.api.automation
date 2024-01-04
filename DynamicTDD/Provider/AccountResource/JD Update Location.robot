@@ -36,7 +36,7 @@ JD-TC-UpdateLocation-1
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
       Set Suite Variable  ${PUSERNAME_D}
       # ${city}=   get_place
       # Set Suite Variable  ${city}
@@ -119,7 +119,7 @@ JD-TC-UpdateLocation-2
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_E}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
       Set Suite Variable  ${PUSERNAME_E}
       # ${city}=   get_place
       # Set Suite Variable  ${city}
@@ -206,7 +206,7 @@ JD-TC-UpdateLocation-3
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_F}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_F}${\n}
       Set Suite Variable  ${PUSERNAME_F}
       # ${city}=   get_place
       # Set Suite Variable  ${city}
@@ -281,7 +281,7 @@ JD-TC-UpdateLocation-4
       ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
     Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
       Set Suite Variable  ${MUSERNAME_E}
       ${uid}=  get_uid  ${MUSERNAME_E}
@@ -358,7 +358,7 @@ JD-TC-UpdateLocation-UH1
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_A}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
       Set Suite Variable  ${PUSERNAME_A}
       # ${city}=   get_place
       # Set Suite Variable  ${city}
@@ -440,7 +440,7 @@ JD-TC-UpdateLocation-5
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
       Set Suite Variable  ${PUSERNAME_B}
       ${city4}=   get_place
       Set Suite Variable  ${city4}

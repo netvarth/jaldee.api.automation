@@ -50,7 +50,7 @@ JD-TC-GetFutureAppointmentCount-1
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${p_id}  ${decrypted_data['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_F}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_F}${\n}
     Set Suite Variable  ${PUSERNAME_F}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
@@ -1291,7 +1291,7 @@ JD-TC-GetFutureAppointmentCount-10
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${pid}  ${decrypted_data['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
     Set Suite Variable  ${PUSERNAME_C}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}

@@ -37,7 +37,7 @@ JD-TC-ListCustomerByProvider-1
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${pcid}  ${resp.json()}
       # Log  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERNAME18}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERNAME18}${\n}
       ${resp}=  GetCustomer ById  ${pcid}
       Should Be Equal As Strings  ${resp.status_code}  200
       Log  ${resp.json()}
@@ -56,7 +56,7 @@ JD-TC-ListCustomerByProvider-2
       Should Be Equal As Strings  ${resp.status_code}  200
       Log  ${resp.json()}
       Set Test Variable  ${pcid1}  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERNAME8}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERNAME8}${\n}
       ${resp}=  GetCustomer ById  ${pcid1}
       Should Be Equal As Strings  ${resp.status_code}  200
       Log  ${resp.json()}
@@ -84,7 +84,7 @@ JD-TC-ListCustomerByProvider-3
       Should Be Equal As Strings  ${resp.status_code}  200
       
       Set Suite Variable  ${pcid2}  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME3}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME3}${\n}
       ${resp}=  GetCustomer ById  ${pcid2}
       Should Be Equal As Strings  ${resp.status_code}  200
       Log  ${resp.json()}
@@ -125,7 +125,7 @@ JD-TC-ListCustomerByProvider-4
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${pcid}  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
       ${resp}=  GetCustomer ById  ${pcid}
       Should Be Equal As Strings  ${resp.status_code}  200
       Log  ${resp.json()}

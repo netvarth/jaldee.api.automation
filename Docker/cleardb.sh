@@ -194,10 +194,12 @@ clear()
 
   # archiveAndDeleteLog ${default_BACKUP_PATH}
 
-  echo -n "" > "${INPUT_LOC%/}/$NUM_FILE"
-  echo -n "" > "${INPUT_LOC%/}/$PAN_FILE"
-  echo -n "" > "${INPUT_LOC%/}/$TIME_FILE"
+  echo "clearing files in TDD_Logs and $VAR_DIR"
+  for file in "${INPUT_LOC%/}/TDD_Logs/"*; do >$file; done
   rm -rf "${INPUT_LOC%/}/$VAR_DIR"/*
+  # echo -n "" > "${INPUT_LOC%/}/$NUM_FILE"
+  # echo -n "" > "${INPUT_LOC%/}/$PAN_FILE"
+  # echo -n "" > "${INPUT_LOC%/}/$TIME_FILE"
   #  rm  "${CUR_LOC%/}"/env*.list
 
 }

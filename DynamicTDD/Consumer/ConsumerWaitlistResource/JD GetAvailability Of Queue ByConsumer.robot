@@ -27,7 +27,7 @@ JD-TC-Get Next Available Dates-1
     Set Test Variable   ${sector}        ${resp[0]['domain']}
     Set Test Variable   ${sub_sector}    ${resp[0]['subdomains'][0]}
     ${PUSERNAME_P}=  Evaluate  ${PUSERNAME}+91235
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_P}${\n}   
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_P}${\n}   
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME_P}  ${pkg_id[0]}
     Log   ${resp.json()}
@@ -661,7 +661,7 @@ JD-TC-Get Next Available Dates-8
     Log  ${decrypted_data}
     Set Suite Variable  ${pid}  ${decrypted_data['id']}
     # Set Test Variable  ${pid}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_L}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_L}${\n}
     Set Suite Variable  ${MUSERNAME_L}
     
     ${accid1}=  get_acc_id  ${MUSERNAME_L} 

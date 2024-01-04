@@ -47,7 +47,7 @@ JD-TC-Provider Note-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_J}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_J}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_J}${\n}
     Set Suite Variable  ${PUSERNAME_J}
 
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -127,7 +127,7 @@ JD-TC-Provider Note-1
     Set Suite Variable  ${cid}  ${resp.json()}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
 
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  

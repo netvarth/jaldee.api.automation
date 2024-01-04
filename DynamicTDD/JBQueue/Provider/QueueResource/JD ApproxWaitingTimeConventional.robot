@@ -48,7 +48,7 @@ JD-TC-Approximate Waiting Time Conventional-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_Z}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_Z}${\n}
     Set Suite Variable  ${PUSERNAME_Z}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_Z}  ${PASSWORD}

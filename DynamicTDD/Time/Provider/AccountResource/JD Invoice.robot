@@ -38,7 +38,7 @@ JD-TC-Invoice-1
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
 
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -160,7 +160,7 @@ JD-TC-Invoice-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid}=  get_acc_id  ${ph}
@@ -286,7 +286,7 @@ JD-TC-Invoice-3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -460,7 +460,7 @@ JD-TC-Invoice-4
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Add SalesChannel  ${scCode}
@@ -629,7 +629,7 @@ JD-TC-Invoice-5
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Change Bill Cycle  ${billCycle[0]} 
@@ -825,7 +825,7 @@ JD-TC-Invoice-6
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -966,7 +966,7 @@ JD-TC-Invoice-7
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 

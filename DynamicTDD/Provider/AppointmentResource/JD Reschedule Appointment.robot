@@ -3363,10 +3363,10 @@ JD-TC-Reschedule Appointment-14
     ${list}=  Create List  1  2  3  4  5  6  7
     
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+10014587
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
     
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+10014785
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
     
     ${PUSERMAIL0}=   Set Variable  ${P_Email}ph${PUSERPH2}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random

@@ -50,7 +50,7 @@ JD-TC-Invoice-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_T}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_T}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_T}${\n}
     Set Suite Variable  ${PUSERNAME_T}
     ${pid}=  get_acc_id  ${PUSERNAME_T}
     Set Suite Variable  ${pid}
@@ -274,7 +274,7 @@ JD-TC-Invoice-4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_S}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_S}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_S}${\n}
     Set Suite Variable  ${PUSERNAME_S}
     ${pid}=  get_acc_id  ${PUSERNAME_S}
     Set Suite Variable  ${pid}
@@ -456,7 +456,7 @@ JD-TC-Invoice-UH3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
     ${pid1}=  get_acc_id  ${ph}
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
@@ -560,7 +560,7 @@ JD-TC-Invoice-5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_R}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_R}${\n}
     Set Suite Variable  ${PUSERNAME_R}
     ${pid}=  get_acc_id  ${PUSERNAME_R}
     Set Suite Variable  ${pid}
@@ -671,7 +671,7 @@ JD-TC-Invoice-5
     # Should Be Equal As Strings    ${resp.status_code}    200
     # ${resp}=  Account Set Credential  ${ph}  ${PASSWORD}  0
     # Should Be Equal As Strings    ${resp.status_code}    200
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
     # ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     # Should Be Equal As Strings    ${resp.status_code}    200
     # ${pid}=  get_acc_id  ${ph}

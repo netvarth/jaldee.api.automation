@@ -57,7 +57,7 @@ JD-TC-ApplyJaldeeCouponToChannel-1
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable  ${PUSERPH0}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service  ${PUSERPH0}  AND  clear_Item    ${PUSERPH0}  AND   clear_Coupon   ${PUSERPH0}   AND  clear_Discount  ${PUSERPH0}  AND  clear_customer  ${PUSERPH0}
      
@@ -476,7 +476,7 @@ JD-TC-ApplyJaldeeCouponToChannel-2
     # Set Suite Variable  ${prov_id1}  ${resp.json()['id']}
 
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+100114103
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service  ${PUSERPH0}  AND  clear_Item    ${PUSERPH0}  AND   clear_Coupon   ${PUSERPH0}   AND  clear_Discount  ${PUSERPH0}  AND  clear_customer  ${PUSERPH0}
      

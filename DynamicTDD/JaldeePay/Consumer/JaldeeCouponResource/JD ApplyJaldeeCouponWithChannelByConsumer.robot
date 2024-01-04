@@ -53,7 +53,7 @@ ${self}  0
 JD-TC-ApplyJaldeeCouponByConsumer-1
     [Documentation]  Consumer apply a coupon at self payment
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+10992109
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
   
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -1481,7 +1481,7 @@ JD-TC-ApplyJaldeeCouponByConsumer-UH5
     [Documentation]  Consumer apply a coupon at Checkin time.but coupon apply only at firstCheckinOnly
 
     ${CUSERPH2}=  Evaluate  ${CUSERPH}+100100160
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
     Set Suite Variable   ${CUSERPH2}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH2}+1000
     ${CUSERMAIL2}=   Set Variable  ${C_Email}ph205.${test_mail}

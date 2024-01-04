@@ -112,7 +112,7 @@ JD-TC-JD S3-3
     Set Test Variable   ${sector}        ${resp[1]['domain']}
     Set Test Variable   ${sub_sector}    ${resp[1]['subdomains'][0]}
     ${PUSERNAME}=  Evaluate  ${PUSERNAME}+112249
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n}   
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}   
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME}  ${pkg_id[0]}
     Log   ${resp.json()}
@@ -138,7 +138,7 @@ JD-TC-JD S3-4
     Set Test Variable   ${sector}        ${resp[1]['domain']}
     Set Test Variable   ${sub_sector}    ${resp[1]['subdomains'][0]}
     ${PUSERNAME}=  Evaluate  ${PUSERNAME}+992249
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n}   
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}   
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME}  ${pkg_id[0]}
     Log   ${resp.json()}
@@ -179,7 +179,7 @@ JD-TC-JD S3-5
     Set Test Variable   ${sector}        ${resp[1]['domain']}
     Set Test Variable   ${sub_sector}    ${resp[1]['subdomains'][0]}
     ${PUSERNAME}=  Evaluate  ${PUSERNAME}+882249
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n}   
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}   
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME}  ${pkg_id[0]}
     Log   ${resp.json()}
@@ -221,7 +221,7 @@ JD-TC-JD S3-6
     Set Test Variable   ${sector}        ${resp[1]['domain']}
     Set Test Variable   ${sub_sector}    ${resp[1]['subdomains'][0]}
     ${PUSERNAME}=  Evaluate  ${PUSERNAME}+772250
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n}   
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}   
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME}  ${pkg_id[0]}
     Log   ${resp.json()}
@@ -277,7 +277,7 @@ JD-TC-JD S3-7
     Set Test Variable   ${sector}        ${resp[1]['domain']}
     Set Test Variable   ${sub_sector}    ${resp[1]['subdomains'][0]}
     ${PUSERNAME}=  Evaluate  ${PUSERNAME}+662249
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n}   
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}   
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME}  ${pkg_id[0]}
     Log   ${resp.json()}
@@ -305,7 +305,7 @@ JD-TC-JD S3-8
     Set Test Variable   ${sector}        ${resp[1]['domain']}
     Set Test Variable   ${sub_sector}    ${resp[1]['subdomains'][0]}
     ${PUSERNAME}=  Evaluate  ${PUSERNAME}+552249
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n}   
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}   
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME}  ${pkg_id[0]}
     Log   ${resp.json()}
@@ -335,7 +335,7 @@ JD-TC-JD S3-9
     Set Test Variable   ${sector}        ${resp[1]['domain']}
     Set Test Variable   ${sub_sector}    ${resp[1]['subdomains'][0]}
     ${PUSERNAME}=  Evaluate  ${PUSERNAME}+442249
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n}   
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}   
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME}  ${pkg_id[0]}
     Log   ${resp.json()}

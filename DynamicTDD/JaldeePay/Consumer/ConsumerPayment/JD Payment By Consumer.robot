@@ -33,7 +33,7 @@ JD-TC-Payment By Consumer-1
     ${PO_Number}    Generate random string    8    123463789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
     Set Suite Variable   ${PUSERPH2}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH2}   AND  clear_service  ${PUSERPH2}  AND  clear_Item    ${PUSERPH2}  AND   clear_Coupon   ${PUSERPH2}   AND  clear_Discount  ${PUSERPH2}  AND  clear_appt_schedule   ${PUSERPH2}
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -341,7 +341,7 @@ JD-TC-Payment By Consumer-2
     [Documentation]  Taking waitlist from consumer side and check prepay amount while checkin more than one person
     
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+1045733
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
     Set Suite Variable   ${PUSERPH1}
     
     ${max_party}=  get_maxpartysize_subdomain
@@ -377,9 +377,9 @@ JD-TC-Payment By Consumer-2
     # Set Test Variable  ${pid}  ${resp.json()['id']}
     
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+305
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+306
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
     ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name
@@ -2125,7 +2125,7 @@ JD-TC-Payment By Consumer-13
     ${PO_Number}    Generate random string    8    123463796
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
     Set Suite Variable   ${PUSERPH2}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH2}   AND  clear_service  ${PUSERPH2}  AND  clear_Item    ${PUSERPH2}  AND   clear_Coupon   ${PUSERPH2}   AND  clear_Discount  ${PUSERPH2}  AND  clear_appt_schedule   ${PUSERPH2}
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -2826,7 +2826,7 @@ JD-TC-Payment By Consumer-2
     [Documentation]  Taking waitlist from consumer side and check prepay amount while checkin more than one person
 
     ${PUSERPH3}=  Evaluate  ${PUSERNAME}+100100204
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH3}${\n}
     Set Suite Variable   ${PUSERPH3}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH3}  AND  clear_service  ${PUSERPH3}  AND  clear_location  ${PUSERPH3}
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -2871,9 +2871,9 @@ JD-TC-Payment By Consumer-2
     Set Suite Variable  ${DAY}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+305
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+306
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
     ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name

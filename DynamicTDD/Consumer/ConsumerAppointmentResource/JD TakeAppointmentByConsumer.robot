@@ -87,7 +87,7 @@ JD-TC-Take Appointment-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
     Set Suite Variable  ${PUSERNAME_B}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -906,7 +906,7 @@ JD-TC-Take Appointment-9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pid}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_X}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_X}${\n}
     Set Suite Variable  ${PUSERNAME_X}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_X}  ${PASSWORD}
@@ -3475,7 +3475,7 @@ JD-TC-Take Appointment-UH12
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_W}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_W}${\n}
     Set Suite Variable  ${PUSERNAME_W}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
@@ -4472,7 +4472,7 @@ JD-TC-Take Appointment-UH14
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
     Set Suite Variable  ${PUSERNAME_D}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}

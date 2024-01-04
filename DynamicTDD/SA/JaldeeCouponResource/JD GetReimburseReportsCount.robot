@@ -46,7 +46,7 @@ JD-TC-Get ReimbursereportsCount-1
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+45445
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     ${licid}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domains[0]}  ${sub_domains[0]}  ${PUSERPH0}  ${licid[0]}
     Log   ${resp.json()}

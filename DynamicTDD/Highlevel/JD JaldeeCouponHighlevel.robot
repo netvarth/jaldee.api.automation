@@ -58,7 +58,7 @@ JD-TC-JaldeeCouponHighlevel-1
     [Documentation]  Consumer apply a coupon at Checkin time,Disable that coupon by superadmin before bill settilment then also add more item on it
     
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+100100150
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
     clear_location  ${PUSERPH0}
     clear_Item  ${PUSERPH0} 

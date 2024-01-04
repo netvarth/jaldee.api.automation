@@ -39,7 +39,7 @@ JD-TC-Update Account Payment Settings-1
        ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
        Log  ${resp.json()}
        Should Be Equal As Strings    ${resp.status_code}    200
-       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
+       Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
        Set Suite Variable  ${PUSERNAME_B}
        ${DAY1}=  db.get_date_by_timezone  ${tz}
        Set Suite Variable  ${DAY1}  ${DAY1}
@@ -127,7 +127,7 @@ JD-TC-Update Account Payment Settings-3
        ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
        Log  ${resp.json()}
        Should Be Equal As Strings    ${resp.status_code}    200
-       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
+       Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
        Set Suite Variable  ${PUSERNAME_B}
        ${DAY1}=  db.get_date_by_timezone  ${tz}
        Set Suite Variable  ${DAY1}  ${DAY1}
@@ -274,7 +274,7 @@ JD-TC-Update Account Payment Settings-UH12
        ${email}=  Set Variable  ${P_Email}${first_name}.${test_mail}
        ${pkg_id}=   get_highest_license_pkg
        ${PUSERNAME}=  Evaluate  ${PUSERNAME}+51160
-       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n} 
+       Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n} 
        ${resp}=  Account SignUp  ${first_name}  ${last_name}   ${email}  ${d1}  ${sd1}  ${PUSERNAME}    ${pkg_id[0]}
        Log   ${resp.json()}
        Should Be Equal As Strings    ${resp.status_code}    200

@@ -48,6 +48,7 @@ BANK_TABLE='bank_master_tbl.sql'
 BACKUP_FILE="${BACKUP_NAME}-${TODAY}.sql"
 SECONDS=0
 myversion=$(mysql -h ${MYSQL_HOST} -se "select @@version;")
+TDD_Logs_Path='$(dirname "$PWD")/DynamicTDD/TDD_Logs/'
 
 
 
@@ -221,6 +222,10 @@ eof
     fi
 }
 
+clearfiles()
+{
+    for file in "${TDD_Logs_Path%/}/"*; do >$file; done
+}
 
 
 # Check if this script is being invoked with sudo command.
@@ -259,6 +264,8 @@ case $1 in
             populate
             populatePostalCodeTable
             populateBankMasterTable
+            echo "clearing files in TDD_Logs."
+            clearfiles
             shift
             ;;
     * )                     

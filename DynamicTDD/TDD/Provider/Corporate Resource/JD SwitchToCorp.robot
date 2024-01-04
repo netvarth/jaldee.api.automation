@@ -37,7 +37,7 @@ JD-TC-SwitchToCorp-1
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_Z}=  Evaluate  ${PUSERNAME}+4512     
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_Z}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_Z}${\n}
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain1}  ${subdomain1}  ${PUSERNAME_Z}   ${pkg_id[0]}
     Log  ${resp.json()}
@@ -65,7 +65,7 @@ JD-TC-SwitchToCorp-2
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_B}=  Evaluate  ${PUSERNAME}+7788    
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain1}  ${subdomain1}  ${PUSERNAME_B}   ${pkg_id[0]}
     Log  ${resp.json()}
@@ -91,7 +91,7 @@ JD-TC-SwitchToCorp-3
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+6694    
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     ${resp}=  Get Licensable Packages
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -118,7 +118,7 @@ JD-TC-SwitchToCorp-4
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+6689     
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     ${resp}=  Get Licensable Packages
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -145,7 +145,7 @@ JD-TC-SwitchToCorp-UH1
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+6210     
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     ${resp}=  Get Licensable Packages
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -199,7 +199,7 @@ JD-TC-SwitchToCorp-UH3
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_C}=  Evaluate  ${PUSERNAME}+4518   
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain2}  ${subdomain2}  ${PUSERNAME_C}   ${pkg_id[0]}
     Log  ${resp.json()}

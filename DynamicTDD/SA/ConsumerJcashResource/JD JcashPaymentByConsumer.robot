@@ -226,8 +226,8 @@ JD-TC-JcashPaymentByConsumer-1
     
     # ${CUSERPH1}=  Evaluate  ${CUSERPH}+104388201
     # Set Suite Variable   ${CUSERPH1}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
-    # Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH1}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
 
     # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+4468
     # ${firstname}=  FakerLibrary.first_name
@@ -256,7 +256,7 @@ JD-TC-JcashPaymentByConsumer-1
 
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+967411232
     Set Suite Variable   ${CUSERPH1}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -534,8 +534,8 @@ JD-TC-JcashPaymentByConsumer-2
     
     # ${CUSERPH2}=  Evaluate  ${CUSERPH}+1043874501
     # Set Suite Variable   ${CUSERPH2}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH2}${\n}
-    # Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH2}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH2}${\n}
 
     # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH2}+4468
     # ${firstname}=  FakerLibrary.first_name
@@ -565,7 +565,7 @@ JD-TC-JcashPaymentByConsumer-2
 
     ${CUSERPH2}=  Evaluate  ${CUSERPH}+95634323
     Set Suite Variable   ${CUSERPH2}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -919,8 +919,8 @@ JD-TC-JcashPaymentByConsumer-3
     
     # ${CUSERPH3}=  Evaluate  ${CUSERPH}+105874501
     # Set Suite Variable   ${CUSERPH3}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
-    # Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH3}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH3}${\n}
 
     # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH3}+4468
     # ${firstname}=  FakerLibrary.first_name
@@ -949,7 +949,7 @@ JD-TC-JcashPaymentByConsumer-3
 
     ${CUSERPH3}=  Evaluate  ${CUSERPH}+7544680
     Set Suite Variable   ${CUSERPH3}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -1135,8 +1135,8 @@ JD-TC-JcashPaymentByConsumer-4
 
     ${CUSERPH4}=  Evaluate  ${CUSERPH}+104328201
     Set Suite Variable   ${CUSERPH4}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH4}${\n}
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH4}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH4}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH4}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH4}+4468
     ${firstname}=  FakerLibrary.first_name
@@ -1345,8 +1345,8 @@ JD-TC-JcashPaymentByConsumer-5
 
     ${CUSERPH5}=  Evaluate  ${CUSERPH}+104377701
     Set Suite Variable   ${CUSERPH5}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH5}${\n}
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH5}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH5}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH5}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH5}+4468
     ${firstname}=  FakerLibrary.first_name
@@ -1589,8 +1589,8 @@ JD-TC-JcashPaymentByConsumer-6
 
     ${CUSERPH6}=  Evaluate  ${CUSERPH}+747328201
     Set Suite Variable   ${CUSERPH6}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH6}${\n}
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH6}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH6}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH6}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH6}+4468
     ${firstname}=  FakerLibrary.first_name
@@ -1843,8 +1843,8 @@ JD-TC-JcashPaymentByConsumer-7
     [Documentation]  Taking waitlist from consumer side then cancel the waitlist after doing the prepayment with jcash and mock.
 
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+1043401
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+4468
     ${firstname}=  FakerLibrary.first_name
@@ -2018,8 +2018,8 @@ JD-TC-JcashPaymentByConsumer-8
     [Documentation]  Taking waitlist from consumer side then cancel the waitlist after doing the fullpayment with jcash and mock.
 
     ${CUSERPH4}=  Evaluate  ${CUSERPH}+104555
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH4}${\n}
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH4}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH4}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH4}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH4}+4468
     ${firstname}=  FakerLibrary.first_name
@@ -2266,8 +2266,8 @@ JD-TC-JcashPaymentByConsumer-9
     [Documentation]  Taking appointment from consumer side then cancel the waitlist after doing the fullpayment with jcash and mock.
 
     ${CUSERPH5}=  Evaluate  ${CUSERPH}+887532454
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH5}${\n}
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH5}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH5}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH5}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH5}+4468
     ${firstname}=  FakerLibrary.first_name
@@ -2561,8 +2561,8 @@ JD-TC-JcashPaymentByConsumer-10
     [Documentation]  Taking order from consumer side then cancel the waitlist after doing the fullpayment with jcash and mock.
 
     ${CUSERPH6}=  Evaluate  ${CUSERPH}+799802
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH6}${\n}
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH6}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH6}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH6}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH6}+4468
     ${firstname}=  FakerLibrary.first_name
@@ -2870,8 +2870,8 @@ JD-TC-JcashPaymentByConsumer-11
     [Documentation]  Taking waitlist from consumer side and the consumer doing the prepayment with jcash and mock and it fails.
 
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+866535
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+4468
     ${firstname}=  FakerLibrary.first_name
@@ -3016,8 +3016,8 @@ JD-TC-JcashPaymentByConsumer-12
     [Documentation]  Taking waitlist from consumer side and the consumer doing the prepayment with jcash.
 
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+866538
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+4468
     ${firstname}=  FakerLibrary.first_name
@@ -3247,8 +3247,8 @@ JD-TC-JcashPaymentByConsumer-13
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+1043301
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+4468
     ${firstname}=  FakerLibrary.first_name
@@ -3481,8 +3481,8 @@ JD-TC-JcashPaymentByConsumer-14
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${CUSERPH2}=  Evaluate  ${CUSERPH}+104221
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH2}${\n}
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH2}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH2}+4468
     ${firstname}=  FakerLibrary.first_name
@@ -3818,8 +3818,8 @@ JD-TC-JcashPaymentByConsumer-15
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${CUSERPH3}=  Evaluate  ${CUSERPH}+106601
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH3}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH3}+4468
     ${firstname}=  FakerLibrary.first_name
@@ -3997,8 +3997,8 @@ JD-TC-JcashPaymentByConsumer-16
     [Documentation]  Taking muliple checkin from prvider side and the consumer doing full payment with jcash and mock.
 
     ${CUSERPH3}=  Evaluate  ${CUSERPH}+19987351
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH3}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH3}+4468
     ${firstname}=  FakerLibrary.first_name
@@ -4029,7 +4029,7 @@ JD-TC-JcashPaymentByConsumer-16
     Set Test Variable   ${sector}        ${resp['domain']}
     Set Test Variable   ${sub_sector}    ${resp['subdomain']}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+8706789
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_A}${\n}   
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}   
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME_A}  ${pkg_id[0]}
     Log   ${resp.json()}
@@ -4047,10 +4047,10 @@ JD-TC-JcashPaymentByConsumer-16
     ${accId1}=  get_acc_id  ${PUSERNAME_A}
 
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+342
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
 
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+343
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
 
     ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERNAME_A}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
@@ -4409,8 +4409,8 @@ JD-TC-JcashPaymentByConsumer-17
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+1045586
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+4468
     ${firstname}=  FakerLibrary.first_name
@@ -4782,8 +4782,8 @@ JD-TC-JcashPaymentByConsumer-clear
     
 #     ${CUSERPH1}=  Evaluate  ${CUSERPH}+1045586
 #     Set Suite Variable   ${CUSERPH1}
-#     Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
-#     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH1}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
 
 #     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+4468
 #     ${firstname}=  FakerLibrary.first_name
@@ -4931,8 +4931,8 @@ JD-TC-JcashPaymentByConsumer-3
     
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+104322201
     Set Suite Variable   ${CUSERPH1}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+4468
     ${firstname}=  FakerLibrary.first_name

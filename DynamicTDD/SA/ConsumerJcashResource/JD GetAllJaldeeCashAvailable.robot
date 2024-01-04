@@ -112,7 +112,7 @@ JD-TC-GetAvailableJcash-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${cons_id}   ${resp.json()['id']} 
 
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH1}${\n}     
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}     
 
     ${resp}=  Get All Jaldee Cash Available
     Log  ${resp.content}
@@ -256,7 +256,7 @@ JD-TC-GetAvailableJcash-3
 
                                                    
 
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
 
 
 
@@ -579,7 +579,7 @@ JD-TC-GetAvailableJcash-6
     
     # ${CUSERPH2}=  Evaluate  ${CUSERPH}+10703556
     # Set Suite Variable   ${CUSERPH2}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH2}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
     # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH2}+48895
     # ${firstname}=  FakerLibrary.first_name
     # ${lastname}=  FakerLibrary.last_name
@@ -600,7 +600,7 @@ JD-TC-GetAvailableJcash-6
     # Should Be Equal As Strings    ${resp.status_code}    200
     # Set Test Variable   ${cons_id}   ${resp.json()['id']}                                                         
 
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH2}${\n}
 
     ${resp}=  Get All Jaldee Cash Available
     Log  ${resp.content}
@@ -692,7 +692,7 @@ JD-TC-GetAvailableJcash-7
     
     # ${CUSERPH2}=  Evaluate  ${CUSERPH}+107035896
     # Set Suite Variable   ${CUSERPH2}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH2}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
     # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH2}+48895
     # ${firstname}=  FakerLibrary.first_name
     # ${lastname}=  FakerLibrary.last_name
@@ -736,7 +736,7 @@ JD-TC-GetAvailableJcash-7
 
 
 
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH2}${\n}
 
     ${resp}=  Get All Jaldee Cash Available
     Log  ${resp.content}

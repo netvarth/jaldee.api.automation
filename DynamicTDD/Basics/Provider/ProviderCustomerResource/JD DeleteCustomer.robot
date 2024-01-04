@@ -28,7 +28,7 @@ JD-TC-DeleteCustomer-1
      ${resp}=  AddCustomer without email   ${firstname}  ${lastname}  ${EMPTY}  ${gender}  ${dob}  ${ph}  ${EMPTY} 
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${customerId}  ${resp.json()}
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
      ${resp}=  DeleteCustomer  ${customerId}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  GetCustomer  firstName-eq=${firstname}  phoneNo-eq=${ph}
@@ -92,7 +92,7 @@ JD-TC-DeleteCustomer-UH5
       ${resp}=  AddCustomer without email   ${firstname}  ${lastname}  ${EMPTY}  ${gender}  ${dob}   ${ph2}  ${EMPTY} 
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cId}  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${cId}  ${s_id}  ${qid}  ${DAY}  ${desc}  ${bool[1]}  ${cId} 
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -131,7 +131,7 @@ JD-TC-DeleteCustomer-2
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${cid}  ${resp.json()}
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
      ${resp}=  DeleteCustomer  ${cid}
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  GetCustomer    phoneNo-eq=${ph}

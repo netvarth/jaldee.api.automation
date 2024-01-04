@@ -46,7 +46,7 @@ JD-TC-UpdateFamilyMember-1
 JD-TC-UpdateFamilyMember-2
       [Documentation]    Update a family member when that family member is also a consumer
       ${CUSERPH1}=  Evaluate  ${CUSERNAME}+100100501
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
       ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${id}=  get_id  ${CUSERNAME31}
@@ -95,7 +95,7 @@ JD-TC-UpdateFamilyMember-2
 JD-TC-UpdateFamilyMember-3
       [Documentation]    Update a family member when that family member also a consumer
       ${CUSERPH2}=  Evaluate  ${CUSERNAME}+100100502
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH2}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
       ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH2}+1000
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
@@ -142,7 +142,7 @@ JD-TC-UpdateFamilyMember-4
       ${id}=  get_id  ${CUSERNAME31}
       Set Suite Variable  ${id}  ${id}
       ${PUSERPH1}=  Evaluate  ${PUSERNAME}+100100501
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH1}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
       ${dob}=  FakerLibrary.Date
@@ -191,7 +191,7 @@ JD-TC-UpdateFamilyMember-5
       Log  ${d1}
       Set Test Variable  ${sd1}  ${resp.json()[0]['subDomains'][0]['subDomain']}
       ${PUSERPH2}=  Evaluate  ${PUSERNAME}+100100502
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
       ${dob}=  FakerLibrary.Date

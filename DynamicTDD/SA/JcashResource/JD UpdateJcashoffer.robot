@@ -244,7 +244,7 @@ JD-TC-Update_JCash_Offer-3
 
     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+55781
     Set Suite Variable   ${CUSERPH0}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+4468
     ${firstname_C0}=  FakerLibrary.first_name
     ${lastname_C0}=  FakerLibrary.last_name

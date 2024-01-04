@@ -35,7 +35,7 @@ JD-TC-CreateSPwithPseudoCorpandBranch-1
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_Z}=  Evaluate  ${PUSERNAME}+4520     
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_Z}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_Z}${\n}
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERNAME_Z}   ${pkg_id[0]}
     Log  ${resp.json()}
@@ -60,9 +60,9 @@ JD-TC-CreateSPwithPseudoCorpandBranch-1
     ${code}=         FakerLibrary.word
 	${email}=   	 Set Variable  ${P_Email}${code}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+9452 
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE1}${\n}
     ${PHONE11}=  Evaluate  ${PUSERNAME}+7578     
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE11}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE11}${\n}
 	${resp}=   Create SP With Pseudo Corp and Branch  ${f_name}  ${l_name}  ${city}  ${state}  ${address}  ${PHONE1}  ${PHONE11}  ${dob}  ${gender}  ${email}   ${subdomain}  ${PASSWORD}
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
@@ -84,9 +84,9 @@ JD-TC-CreateSPwithPseudoCorpandBranch-2
     ${code}=         FakerLibrary.word
 	${email}=   	 Set Variable  ${P_Email}${code}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+1302 
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE1}${\n}
     ${PHONE11}=  Evaluate  ${PUSERNAME}+7578     
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE11}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE11}${\n}
 	${resp}=   Create SP With Pseudo Corp and Branch  ${f_name}  ${l_name}  ${city}  ${state}  ${address}  ${PHONE1}  ${PHONE11}  ${dob}  ${gender}  ${email}   ${subdomain}  ${PASSWORD}
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
@@ -97,7 +97,7 @@ JD-TC-CreateSPwithPseudoCorpandBranch-3
 	${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_Z}=  Evaluate  ${PUSERNAME}+4590     
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_Z}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_Z}${\n}
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERNAME_Z}   ${pkg_id[0]}
     Log  ${resp.json()}
@@ -130,9 +130,9 @@ JD-TC-CreateSPwithPseudoCorpandBranch-3
     ${code}=         FakerLibrary.word
 	${email}=   	 Set Variable  ${P_Email}${code}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+1355
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE1}${\n}
     ${PHONE11}=  Evaluate  ${PUSERNAME}+7578     
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE11}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE11}${\n}
 	${resp}=   Create SP With Pseudo Corp and Branch  ${f_name}  ${l_name}  ${city}  ${state}  ${address}  ${PHONE1}  ${PHONE11}  ${dob}  ${gender}  ${email}   ${subdomain}  ${PASSWORD}
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -156,7 +156,7 @@ JD-TC-CreateSPwithPseudoCorpandBranch-UH1
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+4577     
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERNAME_A}   ${pkg_id[0]}
     Log  ${resp.json()}
@@ -181,9 +181,9 @@ JD-TC-CreateSPwithPseudoCorpandBranch-UH1
     ${code}=         FakerLibrary.word
 	${email}=   	 Set Variable  ${P_Email}${code}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+8002 
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE1}${\n}
     ${PHONE11}=  Evaluate  ${PUSERNAME}+7578     
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE11}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE11}${\n}
 	${resp}=   Create SP With Pseudo Corp and Branch  ${f_name}  ${l_name}  ${city}  ${state}  ${address}  ${PHONE1}  ${PHONE11}  ${dob}  ${gender}  ${email}   ${subdomain}  ${PASSWORD}
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
@@ -203,9 +203,9 @@ JD-TC-CreateSPwithPseudoCorpandBranch-UH2
     ${code}=         FakerLibrary.word
 	${email}=   	 Set Variable  ${P_Email}${city}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+1998 
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE1}${\n}
     ${PHONE11}=  Evaluate  ${PUSERNAME}+7578     
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE11}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE11}${\n}
 	${resp}=   Create SP With Pseudo Corp and Branch  ${f_name}  ${l_name}  ${city}  ${state}  ${address}  ${PHONE1}  ${PHONE11}  ${dob}  ${gender}  ${email}   ${subdomain}  ${PASSWORD}
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    401
@@ -224,9 +224,9 @@ JD-TC-CreateSPwithPseudoCorpandBranch-UH3
     ${code}=         FakerLibrary.word
 	${email}=   	 Set Variable  ${P_Email}${code}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+5443 
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE1}${\n}
     ${PHONE11}=  Evaluate  ${PUSERNAME}+7578     
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE11}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE11}${\n}
 	${resp}=   Create SP With Pseudo Corp and Branch  ${f_name}  ${l_name}  ${city}  ${state}  ${address}  ${PHONE1}  ${PHONE11}  ${dob}  ${gender}  ${email}   ${subdomain}  ${PASSWORD}
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    419

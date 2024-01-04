@@ -31,7 +31,7 @@ JD-TC-Consumer-Payment-Transaction-1
     # ${PO_Number}    Generate random string    8    1234563789
     # ${PO_Number}    Convert To Integer  ${PO_Number}
     # ${PUSERNAME210}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME210}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME210}${\n}
     # Set Suite Variable   ${PUSERNAME210}
     # ${resp}=   Run Keywords  clear_queue  ${PUSERNAME210}   AND  clear_service  ${PUSERNAME210}  AND  clear_Item    ${PUSERNAME210}  AND   clear_Coupon   ${PUSERNAME210}   AND  clear_Discount  ${PUSERNAME210}  AND  clear_appt_schedule   ${PUSERNAME210}
     # ${licid}  ${licname}=  get_highest_license_pkg

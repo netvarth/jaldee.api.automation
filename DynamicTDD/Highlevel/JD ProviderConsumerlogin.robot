@@ -112,7 +112,7 @@ JD-TC-ProviderConsumerlogin-1
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${cid}  ${resp.json()}
     # Log  ${resp.json()}  
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
   
 
     ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME18}  
@@ -184,7 +184,7 @@ JD-TC-ProviderConsumerlogin-1
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${ncid}  ${resp.json()}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph1}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph1}${\n}
     # ${resp}=  GetCustomer  firstName-eq=${firstname1}  phoneNo-eq=${ph1}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Log  ${resp.json()}

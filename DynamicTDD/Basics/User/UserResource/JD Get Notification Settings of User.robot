@@ -61,7 +61,7 @@ JD-TC-GetNotificationSettings_of_User-1
     Set Suite Variable  ${prov_id1}  ${decrypted_data['id']}
 
     #  Set Suite Variable   ${prov_id1}    ${resp.json()['id']}
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E1}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
      Set Suite Variable  ${MUSERNAME_E1}
     sleep  03s
     Set Suite Variable  ${countryCode_CC0}    ${countryCodes[0]}
@@ -1161,7 +1161,7 @@ JD-TC-GetNotificationSettings_of_User-UH6
      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E2}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E2}${\n}
      Set Suite Variable  ${MUSERNAME_E2}
      ${id}=  get_id  ${MUSERNAME_E2}
      Set Suite Variable  ${id}

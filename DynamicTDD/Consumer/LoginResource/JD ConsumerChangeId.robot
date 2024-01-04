@@ -363,7 +363,7 @@ JD-TC-Update consumer number-4
 
     Comment   with default country code +91
     # ${Consumer1}=  Evaluate  ${CUSERNAME}+${PO_Number}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${Consumer1}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${Consumer1}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${Consumer1}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -463,7 +463,7 @@ JD-TC-Update consumer number-UH3
 
     Comment   with default country code +91
     # ${Consumer1}=  Evaluate  ${CUSERNAME}+${PO_Number}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${Consumer1}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${Consumer1}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${Consumer1}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -573,7 +573,7 @@ JD-TC-Update consumer number-UH4
 
     Comment   with country code   ${country_code1}
     # ${Consumer1}=  Evaluate  ${CUSERNAME}+${PO_Number1}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${Consumer1}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${Consumer1}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${Consumer1}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -599,7 +599,7 @@ JD-TC-Update consumer number-UH4
     Comment   with country code   ${country_code2}
     
     # ${Consumer2}=  Evaluate  ${CUSERNAME}+${PO_Number2}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${Consumer2}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${Consumer2}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${Consumer2}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -842,7 +842,7 @@ JD-TC-Update consumer number-5
     ${country_code}    Convert To Integer  ${country_code}
     ${CUSERPH3}=  Evaluate  ${CUSERNAME}+${PO_Number}
     # clear_consumer_msgs  ${CUSERPH3}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH3}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -916,7 +916,7 @@ JD-TC-Update consumer number-6
     ${country_code}    Convert To Integer  ${country_code}
     ${CUSERPH3}=  Evaluate  ${CUSERNAME}+${PO_Number}
     # clear_consumer_msgs  ${CUSERPH3}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH3}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -1110,7 +1110,7 @@ JD-TC-Consumer Login-2
     [Documentation]    Update consumer
 
     ${CUSERPH0}=  Evaluate  ${PUSERNAME}+100100407
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name

@@ -24,7 +24,7 @@ Jaldee-TC-CreateIQ-1
     # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+100100987
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH0}  AND  clear_service  ${PUSERPH0}  AND  clear_location  ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg

@@ -64,7 +64,7 @@ JD-TC-Get JDN Settings-1
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+820
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     ${licid}  ${licname}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERPH0}   ${licid}
     Log  ${resp.json()}
@@ -85,9 +85,9 @@ JD-TC-Get JDN Settings-1
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+821
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+822
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
     ${PUSERMAIL0}=   Set Variable  ${P_Email}820.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name
@@ -166,7 +166,7 @@ JD-TC-Get JDN Settings-2
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERPH3}=  Evaluate  ${PUSERNAME}+830
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH3}${\n}
     ${licid}  ${licname}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERPH3}   ${licid}
     Log  ${resp.json()}
@@ -187,9 +187,9 @@ JD-TC-Get JDN Settings-2
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+831
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+832
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
     ${PUSERMAIL3}=   Set Variable  ${P_Email}830.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name
@@ -283,7 +283,7 @@ JD-TC-Get JDN Settings-4
     [Documentation]  Get JDN Settings of an inactive provider
     ${INACTIVE_PUSER}=  Evaluate  ${PUSERNAME}+840
     Set Suite Variable   ${INACTIVE_PUSER}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${INACTIVE_PUSER}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${INACTIVE_PUSER}${\n}
     
     ${licresp}=   Get Licensable Packages
     Should Be Equal As Strings   ${licresp.status_code}   200

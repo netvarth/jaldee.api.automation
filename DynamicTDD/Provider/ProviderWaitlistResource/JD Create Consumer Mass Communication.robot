@@ -33,7 +33,7 @@ JD-TC-ConsumerMassCommunication-1
      
     ${CUSERPH0}=  Evaluate  ${CUSERPH}+180521
     Set Suite Variable   ${CUSERPH0}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -65,7 +65,7 @@ JD-TC-ConsumerMassCommunication-1
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_B}=  Evaluate  ${PUSERNAME}+55688520
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_B}    ${highest_package[0]}
     Log  ${resp.json()}

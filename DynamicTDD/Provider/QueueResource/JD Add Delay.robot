@@ -531,7 +531,7 @@ JD-TC-AddDelay-UH4
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
       Set Suite Variable  ${PUSERNAME}
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n}  
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
       # ${resp}=  Disable Waitlist
       # Log  ${resp.json()}
       # Should Be Equal As Strings  ${resp.status_code}  200
@@ -567,7 +567,7 @@ JD-TC-AddDelay-UH5
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
       Set Suite Variable  ${PUSERNAME0}
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME0}${\n}  
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME0}${\n}  
 
       ${resp}=  Enable Waitlist
       Log   ${resp.json()}

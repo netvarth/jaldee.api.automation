@@ -40,7 +40,7 @@ JD-TC-CreateBranchSP-1
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_Z}=  Evaluate  ${PUSERNAME}+4521     
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_Z}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_Z}${\n}
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERNAME_Z}   ${pkg_id[0]}
     Log  ${resp.json()}
@@ -91,7 +91,7 @@ JD-TC-CreateBranchSP-1
     ${l_name}=  	 FakerLibrary.last_name	
 	${email}=   	 Set Variable  ${P_Email}${PUSERNAME_Z}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+7777 
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE1}${\n}
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE1}   ${email}  ${subdomain}  ${PASSWORD}  ${dep_code1}
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
@@ -111,7 +111,7 @@ JD-TC-CreateBranchSP-2
     ${l_name}=  	 FakerLibrary.last_name
 	${email}=   	 Set Variable  ${P_Email}${PUSERNAME2}.${test_mail}
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7710    
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE2}${\n}
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE2}  ${email}  ${subdomain}  ${PASSWORD}  ${dep_code1}
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
@@ -144,7 +144,7 @@ JD-TC-CreateBranchSP-3
     ${l_name}=  	 FakerLibrary.last_name
 	${email}=   	 Set Variable  ${P_Email}${PUSERNAME1}.${test_mail}
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7720    
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE2}${\n}
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE2}  ${email}  ${subdomain1}  ${PASSWORD}   ${dep_code1}
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
@@ -155,7 +155,7 @@ JD-TC-CreateBranchSP-4
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_Z}=  Evaluate  ${PUSERNAME}+4500     
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_Z}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_Z}${\n}
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERNAME_Z}   ${pkg_id[0]}
     Log  ${resp.json()}
@@ -188,7 +188,7 @@ JD-TC-CreateBranchSP-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${depid2}  ${resp.json()}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+33422 
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE1}${\n}
 	${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name
 	${email}=   	 Set Variable  ${P_Email}${PHONE1}.${test_mail}
@@ -222,7 +222,7 @@ JD-TC-CreateBranchSP-5
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_Z}=  Evaluate  ${PUSERNAME}+4536   
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_Z}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_Z}${\n}
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERNAME_Z}   ${pkg_id[0]}
     Log  ${resp.json()}
@@ -283,7 +283,7 @@ JD-TC-CreateBranchSP-5
     ${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name
     ${PHONE1}=  Evaluate  ${PUSERNAME}+3147
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE1}${\n}
 	${email}=   Set Variable  ${P_Email}${PHONE1}.${test_mail}
     
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE1}  ${email}  ${subdomain}  ${PASSWORD}  ${dep_code3}
@@ -309,7 +309,7 @@ JD-TC-CreateBranchSP-UH1
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+4525     
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain2}  ${PUSERNAME_A}   ${pkg_id[0]}
     Log  ${resp.json()}
@@ -347,7 +347,7 @@ JD-TC-CreateBranchSP-UH1
     ${l_name}=  	 FakerLibrary.last_name
 	${email}=   	 Set Variable  ${P_Email}${PUSERNAME10}.${test_mail}
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7720    
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE2}${\n}
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE2}  ${email}  ${subdomain2}  ${PASSWORD}   ${dep_code4}
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
@@ -369,7 +369,7 @@ JD-TC-CreateBranchSP-UH2
     ${l_name}=  	 FakerLibrary.last_name
 	${email}=   	 Set Variable  ${P_Email}${PUSERNAME3}.${test_mail}
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7731    
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE2}${\n}
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE2}  ${email}  ${sd1}  ${PASSWORD}  ${dep_code1}
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
@@ -385,7 +385,7 @@ JD-TC-CreateBranchSP-UH3
     ${l_name}=  	 FakerLibrary.last_name
 	${email}=   	 Set Variable  ${P_Email}${PUSERNAME4}.${test_mail}
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7777    
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE2}${\n}
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE2}  ${email}  ${subdomain1}  ${PASSWORD}  ${dep_code1}
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
@@ -401,7 +401,7 @@ JD-TC-CreateBranchSP-UH4
     ${l_name}=  	 FakerLibrary.last_name
 	${email}=   	 Set Variable  ${P_Email}${PUSERNAME1}.${test_mail}
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7751    
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE2}${\n}
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE2}  ${email}  ${subdomain1}  ${PASSWORD}   ${dep_code1}
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
@@ -416,7 +416,7 @@ JD-TC-CreateBranchSP-UH5
     ${l_name}=  	 FakerLibrary.last_name
 	${email}=   	 Set Variable  ${P_Email}${PUSERNAME1}.${test_mail}
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7751    
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE2}${\n}
     ${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE2}  ${email}  ${subdomain1}  ${PASSWORD}  ${dep_code1}
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    401
@@ -429,7 +429,7 @@ JD-TC-CreateBranchSP-UH6
     ${l_name}=  	 FakerLibrary.last_name
 	${email}=   	 Set Variable  ${P_Email}${PUSERNAME1}.${test_mail}
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7751    
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE2}${\n}
     ${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE2}  ${email}  ${subdomain1}  ${PASSWORD}  ${dep_code1}
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    419
@@ -442,7 +442,7 @@ JD-TC-CreateBranchSP-UH7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     ${PHONE2}=  Evaluate  ${PUSERNAME}+7910    
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE2}${\n}
 	${f_name}=  	 FakerLibrary.first_name
     ${l_name}=  	 FakerLibrary.last_name
 	${email}=   	 Set Variable  ${P_Email}${PHONE2}.${test_mail}
@@ -471,7 +471,7 @@ JD-TC-CreateBranchSP-UH8
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_Z}=  Evaluate  ${PUSERNAME}+45255     
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_Z}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_Z}${\n}
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERNAME_Z}   ${pkg_id[0]}
     Log  ${resp.json()}
@@ -496,7 +496,7 @@ JD-TC-CreateBranchSP-UH8
     ${l_name}=  	 FakerLibrary.last_name	
 	${email}=   	 Set Variable  ${P_Email}${PUSERNAME_Z}.${test_mail}
     ${PHONE1}=  Evaluate  ${PUSERNAME}+7637 
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE1}${\n}
 	${resp}=   Create Branch SP  ${f_name}  ${l_name}  ${PHONE1}   ${email}  ${subdomain}  ${PASSWORD}   ${dep_code1}
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422 

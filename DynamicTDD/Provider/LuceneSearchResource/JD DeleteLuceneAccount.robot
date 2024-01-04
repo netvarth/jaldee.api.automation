@@ -127,7 +127,7 @@ JD-TC-Delete Lucene Search Documentation-3
     Set Suite Variable  ${cid20}   ${resp.json()}
 
     ${CUSERPH3}=  Evaluate  ${CUSERPH}+100200204
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
     ${email}=   FakerLibrary.email

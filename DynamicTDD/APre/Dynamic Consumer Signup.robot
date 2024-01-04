@@ -58,7 +58,7 @@ JD-TC-Consumer Signup-1
         Should Be Equal As Strings  ${resp.status_code}  200
         Append To File  ${EXECDIR}/TDD/varfiles/consumermail.py  CUSEREMAIL${US}="${C_Email}${CUSERNAME}.${test_mail}"${\n}
         Append To File  ${EXECDIR}/TDD/varfiles/consumerlist.py  CUSERNAME${US}=${CUSERNAME}${\n}
-        Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERNAME}${\n}
+        Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERNAME}${\n}
         ${US} =  Evaluate  ${US}+1
         Set Global Variable  ${US}
 

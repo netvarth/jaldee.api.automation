@@ -158,7 +158,7 @@ JD-TC-GetRemainingAmountToPay-1
 
     # ${CUSERPH0}=  Evaluate  ${CUSERNAME}+439781
     # Set Suite Variable   ${CUSERPH0}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+4468
     # ${firstname_C0}=  FakerLibrary.first_name
     # ${lastname_C0}=  FakerLibrary.last_name
@@ -187,7 +187,7 @@ JD-TC-GetRemainingAmountToPay-1
     ${CUSERPH0}=  Evaluate  ${CUSERPH}+3841231
     Set Suite Variable   ${CUSERPH0}
 
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${firstname_C0}=  FakerLibrary.first_name
     Set Suite Variable   ${firstname_C0} 
     ${lastname_C0}=  FakerLibrary.last_name
@@ -455,7 +455,7 @@ JD-TC-GetRemainingAmountToPay-3
 
     # ${CUSERPH2}=  Evaluate  ${CUSERNAME}+47801
     # Set Suite Variable   ${CUSERPH2}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH2}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
     # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH2}+4468
     # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH2}+1000
     # ${firstname_C0}=  FakerLibrary.first_name
@@ -485,7 +485,7 @@ JD-TC-GetRemainingAmountToPay-3
     ${CUSERPH2}=  Evaluate  ${CUSERPH}+76556
     Set Suite Variable   ${CUSERPH2}
 
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
     ${firstname_C0}=  FakerLibrary.first_name
     Set Suite Variable   ${firstname_C0} 
     ${lastname_C0}=  FakerLibrary.last_name
@@ -551,7 +551,7 @@ JD-TC-GetRemainingAmountToPay-4
 
     # ${CUSERPH1}=  Evaluate  ${CUSERNAME}+10972081
     # Set Suite Variable   ${CUSERPH1}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
     # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+4468
     # ${firstname_C1}=  FakerLibrary.first_name
     # Set Suite Variable   ${firstname_C1}
@@ -577,7 +577,7 @@ JD-TC-GetRemainingAmountToPay-4
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+988732
     Set Suite Variable   ${CUSERPH1}
 
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
     ${firstname_C1}=  FakerLibrary.first_name
     Set Suite Variable   ${firstname_C1} 
     ${lastname_C1}=  FakerLibrary.last_name
@@ -601,7 +601,7 @@ JD-TC-GetRemainingAmountToPay-4
     Set Suite Variable   ${cons_id}   ${resp.json()['id']}      
                                                      
 
-    # Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH1}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
     
     ${resp}=  Get All Jaldee Cash Available
     Log  ${resp.json()}
@@ -787,7 +787,7 @@ JD-TC-GetRemainingAmountToPay-5
 
     # ${CUSERPH3}=  Evaluate  ${CUSERNAME}+295481
     # Set Suite Variable   ${CUSERPH3}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH3}+44868
     # ${firstname_C3}=  FakerLibrary.first_name
     # Set Suite Variable   ${firstname_C3}
@@ -810,12 +810,12 @@ JD-TC-GetRemainingAmountToPay-5
     # Should Be Equal As Strings    ${resp.status_code}    200
     # Set Suite Variable   ${cons_id}   ${resp.json()['id']}                                                         
 
-    # Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH3}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH3}${\n}
     
     ${CUSERPH3}=  Evaluate  ${CUSERPH}+9875412
     Set Suite Variable   ${CUSERPH3}
 
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     ${firstname_C3}=  FakerLibrary.first_name
     Set Suite Variable   ${firstname_C3} 
     ${lastname_C3}=  FakerLibrary.last_name

@@ -70,7 +70,7 @@ JD-TC-Check Provider Signup-1
         ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n}   
+        Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}   
         ${resp}=  Update Business Profile with schedule  ${bs}  ${bs} Desc   ${companySuffix}  ${city}   ${longi}  ${latti}  www.${companySuffix}.com  ${parking_type}  ${24hours}  ${recurring_type}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200

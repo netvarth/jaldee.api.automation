@@ -48,7 +48,7 @@ JD-TC-Get Waiting time of queue-1
     Log  ${decrypted_data}
     Set Suite Variable  ${pid}  ${decrypted_data['id']}
     # Set Test Variable  ${pid}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_W}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_W}${\n}
     Set Suite Variable  ${PUSERNAME_W}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}

@@ -162,7 +162,7 @@ JD-TC-GetJcashOfferStatCountToday-2
     
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+879564
     Set Suite Variable   ${CUSERPH1}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+4468
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -184,7 +184,7 @@ JD-TC-GetJcashOfferStatCountToday-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
@@ -228,7 +228,7 @@ JD-TC-GetJcashOfferStatCountToday-3
     
     ${CUSERPH2}=  Evaluate  ${CUSERPH}+879587
     Set Suite Variable   ${CUSERPH2}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH2}+4468
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -251,7 +251,7 @@ JD-TC-GetJcashOfferStatCountToday-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH2}${\n}
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
@@ -405,7 +405,7 @@ JD-TC-GetJcashOfferStatCountToday-5
     
     ${CUSERPH3}=  Evaluate  ${CUSERPH}+879569
     Set Suite Variable   ${CUSERPH3}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH3}+4468
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -427,12 +427,12 @@ JD-TC-GetJcashOfferStatCountToday-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH3}${\n}
 
 
     ${CUSERPH4}=  Evaluate  ${CUSERPH}+879568
     Set Suite Variable   ${CUSERPH4}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH4}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH4}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH4}+4468
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -454,7 +454,7 @@ JD-TC-GetJcashOfferStatCountToday-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH4}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH4}${\n}
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
@@ -924,7 +924,7 @@ JD-TC-GetJcashOfferStatCountToday-9
     
     ${CUSERPH3}=  Evaluate  ${CUSERPH}+879580
     Set Suite Variable   ${CUSERPH3}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH3}+4468
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -945,7 +945,7 @@ JD-TC-GetJcashOfferStatCountToday-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH3}${\n}
 
     ${resp}=  Get Jaldee Cash Details
     Log  ${resp.json()}

@@ -22,7 +22,7 @@ JD-TC-Approx Waiting Time-1
     [Documentation]   Check approximate waiting time when calculation mode is ML and batch is enabled
     
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+1030
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service  ${PUSERPH0}  AND  clear_customer  ${PUSERPH0}  AND  clear_Item    ${PUSERPH0}  AND   clear_Coupon   ${PUSERPH0}   AND  clear_Discount  ${PUSERPH0}   
     ${licid}  ${licname}=  get_highest_license_pkg

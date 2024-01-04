@@ -38,7 +38,7 @@ JD-TC-AddCustomer-1
      Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
      Set Test Variable  ${cid}  ${resp.json()}
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
      ${resp}=  GetCustomer ById  ${cid}
      Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
@@ -67,7 +67,7 @@ JD-TC-AddCustomer-2
      Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
      Set Test Variable  ${cid1}  ${resp.json()}
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
      ${resp}=  GetCustomer    phoneNo-eq=${ph2}    status-eq=ACTIVE  
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -107,7 +107,7 @@ JD-TC-AddCustomer-4
      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${ph5}  ${EMPTY}
      Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph5}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph5}${\n}
      ${resp}=  ProviderLogout
      Should Be Equal As Strings  ${resp.status_code}  200
      ${resp}=  Get BusinessDomainsConf
@@ -139,7 +139,7 @@ JD-TC-AddCustomer-5
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${cid}  ${resp.json()}
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME231}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME231}${\n}
      ${firstname1}=  FakerLibrary.first_name
      ${lastname1}=  FakerLibrary.last_name
      ${dob1}=  FakerLibrary.Date
@@ -147,7 +147,7 @@ JD-TC-AddCustomer-5
      ${ph6}=  Evaluate  ${PUSERNAME230}+72005
      ${resp}=  AddFamilyMemberByProviderWithPhoneNo  ${cid}  ${firstname}  ${lastname}  ${dob}  ${gender1}  ${ph6}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph6}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph6}${\n}
      Set Test Variable  ${email5}  ${firstname}${ph6}${C_Email}.${test_mail}
      ${firstname2}=  FakerLibrary.first_name
      ${lastname2}=  FakerLibrary.last_name
@@ -157,7 +157,7 @@ JD-TC-AddCustomer-5
      Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
      Set Test Variable  ${cid1}  ${resp.json()}
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph6}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph6}${\n}
      ${resp}=  GetCustomer    phoneNo-eq=${ph6}   status-eq=ACTIVE   
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -181,7 +181,7 @@ JD-TC-AddCustomer-6
      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${ph3}  ${EMPTY}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph3}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph3}${\n}
      ${resp}=   ProviderLogout
      Should Be Equal As Strings    ${resp.status_code}    200
      ${resp}=  Encrypted Provider Login  ${PUSERNAME233}  ${PASSWORD}
@@ -208,7 +208,7 @@ JD-TC-AddCustomer-7
      Should Be Equal As Strings  ${resp.status_code}  200
      Log  ${resp.json()}
      Set Test Variable  ${cid2}  ${resp.json()}
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph3}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph3}${\n}
      ${resp}=  GetCustomer    phoneNo-eq=${ph3}    status-eq=ACTIVE  
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -272,7 +272,7 @@ JD-TC-AddCustomer-9
 
      ${CUSERPH0}=  Evaluate  ${CUSERPH}+100100333
      Set Suite Variable   ${CUSERPH0}
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
      ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1002
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
@@ -384,7 +384,7 @@ JD-TC-AddCustomer-10
      Set Test Variable  ${cid9}  ${resp.json()}
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph6}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph6}${\n}
 
      ${resp}=  ProviderLogout
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -495,7 +495,7 @@ JD-TC-AddCustomer-11
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${cid9}  ${resp.json()}
-     # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERNAME5}${\n}
+     # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERNAME5}${\n}
 
      ${resp}=  ProviderLogout
      Should Be Equal As Strings  ${resp.status_code}  200
@@ -593,7 +593,7 @@ JD-TC-AddCustomer-12
      Set Test Variable  ${cid}  ${resp.json()}
      Log  ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph6}${\n}                      
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph6}${\n}                      
 
      ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
      ${desc}=   FakerLibrary.word
@@ -660,7 +660,7 @@ JD-TC-AddCustomer-13
 
      ${CUSERPH0}=  Evaluate  ${CUSERPH}+100100444
      Set Suite Variable   ${CUSERPH0}
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
      ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1003
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name
@@ -843,7 +843,7 @@ JD-TC-AddCustomer-UH4
      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email6}  ${gender}  ${dob}  ${ph7}  ${EMPTY}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Test Variable  ${cid}  ${resp.json()}
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph7}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph7}${\n}
      ${resp}=  Encrypted Provider Login  ${ph7}  ${PASSWORD}
      Should Be Equal As Strings    ${resp.status_code}    401
      Should Be Equal As Strings  "${resp.json()}"  "${NOT_REGISTERED_PROVIDER}"
@@ -2285,7 +2285,7 @@ JD-TC-AddCustomer-23
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Set Suite Variable    ${id}    ${resp.json()['id']}       
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
      Set Suite Variable  ${PUSERNAME_C}
 
      clear waitlist   ${PUSERNAME_C}
@@ -2738,7 +2738,7 @@ JD-TC-AddCustomer-UH7
      ${country_code}    Generate random string    2    0123456789
      ${country_code}    Convert To Integer  ${country_code}
      ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number1}
-     # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+     # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
      ${fname}=  FakerLibrary.first_name
      ${lname}=  FakerLibrary.last_name
      ${resp}=   AddCustomer  ${CUSERPH0}  countryCode=+${country_code}  firstName=${fname}  lastName=${lname}  
@@ -2852,7 +2852,7 @@ JD-TC-AddCustomer-91
 
      ${CUSERPH0}=  Evaluate  ${CUSERPH}+100100344
      Set Suite Variable   ${CUSERPH0}
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
      ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1012
      ${firstname}=  FakerLibrary.first_name
      ${lastname}=  FakerLibrary.last_name

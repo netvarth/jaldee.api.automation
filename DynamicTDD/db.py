@@ -56,7 +56,7 @@ loclist=[]
 
 
 addressfile='/ebs/TDD/locations.csv'
-fname='/ebs/TDD/pan.txt'
+fname='/ebs/TDD/TDD_Logs/pan.txt'
 licjson='/ebs/ynwconf/licenseConfig.json'
 bizjson= '/ebs/ynwconf/businessDomainConfig.json'
 def_profile='/ebs/TDD/defaultpaymentprofile.txt'

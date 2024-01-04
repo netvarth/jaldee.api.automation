@@ -59,7 +59,7 @@ JD-TC-Createclinicalnotes-1
     Set Suite Variable  ${userName}  ${decrypted_data['userName']}
     # Set Suite Variable    ${id}    ${resp.json()['id']} 
     # Set Suite Variable    ${userName}    ${resp.json()['userName']}         
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
     Set Suite Variable  ${PUSERNAME_C}
 
     # ${pid}=  get_acc_id  ${PUSERNAME_C}
@@ -314,7 +314,7 @@ JD-TC-Createclinicalnotes-2
     Set Suite Variable  ${userName1}  ${decrypted_data['userName']}
     # Set Suite Variable    ${id1}    ${resp.json()['id']} 
     # Set Suite Variable    ${userName1}    ${resp.json()['userName']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
     Set Suite Variable  ${PUSERNAME_D}
 
     # ${pid0}=  get_acc_id  ${PUSERNAME_D}
@@ -1674,7 +1674,7 @@ JD-TC-Createclinicalnotes-13
     Log  ${decrypted_data}
     Set Suite Variable  ${userName3}  ${decrypted_data['userName']}
     # Set Suite Variable    ${userName3}    ${resp.json()['userName']}   
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
     Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
     Set Suite Variable  ${MUSERNAME_E}
 

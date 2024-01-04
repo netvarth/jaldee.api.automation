@@ -46,7 +46,7 @@ JD-TC-Provider_Signup-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
  
 JD-TC-Provider_Signup-2
     [Documentation]    Create a provider with phone number which is not activated but have done signup
@@ -63,7 +63,7 @@ JD-TC-Provider_Signup-2
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${ph1}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph1}${\n}
 
 JD-TC-Provider_Signup-3
     [Documentation]    Create a provider with phone number which is not activated and resend OTP to email
@@ -80,7 +80,7 @@ JD-TC-Provider_Signup-3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${ph2}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
 
 JD-TC-Provider_Signup-UH1
     [Documentation]   Create a provider with phone number null
@@ -118,7 +118,7 @@ JD-TC-Provider Signup-UH4
     ${country_code}    Generate random string    2    0123456789
     ${country_code}    Convert To Integer  ${country_code}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service  ${PUSERPH0}  AND  clear_Item    ${PUSERPH0}  AND   clear_Coupon   ${PUSERPH0}   AND  clear_Discount  ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -155,7 +155,7 @@ JD-TC-Provider Signup-UH5
 
 
     ${CUSERPH3}=  Evaluate  ${CUSERNAME}+${PO_Number}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH3}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -179,7 +179,7 @@ JD-TC-Provider Signup-UH5
     Should Be Equal As Strings    ${resp.status_code}    200
 
     # ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     # Set Suite Variable   ${PUSERPH0}
     ${resp}=   Run Keywords  clear_queue  ${CUSERPH3}   AND  clear_service  ${CUSERPH3}  AND  clear_Item    ${CUSERPH3}  AND   clear_Coupon   ${CUSERPH3}   AND  clear_Discount  ${CUSERPH3}
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -411,7 +411,7 @@ JD-TC-Provider Signup-5
 
     Comment   with default country code +91
     ${CUSERPH3}=  Evaluate  ${CUSERNAME}+${PO_Number}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH3}+1250
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -483,7 +483,7 @@ JD-TC-Provider Signup-5
     comment  Provider Sign up
 
     # ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     # Set Suite Variable   ${PUSERPH0}
     ${resp}=   Run Keywords  clear_queue  ${CUSERPH3}   AND  clear_service  ${CUSERPH3}  AND  clear_Item    ${CUSERPH3}  AND   clear_Coupon   ${CUSERPH3}   AND  clear_Discount  ${CUSERPH3}
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -587,7 +587,7 @@ JD-TC-Provider Signup-UH6
     ${PO_Number}    Generate random string    5    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service  ${PUSERPH0}  AND  clear_Item    ${PUSERPH0}  AND   clear_Coupon   ${PUSERPH0}   AND  clear_Discount  ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -689,7 +689,7 @@ JD-TC-Provider Signup-UH7
     ${country_code}    Generate random string    2    0123456789
     ${country_code}    Convert To Integer  ${country_code}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service  ${PUSERPH0}  AND  clear_Item    ${PUSERPH0}  AND   clear_Coupon   ${PUSERPH0}   AND  clear_Discount  ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -855,7 +855,7 @@ JD-TC-Provider_Signup-6
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
     
     ${resp}=  Get Consumer Notification Settings
     Log  ${resp.json()}

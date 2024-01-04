@@ -61,7 +61,7 @@ JD-TC-GetLeadWithFilter-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${id}  ${resp.json()['id']}
 
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
     Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
     Set Suite Variable  ${MUSERNAME_E}
 

@@ -53,7 +53,7 @@ JD-TC-UpdateVacation-1
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E3}${\n}
     Set Suite Variable  ${MUSERNAME_E3}
     ${id}=  get_id  ${MUSERNAME_E3}
     Set Suite Variable  ${id}
@@ -2021,7 +2021,7 @@ JD-TC-UpdateVacation-13
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E2}${\n}
     Set Suite Variable  ${MUSERNAME_E2}
     ${id}=  get_id  ${MUSERNAME_E2}
     ${bs}=  FakerLibrary.bs

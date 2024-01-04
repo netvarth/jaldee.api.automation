@@ -109,7 +109,7 @@ JD-TC-Consumer Login-2
     ${country_code}    Convert To Integer  ${country_code}
     ${CUSERPH3}=  Evaluate  ${CUSERNAME}+${PO_Number}
     Set Suite Variable   ${CUSERPH3}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH3}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -151,7 +151,7 @@ JD-TC-Consumer Login-3
     ${country_code}    Convert To Integer  ${country_code}
     ${CUSERPH2}=  Evaluate  ${CUSERNAME}+${PO_Number}
     Set Suite Variable   ${CUSERPH2}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH2}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH2}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -190,7 +190,7 @@ JD-TC-Consumer Login-4
 
     Comment   with default country code +91
     ${CUSERPH4}=  Evaluate  ${CUSERNAME}+${PO_Number}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH4}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH4}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH4}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name

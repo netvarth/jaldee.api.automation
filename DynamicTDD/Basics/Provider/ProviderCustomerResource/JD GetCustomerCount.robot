@@ -36,7 +36,7 @@ JD-TC-Get Customer count-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${c1}  ${resp.json()}
     Log   ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${phoneno}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${phoneno}${\n}
 
     ${f_name}=   FakerLibrary.first_name
     # ${l_name}=   FakerLibrary.last_name
@@ -48,7 +48,7 @@ JD-TC-Get Customer count-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${c2}  ${resp.json()}
     Log   ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${phone}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${phone}${\n}
     ${f_name}=   FakerLibrary.first_name
     ${l_name}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
@@ -58,7 +58,7 @@ JD-TC-Get Customer count-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${c3}  ${resp.json()}
     Log   ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${phone1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${phone1}${\n}
     ${f_name2}=   FakerLibrary.first_name
     Set Suite Variable   ${f_name2}
     ${l_name}=   FakerLibrary.last_name
@@ -69,7 +69,7 @@ JD-TC-Get Customer count-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${c4}  ${resp.json()}
     Log   ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${phone3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${phone3}${\n}
     ${l_name}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
     ${phone2}=    FakerLibrary.Random Int    min=1000000000   max=9999999999
@@ -78,7 +78,7 @@ JD-TC-Get Customer count-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${c5}  ${resp.json()}
     Log   ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${phone2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${phone2}${\n}
     ${f_name}=   FakerLibrary.first_name
     ${l_name}=   FakerLibrary.last_name
     ${dob}=      FakerLibrary.date
@@ -88,7 +88,7 @@ JD-TC-Get Customer count-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${c6}  ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${phone}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${phone}${\n}
     ${resp}=  DeleteCustomer  ${c6}  
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -102,7 +102,7 @@ JD-TC-Get Customer count-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${c7}  ${resp.json()}
     Log   ${resp.json()} 
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${phone}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${phone}${\n}
     ${resp}=  GetCustomer    phoneNo-eq=${phone}    
     Log  ${resp.json()}
     Set Suite Variable     ${jid1}  ${resp.json()[0]['jaldeeId']}

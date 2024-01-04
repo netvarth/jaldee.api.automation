@@ -50,7 +50,7 @@ JD-TC-GetFutureAppointment-1
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${pid}  ${decrypted_data['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_Q}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_Q}${\n}
     Set Suite Variable  ${PUSERNAME_Q}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_Q}  ${PASSWORD}
@@ -1228,7 +1228,7 @@ JD-TC-GetFutureAppointment-10
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${p_id}  ${decrypted_data['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
     Set Suite Variable  ${PUSERNAME_C}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}

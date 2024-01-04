@@ -93,7 +93,7 @@ JD-TC-Take Appointment-1
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${pid}  ${decrypted_data['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
     Set Suite Variable  ${PUSERNAME_B}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -913,7 +913,7 @@ JD-TC-Take Appointment-9
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${pid}  ${decrypted_data['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_X}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_X}${\n}
     Set Suite Variable  ${PUSERNAME_X}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_X}  ${PASSWORD}
@@ -3513,7 +3513,7 @@ JD-TC-Take Appointment-UH12
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${pid}  ${decrypted_data['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_W}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_W}${\n}
     Set Suite Variable  ${PUSERNAME_W}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
@@ -4512,7 +4512,7 @@ JD-TC-Take Appointment-UH14
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${pid}  ${decrypted_data['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
     Set Suite Variable  ${PUSERNAME_D}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}

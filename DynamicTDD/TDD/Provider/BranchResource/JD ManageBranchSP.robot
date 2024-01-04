@@ -40,7 +40,7 @@ JD-TC-ManageBranchSP-1
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_Z}=  Evaluate  ${PUSERNAME}+8830   
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_Z}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_Z}${\n}
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  ProviderKeywords.Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERNAME_Z}   ${pkg_id[0]}
     Log  ${resp.json()}
@@ -69,7 +69,7 @@ JD-TC-ManageBranchSP-1
 	${email}=   	 Set Variable  ${P_Email}${PUSERNAME_Z}.${test_mail}
     ${PHONE11}=  Evaluate  ${PUSERNAME}+77520 
     Set Suite Variable   ${PHONE11}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE11}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE11}${\n}
 	${resp}=   ProviderKeywordsforBranchSP.Create Branch SP  ${f_name}  ${l_name}   ${PHONE11}   ${email}  ${subdomain}  ${PASSWORD}
 	Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
@@ -81,10 +81,10 @@ JD-TC-ManageBranchSP-1
 	Set Suite Variable  ${tab_id1}  ${resp.json()['tabId']} 
 
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+342
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
 
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+343
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
 
     ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERNAME_Z}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
@@ -139,7 +139,7 @@ JD-TC-ManageBranchSP-1
     ${l_name}=  	 FakerLibrary.last_name
 	${PHONE1}=  Evaluate  ${PUSERNAME}+7744 
     Set Suite Variable   ${PHONE1}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PHONE1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PHONE1}${\n}
 	${email}=   	 Set Variable  ${P_Email}${PHONE1}.${test_mail}
     
 	${resp}=   ProviderKeywordsforBranchSP.Create Branch SP  ${f_name}  ${l_name}   ${PHONE1}   ${email}  ${subdomain}  ${PASSWORD}

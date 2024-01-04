@@ -51,7 +51,7 @@ JD-TC-GetAppointmentToday-1
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${p_id}  ${decrypted_data['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_T}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_T}${\n}
     Set Suite Variable  ${PUSERNAME_T}
     # Set Suite Variable  ${PUSERNAME_T}   ${PUSERNAME136}
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_T}  ${PASSWORD}
@@ -1230,7 +1230,7 @@ JD-TC-GetAppointmentToday-10
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${pid}  ${decrypted_data['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Suite Variable  ${PUSERNAME_A}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}

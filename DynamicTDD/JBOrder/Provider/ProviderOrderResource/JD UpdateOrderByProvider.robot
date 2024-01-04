@@ -178,7 +178,7 @@ JD-TC-UpdateOrder-1
     
     ${CUSERPH0}=  Evaluate  ${CUSERPH}+154687
     Set Suite Variable   ${CUSERPH0}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -199,7 +199,7 @@ JD-TC-UpdateOrder-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
 
     # ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}
     # Log   ${resp.json()}
@@ -422,7 +422,7 @@ JD-TC-UpdateOrder-2
 
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+154688
     Set Suite Variable   ${CUSERPH1}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -443,7 +443,7 @@ JD-TC-UpdateOrder-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
 
     # ${resp}=  Consumer Login  ${CUSERPH1}  ${PASSWORD}
     # Log   ${resp.json()}
@@ -771,7 +771,7 @@ JD-TC-UpdateOrder-5
 
     ${CUSERPH2}=  Evaluate  ${CUSERPH}+154689
     Set Suite Variable   ${CUSERPH2}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH2}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -792,7 +792,7 @@ JD-TC-UpdateOrder-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH2}${\n}
 
     # ${resp}=  Consumer Login  ${CUSERPH2}  ${PASSWORD}
     # Log   ${resp.json()}
@@ -1015,7 +1015,7 @@ JD-TC-UpdateOrder-6
     
     ${CUSERPH3}=  Evaluate  ${CUSERPH}+154685
     Set Suite Variable   ${CUSERPH3}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH3}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -1036,7 +1036,7 @@ JD-TC-UpdateOrder-6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH3}${\n}
 
     # ${resp}=  Consumer Login  ${CUSERPH3}  ${PASSWORD}
     # Log   ${resp.json()}
@@ -2194,7 +2194,7 @@ JD-TC-UpdateOrder-7
     
     ${CUSERPH4}=  Evaluate  ${CUSERPH}+154684
     Set Suite Variable   ${CUSERPH4}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH4}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH4}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH4}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -2215,7 +2215,7 @@ JD-TC-UpdateOrder-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH4}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH4}${\n}
 
     # ${resp}=  Consumer Login  ${CUSERPH4}  ${PASSWORD}
     # Log   ${resp.json()}
@@ -3139,7 +3139,7 @@ JD-TC-UpdateOrder-10
     
     ${CUSERPH5}=  Evaluate  ${CUSERPH}+154683
     Set Suite Variable   ${CUSERPH5}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH5}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH5}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH5}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -3160,7 +3160,7 @@ JD-TC-UpdateOrder-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH5}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH5}${\n}
 
 
     # ${resp}=  Consumer Login  ${CUSERPH5}  ${PASSWORD}
@@ -3779,7 +3779,7 @@ JD-TC-UpdateOrder-11
     
     ${CUSERPH6}=  Evaluate  ${CUSERPH}+154682
     Set Suite Variable   ${CUSERPH6}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH6}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH6}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH6}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -3800,7 +3800,7 @@ JD-TC-UpdateOrder-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH6}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH6}${\n}
 
     # ${resp}=  Consumer Login  ${CUSERPH6}  ${PASSWORD}
     # Log   ${resp.json()}

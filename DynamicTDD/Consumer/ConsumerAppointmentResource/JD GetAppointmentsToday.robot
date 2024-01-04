@@ -48,7 +48,7 @@ JD-TC-GetAppointmentToday-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_T}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_T}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_T}${\n}
     Set Suite Variable  ${PUSERNAME_T}
     # Set Suite Variable  ${PUSERNAME_T}   ${PUSERNAME136}
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_T}  ${PASSWORD}
@@ -1224,7 +1224,7 @@ JD-TC-GetAppointmentToday-10
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Suite Variable  ${PUSERNAME_A}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}

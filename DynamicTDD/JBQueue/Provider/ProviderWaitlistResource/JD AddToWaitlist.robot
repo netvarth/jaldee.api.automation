@@ -407,7 +407,7 @@ JD-TC-AddToWaitlist-9
       Should Be Equal As Strings  ${resp.status_code}  200
       Log  ${resp.json()}
       Set Suite Variable  ${pid}  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/numbers.txt   ${PUSERNAME151}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt   ${PUSERNAME151}${\n}
 
       ${desc}=   FakerLibrary.word
       ${resp}=  Add To Waitlist  ${pid}  ${ser_id2}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${pid} 
@@ -453,7 +453,7 @@ JD-TC-AddToWaitlist-11
       Set Test Variable   ${sector}        ${resp['domain']}
       Set Test Variable   ${sub_sector}    ${resp['subdomain']}
       ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+8706
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_A}${\n}   
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}   
       ${pkg_id}=   get_highest_license_pkg
       ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME_A}  ${pkg_id[0]}
       Log   ${resp.json()}
@@ -469,10 +469,10 @@ JD-TC-AddToWaitlist-11
       Set Suite Variable   ${PUSERNAME_A}
 
       ${PUSERPH1}=  Evaluate  ${PUSERNAME}+342
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH1}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
 
       ${PUSERPH2}=  Evaluate  ${PUSERNAME}+343
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
 
       ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERNAME_A}.${test_mail}
       ${views}=  Evaluate  random.choice($Views)  random
@@ -754,7 +754,7 @@ JD-TC-AddToWaitlist-UH7
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
       Set Suite Variable  ${PUSERNAME_C}
 
       # ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
@@ -1052,7 +1052,7 @@ JD-TC-AddToWaitlist-UH15
       Should Be Equal As Strings  ${resp.status_code}  200
       Log  ${resp.json()}
       Set Suite Variable  ${coid3}  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME2}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME2}${\n}
       ${resp}=  Add To Waitlist  ${coid3}  ${ser_id1}  ${que_id7}  ${DAY2}  ${desc}  ${bool[1]}  ${coid3} 
       Should Be Equal As Strings  ${resp.status_code}  422
       Should Be Equal As Strings  "${resp.json()}"  "${HOLIDAY_NON_WORKING_DAY}"
@@ -1077,7 +1077,7 @@ JD-TC-AddToWaitlist-UH16
       Should Be Equal As Strings  ${resp.status_code}  200
       Log  ${resp.json()}
       Set Test Variable  ${cid4}  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME3}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME3}${\n}
       ${resp}=  Add To Waitlist  ${cid4}  ${ser_id1}  ${que_id7}  ${DAY2}  ${desc}  ${bool[1]}  ${cid4} 
       Should Be Equal As Strings  ${resp.status_code}  200
       ${firstname}=  FakerLibrary.first_name
@@ -1089,7 +1089,7 @@ JD-TC-AddToWaitlist-UH16
       Should Be Equal As Strings  ${resp.status_code}  200
       Log  ${resp.json()}
       Set Test Variable  ${cid5}  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME4}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME4}${\n}
      
       ${resp}=  Add To Waitlist  ${cid5}  ${ser_id1}  ${que_id7}  ${DAY2}  ${desc}  ${bool[1]}  ${cid5} 
       Log   ${resp.json()}
@@ -1117,7 +1117,7 @@ JD-TC-AddToWaitlist-UH17
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cid0}  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME1}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME1}${\n}
       
       # ${resp}=  Add To Waitlist  ${cid0}  ${ser_id3}  ${que_id8}  ${DAY1}  ${desc}  ${bool[1]}  ${cid0} 
       # Log   ${resp.json()}
@@ -1135,7 +1135,7 @@ JD-TC-AddToWaitlist-UH17
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cid1}  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME3}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME3}${\n}
       
       ${resp}=  Add To Waitlist  ${cid0}  ${ser_id3}  ${que_id8}  ${DAY1}  ${desc}  ${bool[1]}  ${cid0}   location=${loc_id1}
       Log   ${resp.json()}
@@ -1153,7 +1153,7 @@ JD-TC-AddToWaitlist-UH17
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${cid2}  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME6}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME6}${\n}
       
       ${resp}=  Add To Waitlist  ${cid2}  ${ser_id3}  ${que_id8}  ${DAY1}  ${desc}  ${bool[1]}  ${cid2}  location=${loc_id1}
       Log  ${resp.json()}

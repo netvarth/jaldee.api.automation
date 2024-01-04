@@ -3932,7 +3932,7 @@ JD-TC-Take Appointment-25
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+201
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
@@ -4058,7 +4058,7 @@ JD-TC-Take Appointment-26
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+211
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
@@ -6880,7 +6880,7 @@ JD-TC-Take Appointment-UH1
     Set Suite Variable  ${userName}  ${decrypted_data['userName']}
     # Set Suite Variable    ${id}    ${resp.json()['id']} 
     # Set Suite Variable    ${userName}    ${resp.json()['userName']}         
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Suite Variable  ${PUSERNAME_A}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}
@@ -9496,7 +9496,7 @@ JD-TC-Take Appointment-UH29
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+221
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
 
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name

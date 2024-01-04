@@ -48,7 +48,7 @@ JD-TC-GetCustomViewApis-1
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_C}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_C}${\n}
     Set Suite Variable  ${MUSERNAME_C}
     ${id}=  get_id  ${MUSERNAME_C}
     Set Suite Variable  ${id}
@@ -164,7 +164,7 @@ JD-TC-GetCustomViewApis-2
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_C}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_C}${\n}
     Set Suite Variable  ${MUSERNAME_C}
     ${id}=  get_id  ${MUSERNAME_C}
     Set Suite Variable  ${id}
@@ -350,7 +350,7 @@ JD-TC-GetCustomViewApis-UH1
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_Z}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_Z}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_Z}${\n}
     ${name}=   FakerLibrary.word
     ${resp}=  Get CustomeView
     Log  ${resp.json()}

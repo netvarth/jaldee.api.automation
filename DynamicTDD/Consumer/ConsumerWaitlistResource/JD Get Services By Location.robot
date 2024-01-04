@@ -50,7 +50,7 @@ JD-TC-Get Service By Location -1
     Log  ${decrypted_data}
     Set Suite Variable  ${pid}  ${decrypted_data['id']}
     # Set Test Variable  ${pid}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_G}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_G}${\n}
     Set Suite Variable  ${PUSERNAME_G}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}

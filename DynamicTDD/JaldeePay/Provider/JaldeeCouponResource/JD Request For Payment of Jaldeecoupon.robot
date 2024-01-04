@@ -46,7 +46,7 @@ JD-TC-Request for payment-1
     
     
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+100100036
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
     
     #clear_reimburseReport  

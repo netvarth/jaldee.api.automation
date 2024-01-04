@@ -162,7 +162,7 @@ JD-TC-Consumer_Signup-1
 
     # ${CUSERPH0}=  Evaluate  ${CUSERPH}+100100201
     # Set Suite Variable   ${CUSERPH0}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
     ${PH_Number}    Random Number 	digits=5 
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'

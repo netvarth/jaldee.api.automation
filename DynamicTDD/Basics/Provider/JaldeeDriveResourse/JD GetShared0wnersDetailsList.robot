@@ -198,7 +198,7 @@ JD-TC-GetSharedOnwnersDetailsList-3
     ${resp}=  Encrypted Provider Login   ${PUSERNAME30}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-     #Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME14}${\n}
+     #Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME14}${\n}
     Set Test Variable   ${PUSERNAME30}
     ${acc_id}=  get_acc_id  ${PUSERNAME30}
     Set Test Variable   ${acc_id}
@@ -2813,7 +2813,7 @@ JD-TC-GetSharedOnwnersDetailsList-UH3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-     #Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME14}${\n}
+     #Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME14}${\n}
     Set Test Variable  ${PUSERNAME107}
     ${acc_id4}=  get_acc_id  ${PUSERNAME107}
     Set Test Variable   ${acc_id4}
@@ -2881,7 +2881,7 @@ JD-TC-GetSharedOnwnersDetailsList-UH5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME167}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-     #Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME14}${\n}
+     #Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME14}${\n}
     Set Test Variable  ${PUSERNAME167}
     ${acc_id}=  get_acc_id  ${PUSERNAME167}
     Set Test Variable   ${acc_id}
@@ -2903,7 +2903,7 @@ JD-TC-GetSharedOnwnersDetailsList-UH6
     ${resp}=  Encrypted Provider Login  ${PUSERNAME167}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-     #Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME14}${\n}
+     #Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME14}${\n}
     Set Test Variable  ${PUSERNAME167}
     ${acc_id}=  get_acc_id  ${PUSERNAME167}
     Set Test Variable   ${acc_id}

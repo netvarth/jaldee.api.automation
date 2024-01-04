@@ -111,9 +111,9 @@ JD-TC- Delete Discount-UH5
 
        ${list}=  Create List  1  2  3  4  5  6  7
        ${PUSERPH4}=  Evaluate  ${PUSERNAME${a}}+305
-       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH4}${\n}
+       Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
        ${PUSERPH5}=  Evaluate  ${PUSERNAME}+306
-       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
+       Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
        ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
        ${views}=  Evaluate  random.choice($Views)  random
        ${name1}=  FakerLibrary.name

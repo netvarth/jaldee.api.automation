@@ -21,7 +21,7 @@ Consumer_Signup
 
     # ${CUSERPH0}=  Evaluate  ${CUSERNAME}+100100201
     # Set Suite Variable   ${CUSERPH0}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${CO_Number}=  FakerLibrary.Numerify  %#####
     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${CO_Number}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000

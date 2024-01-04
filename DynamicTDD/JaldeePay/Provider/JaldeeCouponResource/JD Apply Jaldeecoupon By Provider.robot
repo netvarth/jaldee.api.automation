@@ -52,7 +52,7 @@ JD-TC-ApplyJaldeeCoupon-1
     [Documentation]  Provider apply a coupon after waitlist
 
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+100110103
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service  ${PUSERPH0}  AND  clear_Item    ${PUSERPH0}  AND   clear_Coupon   ${PUSERPH0}   AND  clear_Discount  ${PUSERPH0}  AND  clear_customer  ${PUSERPH0}
      
@@ -842,7 +842,7 @@ JD-TC-ApplyJaldeeCoupon-UH4
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+45820
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     ${licid}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domains[1]}  ${sub_domains[1]}  ${PUSERPH0}  ${licid[0]}
     Log   ${resp.json()}

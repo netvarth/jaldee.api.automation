@@ -120,7 +120,7 @@ JD-TC-AddFavouriteProvider-UH5
       [Documentation]  Create inactive account
       ${INACTIVE_PUSER}=  Evaluate  ${PUSERNAME}+685323
       Set Suite Variable   ${INACTIVE_PUSER}
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${INACTIVE_PUSER}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${INACTIVE_PUSER}${\n}
       ${licresp}=   Get Licensable Packages
       Should Be Equal As Strings   ${licresp.status_code}   200
       ${liclen}=  Get Length  ${licresp.json()}
@@ -146,7 +146,7 @@ JD-TC-AddFavouriteProvider-UH5
       ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${INACTIVE_PUSER}    ${pkgId}
       Log   ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${INACTIVE_PUSER}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${INACTIVE_PUSER}${\n}
       ${resp}=  Account Activation  ${INACTIVE_PUSER}  0
       Log   ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200

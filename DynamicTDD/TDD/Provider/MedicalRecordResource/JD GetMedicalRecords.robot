@@ -66,7 +66,7 @@ JD-TC-GetMR-1
     # ${pid}=  get_acc_id  ${PUSERNAME_C}
     # Set Suite Variable  ${pid}
 
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
     Set Suite Variable  ${PUSERNAME_C}
 
     

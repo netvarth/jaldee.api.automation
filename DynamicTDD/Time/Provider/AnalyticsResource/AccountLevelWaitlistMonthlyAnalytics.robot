@@ -66,7 +66,7 @@ JD-TC-MONTHLY_PHONE_TOKEN-1
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -422,7 +422,7 @@ JD-TC-MONTHLY_WALK_IN_TOKEN and ARRIVED_TOKEN-2
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -820,7 +820,7 @@ JD-TC-MONTHLY_ONLINE_TOKEN and CHECKED_IN_TOKEN-3
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -1155,7 +1155,7 @@ JD-TC-MONTHLY_TELE_SERVICE_TOKEN-4
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -1564,7 +1564,7 @@ JD-TC-MONTHLY_TELEGRAM_TOKEN and WEB_TOKENS-5
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -1915,7 +1915,7 @@ JD-TC-MONTHLY STARTED_TOKEN-6
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -2335,7 +2335,7 @@ JD-TC-MONTHLY CANCELLED_TOKEN-7
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -2727,7 +2727,7 @@ JD-TC-MONTHLY DONE_TOKEN-8
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -3107,7 +3107,7 @@ JD-TC-MONTHLY RESCHEDULED_TOKEN-9
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}

@@ -170,14 +170,14 @@ Billable
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${ConsMobilenum}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${ConsMobilenum}${\n}
 # *** comment ***
 # # JD-TC-Consumer Signup With Email-2
 
 
 # #     [Documentation]   Create consumer  with email (internationalphone number) - its okey
     
-# #      Append To File  ${EXECDIR}/TDD/numbers.txt  ${internatMobNum}${\n}
+# #      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${internatMobNum}${\n}
    
 # #     ${resp}=  Consumer SignUp Notification    ${firstname}   ${lastname}    ${internatMobNum}     ${internatcountryCode}   email=${conEmail1simi}
 # #     Log  ${resp.content}
@@ -192,13 +192,13 @@ Billable
 # #     Log  ${resp.content}
 # #     Should Be Equal As Strings    ${resp.status_code}    200
 
-# #     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${conEmail1simi}${\n}
+# #     Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${conEmail1simi}${\n}
 
 # JD-TC-Consumer Signup With Email-3
 
 #     [Documentation]   Create consumer  with email - its ok
     
-#      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MobilenumHi}${\n}
+#      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MobilenumHi}${\n}
    
 #     ${resp}=  Consumer SignUp Notification    ${firstname}   ${lastname}    ${MobilenumHi}     ${countryCode}   email=${Emailhisham}
 #     Log  ${resp.content}
@@ -213,7 +213,7 @@ Billable
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${MobilenumHi}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${MobilenumHi}${\n}
 
 # # *** comment ***
 
@@ -250,7 +250,7 @@ Billable
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD2}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
 
 
 # JD-TC-AddCustomer-1
@@ -260,7 +260,7 @@ Billable
 #     ${resp}=  Consumer SignUp Notification   ${firstname}  ${lastname}    ${MobilenumHi}    ${countryCode}  
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${MobilenumHi}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${MobilenumHi}${\n}
 
 #     ${resp}=  Consumer Activation  ${MobilenumHi}  1
 #     Log  ${resp.content}
@@ -316,7 +316,7 @@ Billable
 #     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
 #     Set Suite Variable  ${ConsMobilenum}
 #     ${pid}=  get_acc_id  ${ConsMobilenum}
 #     ${id}=  get_id  ${ConsMobilenum}
@@ -432,7 +432,7 @@ Billable
 #      Should Be Equal As Strings  ${resp.status_code}  200
 #      Log  ${resp.json()}
 #      Set Test Variable  ${cid}  ${resp.json()}
-#      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MobilenumHi}${\n}
+#      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MobilenumHi}${\n}
 #      ${resp}=  GetCustomer ById  ${cid}
 #      Should Be Equal As Strings  ${resp.status_code}  200
 #      Log  ${resp.json()}
@@ -478,7 +478,7 @@ Billable
 #      Should Be Equal As Strings  ${resp.status_code}  200
 #      Log  ${resp.json()}
 #      Set Test Variable  ${cid1}  ${resp.json()}
-#      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MobilenumHi}${\n}
+#      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MobilenumHi}${\n}
 #      ${resp}=  GetCustomer    phoneNo-eq=${MobilenumHi}    status-eq=ACTIVE  
 #      Log  ${resp.json()}
 #      Should Be Equal As Strings  ${resp.status_code}  200
@@ -513,7 +513,7 @@ Billable
 #     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
 #     Set Suite Variable  ${ConsMobilenum}
 #     ${id}=  get_id  ${ConsMobilenum}
 #     Set Suite Variable  ${id}
@@ -646,7 +646,7 @@ Billable
 # #     Log   ${resp.json()}
 # #     Should Be Equal As Strings  ${resp.status_code}  200
 # #     Set Test Variable  ${cid}  ${resp.json()}
-# #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph}${\n}
+# #     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
 # #     ${firstname1}=  FakerLibrary.first_name
 # #     ${lastname1}=  FakerLibrary.last_name
 # #     ${ph1}=  Evaluate  ${PUSERNAME230}+71019
@@ -655,7 +655,7 @@ Billable
 # #     Log  ${resp.json()}
 # #     Should Be Equal As Strings  ${resp.status_code}  200
 # #     Set Test Variable  ${ncid}  ${resp.json()}
-# #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph1}${\n}
+# #     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph1}${\n}
 # #     ${resp}=  GetCustomer    phoneNo-eq=${ph1}
 # #     Should Be Equal As Strings  ${resp.status_code}  200
 # #     Log  ${resp.json()}
@@ -701,7 +701,7 @@ Billable
 # #     ${resp}=  Encrypted Provider Login Notification   ${conEmail1simi}  ${PASSWORD2}  ${internatcountryCode}
 # #     Should Be Equal As Strings    ${resp.status_code}    200
 # #     Log  ${resp.content}
-# #     Append To File  ${EXECDIR}/TDD/numbers.txt  ${conEmail1simi}${\n}
+# #     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${conEmail1simi}${\n}
 
 # JD-TC-Provider_Signup -3
 #     [Documentation]    Create a provider with all valid attributes(email notification)
@@ -740,7 +740,7 @@ Billable
 #     ${resp}=  Encrypted Provider Login Notification   ${conEmail1simi}  ${PASSWORD2}  ${countryCode}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Log  ${resp.content}
-#     Append To File  ${EXECDIR}/TDD/numbers.txt  ${conEmail1simi}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${conEmail1simi}${\n}
 
     
 
@@ -783,7 +783,7 @@ Billable
 #     ${resp}=  Encrypted Provider Login Notification   ${conEmail1simi}  ${PASSWORD2}  ${countryCode}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 #     Log  ${resp.content}
-#     Append To File  ${EXECDIR}/TDD/numbers.txt  ${conEmail1simi}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${conEmail1simi}${\n}
 
 # JD-TC-providerConsumerSignup-1
 #     [Documentation]    Provider Consumer Signup with phonne num
@@ -1028,7 +1028,7 @@ Billable
 #     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
 #     Set Suite Variable  ${ConsMobilenum}
 #     ${id}=  get_id  ${ConsMobilenum}
 #     Set Suite Variable  ${id}
@@ -1047,7 +1047,7 @@ Billable
   
 #     # ${CUSERPH0}=  Evaluate  ${CUSERPH}+100200201
 #     # Set Suite Variable   ${CUSERPH0}
-#     # Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+#     # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
 #     # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
 #     # ${firstname}=  FakerLibrary.first_name
 #     # ${lastname}=  FakerLibrary.last_name
@@ -1065,7 +1065,7 @@ Billable
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH0}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
 
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
 #     Log  ${resp.json()}
@@ -1110,7 +1110,7 @@ Billable
 #     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
 #     Set Suite Variable  ${ConsMobilenum}
 #     ${pid}=  get_acc_id  ${ConsMobilenum}
 #     ${id}=  get_id  ${ConsMobilenum}
@@ -1310,7 +1310,7 @@ Billable
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${MobilenumHi}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${MobilenumHi}${\n}
 
 #     ${resp}=  Consumer Login  ${MobilenumHi}  ${PASSWORD}
 #     Log  ${resp.content}
@@ -1389,7 +1389,7 @@ Billable
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${MobilenumHi}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${MobilenumHi}${\n}
 
 #     ${resp}=  Consumer Login  ${MobilenumHi}  ${PASSWORD1}
 #     Log  ${resp.content}
@@ -1435,7 +1435,7 @@ Billable
 #     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
 #     Set Suite Variable  ${ConsMobilenum}
 #     ${pid}=  get_acc_id  ${ConsMobilenum}
 #     ${id}=  get_id  ${ConsMobilenum}
@@ -1686,7 +1686,7 @@ Billable
 #     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
 #     Set Suite Variable  ${ConsMobilenum}
 
 #     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
@@ -1852,7 +1852,7 @@ Billable
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${MobilenumHi}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${MobilenumHi}${\n}
 
 #     ${resp}=  Consumer Login  ${MobilenumHi}  ${PASSWORD1}
 #     Log  ${resp.content}
@@ -2040,7 +2040,7 @@ Billable
 #     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
 #     Set Suite Variable  ${ConsMobilenum}
 #     Set Suite Variable  ${old_pkgid}  ${resp.json()['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']} 
 
@@ -2152,7 +2152,7 @@ Billable
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${MobilenumHi}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${MobilenumHi}${\n}
 
 #     ${resp}=  Consumer Login  ${MobilenumHi}  ${PASSWORD1}
 #     Log  ${resp.content}
@@ -2200,7 +2200,7 @@ Billable
 #     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
 #     Set Suite Variable  ${ConsMobilenum}
 #     ${pid}=  get_acc_id  ${ConsMobilenum}
 #     ${id}=  get_id  ${ConsMobilenum}
@@ -2424,7 +2424,7 @@ Billable
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${MobilenumHi}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${MobilenumHi}${\n}
 
 #     ${resp}=  Consumer Login  ${MobilenumHi}  ${PASSWORD1}
 #     Log  ${resp.content}
@@ -2472,7 +2472,7 @@ Billable
 #     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
 #     Set Suite Variable  ${ConsMobilenum}
 #     ${pid}=  get_acc_id  ${ConsMobilenum}
 #     ${id}=  get_id  ${ConsMobilenum}
@@ -2687,7 +2687,7 @@ Billable
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${MobilenumHi}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${MobilenumHi}${\n}
 
     # ${resp}=  Consumer Login  ${MobilenumHi}  ${PASSWORD1}
     # Log  ${resp.content}
@@ -2733,7 +2733,7 @@ Billable
     # ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
     # Set Suite Variable  ${ConsMobilenum}
     # ${pid}=  get_acc_id  ${ConsMobilenum}
     # ${id}=  get_id  ${ConsMobilenum}
@@ -3000,7 +3000,7 @@ Billable
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${MobilenumHi}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${MobilenumHi}${\n}
 
     # ${resp}=  Consumer Login  ${MobilenumHi}  ${PASSWORD1}
     # Log  ${resp.content}
@@ -3046,7 +3046,7 @@ Billable
     # ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
     # Set Suite Variable  ${ConsMobilenum}
     # ${pid}=  get_acc_id  ${ConsMobilenum}
     # ${id1}=  get_id  ${ConsMobilenum}
@@ -3226,7 +3226,7 @@ Billable
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${MobilenumHi}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${MobilenumHi}${\n}
 
 #     ${resp}=  Consumer Login  ${MobilenumHi}  ${PASSWORD1}
 #     Log  ${resp.content}
@@ -3262,7 +3262,7 @@ Billable
     #  ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
     #  Log  ${resp.json()}
     #  Should Be Equal As Strings    ${resp.status_code}    200
-    #  Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+    #  Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
     #  Set Suite Variable  ${ConsMobilenum}
     #  ${DAY1}=  db.get_date_by_timezone  ${tz}
     #  Set Suite Variable  ${DAY1}  ${DAY1}
@@ -3639,7 +3639,7 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${MobilenumHi}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${MobilenumHi}${\n}
 
     ${resp}=  Consumer Login  ${MobilenumHi}  ${PASSWORD1}
     Log  ${resp.content}
@@ -3679,7 +3679,7 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
      ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
      Set Suite Variable  ${ConsMobilenum}
      ${DAY1}=  db.get_date_by_timezone  ${tz}
 
@@ -3960,7 +3960,7 @@ JD-TC-DonationPayment, order item by cosumer , order mass communication-1
     ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
      Set Suite Variable  ${ConsMobilenum}
     Set Test Variable  ${pid}  ${resp.json()['id']}
     
@@ -4141,7 +4141,7 @@ JD-TC-Order_MassCommunication-1
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#     Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${MobilenumHi}${\n}
+#     Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${MobilenumHi}${\n}
 
     ${resp}=  Consumer Login  ${MobilenumHi}  ${PASSWORD1}
     Log  ${resp.content}
@@ -4171,7 +4171,7 @@ JD-TC-Order_MassCommunication-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${MobilenumRIA}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${MobilenumRIA}${\n}
 
     ${resp}=  Consumer Login  ${MobilenumRIA}  ${PASSWORDorder}
     Log  ${resp.content}
@@ -4209,7 +4209,7 @@ JD-TC-Order_MassCommunication-1
      ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
      Set Suite Variable  ${ConsMobilenum}
      ${DAY1}=  db.get_date_by_timezone  ${tz}
      ${accId3}=  get_acc_id  ${ConsMobilenum}
@@ -4756,7 +4756,7 @@ JD-TC-Payment By Consumer-1
     # ${PO_Number}    Generate random string    8    123463789
     # ${PO_Number}    Convert To Integer  ${PO_Number}
     # ${PUSERPH2}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
     # Set Suite Variable   ${PUSERPH2}
     # ${resp}=   Run Keywords  clear_queue  ${PUSERPH2}   AND  clear_service  ${PUSERPH2}  AND  clear_Item    ${PUSERPH2}  AND   clear_Coupon   ${PUSERPH2}   AND  clear_Discount  ${PUSERPH2}  AND  clear_appt_schedule   ${PUSERPH2}
     # ${licid}  ${licname}=  get_highest_license_pkg
@@ -4788,7 +4788,7 @@ JD-TC-Payment By Consumer-1
      ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
      Set Suite Variable  ${ConsMobilenum}
      ${DAY1}=  db.get_date_by_timezone  ${tz}
      ${accId3}=  get_acc_id  ${ConsMobilenum}
@@ -4953,7 +4953,7 @@ JD-TC-Payment By Consumer-1
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${MobilenumRIA}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${MobilenumRIA}${\n}
 
     ${resp}=  Consumer Login  ${MobilenumRIA}  ${PASSWORDorder}
     Log  ${resp.content}
@@ -5071,7 +5071,7 @@ JD-TC-AssignTeamTo Appointment and waitlist-1
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${MobilenumHi}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${MobilenumHi}${\n}
 
     # ${resp}=  Consumer Login  ${MobilenumHi}  ${PASSWORD1}
     # Log  ${resp.content}
@@ -5107,7 +5107,7 @@ JD-TC-AssignTeamTo Appointment and waitlist-1
     #  ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${PASSWORD}
     #  Log  ${resp.json()}
     #  Should Be Equal As Strings    ${resp.status_code}    200
-    # #  Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+    # #  Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
     #  Set Suite Variable  ${ConsMobilenum}
     #  ${DAY1}=  db.get_date_by_timezone  ${tz}
     #  Set Suite Variable  ${DAY1}  ${DAY1}
@@ -5491,7 +5491,7 @@ Appointment Cancellation-8
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${MobilenumHi}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${MobilenumHi}${\n}
 
     # ${resp}=  Consumer Login  ${MobilenumHi}  ${PASSWORD1}
     # Log  ${resp.content}
@@ -5537,7 +5537,7 @@ Appointment Cancellation-8
     # ${resp}=  Encrypted Provider Login  ${ConsMobilenum}  ${NEW_PASSWORD12}
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    # Append To File  ${EXECDIR}/TDD/numbers.txt  ${ConsMobilenum}${\n}
+    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ConsMobilenum}${\n}
     # Set Suite Variable  ${ConsMobilenum}
     # ${pid}=  get_acc_id  ${ConsMobilenum}
     # ${id}=  get_id  ${ConsMobilenum}

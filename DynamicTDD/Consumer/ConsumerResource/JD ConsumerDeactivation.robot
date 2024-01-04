@@ -73,7 +73,7 @@ JD-TC-Consumer Deactivation -1
 
     ${CUSERPH0}=  Evaluate  ${CUSERPH}+1001989
     Set Suite Variable   ${CUSERPH0}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -95,7 +95,7 @@ JD-TC-Consumer Deactivation -1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/consumernumbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
 
     ${resp}=    Consumer Deactivation 
     Log  ${resp.content}
@@ -133,7 +133,7 @@ JD-TC-Consumer Deactivation -2
     Log  ${decrypted_data}
     Set Test Variable  ${pid}  ${decrypted_data['id']}
     # Set Test Variable  ${pid}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_B}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
     Set Suite Variable  ${PUSERNAME_B}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -294,7 +294,7 @@ JD-TC-Consumer Deactivation -2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+100100204
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
     Set Suite Variable   ${CUSERPH1}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+1001
     ${firstname}=  FakerLibrary.first_name
@@ -553,7 +553,7 @@ JD-TC-Consumer Deactivation -4
     Should Be Equal As Strings  ${resp.status_code}  200 
 
     ${CUSERPH2}=  Evaluate  ${CUSERPH}+100100222
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
     Set Suite Variable   ${CUSERPH2}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH2}+1002
     ${firstname}=  FakerLibrary.first_name
@@ -751,7 +751,7 @@ JD-TC-Consumer Deactivation -5
     Should Be Equal As Strings  ${resp.status_code}  200 
 
     ${CUSERPH3}=  Evaluate  ${CUSERPH}+100100333
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     Set Suite Variable   ${CUSERPH3}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH3}+1003
     ${firstname}=  FakerLibrary.first_name
@@ -917,7 +917,7 @@ JD-TC-Consumer Deactivation -6
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${CUSERPH4}=  Evaluate  ${CUSERPH}+100100444
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH4}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH4}${\n}
     Set Suite Variable   ${CUSERPH4}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH4}+1004
     ${firstname}=  FakerLibrary.first_name
@@ -1065,7 +1065,7 @@ JD-TC-Consumer Deactivation -7
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${CUSERPH5}=  Evaluate  ${CUSERPH}+100100555
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${CUSERPH5}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH5}${\n}
     Set Suite Variable   ${CUSERPH5}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH5}+1000
     ${firstname}=  FakerLibrary.first_name

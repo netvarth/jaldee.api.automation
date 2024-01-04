@@ -37,7 +37,7 @@ JD-TC-Update Email-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${pro_id}  ${resp.json()['id']}
     Set Test Variable  ${PUSERNAME}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME}${\n}  
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
     ${pid}=  get_acc_id  ${PUSERNAME}
     ${resp}=  Get Provider Details    ${pro_id} 
     Log  ${resp.json()}
@@ -165,7 +165,7 @@ JD-TC-Update Email-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id1}  ${resp.json()['id']}
     Set Suite Variable  ${PUSERNAME_0}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_0}${\n}  
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_0}${\n}  
     ${pid}=  get_acc_id  ${PUSERNAME_0}
     ${resp}=  Get Provider Details    ${pro_id1} 
     Log  ${resp.json()}
@@ -296,9 +296,9 @@ JD-TC-Update Email-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id2}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_K}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
     Set Suite Variable  ${MUSERNAME_K}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_K}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
     ${pid2}=  get_acc_id  ${MUSERNAME_K}
     ${resp}=  Get Provider Details    ${pro_id2} 
     Log  ${resp.json()}
@@ -438,9 +438,9 @@ JD-TC-Update Email-4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id3}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_L}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_L}${\n}
     Set Suite Variable  ${MUSERNAME_L}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_L}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_L}${\n}
     ${pid3}=  get_acc_id  ${MUSERNAME_L}
     ${resp}=  Get Provider Details    ${pro_id3} 
     Log  ${resp.json()}
@@ -595,7 +595,7 @@ JD-TC-Update Email-UH3
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id5}  ${resp.json()['id']}
     Set Suite Variable  ${PUSERNAME5}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME5}${\n}  
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME5}${\n}  
     ${pid5}=  get_acc_id  ${PUSERNAME5}
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
@@ -657,9 +657,9 @@ JD-TC-Update Email-5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id4}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_M}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_M}${\n}
     Set Suite Variable  ${MUSERNAME_M}
-    Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_M}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_M}${\n}
     ${pid4}=  get_acc_id  ${MUSERNAME_M}  
     ${resp}=  Get Account contact information
     Log  ${resp.json()}

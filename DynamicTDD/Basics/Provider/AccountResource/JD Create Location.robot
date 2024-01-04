@@ -80,7 +80,7 @@ JD-TC-CreateLocation-2
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_D}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
       Set Suite Variable  ${PUSERNAME_D}
       # ${city1}=   get_place
       # Set Suite Variable  ${city1}
@@ -168,7 +168,7 @@ JD-TC-CreateLocation-3
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_E}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
       Set Suite Variable  ${PUSERNAME_E}
       # ${city3}=   get_place
       # Set Suite Variable  ${city3}
@@ -226,7 +226,7 @@ JD-TC-CreateLocation-4
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_F}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_F}${\n}
       Set Suite Variable  ${PUSERNAME_F}
       # ${city5}=   get_place
       # Set Suite Variable  ${city5}
@@ -297,7 +297,7 @@ JD-TC-CreateLocation-5
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_A}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
       Set Suite Variable  ${PUSERNAME_A}
 
       # ${city7}=   get_place
@@ -396,7 +396,7 @@ JD-TC-CreateLocation-UH4
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_G}${\n}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_G}${\n}
       ${sTime3}=  add_timezone_time  ${tz}  1  05  
       Set Suite Variable   ${sTime3}
       ${eTime3}=  add_timezone_time  ${tz}  1  50  
@@ -451,7 +451,7 @@ JD-TC-CreateLocation-UH4
 #       ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
 #       Log  ${resp.json()}
 #       Should Be Equal As Strings    ${resp.status_code}    200
-#       Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERNAME_C}${\n}
+#       Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
 
 #       ${resp}=  Create Location  ${city}  ${longi}  ${latti}  www.${city}.com  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime0}  ${eTime0}
 #       Log  ${resp.json()}
