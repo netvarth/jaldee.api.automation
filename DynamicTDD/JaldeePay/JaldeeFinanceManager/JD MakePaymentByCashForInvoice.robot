@@ -254,6 +254,7 @@ JD-TC-MakePaymentByCash-1
     ${discAmt}=    Evaluate  ${adhoc_amt}+${service_amt}+${item_amt}
 
     ${balance}=    evaluate    ${discAmt}-10
+    ${balance}=  Convert To Number  ${balance}  2
 
     ${note}=    FakerLibrary.word
     ${resp}=  Make Payment By Cash For Invoice   ${invoice_uid}  ${payment_modes[0]}  10  ${note}

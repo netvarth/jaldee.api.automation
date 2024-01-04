@@ -391,5 +391,7 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-UH
 
     ${resp}=   Apply Jaldee Coupon for Appointment    ${apptid1}    sdgjbsdjvbskhadbvgf 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${JALDEE_COOUPON_NOT_TARGETED}
+
    

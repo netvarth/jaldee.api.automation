@@ -258,7 +258,7 @@ JD-TC-ApplyProviderCouponforwaitlist-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${SERVICE2}=  FakerLibrary.sentence
+    ${SERVICE2}=  FakerLibrary.name
     ${description}=  FakerLibrary.sentence
     ${min_pre}=   Random Int   min=10   max=50
     ${Total}=   Random Int   min=100   max=500
@@ -467,7 +467,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH3
     ${min_bill_amount}=   Random Int   min=90   max=100
     ${max_disc_val}=   Random Int   min=90  max=100
     ${max_prov_use}=   Random Int   min=10   max=20
-    ${book_channel}=   Create List     ${bookingChannel[1]}
+    ${book_channel}=   Create List     ${bookingChannel[1]}    ${bookingChannel[0]}
     ${coupn_based}=  Create List   ${couponBasedOn[0]}
     ${tc}=  FakerLibrary.sentence
     ${services}=   Create list     ${ser_id1}   ${sid}  ${sid1}
