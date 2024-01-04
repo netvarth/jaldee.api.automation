@@ -52,9 +52,8 @@ JD-TC-Get Customers-1
     Set Suite Variable  ${cid}  ${resp.json()}
     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
     ${resp}=  GetCustomer   account-eq=${cid} 
-    Should Be Equal As Strings  ${resp.status_code}  200  
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200  
     Verify Response List  ${resp}  0  firstName=${firstname1}  lastName=${lastname1}  phoneNo=${ph}  dob=${dob1}  gender=${gender1}  email_verified=${bool[0]}   phone_verified=${bool[0]}  id=${cid}  favourite=${bool[0]}
    
 JD-TC-Get Customers-2
@@ -123,8 +122,8 @@ JD-TC-Get Customers-5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME245}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  GetCustomer   status-eq=ACTIVE   
-    Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response List  ${resp}  0  firstName=${firstname1}  lastName=${lastname1}  phoneNo=${ph}  dob=${dob1}  gender=${gender1}  email_verified=${bool[0]}   phone_verified=${bool[0]}  id=${cid}  favourite=${bool[0]}
     
 JD-TC-Get Customers-UH1
