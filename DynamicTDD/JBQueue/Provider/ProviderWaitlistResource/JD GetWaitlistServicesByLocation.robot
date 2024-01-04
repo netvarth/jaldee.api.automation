@@ -226,7 +226,7 @@ JD-TC-Get Waitlist Service By Location -2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get waitlist Service By Location  ${p1_l2}
+    ${resp}=   ${p1_l2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${length}=  Get Length  ${resp.json()}

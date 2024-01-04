@@ -3253,3 +3253,36 @@ Get locations by service
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw   /consumer/service/${serviceId}/location    expected_status=any
     [Return]  ${resp}
+
+Get Booking Invoices
+     [Arguments]      ${ynwuuid}  
+    Check And Create YNW Session
+    ${resp}=    GET On Session  ynw   /consumer/jp/finance/invoice/ynwuid/${ynwuuid}    expected_status=any
+    [Return]  ${resp}
+
+
+Get invoices bydate
+     [Arguments]      ${startDate}   ${endDate}
+    ${data}=  Create Dictionary   startDate=${startDate}    endDate=${endDate}
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=    GET On Session  ynw   /consumer/jp/finance/invoice/bydate   data=${data}   expected_status=any
+    [Return]  ${resp}
+
+Invoice pay via link
+    [Arguments]  ${uuid}  ${amount}  ${purpose}   ${source}  ${accountId}  ${paymentMode}  ${isInternational}  ${serviceId}  ${custId}   &{kwargs}
+    ${data}=    Create Dictionary    uuid=${uuid}  amount=${amount}  purpose=${purpose}    source=${source}  accountId=${accountId}   paymentMode=${paymentMode}   isInternational=${isInternational}    serviceId=${serviceId}   custId=${custId}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    ${cons_params}=  Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    Check And Create YNW Session
+    ${resp}=   POST On Session  ynw  /consumer/jp/finance/pay   params=${cons_params}  data=${data}   expected_status=any  headers=${cons_headers}
+    [Return]  ${resp}
+

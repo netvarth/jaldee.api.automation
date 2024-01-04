@@ -10692,7 +10692,27 @@ Get Category By Id
     ${resp}=  GET On Session  ynw  /provider/jp/finance/category/${category_id}     expected_status=any
     [Return]  ${resp}
 
+Get Category With Filter
 
+    [Arguments]   &{param}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/category/list    params=${param}     expected_status=any
+    [Return]  ${resp}
+
+Get Default Category By Type
+
+    [Arguments]   ${typeEnum}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/category/default/${typeEnum}     expected_status=any
+    [Return]  ${resp}
+
+Update default category by type
+
+    [Arguments]   ${categoryid}   ${categoryTypeEnum}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/jp/finance/category/${categoryid}/${categoryTypeEnum}/default    expected_status=any
+    [Return]  ${resp}
+    
 Get Category By CategoryType
 
     [Arguments]   ${categoryType}  
@@ -10793,7 +10813,7 @@ Get Finance Status By Id
 
     [Arguments]   ${Status_id}  
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/jp/finance/status/${Status_id}     expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/status/${Status_id}    expected_status=any
     [Return]  ${resp}
 
 Get default status
@@ -10850,8 +10870,8 @@ Upload Finance Vendor Attachment
 
 Create Expense
 
-    [Arguments]    ${expenseCategoryId}  ${amount}  ${expenseDate}   ${expenseFor}    ${vendorId}  ${description}  ${referenceNo}   ${employeeName}    ${itemList}    ${departmentList}    ${uploadedDocuments}  &{kwargs}
-    ${data}=  Create Dictionary  expenseCategoryId=${expenseCategoryId}   amount=${amount}  expenseDate=${expenseDate}   expenseFor=${expenseFor}  vendorId=${vendorId}    description=${description}  referenceNo=${referenceNo}    employeeName=${employeeName}    itemList=${itemList}    departmentList=${departmentList}    uploadedDocuments=${uploadedDocuments}
+    [Arguments]    ${expenseCategoryId}  ${amount}  ${expenseDate}   ${expenseFor}    ${vendorUid}  ${description}  ${referenceNo}   ${employeeName}    ${itemList}    ${departmentList}    ${uploadedDocuments}  &{kwargs}
+    ${data}=  Create Dictionary  expenseCategoryId=${expenseCategoryId}   amount=${amount}  expenseDate=${expenseDate}   expenseFor=${expenseFor}  vendorUid=${vendorUid}    description=${description}  referenceNo=${referenceNo}    employeeName=${employeeName}    itemList=${itemList}    departmentList=${departmentList}    uploadedDocuments=${uploadedDocuments}
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -10862,8 +10882,8 @@ Create Expense
 
 Update Expense
 
-    [Arguments]    ${uid}    ${expenseCategoryId}  ${amount}  ${expenseDate}   ${expenseFor}    ${vendorId}  ${description}  ${referenceNo}   ${employeeName}    ${itemList}    ${departmentList}    ${uploadedDocuments}  &{kwargs}
-    ${data}=  Create Dictionary  expenseCategoryId=${expenseCategoryId}   amount=${amount}  expenseDate=${expenseDate}   expenseFor=${expenseFor}  vendorId=${vendorId}    description=${description}  referenceNo=${referenceNo}    employeeName=${employeeName}    itemList=${itemList}    departmentList=${departmentList}    uploadedDocuments=${uploadedDocuments}
+    [Arguments]    ${uid}    ${expenseCategoryId}  ${amount}  ${expenseDate}   ${expenseFor}    ${vendorUid}  ${description}  ${referenceNo}   ${employeeName}    ${itemList}    ${departmentList}    ${uploadedDocuments}  &{kwargs}
+    ${data}=  Create Dictionary  expenseCategoryId=${expenseCategoryId}   amount=${amount}  expenseDate=${expenseDate}   expenseFor=${expenseFor}  vendorUid=${vendorUid}    description=${description}  referenceNo=${referenceNo}    employeeName=${employeeName}    itemList=${itemList}    departmentList=${departmentList}    uploadedDocuments=${uploadedDocuments}
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -10913,11 +10933,21 @@ Upload Finance Expense Attachment
 
 Create Invoice
 
-    [Arguments]    ${invoiceCategoryId}  ${amount}  ${invoiceDate}   ${invoiceLabel}    ${billedTo}  ${vendorId}  ${invoiceId}    ${providerConsumerId}    &{kwargs}
-    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}   amount=${amount}  invoiceDate=${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorId=${vendorId}  invoiceId=${invoiceId}    providerConsumerId=${providerConsumerId}
+    [Arguments]    ${invoiceCategoryId}   ${invoiceDate}   ${invoiceLabel}    ${billedTo}  ${vendorUid}  ${invoiceId}    ${providerConsumerIdList}  @{vargs}   &{kwargs}
+
+     ${len}=  Get Length  ${vargs}
+    ${itemList}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${itemList}  ${vargs[${index}]}
+    END
+    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}     invoiceDate=${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorUid=${vendorUid}  invoiceId=${invoiceId}    providerConsumerIdList=${providerConsumerIdList}   itemList=${itemList} 
+
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
+    log  ${data}
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/invoice    data=${data}  expected_status=any    headers=${headers}
@@ -10925,8 +10955,8 @@ Create Invoice
 
 Update Invoice
 
-    [Arguments]    ${uid}     ${invoiceCategoryId}  ${amount}  ${invoiceDate}   ${invoiceLabel}    ${billedTo}  ${vendorId}      &{kwargs}
-    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}   amount=${amount}  invoiceDate=${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorId=${vendorId}  
+    [Arguments]    ${uid}     ${invoiceCategoryId}    ${invoiceDate}   ${invoiceLabel}    ${billedTo}  ${vendorUid}      &{kwargs}
+    ${data}=  Create Dictionary  invoiceCategoryId=${invoiceCategoryId}     invoiceDate=${invoiceDate}   invoiceLabel=${invoiceLabel}  billedTo=${billedTo}    vendorUid=${vendorUid}  
     FOR  ${key}  ${value}  IN  &{kwargs}
         Set To Dictionary  ${data}   ${key}=${value}
     END
@@ -11010,12 +11040,19 @@ Upload Finance Invoice Attachment
 
 Create PaymentsOut
 
-    [Arguments]    ${amount}  ${payableCategoryId}  ${paidDate}   ${payableLabel}    ${description}  ${referenceNo}  ${vendorId}   ${paymentsOutStatus}    ${paymentStatus}    ${paymentMode}    &{kwargs}
+    [Arguments]    ${amount}  ${payableCategoryId}  ${paidDate}   ${payableLabel}    ${description}  ${referenceNo}  ${vendorUid}   ${paymentsOutStatus}    ${paymentStatus}    ${paymentMode}   @{vargs}    &{kwargs}
 
     ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
-    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  paidDate=${paidDate}   paymentsOutLabel=${payableLabel}  description=${description}    referenceNo=${referenceNo}  vendorId=${vendorId}    paymentsOutStatus=${paymentsOutStatus}    paymentStatus=${paymentStatus}    paymentInfo=${paymentMode}
+
+    ${len}=  Get Length  ${vargs}
+    FOR    ${index}    IN RANGE  1  ${len}
+        # ${ap}=  Create Dictionary  id=${vargs[${index}]}
+        Append To List  ${vargs}   ${ap}
+        
+    END
+    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  paidDate=${paidDate}   paymentsOutLabel=${payableLabel}  description=${description}    referenceNo=${referenceNo}  vendorUid=${vendorUid}    paymentsOutStatus=${paymentsOutStatus}    paymentStatus=${paymentStatus}    paymentInfo=${paymentMode}
     FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
+        Set To Dictionary  ${paymentMode}   ${key}=${value}
     END
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
@@ -11024,12 +11061,12 @@ Create PaymentsOut
 
 Update PaymentsOut
 
-    [Arguments]    ${payable_uid}     ${amount}  ${payableCategoryId}  ${paidDate}   ${payableLabel}    ${description}  ${referenceNo}  ${vendorId}   ${paymentsOutStatus}    ${paymentStatus}    ${paymentMode}    &{kwargs}
+    [Arguments]    ${payable_uid}     ${amount}  ${payableCategoryId}  ${paidDate}   ${payableLabel}    ${description}  ${referenceNo}  ${vendorUid}   ${paymentsOutStatus}    ${paymentStatus}    ${paymentMode}    &{kwargs}
     
     ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
-    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  paidDate=${paidDate}   paymentsOutLabel=${payableLabel}  description=${description}    referenceNo=${referenceNo}  vendorId=${vendorId}    paymentsOutStatus=${paymentsOutStatus}    paymentStatus=${paymentStatus}    paymentInfo=${paymentMode}
+    ${data}=  Create Dictionary  amount=${amount}   paymentsOutCategoryId=${payableCategoryId}  paidDate=${paidDate}   paymentsOutLabel=${payableLabel}  description=${description}    referenceNo=${referenceNo}  vendorUid=${vendorUid}    paymentsOutStatus=${paymentsOutStatus}    paymentStatus=${paymentStatus}    paymentInfo=${paymentMode}
     FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
+        Set To Dictionary  ${paymentMode}   ${key}=${value}
     END
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
@@ -11081,6 +11118,7 @@ Update PaymentsOut Status
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsOut/${payableUid}/${status}     expected_status=any    headers=${headers}
     [Return]  ${resp}
+
 
 Create CDL Enquiry
     [Arguments]  ${category}  ${customer_id}  ${customerCity}  ${aadhaar}  ${pan}  ${customerState}  ${customerPin}  ${location}  ${enquireMasterId}  ${targetPotential}
@@ -11209,6 +11247,35 @@ Account with Multiple Users in NBFC
    
     [Return]  ${MUSERNAME${a}}
 
+Get default status by type
+
+    [Arguments]  ${typeName}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/status/default/${typeName}/     expected_status=any
+    [Return]  ${resp}
+
+
+Get status count
+
+    [Arguments]   &{param} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/status/list/count   params=${param}   expected_status=any
+    [Return]  ${resp}
+
+Get status list filter
+
+    [Arguments]   &{param} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/status/list   params=${param}   expected_status=any
+    [Return]  ${resp}
+
+
+Update default status
+
+    [Arguments]    ${id}  ${typeName}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/jp/finance/status/${id}/${typeName}/default     expected_status=any
+    [Return]  ${resp}
 # -------------- Patient Records-----------
 
 Add Patient Medical History
@@ -11756,6 +11823,613 @@ Get Treatment Plan By Dental Id
     ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/dental/${id}  expected_status=any
     [Return]  ${resp}
 
+# --------- Finance ----------
+Auto Invoice Generation For Catalog
+
+   [Arguments]  ${catalogId}      ${toggle} 
+   Check And Create YNW Session
+   ${resp}=  PUT On Session  ynw  /provider/catalog/${catalogId}/invoicegeneration/${toggle}   expected_status=any
+   [Return]  ${resp}
+
+Auto Invoice Generation For Service
+
+   [Arguments]  ${serviceId}      ${toggle} 
+   Check And Create YNW Session
+   ${resp}=  PUT On Session  ynw  /provider/services/${serviceId}/invoicegeneration/${toggle}   expected_status=any
+   [Return]  ${resp}
+
+Create PaymentsIn
+
+    [Arguments]    ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}    ${paymentMode}   &{kwargs}   
+
+
+    # ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
+    ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}   paymentInfo=${paymentMode}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/jp/finance/paymentsIn    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Update PaymentsIn
+    [Arguments]    ${payable_uid}  ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}    ${paymentMode}   &{kwargs}
+
+    # ${paymentMode}=    Create Dictionary   paymentMode=${paymentMode}
+    ${data}=  Create Dictionary  amount=${amount}   paymentsInCategoryId=${payableCategoryId}  receivedDate=${receivedDate}   paymentsInLabel=${payableLabel}    vendorUid=${vendorUid}      paymentInfo=${paymentMode}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsIn/${payable_uid}     data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Get PaymentsIn By Id
+
+    [Arguments]   ${uid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn/${uid}     expected_status=any
+    [Return]  ${resp}
+
+
+Get PaymentsIn With Filter
+
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn   params=${param}     expected_status=any
+    [Return]  ${resp}
+
+Get PaymentsIn Count With Filter
+
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn/count    params=${param}     expected_status=any
+    [Return]  ${resp}
+
+Update PaymentsIn Status
+
+    [Arguments]    ${payableUid}     ${status} 
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsIn/${payableUid}/${status}     expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Get PaymentsOut Log List UId
+
+    [Arguments]   ${uid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsOut/${uid}/statelist     expected_status=any
+    [Return]  ${resp}
+
+Get PaymentsIn Log List UId
+
+    [Arguments]   ${uid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn/${uid}/statelist     expected_status=any
+    [Return]  ${resp}
+
+Upload Finance PaymentsIn Attachment
+    [Arguments]    ${payable_uid}      @{vargs}
+
+    ${len}=  Get Length  ${vargs}
+    ${attachments}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${attachments}  ${vargs[${index}]}
+    END
+    
+    ${data}=  Create Dictionary      attachments=${attachments}
+
+   ${data}=  json.dumps  ${data}
+   Check And Create YNW Session
+   ${resp}=  PUT On Session  ynw  /provider/jp/finance/paymentsIn/${payable_uid}/attachments  data=${data}  expected_status=any
+   [Return]  ${resp}
+
+Generate Link For Invoice
+
+    [Arguments]    ${uuid}  ${phNo}  ${email}  ${emailNotification}    ${smsNotification}   @{vargs}
+    
+    ${data}=    Create Dictionary    uuid=${uuid}  phNo=${phNo}  email=${email}    emailNotification=${emailNotification}  smsNotification=${smsNotification}
+    Check And Create YNW Session
+    ${data}=  json.dumps  ${data}
+    ${resp}=    POST On Session    ynw    /provider/jp/finance/pay/createLink    data=${data}    expected_status=any
+    [Return]  ${resp}
+
+Get Payment Link Details
+
+    [Arguments]   ${paylink}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/link/${paylink}    expected_status=any
+    [Return]  ${resp}
+
+Apply Discount
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}         &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/discount    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Apply Jaldee Coupon
+
+    [Arguments]    ${uuid}     ${jaldeeCouponCode}         &{kwargs}
+    ${data}=  Create Dictionary  jaldeeCouponCode=${jaldeeCouponCode}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+
+Apply Provider Coupon
+
+    [Arguments]    ${uuid}     ${couponCode}         &{kwargs}
+    ${data}=  Create Dictionary  couponCode=${couponCode}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/providercoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Apply Service Level Discount
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    ${serviceId}      &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/serviceleveldiscount/${serviceId}    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+
+Remove Discount
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}         &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/remove/discount    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+
+Remove Jaldee Coupon
+
+    [Arguments]    ${uuid}     ${jaldeeCouponCode}         &{kwargs}
+    ${data}=  Create Dictionary  jaldeeCouponCode=${jaldeeCouponCode}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/remove/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+
+Remove Provider Coupon
+
+    [Arguments]    ${uuid}     ${couponCode}         &{kwargs}
+    ${data}=  Create Dictionary  couponCode=${couponCode}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/remove/providercoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Update Finance Service
+
+    [Arguments]    ${uuid}     @{vargs}
+    ${len}=  Get Length  ${vargs}
+    ${serviceList}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${serviceList}  ${vargs[${index}]}
+    END
+    ${data}=    json.dumps    ${serviceList}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/updateservices    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Remove Service Level Discount
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    ${serviceId}      &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/remove/serviceleveldiscount/${serviceId}    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Update Invoice Items
+
+    [Arguments]    ${uuid}     @{vargs}
+    ${len}=  Get Length  ${vargs}
+    ${ItemList}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${ItemList}  ${vargs[${index}]}
+    END
+    ${data}=    json.dumps    ${ItemList}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/updateitems    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Apply Item Level Discount
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    ${itemId}      &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/itemleveldiscount/${itemId}    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Remove Item Level Discount
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    ${itemId}      &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/remove/itemleveldiscount/${itemId}    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Update Bill Status
+
+    [Arguments]   ${invoiceUid}    ${billStatus}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /provider/jp/finance/invoice/${invoiceUid}/billstatus/${billStatus}    expected_status=any
+    [Return]  ${resp}
+
+Apply Provider Coupon for waitlist
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  couponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/apply/providercoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Remove Provider Coupon for waitlist
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  couponCode=${couponCode}      
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/remove/providercoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Apply Service Level Discount for waitlist
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/apply/serviceleveldiscount    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Remove Service Level Discount for waitlist
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/remove/serviceleveldiscount    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Get Invoice Log List UId
+
+    [Arguments]   ${uid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/${uid}/invoicestatelog     expected_status=any
+    [Return]  ${resp}
+
+Update bill view status
+
+    [Arguments]   ${uid}    ${billViewStatus}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/jp/finance/invoice/${uid}/billviewstatus/${billViewStatus}     expected_status=any
+    [Return]  ${resp}
+
+Share invoice as pdf 
+    [Arguments]    ${uuid}   ${emailNotification}    ${email}   ${html}  &{kwargs}
+    ${data}=    Create Dictionary       emailNotification=${emailNotification}  email=${email}   html=${html}
+     FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/jp/finance/invoice/${uuid}/createSharePdf    data=${data}   expected_status=any
+    [Return]  ${resp}
+
+
+Apply Jaldee Coupon for waitlist
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Remove Jaldee Coupon for waitlist
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/remove/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Get Waitlist level Bill Details
+
+    [Arguments]   ${uuid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/waitlist/${uuid}/billdetails     expected_status=any
+    [Return]  ${resp}
+
+Apply Jaldee Coupon for Appointment
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Remove Jaldee Coupon for Appointment
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/remove/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Apply Provider Coupon for Appointment
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  couponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/apply/providercoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Remove Provider Coupon for Appointment
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  couponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/remove/providercoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Apply Service Level Discount for Appointment
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/apply/serviceleveldiscount    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+
+Remove Service Level Discount for Appointment
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/remove/serviceleveldiscount    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+    
+Get Appointment level Bill Details
+
+    [Arguments]   ${uuid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/appointment/${uuid}/billdetails     expected_status=any
+    [Return]  ${resp}
+
+
+Get Category List Configuration
+
+    [Arguments]   ${categoryType}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/category/config/${categoryType}       expected_status=any
+    [Return]  ${resp}
+
+Copy Category Status List Configuration
+
+    [Arguments]   ${categoryType}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/jp/finance/config/${categoryType}       expected_status=any
+    [Return]  ${resp}
+
+Get Status List Configuration
+
+    [Arguments]   ${categoryType}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/status/config/${categoryType}       expected_status=any
+    [Return]  ${resp}
+
+Get finance Confiq
+ 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/jp/finance/config/Invoice     expected_status=any
+    [Return]  ${resp}
+
+Get default finance category Confiq
+ 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/category/default/Invoice     expected_status=any
+    [Return]  ${resp}
+
+Apply Discount for Order
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/apply/discount    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Remove Discount for Order
+
+    [Arguments]    ${uuid}     ${id}  ${discountValue}  ${privateNote}   ${displayNote}    &{kwargs}
+    ${data}=  Create Dictionary  id=${id}   discountValue=${discountValue}  privateNote=${privateNote}   displayNote=${displayNote}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/remove/discount    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Apply Jaldee Coupon for Order
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Remove Jaldee Coupon for Order
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  jaldeeCouponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/remove/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Apply Provider Coupon for Order
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  couponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/apply/providercoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Remove Provider Coupon for Order
+
+    [Arguments]    ${uuid}     ${couponCode}     &{kwargs}
+    ${data}=  Create Dictionary  couponCode=${couponCode}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/remove/providercoupon    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Get Order level Bill Details
+
+    [Arguments]   ${uuid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/orders/${uuid}/billdetails     expected_status=any
+    [Return]  ${resp}
+
+
+Make Payment By Cash 
+
+    [Arguments]    ${uuid}     ${acceptPaymentBy}    ${amount}     ${paymentNote}     &{kwargs}
+    ${data}=  Create Dictionary  uuid=${uuid}     acceptPaymentBy=${acceptPaymentBy}     amount=${amount}     paymentNote=${paymentNote}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/payment/acceptPayment    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Make Payment By Cash For Invoice
+
+    [Arguments]    ${uuid}     ${acceptPaymentBy}    ${amount}     ${paymentNote}     &{kwargs}
+    ${data}=  Create Dictionary  uuid=${uuid}     acceptPaymentBy=${acceptPaymentBy}     amount=${amount}     paymentNote=${paymentNote}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/jp/finance/pay/acceptPayment    data=${data}  expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
 Create Appointment Reminder Settings
     [Arguments]  ${resource_type}  ${event_type}  ${email}  ${sms}  ${push_notf}  ${common_msg}  ${reminder_time}
     ${data}=  Create Dictionary  resourceType=${resource_type}  eventType=${event_type}  email=${email}  sms=${sms}  
@@ -11764,6 +12438,25 @@ Create Appointment Reminder Settings
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /provider/consumerNotification/settings   data=${data}  expected_status=any
     [Return]  ${resp}
+
+Get Bookings Invoices
+     [Arguments]      ${ynwuuid}  
+    Check And Create YNW Session
+    ${resp}=    GET On Session  ynw   /provider/jp/finance/invoice/ynwuid/${ynwuuid}    expected_status=any
+    [Return]  ${resp}
+
+Update Invoice Status
+
+    [Arguments]    ${InvoiceUid}     ${userId}     
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${InvoiceUid}/${userId}     expected_status=any    headers=${headers}
+    [Return]  ${resp}
+
+Get next invoice Id
+    [Arguments]   ${locationId}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/${locationId}/nextInvoiceId     expected_status=any
+
 
 Validate phone number
     [Arguments]     ${countryCode}  ${phoneNumber}
@@ -11948,3 +12641,55 @@ update lead assignees LOS
     Check And Create YNW Session   
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/assignees   expected_status=any
     [Return]  ${resp}
+
+AddItemToFinance
+
+   [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
+    ${ItemLists}=  Create List     ${ItemLists}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Append To List  ${ItemLists}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${ItemLists}  
+
+   Check And Create YNW Session
+   ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/addItems    data=${data}  expected_status=any  
+   [Return]  ${resp} 
+
+AddServiceToFinance
+
+   [Arguments]  ${uuid}   ${serviceList}  &{kwargs}
+    ${serviceLists}=  Create List     ${serviceList}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Append To List  ${serviceLists}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${serviceLists}  
+
+   Check And Create YNW Session
+   ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/addservices    data=${data}  expected_status=any  
+   [Return]  ${resp} 
+
+RemoveServiceToFinance
+
+   [Arguments]  ${uuid}   ${serviceList}  &{kwargs}
+    ${serviceLists}=  Create List     ${serviceList}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Append To List  ${serviceLists}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${serviceLists}  
+
+   Check And Create YNW Session
+   ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/removeservices    data=${data}  expected_status=any  
+   [Return]  ${resp} 
+
+RemoveItemToFinance
+
+   [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
+    ${ItemLists}=  Create List     ${ItemLists}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Append To List  ${ItemLists}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${ItemLists}  
+
+   Check And Create YNW Session
+   ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/removeitems    data=${data}  expected_status=any  
+   [Return]  ${resp} 

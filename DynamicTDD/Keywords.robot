@@ -35,7 +35,7 @@ ${bType}                  Waitlist
 @{disctype}               Predefine   OnDemand
 @{recurringtype}          Daily  Weekly  Monthly  MonthlyWeekly  Once
 @{parkingType}            street  privatelot  valet  free   paid   none
-@{purpose}                prePayment  billPayment  subscriptionLicenseInvoicePayment  verifyPayuPayment  verifyPaytmPayment  donation
+@{purpose}                prePayment  billPayment  subscriptionLicenseInvoicePayment  verifyPayuPayment  verifyPaytmPayment  donation   financeInvoicePayment
 @{paymentStatus}          NotPaid  PartiallyPaid  FullyPaid  Refund  PartiallyRefunded  Paid
 @{billStatus}             New  Settled  Cancel
 @{billViewStatus}         Show  Notshow
@@ -234,7 +234,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{ivr_status}                       connected  missed 	voicemail  success 	transferred  inCall  callCompleted
 @{ivr_category}                     MONTHLY  WEEKLY  DATE_RANGE
 @{dentalState}                      TEMPORARY  PERMANENT  MIXED
-@{categoryType}                     Vendor  Expense  PaymentsOut  PaymentsIn  Invoice
+@{categoryType}                     Vendor  Expense  PaymentsInOut  Invoice
 @{MembershipApprovalType}           Manual  Automatic
 @{MembershipServiceStatus}          Enabled  Disabled
 @{emptylist}
@@ -247,6 +247,8 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{PRStatus}                         OPEN  CLOSED  COMPLETED 
 @{RateType}                         Diminishing  Flat
 @{WorkStatus}                       OPEN  CANCELED  COMPLETE
+@{subcategory}                      ADD_PAYMENT_IN(AuditCategory.PAYMENT)   UPDATE_PAYMENT_IN(AuditCategory.PAYMENT)   UPDATE_PAYMENT_IN_STATUS(AuditCategory.PAYMENT)     ADD_PAYMENT_OUT(AuditCategory.PAYMENT)      UPDATE_PAYMENT_OUT(AuditCategory.PAYMENT)   UPDATE_PAYMENT_OUT_STATUS(AuditCategory.PAYMENT)      ADD_FINANCE_INVOICE(AuditCategory.FINANCE_INVOICE)    UPDATE_FINANCE_INVOICE(AuditCategory.FINANCE_INVOICE)        UPDATE_FINANCE_INVOICE_STATUS(AuditCategory.FINANCE_INVOICE)      ADD_EXPENSE(AuditCategory.EXPENSE)    UPDATE_EXPENSE(AuditCategory.EXPENSE)    UPDATE_EXPENSE_STATUS(AuditCategory.EXPENSE)
+@{paymentGateway}                   PAYTM  PAYUMONEY  RAZORPAY
 @{leadchannel}                      DIRECT  WHATSAPP  TELEGRAM  IVR  BRANDEDAPP
 
 

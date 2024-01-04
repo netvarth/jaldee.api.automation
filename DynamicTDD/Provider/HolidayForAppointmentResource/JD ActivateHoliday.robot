@@ -1274,7 +1274,7 @@ JD-TC-ActivateHoliday-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get Appointment Settings
+    ${resp}=   Get  Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
