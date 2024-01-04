@@ -12643,7 +12643,6 @@ update lead assignees LOS
     [Return]  ${resp}
 
 AddItemToFinance
-
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
     ${ItemLists}=  Create List     ${ItemLists}
     FOR  ${key}  ${value}  IN  &{kwargs}
