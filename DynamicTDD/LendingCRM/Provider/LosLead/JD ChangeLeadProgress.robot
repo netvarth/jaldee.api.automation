@@ -155,6 +155,25 @@ JD-TC-ChangeLeadProgress-1
     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id2}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${P2name}
 
+    ${resp}=    Get Lead By Filter LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id2}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${P2name}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
+
 
 JD-TC-ChangeLeadProgress-UH1
 

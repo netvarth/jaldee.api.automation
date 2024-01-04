@@ -30,7 +30,7 @@ JD-TC-ChangeLeadStatus-1
 
     [Documentation]             Change Lead Status
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -153,11 +153,30 @@ JD-TC-ChangeLeadStatus-1
     Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id2}
     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${S2name}
 
+    ${resp}=    Get Lead By Filter LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id2}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${S2name}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
+
 JD-TC-ChangeLeadStatus-UH1
 
     [Documentation]             Change Lead Status where lead_uid is invalid 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -174,16 +193,18 @@ JD-TC-ChangeLeadStatus-UH2
 
     [Documentation]             Change Lead Status where progress is invalid 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME42}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   Status
 
     ${fake}=    Random Int  min=300  max=999
 
     ${resp}=    Change Lead Status LOS  ${lead_uid}  ${fake} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${NO_PERMISSION}
+    Should Be Equal As Strings    ${resp.json()}        ${INVALID_X_ID}
 
 JD-TC-ChangeLeadStatus-UH3
 
@@ -198,7 +219,7 @@ JD-TC-ChangeLeadStatus-UH4
 
     [Documentation]             Change Lead Status using another provider lof=gin
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME43}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME37}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
