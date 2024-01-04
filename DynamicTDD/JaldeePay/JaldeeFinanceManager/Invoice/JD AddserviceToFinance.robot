@@ -106,7 +106,7 @@ JD-TC-Apply Service to Finance-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  "${resp.json()}"    "true"
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH0}${\n}
 
     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
     Log   ${resp.json()}
@@ -953,7 +953,7 @@ JD-TC-Consumer-Payment-Transaction-Individual-1
     ${PO_Number}    Generate random string    8    1234564789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
+    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH1}${\n}
     Set Suite Variable   ${PUSERPH1}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH1}   AND  clear_service  ${PUSERPH1}  AND  clear_Item    ${PUSERPH1}  AND   clear_Coupon   ${PUSERPH1}   AND  clear_Discount  ${PUSERPH1}  AND  clear_appt_schedule   ${PUSERPH1}
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -1157,6 +1157,16 @@ JD-TC-Consumer-Payment-Transaction-Individual-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_sid1}  ${resp.json()}
 
+    ${resp}=  Auto Invoice Generation For Service   ${p1_sid1}    ${toggle[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${p1_sid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
+
+
     ${P1SERVICE2}=    FakerLibrary.word
     Set Suite Variable   ${P1SERVICE2} 
     ${desc}=   FakerLibrary.sentence
@@ -1164,6 +1174,15 @@ JD-TC-Consumer-Payment-Transaction-Individual-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_sid2}  ${resp.json()}
+
+    ${resp}=  Auto Invoice Generation For Service   ${p1_sid2}    ${toggle[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${p1_sid2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
 
     ${queue1}=    FakerLibrary.word
     ${capacity}=  FakerLibrary.Numerify  %%
@@ -1241,8 +1260,11 @@ JD-TC-Consumer-Payment-Transaction-Individual-1
 
 
     sleep   02s
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid1}
+
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${None}
     Log  ${resp.json()}
+    # ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid1}
+    # Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Make payment Consumer Mock  ${min_pre}  ${bool[1]}  ${cwid}  ${pid}  ${purpose[0]}  ${cid1}
@@ -1255,13 +1277,20 @@ JD-TC-Consumer-Payment-Transaction-Individual-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Bill By UUId  ${cwid}
+    ${resp1}=  Get Bookings Invoices  ${cwid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code} 200
+
+
+
+    ${resp}=  ProviderLogout
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME6}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+   ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
 
     sleep   02s
 
@@ -1303,7 +1332,7 @@ JD-TC-Consumer-Payment-Transaction-Individual-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}     waitlistStatus=${wl_status[0]}
     
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${balamount}  ${purpose[1]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid1}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${balamount}  ${purpose[1]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${None}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${resp}=  Make payment Consumer Mock  ${balamount}  ${bool[1]}  ${cwid}  ${pid}  ${purpose[1]}  ${cid1}
