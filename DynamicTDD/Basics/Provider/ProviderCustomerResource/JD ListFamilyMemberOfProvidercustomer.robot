@@ -340,7 +340,7 @@ JD-TC-ListFamilyMemberOfProvidercustomer-UH2
       ${resp}=  ListFamilyMemberByProvider   0
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  422
-      Should Be Equal As Strings  "${resp.json()}"   "${INVALID_ID}"
+      Should Be Equal As Strings  "${resp.json()}"   "${INVALID_CONS_ID}"
 
 JD-TC-ListFamilyMemberOfProvidercustomer-UH3
       [Documentation]    Adding a customer and add two family members  and another provider trying to list these family member

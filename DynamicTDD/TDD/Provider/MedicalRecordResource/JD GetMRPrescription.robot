@@ -1069,6 +1069,7 @@ JD-TC-GetMRprescription-9
     # Set Test Variable    ${id3}    ${resp.json()['id']} 
     # Set Test Variable    ${userName3}    ${resp.json()['userName']} 
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${MUSERNAME_E}+1000000000

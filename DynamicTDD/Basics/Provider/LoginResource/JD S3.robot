@@ -18,6 +18,12 @@ JD-TC-JD S3-1
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME80}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+    
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
     ${list}=  Create List  1  2  3 

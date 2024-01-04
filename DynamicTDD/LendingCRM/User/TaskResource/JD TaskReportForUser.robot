@@ -167,7 +167,7 @@ JD-TC-TaskReport-2
 
     [Documentation]  Generate Task Report For Title Filter
 
-    ${resp}=  Encrypted Provide=r Login        ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login        ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}    200
     

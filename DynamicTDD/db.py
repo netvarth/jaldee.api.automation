@@ -2517,16 +2517,20 @@ def get_iscorp_subdomains(flag):
     domlist=[]
     dflag = True if int(flag) == 1 else False
     # print (dflag)
-    for i in range(len(data['businessDomains'])):
-        for j in range(len(data['businessDomains'][i]['subDomains'])):
-            # print  "Domain: " + str(data['businessDomains'][i]['domain']) + str(i)
-            # print  "Sub Domain: " + str(data['businessDomains'][i]['subDomains'][j]['subDomain']) + str(j)
-            if dflag is True and data['businessDomains'][i]['subDomains'][j]['isCorp'] == dflag:
-                domdict={"domainId": data['businessDomains'][i]['id'], "domain": data['businessDomains'][i]['domain'], "subdomains": data['businessDomains'][i]['subDomains'][j]['subDomain'], "subdomainId": data['businessDomains'][i]['subDomains'][j]['id'], "userSubDomain": data['businessDomains'][i]['subDomains'][j]['userSubDomain']}
-                domlist.append(domdict)
-            elif dflag is False and data['businessDomains'][i]['subDomains'][j]['isCorp'] == dflag:
-                domdict={"domainId": data['businessDomains'][i]['id'], "domain": data['businessDomains'][i]['domain'], "subdomains": data['businessDomains'][i]['subDomains'][j]['subDomain'], "subdomainId": data['businessDomains'][i]['subDomains'][j]['id']}
-                domlist.append(domdict)
+    try:
+        for i in range(len(data['businessDomains'])):
+            for j in range(len(data['businessDomains'][i]['subDomains'])):
+                # print  "Domain: " + str(data['businessDomains'][i]['domain']) + str(i)
+                # print  "Sub Domain: " + str(data['businessDomains'][i]['subDomains'][j]['subDomain']) + str(j)
+                if dflag is True and data['businessDomains'][i]['subDomains'][j]['isCorp'] == dflag:
+                    domdict={"domainId": data['businessDomains'][i]['id'], "domain": data['businessDomains'][i]['domain'], "subdomains": data['businessDomains'][i]['subDomains'][j]['subDomain'], "subdomainId": data['businessDomains'][i]['subDomains'][j]['id'], "userSubDomainId": data['businessDomains'][i]['subDomains'][j]['userSubDomainId']}
+                    domlist.append(domdict)
+                elif dflag is False and data['businessDomains'][i]['subDomains'][j]['isCorp'] == dflag:
+                    domdict={"domainId": data['businessDomains'][i]['id'], "domain": data['businessDomains'][i]['domain'], "subdomains": data['businessDomains'][i]['subDomains'][j]['subDomain'], "subdomainId": data['businessDomains'][i]['subDomains'][j]['id']}
+                    domlist.append(domdict)
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
     return domlist
 
 
@@ -2925,7 +2929,7 @@ def convert_slot_12hr(slot):
             # print t2
             t2=t2.strftime('%I:%M %p')
             # print t2
-            return t1+" - "+t2
+            return t1+"-"+t2
         except Exception as e:
             print ("Exception:", e)
             print ("Exception at line no:", e.__traceback__.tb_lineno)

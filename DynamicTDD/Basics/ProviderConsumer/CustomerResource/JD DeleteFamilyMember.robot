@@ -66,7 +66,7 @@ JD-TC-DeleteFamilyMembers-1
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[1]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
+    IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
         ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
         Should Be Equal As Strings  ${resp1.status_code}  200
     ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[1]}'
@@ -143,7 +143,8 @@ JD-TC-DeleteFamilyMembers-UH1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable     ${Famid}    ${resp.json()[0]['id']}
 
-    ${inv_FamId}=  Generate Random String  3  [NUMBERS]
+    # ${inv_FamId}=  Generate Random String  3  [NUMBERS]
+    ${inv_FamId}=  Random Int  min=1000  max=2000
 
     ${resp}=    Delete ProCons FamilyMember    ${inv_FamId}
     Log  ${resp.json()}

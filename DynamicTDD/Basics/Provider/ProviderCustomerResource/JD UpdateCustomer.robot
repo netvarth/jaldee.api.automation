@@ -783,7 +783,7 @@ JD-TC-Update CustomerDetails-UH6
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[1]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
+    IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
         ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
         Should Be Equal As Strings  ${resp1.status_code}  200
     ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[1]}'
@@ -1316,7 +1316,10 @@ JD-TC-Update CustomerDetails-13
 	[Documentation]  Update a valid customer with email
     ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -1326,8 +1329,8 @@ JD-TC-Update CustomerDetails-13
     ${ph2}=  Evaluate  ${PUSERNAME230}+71013
     Set Suite Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
     ${resp}=  AddCustomer  ${phone1}   firstName=${firstname}   lastName=${lastname}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Log  ${resp.json()} 
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${ph2}${\n}
     Set Test Variable  ${cid2}  ${resp.json()}
     ${firstname1}=  FakerLibrary.first_name
@@ -1462,7 +1465,10 @@ JD-TC-Update CustomerDetails-UH8
 	[Documentation]  Try to Update a  customer with invalid second number
     ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -1489,7 +1495,7 @@ JD-TC-Update CustomerDetails-UH8
 
 
 
-JD-TC-Update CustomerDetails-13
+JD-TC-Update CustomerDetails-14
     [Documentation]  update manual id of customer
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
@@ -1499,18 +1505,18 @@ JD-TC-Update CustomerDetails-13
     Set Test Variable  ${p_id}  ${decrypted_data['id']}
     
     ${resp}=  Get Accountsettings  
-     Log  ${resp.content}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     IF  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}==${customerseries[0]}
-          ${resp}=  JaldeeId Format   ${customerseries[1]}   ${EMPTY}   ${EMPTY}
-          Log  ${resp.json()}
-          Should Be Equal As Strings  ${resp.status_code}  200
-     END
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  '${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}'=='${customerseries[0]}'
+        ${resp}=  JaldeeId Format   ${customerseries[1]}   ${EMPTY}   ${EMPTY}
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-     ${resp}=  Get Accountsettings  
-     Log  ${resp.content}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Should Be Equal As Strings  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}  ${customerseries[1]}
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['jaldeeIdFormat']['customerSeriesEnum']}  ${customerseries[1]}
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name

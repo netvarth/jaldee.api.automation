@@ -84,6 +84,7 @@ JD-TC-Patient Record Flow-1
 
 
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${id}=  get_id  ${MUSERNAME_E}
      Set Suite Variable  ${id}
@@ -170,7 +171,7 @@ JD-TC-Patient Record Flow-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${CUR_DAY}=  get_date
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=   Create Sample Location
     Set Test Variable    ${loc_id1}    ${resp}  
     # ${resp}=   Create Sample Service  ${SERVICE1}

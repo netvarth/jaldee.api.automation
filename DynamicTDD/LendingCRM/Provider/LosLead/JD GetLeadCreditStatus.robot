@@ -26,7 +26,7 @@ JD-TC-GetLeadCreditStatus-1
 
     [Documentation]             Get lead Credit Status
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME51}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -48,7 +48,28 @@ JD-TC-GetLeadCreditStatus-1
     ${resp}=    Get Lead Credit Status LOS
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['id']}           ${creditstatus}
-    Should Be Equal As Strings    ${resp.json()['account']}      ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['name']}         ${name}
-    Should Be Equal As Strings    ${resp.json()['status']}       ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${creditstatus}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}      ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['name']}         ${name}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
+
+JD-TC-GetLeadCreditStatus-UH1
+
+    [Documentation]             Get lead Credit Status without login
+
+    ${resp}=    Get Lead Credit Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-GetLeadCreditStatus-UH2
+
+    [Documentation]             Get lead Credit Status with another provider login
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME52}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Credit Status LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200

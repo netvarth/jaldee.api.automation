@@ -215,7 +215,7 @@ JD-TC-Consumer-Payment-TransactionBy UUId-1
     Set Suite Variable   ${cid1}
 
     ${msg}=  FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -323,7 +323,7 @@ JD-TC-Consumer-Payment-TransactionBy UUId-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${msg}=  FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_qid}  ${DAY}  ${p1_sid2}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -404,7 +404,7 @@ JD-TC-Consumer-Payment-TransactionBy UUId-3
     Set Suite Variable  ${cid2}  ${resp.json()}
 
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist  ${cid2}  ${p1_sid2}  ${p1_qid}  ${DAY}  ${msg}  ${bool[1]}  ${cid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -471,7 +471,7 @@ JD-TC-Consumer-Payment-TransactionBy UUId-4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${msg}=  FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist  ${cid}  ${p1_sid2}  ${p1_qid}  ${DAY}  ${msg}  ${bool[1]}  ${cid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

@@ -130,7 +130,7 @@ JD-TC-CreateAppointmentNote-1
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${cookie}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.AppointmentNote   ${cookie}   ${apptid1}  ${msg}  ${caption}

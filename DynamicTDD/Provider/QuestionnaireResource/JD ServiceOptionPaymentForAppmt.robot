@@ -852,8 +852,12 @@ JD-TC-ServiceOptionsPaymentForAppointment-4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME27}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${fname}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname}   ${decrypted_data['lastName']}
     Set Suite Variable   ${domain}    ${resp.json()['sector']}
     Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
 
@@ -1186,8 +1190,12 @@ JD-TC-ServiceOptionsPaymentForAppointment-5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME29}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${fname}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname}   ${decrypted_data['lastName']}
     Set Suite Variable   ${domain}    ${resp.json()['sector']}
     Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
 

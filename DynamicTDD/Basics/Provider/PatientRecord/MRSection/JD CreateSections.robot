@@ -75,6 +75,7 @@ JD-TC-Create Sections-1
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${id}=  get_id  ${MUSERNAME_E}
      Set Suite Variable  ${id}
@@ -126,7 +127,7 @@ JD-TC-Create Sections-1
     Set Suite Variable    ${name}
     ${aliasName}=  FakerLibrary.name
     Set Suite Variable    ${aliasName}
-    ${DAY1}=  get_date
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${DAY1}
 
     ${resp}=    Create Case Category    ${name}  ${aliasName}

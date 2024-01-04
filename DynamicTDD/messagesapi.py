@@ -23,6 +23,7 @@ EMAIL_FAILED= "Unable to send email message. Please enter a valid email for noti
 PLEASE_ENTER_FIRST_NAME= "Please enter the first name"
 PLEASE_ENTER_LAST_NAME= "Please enter the last name"
 FIRST_NAME_REQUIRED= "Please enter First Name"
+LAST_NAME_REQUIRED = "Please enter Last Name"
 
 PHONE_AND_FIRST_NAME_OR_LAST_NAME_REQUIRED= "Both first name and last name or phone number required for searching"
 EMAIL_PHONE_NO_CANT_REPEAT= "Alert! The email id  you have entered is already registered with Jaldee. Try again with different email id.In case, you have forgotten your password,try retrieving the same."
@@ -1177,7 +1178,7 @@ USER_NOT_FOUND_WITH_ID= "User not found with id {}"
 
 #consumer
 INVALID_CONS_ID= "Invalid Consumer Id"
-INVALID_ID= "Invalid Consumer Id"
+# INVALID_ID= "Invalid Consumer Id"
 PRO_CON_ALREADY_EXIST= "[customer] already exists"
 ENTER_CON_PHONE_NO= "Enter Consumer phone number"
 CONSUMER_NOT_FOUND= "Consumer not found"
@@ -2200,4 +2201,20 @@ appmntReminder_Consumer_APP= "[consumer],\n[appttime] reminder for your appointm
 
 CUSTOMER_FIRST_NAME_REQUIRED= "Please enter the first name"
 CUSTOMER_LAST_NAME_REQUIRED= "Please enter the last name"
+
+# Los
+
+CONSUMER_REQUIRED = "Consumer required."
+CONSUMER_FIRST_NAME_REQUIRED = "Consumer first name required."
+CONSUMER_FIRST_NAME_LENGTH_EXCEED ="Consumer first name should not exceed 250 chars"
+CONSUMER_LAST_NAME_REQUIRED = "Consumer last name required."
+CONSUMER_LAST_NAME_LENGTH_EXCEED ="Consumer last name should not exceed 250 chars"
+CONSUMER_DOB_REQUIRED = "Consumer DOB required."
+CONSUMER_GENDER_REQUIRED = "Consumer gender required."
+CONSUMER_PHONE_NO_REQUIRED = "Consumer phone number required."
+EMAIL_ID_REQUIRED = "Email Id required"
+AADHAAR_NUMBER_REQUIRED =  "Aadhaar number required."
+INVALID_AADHAAR_NUMBER =  "Invalid Aadhaar number."
+PAN_REQUIRED = "PAN required"
+INVALID_PAN = "Invalid PAN"
 

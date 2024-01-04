@@ -74,7 +74,7 @@ JD-TC-GetCountOfFileInFilter-1
     ${msg}=   FakerLibrary.Word
     ${caption}=  Fakerlibrary.sentence
     ${caption1}=  Fakerlibrary.Sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
  
     ${resp}=  db.getType   ${jpegfile}
     Log  ${resp}

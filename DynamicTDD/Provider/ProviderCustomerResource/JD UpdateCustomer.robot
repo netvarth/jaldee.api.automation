@@ -26,7 +26,10 @@ JD-TC-Update CustomerDetails-1
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME233}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
 
     # ${resp}=  Get Account Settings
     # Log  ${resp.json()}
@@ -75,7 +78,10 @@ JD-TC-Update CustomerDetails-2
 	[Documentation]  Update a valid customer with email
     ${resp}=  Encrypted Provider Login  ${PUSERNAME234}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -202,7 +208,10 @@ JD-TC-Update CustomerDetails-UH4
 	[Documentation]  A non parent updates a customer
     ${resp}=  Encrypted Provider Login  ${PUSERNAME232}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -232,7 +241,10 @@ JD-TC-Update CustomerDetails-4
 	[Documentation]  Update a valid customer here add a new consumer number(new keyword)
     ${resp}=  Encrypted Provider Login  ${PUSERNAME233}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${ph}=  Evaluate  ${PUSERNAME230}+71018
@@ -760,7 +772,7 @@ JD-TC-Update CustomerDetails-UH6
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[1]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
+    IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
         ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
         Should Be Equal As Strings  ${resp1.status_code}  200
     ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[1]}'

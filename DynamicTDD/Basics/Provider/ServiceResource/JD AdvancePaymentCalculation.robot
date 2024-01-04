@@ -771,7 +771,7 @@ JD-TC-AdvancePaymentcalculation-14
     Should Be Equal As Strings  ${resp.json()['amountRequiredNow']}                     ${min_pre}
     
     ${msg}=  FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${qid1}  ${DAY1}  ${ser_id1}  ${msg}  ${bool[0]}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -906,7 +906,7 @@ JD-TC-AdvancePaymentcalculation-15
     Should Be Equal As Strings  ${resp.json()['amountRequiredNow']}                     ${adv_pay_amnt}
     
     ${msg}=  FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${qid1}  ${DAY1}  ${ser_id1}  ${msg}  ${bool[0]}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -1543,7 +1543,7 @@ JD-TC-AdvancePaymentcalculation-19
     Should Be Equal As Strings  ${resp.json()['amountRequiredNow']}                     ${adv_pay_amnt}
     
     ${msg}=  FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${qid1}  ${DAY1}  ${ser_id1}  ${msg}  ${bool[0]}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -1807,7 +1807,7 @@ JD-TC-AdvancePaymentcalculation-20
     Should Be Equal As Strings  ${resp.json()['amountRequiredNow']}                     ${min_pre}
 
     ${msg}=  FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${msg}  ${bool[0]}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -1918,8 +1918,12 @@ JD-TC-AdvancePaymentcalculation-21
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${fname}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname}   ${decrypted_data['lastName']}
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2097,7 +2101,7 @@ JD-TC-AdvancePaymentcalculation-21
     Should Be Equal As Strings  ${resp.json()['amountRequiredNow']}                     ${adv_pay_amnt}
 
     ${msg}=  FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${account_id}  ${q_id}  ${DAY1}  ${s_id}  ${msg}  ${bool[0]}  ${self}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 

@@ -26,11 +26,11 @@ ${bankIfsc}                      55555555555
 
 *** Test Cases ***
 
-JD-TC-GetLeadProgress-1
+JD-TC-ChangeLeadProgress-1
 
-    [Documentation]             Get Lead Progress
+    [Documentation]             Change Lead Progress
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -91,37 +91,23 @@ JD-TC-GetLeadProgress-1
     ${PH_Number}    Random Number 	       digits=5 
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
-    Set Suite Variable    ${consumerPhone}  555${PH_Number}
-
-    ${resp}=  AddCustomer  ${consumerPhone}    
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-    Set Suite Variable  ${consumerId}  ${resp.json()[0]['id']}
-
+    Set Test Variable    ${consumerPhone}  555${PH_Number}
     ${requestedAmount}=     Random Int  min=30000  max=600000
-    Set Suite Variable      ${requestedAmount}
     ${description}=         FakerLibrary.bs
-    Set Suite Variable      ${description}
     ${consumerFirstName}=   FakerLibrary.first_name
-    Set Suite Variable      ${consumerFirstName}
     ${consumerLastName}=    FakerLibrary.last_name  
-    Set Suite Variable      ${consumerLastName}
     ${dob}=    FakerLibrary.Date
-    Set Suite Variable      ${dob}
-    Set Suite Variable      ${Pname}
-    Set Suite Variable     ${consumerEmail}  ${consumerFirstName}.${test_mail}   
+    ${address}=  FakerLibrary.address
+    ${gender}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}.${test_mail}   
     ${permanentAddress1}=   FakerLibrary.address
-    Set Suite Variable      ${permanentAddress1}
     ${permanentAddress2}=   FakerLibrary.address  
-    Set Suite Variable      ${permanentAddress2}
     ${nomineeName}=     FakerLibrary.first_name
-    Set Suite Variable      ${nomineeName}
+    ${status}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    ${consumerKyc}=   Create Dictionary  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
 
-    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${losProduct}  ${status_id}  ${Sname}  ${progress_id}  ${Pname}  ${requestedAmount}  ${description}  ${consumerId}  ${consumerFirstName}  ${consumerLastName}  ${dob}  ${Genderlist[1]}  ${countryCodes[1]}  ${consumerPhone}  ${consumerEmail}  ${aadhaar}  ${pan}  ${bankAccountNo}  ${bankIfsc}  ${permanentAddress1}  ${permanentAddress2}  ${permanentDistrict}  ${permanentState}  ${permanentPin}  ${NomineeType[2]}  ${nomineeName}
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable      ${lead_uid}      ${resp.json()['uid']}
@@ -137,24 +123,23 @@ JD-TC-GetLeadProgress-1
     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerId']}           ${consumerId}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
-    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${Genderlist[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
 
-    ${S2name}=    FakerLibrary.name
-    Set Suite Variable      ${S2name}
+    ${P2name}=    FakerLibrary.name
+    Set Suite Variable      ${P2name}
 
-    ${resp}=    Create Lead Status LOS  ${S2name}
+    ${resp}=    Create Lead Progress LOS  ${P2name}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable      ${status_id2}      ${resp.json()['id']}
+    Set Suite Variable      ${progress_id2}      ${resp.json()['id']}
 
-    ${resp}=    Change Lead Status LOS  ${lead_uid}  ${status_id2} 
+    ${resp}=    Change Lead Progress LOS  ${lead_uid}  ${progress_id2} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -165,5 +150,62 @@ JD-TC-GetLeadProgress-1
     Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
     Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
-    Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id2}
-    Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${S2name}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id2}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${P2name}
+
+
+JD-TC-ChangeLeadProgress-UH1
+
+    [Documentation]             Change Lead Progress where lead_uid is invalid 
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${fake}=    Random Int  min=300  max=999
+
+    ${INVALID_LEAD_ID}=   Replace String  ${INVALID_LEAD_ID}  {}  Lead
+
+    ${resp}=    Change Lead Progress LOS  ${fake}  ${progress_id2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${INVALID_LEAD_ID}
+
+JD-TC-ChangeLeadProgress-UH2
+
+    [Documentation]             Change Lead Progress where progress is invalid 
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${fake}=    Random Int  min=300  max=999
+
+    ${resp}=    Change Lead Progress LOS  ${lead_uid}  ${fake} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${Invalid_Progress_ID}
+
+JD-TC-ChangeLeadProgress-UH3
+
+    [Documentation]             Change Lead Progress without login
+
+    ${resp}=    Change Lead Progress LOS  ${lead_uid}  ${progress_id2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
+
+JD-TC-ChangeLeadProgress-UH4
+
+    [Documentation]             Change Lead Progress using another provider lof=gin
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME41}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Change Lead Progress LOS  ${lead_uid}  ${progress_id2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${NO_PERMISSION}

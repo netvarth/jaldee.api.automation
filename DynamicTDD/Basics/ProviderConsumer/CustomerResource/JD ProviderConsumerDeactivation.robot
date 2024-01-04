@@ -364,7 +364,7 @@ JD-TC-Consumer Deactivation -2
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
-    Should Be Equal As Strings    ${resp.json()}   ${Should Be Equal As Strings    ${resp.json()}   ${NOT_REGISTERED_CUSTOMER}}
+    Should Be Equal As Strings    ${resp.json()}   ${NOT_REGISTERED_CUSTOMER}
 
     ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
     Log   ${resp.content}

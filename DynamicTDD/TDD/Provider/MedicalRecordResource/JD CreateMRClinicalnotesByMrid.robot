@@ -1675,6 +1675,7 @@ JD-TC-Createclinicalnotes-13
     Set Suite Variable  ${userName3}  ${decrypted_data['userName']}
     # Set Suite Variable    ${userName3}    ${resp.json()['userName']}   
     Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
     Set Suite Variable  ${MUSERNAME_E}
 
     ${list}=  Create List  1  2  3  4  5  6  7

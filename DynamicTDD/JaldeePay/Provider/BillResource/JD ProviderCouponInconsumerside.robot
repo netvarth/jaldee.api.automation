@@ -174,7 +174,7 @@ JD-TC-ProviderCouponBill-1
     Set Suite Variable   ${cid1}
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}  
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}  
     ${resp}=  Add To Waitlist Consumers   ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     # ${json}=  evaluate    json.loads('''${resp.content()}''')    json
@@ -322,7 +322,7 @@ JD-TC-ProviderCouponBill-2
     Set Suite Variable   ${cid2}
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${coupons}=  Create List  ${cupn_code}  
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
     Log  ${resp.json()}
@@ -426,7 +426,7 @@ JD-TC-ProviderCouponBill-UH1
     ${cid}=  get_id  ${CUSERNAME18}
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${coupons}=  Create List  ${cupn_code3}  
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
     Log  ${resp.json()}
@@ -487,7 +487,7 @@ JD-TC-ProviderCouponBill-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${coupons}=  Create List  ${cupn_code3}  
     # ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
     # Log  ${resp.json()}
@@ -536,7 +536,7 @@ JD-TC-ProviderCouponBill-UH2
     ${cid}=  get_id  ${CUSERNAME2}
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${coupons}=  Create List  ${cupn_code4}  
     # ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid2}  ${msg}  ${bool[0]}  ${coupons}  ${self}
     # Log  ${resp.json()}
@@ -586,7 +586,7 @@ JD-TC-ProviderCouponBill-UH3
     ${cid}=  get_id  ${CUSERNAME3}
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid2}  ${msg}  ${bool[0]}   ${self}
     Log  ${resp.json()}
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -886,7 +886,7 @@ JD-TC-ProviderCouponBill-3
     ${cid2}=  get_id  ${CUSERNAME6}
     
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${coupons}=  Create List  ${cupn_code02}  ${cupn_code2018}
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid1}  ${qid1}  ${DAY}  ${s_id2}  ${msg}  ${bool[0]}  ${coupons}  ${self}
     Log  ${resp.json()}
@@ -970,7 +970,7 @@ JD-TC-ProviderCouponBill-4
     ${cid2}=  get_id  ${CUSERNAME1}
     
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${coupons}=  Create List  ${cupn_code02}  
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid1}  ${qid1}  ${DAY}  ${s_id3}  ${msg}  ${bool[0]}  ${coupons}  ${self}
     Log  ${resp.json()}
@@ -1101,7 +1101,7 @@ JD-TC-ProviderCouponBill-5
     ${cid}=  get_id  ${CUSERNAME2}
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${coupons}=  Create List  ${cupn_code3}  
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid1}  ${qid1}  ${DAY}  ${s_id3}  ${msg}  ${bool[0]}  ${coupons}  ${self}
     Log  ${resp.json()}
@@ -1237,7 +1237,7 @@ JD-TC-ProviderCouponBill-6
     ${cid}=  get_id  ${CUSERNAME3}
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid1}  ${qid1}  ${DAY}  ${s_id3}  ${msg}  ${bool[0]}   ${self}
     Log  ${resp.json()}
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -1377,7 +1377,7 @@ JD-TC-ProviderCouponBill-UH4
     ${cid}=  get_id  ${CUSERNAME5}
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid1}  ${qid1}  ${DAY}  ${s_id3}  ${msg}  ${bool[0]}   ${self}
     Log  ${resp.json()}
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -1464,7 +1464,7 @@ JD-TC-ProviderCouponBill-UH5
     ${cid}=  get_id  ${CUSERNAME15}
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Add To Waitlist Consumers  ${pid1}  ${qid1}  ${DAY}  ${s_id3}  ${msg}  ${bool[0]}   ${self}
     Log  ${resp.json()}
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -1573,7 +1573,7 @@ JD-TC-ProviderCouponBill-UH6
     Should Be Equal As Strings  ${resp.status_code}   200
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     # ${coupons}=  Create List  ${cupn_code3}  
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${pid}  ${p1_qid1}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
     Log  ${resp.json()}
@@ -1832,7 +1832,7 @@ JD-TC-ProviderCouponBill-7
         ${consid}=  get_id  ${CUSERNAME${i}}
 
         ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}  
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}  
         ${resp}=  Add To Waitlist Consumers   ${account_id1}  ${que_id1}  ${DAY}  ${ser_id1}  ${msg}  ${bool[0]}  ${self}
         Log  ${resp.json()}
         ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -2090,7 +2090,7 @@ JD-TC-ProviderCouponBill-8
         ${consid}=  get_id  ${CUSERNAME${i}}
 
         ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}  
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}  
         ${resp}=  Add To Waitlist Consumers   ${account_id1}  ${que_id1}  ${DAY}  ${ser_id1}  ${msg}  ${bool[0]}  ${self}
         Log  ${resp.json()}
         ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -2178,7 +2178,7 @@ JD-TC-ProviderCouponBill-8
     ${consid}=  get_id  ${CUSERNAME35}
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}  
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}  
     ${resp}=  Add To Waitlist Consumers   ${account_id1}  ${que_id1}  ${DAY}  ${ser_id1}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -2704,7 +2704,7 @@ JD-TC-ProviderCouponBill-11
     ${consid}=  get_id  ${CUSERNAME39}
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${coupons}=  Create List  ${cupn_code1}  
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${account_id1}  ${que_id1}  ${DAY1}  ${ser_id1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
     Log  ${resp.json()}
@@ -2789,7 +2789,7 @@ JD-TC-ProviderCouponBill-11
     ${consid}=  get_id  ${CUSERNAME35}
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${coupons}=  Create List  ${cupn_code1}  
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${account_id1}  ${que_id1}  ${DAY1}  ${ser_id1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
     Log  ${resp.json()}
@@ -2836,7 +2836,7 @@ JD-TC-ProviderCouponBill-12
     ${consid}=  get_id  ${CUSERNAME39}
     ${DAY3}=   db.add_timezone_date  ${tz}  1  
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${coupons}=  Create List  ${cupn_code1}  
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${account_id1}  ${que_id1}  ${DAY3}  ${ser_id1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
     Log  ${resp.json()}
@@ -3006,7 +3006,7 @@ JD-TC-ProviderCouponBill-13
     
     ${DAY3}=   db.add_timezone_date  ${tz}  1  
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${coupons}=  Create List  ${cupn_code}  
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${account_id1}  ${que_id1}  ${DAY3}  ${ser_id1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
     Log  ${resp.json()}
@@ -3183,7 +3183,7 @@ JD-TC-ProviderCouponBill-14
     
     ${DAY3}=   db.add_timezone_date  ${tz}  1  
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${coupons}=  Create List  ${cupn_code}  
     ${resp}=  Add To Waitlist Consumers with JCoupon  ${account_id1}  ${que_id1}  ${DAY3}  ${ser_id1}  ${msg}  ${bool[0]}  ${coupons}  ${self}
     Log  ${resp.json()}

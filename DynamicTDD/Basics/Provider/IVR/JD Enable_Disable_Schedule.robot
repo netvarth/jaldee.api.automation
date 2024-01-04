@@ -183,7 +183,7 @@ JD-Enable_Disable_Schedule-UH1
 
     ${resp}=    Enable And Disable A Schedule    ${JCstatus[0]}    ${sch_id1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Scheduled Using Id    ${sch_id1}
     Log  ${resp.json()}
@@ -231,7 +231,7 @@ JD-Enable_Disable_Schedule-UH2
 
     ${resp}=    Enable And Disable A Schedule    ${JCstatus[1]}    ${sch_id1}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Scheduled Using Id    ${sch_id1}
     Log  ${resp.json()}

@@ -243,7 +243,7 @@ JD-TC-Apply ProviderCoupon-1
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
-    ${invoiceDate}=   db.get_date
+    ${invoiceDate}=   db.db.get_date_by_timezone  ${tz}
     ${invoiceId}=   FakerLibrary.word
 
     ${quantity}=   Random Int  min=5  max=10
@@ -2707,7 +2707,7 @@ JD-TC-ProviderCouponBill-UH3
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
     ${invoiceLabel}=   FakerLibrary.word
-    ${invoiceDate}=   db.get_date
+    ${invoiceDate}=   db.db.get_date_by_timezone  ${tz}
     ${invoiceId}=   FakerLibrary.word
 
     ${quantity}=   Random Int  min=5  max=10

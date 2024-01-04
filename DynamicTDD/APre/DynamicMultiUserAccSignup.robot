@@ -20,19 +20,15 @@ ${BUSER}      ${MUSERNAME}
 *** Test Cases ***
 
 Remove Files
-    # ${Time}=  db.get_time_by_timezone   ${tz}
-    # ${sTime}=  add_time  0  15
-    # Set Suite Variable   ${sTime}  ${sTime}
-    # ${eTime}=  add_time   0  45
-    # Set Suite Variable   ${eTime}  ${eTime}
-    Remove File   ${EXECDIR}/TDD/varfiles/branches.py
-    # Create File   ${EXECDIR}/TDD/varfiles/branches.py
+   
     Remove File   ${EXECDIR}/TDD/varfiles/musers.py
     Create File   ${EXECDIR}/TDD/varfiles/musers.py
-    Remove File   ${EXECDIR}/TDD/varfiles/branches_highestlic.py
-    # Create File   ${EXECDIR}/TDD/varfiles/branches_highestlic.py
+
     Remove File   ${EXECDIR}/TDD/varfiles/hl_musers.py
     Create File   ${EXECDIR}/TDD/varfiles/hl_musers.py
+
+    Remove File   ${EXECDIR}/TDD/varfiles/providers.py
+    Create File   ${EXECDIR}/TDD/varfiles/providers.py
 
 JD-TC-Branch_Signup-1
     [Documentation]    Create a provider with all valid attributes
@@ -47,18 +43,18 @@ JD-TC-Branch_Signup-1
         ${nods}=  Evaluate  ${nods}+${sublen}
     END
 
-    ${corp_resp}=   get_iscorp_subdomains  1
-    ${iscorpnods}=   Get Length  ${corp_resp}
+    # ${corp_resp}=   get_iscorp_subdomains  1
+    # ${iscorpnods}=   Get Length  ${corp_resp}
 
     ${licresp}=   Get Licensable Packages
     Should Be Equal As Strings   ${licresp.status_code}   200
     ${liclen}=  Get Length  ${licresp.json()} 
     ${totnods}=   Evaluate  ${liclen}*${nods}
-    ${totiscorpnods}=   Evaluate  ${liclen}*${iscorpnods}
+    # ${totiscorpnods}=   Evaluate  ${liclen}*${iscorpnods}
 
 
     # ${usercount}=  Set Variable If  ${branch_count}>${defaultCount}  ${branch_count}   ${defaultCount} 
-    ${count}=  Set Variable If  ${branch_count}>${totiscorpnods}  ${branch_count}   ${totnods}
+    ${count}=  Set Variable If  ${branch_count}>${totnods}  ${branch_count}   ${totnods}
     Set Global Variable  ${count}   
     #${newrange}=  Set Variable If  ${newlen}>${liclen}  ${newlen}   ${liclen}  
     # ${licresp}=   Get Licensable Packages
@@ -73,7 +69,7 @@ JD-TC-Branch_Signup-1
     END
     Log Many  ${BUSER}  ${count}  ${US}
 
-    ${count}=  Set Variable If  ${count}==${totnods}  ${totiscorpnods}   ${branch_count}
+    ${count}=  Set Variable If  ${count}==${totnods}  ${totnods}   ${branch_count}
     Log  ${count}
 
     Log  \n${count} multiuser accounts signed up   console=yes
@@ -179,6 +175,7 @@ SignUp Account
         IF  '${pkgId}' == '${highest_pkg[0]}'
         # Append To File  ${EXECDIR}/TDD/varfiles/branches_highestlic.py  BHUSERNAME${BR}= ${BUSER}${\n}
         Append To File  ${EXECDIR}/TDD/varfiles/hl_musers.py  HLMUSERNAME${BR}= ${BUSER}${\n}
+        Append To File  ${EXECDIR}/TDD/varfiles/hl_providers.py  HLPUSERNAME${BR}= ${BUSER}${\n}
         END
         ${BR} =	Set Variable If	 '${pkgId}' == '${highest_pkg[0]}'	${BR+1}	 ${BR}
         Set Global Variable  ${BR}
@@ -193,6 +190,9 @@ SignUp Account
 
         Append To File  ${EXECDIR}/TDD/varfiles/musers.py  MUSERNAME${US}= ${BUSER}${\n}
         Append To File  ${EXECDIR}/TDD/numbers.txt   ${BUSER}${\n}
+
+        Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${US}=${BUSER}${\n}
+        Append To File  ${EXECDIR}/TDD/numbers.txt  ${BUSER}${\n}
         
         Set Test Variable  ${email_id}  ${B_Email}${BUSER}.${test_mail}
         ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}

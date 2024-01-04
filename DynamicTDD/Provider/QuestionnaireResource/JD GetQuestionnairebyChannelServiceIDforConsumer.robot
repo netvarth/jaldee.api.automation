@@ -521,8 +521,12 @@ JD-TC-QuestionnaireByChannelServiceId-4
     ${resp}=  Consumer Login  ${CUSERNAME18}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
-    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    # Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    # Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${fname}  ${decrypted_data['firstName']}
+    Set Suite Variable  ${lname}   ${decrypted_data['lastName']}
 
     ${resp}=  Consumer Logout
     Log  ${resp.content}

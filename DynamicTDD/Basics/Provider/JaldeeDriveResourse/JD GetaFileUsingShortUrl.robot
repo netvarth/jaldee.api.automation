@@ -78,7 +78,7 @@ JD-TC-GetaFileusingShortUrl-1
    
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${pdffile}  
     Log  ${resp.json()}
@@ -147,7 +147,7 @@ JD-TC-GetaFileusingShortUrl-2
    
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${pngfile}  
     Log  ${resp.json()}
@@ -215,7 +215,7 @@ JD-TC-GetaFileusingShortUrl-3
    
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile}  
     Log  ${resp.json()}
@@ -281,7 +281,7 @@ JD-TC-GetaFileusingShortUrl-4
    
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${giffile}  
     Log  ${resp.json()}
@@ -360,7 +360,7 @@ JD-TC-GetaFileusingShortUrl-5
    
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id12}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpegfile}  
     Log  ${resp.json()}
@@ -427,7 +427,7 @@ JD-TC-GetaFileusingShortUrl-6
    
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${txtfile}  
     Log  ${resp.json()}
@@ -494,7 +494,7 @@ JD-TC-GetaFileusingShortUrl-7
    
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${docfile}  
     Log  ${resp.json()}

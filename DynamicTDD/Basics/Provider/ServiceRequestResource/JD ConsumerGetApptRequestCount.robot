@@ -184,7 +184,7 @@ JD-TC-ConsumerGetApptRequestCount-3
     ${cons_note2}=    FakerLibrary.word
     Set Suite Variable   ${cons_note2}
     ${coupons}=  Create List
-    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid1}  ${sch_id1}  ${DAY1}  ${cons_note}  ${countryCodes[0]}  ${CUSERNAME11}  ${coupons}  ${apptfor}
+    ${resp}=  Consumer Create Appt Service Request  ${acc_id1}  ${sid1}  ${sch_id1}  ${DAY1}  ${cons_note2}  ${countryCodes[0]}  ${CUSERNAME11}  ${coupons}  ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}

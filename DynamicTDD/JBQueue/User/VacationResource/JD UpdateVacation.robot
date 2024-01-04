@@ -1480,7 +1480,7 @@ JD-TC-UpdateVacation-UH13
 
     
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${CUR_DAY}  ${s_id}  ${msg}  ${bool[0]}  ${u_id}   0
     Log  ${resp.json()}
@@ -1509,7 +1509,7 @@ JD-TC-UpdateVacation-UH13
     Set Suite Variable  ${Conid1}  ${resp.json()['id']}
     
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${CUR_DAY}  ${s_id}  ${msg}  ${bool[0]}  ${u_id}   0
     Log  ${resp.json()}

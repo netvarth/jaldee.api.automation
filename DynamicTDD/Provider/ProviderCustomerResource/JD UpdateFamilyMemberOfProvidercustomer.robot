@@ -149,7 +149,10 @@ JD-TC-UpdateFamilyMemberOfProvidercustomer-UH3
 	[Documentation]  A non parent updates a familymember
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${p_id}  ${resp.json()['id']}
+    # Set Test Variable  ${p_id}  ${resp.json()['id']}
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${p_id}  ${decrypted_data['id']}
     ${firstname1}=  FakerLibrary.first_name
     ${lastname1}=  FakerLibrary.last_name
     ${dob1}=  FakerLibrary.Date

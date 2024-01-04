@@ -1854,7 +1854,7 @@ JD-TC- Create Bill -UH5
         Set Test Variable  ${wid}  ${wid[0]}
         ${cancel}    Random Element    ${cancelReason} 
         ${msg}=  Fakerlibrary.word
-        Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+        Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=  Waitlist Action Cancel  ${wid}  ${cancel}   ${msg} 
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=  Get Bill By UUId  ${wid}   
@@ -1888,7 +1888,7 @@ JD-TC- Create Bill -UH6
         Should Be Equal As Strings  "${resp.json()}"  "${NO_ITEMS_FOUND}"
         ${cancel}    Random Element     ${cancelReason} 
         ${msg}=  Fakerlibrary.word
-        Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+        Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=  Waitlist Action Cancel  ${wid}  ${cancel}  ${msg} 
         Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -1926,7 +1926,7 @@ JD-TC- Create Bill -UH7
         Should Be Equal As Strings  "${resp.json()}"  "${INCORRECT_DISCOUNT_ID}"
         ${cancel}    Random Element     ${cancelReason} 
         ${msg}=  Fakerlibrary.word
-        Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+        Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=  Waitlist Action Cancel  ${wid}  ${cancel}  ${msg} 
         Should Be Equal As Strings  ${resp.status_code}  200 
 
@@ -2002,7 +2002,7 @@ JD-TC- Create Bill -UH8
         # Should Be Equal As Strings  "${resp.json()}"  "${INCORRECT_COUPON_ID}"
         ${cancel}    Random Element    ${cancelReason} 
         ${msg}=  Fakerlibrary.word
-        Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+        Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=  Waitlist Action Cancel  ${wid}   ${cancel}  ${msg} 
         Should Be Equal As Strings  ${resp.status_code}  200 
 

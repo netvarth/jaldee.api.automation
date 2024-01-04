@@ -338,6 +338,12 @@ JD-TC-GetUserAccessScopes-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=   Get Locations
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    # Set Suite Variable  ${loc_id1}  ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+
     ${DAY1}=  db.add_timezone_date  ${tz}   2
     Set Suite Variable  ${DAY1}
     ${resp}=  Add To Waitlist  ${cid}  ${s_id11}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${cid}

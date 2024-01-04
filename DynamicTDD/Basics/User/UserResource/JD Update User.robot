@@ -45,6 +45,7 @@ JD-TC-UpdateUser-1
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${id}=  get_id  ${MUSERNAME_E}
      Set Suite Variable  ${id}
@@ -477,7 +478,7 @@ JD-TC-UpdateUser-UH7
      ${resp}=  Update User  ${u_id}  ${EMPTY}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[1]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id1}   ${sub_domain_id}   ${bool[0]}  ${countryCodes[1]}  ${whpnum1}  ${countryCodes[1]}  ${tlgnum1}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  422
-     Should Be Equal As Strings  "${resp.json()}"  "${VALID_FIRST_NAME}"
+     Should Be Equal As Strings  ${resp.json()}  ${FIRST_NAME_REQUIRED}
 
 JD-TC-UpdateUser-UH8
      [Documentation]  Update a user with empty last name by branch login
@@ -488,7 +489,7 @@ JD-TC-UpdateUser-UH8
      ${resp}=  Update User  ${u_id}  ${firstname1}  ${EMPTY}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[1]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id1}   ${sub_domain_id}   ${bool[0]}  ${countryCodes[1]}  ${whpnum1}  ${countryCodes[1]}  ${tlgnum1}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  422
-     Should Be Equal As Strings  "${resp.json()}"  "${VALID_LAST_NAME}"
+     Should Be Equal As Strings  "${resp.json()}"  "${LAST_NAME_REQUIRED}"
 
 
 JD-TC-UpdateUser-UH9
@@ -517,8 +518,7 @@ JD-TC-UpdateUser-UH9
      Should Be Equal As Strings    ${resp.status_code}    200
      Append To File  ${EXECDIR}/TDD/numbers.txt  ${MUSERNAME_E2}${\n}
      Set Suite Variable  ${MUSERNAME_E2}
-     ${DAY1}=  db.get_date_by_timezone  ${tz}
-     Set Suite Variable  ${DAY1}  ${DAY1}
+
      ${list}=  Create List  1  2  3  4  5  6  7
      Set Suite Variable  ${list}  ${list}
      ${ph1}=  Evaluate  ${MUSERNAME_E2}+1000000000
@@ -548,6 +548,8 @@ JD-TC-UpdateUser-UH9
      Set Suite Variable   ${sTime}
      ${eTime}=  add_timezone_time  ${tz}  0  45  
      Set Suite Variable   ${eTime}
+     ${DAY1}=  db.get_date_by_timezone  ${tz}
+     Set Suite Variable  ${DAY1}  ${DAY1}
      ${resp}=  Update Business Profile With Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
@@ -1118,13 +1120,23 @@ JD-TC-UpdateUser -11
 
     FOR  ${i}  IN RANGE   ${len}
 
-        Run Keyword IF  '${resp.json()[${i}]['id']}' == '${u_id1}'
+        # Run Keyword IF  '${resp.json()[${i}]['id']}' == '${u_id1}'
     
-        ...    Verify Response List  ${resp}  ${i}  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}   mobileNo=${PUSERPH2}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[2]}  status=ACTIVE  email=${P_Email}${PUSERPH2}.${test_mail}  state=${state}  deptId=0  subdomain=${sub_domain_id2}  admin=${bool[1]}  
-        ...    Should Be Equal As Strings  ${resp.json()[${i}]['city']}      ${city}    ignore_case=True     
-        ...    ELSE IF     '${resp.json()[${i}]['id']}' == '${u_id}'   
-        ...    Verify Response List  ${resp}  ${i}  id=${id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH1}  userType=${userType[0]}  status=ACTIVE  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[1]} 
+        # ...    Verify Response List  ${resp}  ${i}  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}   mobileNo=${PUSERPH2}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[2]}  status=ACTIVE  email=${P_Email}${PUSERPH2}.${test_mail}  state=${state}  deptId=0  subdomain=${sub_domain_id2}  admin=${bool[1]}  
+        # ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}      ${city}    ignore_case=True     
+        # ...    ELSE IF     '${resp.json()[${i}]['id']}' == '${u_id}'   
+        # ...    Verify Response List  ${resp}  ${i}  id=${id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH1}  userType=${userType[0]}  status=ACTIVE  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[1]} 
+        IF  '${resp.json()[${i}]['id']}' == '${u_id1}'
+
+            Verify Response List  ${resp}  ${i}  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}   mobileNo=${PUSERPH2}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[2]}  status=ACTIVE  email=${P_Email}${PUSERPH2}.${test_mail}  state=${state}  deptId=0  subdomain=${sub_domain_id2}  admin=${bool[1]}
+            Should Be Equal As Strings  ${resp.json()[${i}]['city']}      ${city}    ignore_case=True     
         
+        ELSE IF     '${resp.json()[${i}]['id']}' == '${u_id}'
+
+            Verify Response List  ${resp}  ${i}  id=${id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH1}  userType=${userType[0]}  status=ACTIVE  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[1]} 
+        
+        END
+
     END
 
     ${resp}=  Provider Logout
@@ -1266,11 +1278,21 @@ JD-TC-UpdateUser -12
 
     FOR  ${i}  IN RANGE   ${len}
 
-        Run Keyword IF  '${resp.json()[${i}]['id']}' == '${u_id1}'
-        ...    Should Be Equal As Strings  ${resp.json()[${i}]['city']}      ${city}    ignore_case=True
-        ...    Verify Response List  ${resp}  ${i}  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERPH2}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH2}.${test_mail}   state=${state}  deptId=${dep_id}  subdomain=${userSubDomain}  admin=${bool[0]}  
-        ...    ELSE IF     '${resp.json()[${i}]['id']}' == '${u_id}'   
-        ...    Verify Response List  ${resp}  ${i}  id=${id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH1}  userType=${userType[0]}  status=ACTIVE  deptId=${dep_id}  subdomain=${userSubDomain}  admin=${bool[1]} 
+        # Run Keyword IF  '${resp.json()[${i}]['id']}' == '${u_id1}'
+        # ...    Should Be Equal As Strings  ${resp.json()[${i}]['city']}      ${city}    ignore_case=True
+        # ...    AND  Verify Response List  ${resp}  ${i}  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERPH2}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH2}.${test_mail}   state=${state}  deptId=${dep_id}  subdomain=${userSubDomain}  admin=${bool[0]}  
+        # ...    ELSE IF     '${resp.json()[${i}]['id']}' == '${u_id}'   
+        # ...    Verify Response List  ${resp}  ${i}  id=${id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH1}  userType=${userType[0]}  status=ACTIVE  deptId=${dep_id}  subdomain=${userSubDomain}  admin=${bool[1]} 
+        IF  '${resp.json()[${i}]['id']}' == '${u_id1}'
+
+            Should Be Equal As Strings  ${resp.json()[${i}]['city']}      ${city}    ignore_case=True
+            Verify Response List  ${resp}  ${i}  id=${u_id1}  firstName=${firstname1}  lastName=${lastname1}  mobileNo=${PUSERPH2}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERPH2}.${test_mail}   state=${state}  deptId=${dep_id}  subdomain=${userSubDomain}  admin=${bool[0]}  
+        
+        ELSE IF     '${resp.json()[${i}]['id']}' == '${u_id}'
+
+            Verify Response List  ${resp}  ${i}  id=${id}  firstName=${firstname}  lastName=${lastname}  mobileNo=${PUSERPH1}  userType=${userType[0]}  status=ACTIVE  deptId=${dep_id}  subdomain=${userSubDomain}  admin=${bool[1]} 
+        
+        END
     END
 
 

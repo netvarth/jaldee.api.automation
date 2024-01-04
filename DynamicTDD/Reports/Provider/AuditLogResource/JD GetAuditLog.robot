@@ -37,6 +37,7 @@ JD-TC-GetAuditLog -1
     ${resp}=   Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200 
     # ${aid}=  get_acc_id  ${PUSERNAME160}
+    ${lid}=  Create Sample Location
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

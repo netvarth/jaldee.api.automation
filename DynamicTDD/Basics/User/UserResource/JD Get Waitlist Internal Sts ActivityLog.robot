@@ -188,8 +188,7 @@ JD-TC-WaitlistGetInternalStsActivityLog-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
 
-    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable  ${CUR_DAY}
+    
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}
 
@@ -205,6 +204,8 @@ JD-TC-WaitlistGetInternalStsActivityLog-1
     Set Suite Variable    ${strt_time}
     ${end_time}=    add_timezone_time  ${tz}  3  30   
     Set Suite Variable    ${end_time}   
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${CUR_DAY}
     ${parallel}=   Random Int  min=1   max=2
     Set Suite Variable   ${parallel}
     ${capacity}=  Random Int   min=10   max=20

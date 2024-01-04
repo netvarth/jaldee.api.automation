@@ -334,7 +334,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-3
     Set Test Variable  ${ModeId1}          ${PUSERPH_id}
     Set Test Variable  ${ModeStatus1}      ACTIVE
     ${Desc1}=    FakerLibrary.sentence
-    ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}
+    ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Desc1}
     ${virtualCallingModes}=  Create List  ${VirtualcallingMode1}
 
     # Set Test Variable  ${whatsappId3}       ${PUSERPH_id}
@@ -522,7 +522,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-5
     Set Test Variable  ${ModeId1}          ${Whatsapp_Pid1}
     Set Test Variable  ${ModeStatus1}      ACTIVE
     ${Desc1}=    FakerLibrary.sentence
-    ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}
+    ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Desc1}
     ${virtualCallingModes_list1}=  Create List  ${VirtualcallingMode1}
 
 
@@ -850,7 +850,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-N1
 
     ${GoogleMeet_details}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}   
 
-    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   status=${ModeStatus2}   instructions=${Desc2}
+    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   countryCode=${countryCodes[0]}  status=${ModeStatus2}   instructions=${Desc2}
 
     
     ${virtualCallingModes}=  Create List  ${GoogleMeet_details}   ${Whatsapp_details}
@@ -938,7 +938,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-8
 
     ${GoogleMeet_details}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}   
 
-    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   status=${ModeStatus2}   instructions=${Desc2}
+    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   countryCode=${countryCodes[0]}  status=${ModeStatus2}   instructions=${Desc2}
 
     
     ${virtualCallingModes}=  Create List  ${GoogleMeet_details}   ${Whatsapp_details}
@@ -1027,7 +1027,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-9
 
     ${Phone_details}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}   
 
-    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   status=${ModeStatus2}   instructions=${Desc2}
+    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   countryCode=${countryCodes[0]}  status=${ModeStatus2}   instructions=${Desc2}
 
     
     ${virtualCallingModes}=  Create List  ${Phone_details}   ${Whatsapp_details}
@@ -1154,7 +1154,7 @@ JD-TC-CreateVirtualService-(Non-Billable Subdomain)-10
     ${instructions2}=   FakerLibrary.sentence
 
     ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=ACTIVE    instructions=${instructions1} 
-    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH2}   status=ACTIVE    instructions=${instructions2} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH2}   countryCode=${countryCodes[0]}  status=ACTIVE    instructions=${instructions2} 
     ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
     ${resp}=  Update Virtual Calling Mode   ${vcm1}
@@ -1239,7 +1239,7 @@ JD-TC-CreateVirtualService-(Non-Billable Subdomain)-11
     ${instructions2}=   FakerLibrary.sentence
 
     ${VirtualcallingMode1}=   Create Dictionary   callingMode=${CallingModes[0]}   value=${ZOOM_id0}   status=ACTIVE    instructions=${instructions1} 
-    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH2}   status=INACTIVE    instructions=${instructions2} 
+    ${VirtualcallingMode2}=   Create Dictionary   callingMode=${CallingModes[1]}   value=${PUSERPH2}   countryCode=${countryCodes[0]}  status=INACTIVE    instructions=${instructions2} 
     ${vcm1}=  Create List  ${VirtualcallingMode1}   ${VirtualcallingMode2}
 
     ${resp}=  Update Virtual Calling Mode   ${vcm1}
@@ -1362,7 +1362,7 @@ JD-TC-CreateVirtualService-(Non-Billable Subdomain)-12
     Set Test Variable  ${ModeId1}          ${PUSERPH_id}
     Set Test Variable  ${ModeStatus1}      ACTIVE
     ${Desc1}=    FakerLibrary.sentence
-    ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}
+    ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Desc1}
     ${virtualCallingModes}=  Create List  ${VirtualcallingMode1}
 
 
@@ -1780,7 +1780,7 @@ JD-TC-CreateVirtualService-UH4
     Set Test Variable  ${ModeId1}          ${EMPTY}
     Set Test Variable  ${ModeStatus1}      ACTIVE
     ${Desc1}=    FakerLibrary.sentence
-    ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}
+    ${VirtualcallingMode1}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   countryCode=${countryCodes[0]}  status=${ModeStatus1}   instructions=${Desc1}
     ${virtualCallingModes}=  Create List  ${VirtualcallingMode1}
 
 
@@ -2095,7 +2095,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-15
 
     ${GoogleMeet_details}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}   
 
-    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   status=${ModeStatus2}   instructions=${Desc2}
+    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   countryCode=${countryCodes[0]}  status=${ModeStatus2}   instructions=${Desc2}
 
     
     ${virtualCallingModes}=  Create List  ${GoogleMeet_details}   ${Whatsapp_details}
@@ -2185,7 +2185,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-16
 
     ${Phone_details}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}   
 
-    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   status=${ModeStatus2}   instructions=${Desc2}
+    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   countryCode=${countryCodes[0]}  status=${ModeStatus2}   instructions=${Desc2}
 
     
     ${virtualCallingModes}=  Create List  ${Phone_details}   ${Whatsapp_details}
@@ -2476,7 +2476,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-19
 
     ${GoogleMeet_details}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}   
 
-    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   status=${ModeStatus2}   instructions=${Desc2}
+    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   countryCode=${countryCodes[0]}  status=${ModeStatus2}   instructions=${Desc2}
 
     
     ${virtualCallingModes}=  Create List  ${GoogleMeet_details}   ${Whatsapp_details}
@@ -2562,7 +2562,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-20
 
     ${GoogleMeet_details}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}   
 
-    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   status=${ModeStatus2}   instructions=${Desc2}
+    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   countryCode=${countryCodes[0]}  status=${ModeStatus2}   instructions=${Desc2}
 
     
     ${virtualCallingModes}=  Create List  ${GoogleMeet_details}   ${Whatsapp_details}
@@ -2651,7 +2651,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-21
 
     ${Phone_details}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}   
 
-    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   status=${ModeStatus2}   instructions=${Desc2}
+    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   countryCode=${countryCodes[0]}  status=${ModeStatus2}   instructions=${Desc2}
 
     
     ${virtualCallingModes}=  Create List  ${Phone_details}   ${Whatsapp_details}
@@ -2737,7 +2737,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-22
 
     ${Phone_details}=   Create Dictionary   callingMode=${callingMode1}   value=${ModeId1}   status=${ModeStatus1}   instructions=${Desc1}   
 
-    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   status=${ModeStatus2}   instructions=${Desc2}
+    ${Whatsapp_details}=   Create Dictionary   callingMode=${callingMode2}   value=${ModeId2}   countryCode=${countryCodes[0]}  status=${ModeStatus2}   instructions=${Desc2}
 
     
     ${virtualCallingModes}=  Create List  ${Phone_details}   ${Whatsapp_details}
