@@ -12635,7 +12635,12 @@ Change Lead Progress LOS
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/progress/${id}   expected_status=any
     [Return]  ${resp}
 
-<<<<<<< HEAD
+update lead assignees LOS    
+    [Arguments]     ${uid}
+
+    Check And Create YNW Session   
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/assignees   expected_status=any
+    [Return]  ${resp}
 
 AddItemToFinance
 
@@ -12688,11 +12693,5 @@ RemoveItemToFinance
    Check And Create YNW Session
    ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/removeitems    data=${data}  expected_status=any  
    [Return]  ${resp} 
-=======
-update lead assignees LOS    
-    [Arguments]     ${uid}
 
-    Check And Create YNW Session   
-    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/assignees   expected_status=any
-    [Return]  ${resp}
->>>>>>> refs/remotes/origin/master
+
