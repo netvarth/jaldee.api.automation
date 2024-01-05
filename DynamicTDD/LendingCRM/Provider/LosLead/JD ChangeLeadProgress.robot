@@ -224,7 +224,9 @@ JD-TC-ChangeLeadProgress-UH4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   lead
+
     ${resp}=    Change Lead Progress LOS  ${lead_uid}  ${progress_id2} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${NO_PERMISSION}
+    Should Be Equal As Strings    ${resp.json()}        ${NO_PERMISSION_X}

@@ -12636,10 +12636,48 @@ Change Lead Progress LOS
     [Return]  ${resp}
 
 update lead assignees LOS    
+    [Arguments]     ${uid}  @{vargs}
+
+    ${len}=  Get Length  ${vargs}
+    ${list}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${list}  ${vargs[${index}]}
+    END
+    ${data}=  Create Dictionary  assignees=${list} 
+    ${data}=    json.dumps    ${data}
+    
+    Check And Create YNW Session   
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/assignees    data=${data}   expected_status=any
+    [Return]  ${resp}
+
+Generate CIBIL LOS   
     [Arguments]     ${uid}
 
-    Check And Create YNW Session   
-    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/assignees   expected_status=any
+    Check And Create YNW Session  
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/generate/cibil   expected_status=any
+    [Return]  ${resp}
+
+Generate EQUIFAX LOS
+    [Arguments]     ${uid}
+
+    Check And Create YNW Session  
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/generate/equifax   expected_status=any
+    [Return]  ${resp}
+
+Generate Loan Application LOS
+    [Arguments]     ${uid}
+
+    Check And Create YNW Session  
+    ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/generate/loanapplication   expected_status=any
+    [Return]  ${resp}
+
+Get Audit Log or History LOS
+    [Arguments]     ${uid}
+
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/los/lead/${uid}/auditlog   expected_status=any
     [Return]  ${resp}
 
 AddItemToFinance

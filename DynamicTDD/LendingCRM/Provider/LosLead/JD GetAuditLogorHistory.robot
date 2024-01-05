@@ -26,11 +26,11 @@ ${bankIfsc}                      55555555555
 
 *** Test Cases ***
 
-JD-TC-GetLead-1
+JD-TC-Get Audit Log or History-1
 
-    [Documentation]             Get Lead
+    [Documentation]             Get Audit Log Or History
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME47}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -59,6 +59,7 @@ JD-TC-GetLead-1
     Set Suite Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
 
     ${Sname}=    FakerLibrary.name
+    Set Suite Variable      ${Sname}
 
     ${resp}=    Create Lead Status LOS  ${Sname}
     Log  ${resp.content}
@@ -73,6 +74,7 @@ JD-TC-GetLead-1
     Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
 
     ${Pname}=    FakerLibrary.name
+    Set Suite Variable      ${Pname}
 
     ${resp}=    Create Lead Progress LOS  ${Pname}
     Log  ${resp.content}
@@ -110,74 +112,6 @@ JD-TC-GetLead-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable      ${lead_uid}      ${resp.json()['uid']}
 
-    ${resp}=    Get Lead LOS   ${lead_uid}
+    ${resp}=    Get Audit Log or History LOS  ${lead_uid} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                 ${lead_uid}
-    Should Be Equal As Strings    ${resp.json()['account']}                             ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['channel']}                             ${leadchannel[0]}
-    Should Be Equal As Strings    ${resp.json()['losProduct']}                          ${losProduct}
-    Should Be Equal As Strings    ${resp.json()['status']['id']}                        ${status_id}
-    Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
-    Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
-    Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['dob']}                  ${dob}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['gender']}               ${gender}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhone']}        ${consumerPhone}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerEmail']}        ${consumerEmail}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentAddress1']}    ${permanentAddress1}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentAddress2']}    ${permanentAddress2}
-    Should Be Equal As StringS    ${resp.json()['consumerKyc']['permanentDistrict']}    ${permanentDistrict}  
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentState']}       ${permanentState}  
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentPin']}         ${permanentPin}  
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['aadhaar']}              ${aadhaar}  
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['pan']}                  ${pan}  
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankAccountNo']}        ${bankAccountNo}  
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankIfsc']}             ${bankIfsc}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeType']}          ${NomineeType[2]}  
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeName']}          ${nomineeName}
-
-JD-TC-GetLead-UH1
-
-    [Documentation]             Get Lead without login
-
-    ${resp}=    Get Lead LOS   ${lead_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   419
-    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
-
-JD-TC-GetLead-UH2
-
-    [Documentation]             Get Lead with invalid lead id
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${fake}=    Random Int  min=300  max=999
-
-    ${INVALID_LEAD_ID}=   Replace String  ${INVALID_LEAD_ID}  {}  Lead
-
-    ${resp}=    Get Lead LOS   ${fake}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_LEAD_ID}
-
-JD-TC-GetLead-UH3
-
-    [Documentation]             Get Lead with another provider who is not created any leads 
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME48}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   lead
-
-    ${resp}=    Get Lead LOS   ${lead_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${NO_PERMISSION_X}
