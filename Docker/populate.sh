@@ -224,7 +224,13 @@ eof
 
 clearfiles()
 {
-    for file in "${TDD_Logs_Path%/}/"*; do echo "Clearing file $(basename $file)"; >$file; done
+    # for file in "${TDD_Logs_Path%/}/"*; do echo "Clearing file $(basename $file)"; >$file; done
+    for file in "${TDD_Logs_Path%/}/"*; do
+        if [ -s $file ]; then
+            echo "Clearing file $(basename $file)"
+            >$file
+        fi
+    done
 }
 
 

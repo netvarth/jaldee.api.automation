@@ -189,10 +189,8 @@ SignUp Account
         Set Suite Variable  ${pid}  ${decrypted_data['id']}
 
         Append To File  ${EXECDIR}/TDD/varfiles/musers.py  MUSERNAME${US}= ${BUSER}${\n}
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt   ${BUSER}${\n}
-
         Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${US}=${BUSER}${\n}
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${BUSER}${\n}
+        Append To File  ${EXECDIR}/TDD/varfiles/aprenumbers.txt  ${BUSER}${\n}
         
         Set Test Variable  ${email_id}  ${B_Email}${BUSER}.${test_mail}
         ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
