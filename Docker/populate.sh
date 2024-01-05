@@ -48,7 +48,7 @@ BANK_TABLE='bank_master_tbl.sql'
 BACKUP_FILE="${BACKUP_NAME}-${TODAY}.sql"
 SECONDS=0
 myversion=$(mysql -h ${MYSQL_HOST} -se "select @@version;")
-TDD_Logs_Path='$(dirname "$PWD")/DynamicTDD/TDD_Logs/'
+TDD_Logs_Path="$(dirname "$PWD")/DynamicTDD/TDD_Logs/"
 
 
 
@@ -224,7 +224,7 @@ eof
 
 clearfiles()
 {
-    for file in "${TDD_Logs_Path%/}/"*; do >$file; done
+    for file in "${TDD_Logs_Path%/}/"*; do echo "Clearing file $(basename $file)"; >$file; done
 }
 
 
