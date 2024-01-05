@@ -852,3 +852,264 @@ JD-TC-Apply Discount-7
     Should Be Equal As Strings  ${resp.json()['discounts'][0]['displayNote']}  ${displayNote}
     Should Be Equal As Strings  ${resp.json()['amountTotal']}  ${servicenetRate}
     Should Be Equal As Strings  ${resp.json()['amountDue']}  ${discAmt}
+
+JD-TC-Apply Discount-8
+
+    [Documentation]  Create a Order for a provider then apply a Discount.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Order Settings by account id
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword If  ${resp.json()['enableOrder']}==${bool[0]}   Enable Order Settings
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword If   ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}     Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
+
+    ${resp}=  Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+
+    ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2  
+    ${itemDesc1}=  FakerLibrary.Sentence   nb_words=3   
+    ${price2}=  Random Int  min=50   max=300 
+    ${price2}=  Convert To Number  ${price2}  1
+    Set Suite Variable  ${price2}
+
+    ${price1float}=  twodigitfloat  ${price2}
+
+    ${itemNameInLocal1}=  FakerLibrary.Sentence   nb_words=2  
+  
+    ${promoPrice2}=  Random Int  min=10   max=${price2} 
+    ${promoPrice2}=  Convert To Number  ${promoPrice2}  1
+    Set Suite Variable  ${promoPrice2}
+
+    ${promoPrice1float}=  twodigitfloat  ${promoPrice2}
+
+    ${promoPrcnt1}=   Evaluate    random.uniform(0.0,80)
+    ${promotionalPrcnt1}=  twodigitfloat  ${promoPrcnt1}
+
+    ${note1}=  FakerLibrary.Sentence   
+
+    ${promoLabel1}=   FakerLibrary.word 
+    
+    ${displayName3}=   FakerLibrary.name 
+    Set Suite Variable  ${displayName3}
+
+    ${itemName3}=   FakerLibrary.word  
+    ${itemCode3}=   FakerLibrary.word 
+
+    ${resp}=  Create Order Item    ${displayName3}    ${shortDesc1}    ${itemDesc1}    ${price2}    ${bool[0]}    ${itemName3}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice2}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode3}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}      
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${item_id3}  ${resp.json()}
+
+    ${startDate}=  db.get_date_by_timezone  ${tz}
+    ${endDate}=  db.add_timezone_date  ${tz}  10        
+
+    ${startDate1}=  db.get_date_by_timezone  ${tz}
+    ${endDate1}=  db.add_timezone_date  ${tz}  15    
+
+    ${startDate2}=  db.add_timezone_date  ${tz}  5  
+    ${endDate2}=  db.add_timezone_date  ${tz}  25  
+
+    ${noOfOccurance}=  Random Int  min=0   max=0
+
+    ${sTime3}=  add_timezone_time  ${tz}  0  15  
+    Set Suite Variable   ${sTime3}
+    ${eTime3}=  add_timezone_time  ${tz}  1  00   
+    Set Suite Variable    ${eTime3}
+    ${list}=  Create List  1  2  3  4  5  6  7
+  
+    ${deliveryCharge}=  Random Int  min=50   max=100
+    Set Suite Variable    ${deliveryCharge}
+    ${deliveryCharge3}=  Convert To Number  ${deliveryCharge}  1
+    Set Suite Variable    ${deliveryCharge3}
+
+    ${Title}=  FakerLibrary.Sentence   nb_words=2 
+    ${Text}=  FakerLibrary.Sentence   nb_words=4
+
+    ${minQuantity3}=  Random Int  min=1   max=30
+    Set Suite Variable   ${minQuantity3}
+
+    ${maxQuantity3}=  Random Int  min=${minQuantity3}   max=50
+    Set Suite Variable   ${maxQuantity3}
+
+
+    ${catalogDesc}=   FakerLibrary.name 
+    Set Suite Variable  ${catalogDesc}
+    ${cancelationPolicy}=  FakerLibrary.Sentence   nb_words=5
+    Set Suite Variable  ${cancelationPolicy}
+    ${terminator}=  Create Dictionary  endDate=${endDate}  noOfOccurance=${noOfOccurance}
+    Set Suite Variable  ${terminator}
+    ${terminator1}=  Create Dictionary  endDate=${endDate1}  noOfOccurance=${noOfOccurance}
+    Set Suite Variable  ${terminator1}
+    ${timeSlots1}=  Create Dictionary  sTime=${sTime3}   eTime=${eTime3}
+    ${timeSlots}=  Create List  ${timeSlots1}
+    ${catalogSchedule}=  Create Dictionary  recurringType=${recurringtype[1]}  repeatIntervals=${list}  startDate=${startDate}   terminator=${terminator}   timeSlots=${timeSlots}
+    Set Suite Variable  ${catalogSchedule}
+    ${pickupSchedule}=  Create Dictionary  recurringType=${recurringtype[1]}  repeatIntervals=${list}  startDate=${startDate1}   terminator=${terminator1}   timeSlots=${timeSlots}
+
+    ${pickUp}=  Create Dictionary  orderPickUp=${boolean[1]}   pickUpSchedule=${pickupSchedule}   pickUpOtpVerification=${boolean[1]}   pickUpScheduledAllowed=${boolean[1]}   pickUpAsapAllowed=${boolean[1]}
+    Set Suite Variable  ${pickUp}
+    ${homeDelivery}=  Create Dictionary  homeDelivery=${boolean[1]}   deliverySchedule=${pickupSchedule}   deliveryOtpVerification=${boolean[1]}   deliveryRadius=5   scheduledHomeDeliveryAllowed=${boolean[1]}   asapHomeDeliveryAllowed=${boolean[1]}   deliveryCharge=${deliveryCharge3}
+    Set Suite Variable  ${homeDelivery}
+
+    ${terminator2}=  Create Dictionary  endDate=${endDate2}  noOfOccurance=${noOfOccurance}
+    Set Suite Variable  ${terminator2}
+    ${pickupSchedule2}=  Create Dictionary  recurringType=${recurringtype[1]}  repeatIntervals=${list}  startDate=${startDate2}   terminator=${terminator2}   timeSlots=${timeSlots}
+    ${pickUp2}=  Create Dictionary  orderPickUp=${boolean[1]}   pickUpSchedule=${pickupSchedule2}   pickUpOtpVerification=${boolean[1]}   pickUpScheduledAllowed=${boolean[1]}   pickUpAsapAllowed=${boolean[1]}
+    Set Suite Variable  ${pickUp2}
+    ${homeDelivery2}=  Create Dictionary  homeDelivery=${boolean[1]}   deliverySchedule=${pickupSchedule2}   deliveryOtpVerification=${boolean[1]}   deliveryRadius=5   scheduledHomeDeliveryAllowed=${boolean[1]}   asapHomeDeliveryAllowed=${boolean[1]}   deliveryCharge=${deliveryCharge3}
+    Set Suite Variable  ${homeDelivery2}
+
+    ${preInfo}=  Create Dictionary  preInfoEnabled=${boolean[1]}   preInfoTitle=${Title}   preInfoText=${Text}   
+    Set Suite Variable  ${preInfo}
+    ${postInfo}=  Create Dictionary  postInfoEnabled=${boolean[1]}   postInfoTitle=${Title}   postInfoText=${Text}   
+    Set Suite Variable  ${postInfo}
+    ${StatusList1}=  Create List  ${orderStatuses[0]}  ${orderStatuses[1]}   ${orderStatuses[2]}   ${orderStatuses[3]}  ${orderStatuses[9]}   ${orderStatuses[8]}    ${orderStatuses[11]}   ${orderStatuses[12]}
+    Set Suite Variable  ${StatusList1} 
+    # ${catalogItem1}=  Create Dictionary  itemId=${item_id1}    minQuantity=${minQuantity}   maxQuantity=${maxQuantity}  
+    # ${catalogItem}=  Create List   ${catalogItem1}
+    
+    ${item1_Id}=  Create Dictionary  itemId=${item_id3}
+    # ${item2_Id}=  Create Dictionary  itemId=${item_id4}
+    ${catalogItem1}=  Create Dictionary  item=${item1_Id}    minQuantity=${minQuantity3}   maxQuantity=${maxQuantity3}  
+    # ${catalogItem2}=  Create Dictionary  item=${item2_Id}    minQuantity=${minQuantity3}   maxQuantity=${maxQuantity3}  
+    ${catalogItem}=  Create List   ${catalogItem1}  
+    Set Suite Variable  ${catalogItem}
+    Set Suite Variable  ${orderType}       ${OrderTypes[0]}
+    Set Suite Variable  ${catalogStatus}   ${catalogStatus[0]}
+    Set Suite Variable  ${paymentType}     ${AdvancedPaymentType[0]}
+    Set Suite Variable  ${paymentType2}     ${AdvancedPaymentType[1]}
+
+    ${advanceAmount}=  Random Int  min=10   max=50
+   
+    ${far}=  Random Int  min=14  max=14
+    Set Suite Variable  ${far}
+    ${soon}=  Random Int  min=0   max=0
+    Set Suite Variable  ${soon}
+    Set Suite Variable  ${minNumberItem}   1
+
+    Set Suite Variable  ${maxNumberItem}   5
+    
+    ${catalogName1}=   FakerLibrary.name  
+    ${catalogName2}=   FakerLibrary.word  
+    ${catalogName3}=   FakerLibrary.lastname  
+
+    ${resp}=  Create Catalog For ShoppingCart   ${catalogName1}  ${catalogDesc}   ${catalogSchedule}   ${orderType}   ${paymentType}   ${StatusList1}   ${catalogItem}   ${minNumberItem}   ${maxNumberItem}    ${cancelationPolicy}   catalogStatus=${catalogStatus}   pickUp=${pickUp}   homeDelivery=${homeDelivery}   showPrice=${boolean[1]}   advanceAmount=${advanceAmount}   showContactInfo=${boolean[1]}   howFar=${far}   howSoon=${soon}   preInfo=${preInfo}   postInfo=${postInfo}    
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${CatalogId1}   ${resp.json()}
+
+    ${resp}=  Get Order Catalog    ${CatalogId1}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=  AddCustomer  ${CUSERNAME20}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${cid20}   ${resp.json()}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME20}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+
+    # ${cid20}=  get_id  ${CUSERNAME20}
+    # Set Suite Variable   ${cid20}
+
+    ${DAY1}=  db.add_timezone_date  ${tz}  12  
+    # ${address}=  get_address
+    ${C_firstName}=   FakerLibrary.first_name 
+    ${C_lastName}=   FakerLibrary.name 
+    ${C_num1}    Random Int  min=123456   max=999999
+    ${CUSERPH}=  Evaluate  ${CUSERNAME}+${C_num1}
+    Set Test Variable  ${C_email}  ${C_firstName}${CUSERPH}.${test_mail}
+    ${homeDeliveryAddress}=   FakerLibrary.name 
+    ${city}=  FakerLibrary.city
+    ${landMark}=  FakerLibrary.Sentence   nb_words=2 
+    ${address}=  Create Dictionary   phoneNumber=${CUSERPH}    firstName=${C_firstName}   lastName=${C_lastName}   email=${C_email}    address=${homeDeliveryAddress}   city=${city}   postalCode=${C_num1}    landMark=${landMark}   countryCode=${countryCodes[0]}
+    Set Suite Variable  ${address}
+
+    ${item_quantity1}=  FakerLibrary.Random Int  min=${minQuantity3}   max=${maxQuantity3}
+    ${item_quantity1}=  Convert To Number  ${item_quantity1}  1
+    Set Suite Variable  ${item_quantity1}
+    ${firstname}=  FakerLibrary.first_name
+    Set Suite Variable  ${email}  ${firstname}${CUSERNAME20}.${test_mail}
+    ${orderNote}=  FakerLibrary.Sentence   nb_words=5
+    Set Suite Variable  ${orderNote}
+
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${HLMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Create Order By Provider For HomeDelivery    ${cookie}  ${cid20}   ${cid20}   ${CatalogId1}   ${boolean[1]}   ${address}  ${sTime3}    ${eTime3}   ${DAY1}    ${CUSERNAME20}    ${email}  ${orderNote}  ${countryCodes[1]}  ${item_id3}   ${item_quantity1}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${orderid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${orderid1}  ${orderid[0]}
+
+    ${resp}=   Get Order by uid    ${orderid1} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable    ${ordernumber}     ${resp.json()['orderNumber']}   
+    Should Be Equal As Strings  ${resp.json()['uid']}                     ${orderid1}
+    Should Be Equal As Strings  ${resp.json()['homeDelivery']}            ${bool[1]} 
+    Should Be Equal As Strings  ${resp.json()['storePickup']}             ${bool[0]} 
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${address}=  FakerLibrary.city
+    Set Suite Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+    ${invoiceId}=   FakerLibrary.word
+    
+    ${quantity}=   Random Int  min=500  max=1000
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${servicecharge}=   Random Int  min=5  max=10
+
+
+    ${itemList}=  Create Dictionary  itemId=${item_id3}   quantity=${quantity}  price=${servicecharge}
+    ${itemList}=    Create List    ${itemList}
+    ${servicenetRate}=  Evaluate  ${quantity} * ${servicecharge}
+    ${servicenetRate}=  Convert To Number  ${servicenetRate}   2
+    Set Test Variable   ${servicenetRate}
+    
+    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   itemList=${itemList}   ynwUuid=${orderid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid3}   ${resp.json()['uidList'][0]} 
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+    ${discAmt}=    Evaluate  ${servicenetRate}-${discountprice}
+
+    ${resp}=   Apply Discount   ${invoice_uid3}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['id']}  ${discountId}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['discountType']}  ${disctype[0]}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['discountValue']}  ${discountprice}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['calculationType']}  ${calctype[1]}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['privateNote']}  ${privateNote}
+    Should Be Equal As Strings  ${resp.json()['discounts'][0]['displayNote']}  ${displayNote}
+    Should Be Equal As Strings  ${resp.json()['amountTotal']}  ${servicenetRate}
+    Should Be Equal As Strings  ${resp.json()['amountDue']}  ${discAmt}
