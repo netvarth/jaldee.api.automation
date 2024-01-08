@@ -67,14 +67,15 @@ Get Non Billable Subdomain
 
 
 
+
 *** Test Cases ***
 
 JD-TC-Apply Service to Finance-1
 
-    [Documentation]  Apply Service Level Discount.
+    [Documentation]  Create one invoice with one service .then add another service to invoice.
 
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3381864
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3481864
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -404,7 +405,7 @@ JD-TC-Apply Service to Finance-1
 
 JD-TC-Apply Service To Finance-2
 
-    [Documentation]   Service auto invoice generation is on,then took one appointment from consumer side  and check whethrer invoice is created there .
+    [Documentation]   Service auto invoice generation is on,then took one appointment from consumer side  and check whethrer invoice is created there ,then add service to that invoice.
 
 
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
@@ -619,9 +620,14 @@ JD-TC-Apply Service To Finance-2
     Should Be Equal As Strings  ${resp.json()['netTotal']}  ${Total}
     Should Be Equal As Strings  ${resp.json()['netRate']}  ${Total}
 
+    ${resp1}=  Get provider Appt By Id  ${apptid1}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+
 JD-TC-Apply Services to finance-3
 
-    [Documentation]   Service auto invoice generation is on,then took walkin appointment  and check whethrer invoice is created there .
+    [Documentation]   Service auto invoice generation is on,then took walkin appointment  and check whethrer invoice is created there then add service to that invoice.
+
 
     ${resp}=  Consumer Login  ${CUSERNAME2}  ${PASSWORD}
     Log   ${resp.json()}
@@ -803,7 +809,7 @@ JD-TC-Apply Services to finance-3
 
 JD-TC-Apply Services to finance-4
 
-    [Documentation]   Service auto invoice generation is on,then took walkin token  and check whethrer invoice is created there .
+    [Documentation]   Service auto invoice generation is on,then took walkin token  and check whethrer invoice is created there then add service to that invoice.
 
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
@@ -963,7 +969,8 @@ JD-TC-Apply Services to finance-4
 
 
 JD-TC-Apply Services to finance-5
-    [Documentation]  Taking waitlist from consumer side and the consumer doing the prepayment first then full payment,then check invoice(auto-invoice generation flag is on)
+    [Documentation]  Taking waitlist from consumer side and the consumer doing the prepayment - check invoice(auto-invoice generation flag is on) then add service to that invoice.
+
    
     # ${billable_providers}=    Billable Domain Providers   min=70   max=80
     # Log   ${billable_providers}
@@ -1289,6 +1296,7 @@ JD-TC-Apply Services to finance-5
     ${balamount}=  Evaluate  ${totalamt}-${min_pre}
     ${balamount}=  Convert To Number  ${balamount}  2
 
+
     ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1313,73 +1321,31 @@ JD-TC-Apply Services to finance-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get Bookings Invoices  ${cwid}
+    ${resp1}=  Get provider Waitlist By Id  ${cwid}
     Log  ${resp1.content}
-    Should Be Equal As Strings  ${resp1.status_code} 200
+    Should Be Equal As Strings  ${resp1.status_code}  200
 
 
-
-    ${resp}=  ProviderLogout
-    Log  ${resp.json()}
+    ${resp}=  Get Bookings Invoices  ${cwid}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}  ${P1SERVICE1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}  1.0
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['price']}  ${Tot}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}  ${Tot}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['ynwUuid']}  ${cwid}
+    Should Be Equal As Strings  ${resp.json()[0]['amountPaid']}  ${min_pre}
+    Should Be Equal As Strings  ${resp.json()[0]['amountDue']}  ${balamount}
+    Should Be Equal As Strings  ${resp.json()[0]['amountTotal']}  ${Tot}
+    Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  ${gstpercentage[3]}
+    Should Be Equal As Strings  ${resp.json()[0]['defaultCurrencyAmount']}  ${Tot}
+    Should Be Equal As Strings  ${resp.json()[0]['netTaxAmount']}  ${tax}
+    Should Be Equal As Strings  ${resp.json()[0]['netTotal']}  ${Tot}
+    Should Be Equal As Strings  ${resp.json()[0]['netRate']}  ${totalamt}
+    Should Be Equal As Strings  ${resp.json()[0]['taxableTotal']}  ${Tot}
+    Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid}
 
-   ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-
-    sleep   02s
-
-    ${resp}=   Get Payment Details By UUId   ${cwid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable    ${id}   ${resp.json()[0]['id']} 
-
-    Should Be Equal As Strings  ${resp.json()[0]['amount']}   ${min_pre}
-    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}   ${cwid}
-
-    Should Be Equal As Strings  ${resp.json()[0]['paymentRefId']}   ${payref} 
-    Should Be Equal As Strings  ${resp.json()[0]['amount']}   ${min_pre}
-    Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}   ${payment_modes[5]}
-    Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}   ${cwid}
-
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  uuid=${cwid}  netTotal=${Tot}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  
-    ...    billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${min_pre}   totalTaxAmount=${tax}
-    Should Be Equal As Numbers  ${resp.json()['netRate']}   ${totalamt} 
-    Should Be Equal As Numbers  ${resp.json()['amountDue']}   ${balamount}
-
-    ${resp}=  Get Individual Payment Records   ${id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['id']}   ${id}
-    Should Be Equal As Strings  ${resp.json()['amount']}   ${min_pre}
-    Should Be Equal As Strings  ${resp.json()['paymentMode']}  Mock
-    Should Be Equal As Strings  ${resp.json()['paymentRefId']}   ${payref}
-    Should Be Equal As Strings  ${resp.json()['accountId']}   ${pid}
-    Should Be Equal As Strings  ${resp.json()['ynwUuid']}    ${cwid}
-
-    ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}     waitlistStatus=${wl_status[0]}
-    
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${balamount}  ${purpose[1]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${None}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    # ${resp}=  Make payment Consumer Mock  ${balamount}  ${bool[1]}  ${cwid}  ${pid}  ${purpose[1]}  ${cid1}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD} 
-    Should Be Equal As Strings    ${resp.status_code}   200
-    sleep   01s
-    ${resp}=  Get Waitlist By Id  ${cwid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
 
 JD-TC-Apply Service To Finance-6

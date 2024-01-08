@@ -187,7 +187,7 @@ Inactive ProviderCustomer
     [Return]  ${resp}
 
 
------------ LOS LEAD ---------
+#----------- LOS LEAD ---------
 
 PC Create Lead LOS     
     [Arguments]  ${channel}  ${description}  ${losProduct}  ${requestedAmount}  &{kwargs}
@@ -234,4 +234,24 @@ PC Get Lead Count By Filter LOS
 
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /consumer/los/lead/count   params=${param}   expected_status=any
+    [Return]  ${resp}
+
+
+Get provider Waitlist By Id
+    [Arguments]  ${uuid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/waitlist/${uuid}/billdetails   expected_status=any   
+    [Return]  ${resp}
+
+
+Get provider Appt By Id
+    [Arguments]  ${uuid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/appointment/${uuid}/billdetails   expected_status=any   
+    [Return]  ${resp}
+
+Get provider Order By Id
+    [Arguments]  ${uuid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/orders/${uuid}/billdetails   expected_status=any   
     [Return]  ${resp}
