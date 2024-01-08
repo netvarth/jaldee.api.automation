@@ -177,3 +177,61 @@ Update Read Count
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /spconsumer/communicate/communicationDetailToRead  data=${data}  expected_status=any
     [Return]  ${resp}
+
+Inactive ProviderCustomer 
+
+    [Arguments]     ${consumerId}   ${status}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /provider/customers/${consumerId}/changeStatus/${status}    expected_status=any
+    [Return]  ${resp}
+
+
+----------- LOS LEAD ---------
+
+PC Create Lead LOS     
+    [Arguments]  ${channel}  ${description}  ${losProduct}  ${requestedAmount}  &{kwargs}
+
+    ${data}=  Create Dictionary  losProduct=${losProduct}  requestedAmount=${requestedAmount}  description=${description}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/los/lead/channel/${channel}   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+PC Get Lead By Uid LOS
+
+    [Arguments]      ${uid}  
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/los/lead/${uid}  expected_status=any
+    [Return]  ${resp}
+
+PC Update Lead LOS    
+
+    [Arguments]  ${uid}  ${description}  ${losProduct}  ${requestedAmount}  &{kwargs}
+
+    ${data}=  Create Dictionary  losProduct=${losProduct}  requestedAmount=${requestedAmount}  description=${description}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /consumer/los/lead/${uid}   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+PC Get Lead By Filter LOS
+    [Arguments]   &{param}
+
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /consumer/los/lead   params=${param}   expected_status=any
+    [Return]  ${resp}
+
+PC Get Lead Count By Filter LOS
+    [Arguments]   &{param}
+
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /consumer/los/lead/count   params=${param}   expected_status=any
+    [Return]  ${resp}
