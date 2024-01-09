@@ -234,10 +234,7 @@ JD-TC-Invoice pay via link-1
     ${invoiceLabel}=   FakerLibrary.word
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     # ${invoiceDate}=   Get Current Date    result_format=%Y/%m/%d
-    ${resp}=   Get next invoice Id   ${lid}
-    Log  ${resp}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${invoiceId}   ${resp}
+
 
     ${item1}=     FakerLibrary.word
     ${itemCode1}=     FakerLibrary.word
@@ -531,8 +528,9 @@ JD-TC-Invoice pay via link-UH9
     ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${billStatusNote}=   FakerLibrary.word
 
-    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}       ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
@@ -561,9 +559,9 @@ JD-TC-Invoice pay via link-UH10
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     # ${invoiceDate}=   Get Current Date    result_format=%Y/%m/%d
     ${resp}=   Get next invoice Id   ${lid}
-    Log  ${resp.content}
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${invoiceId}   ${resp.content}
+    Set Suite Variable   ${invoiceId}   ${resp.json()}
 
     ${item1}=     FakerLibrary.word
     ${itemCode1}=     FakerLibrary.word
@@ -585,7 +583,7 @@ JD-TC-Invoice pay via link-UH10
     ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}   price=${promotionalPrice}
     # ${itemList}=    Create List    ${itemList}
 
-    ${resp}=  Create Finance Status   ${New_status[2]}  ${categoryType[3]} 
+    ${resp}=  Create Finance Status   ${New_status[3]}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${status_id1}   ${resp.json()}

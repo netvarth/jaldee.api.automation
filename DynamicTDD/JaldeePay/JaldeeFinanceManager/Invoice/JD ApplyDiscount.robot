@@ -565,8 +565,8 @@ JD-TC-Apply Discount-UH7
     Set Suite Variable   ${invoice_uid2}   ${resp.json()['uidList'][0]} 
 
 
-
-    ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[2]}   
+    ${billStatusNote}=   FakerLibrary.word
+    ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[2]}       ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

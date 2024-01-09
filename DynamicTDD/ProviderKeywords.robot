@@ -12458,13 +12458,13 @@ Get next invoice Id
     [Arguments]   ${locationId}    
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/${locationId}/nextInvoiceId     expected_status=any
-
+    [Return]  ${resp}
 
 Validate phone number
     [Arguments]     ${countryCode}  ${phoneNumber}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/validate/phonenumber/${countryCode}/${phoneNumber}  expected_status=any
-    
+    [Return]  ${resp}    
 
 # ................ LOS Lead ....................
 
