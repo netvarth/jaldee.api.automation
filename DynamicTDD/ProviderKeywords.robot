@@ -12603,14 +12603,14 @@ Updtae Lead LOS
 
 Get Lead By Filter LOS
     [Arguments]   &{param}
-
+    Log  ${param}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/los/lead   params=${param}   expected_status=any
     [Return]  ${resp}
 
 Get Lead Count By Filter LOS
     [Arguments]   &{param}
-
+    Log  ${param}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/los/lead/count   params=${param}   expected_status=any
     [Return]  ${resp}

@@ -26,7 +26,7 @@ ${bankIfsc}                      55555555555
 
 *** Test Cases ***
 
-JD-TC-Get Audit Log or History-1
+JD-TC-GetAuditLogorHistory-1
 
     [Documentation]             Get Audit Log Or History
 
@@ -115,3 +115,46 @@ JD-TC-Get Audit Log or History-1
     ${resp}=    Get Audit Log or History LOS  ${lead_uid} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['account']}     ${account_id1}
+    Should Be Equal As Strings    ${resp.json()['leadUid']}     ${lead_uid}
+
+JD-TC-GetAuditLogorHistory-UH1
+
+    [Documentation]             Get Audit Log Or History- lead uid is invalid
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME77}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${fake}=    Random Int  min=999  max=9999
+
+    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   Lead
+
+    ${resp}=    Get Audit Log or History LOS  ${fake} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${INVALID_X_ID}
+
+JD-TC-GetAuditLogorHistory-UH2
+
+    [Documentation]             Get Audit Log Or History- without login
+
+    ${resp}=    Get Audit Log or History LOS  ${lead_uid} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
+
+JD-TC-GetAuditLogorHistory-UH3
+
+    [Documentation]             Get Audit Log Or History- with another provider login
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME78}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   lead
+
+    ${resp}=    Get Audit Log or History LOS  ${lead_uid} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${NO_PERMISSION_X}
