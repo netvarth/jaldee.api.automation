@@ -419,7 +419,9 @@ JD-TC-GenerateLinkForInvoice-UH7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
+   ${billStatusNote}=   FakerLibrary.word
+
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}      ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}
@@ -439,7 +441,7 @@ JD-TC-GenerateLinkForInvoice-UH7
 
 JD-TC-GenerateLinkForInvoice-UH8
 
-    [Documentation]  ubill status is in draft stage and Generate Link .
+    [Documentation]  bill status is in draft stage and Generate Link .
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
@@ -495,6 +497,10 @@ JD-TC-GenerateLinkForInvoice-UH8
     ${vendor_phn}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${email}=   FakerLibrary.word
 
+    ${resp1}=  Get Invoice By Id  ${invoice_uid1}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+
     ${resp}=  Generate Link For Invoice  ${invoice_uid1}   ${vendor_phn}    ${email}    ${boolean[1]}    ${boolean[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -508,7 +514,9 @@ JD-TC-GenerateLinkForInvoice-UH9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[2]}   
+   ${billStatusNote}=   FakerLibrary.word
+
+    ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[2]}      ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${apptStatus[4]}

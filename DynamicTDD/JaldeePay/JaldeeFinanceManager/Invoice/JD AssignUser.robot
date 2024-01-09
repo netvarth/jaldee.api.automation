@@ -372,15 +372,18 @@ JD-TC-Assign User-UH6
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
 
-    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
+    ${billStatusNote}=   FakerLibrary.word
+
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+   ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}
 
 
     ${resp}=  Assign User   ${invoice_uid}  ${u_id}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${Draft_status}
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_STATUS}
 
 JD-TC-Assign User-UH7
 
@@ -429,7 +432,9 @@ JD-TC-Assign User-UH8
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[2]}   
+    ${billStatusNote}=   FakerLibrary.word
+
+    ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[2]}     ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${apptStatus[4]}

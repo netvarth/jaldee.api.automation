@@ -4333,7 +4333,7 @@ Take Appointment For Consumer
     # ${data}=    Create Dictionary   appointmentMode=WALK_IN_APPOINTMENT  consumer=${cid}  service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}  
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/appointment  params=${pro_params}    data=${data}  expected_status=any
     [Return]  ${resp}
 
 
@@ -12101,9 +12101,11 @@ Remove Item Level Discount
 
 Update Bill Status
 
-    [Arguments]   ${invoiceUid}    ${billStatus}
+    [Arguments]   ${invoiceUid}    ${billStatus}   ${billStatusNote}
+    ${data}=  Create Dictionary  billStatusNote=${billStatusNote}  
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw   /provider/jp/finance/invoice/${invoiceUid}/billstatus/${billStatus}    expected_status=any
+    ${data}=  json.dumps  ${data}
+    ${resp}=  PUT On Session  ynw   /provider/jp/finance/invoice/${invoiceUid}/billstatus/${billStatus}     data=${data}   expected_status=any
     [Return]  ${resp}
 
 Apply Provider Coupon for waitlist

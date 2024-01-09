@@ -91,13 +91,25 @@ JD-TC-Invoice pay via link-1
     Set Test Variable  ${Profileid}  ${resp.json()[0]['profileId']}
 
 
-    ${resp}=  Create Sample Location  
-    Set Suite Variable    ${lid}    ${resp}  
+    # ${resp}=  Create Sample Location  
+    # Set Suite Variable    ${lid}    ${resp}  
+
+
+    ${resp}=   Get Locations 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${lid}    ${resp.json()[0]['id']}  
 
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${resp}=   Get next invoice Id   ${lid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${invoiceId}   ${resp.json()}
+
 
     ${name}=   FakerLibrary.word
     Set Suite Variable   ${name}
@@ -223,9 +235,9 @@ JD-TC-Invoice pay via link-1
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     # ${invoiceDate}=   Get Current Date    result_format=%Y/%m/%d
     ${resp}=   Get next invoice Id   ${lid}
-    Log  ${resp.json()}
+    Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${invoiceId}   ${resp.json()}
+    Set Suite Variable   ${invoiceId}   ${resp}
 
     ${item1}=     FakerLibrary.word
     ${itemCode1}=     FakerLibrary.word
@@ -275,10 +287,7 @@ JD-TC-Invoice pay via link-1
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}
 
-    ${resp}=   Get next invoice Id   ${lid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${invoiceId}   ${resp.json()}
+
     
     ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}    serviceList=${serviceList}   adhocItemList=${adhocItemList}    billStatus=${billStatus[0]}   locationId=${lid}
     Log  ${resp.json()}
@@ -552,9 +561,9 @@ JD-TC-Invoice pay via link-UH10
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     # ${invoiceDate}=   Get Current Date    result_format=%Y/%m/%d
     ${resp}=   Get next invoice Id   ${lid}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${invoiceId}   ${resp.json()}
+    Set Suite Variable   ${invoiceId}   ${resp.content}
 
     ${item1}=     FakerLibrary.word
     ${itemCode1}=     FakerLibrary.word

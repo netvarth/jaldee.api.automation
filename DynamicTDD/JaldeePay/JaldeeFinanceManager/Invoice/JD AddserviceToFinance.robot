@@ -383,7 +383,7 @@ JD-TC-Apply Service to Finance-1
 
 
     ${resp}=  AddServiceToFinance   ${invoice_uid}   ${serviceList1}    
-    Log  ${resp.json()} 
+    Log  ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -599,7 +599,7 @@ JD-TC-Apply Service To Finance-2
 
 
     ${resp}=  AddServiceToFinance   ${invoice_appt_uid}   ${serviceList1}    
-    Log  ${resp.json()} 
+    Log  ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Invoice By Id  ${invoice_appt_uid}
@@ -786,7 +786,7 @@ JD-TC-Apply Services to finance-3
 
 
     ${resp}=  AddServiceToFinance   ${invoice_apptwalkin_uid}   ${serviceList1}    
-    Log  ${resp.json()} 
+    Log  ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Invoice By Id  ${invoice_apptwalkin_uid}
@@ -946,7 +946,7 @@ JD-TC-Apply Services to finance-4
 
 
     ${resp}=  AddServiceToFinance   ${invoice_wtlistwalkin_uid}   ${serviceList1}    
-    Log  ${resp.json()} 
+    Log  ${resp.content} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Invoice By Id  ${invoice_wtlistwalkin_uid}
@@ -1189,7 +1189,7 @@ JD-TC-Apply Services to finance-5
     ${min_pre}=   Random Int   min=40   max=50
     ${Tot}=   Random Int   min=100   max=300
     ${min_pre}=  Convert To Number  ${min_pre}  1
-    ${pre_float}=  twodigitfloat  ${min_pre}
+    # ${pre_float}=  twodigitfloat  ${min_pre}
     ${Tot1}=  Convert To Number  ${Tot}  1 
     Set Suite Variable   ${Tot}   ${Tot1}
 
@@ -1217,6 +1217,12 @@ JD-TC-Apply Services to finance-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_sid2}  ${resp.json()}
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${serviceprice}=   Random Int  min=100  max=500
+    ${serviceprice}=  Convert To Number  ${serviceprice}  1
+    ${serviceList1}=  Create Dictionary  serviceId=${p1_sid2}   quantity=${quantity}   price=${serviceprice} 
 
     ${resp}=  Auto Invoice Generation For Service   ${p1_sid2}    ${toggle[0]}
     Log  ${resp.json()}
@@ -1292,7 +1298,7 @@ JD-TC-Apply Services to finance-5
     ${tax1}=  Evaluate  ${Tot}*${gstpercentage[3]}
     ${tax}=   Evaluate  ${tax1}/100
     ${totalamt}=  Evaluate  ${Tot}+${tax}
-    ${totalamt}=  twodigitfloat  ${totalamt}
+    # ${totalamt}=  twodigitfloat  ${totalamt}
     ${balamount}=  Evaluate  ${totalamt}-${min_pre}
     ${balamount}=  Convert To Number  ${balamount}  2
 
@@ -1345,6 +1351,46 @@ JD-TC-Apply Services to finance-5
     Should Be Equal As Strings  ${resp.json()[0]['netRate']}  ${totalamt}
     Should Be Equal As Strings  ${resp.json()[0]['taxableTotal']}  ${Tot}
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid}
+    Set Suite Variable  ${invoice_wtlistonline_uid}  ${resp.json()[0]['invoiceUid']}
+
+
+    ${resp}=  AddServiceToFinance   ${invoice_wtlistonline_uid}   ${serviceList1}    
+    Log  ${resp.content} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${service_quantity}=  Evaluate  ${serviceprice}*${quantity}
+    ${amount_tot}=  Evaluate  ${Tot}+${service_quantity}
+    ${tax2}=  Evaluate  ${amount_tot}*${gstpercentage[3]}
+    ${nettax}=   Evaluate  ${tax2}/100
+    ${netRate}=  Evaluate  ${amount_tot}+${nettax}
+    ${netRate}=  twodigitfloat  ${netRate}
+    ${amountDue}=  Evaluate  ${netRate}-${min_pre}
+    ${amountDue}=  Convert To Number  ${amountDue}  2
+
+    ${resp}=  Get Bookings Invoices  ${cwid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}  ${P1SERVICE1}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}  1.0
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['price']}  ${Tot}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}  ${Tot}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['ynwUuid']}  ${cwid}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['serviceId']}  ${p1_sid2}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['serviceName']}  ${P1SERVICE2}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['quantity']}  ${quantity}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['price']}  ${serviceprice}
+    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][1]['netRate']}  ${service_quantity}
+    Should Be Equal As Strings  ${resp.json()[0]['amountPaid']}  ${min_pre}
+    Should Be Equal As Strings  ${resp.json()[0]['amountDue']}  ${amountDue}
+    Should Be Equal As Strings  ${resp.json()[0]['amountTotal']}  ${amount_tot}
+    Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  ${gstpercentage[3]}
+    Should Be Equal As Strings  ${resp.json()[0]['netTaxAmount']}  ${nettax}
+    Should Be Equal As Strings  ${resp.json()[0]['netTotal']}  ${amount_tot}
+    Should Be Equal As Strings  ${resp.json()[0]['netRate']}  ${netRate}
+    Should Be Equal As Strings  ${resp.json()[0]['taxableTotal']}  ${amount_tot}
+    Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid}
+
 
 
 
@@ -1488,7 +1534,7 @@ JD-TC-Apply Service To Finance-6
         Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
     END
     ${num_slots}=  Get Length  ${slots}
-    ${j}=  Random Int  max=${num_slots-3}
+    ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
