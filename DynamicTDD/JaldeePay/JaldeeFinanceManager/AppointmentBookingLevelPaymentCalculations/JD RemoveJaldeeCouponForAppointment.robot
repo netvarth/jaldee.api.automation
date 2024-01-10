@@ -116,7 +116,15 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     ${pid}=  get_acc_id  ${PUSERPH0}
     ${cid}=  get_id  ${CUSERNAME32}
 
-    ${DAY1}=  get_date
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERPH0}+15566122
     ${ph2}=  Evaluate  ${PUSERPH0}+25566122
@@ -138,8 +146,8 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     ${24hours}    Random Element    ${bool}
     ${desc}=   FakerLibrary.sentence
     ${url}=   FakerLibrary.url
-    ${sTime}=  add_time  0  15
-    ${eTime}=  add_time   0  45
+    ${sTime}=  db.add_timezone_time     ${tz}  0  15
+    ${eTime}=  db.add_timezone_time     ${tz}   0  45
     ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -201,14 +209,6 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-
-    ${resp}=  Create Sample Location  
-    Set Suite Variable    ${lid}    ${resp}  
-
-    ${resp}=   Get Location ById  ${lid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
