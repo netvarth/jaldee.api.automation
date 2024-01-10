@@ -110,7 +110,9 @@ JD-TC-UpdateBillStatus-1
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
     ${srv_duration}=   Random Int   min=10   max=20
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[0]}  ${bool[0]}
+    ${maxBookingsAllowed}=   Random Int  min=1  max=5
+    ${maxBookingsAllowed}=  Convert To Number  ${maxBookingsAllowed}  1
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[0]}  ${bool[0]}    maxBookingsAllowed=${maxBookingsAllowed}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
@@ -226,7 +228,7 @@ JD-TC-UpdateBillStatus-1
     Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[7]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
@@ -241,7 +243,7 @@ JD-TC-UpdateBillStatus-1
     Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[0]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
@@ -469,7 +471,7 @@ JD-TC-UpdateBillStatus-4
 JD-TC-UpdateBillStatus-UH1
 
 
-    [Documentation]  try to update  settle invoice.(invoice is in draft status)
+    [Documentation]  try to update  settle invoice thats already settiled.
 
     ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log  ${resp.content}
@@ -479,7 +481,7 @@ JD-TC-UpdateBillStatus-UH1
     ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}    ${billStatusNote}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${Draft_status}
+    Should Be Equal As Strings  ${resp.json()}   ${BILL_STATUS_IS_ALREADY_SETTILED}
 
 JD-TC-UpdateBillStatus-UH2
 

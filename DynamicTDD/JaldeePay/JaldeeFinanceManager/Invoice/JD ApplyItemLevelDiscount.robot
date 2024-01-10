@@ -70,7 +70,7 @@ JD-TC-Apply Item Level Discount-1
     [Documentation]  Apply Item  Level Discount.
 
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3481838
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+5551838
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg

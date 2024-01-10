@@ -370,6 +370,10 @@ JD-TC-UpdateService-UH6
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     ${billStatusNote}=   FakerLibrary.word
 
     ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}    ${billStatusNote}

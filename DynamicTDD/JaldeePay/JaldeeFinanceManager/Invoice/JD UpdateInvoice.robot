@@ -202,7 +202,10 @@ JD-TC-UpdateInvoice-1
     ${desc}=   FakerLibrary.sentence
     ${servicecharge}=   Random Int  min=100  max=500
 
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}
+    ${maxBookingsAllowed}=   Random Int  min=1  max=5
+    ${maxBookingsAllowed}=  Convert To Number  ${maxBookingsAllowed}  1
+
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}   maxBookingsAllowed=${maxBookingsAllowed}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sid1}  ${resp.json()}
