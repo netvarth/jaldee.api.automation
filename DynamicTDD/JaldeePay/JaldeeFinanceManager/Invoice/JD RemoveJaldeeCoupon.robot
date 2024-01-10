@@ -201,7 +201,7 @@ JD-TC-Remove JaldeeCoupon-1
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
-    ${resp1}=  AddCustomer  ${CUSERNAME1}
+    ${resp1}=  AddCustomer  ${CUSERNAME13}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${pcid18}   ${resp1.json()}
@@ -313,8 +313,11 @@ JD-TC-RemoveJaldeeCoupon-UH1
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${billStatusNote}=   FakerLibrary.word
 
-    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[2]}   
+
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[2]}    ${billStatusNote}
+   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${apptStatus[4]}

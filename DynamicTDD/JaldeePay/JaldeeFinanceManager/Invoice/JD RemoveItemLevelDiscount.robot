@@ -444,7 +444,7 @@ JD-TC-Remove Item Level Discount-1
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['netRate']}   ${netRate}
     Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['totalPrice']}   ${servicenetRate}
     Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['netRate']}   ${servicenetRate}
-    Should Be Equal As Strings  ${resp1.json()['amountTotal']}     ${rate}
+    Should Be Equal As Strings  ${resp1.json()['amountTotal']}     ${servicenetRate}
     Should Be Equal As Strings  ${resp1.json()['amountDue']}     ${netTotal}
     Should Be Equal As Strings  ${resp1.json()['taxableTotal']}     ${total_amt_with_tax}
     Should Be Equal As Strings  ${resp1.json()['nonTaxableTotal']}     ${servicenetRate}
@@ -784,7 +784,7 @@ JD-TC-Remove Item Level Discount-3
     Should Be Equal As Strings  ${resp1.json()['netRate']}     ${netTotal2}
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['totalPrice']}   ${netTotal}
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discountTotal']}   ${discountprice}
-    Should Be Equal As Strings  ${resp1.json()['amountTotal']}     ${amounttotal}
+    Should Be Equal As Strings  ${resp1.json()['amountTotal']}     ${netTotal}
 
 
     ${vender_name}=   FakerLibrary.firstname
@@ -1109,8 +1109,8 @@ JD-TC-Remove Item Level Discount-UH7
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-
-    ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[1]}   
+    ${billStatusNote}=   FakerLibrary.word
+    ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[1]}    ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
@@ -1120,10 +1120,12 @@ JD-TC-Remove Item Level Discount-UH7
         ${discountValue1}=     Random Int   min=50   max=100
     ${discountValue1}=  Convert To Number  ${discountValue1}  1
 
+    ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}
+
     ${resp}=  Remove Item Level Discount   ${invoice_uid1}   ${discountId}    ${discountValue1}   ${privateNote}  ${displayNote}   ${itemId1}
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_SETTLED}
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_STATUS}
 
 
 *** comment ***

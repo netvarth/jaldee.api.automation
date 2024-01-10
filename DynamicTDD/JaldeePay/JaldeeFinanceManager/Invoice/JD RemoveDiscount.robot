@@ -595,8 +595,8 @@ JD-TC-Remove Discount-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-
-    ${resp}=  Update bill status   ${invoice_uid3}    ${billStatus[2]}   
+    ${billStatusNote}=   FakerLibrary.word
+    ${resp}=  Update bill status   ${invoice_uid3}    ${billStatus[2]}    ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

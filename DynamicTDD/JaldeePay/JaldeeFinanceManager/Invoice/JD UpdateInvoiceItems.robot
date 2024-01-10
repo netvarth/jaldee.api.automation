@@ -357,17 +357,18 @@ JD-TC-UpdateInvoiceItem-UH6
     ${resp}=  Encrypted Provider Login  ${PUSERNAME40}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${billStatusNote}=   FakerLibrary.word
 
-    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[0]}   
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[0]}    ${billStatusNote}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}    ${billStatusNote} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
+    ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}
 
     ${resp}=  Update Invoice Items  ${invoice_uid}   ${itemList1}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_SETTLED}
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_STATUS}

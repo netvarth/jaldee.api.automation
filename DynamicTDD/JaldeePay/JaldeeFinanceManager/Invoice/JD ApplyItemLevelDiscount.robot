@@ -866,9 +866,9 @@ JD-TC-Apply Item Level Discount-UH4
 
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
-    ${discount}=   FakerLibrary.RandomNumber
+    ${wrongdiscount}=   FakerLibrary.RandomNumber
 
-    ${resp}=   Apply Item Level Discount   ${invoice_uid}   ${discount}    ${discountprice}   ${privateNote}  ${displayNote}  ${itemId}
+    ${resp}=   Apply Item Level Discount   ${invoice_uid}   ${wrongdiscount}    ${discountprice}   ${privateNote}  ${displayNote}  ${itemId}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
 

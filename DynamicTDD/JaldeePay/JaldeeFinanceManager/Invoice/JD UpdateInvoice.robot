@@ -467,12 +467,12 @@ JD-TC-UpdateInvoice-UH4
     ${amount1}=   Random Int  min=500  max=2000
     ${amount1}=     roundval    ${amount1}   1
 
-
-    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[0]}   
+    ${billStatusNote}=   FakerLibrary.word
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[0]}    ${billStatusNote}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}    ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}

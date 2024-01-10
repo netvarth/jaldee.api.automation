@@ -424,16 +424,16 @@ JD-TC-UnAssign User-UH6
     Should Be Equal As Strings  ${resp1.json()[0]['assignedUserId']}  ${u_id2}
 
 
-
-    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
+    ${billStatusNote}=   FakerLibrary.word
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}       ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
+    ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}
 
     ${resp}=  UnAssign User   ${invoice_uid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_SETTLED}
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_STATUS}
 
 JD-TC-UnAssign User-UH7
 

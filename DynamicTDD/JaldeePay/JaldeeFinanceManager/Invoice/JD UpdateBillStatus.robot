@@ -110,7 +110,7 @@ JD-TC-UpdateBillStatus-1
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
     ${srv_duration}=   Random Int   min=10   max=20
-    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[1]}  ${bool[0]}
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[0]}  ${bool[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
@@ -267,8 +267,9 @@ JD-TC-UpdateBillStatus-1
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()['billStatus']}  ${billStatus[0]}
+    ${billStatusNote}=   FakerLibrary.word
 
-    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}       ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -295,7 +296,9 @@ JD-TC-UpdateBillStatus-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${invoice_uid1}   ${resp.json()[0]['invoiceUid']}
 
-    ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[2]}   
+    ${billStatusNote}=   FakerLibrary.word
+
+    ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[2]}    ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -429,7 +432,9 @@ JD-TC-UpdateBillStatus-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${invoice_uid2}   ${resp.json()['uidList'][0]} 
 
-    ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[0]}   
+    ${billStatusNote}=   FakerLibrary.word
+
+    ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[0]}    ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -446,8 +451,9 @@ JD-TC-UpdateBillStatus-4
     ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${billStatusNote}=   FakerLibrary.word
 
-    ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[2]}   
+    ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[2]}    ${billStatusNote}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -468,8 +474,9 @@ JD-TC-UpdateBillStatus-UH1
     ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${billStatusNote}=   FakerLibrary.word
 
-    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}   
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}    ${billStatusNote}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${Draft_status}
@@ -482,8 +489,9 @@ JD-TC-UpdateBillStatus-UH2
     ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${billStatusNote}=   FakerLibrary.word
 
-    ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[2]}   
+    ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[2]}    ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${BILL_STATUS_IS_ALREADY_CANCELLED}
@@ -496,8 +504,9 @@ JD-TC-UpdateBillStatus-UH3
     ${resp}=  Encrypted Provider Login  ${billable_providers[2]}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${billStatusNote}=   FakerLibrary.word
 
-    ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[2]}   
+    ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[2]}    ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${CAP_JALDEE_FINANCE_DISABLED}
@@ -527,7 +536,9 @@ JD-TC-UpdateBillStatus-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-    ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[2]}   
+    ${billStatusNote}=   FakerLibrary.word
+
+    ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[2]}    ${billStatusNote} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}

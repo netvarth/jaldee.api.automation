@@ -344,12 +344,13 @@ JD-TC-UploadInvoiceAttachement-UH3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME45}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${billStatusNote}=   FakerLibrary.word
 
-    ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[0]}   
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[0]}    ${billStatusNote}  
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[1]}   
+    ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[1]}    ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}
@@ -382,7 +383,7 @@ JD-TC-UploadInvoiceAttachement-UH4
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable   ${pcid10}   ${resp1.json()}
 
-    ${resp1}=  AddCustomer  ${CUSERNAME9}
+    ${resp1}=  AddCustomer  ${CUSERNAME15}
     Log  ${resp1.json()}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable   ${pcid9}   ${resp1.json()}

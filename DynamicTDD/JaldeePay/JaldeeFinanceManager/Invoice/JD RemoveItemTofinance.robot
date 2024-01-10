@@ -70,7 +70,7 @@ JD-TC-Remove Item to Finance-1
     [Documentation]  Apply Service Level Discount.
 
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3381864
+    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3581864
     Set Suite Variable   ${PUSERPH0}
     
     ${licid}  ${licname}=  get_highest_license_pkg

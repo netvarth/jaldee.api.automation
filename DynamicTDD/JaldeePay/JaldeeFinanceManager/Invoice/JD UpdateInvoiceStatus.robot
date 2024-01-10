@@ -344,7 +344,7 @@ JD-TC-UpdateInvoiceStatus-UH4
     Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()['invoiceStatusName']}  ${New_status[1]}
+    Should Be Equal As Strings  ${resp1.json()['invoiceStatusName']}  ${billStatus[0]}
 
 JD-TC-UpdateInvoiceStatus-UH5
 
@@ -353,13 +353,14 @@ JD-TC-UpdateInvoiceStatus-UH5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME46}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${billStatusNote}=   FakerLibrary.word
 
-    ${resp}=  Update bill status   ${invoice_uid3}    ${billStatus[0]}   
+    ${resp}=  Update bill status   ${invoice_uid3}    ${billStatus[0]}    ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  Update bill status   ${invoice_uid3}    ${billStatus[1]}   
+    ${resp}=  Update bill status   ${invoice_uid3}    ${billStatus[1]}      ${billStatusNote}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}

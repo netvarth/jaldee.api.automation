@@ -309,7 +309,8 @@ JD-TC-Share invoice as pdf-4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[1]}   
+    ${billStatusNote}=   FakerLibrary.word
+    ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[1]}       ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -408,8 +409,9 @@ JD-TC-Share invoice as pdf-UH6
     ${resp}=   Encrypted Provider Login  ${PUSERNAME71}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${billStatusNote}=   FakerLibrary.word
 
-    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[2]}   
+    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[2]}      ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
