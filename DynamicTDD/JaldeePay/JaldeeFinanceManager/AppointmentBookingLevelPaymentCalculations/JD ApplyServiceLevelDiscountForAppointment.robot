@@ -456,7 +456,7 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-5
 
     ${discount2}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
-    ${discountprice1}=     Random Int   min=50   max=100
+    ${discountprice1}=     Random Int   min=5   max=10
     ${discountprice}=  Convert To Number  ${discountprice1}  1
     Set Suite Variable   ${discountprice}
     ${resp}=   Create Discount  ${discount2}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}

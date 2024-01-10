@@ -456,6 +456,7 @@ JD-TC-RemoveProviderCouponForAppointmnet-3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME125}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    clear Customer  ${PUSERNAME125}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}

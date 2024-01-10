@@ -55,7 +55,7 @@ JD-TC-GetCategoryByCategoryType-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     
-    ${name}=   FakerLibrary.word
+    ${name}=   FakerLibrary.name
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -103,7 +103,7 @@ JD-TC-GetCategoryByCategoryType-3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
     
-    ${name}=   FakerLibrary.word
+    ${name}=   FakerLibrary.name
     ${resp}=  Create Category   ${name}  ${categoryType[2]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
