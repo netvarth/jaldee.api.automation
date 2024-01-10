@@ -589,7 +589,7 @@ JD-TC-CreateInvoice-UH3
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}  ${LINE_ITEMS_CANNOT_EMPTY}
     
-JD-TC-CreateInvoice-
+JD-TC-CreateInvoice-5
 
     [Documentation]  Provider take one walking checkin and create invoice using that waitlist id.
 
@@ -813,7 +813,7 @@ JD-TC-CreateInvoice-
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
 
 
-JD-TC-CreateInvoice-
+JD-TC-CreateInvoice-6
 
     [Documentation]  Provider take one online checkin and create invoice using that waitlist id.
 
@@ -885,7 +885,7 @@ JD-TC-CreateInvoice-
     Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
     Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
  
-JD-TC-CreateInvoice-
+JD-TC-CreateInvoice-7
 
     [Documentation]  Again try to create invoice using that waitlist id.
 
@@ -897,4 +897,231 @@ JD-TC-CreateInvoice-
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp1}=  Get Bookings Invoices  ${wid1}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()[0]['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()[0]['invoiceCategoryId']}  ${category_id}
+    # Should Be Equal As Strings  ${resp1.json()[0]['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
+    Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
 
+    Should Be Equal As Strings  ${resp1.json()[1]['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()[1]['invoiceCategoryId']}  ${category_id}
+    # Should Be Equal As Strings  ${resp1.json()[1]['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp1.json()[1]['invoiceDate']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()[1]['invoiceLabel']}  ${invoiceLabel}
+    Should Be Equal As Strings  ${resp1.json()[1]['billedTo']}  ${address}
+
+
+JD-TC-CreateInvoice-8
+
+    [Documentation]  Provider take one walking Appointment and create invoice using that Appointment id.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    clear_appt_schedule   ${HLMUSERNAME1}
+
+    ${resp}=  Get Appointment Schedules
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Appointment Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.add_timezone_time     ${tz}  0  15
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${maxval}=  Convert To Integer   ${delta/2}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${loc_id1}  ${duration}  ${bool1}  ${ser_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sch_id}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${ser_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+
+    ${resp}=  AddCustomer  ${CUSERNAME8} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}   ${resp.json()}
+    
+    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+    
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Suite Variable  ${apptid1}  ${apptid[0]}
+
+    ${resp}=  Get Appointment EncodedID   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${encId}=  Set Variable   ${resp.json()}
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid1}
+
+    ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}        ynwUuid=${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid4}   ${resp.json()['uidList'][0]}  
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid4}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id}
+    # Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
+    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
+    Should Be Equal As Strings  ${resp1.json()['vendorUid']}  ${vendor_uid1}
+    # Should Be Equal As Strings  ${resp1.json()['invoiceId']}  ${invoiceId}
+    Should Be Equal As Strings  ${resp1.json()['ynwUuid']}  ${apptid1}
+    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['serviceId']}  ${ser_id1}
+    Should Be Equal As Strings  ${resp1.json()['locationId']}  ${loc_id1}
+
+JD-TC-CreateInvoice-9
+
+    [Documentation]  Provider take one online Appointment and create invoice using that Appointment id.
+
+    ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${jdconID}   ${resp.json()['id']}
+    Set Test Variable  ${fname}   ${resp.json()['firstName']}
+    Set Test Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=  Get Appointment Schedules Consumer  ${account_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id}   ${account_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id}   ${account_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${j}=  Random Int  max=${num_slots-3}
+    Set Test Variable   ${slot1}   ${slots[${j}]}
+
+    ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+
+    ${cnote}=   FakerLibrary.name
+    ${resp}=   Take Appointment For Provider   ${account_id1}  ${ser_id1}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${loc_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
+    Set Suite Variable   ${apptid1}
+
+    ${resp}=   Get consumer Appointment By Id   ${account_id1}  ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Verify Response    ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${ser_id1}
+    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}  ${apptStatus[1]}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id1}
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}        ynwUuid=${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${invoice_uid4}   ${resp.json()['uidList'][0]}  
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid4}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id}
+    # Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
+    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
+    Should Be Equal As Strings  ${resp1.json()['vendorUid']}  ${vendor_uid1}
+    # Should Be Equal As Strings  ${resp1.json()['invoiceId']}  ${invoiceId}
+    Should Be Equal As Strings  ${resp1.json()['ynwUuid']}  ${apptid1}
+    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['serviceId']}  ${ser_id1}
+    Should Be Equal As Strings  ${resp1.json()['locationId']}  ${loc_id1}
+
+JD-TC-CreateInvoice-10
+
+    [Documentation]  Again try to create invoice using that Appointment id.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}        ynwUuid=${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp1}=  Get Bookings Invoices  ${apptid1}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+     Should Be Equal As Strings  ${resp1.json()[0]['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()[0]['invoiceCategoryId']}  ${category_id}
+    # Should Be Equal As Strings  ${resp1.json()[0]['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
+    Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
+    Should Be Equal As Strings  ${resp1.json()[0]['vendorUid']}  ${vendor_uid1}
+    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceId']}  ${invoiceId}
+    Should Be Equal As Strings  ${resp1.json()[0]['ynwUuid']}  ${apptid1}
+    Should Be Equal As Strings  ${resp1.json()[0]['serviceList'][0]['serviceId']}  ${ser_id1}
+    # Should Be Equal As Strings  ${resp1.json()[0]['locationId']}  ${loc_id1}
+
+     Should Be Equal As Strings  ${resp1.json()[1]['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()[1]['invoiceCategoryId']}  ${category_id}
+    # Should Be Equal As Strings  ${resp1.json()[1]['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp1.json()[1]['invoiceDate']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()[1]['invoiceLabel']}  ${invoiceLabel}
+    Should Be Equal As Strings  ${resp1.json()[1]['billedTo']}  ${address}
+    Should Be Equal As Strings  ${resp1.json()[1]['vendorUid']}  ${vendor_uid1}
+    # Should Be Equal As Strings  ${resp1.json()[1]['invoiceId']}  ${invoiceId}
+    Should Be Equal As Strings  ${resp1.json()[1]['ynwUuid']}  ${apptid1}
+    Should Be Equal As Strings  ${resp1.json()[1]['serviceList'][0]['serviceId']}  ${ser_id1}
+    # Should Be Equal As Strings  ${resp1.json()[0]['locationId']}  ${loc_id1}
