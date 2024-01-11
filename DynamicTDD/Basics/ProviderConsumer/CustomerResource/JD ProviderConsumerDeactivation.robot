@@ -16,6 +16,7 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 
 *** Variables ***
 ${self}         0
+${SERVICE1}               SERVICE1001
 
 *** Keywords ***
 Consumer Deactivation
@@ -393,7 +394,7 @@ JD-TC-Consumer Deactivation -2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['uid']}                                           ${apptid1}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                                ${cid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['id']}                                ${cid}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}          ${fname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}           ${lname}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['primaryMobileNo']}    ${ph_no}
@@ -410,6 +411,7 @@ JD-TC-Consumer Deactivation -2
 JD-TC-Consumer Deactivation -3
     [Documentation]   ReSignup the consumer and try to get above appoiment details.
 
+    ${email}=    FakerLibrary.Email
     ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -459,3 +461,146 @@ JD-TC-Consumer Deactivation -3
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${lid}
 
+
+JD-TC-Consumer Deactivation -4
+    [Documentation]   provider create a ProviderConsumer then deactivate , try to get that ProviderConsumer from provider side.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${accountId}=    get_acc_id       ${PUSERNAME7}
+
+    ${firstName}=  FakerLibrary.name
+    Set Suite Variable    ${firstName}
+    ${lastName}=  FakerLibrary.last_name
+    Set Suite Variable    ${lastName}
+    ${primaryMobileNo}    Generate random string    10    123456789
+    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
+    Set Suite Variable    ${primaryMobileNo}
+    ${email}=    FakerLibrary.Email
+    Set Suite Variable    ${email}
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}\
+
+    ${resp}=    Consumer Deactivation
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Consumer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  GetCustomer   account-eq=${cid} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+
+JD-TC-Consumer Deactivation -5
+    [Documentation]   try to Deactivate that ProviderConsumer from provider side.then try to take a waitlist.
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${accountId}=    get_acc_id       ${PUSERNAME6}
+
+    ${firstName}=  FakerLibrary.name
+    ${lastName}=  FakerLibrary.last_name
+    ${primaryMobileNo}    Generate random string    10    123456789
+    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
+    ${email}=    FakerLibrary.Email
+
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}\
+
+    ${resp}=    Consumer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Change Provider Consumer Profile Status    ${cid}    ${status[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  GetCustomer   account-eq=${cid} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings  ${resp.json()[0]['firstName']}           ${firstName}
+    Should Be Equal As Strings  ${resp.json()[0]['lastName']}           ${lastName}
+    Should Be Equal As Strings  ${resp.json()[0]['email']}           ${email}
+    Should Be Equal As Strings  ${resp.json()[0]['phoneNo']}           ${primaryMobileNo}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}           ${status[1]}
+
+    ${resp}=   Create Sample Location
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+
+    ${resp}=   Create Sample Service  ${SERVICE1}
+    Set Suite Variable    ${ser_id1}    ${resp}  
+ 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${q_name}=    FakerLibrary.name
+    ${list}=  Create List   1  2  3  4  5  6  7
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
+    ${parallel}=   Random Int  min=1   max=1
+    ${capacity}=  Random Int   min=10   max=20
+    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${que_id1}   ${resp.json()}
+    ${desc}=   FakerLibrary.word
+    ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${CUR_DAY}  ${desc}  ${bool[1]}  ${cid} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${CUSTOMER_IS_INACTIVE}
