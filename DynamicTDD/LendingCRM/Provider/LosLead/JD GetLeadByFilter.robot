@@ -187,6 +187,89 @@ JD-TC-GetLeadByFilter-1
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone2}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail2}
 
+
+
+JD-TC-GetLeadByFilter-2
+
+    [Documentation]             Get Lead By Filter - uid
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
+
+JD-TC-GetLeadByFilter-3
+
+    [Documentation]             Get Lead By Filter - referenceNo
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
+
+JD-TC-GetLeadByFilter-4
+
+    [Documentation]             Get Lead By Filter - losProduct
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail2}
+
     Should Be Equal As Strings    ${resp.json()[1]['uid']}                                 ${lead_uid}
     Should Be Equal As Strings    ${resp.json()[1]['account']}                             ${account_id1}
     Should Be Equal As Strings    ${resp.json()[1]['channel']}                             ${leadchannel[0]}
@@ -203,313 +286,216 @@ JD-TC-GetLeadByFilter-1
     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhone']}        ${consumerPhone}
     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerEmail']}        ${consumerEmail}
 
-# JD-TC-GetLeadByFilter-2
+JD-TC-GetLeadByFilter-5
 
-#     [Documentation]             Get Lead By Filter - uid
+    [Documentation]             Get Lead By Filter - consumerId
 
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-#     ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid}
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-#     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid}
-#     Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
-#     Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
-#     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
+    ${resp}=    Get Lead By Filter LOS   consumerId-eq=${consumerId}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
 
-# JD-TC-GetLeadByFilter-3
+JD-TC-GetLeadByFilter-6
 
-#     [Documentation]             Get Lead By Filter - referenceNo
+    [Documentation]             Get Lead By Filter - consumerFirstName
 
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-#     ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo}
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-#     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid}
-#     Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
-#     Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
-#     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
+    ${resp}=    Get Lead By Filter LOS   consumerFirstName-eq=${consumerFirstName}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
 
-# JD-TC-GetLeadByFilter-4
+JD-TC-GetLeadByFilter-7
 
-#     [Documentation]             Get Lead By Filter - losProduct
+    [Documentation]             Get Lead By Filter - consumerLastName
 
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-#     ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct}
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-#     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
-#     Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
-#     Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
-#     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail2}
-
-#     Should Be Equal As Strings    ${resp.json()[1]['uid']}                                 ${lead_uid}
-#     Should Be Equal As Strings    ${resp.json()[1]['account']}                             ${account_id1}
-#     Should Be Equal As Strings    ${resp.json()[1]['channel']}                             ${leadchannel[0]}
-#     Should Be Equal As Strings    ${resp.json()[1]['losProduct']}                          ${losProduct}
-#     Should Be Equal As Strings    ${resp.json()[1]['status']['id']}                        ${status_id}
-#     Should Be Equal As Strings    ${resp.json()[1]['status']['name']}                      ${Sname}
-#     Should Be Equal As Strings    ${resp.json()[1]['progress']['id']}                      ${progress_id}
-#     Should Be Equal As Strings    ${resp.json()[1]['progress']['name']}                    ${Pname}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerLastName']}     ${consumerLastName}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['dob']}                  ${dob}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['gender']}               ${gender}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhone']}        ${consumerPhone}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerEmail']}        ${consumerEmail}
-
-# JD-TC-GetLeadByFilter-5
-
-#     [Documentation]             Get Lead By Filter - consumerId
-
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-
-#     ${resp}=    Get Lead By Filter LOS   consumerId-eq=${consumerId}
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-#     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid}
-#     Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
-#     Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
-#     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
-
-# JD-TC-GetLeadByFilter-6
-
-#     [Documentation]             Get Lead By Filter - consumerFirstName
-
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-
-#     ${resp}=    Get Lead By Filter LOS   consumerFirstName-eq=${consumerFirstName}
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-#     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid}
-#     Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
-#     Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
-#     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
-
-# JD-TC-GetLeadByFilter-7
-
-#     [Documentation]             Get Lead By Filter - consumerLastName
-
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-
-#     ${resp}=    Get Lead By Filter LOS   consumerLastName-eq=${consumerLastName}
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-#     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid}
-#     Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
-#     Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
-#     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
+    ${resp}=    Get Lead By Filter LOS   consumerLastName-eq=${consumerLastName}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
     
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail}
 
-# JD-TC-GetLeadByFilter-8
+JD-TC-GetLeadByFilter-8
 
-#     [Documentation]             Get Lead By Filter - createdDate
+    [Documentation]             Get Lead By Filter - createdDate
 
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-#     ${resp}=    Get Lead By Filter LOS   createdDate-eq=${createdDate}
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-#     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
-#     Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
-#     Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
-#     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail2}
+    ${resp}=    Get Lead By Filter LOS   createdDate-eq=${createdDate}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail2}
 
-#     Should Be Equal As Strings    ${resp.json()[1]['uid']}                                 ${lead_uid}
-#     Should Be Equal As Strings    ${resp.json()[1]['account']}                             ${account_id1}
-#     Should Be Equal As Strings    ${resp.json()[1]['channel']}                             ${leadchannel[0]}
-#     Should Be Equal As Strings    ${resp.json()[1]['losProduct']}                          ${losProduct}
-#     Should Be Equal As Strings    ${resp.json()[1]['status']['id']}                        ${status_id}
-#     Should Be Equal As Strings    ${resp.json()[1]['status']['name']}                      ${Sname}
-#     Should Be Equal As Strings    ${resp.json()[1]['progress']['id']}                      ${progress_id}
-#     Should Be Equal As Strings    ${resp.json()[1]['progress']['name']}                    ${Pname}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerLastName']}     ${consumerLastName}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['dob']}                  ${dob}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['gender']}               ${gender}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhone']}        ${consumerPhone}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerEmail']}        ${consumerEmail}
+    Should Be Equal As Strings    ${resp.json()[1]['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()[1]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[1]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[1]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[1]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[1]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[1]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[1]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhone']}        ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerEmail']}        ${consumerEmail}
 
-# JD-TC-GetLeadByFilter-9
+JD-TC-GetLeadByFilter-9
 
-#     [Documentation]             Get Lead By Filter - isConverted false
+    [Documentation]             Get Lead By Filter - isConverted false
 
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-#     ${resp}=    Get Lead By Filter LOS   isConverted-eq=${boolean[0]}
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-#     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
-#     Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
-#     Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
-#     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail2}
+    ${resp}=    Get Lead By Filter LOS   isConverted-eq=${boolean[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail2}
 
-#     Should Be Equal As Strings    ${resp.json()[1]['uid']}                                 ${lead_uid}
-#     Should Be Equal As Strings    ${resp.json()[1]['account']}                             ${account_id1}
-#     Should Be Equal As Strings    ${resp.json()[1]['channel']}                             ${leadchannel[0]}
-#     Should Be Equal As Strings    ${resp.json()[1]['losProduct']}                          ${losProduct}
-#     Should Be Equal As Strings    ${resp.json()[1]['status']['id']}                        ${status_id}
-#     Should Be Equal As Strings    ${resp.json()[1]['status']['name']}                      ${Sname}
-#     Should Be Equal As Strings    ${resp.json()[1]['progress']['id']}                      ${progress_id}
-#     Should Be Equal As Strings    ${resp.json()[1]['progress']['name']}                    ${Pname}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerLastName']}     ${consumerLastName}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['dob']}                  ${dob}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['gender']}               ${gender}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhone']}        ${consumerPhone}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerEmail']}        ${consumerEmail}
+    Should Be Equal As Strings    ${resp.json()[1]['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()[1]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[1]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[1]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[1]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[1]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[1]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[1]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhone']}        ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerEmail']}        ${consumerEmail}
 
-# JD-TC-GetLeadByFilter-10
+JD-TC-GetLeadByFilter-10
 
-#     [Documentation]             Get Lead By Filter - isRejected false
+    [Documentation]             Get Lead By Filter - isRejected false
 
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-#     ${resp}=    Get Lead By Filter LOS   isRejected-eq=${boolean[0]}
-#     Log  ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}   200
-#     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
-#     Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
-#     Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
-#     Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
-#     Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone2}
-#     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail2}
+    ${resp}=    Get Lead By Filter LOS   isRejected-eq=${boolean[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail2}
 
-#     Should Be Equal As Strings    ${resp.json()[1]['uid']}                                 ${lead_uid}
-#     Should Be Equal As Strings    ${resp.json()[1]['account']}                             ${account_id1}
-#     Should Be Equal As Strings    ${resp.json()[1]['channel']}                             ${leadchannel[0]}
-#     Should Be Equal As Strings    ${resp.json()[1]['losProduct']}                          ${losProduct}
-#     Should Be Equal As Strings    ${resp.json()[1]['status']['id']}                        ${status_id}
-#     Should Be Equal As Strings    ${resp.json()[1]['status']['name']}                      ${Sname}
-#     Should Be Equal As Strings    ${resp.json()[1]['progress']['id']}                      ${progress_id}
-#     Should Be Equal As Strings    ${resp.json()[1]['progress']['name']}                    ${Pname}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerLastName']}     ${consumerLastName}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['dob']}                  ${dob}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['gender']}               ${gender}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhone']}        ${consumerPhone}
-#     Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerEmail']}        ${consumerEmail}
+    Should Be Equal As Strings    ${resp.json()[1]['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()[1]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[1]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[1]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[1]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[1]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[1]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[1]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhone']}        ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerEmail']}        ${consumerEmail}
 
 
 JD-TC-GetLeadByFilter-11
@@ -539,7 +525,6 @@ JD-TC-GetLeadByFilter-11
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone2}
     Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail2}
 
-*** comment ***
 
 JD-TC-GetLeadByFilter-12
 
@@ -577,7 +562,7 @@ JD-TC-GetLeadByFilter-13
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid2} & internalProgress-eq=${internalProgress}
+    ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid2}&internalProgress-eq=${internalProgress}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -604,7 +589,7 @@ JD-TC-GetLeadByFilter-14
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid2} & internalStatus-eq=${internalStatus}
+    ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid2}&internalStatus-eq=${internalStatus}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -631,7 +616,7 @@ JD-TC-GetLeadByFilter-15
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid2} & consumerId-eq=${consumerId}
+    ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid2}&consumerId-eq=${consumerId}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}    []
@@ -645,7 +630,7 @@ JD-TC-GetLeadByFilter-16
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid2} & consumerFirstName-eq=${consumerFirstName2}
+    ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid2}&consumerFirstName-eq=${consumerFirstName2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -673,7 +658,7 @@ JD-TC-GetLeadByFilter-17
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid2} & consumerLastName-eq=${consumerLastName2}
+    ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid2}&consumerLastName-eq=${consumerLastName2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -701,7 +686,7 @@ JD-TC-GetLeadByFilter-18
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid2} & createdDate-eq=${createdDate}
+    ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid2}&createdDate-eq=${createdDate}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -729,7 +714,7 @@ JD-TC-GetLeadByFilter-19
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid2} & isConverted-eq=${boolean[0]}
+    ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid2}&isConverted-eq=${boolean[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -757,7 +742,7 @@ JD-TC-GetLeadByFilter-20
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid2} & isRejected-eq=${boolean[1]}
+    ${resp}=    Get Lead By Filter LOS   uid-eq=${lead_uid2}&isRejected-eq=${boolean[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}    []
@@ -815,7 +800,7 @@ JD-TC-GetLeadByFilter-22
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2} & losProduct-eq=${losProduct}
+    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2}&losProduct-eq=${losProduct}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -843,7 +828,7 @@ JD-TC-GetLeadByFilter-23
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2} & internalProgress-eq=${internalProgress2}
+    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2}&internalProgress-eq=${internalProgress2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -871,7 +856,7 @@ JD-TC-GetLeadByFilter-24
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2} & internalStatus-eq=${internalStatus2}
+    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2}&internalStatus-eq=${internalStatus2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -899,7 +884,7 @@ JD-TC-GetLeadByFilter-25
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2} & consumerId-eq=${consumerId2}
+    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2}&consumerId-eq=${consumerId2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -927,7 +912,7 @@ JD-TC-GetLeadByFilter-26
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2} & consumerFirstName-eq=${consumerFirstName}
+    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2}&consumerFirstName-eq=${consumerFirstName}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}    []
@@ -941,7 +926,7 @@ JD-TC-GetLeadByFilter-27
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2} & consumerLastName-eq=${consumerLastName2}
+    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2}&consumerLastName-eq=${consumerLastName2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -969,7 +954,7 @@ JD-TC-GetLeadByFilter-28
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2} & createdDate-eq=${createdDate}
+    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2}&createdDate-eq=${createdDate}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -997,7 +982,7 @@ JD-TC-GetLeadByFilter-29
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2} & isConverted-eq=${boolean[1]}
+    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2}&isConverted-eq=${boolean[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     []
@@ -1011,7 +996,7 @@ JD-TC-GetLeadByFilter-30
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2} & isRejected-eq=${boolean[0]}
+    ${resp}=    Get Lead By Filter LOS   referenceNo-eq=${referenceNo2}&isRejected-eq=${boolean[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1083,7 +1068,7 @@ JD-TC-GetLeadByFilter-32
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct} & internalProgress-eq=${internalProgress2}
+    ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct}&internalProgress-eq=${internalProgress2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1111,7 +1096,7 @@ JD-TC-GetLeadByFilter-33
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct} & internalStatus-eq=${internalStatus2}
+    ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct}&internalStatus-eq=${internalStatus2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1139,7 +1124,7 @@ JD-TC-GetLeadByFilter-34
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct} & consumerId-eq=${consumerId2}
+    ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct}&consumerId-eq=${consumerId2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1167,7 +1152,7 @@ JD-TC-GetLeadByFilter-35
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct} & consumerFirstName-eq=${consumerFirstName2}
+    ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct}&consumerFirstName-eq=${consumerFirstName2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1195,7 +1180,7 @@ JD-TC-GetLeadByFilter-36
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct} & consumerLastName-eq=${consumerLastName2}
+    ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct}&consumerLastName-eq=${consumerLastName2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1223,7 +1208,7 @@ JD-TC-GetLeadByFilter-37
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct} & createdDate-eq=${createdDate}
+    ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct}&createdDate-eq=${createdDate}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1267,7 +1252,7 @@ JD-TC-GetLeadByFilter-38
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct} & isConverted-eq=${boolean[1]}
+    ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct}&isConverted-eq=${boolean[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     []
@@ -1281,7 +1266,7 @@ JD-TC-GetLeadByFilter-39
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct} & isRejected-eq=${boolean[0]}
+    ${resp}=    Get Lead By Filter LOS   losProduct-eq=${losProduct}&isRejected-eq=${boolean[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1369,7 +1354,7 @@ JD-TC-GetLeadByFilter-41
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   internalProgress-eq=${internalProgress2} & internalStatus-eq=${internalStatus2}
+    ${resp}=    Get Lead By Filter LOS   internalProgress-eq=${internalProgress2}&internalStatus-eq=${internalStatus2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1397,7 +1382,7 @@ JD-TC-GetLeadByFilter-42
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   internalProgress-eq=${internalProgress2} & consumerId-eq=${consumerId2}
+    ${resp}=    Get Lead By Filter LOS   internalProgress-eq=${internalProgress2}&consumerId-eq=${consumerId2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1425,7 +1410,7 @@ JD-TC-GetLeadByFilter-43
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   internalProgress-eq=${internalProgress2} & consumerFirstName-eq=${consumerFirstName2}
+    ${resp}=    Get Lead By Filter LOS   internalProgress-eq=${internalProgress2}&consumerFirstName-eq=${consumerFirstName2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1453,7 +1438,7 @@ JD-TC-GetLeadByFilter-44
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   internalProgress-eq=${internalProgress2} & consumerLastName-eq=${consumerLastName2}
+    ${resp}=    Get Lead By Filter LOS   internalProgress-eq=${internalProgress2}&consumerLastName-eq=${consumerLastName2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1481,7 +1466,7 @@ JD-TC-GetLeadByFilter-45
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   internalProgress-eq=${internalProgress2} & createdDate-eq=${createdDate}
+    ${resp}=    Get Lead By Filter LOS   internalProgress-eq=${internalProgress2}&createdDate-eq=${createdDate}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1525,7 +1510,7 @@ JD-TC-GetLeadByFilter-46
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   internalProgress-eq=${internalProgress2} & isConverted-eq=${boolean[1]}
+    ${resp}=    Get Lead By Filter LOS   internalProgress-eq=${internalProgress2}&isConverted-eq=${boolean[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     []
@@ -1539,7 +1524,7 @@ JD-TC-GetLeadByFilter-47
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   internalProgress-eq=${internalProgress} & isRejected-eq=${boolean[0]}
+    ${resp}=    Get Lead By Filter LOS   internalProgress-eq=${internalProgress}&isRejected-eq=${boolean[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1627,7 +1612,7 @@ JD-TC-GetLeadByFilter-49
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   internalStatus-eq=${internalStatus2} & consumerId-eq=${consumerId2}
+    ${resp}=    Get Lead By Filter LOS   internalStatus-eq=${internalStatus2}&consumerId-eq=${consumerId2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1655,7 +1640,7 @@ JD-TC-GetLeadByFilter-50
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   internalStatus-eq=${internalStatus2} & consumerFirstName-eq=${consumerFirstName2}
+    ${resp}=    Get Lead By Filter LOS   internalStatus-eq=${internalStatus2}&consumerFirstName-eq=${consumerFirstName2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1683,7 +1668,7 @@ JD-TC-GetLeadByFilter-51
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   internalStatus-eq=${internalStatus2} & consumerLastName-eq=${consumerLastName2}
+    ${resp}=    Get Lead By Filter LOS   internalStatus-eq=${internalStatus2}&consumerLastName-eq=${consumerLastName2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1711,7 +1696,7 @@ JD-TC-GetLeadByFilter-52
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   internalStatus-eq=${internalStatus} & createdDate-eq=${createdDate}
+    ${resp}=    Get Lead By Filter LOS   internalStatus-eq=${internalStatus}&createdDate-eq=${createdDate}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1755,7 +1740,7 @@ JD-TC-GetLeadByFilter-53
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   internalStatus-eq=${internalStatus2} & isConverted-eq=${boolean[1]}
+    ${resp}=    Get Lead By Filter LOS   internalStatus-eq=${internalStatus2}&isConverted-eq=${boolean[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     []
@@ -1769,7 +1754,7 @@ JD-TC-GetLeadByFilter-54
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   internalStatus-eq=${internalStatus} & isRejected-eq=${boolean[0]}
+    ${resp}=    Get Lead By Filter LOS   internalStatus-eq=${internalStatus}&isRejected-eq=${boolean[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1858,7 +1843,7 @@ JD-TC-GetLeadByFilter-56
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   consumerId-eq=${consumerId2} & consumerFirstName-eq=${consumerFirstName2}
+    ${resp}=    Get Lead By Filter LOS   consumerId-eq=${consumerId2}&consumerFirstName-eq=${consumerFirstName2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1886,7 +1871,7 @@ JD-TC-GetLeadByFilter-57
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   consumerId-eq=${consumerId2} & consumerLastName-eq=${consumerLastName2}
+    ${resp}=    Get Lead By Filter LOS   consumerId-eq=${consumerId2}&consumerLastName-eq=${consumerLastName2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1914,7 +1899,7 @@ JD-TC-GetLeadByFilter-58
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   consumerId-eq=${consumerId2} & createdDate-eq=${createdDate}
+    ${resp}=    Get Lead By Filter LOS   consumerId-eq=${consumerId2}&createdDate-eq=${createdDate}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -1942,7 +1927,7 @@ JD-TC-GetLeadByFilter-59
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   consumerId-eq=${consumerId2} & isConverted-eq=${boolean[1]}
+    ${resp}=    Get Lead By Filter LOS   consumerId-eq=${consumerId2}&isConverted-eq=${boolean[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     []
@@ -1956,7 +1941,7 @@ JD-TC-GetLeadByFilter-60
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   consumerId-eq=${consumerId2} & isRejected-eq=${boolean[0]}
+    ${resp}=    Get Lead By Filter LOS   consumerId-eq=${consumerId2}&isRejected-eq=${boolean[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -2028,7 +2013,7 @@ JD-TC-GetLeadByFilter-62
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   consumerFirstName-eq=${consumerFirstName2} & consumerLastName-eq=${consumerLastName2}
+    ${resp}=    Get Lead By Filter LOS   consumerFirstName-eq=${consumerFirstName2}&consumerLastName-eq=${consumerLastName2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -2056,7 +2041,7 @@ JD-TC-GetLeadByFilter-63
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   consumerFirstName-eq=${consumerFirstName2} & createdDate-eq=${createdDate}
+    ${resp}=    Get Lead By Filter LOS   consumerFirstName-eq=${consumerFirstName2}&createdDate-eq=${createdDate}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -2084,7 +2069,7 @@ JD-TC-GetLeadByFilter-64
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   consumerFirstName-eq=${consumerFirstName} & isConverted-eq=${boolean[1]}
+    ${resp}=    Get Lead By Filter LOS   consumerFirstName-eq=${consumerFirstName}&isConverted-eq=${boolean[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     []
@@ -2098,7 +2083,7 @@ JD-TC-GetLeadByFilter-65
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   consumerFirstName-eq=${consumerFirstName2} & isRejected-eq=${boolean[0]}
+    ${resp}=    Get Lead By Filter LOS   consumerFirstName-eq=${consumerFirstName2}&isRejected-eq=${boolean[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -2169,7 +2154,7 @@ JD-TC-GetLeadByFilter-67
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   consumerLastName-eq=${consumerLastName2} & createdDate-eq=${createdDate}
+    ${resp}=    Get Lead By Filter LOS   consumerLastName-eq=${consumerLastName2}&createdDate-eq=${createdDate}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -2213,7 +2198,7 @@ JD-TC-GetLeadByFilter-68
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   consumerLastName-eq=${consumerLastName} & isConverted-eq=${boolean[1]}
+    ${resp}=    Get Lead By Filter LOS   consumerLastName-eq=${consumerLastName}&isConverted-eq=${boolean[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     []
@@ -2227,7 +2212,7 @@ JD-TC-GetLeadByFilter-69
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   consumerLastName-eq=${consumerLastName2} & isRejected-eq=${boolean[0]}
+    ${resp}=    Get Lead By Filter LOS   consumerLastName-eq=${consumerLastName2}&isRejected-eq=${boolean[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -2299,7 +2284,7 @@ JD-TC-GetLeadByFilter-71
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   createdDate-eq=${createdDate} & isConverted-eq=${boolean[1]}
+    ${resp}=    Get Lead By Filter LOS   createdDate-eq=${createdDate}&isConverted-eq=${boolean[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     []
@@ -2313,7 +2298,7 @@ JD-TC-GetLeadByFilter-72
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   createdDate-eq=${createdDate2} & isRejected-eq=${boolean[0]}
+    ${resp}=    Get Lead By Filter LOS   createdDate-eq=${createdDate2}&isRejected-eq=${boolean[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
@@ -2357,7 +2342,132 @@ JD-TC-GetLeadByFilter-73
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Lead By Filter LOS   isRejected-eq=${boolean[0]} & isConverted-eq=${boolean[1]}
+    ${resp}=    Get Lead By Filter LOS   isRejected-eq=${boolean[0]}&isConverted-eq=${boolean[1]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}     []
+
+
+JD-TC-GetLeadByFilter-74
+
+    [Documentation]             Get Lead By Filter - consumerFirstName or consumerLastName
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead By Filter LOS   or=consumerFirstName-eq=${consumerFirstName2},consumerLastName-eq=${consumerLastName}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail2}
+
+    Should Be Equal As Strings    ${resp.json()[1]['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()[1]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[1]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[1]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[1]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[1]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[1]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[1]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhone']}        ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerEmail']}        ${consumerEmail}
+
+
+JD-TC-GetLeadByFilter-75
+
+    [Documentation]             Get Lead By Filter - both consumerFirstName
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead By Filter LOS   or=consumerFirstName-eq=${consumerFirstName2},${consumerFirstName}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail2}
+
+    Should Be Equal As Strings    ${resp.json()[1]['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()[1]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[1]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[1]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[1]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[1]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[1]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[1]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerPhone']}        ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[1]['consumerKyc']['consumerEmail']}        ${consumerEmail}
+
+
+JD-TC-GetLeadByFilter-76
+
+    [Documentation]             Get Lead By Filter - consumerFirstName or Last name
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead By Filter LOS   or=consumerFirstName-eq=${consumerFirstName2},consumerLastName-eq=${consumerLastName2}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                 ${lead_uid2}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}                             ${account_id1}
+    Should Be Equal As Strings    ${resp.json()[0]['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['id']}                        ${status_id}
+    Should Be Equal As Strings    ${resp.json()[0]['status']['name']}                      ${Sname}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['id']}                      ${progress_id}
+    Should Be Equal As Strings    ${resp.json()[0]['progress']['name']}                    ${Pname}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerFirstName']}    ${consumerFirstName2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerLastName']}     ${consumerLastName2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['dob']}                  ${dob2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['gender']}               ${gender2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerPhone']}        ${consumerPhone2}
+    Should Be Equal As Strings    ${resp.json()[0]['consumerKyc']['consumerEmail']}        ${consumerEmail2}
+
+JD-TC-GetLeadByFilter-UH1
+
+    [Documentation]             Get Lead By Filter - without login
+
+    ${resp}=    Get Lead By Filter LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
