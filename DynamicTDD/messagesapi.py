@@ -2220,3 +2220,5 @@ INVALID_PAN = "Invalid PAN"
 AGE_MONTH_INVALID = "The given number of months in age is invalid"
 AGE_YEAR_INVALID = "The given age is invalid"
 NO_PERMISSION_X = "Content is Protected...!! You are not permitted to view/edit this {} details."
+
+CUSTOMER_IS_INACTIVE="This [customer] is in inactive status."

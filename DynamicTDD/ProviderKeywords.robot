@@ -12733,3 +12733,9 @@ RemoveItemToFinance
    Check And Create YNW Session
    ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/removeitems    data=${data}  expected_status=any  
    [Return]  ${resp} 
+
+Change Provider Consumer Profile Status 
+    [Arguments]    ${consumerId}   ${status}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/customers/${consumerId}/changeStatus/${status}   expected_status=any
+    [Return]  ${resp}

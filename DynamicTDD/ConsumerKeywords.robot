@@ -3286,3 +3286,9 @@ Invoice pay via link
     ${resp}=   POST On Session  ynw  /consumer/jp/finance/pay   params=${cons_params}  data=${data}   expected_status=any  headers=${cons_headers}
     [Return]  ${resp}
 
+Consumer Deactivation
+    
+    Check And Create YNW Session
+    ${headers2}=     Create Dictionary    Content-Type=application/json  
+    ${resp}=    DELETE On Session    ynw    /consumer/login/deActivate      expected_status=any
+    [Return]  ${resp}
