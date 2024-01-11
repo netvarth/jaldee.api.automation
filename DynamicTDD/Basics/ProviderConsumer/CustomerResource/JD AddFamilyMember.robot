@@ -175,8 +175,9 @@ JD-TC-AddFamilyMembersForProviderConsumer-UH3
     ${resp}=    Get FamilyMember
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${lname1}                      FakerLibrary.last_name
 
-    ${resp}=    Add FamilyMember For ProviderConsumer    ${empty}  ${lname}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${cc}  ${cc}  ${numt}  ${cc}  ${numw}
+    ${resp}=    Add FamilyMember For ProviderConsumer    ${empty}  ${lname1}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${cc}  ${cc}  ${numt}  ${cc}  ${numw}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

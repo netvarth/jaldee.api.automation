@@ -1518,7 +1518,8 @@ JD-TC-Remove Service Level Discount-UH7
     ${resp}=  Update bill status   ${invoice_uid2}    ${billStatus[1]}   ${billStatusNote} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
+    ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}
+    # ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
 
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
@@ -1526,4 +1527,4 @@ JD-TC-Remove Service Level Discount-UH7
     ${resp}=   Remove Service Level Discount   ${invoice_uid2}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${sid3}
     Log  ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_SETTLED}
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_STATUS}

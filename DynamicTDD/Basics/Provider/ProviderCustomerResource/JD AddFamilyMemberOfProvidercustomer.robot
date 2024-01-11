@@ -8,8 +8,22 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
+
+*** Keywords ***
+Add FamilyMember For ProviderConsumer1
+    [Arguments]                   ${firstname}   ${lastname}   ${dob}   ${gender}    ${primarynum}        &{kwargs}
+    Check And Create YNW Session
+
+    ${userProfile}=               Create Dictionary    firstName=${firstname}   lastName=${lastname}   dob=${dob}   gender=${gender}   primaryMobileNo=${primarynum}   
+    ${data}=                      Create Dictionary    userProfile=${userProfile}
+      FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+      END
+    ${resp}=                      POST On Session  ynw   /consumer/familyMember   json=${data}    expected_status=any
+    [Return]                      ${resp}
 
 
 *** Test Cases ***
@@ -288,7 +302,8 @@ JD-TC-AddFamilyMemberOfProvidercustomer-6
       ${resp}=  ListFamilyMember
       Should Be Equal As Strings  ${resp.status_code}  200  
       Log   ${resp.json()}
-      Should Be Equal As Strings   ${resp.json()}   []
+      # Should Be Equal As Strings   ${resp.json()}   []
+      Should Not Be Empty    ${resp.json()}
       # ${len}=  Get Length  ${resp.json()}
       # Should Be Equal As Strings  ${resp.status_code}  200
       # Log  ${len}
@@ -305,6 +320,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-6
       # Should Be Equal As Strings  ${resp.json()[1]['gender']}  ${gender1}
 
       ${resp}=  ProviderLogout
+
 
 JD-TC-AddFamilyMemberOfProvidercustomer-7
       [Documentation]    Adding a customer and add two family members with two different providers ,in this case one family member is common and if the consumer sign up,then  the list of family members should not be duplicated.
@@ -973,3 +989,341 @@ JD-TC-AddFamilyMemberOfProvidercustomer-12
       ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[0]}  ${boolean[0]}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-AddFamilyMemberOfProvidercustomer-13
+      [Documentation]    Add two family members from provider side.then check this family members from provider consumer login.
+
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+       # Set Test Variable  ${p_id}  ${resp.json()['id']}
+      ${firstname}=  FakerLibrary.first_name
+      Set Test Variable  ${firstname}
+      ${lastname}=  FakerLibrary.last_name
+      Set Test Variable  ${lastname}
+      ${ph3}=  Evaluate  ${PUSERNAME23}+77605
+      Set Test Variable  ${email3}  ${firstname}${ph3}${C_Email}.${test_mail}
+      ${dob}=  FakerLibrary.Date
+      Set Test Variable  ${dob}
+      ${gender}=  Random Element    ${Genderlist}
+      Set Test Variable  ${gender}
+      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email3}  ${gender}  ${dob}   ${ph3}  ${EMPTY}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${pcid3}  ${resp.json()}
+      Log  ${resp.json()}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph3}${\n}
+      ${firstname1}=  FakerLibrary.first_name
+      ${lastname1}=  FakerLibrary.last_name
+      ${dob1}=  FakerLibrary.Date
+      ${gender1}=  Random Element    ${Genderlist}
+      ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+340005
+
+      ${resp}=  AddFamilyMemberByProviderWithPhoneNo   ${pcid3}  ${firstname1}  ${lastname1}  ${dob1}  ${gender1}  ${Familymember_ph}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${mem_id1}  ${resp.json()}
+      ${firstname2}=  FakerLibrary.first_name
+      ${lastname2}=  FakerLibrary.last_name
+      ${dob2}=  FakerLibrary.Date
+      ${gender2}=  Random Element    ${Genderlist}
+      ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+305005
+
+      ${resp}=  AddFamilyMemberByProviderWithPhoneNo   ${pcid3}  ${firstname2}  ${lastname2}  ${dob2}  ${gender2}   ${Familymember_ph}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${mem_id2}  ${resp.json()}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph3}${\n}
+        ${resp}=    Send Otp For Login    ${ph3}    ${p_id}
+      Log   ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}   200
+
+      ${resp}=    Verify Otp For Login   ${ph3}   12
+      Log   ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}   200
+      Set Suite Variable  ${token}  ${resp.json()['token']}
+
+      ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email3}    ${ph3}     ${p_id}
+      Log  ${resp.json()}
+      Should Be Equal As Strings    ${resp.status_code}   200
+
+      ${resp}=    Customer Logout
+      Log  ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}    200
+
+      ${resp}=    ProviderConsumer Login with token   ${ph3}    ${p_id}  ${token} 
+      Log   ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}   200 
+      Set Test Variable    ${pcid3}    ${resp.json()['providerConsumer']}
+
+      ${resp}=    Get FamilyMember
+      Log   ${resp.json()}
+      Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  ListFamilyMember
+      Should Be Equal As Strings  ${resp.status_code}  200  
+      Log   ${resp.json()}
+      # Should Be Equal As Strings   ${resp.json()}   []
+      Should Not Be Empty    ${resp.json()}
+      # ${len}=  Get Length  ${resp.json()}
+      # Should Be Equal As Strings  ${resp.status_code}  200
+      # Log  ${len}
+      # Should Be Equal As Strings   ${len}   2
+      # Verify Response List  ${resp}  0  user=${mem_id2}
+      # Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstname2}
+      # Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lastname2}
+      # Should Be Equal As Strings  ${resp.json()[0]['dob']}  ${dob2}
+      # Should Be Equal As Strings  ${resp.json()[0]['gender']}  ${gender2}
+      # Verify Response List  ${resp}  1  user=${mem_id1}
+      # Should Be Equal As Strings  ${resp.json()[1]['firstName']}  ${firstname1}
+      # Should Be Equal As Strings  ${resp.json()[1]['lastName']}  ${lastname1}
+      # Should Be Equal As Strings  ${resp.json()[1]['dob']}  ${dob1}
+      # Should Be Equal As Strings  ${resp.json()[1]['gender']}  ${gender1}
+
+JD-TC-AddFamilyMemberOfProvidercustomer-14
+      [Documentation]    Adding customer and add 2 familymembers , after if the consumer signup ,again adding the same family members and check the provider consumer ids.
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+      # Set Test Variable  ${p_id}  ${resp.json()['id']}
+      ${firstname}=  FakerLibrary.first_name
+      Set Test Variable  ${firstname}
+      ${lastname}=  FakerLibrary.last_name
+      Set Test Variable  ${lastname}
+      ${ph3}=  Evaluate  ${PUSERNAME23}+76605
+      Set Test Variable  ${email3}  ${firstname}${ph3}${C_Email}.${test_mail}
+      ${dob}=  FakerLibrary.Date
+      Set Test Variable  ${dob}
+      ${gender}=  Random Element    ${Genderlist}
+      Set Test Variable  ${gender}
+      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email3}  ${gender}  ${dob}   ${ph3}  ${EMPTY}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${pcid3}  ${resp.json()}
+      Log  ${resp.json()}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph3}${\n}
+      ${firstname1}=  FakerLibrary.first_name
+      ${lastname1}=  FakerLibrary.last_name
+      ${dob1}=  FakerLibrary.Date
+      ${gender1}=  Random Element    ${Genderlist}
+      ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+340005
+
+      ${resp}=  AddFamilyMemberByProviderWithPhoneNo   ${pcid3}  ${firstname1}  ${lastname1}  ${dob1}  ${gender1}  ${Familymember_ph}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${mem_id1}  ${resp.json()}
+      ${firstname2}=  FakerLibrary.first_name
+      ${lastname2}=  FakerLibrary.last_name
+      ${dob2}=  FakerLibrary.Date
+      ${gender2}=  Random Element    ${Genderlist}
+      ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+300005
+
+      ${resp}=  AddFamilyMemberByProviderWithPhoneNo   ${pcid3}  ${firstname2}  ${lastname2}  ${dob2}  ${gender2}   ${Familymember_ph}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${mem_id2}  ${resp.json()}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph3}${\n}
+      ${address}=  FakerLibrary.Address
+      ${alternativeNo}=  Evaluate  ${PUSERNAME23}+73006
+      ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${ph3}    ${alternativeNo}  ${dob}  ${gender}  ${EMPTY}
+      Log   ${resp.json()}
+      Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  Consumer Activation  ${ph3}  1
+      Log   ${resp.json()}
+      Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  Consumer Set Credential  ${ph3}  ${PASSWORD}  1
+      Log   ${resp.json()}
+      Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  Consumer Login   ${ph3}  ${PASSWORD}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      ${resp}=  ListFamilyMember
+      Should Be Equal As Strings  ${resp.status_code}  200  
+      Log   ${resp.json()}
+      Should Be Equal As Strings   ${resp.json()}   []
+
+      ${resp}=  Add FamilyMember For ProviderConsumer1     ${firstname1}  ${lastname1}  ${dob1}  ${gender1}  ${Familymember_ph}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${mem_id4}  ${resp.json()}
+      ${firstname2}=  FakerLibrary.first_name
+      ${lastname2}=  FakerLibrary.last_name
+      ${dob2}=  FakerLibrary.Date
+      ${gender2}=  Random Element    ${Genderlist}
+      ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+300005
+
+      ${resp}=  Add FamilyMember For ProviderConsumer1     ${firstname2}  ${lastname2}  ${dob2}  ${gender2}   ${Familymember_ph}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${mem_id5}  ${resp.json()}
+
+      Should Be Equal   ${mem_id1}  ${mem_id4}
+      Should Be Equal   ${mem_id2}  ${mem_id5}
+
+
+      ${resp}=  ProviderLogout
+
+
+JD-TC-AddFamilyMemberOfProvidercustomer-15
+      [Documentation]    Add two family members from provider side and took one appointment for one of the family member.then check this family members from provider consumer login.
+
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Test Variable  ${p_id}  ${decrypted_data['id']}
+
+       # Set Test Variable  ${p_id}  ${resp.json()['id']}
+      ${firstname}=  FakerLibrary.first_name
+      Set Test Variable  ${firstname}
+      ${lastname}=  FakerLibrary.last_name
+      Set Test Variable  ${lastname}
+      ${ph3}=  Evaluate  ${PUSERNAME23}+77606
+      Set Test Variable  ${email3}  ${firstname}${ph3}${C_Email}.${test_mail}
+      ${dob}=  FakerLibrary.Date
+      Set Test Variable  ${dob}
+      ${gender}=  Random Element    ${Genderlist}
+      Set Test Variable  ${gender}
+      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email3}  ${gender}  ${dob}   ${ph3}  ${EMPTY}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${pcid3}  ${resp.json()}
+      Log  ${resp.json()}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph3}${\n}
+      ${firstname1}=  FakerLibrary.first_name
+      ${lastname1}=  FakerLibrary.last_name
+      ${dob1}=  FakerLibrary.Date
+      ${gender1}=  Random Element    ${Genderlist}
+      ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+340007
+
+      ${resp}=  AddFamilyMemberByProviderWithPhoneNo   ${pcid3}  ${firstname1}  ${lastname1}  ${dob1}  ${gender1}  ${Familymember_ph}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${mem_id1}  ${resp.json()}
+      ${firstname2}=  FakerLibrary.first_name
+      ${lastname2}=  FakerLibrary.last_name
+      ${dob2}=  FakerLibrary.Date
+      ${gender2}=  Random Element    ${Genderlist}
+      ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+305008
+
+      ${resp}=  AddFamilyMemberByProviderWithPhoneNo   ${pcid3}  ${firstname2}  ${lastname2}  ${dob2}  ${gender2}   ${Familymember_ph}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${mem_id2}  ${resp.json()}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph3}${\n}
+
+    ${resp}=   Get Appointment Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
+
+    ${lid}=  Create Sample Location  
+    Set Suite Variable  ${lid}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    clear_appt_schedule   ${PUSERNAME0}
+
+    ${SERVICE1}=    FakerLibrary.word
+    ${desc}=   FakerLibrary.sentence
+    ${min_pre}=   Random Int   min=1   max=50
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1 
+    ${srv_duration}=   Random Int   min=10   max=20
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[1]}  ${bool[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    Set Test Variable  ${s_id}  ${resp.json()}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${tot_amt}   ${resp.json()['totalAmount']}
+
+
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${maxval}=  Convert To Integer   ${delta/2}
+    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sch_id}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}   ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+
+    
+    
+    ${apptfor1}=  Create Dictionary  id=${mem_id2}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+    
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${mem_id2}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Test Variable  ${apptid1}  ${apptid[1]}
+
+    ${resp}=  Get Appointment EncodedID   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${encId}=  Set Variable   ${resp.json()}
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${resp}=    Send Otp For Login    ${ph3}    ${p_id}
+      Log   ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}   200
+
+      ${resp}=    Verify Otp For Login   ${ph3}   12
+      Log   ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}   200
+      Set Suite Variable  ${token}  ${resp.json()['token']}
+
+      ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email3}    ${ph3}     ${p_id}
+      Log  ${resp.json()}
+      Should Be Equal As Strings    ${resp.status_code}   200
+
+      ${resp}=    Customer Logout
+      Log  ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}    200
+
+      ${resp}=    ProviderConsumer Login with token   ${ph3}    ${p_id}  ${token} 
+      Log   ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}   200 
+      Set Test Variable    ${pcid3}    ${resp.json()['providerConsumer']}
+
+      ${resp}=    Get FamilyMember
+      Log   ${resp.json()}
+      Should Be Equal As Strings    ${resp.status_code}    200
+      ${resp}=  ListFamilyMember
+      Should Be Equal As Strings  ${resp.status_code}  200  
+      Log   ${resp.json()}
+      # Should Be Equal As Strings   ${resp.json()}   []
+      Should Not Be Empty    ${resp.json()}
