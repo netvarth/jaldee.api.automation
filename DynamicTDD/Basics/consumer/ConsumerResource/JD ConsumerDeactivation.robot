@@ -29,6 +29,7 @@ ${digits}       0123456789
 @{dom_list}
 @{multiloc_providers}
 ${countryCode}   +91
+${SERVICE3}               SERVICE1001
 
 ***Keywords***
 
@@ -56,13 +57,6 @@ Get branch by license
 
     END
     [Return]  ${Branch_PH}
-
-Consumer Deactivation
-    
-    Check And Create YNW Session
-    ${headers2}=     Create Dictionary    Content-Type=application/json  
-    ${resp}=    DELETE On Session    ynw    /consumer/login/deActivate      expected_status=any
-    [Return]  ${resp}
 
 
 *** Test Cases ***                                                                     
@@ -1169,3 +1163,102 @@ JD-TC-Consumer Deactivation -7
     ${resp}=  Get Waitlist Consumer
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-Consumer Deactivation -8
+    [Documentation]   try to Deactivate that Consumer from provider side.then try to take a waitlist.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${pid0}=  get_acc_id  ${PUSERNAME3}
+
+    ${resp}=   Create Sample Location
+    Set Test Variable    ${loc_id1}    ${resp}  
+
+    ${resp}=   Get Location ById  ${loc_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+
+    ${resp}=   Create Sample Service  ${SERVICE3}    maxBookingsAllowed=2
+    Set Suite Variable    ${ser_id1}    ${resp}  
+ 
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${q_name}=    FakerLibrary.name
+    ${list}=  Create List   1  2  3  4  5  6  7
+    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+
+    ${end_time}=    db.add_timezone_time  ${tz}  3  00 
+    ${parallel}=   Random Int  min=1   max=1
+    ${capacity}=  Random Int   min=10   max=20
+    ${resp}=  Create Queue    ${q_name}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${EMPTY}  ${EMPTY}  ${strt_time}  ${end_time}  ${parallel}   ${capacity}    ${loc_id1}  ${ser_id1}  
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${que_id1}   ${resp.json()}
+
+    ${CUSERPH0}=  Evaluate  ${CUSERPH}+1011989
+    Set Suite Variable   ${CUSERPH0}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+    ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
+    ${firstname}=  FakerLibrary.first_name
+    ${lastname}=  FakerLibrary.last_name
+    ${address}=  FakerLibrary.address
+    ${dob}=  FakerLibrary.Date
+    ${gender}    Random Element    ${Genderlist}
+    ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${CUSERPH0}  ${CUSERPH_SECOND}  ${dob}  ${gender}   ${EMPTY}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Consumer Activation  ${CUSERPH0}  1
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Consumer Set Credential  ${CUSERPH0}  ${PASSWORD}  1
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200     
+    ${cid}=  get_id  ${CUSERPH0}          
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${wid1}  ${wid[0]}
+
+    ${resp}=    Consumer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200 
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME3}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  GetCustomer   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Set Test Variable  ${jcid}  ${resp.json()[0]['id']}
+
+    ${resp}=    Change Provider Consumer Profile Status    ${jcid}    ${status[1]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  GetCustomer   account-eq=${cid} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings  ${resp.json()[0]['firstName']}           ${firstName}
+    Should Be Equal As Strings  ${resp.json()[0]['lastName']}           ${lastName}
+    Should Be Equal As Strings  ${resp.json()[0]['phoneNo']}           ${CUSERPH0}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}           ${status[1]}
+
+    ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200            
+
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Add To Waitlist Consumers  ${pid0}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 

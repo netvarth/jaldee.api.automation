@@ -348,11 +348,11 @@ JD-TC-Get Log-3
     ${resp1}=  Get Invoice Log List UId   ${invoice_uid1}
     Log  ${resp1.json()}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['invoiceUid']}  ${invoice_uid1}
-    Should Be Equal As Strings  ${resp.json()['invoiceStateList'][0]['date']}  ${DAY}
-    Should Be Equal As Strings  ${resp.json()['invoiceStateList'][0]['time']}  ${time_now}
-    Should Be Equal As Strings  ${resp.json()['invoiceStateList'][0]['userType']}  ${userType[0]}
-    Should Be Equal As Strings  ${resp.json()['invoiceStateList'][0]['localUserId']}  ${pid}
+    Should Be Equal As Strings  ${resp1.json()['invoiceUid']}  ${invoice_uid1}
+    Should Be Equal As Strings  ${resp1.json()['invoiceStateList'][0]['date']}  ${DAY}
+    Should Be Equal As Strings  ${resp1.json()['invoiceStateList'][0]['time']}  ${time_now}
+    Should Be Equal As Strings  ${resp1.json()['invoiceStateList'][0]['userType']}  ${userType[0]}
+    Should Be Equal As Strings  ${resp1.json()['invoiceStateList'][0]['localUserId']}  ${pid}
 
 
 
