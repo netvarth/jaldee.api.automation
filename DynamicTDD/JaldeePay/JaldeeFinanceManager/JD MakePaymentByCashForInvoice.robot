@@ -11,6 +11,7 @@ Library           /ebs/TDD/db.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -331,7 +332,6 @@ JD-TC-MakePaymentByCash-UH3
     ${note}=    FakerLibrary.word
     ${resp}=  Make Payment By Cash For Invoice   ${invoice_uid}  ${payment_modes[0]}  10  ${note}
     Log  ${resp.json()}
-   Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}" 
 
-    
