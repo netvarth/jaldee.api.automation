@@ -3300,8 +3300,3 @@ Get Service payment modes
     ${resp}=   GET On Session  ynw  /consumer/payment/modes/service/${accountId}/${serviceId}/${paymentPurpose}    expected_status=any
     [Return]  ${resp}
     
-Get payment modes
-    [Arguments]  ${accountId}   ${serviceId}   ${paymentPurpose}
-    Check And Create YNW Session
-    ${resp}=   GET On Session  ynw  /consumer/payment/modes/service/${accountId}/${serviceId}/${paymentPurpose}    expected_status=any
-    [Return]  ${resp}
