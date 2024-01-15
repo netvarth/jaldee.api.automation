@@ -1,7 +1,7 @@
 *** Settings ***
 Suite Teardown     Delete All Sessions
 Test Teardown      Delete All Sessions
-Force Tags         LOS
+Force Tags         LOS Lead
 Library            Collections
 Library            String
 Library            json

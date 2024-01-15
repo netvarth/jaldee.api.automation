@@ -267,7 +267,9 @@ JD-TC-UpdateLeadAssignees-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   lead
+
     ${resp}=    update lead assignees LOS    ${lead_uid}   ${u_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings    ${resp.json()}        ${NO_PERMISSION}
+    Should Be Equal As Strings    ${resp.json()}        ${NO_PERMISSION_X}

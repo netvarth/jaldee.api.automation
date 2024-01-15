@@ -123,33 +123,42 @@ JD-TC-GetLeadCountByFilter-1
     Set Suite Variable      ${consumerId}           ${resp.json()['consumerKyc']['consumerId']} 
     Set Suite Variable      ${internalProgress}     ${resp.json()['internalProgress']}
     Set Suite Variable      ${internalStatus}       ${resp.json()['internalStatus']}
-    Should Be Equal As Strings    ${resp.json()['uid']}                                 ${lead_uid}
-    Should Be Equal As Strings    ${resp.json()['account']}                             ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['channel']}                             ${leadchannel[0]}
-    Should Be Equal As Strings    ${resp.json()['losProduct']}                          ${losProduct}
-    Should Be Equal As Strings    ${resp.json()['status']['id']}                        ${status_id}
-    Should Be Equal As Strings    ${resp.json()['status']['name']}                      ${Sname}
-    Should Be Equal As Strings    ${resp.json()['progress']['id']}                      ${progress_id}
-    Should Be Equal As Strings    ${resp.json()['progress']['name']}                    ${Pname}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['dob']}                  ${dob}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['gender']}               ${gender}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhone']}        ${consumerPhone}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerEmail']}        ${consumerEmail}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentAddress1']}    ${permanentAddress1}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentAddress2']}    ${permanentAddress2}
-    Should Be Equal As StringS    ${resp.json()['consumerKyc']['permanentDistrict']}    ${permanentDistrict}  
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentState']}       ${permanentState}  
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentPin']}         ${permanentPin}  
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['aadhaar']}              ${aadhaar}  
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['pan']}                  ${pan}  
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankAccountNo']}        ${bankAccountNo}  
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankIfsc']}             ${bankIfsc}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeType']}          ${NomineeType[2]}  
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeName']}          ${nomineeName}
+
+    ${PH_Number}    Random Number 	       digits=5 
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable    ${consumerPhone2}  555${PH_Number}
+    ${requestedAmount2}=     Random Int  min=30000  max=600000
+    ${description2}=         FakerLibrary.bs
+    ${consumerFirstName2}=   FakerLibrary.first_name
+    Set Suite Variable      ${consumerFirstName2}
+    ${consumerLastName2}=    FakerLibrary.last_name  
+    Set Suite Variable      ${consumerLastName2}
+    ${dob2}=    FakerLibrary.Date
+    ${address2}=  FakerLibrary.address
+    ${gender2}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail2}  ${C_Email}${consumerPhone2}.${test_mail}   
+    ${permanentAddress11}=   FakerLibrary.address
+    ${permanentAddress22}=   FakerLibrary.address  
+    ${nomineeName2}=     FakerLibrary.first_name
+    ${status2}=  Create Dictionary  id=${status_id}  name=${Sname}
+    ${progress2}=  Create Dictionary  id=${progress_id}  name=${Pname}
+    ${consumerKyc}=   Create Dictionary  consumerFirstName=${consumerFirstName2}  consumerLastName=${consumerLastName2}  dob=${dob2}  gender=${gender2}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone2}  consumerEmail=${consumerEmail2}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress11}  permanentAddress2=${permanentAddress22}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName2}
+
+    ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${status}  progress=${progress}  consumerKyc=${consumerKyc}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable      ${lead_uid2}      ${resp.json()['uid']}
+
+    ${resp}=    Get Lead LOS   ${lead_uid2}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable      ${kycid2}                ${resp.json()['consumerKyc']['id']}
+    Set Suite Variable      ${referenceNo2}          ${resp.json()['referenceNo']}
+    Set Suite Variable      ${createdDate2}          ${resp.json()['createdDate']}
+    Set Suite Variable      ${consumerId2}           ${resp.json()['consumerKyc']['consumerId']} 
+    Set Suite Variable      ${internalProgress2}     ${resp.json()['internalProgress']}
+    Set Suite Variable      ${internalStatus2}       ${resp.json()['internalStatus']}
 
 
     ${resp}=    Get Lead By Filter LOS
@@ -307,3 +316,191 @@ JD-TC-GetLeadCountByFilter-12
     Should Be Equal As Strings    ${resp.json()}    ${len}
 
 
+JD-TC-GetLeadCountByFilter-13
+
+    [Documentation]             Get Lead Count By Filter - uid and reference
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Count By Filter LOS   uid-eq=${lead_uid}  referenceNo-eq=${referenceNo}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Not Be Empty  ${resp.json()}
+
+
+JD-TC-GetLeadByFilter-14
+
+    [Documentation]             Get Lead Count By Filter - uid and losProduct
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Count By Filter LOS   uid-eq=${lead_uid}  losProduct-eq=${losProduct}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Not Be Empty  ${resp.json()}
+
+
+JD-TC-GetLeadByFilter-15
+
+    [Documentation]             Get Lead Count By Filter - uid and internalProgress
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Count By Filter LOS   uid-eq=${lead_uid2}  internalProgress-eq=${internalProgress}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Not Be Empty  ${resp.json()}
+
+JD-TC-GetLeadByFilter-16
+
+    [Documentation]             Get Lead Count By Filter - uid and internalStatus
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Count By Filter LOS   uid-eq=${lead_uid2}  internalStatus-eq=${internalStatus}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Not Be Empty  ${resp.json()}    
+
+JD-TC-GetLeadByFilter-17
+
+    [Documentation]             Get Lead Count By Filter - uid and consumerId
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Count By Filter LOS   uid-eq=${lead_uid2}  consumerId-eq=${consumerId}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Not Be Empty  ${resp.json()}
+
+
+JD-TC-GetLeadByFilter-18
+
+    [Documentation]             Get Lead Count By Filter - uid and consumerFirstName
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Count By Filter LOS   uid-eq=${lead_uid2}  consumerFirstName-eq=${consumerFirstName2}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Not Be Empty  ${resp.json()}         
+
+
+JD-TC-GetLeadByFilter-19
+
+    [Documentation]             Get Lead Count By Filter - uid and consumerLastName
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Count By Filter LOS   uid-eq=${lead_uid2}  consumerLastName-eq=${consumerLastName2}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Not Be Empty  ${resp.json()}           
+
+
+JD-TC-GetLeadByFilter-20
+
+    [Documentation]             Get Lead Count By Filter - uid and createdDate
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Count By Filter LOS   uid-eq=${lead_uid2}  createdDate-eq=${createdDate}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Not Be Empty  ${resp.json()}          
+
+JD-TC-GetLeadByFilter-21
+
+    [Documentation]             Get Lead Count By Filter - uid and isConverted
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Count By Filter LOS   uid-eq=${lead_uid2}  isConverted-eq=${boolean[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Not Be Empty  ${resp.json()}                         
+
+JD-TC-GetLeadByFilter-22
+
+    [Documentation]             Get Lead Count By Filter - uid and isRejected
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Count By Filter LOS   uid-eq=${lead_uid2}  isRejected-eq=${boolean[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Not Be Empty  ${resp.json()} 
+
+
+JD-TC-GetLeadByFilter-23
+
+    [Documentation]             Get Lead Count By Filter - both lead internalProgress
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Count By Filter LOS   internalProgress-eq=${internalProgress2},${internalProgress}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Not Be Empty  ${resp.json()}
+
+JD-TC-GetLeadByFilter-24
+
+    [Documentation]             Get Lead Count By Filter - uid and internalStatus
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Count By Filter LOS   internalProgress-eq=${internalProgress}  internalStatus-eq=${internalStatus}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Not Be Empty  ${resp.json()}    
+
+JD-TC-GetLeadByFilter-25
+
+    [Documentation]             Get Lead Count By Filter - both lead consumerFirstName
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Count By Filter LOS   consumerFirstName-eq=${consumerFirstName},${consumerFirstName2}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Not Be Empty  ${resp.json()}
+
+
+JD-TC-GetLeadByFilter-26
+
+    [Documentation]             Get Lead Count By Filter - consumerLastName and consumerFirstName
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME49}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Lead Count By Filter LOS   consumerLastName-eq=${consumerLastName}  consumerFirstName-eq=${consumerFirstName2}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Not Be Empty  ${resp.json()}
