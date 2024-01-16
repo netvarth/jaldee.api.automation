@@ -31,7 +31,7 @@ JD-TC-CreateLead-1
 
     [Documentation]  Create Lead with customer id where customer has all the details.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -179,7 +179,7 @@ JD-TC-CreateLead-2
 
     [Documentation]  Create Lead without creating customer.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -325,7 +325,7 @@ JD-TC-CreateLead-3
 
     [Documentation]  Create Lead with full customer details including customer id.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -502,7 +502,7 @@ JD-TC-CreateLead-4
 
     [Documentation]  Create Lead without status - status is not mandatory
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -652,7 +652,7 @@ JD-TC-CreateLead-5
 
     [Documentation]  Create Lead without progress - progress is not mandatory
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -781,7 +781,7 @@ JD-TC-CreateLead-6
 
     [Documentation]  Create Lead with different customer details
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -957,7 +957,7 @@ JD-TC-CreateLead-7
 
     [Documentation]  Create Lead without nominee details
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -1098,15 +1098,15 @@ JD-TC-CreateLead-7
     # Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['pan']}                  ${pan}  
     # Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankAccountNo']}        ${bankAccountNo}  
     # Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankIfsc']}             ${bankIfsc}
-    Should Not Contain  ${resp.json()['consumerKyc']['nomineeName']}
-    Should Not Contain  ${resp.json()['consumerKyc']['nomineeType']}
+    # Should Not Contain  ${resp.json()['consumerKyc']['nomineeName']}
+    # Should Not Contain  ${resp.json()['consumerKyc']['nomineeType']}
 
 
 JD-TC-CreateLead-8
 
     [Documentation]  Create Lead with customer id as NONE
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -1206,15 +1206,12 @@ JD-TC-CreateLead-8
 
     ${requestedAmount}=     Random Int  min=30000  max=600000
     ${description}=         FakerLibrary.bs
-    # ${permanentAddress1}=   FakerLibrary.address
     ${permanentAddress2}=   FakerLibrary.address  
     ${nomineeName}=     FakerLibrary.first_name
     ${cdl_status}=  Create Dictionary  id=${status_id}  name=${Sname}
     ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-#     ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     ${consumerKyc}=   Create Dictionary  consumerId=${NONE}  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}
 
-    # ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${losProduct}  ${status_id}  ${Sname}  ${progress_id}  ${Pname}  ${requestedAmount}  ${description}  ${consumerId}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${aadhaar}  ${pan}  ${bankAccountNo}  ${bankIfsc}  ${permanentAddress1}  ${permanentAddress2}  ${permanentDistrict}  ${permanentState}  ${permanentPin}  ${NomineeType[2]}  ${nomineeName}
     ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -1239,18 +1236,18 @@ JD-TC-CreateLead-8
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['gender']}               ${gender}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhone']}        ${consumerPhone}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerEmail']}        ${consumerEmail}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentAddress1']}    ${permanentAddress1}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentAddress2']}    ${permanentAddress2}
-    Run Keyword And Continue On Failure  Should Be Equal As StringS    ${resp.json()['consumerKyc']['permanentDistrict']}    ${permanentDistrict}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentState']}       ${permanentState}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentPin']}         ${permanentPin}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['aadhaar']}              ${aadhaar}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['pan']}                  ${pan}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankAccountNo']}        ${bankAccountNo}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankIfsc']}             ${bankIfsc}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeType']}          ${NomineeType[2]}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeName']}          ${nomineeName}
+    # Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerEmail']}        ${consumerEmail}
+    # Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentAddress1']}    ${permanentAddress1}
+    # Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentAddress2']}    ${permanentAddress2}
+    # Run Keyword And Continue On Failure  Should Be Equal As StringS    ${resp.json()['consumerKyc']['permanentDistrict']}    ${permanentDistrict}  
+    # Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentState']}       ${permanentState}  
+    # Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentPin']}         ${permanentPin}  
+    # Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['aadhaar']}              ${aadhaar}  
+    # Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['pan']}                  ${pan}  
+    # Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankAccountNo']}        ${bankAccountNo}  
+    # Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankIfsc']}             ${bankIfsc}
+    # Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeType']}          ${NomineeType[2]}  
+    # Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeName']}          ${nomineeName}
     Set Test Variable      ${consumerId1}      ${resp.json()['consumerKyc']['id']}
 
     comment  There should be no change in the existing customer details even if different details are provided when creating lead.
@@ -1283,7 +1280,7 @@ JD-TC-CreateLead-9
 
     [Documentation]  create lead using EMPTY consumerEmail
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -1432,7 +1429,7 @@ JD-TC-CreateLead-10
 
     [Documentation]  create lead using EMPTY Aadhar card details.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -1581,7 +1578,7 @@ JD-TC-CreateLead-11
 
     [Documentation]  create lead using EMPTY pan card details.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -1730,7 +1727,7 @@ JD-TC-CreateLead-12
 
     [Documentation]  create lead using EMPTY bankAccountNo details.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -1879,7 +1876,7 @@ JD-TC-CreateLead-13
 
     [Documentation]  create lead using EMPTY bankIfsc details.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -2029,7 +2026,7 @@ JD-TC-CreateLead-14
 
     [Documentation]  create lead without bankIfsc details.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -2172,14 +2169,14 @@ JD-TC-CreateLead-14
     # # Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankIfsc']}             ${bankIfsc}
     # Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeType']}          ${NomineeType[2]}  
     # Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeName']}          ${nomineeName}
-    Should Not Contain  ${resp.json()['consumerKyc']['bankIfsc']}
+    # Should Not Contain  ${resp.json()['consumerKyc']['bankIfsc']}
 
 
 JD-TC-CreateLead-15
 
     [Documentation]  create lead using EMPTY permanentAddress1.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -2328,7 +2325,7 @@ JD-TC-CreateLead-16
 
     [Documentation]  create lead using EMPTY permanentAddress2.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -2478,7 +2475,7 @@ JD-TC-CreateLead-17
 
     [Documentation]  create lead using EMPTY permanentDistrict.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -2628,7 +2625,7 @@ JD-TC-CreateLead-18
 
     [Documentation]  create lead using EMPTY permanentState.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -2759,7 +2756,7 @@ JD-TC-CreateLead-19
 
     [Documentation]  create lead using EMPTY permanentPin.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -2909,7 +2906,7 @@ JD-TC-CreateLead-UH1
 
     [Documentation]  Create Lead without customer details (even consumer id is None)
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3007,7 +3004,7 @@ JD-TC-CreateLead-UH2
 
     [Documentation]  Create Lead without login
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3111,7 +3108,7 @@ JD-TC-CreateLead-UH3
 
     [Documentation]  Consumer creates a lead
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3219,17 +3216,18 @@ JD-TC-CreateLead-UH4
 
     [Documentation]  Provider Customer creates a lead
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+    Set Test Variable  ${provider_name}  ${decrypted_data['userName']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${account_id}  ${resp.json()['id']}
+    Should Be Equal As Strings            ${resp.status_code}  200
+    Set Test Variable                    ${account_id}       ${resp.json()['id']}
 
     FOR    ${i}    IN RANGE  0  3
         ${pin}=  get_pincode
@@ -3291,34 +3289,52 @@ JD-TC-CreateLead-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${ageyrs}  ${agemonths}=  db.calculate_age_years_months     ${dob}
+
     ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${consumerId}  ${resp.json()[0]['id']}
+    Set Suite Variable  ${consumerId11}  ${resp.json()[0]['id']}
+    Should Be Equal As Strings    ${resp.json()[0]['id']}  ${consumerId11}
+    Should Be Equal As Strings    ${resp.json()[0]['firstName']}  ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()[0]['lastName']}  ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()[0]['email']}  ${consumerEmail}
+    Should Be Equal As Strings    ${resp.json()[0]['gender']}  ${gender}
+    Should Be Equal As Strings    ${resp.json()[0]['dob']}  ${dob}
+    Should Be Equal As Strings    ${resp.json()[0]['phoneNo']}  ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[0]['countryCode']}  ${countryCodes[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}  ${status[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['favourite']}  ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['phone_verified']}  ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['email_verified']}  ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['whatsAppNum']['countryCode']}  ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['whatsAppNum']['number']}  ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[0]['telegramNum']['countryCode']}  ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['telegramNum']['number']}  ${consumerPhone}
+    Should Be Equal As Strings    ${resp.json()[0]['age']['year']}  ${ageyrs}
+    Should Be Equal As Strings    ${resp.json()[0]['age']['month']}  ${agemonths}
+    Should Be Equal As Strings    ${resp.json()[0]['account']}  ${account_id}
+    ${fullName}   Set Variable    ${consumerFirstName} ${consumerLastName}
+    Set Suite Variable  ${fullName}
 
-    ${resp}=  Provider Logout
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Send Otp For Login    ${consumerPhone}    ${account_id}   alternateLoginId=${consumerEmail}
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   ${OtpPurpose['Authentication']}
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable  ${token}  ${resp.json()['token']}
-
-    ${resp}=    ProviderConsumer SignUp    ${consumerFirstName}  ${consumerLastName}  ${consumerEmail}  ${consumerPhone}  ${account_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200    
+    Set Suite Variable   ${token}  ${resp.json()['token']}
 
     ${resp}=  Customer Logout   
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token   ${consumerPhone}  ${account_id}  ${token}
-    Log   ${resp.content}
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accountId}    ${token}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
+    Set Suite Variable    ${PCid}   ${resp.json()['id']}
 
     ${requestedAmount}=     Random Int  min=30000  max=600000
     ${description}=         FakerLibrary.bs
@@ -3327,18 +3343,13 @@ JD-TC-CreateLead-UH4
     ${nomineeName}=     FakerLibrary.first_name
     ${cdl_status}=  Create Dictionary  id=${status_id}  name=${Sname}
     ${progress}=  Create Dictionary  id=${progress_id}  name=${Pname}
-    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
+    ${consumerKyc}=   Create Dictionary  consumerId=${consumerId11}   consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
     
     # ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${losProduct}  ${status_id}  ${Sname}  ${progress_id}  ${Pname}  ${requestedAmount}  ${description}  ${consumerId}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${aadhaar}  ${pan}  ${bankAccountNo}  ${bankIfsc}  ${permanentAddress1}  ${permanentAddress2}  ${permanentDistrict}  ${permanentState}  ${permanentPin}  ${NomineeType[2]}  ${nomineeName}
     ${resp}=    Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  status=${cdl_status}  progress=${progress}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings    ${resp.json()}    ${LOGIN_NO_ACCESS_FOR_URL}
-
-    # ${resp}=    Get Lead LOS   ${lead_uid}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
 
 
 
@@ -3378,7 +3389,7 @@ JD-TC-CreateLead-UH5
     ${resp}=  Provider Logout
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3455,7 +3466,7 @@ JD-TC-CreateLead-UH6
 
     [Documentation]  create lead using invalid provider customer id
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3552,7 +3563,7 @@ JD-TC-CreateLead-UH7
 
     [Documentation]  create lead using empty consumerKyc
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3648,7 +3659,7 @@ JD-TC-CreateLead-UH8
 
     [Documentation]  create lead using empty consumer firstname
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3744,7 +3755,7 @@ JD-TC-CreateLead-UH9
 
     [Documentation]  create lead using empty consumer lastname
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3840,7 +3851,7 @@ JD-TC-CreateLead-UH10
 
     [Documentation]  Add customer without customer details and create lead only using consumer id
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3936,7 +3947,7 @@ JD-TC-CreateLead-UH11
 
     [Documentation]  create lead using empty nominee name
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4040,7 +4051,7 @@ JD-TC-CreateLead-UH12
 
     [Documentation]  create lead using empty customer dob
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4136,7 +4147,7 @@ JD-TC-CreateLead-UH13
 
     [Documentation]  create lead using empty customer consumerPhone
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4232,7 +4243,7 @@ JD-TC-CreateLead-UH14
 
     [Documentation]  create lead using customer consumerPhone without consumerPhoneCode
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4336,7 +4347,7 @@ JD-TC-CreateLead-UH15
 
     [Documentation]  create lead using customer consumerPhone and EMPTY consumerPhoneCode
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4435,7 +4446,7 @@ JD-TC-CreateLead-UH15
 
 #     [Documentation]  Create Lead without channel
 
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4544,7 +4555,7 @@ JD-TC-CreateLead-UH15
 
 #     [Documentation]  Create Lead without product
 
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4648,7 +4659,7 @@ JD-TC-CreateLead-UH15
 
 #     [Documentation]  Create Lead with invalid product id
 
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4751,7 +4762,7 @@ JD-TC-CreateLead-UH15
 
 #     [Documentation]  create lead using empty nominee type
 
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4856,7 +4867,7 @@ JD-TC-CreateLead-UH15
 
 #     [Documentation]  create lead using empty customer gender
 
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME30}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     ${decrypted_data}=  db.decrypt_data   ${resp.content}

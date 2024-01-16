@@ -31,10 +31,10 @@ JD-TC-GetLeadCountByFilter-1
 
     [Documentation]             Get Lead By Filter
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME86}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=    get_acc_id       ${PUSERNAME86}
+    ${accountId}=    get_acc_id       ${PUSERNAME89}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -462,3 +462,26 @@ JD-TC-GetLeadCountByFilter-12
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}    ${len}
+
+
+JD-TC-GetLeadCountByFilter-UH1
+
+    [Documentation]             Get Lead By Filter - without login
+
+    ${resp}=    PC Get Lead Count By Filter LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
+
+
+JD-TC-GetLeadCountByFilter-UH2
+
+    [Documentation]             Get Lead By Filter - with provider login 
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    PC Get Lead Count By Filter LOS
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422

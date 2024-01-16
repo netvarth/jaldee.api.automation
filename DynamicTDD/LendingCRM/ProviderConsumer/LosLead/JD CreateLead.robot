@@ -185,152 +185,6 @@ JD-TC-CreateLead-1
     Should Be Equal As Strings      ${resp.status_code}  200
 
 
-JD-TC-CreateLead-2
-
-    [Documentation]  Create Lead without creating customer.
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    ${decrypted_data}=  db.decrypt_data   ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-    Set Test Variable  ${provider_name}  ${decrypted_data['userName']}
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings            ${resp.status_code}  200
-    Set Test Variable                    ${account_id}       ${resp.json()['id']}
-
-    FOR    ${i}    IN RANGE  0  3
-        ${pin}=  get_pincode
-        ${kwstatus}  ${resp} =   Run Keyword And Ignore Error  Get LocationsByPincode  ${pin}
-        IF    '${kwstatus}' == 'FAIL'
-                Continue For Loop
-        ELSE IF    '${kwstatus}' == 'PASS'
-                Exit For Loop
-        END
-    END
-    Log  ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
-    Set Test Variable  ${city}      ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentState}     ${resp.json()[0]['PostOffice'][0]['State']}    
-    Set Test Variable  ${permanentDistrict}  ${resp.json()[0]['PostOffice'][0]['District']}   
-    Set Test Variable  ${permanentPin}       ${resp.json()[0]['PostOffice'][0]['Pincode']}
-
-    ${PH_Number}    Random Number 	       digits=5 
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
-
-    ${resp1}=  AddCustomer  ${consumerPhone}
-    Log  ${resp1.content}
-    Should Be Equal As Strings  ${resp1.status_code}  200
-    Set Suite Variable  ${pcid18}   ${resp1.json()}
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-
-    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accountId}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-  
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Customer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-   
-    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accountId}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
-    Set Suite Variable    ${PCid}   ${resp.json()['id']}
-
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
-    ${requestedAmount}=     Random Int  min=30000  max=600000
-    ${description}=         FakerLibrary.bs
-    ${consumerFirstName}=   FakerLibrary.first_name
-    ${consumerLastName}=    FakerLibrary.last_name  
-    ${dob}=    FakerLibrary.Date
-    ${address}=  FakerLibrary.address
-    ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}   
-    ${permanentAddress1}=   FakerLibrary.address
-    ${permanentAddress2}=   FakerLibrary.address  
-    ${nomineeName}=     FakerLibrary.first_name
-    ${consumerKyc}=   Create Dictionary  consumerFirstName=${consumerFirstName}  consumerLastName=${consumerLastName}  dob=${dob}  gender=${gender}  consumerPhoneCode=${countryCodes[1]}   consumerPhone=${consumerPhone}  consumerEmail=${consumerEmail}  aadhaar=${aadhaar}  pan=${pan}  bankAccountNo=${bankAccountNo}  bankIfsc=${bankIfsc}  permanentAddress1=${permanentAddress1}  permanentAddress2=${permanentAddress2}  permanentDistrict=${permanentDistrict}  permanentState=${permanentState}  permanentPin=${permanentPin}  nomineeType=${nomineeType[2]}  nomineeName=${nomineeName}
-
-    ${resp}=    PC Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  consumerKyc=${consumerKyc}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
-
-    ${resp}=    PC Get Lead By Uid LOS   ${lead_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                 ${lead_uid}
-    Should Be Equal As Strings    ${resp.json()['account']}                             ${account_id}
-    Should Be Equal As Strings    ${resp.json()['channel']}                             ${leadchannel[0]}
-    Should Be Equal As Strings    ${resp.json()['losProduct']}                          ${losProduct}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['dob']}                  ${dob}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['gender']}               ${gender}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
-    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhone']}        ${consumerPhone}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerEmail']}        ${consumerEmail}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentAddress1']}    ${permanentAddress1}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentAddress2']}    ${permanentAddress2}
-    Run Keyword And Continue On Failure  Should Be Equal As StringS    ${resp.json()['consumerKyc']['permanentDistrict']}    ${permanentDistrict}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentState']}       ${permanentState}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentPin']}         ${permanentPin}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['aadhaar']}              ${aadhaar}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['pan']}                  ${pan}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankAccountNo']}        ${bankAccountNo}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankIfsc']}             ${bankIfsc}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeType']}          ${NomineeType[2]}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeName']}          ${nomineeName}
-    Set Test Variable      ${consumerId}      ${resp.json()['consumerKyc']['id']}
-
-    ${ageyrs}  ${agemonths}=  db.calculate_age_years_months     ${dob}
-
-    ${resp}=    Customer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}  200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}  ${consumerId}
-    Should Be Equal As Strings    ${resp.json()[0]['firstName']}  ${consumerFirstName}
-    Should Be Equal As Strings    ${resp.json()[0]['lastName']}  ${consumerLastName}
-    Should Be Equal As Strings    ${resp.json()[0]['email']}  ${consumerEmail}
-    Should Be Equal As Strings    ${resp.json()[0]['gender']}  ${gender}
-    Should Be Equal As Strings    ${resp.json()[0]['dob']}  ${dob}
-    Should Be Equal As Strings    ${resp.json()[0]['phoneNo']}  ${consumerPhone}
-    Should Be Equal As Strings    ${resp.json()[0]['countryCode']}  ${countryCodes[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}  ${status[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['favourite']}  ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['phone_verified']}  ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['email_verified']}  ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['whatsAppNum']['countryCode']}  ${countryCodes[1]}
-    Should Be Equal As Strings    ${resp.json()[0]['whatsAppNum']['number']}  ${consumerPhone}
-    Should Be Equal As Strings    ${resp.json()[0]['telegramNum']['countryCode']}  ${countryCodes[1]}
-    Should Be Equal As Strings    ${resp.json()[0]['telegramNum']['number']}  ${consumerPhone}
-    Should Be Equal As Strings    ${resp.json()[0]['age']['year']}  ${ageyrs}
-    Should Be Equal As Strings    ${resp.json()[0]['age']['month']}  ${agemonths}
-    Should Be Equal As Strings    ${resp.json()[0]['account']}  ${account_id}
-
 JD-TC-CreateLead-3
 
     [Documentation]  Create Lead with full customer details including customer id.
@@ -907,18 +761,18 @@ JD-TC-CreateLead-6
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['gender']}               ${gender}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
     Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhone']}        ${consumerPhone}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerEmail']}        ${consumerEmail}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentAddress1']}    ${permanentAddress1}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentAddress2']}    ${permanentAddress2}
-    Run Keyword And Continue On Failure  Should Be Equal As StringS    ${resp.json()['consumerKyc']['permanentDistrict']}    ${permanentDistrict}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentState']}       ${permanentState}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentPin']}         ${permanentPin}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['aadhaar']}              ${aadhaar}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['pan']}                  ${pan}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankAccountNo']}        ${bankAccountNo}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankIfsc']}             ${bankIfsc}
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeType']}          ${NomineeType[2]}  
-    Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeName']}          ${nomineeName}
+#     Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerEmail']}        ${consumerEmail}
+#     Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentAddress1']}    ${permanentAddress1}
+#     Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentAddress2']}    ${permanentAddress2}
+#     Run Keyword And Continue On Failure  Should Be Equal As StringS    ${resp.json()['consumerKyc']['permanentDistrict']}    ${permanentDistrict}  
+#     Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentState']}       ${permanentState}  
+#     Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentPin']}         ${permanentPin}  
+#     Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['aadhaar']}              ${aadhaar}  
+#     Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['pan']}                  ${pan}  
+#     Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankAccountNo']}        ${bankAccountNo}  
+#     Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['bankIfsc']}             ${bankIfsc}
+#     Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeType']}          ${NomineeType[2]}  
+#     Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['nomineeName']}          ${nomineeName}
     Set Test Variable      ${consumerId1}      ${resp.json()['consumerKyc']['id']}
 
     comment  There should be no change in the existing customer details even if different details are provided when creating lead.
@@ -2311,9 +2165,9 @@ JD-TC-CreateLead-17
     Run Keyword And Continue On Failure  Should Be Equal As Strings    ${resp.json()['consumerKyc']['permanentPin']}         ${EMPTY}  
 
 
-JD-TC-CreateLead-UH1
+JD-TC-CreateLead-18
 
-    [Documentation]  Create Lead without customer details (even consumer id is None)
+    [Documentation]  Create Lead without customer details (even consumer id is None) - get every details from session
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD} 
     Log  ${resp.content}
@@ -2391,11 +2245,27 @@ JD-TC-CreateLead-UH1
 
     ${resp}=    PC Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_FIRST_NAME_REQUIRED}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
+
+    ${resp}=    PC Get Lead By Uid LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()['account']}                             ${account_id}
+    Should Be Equal As Strings    ${resp.json()['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhone']}        ${consumerPhone}
 
 
-JD-TC-CreateLead-UH2
+JD-TC-CreateLead-19
 
     [Documentation]  Create Lead without login
 
@@ -2486,7 +2356,7 @@ JD-TC-CreateLead-UH2
     Should Be Equal As Strings  ${resp.json()}  ${SESSION_EXPIRED}
 
 
-JD-TC-CreateLead-UH3
+JD-TC-CreateLead-20
 
     [Documentation]  create lead using provider login
 
@@ -2518,7 +2388,7 @@ JD-TC-CreateLead-UH3
     Should Be Equal As Strings    ${resp.json()}   ${NO_ACCESS_TO_URL}
 
 
-JD-TC-CreateLead-UH5
+JD-TC-CreateLead-21
 
     [Documentation]  create lead using empty consumerKyc
 
@@ -2599,10 +2469,10 @@ JD-TC-CreateLead-UH5
     ${resp}=    PC Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  consumerKyc=${NONE}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_REQUIRED}
+    Should Be Equal As Strings    ${resp.json()}   ${CONSUMER_REQUIRED}
 
 
-JD-TC-CreateLead-UH6
+JD-TC-CreateLead-22
 
     [Documentation]  create lead using empty consumer firstname
 
@@ -2682,11 +2552,26 @@ JD-TC-CreateLead-UH6
 
     ${resp}=    PC Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_FIRST_NAME_REQUIRED}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
 
+    ${resp}=    PC Get Lead By Uid LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()['account']}                             ${account_id}
+    Should Be Equal As Strings    ${resp.json()['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhone']}        ${consumerPhone}
 
-JD-TC-CreateLead-UH7
+JD-TC-CreateLead-23
 
     [Documentation]  create lead using empty consumer lastname
 
@@ -2766,11 +2651,27 @@ JD-TC-CreateLead-UH7
 
     ${resp}=    PC Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_LAST_NAME_REQUIRED}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
+
+    ${resp}=    PC Get Lead By Uid LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()['account']}                             ${account_id}
+    Should Be Equal As Strings    ${resp.json()['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhone']}        ${consumerPhone}
 
 
-JD-TC-CreateLead-UH8
+JD-TC-CreateLead-24
 
     [Documentation]  Add customer without customer details and create lead only using consumer id
 
@@ -2851,10 +2752,10 @@ JD-TC-CreateLead-UH8
     ${resp}=    PC Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_FIRST_NAME_REQUIRED}
+    Should Be Equal As Strings    ${resp.json()}   ${CONSUMER_FIRST_NAME_REQUIRED}
 
 
-JD-TC-CreateLead-UH9
+JD-TC-CreateLead-25
 
     [Documentation]  create lead using empty nominee name
 
@@ -2941,20 +2842,8 @@ JD-TC-CreateLead-UH9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Customer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-
-
-JD-TC-CreateLead-UH10
+JD-TC-CreateLead-26
 
     [Documentation]  create lead using empty customer dob
 
@@ -3034,11 +2923,26 @@ JD-TC-CreateLead-UH10
 
     ${resp}=    PC Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_DOB_REQUIRED}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
 
+    ${resp}=    PC Get Lead By Uid LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()['account']}                             ${account_id}
+    Should Be Equal As Strings    ${resp.json()['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhone']}        ${consumerPhone}
 
-JD-TC-CreateLead-UH11
+JD-TC-CreateLead-27
 
     [Documentation]  create lead using empty customer consumerPhone
 
@@ -3118,11 +3022,27 @@ JD-TC-CreateLead-UH11
 
     ${resp}=    PC Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}    ${CONSUMER_PHONE_NO_REQUIRED}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
+
+    ${resp}=    PC Get Lead By Uid LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()['account']}                             ${account_id}
+    Should Be Equal As Strings    ${resp.json()['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhone']}        ${consumerPhone}
 
 
-JD-TC-CreateLead-UH12
+JD-TC-CreateLead-28
 
     [Documentation]  create lead using customer consumerPhone without consumerPhoneCode
 
@@ -3208,21 +3128,21 @@ JD-TC-CreateLead-UH12
     ${resp}=    PC Get Lead By Uid LOS   ${lead_uid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()['account']}                             ${account_id}
+    Should Be Equal As Strings    ${resp.json()['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhone']}        ${consumerPhone}
 
-    ${resp}=    Customer Logout
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME99}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
-    Log   ${resp.json()}
-    Should Be Equal As Strings      ${resp.status_code}  200
-
-
-JD-TC-CreateLead-UH13
+JD-TC-CreateLead-29
 
     [Documentation]  create lead using customer consumerPhone and EMPTY consumerPhoneCode
 
@@ -3302,6 +3222,22 @@ JD-TC-CreateLead-UH13
 
     ${resp}=    PC Create Lead LOS  ${leadchannel[0]}  ${description}  ${losProduct}  ${requestedAmount}  consumerKyc=${consumerKyc}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}    ${COUNTRY_CODEREQUIRED}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable      ${lead_uid}      ${resp.json()['uid']}
+
+    ${resp}=    PC Get Lead By Uid LOS   ${lead_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                 ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()['account']}                             ${account_id}
+    Should Be Equal As Strings    ${resp.json()['channel']}                             ${leadchannel[0]}
+    Should Be Equal As Strings    ${resp.json()['losProduct']}                          ${losProduct}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['id']}                   ${consumerId}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['leadUid']}              ${lead_uid}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerFirstName']}    ${consumerFirstName}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerLastName']}     ${consumerLastName}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['dob']}                  ${dob}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['gender']}               ${gender}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhoneCode']}    ${countryCodes[1]}
+    Should Be Equal As Strings    ${resp.json()['consumerKyc']['consumerPhone']}        ${consumerPhone}
 

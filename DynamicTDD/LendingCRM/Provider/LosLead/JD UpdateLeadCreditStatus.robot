@@ -90,7 +90,7 @@ JD-TC-UpdateLeadCreditStatus-UH1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${fake}=    Random Int  min=300  max=999
-    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   Lead credit status
+    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   Credit Status
 
     ${resp}=    Update Lead Credit Status LOS    ${fake}   ${name2}   ${toggle[1]}
     Log  ${resp.content}
@@ -129,7 +129,7 @@ JD-TC-UpdateLeadCreditStatus-UH4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   lead
+    ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   credit status
 
     ${resp}=    Update Lead Credit Status LOS    ${creditstatus}   ${name2}   ${toggle[1]}
     Log  ${resp.content}

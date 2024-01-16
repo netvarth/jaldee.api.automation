@@ -91,7 +91,7 @@ JD-TC-UpdateLeadProgress-UH1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${fake}=    Random Int  min=300  max=999
-    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   Lead Progress
+    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   Progress
 
     ${resp}=    Update Lead Progress LOS    ${fake}   ${name2}   ${toggle[1]}
     Log  ${resp.content}
@@ -130,7 +130,7 @@ JD-TC-UpdateLeadProgress-UH4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   lead
+    ${NO_PERMISSION_X}=   Replace String  ${NO_PERMISSION_X}  {}   progress
 
     ${resp}=    Update Lead Progress LOS    ${progress_id}   ${name2}   ${toggle[1]}
     Log  ${resp.content}
