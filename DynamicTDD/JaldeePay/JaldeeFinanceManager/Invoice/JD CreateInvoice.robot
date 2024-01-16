@@ -1527,7 +1527,7 @@ JD-TC-CreateInvoice-11
 
 JD-TC-CreateInvoice-12
 
-    [Documentation]  Taking waitlist from consumer side and the consumer doing the prepayment - check invoice(auto-invoice generation flag is on) (Tax enabled)
+    [Documentation]  Taking waitlist from consumer side and the consumer doing the prepayment and then did full payment - check invoice(auto-invoice generation flag is on) (Tax enabled)
 
    
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId1}  ${token} 
@@ -1995,7 +1995,7 @@ JD-TC-CreateInvoice-13
 
 JD-TC-CreateInvoice-14
 
-    [Documentation]  Taking waitlist from consumer side and the consumer doing the prepayment - check invoice(auto-invoice generation flag is on) (Tax Disabled)
+    [Documentation]  Taking waitlist from consumer side and the consumer doing the prepayment and did full payment - check invoice(auto-invoice generation flag is on) (Tax Disabled)
 
    
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo1}    ${accountId2}  ${token1} 
@@ -2778,6 +2778,29 @@ JD-TC-CreateInvoice-19
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
+    ${name}=   FakerLibrary.word
+    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${category_id}   ${resp.json()}
+    
+    ${name}=   FakerLibrary.word
+    ${resp}=  Create Category   ${name}  ${categoryType[2]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${category_id1}   ${resp.json()}
+
+    ${name1}=   FakerLibrary.word
+    ${resp}=  Create Category   ${name1}  ${categoryType[3]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${category_id2}   ${resp.json()}
+
+    ${resp}=   Get Category With Filter  categoryType-eq=${categoryType[0]}  
+    Log  ${resp.json()}
+
+
+
     ${resp}=  ProviderLogout
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2861,7 +2884,7 @@ JD-TC-CreateInvoice-19
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${loc_id1}
 
-    ${resp}=  Make payment Consumer Mock  ${pid2}  ${min_pre1}  ${purpose[0]}  ${apptid1}  ${p1_sid2}  ${bool[0]}   ${bool[1]}  ${None}
+    ${resp}=  Make payment Consumer Mock  ${pid2}  ${Tot2}  ${purpose[1]}  ${apptid1}  ${p1_sid2}  ${bool[0]}   ${bool[1]}  ${None}
     Log  ${resp.json()}
     # ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid1}
     # Log  ${resp.json()}
