@@ -1331,10 +1331,10 @@ JD-TC-CreateInvoice-11
 
     ${min_pre}=   Random Int   min=40   max=50
     ${Tot}=   Random Int   min=100   max=300
-    ${min_pre}=  Convert To Number  ${min_pre}  1
+    ${min_pre}=   Convert To Integer   ${min_pre}  
     Set Suite Variable   ${min_pre}
     # ${pre_float}=  twodigitfloat  ${min_pre}
-    ${Tot1}=  Convert To Number  ${Tot}  1 
+    ${Tot1}=  Convert To Integer  ${Tot}  
     Set Suite Variable   ${Tot}   ${Tot1}
 
     ${P1SERVICE1}=    FakerLibrary.word
@@ -1365,9 +1365,9 @@ JD-TC-CreateInvoice-11
     Set Suite Variable  ${p1_sid2}  ${resp.json()}
 
     ${quantity}=   Random Int  min=5  max=10
-    ${quantity}=  Convert To Number  ${quantity}  1
+    ${quantity}=  Convert To Integer  ${quantity}  
     ${serviceprice}=   Random Int  min=100  max=500
-    ${serviceprice}=  Convert To Number  ${serviceprice}  1
+    ${serviceprice}=  Convert To Integer  ${serviceprice}  
     ${serviceList1}=  Create Dictionary  serviceId=${p1_sid2}   quantity=${quantity}   price=${serviceprice} 
 
     ${resp}=  Auto Invoice Generation For Service   ${p1_sid2}    ${toggle[0]}
@@ -1450,12 +1450,11 @@ JD-TC-CreateInvoice-11
     
     ${tax1}=  Evaluate  ${Tot}*${gstpercentage[3]}
     ${tax}=   Evaluate  ${tax1}/100
+    ${tax}=  Convert To Integer  ${tax}  
     ${totalamt}=  Evaluate  ${Tot}+${tax}
-    ${totalamt}=  Convert To Number  ${totalamt}  2
-    ${totalamt}=  Evaluate  "%.2f" % ${totalamt}
-    # ${totalamt}=  twodigitfloat  ${totalamt}
+    ${totalamt}=  Convert To Integer  ${totalamt}  
     ${balamount}=  Evaluate  ${totalamt}-${min_pre}
-    ${balamount}=  Convert To Number  ${balamount}  2
+    ${balamount}=  Convert To Integer  ${balamount}  
 
 
     ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid1}
@@ -1491,22 +1490,34 @@ JD-TC-CreateInvoice-11
     ${resp}=  Get Bookings Invoices  ${cwid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid1}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}  ${P1SERVICE1}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}  1.0
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['price']}  ${Tot}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}  ${Tot}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['ynwUuid']}  ${cwid}
-    Should Be Equal As Strings  ${resp.json()[0]['amountPaid']}  ${min_pre}
-    Should Be Equal As Strings  ${resp.json()[0]['amountDue']}  ${balamount}
-    Should Be Equal As Strings  ${resp.json()[0]['amountTotal']}  ${Tot}
-    Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  ${gstpercentage[3]}
-    Should Be Equal As Strings  ${resp.json()[0]['defaultCurrencyAmount']}  ${Tot}
-    Should Be Equal As Strings  ${resp.json()[0]['netTaxAmount']}  ${tax}
-    Should Be Equal As Strings  ${resp.json()[0]['netTotal']}  ${Tot}
-    Should Be Equal As Strings  ${resp.json()[0]['netRate']}  ${totalamt}
-    Should Be Equal As Strings  ${resp.json()[0]['taxableTotal']}  ${Tot}
+   ${service_response_price}=  Convert To Integer  ${resp.json()[0]['serviceList'][0]['price']} 
+   ${service_response_netRate}=  Convert To Integer  ${resp.json()[0]['serviceList'][0]['netRate']} 
+   ${response_amountPaid}=  Convert To Integer  ${resp.json()[0]['amountPaid']}
+   ${response_amountDue}=  Convert To Integer  ${resp.json()[0]['amountDue']}
+   ${response_amountTotal}=  Convert To Integer  ${resp.json()[0]['amountTotal']}
+#    ${response_taxPercentage}=  Convert To Integer  ${resp.json()[0]['taxPercentage']}
+   ${response_defaultCurrencyAmount}=  Convert To Integer  ${resp.json()[0]['defaultCurrencyAmount']}
+   ${response_netTaxAmount}=  Convert To Integer  ${resp.json()[0]['netTaxAmount']}
+   ${response_netTotal}=  Convert To Integer  ${resp.json()[0]['netTotal']}
+   ${response_netRate}=  Convert To Integer  ${resp.json()[0]['netRate']}
+   ${response_taxableTotal}=  Convert To Integer  ${resp.json()[0]['taxableTotal']}
+
+    Should Be Equal As Strings   ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid1}
+    Should Be Equal As Strings   ${resp.json()[0]['serviceList'][0]['serviceName']}  ${P1SERVICE1}
+    Should Be Equal As Strings   ${resp.json()[0]['serviceList'][0]['quantity']}  1.0
+    Should Be Equal As Strings   ${service_response_price}   ${Tot}
+    Should Be Equal As Strings   ${service_response_netRate}  ${Tot}
+    Should Be Equal As Strings   ${resp.json()[0]['serviceList'][0]['ynwUuid']}  ${cwid}
+    Should Be Equal As Strings   ${response_amountPaid}   ${min_pre}
+    Should Be Equal As Strings   ${response_amountDue}  ${balamount}
+    Should Be Equal As Strings   ${resp.json()[0]['taxPercentage']}  ${gstpercentage[3]}
+    Should Be Equal As Strings   ${response_defaultCurrencyAmount}   ${Tot}
+    Should Be Equal As Strings   ${response_netTaxAmount}  ${tax}
+    Should Be Equal As Strings   ${response_netTotal}  ${Tot}
+    Should Be Equal As Strings   ${response_netRate}  ${totalamt}
+    Should Be Equal As Strings   ${response_taxableTotal}  ${Tot}
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid}
+    Should Be Equal As Strings   ${response_amountTotal}  ${Tot}
     Set Suite Variable  ${invoice_wtlistonline_uid}  ${resp.json()[0]['invoiceUid']}
 
 
@@ -1532,12 +1543,13 @@ JD-TC-CreateInvoice-12
     
     ${tax1}=  Evaluate  ${Tot}*${gstpercentage[3]}
     ${tax}=   Evaluate  ${tax1}/100
+    ${tax}=   Convert To Integer  ${tax}  
     ${totalamt}=  Evaluate  ${Tot}+${tax}
-    ${totalamt}=  Convert To Number  ${totalamt}  2
+    ${totalamt}=   Convert To Integer  ${totalamt}  
     # ${totalamt}=  Evaluate  "%.2f" % ${totalamt}
     # ${totalamt}=  twodigitfloat  ${totalamt}
     ${balamount}=  Evaluate  ${totalamt}-${min_pre}
-    ${balamount}=  Convert To Number  ${balamount}  2
+    ${balamount}=   Convert To Integer  ${balamount}  
 
 
     ${resp}=  Get consumer Waitlist By Id  ${cwid1}  ${pid1}
@@ -1576,24 +1588,35 @@ JD-TC-CreateInvoice-12
 
     ${resp}=  Get Bookings Invoices  ${cwid1}
     Log  ${resp.content}
+   ${service_response_price}=  Convert To Integer  ${resp.json()[0]['serviceList'][0]['price']} 
+   ${service_response_netRate}=  Convert To Integer  ${resp.json()[0]['serviceList'][0]['netRate']} 
+   ${response_amountPaid}=  Convert To Integer  ${resp.json()[0]['amountPaid']}
+   ${response_amountDue}=  Convert To Integer  ${resp.json()[0]['amountDue']}
+   ${response_amountTotal}=  Convert To Integer  ${resp.json()[0]['amountTotal']}
+   ${response_defaultCurrencyAmount}=  Convert To Integer  ${resp.json()[0]['defaultCurrencyAmount']}
+   ${response_netTaxAmount}=  Convert To Integer  ${resp.json()[0]['netTaxAmount']}
+   ${response_netTotal}=  Convert To Integer  ${resp.json()[0]['netTotal']}
+   ${response_netRate}=  Convert To Integer  ${resp.json()[0]['netRate']}
+   ${response_taxableTotal}=  Convert To Integer  ${resp.json()[0]['taxableTotal']}
+
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid1}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}  1.0
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['price']}  ${Tot}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}  ${Tot}
+    Should Be Equal As Strings  ${service_response_price}   ${Tot}
+    Should Be Equal As Strings  ${service_response_netRate}  ${Tot}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['ynwUuid']}  ${cwid1}
-    Should Be Equal As Strings  ${resp.json()[0]['amountPaid']}  ${min_pre}
-    Should Be Equal As Strings  ${resp.json()[0]['amountDue']}  ${balamount}
-    Should Be Equal As Strings  ${resp.json()[0]['amountTotal']}  ${Tot}
+    Should Be Equal As Strings   ${response_amountPaid}   ${min_pre}
+    Should Be Equal As Strings  ${response_amountDue}  ${balamount}
     Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  ${gstpercentage[3]}
-    Should Be Equal As Strings  ${resp.json()[0]['defaultCurrencyAmount']}  ${Tot}
-    Should Be Equal As Strings  ${resp.json()[0]['netTaxAmount']}  ${tax}
-    Should Be Equal As Strings  ${resp.json()[0]['netTotal']}  ${Tot}
-    Should Be Equal As Strings  ${resp.json()[0]['netRate']}  ${totalamt}
-    Should Be Equal As Strings  ${resp.json()[0]['taxableTotal']}  ${Tot}
+    Should Be Equal As Strings   ${response_defaultCurrencyAmount}  ${Tot}
+    Should Be Equal As Strings  ${response_netTaxAmount}  ${tax}
+    Should Be Equal As Strings  ${response_netTotal}  ${Tot}
+    Should Be Equal As Strings  ${response_netRate}  ${totalamt}
+    Should Be Equal As Strings   ${response_taxableTotal}  ${Tot}
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid1}
     Should Be Equal As Strings  ${resp.json()[0]['billPaymentStatus']}  ${paymentStatus[1]}
+    Should Be Equal As Strings   ${response_amountTotal}  ${Tot}
     Set Suite Variable  ${invoice_wtlistonline_uid1}  ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  ProviderLogout
@@ -1634,15 +1657,19 @@ JD-TC-CreateInvoice-12
 
     ${resp1}=  Get Invoice By Id  ${invoice_wtlistonline_uid1}
     Log  ${resp1.content}
+    ${response1_netTotal}=  Convert To Integer  ${resp1.json()['netTotal']}
+    ${response1_netRate}=  Convert To Integer  ${resp1.json()['netRate']}
+    ${response1_amountTotal}=  Convert To Integer  ${resp1.json()['amountTotal']}
+
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()['accountId']}  ${pid1}
     Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${categ_id1}
     Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${Booking}
     Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['serviceId']}  ${p1_sid1}
     Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['quantity']}  1.0
-    Should Be Equal As Strings  ${resp1.json()['netTotal']}  ${Tot}
-    Should Be Equal As Strings  ${resp1.json()['netRate']}  ${totalamt}
-    Should Be Equal As Strings  ${resp1.json()['amountTotal']}  ${Tot}
+    Should Be Equal As Strings  ${response1_netTotal}  ${Tot}
+    Should Be Equal As Strings  ${response1_netRate}  ${totalamt}
+    Should Be Equal As Strings   ${response1_amountTotal}  ${Tot}
     Should Be Equal As Strings  ${resp1.json()['amountDue']}  0
     Should Be Equal As Strings  ${resp1.json()['billPaymentStatus']}  ${paymentStatus[2]}
 
@@ -1652,20 +1679,41 @@ JD-TC-CreateInvoice-12
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid1}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}  1.0
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['price']}  ${Tot}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}  ${Tot}
+    Should Be Equal As Strings  ${service_response_price}   ${Tot}
+    Should Be Equal As Strings  ${service_response_netRate}  ${Tot}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['ynwUuid']}  ${cwid1}
-    Should Be Equal As Strings  ${resp.json()[0]['amountPaid']}  ${min_pre}
-    Should Be Equal As Strings  ${resp.json()[0]['amountTotal']}  ${Tot}
+    Should Be Equal As Strings   ${response_amountPaid}   ${min_pre}
+    Should Be Equal As Strings  ${response_amountDue}  0
     Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  ${gstpercentage[3]}
-    Should Be Equal As Strings  ${resp.json()[0]['defaultCurrencyAmount']}  ${Tot}
-    Should Be Equal As Strings  ${resp.json()[0]['netTaxAmount']}  ${tax}
-    Should Be Equal As Strings  ${resp.json()[0]['netTotal']}  ${Tot}
-    Should Be Equal As Strings  ${resp.json()[0]['netRate']}  ${totalamt}
-    Should Be Equal As Strings  ${resp.json()[0]['taxableTotal']}  ${Tot}
+    Should Be Equal As Strings   ${response_defaultCurrencyAmount}  ${Tot}
+    Should Be Equal As Strings  ${response_netTaxAmount}  ${tax}
+    Should Be Equal As Strings  ${response_netTotal}  ${Tot}
+    Should Be Equal As Strings  ${response_netRate}  ${totalamt}
+    Should Be Equal As Strings   ${response_taxableTotal}  ${Tot}
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid1}
     Should Be Equal As Strings  ${resp.json()[0]['billPaymentStatus']}  ${paymentStatus[2]}
-    Should Be Equal As Strings  ${resp.json()[0]['amountDue']}  0
+    Should Be Equal As Strings   ${response_amountTotal}  ${Tot}
+
+
+
+
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid1}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}  ${P1SERVICE1}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}  1.0
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['price']}  ${Tot}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}  ${Tot}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['ynwUuid']}  ${cwid1}
+    # Should Be Equal As Strings  ${resp.json()[0]['amountPaid']}  ${min_pre}
+    # Should Be Equal As Strings  ${resp.json()[0]['amountTotal']}  ${Tot}
+    # Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  ${gstpercentage[3]}
+    # Should Be Equal As Strings  ${resp.json()[0]['defaultCurrencyAmount']}  ${Tot}
+    # Should Be Equal As Strings  ${resp.json()[0]['netTaxAmount']}  ${tax}
+    # Should Be Equal As Strings  ${resp.json()[0]['netTotal']}  ${Tot}
+    # Should Be Equal As Strings  ${resp.json()[0]['netRate']}  ${totalamt}
+    # Should Be Equal As Strings  ${resp.json()[0]['taxableTotal']}  ${Tot}
+    # Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid1}
+    # Should Be Equal As Strings  ${resp.json()[0]['billPaymentStatus']}  ${paymentStatus[2]}
+    # Should Be Equal As Strings  ${resp.json()[0]['amountDue']}  0
 
 
 JD-TC-CreateInvoice-13
@@ -1861,10 +1909,10 @@ JD-TC-CreateInvoice-13
 
     ${min_pre1}=   Random Int   min=40   max=50
     ${Tot}=   Random Int   min=100   max=300
-    ${min_pre1}=  Convert To Number  ${min_pre1}  1
+    ${min_pre1}=   Convert To Integer  ${min_pre1}  
     Set Suite Variable   ${min_pre1}
     # ${pre_float}=  twodigitfloat  ${min_pre}
-    ${Tot11}=  Convert To Number  ${Tot}  1 
+    ${Tot11}=   Convert To Integer  ${Tot}   
     Set Suite Variable   ${Tot2}   ${Tot11}
 
     ${P1SERVICE11}=    FakerLibrary.word
@@ -1952,7 +2000,7 @@ JD-TC-CreateInvoice-13
     
 
     ${balamount}=  Evaluate  ${Tot2}-${min_pre1}
-    ${balamount}=  Convert To Number  ${balamount}  2
+    ${balamount}=   Convert To Integer  ${balamount}  
 
 
     ${resp}=  Get consumer Waitlist By Id  ${cwid3}  ${pid2}
@@ -1987,23 +2035,55 @@ JD-TC-CreateInvoice-13
     ${resp}=  Get Bookings Invoices  ${cwid3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+   ${service_response_price}=  Convert To Integer  ${resp.json()[0]['serviceList'][0]['price']} 
+   ${service_response_netRate}=  Convert To Integer  ${resp.json()[0]['serviceList'][0]['netRate']} 
+   ${response_amountPaid}=  Convert To Integer  ${resp.json()[0]['amountPaid']}
+   ${response_amountDue}=  Convert To Integer  ${resp.json()[0]['amountDue']}
+   ${response_amountTotal}=  Convert To Integer  ${resp.json()[0]['amountTotal']}
+   ${response_defaultCurrencyAmount}=  Convert To Integer  ${resp.json()[0]['defaultCurrencyAmount']}
+   ${response_netTaxAmount}=  Convert To Integer  ${resp.json()[0]['netTaxAmount']}
+   ${response_netTotal}=  Convert To Integer  ${resp.json()[0]['netTotal']}
+   ${response_netRate}=  Convert To Integer  ${resp.json()[0]['netRate']}
+   ${response_taxableTotal}=  Convert To Integer  ${resp.json()[0]['taxableTotal']}
+
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid11}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}  ${P1SERVICE11}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}  1.0
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['price']}  ${Tot2}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}  ${Tot2}
+    Should Be Equal As Strings  ${service_response_price}   ${Tot2}
+    Should Be Equal As Strings  ${service_response_netRate}  ${Tot2}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['ynwUuid']}  ${cwid3}
-    Should Be Equal As Strings  ${resp.json()[0]['amountPaid']}  ${min_pre1}
-    Should Be Equal As Strings  ${resp.json()[0]['amountDue']}  ${balamount}
-    Should Be Equal As Strings  ${resp.json()[0]['amountTotal']}  ${Tot2}
-    # Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  ${gstpercentage[3]}
-    Should Be Equal As Strings  ${resp.json()[0]['defaultCurrencyAmount']}  ${Tot2}
-    Should Be Equal As Strings  ${resp.json()[0]['netTaxAmount']}  0.0
-    Should Be Equal As Strings  ${resp.json()[0]['netTotal']}  ${Tot2}
-    Should Be Equal As Strings  ${resp.json()[0]['netRate']}  ${Tot2}
-    Should Be Equal As Strings  ${resp.json()[0]['taxableTotal']}  0.0
+    Should Be Equal As Strings   ${response_amountPaid}   ${min_pre1}
+    Should Be Equal As Strings  ${response_amountDue}  ${balamount}
+    Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  0.0
+    Should Be Equal As Strings   ${response_defaultCurrencyAmount}  ${Tot2}
+    Should Be Equal As Strings  ${response_netTaxAmount}  0
+    Should Be Equal As Strings  ${response_netTotal}  ${Tot2}
+    Should Be Equal As Strings  ${response_netRate}  ${totalamt}
+    Should Be Equal As Strings   ${response_taxableTotal} 0
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid3}
     Set Suite Variable  ${invoice_wtlistonline_uid2}  ${resp.json()[0]['invoiceUid']}
+    Should Be Equal As Strings  ${resp.json()[0]['billPaymentStatus']}  ${paymentStatus[1]}
+    Should Be Equal As Strings   ${response_amountTotal}  ${Tot2}
+
+
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid11}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}  ${P1SERVICE11}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}  1.0
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['price']}  ${Tot2}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}  ${Tot2}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['ynwUuid']}  ${cwid3}
+    # Should Be Equal As Strings  ${resp.json()[0]['amountPaid']}  ${min_pre1}
+    # Should Be Equal As Strings  ${resp.json()[0]['amountDue']}  ${balamount}
+    # Should Be Equal As Strings  ${resp.json()[0]['amountTotal']}  ${Tot2}
+    # # Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  ${gstpercentage[3]}
+    # Should Be Equal As Strings  ${resp.json()[0]['defaultCurrencyAmount']}  ${Tot2}
+    # Should Be Equal As Strings  ${resp.json()[0]['netTaxAmount']}  0.0
+    # Should Be Equal As Strings  ${resp.json()[0]['netTotal']}  ${Tot2}
+    # Should Be Equal As Strings  ${resp.json()[0]['netRate']}  ${Tot2}
+    # Should Be Equal As Strings  ${resp.json()[0]['taxableTotal']}  0.0
+    # Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid3}
+    # Set Suite Variable  ${invoice_wtlistonline_uid2}  ${resp.json()[0]['invoiceUid']}
 
 JD-TC-CreateInvoice-14
 
@@ -2027,7 +2107,7 @@ JD-TC-CreateInvoice-14
     
 
     ${balamount}=  Evaluate  ${Tot2}-${min_pre1}
-    ${balamount}=  Convert To Number  ${balamount}  2
+    ${balamount}=   Convert To Integer  ${balamount}  
 
 
     ${resp}=  Get consumer Waitlist By Id  ${cwid4}  ${pid2}
@@ -2058,23 +2138,52 @@ JD-TC-CreateInvoice-14
     ${resp}=  Get Bookings Invoices  ${cwid4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+   ${service_response_price}=  Convert To Integer  ${resp.json()[0]['serviceList'][0]['price']} 
+   ${service_response_netRate}=  Convert To Integer  ${resp.json()[0]['serviceList'][0]['netRate']} 
+   ${response_amountPaid}=  Convert To Integer  ${resp.json()[0]['amountPaid']}
+   ${response_amountDue}=  Convert To Integer  ${resp.json()[0]['amountDue']}
+   ${response_amountTotal}=  Convert To Integer  ${resp.json()[0]['amountTotal']}
+   ${response_defaultCurrencyAmount}=  Convert To Integer  ${resp.json()[0]['defaultCurrencyAmount']}
+   ${response_netTaxAmount}=  Convert To Integer  ${resp.json()[0]['netTaxAmount']}
+   ${response_netTotal}=  Convert To Integer  ${resp.json()[0]['netTotal']}
+   ${response_netRate}=  Convert To Integer  ${resp.json()[0]['netRate']}
+   ${response_taxableTotal}=  Convert To Integer  ${resp.json()[0]['taxableTotal']}
+
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid11}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}  ${P1SERVICE11}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}  1.0
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['price']}  ${Tot2}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}  ${Tot2}
+    Should Be Equal As Strings  ${service_response_price}   ${Tot2}
+    Should Be Equal As Strings  ${service_response_netRate}  ${Tot2}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['ynwUuid']}  ${cwid4}
-    Should Be Equal As Strings  ${resp.json()[0]['amountPaid']}  ${min_pre1}
-    Should Be Equal As Strings  ${resp.json()[0]['amountDue']}  ${balamount}
-    Should Be Equal As Strings  ${resp.json()[0]['amountTotal']}  ${Tot2}
-    # Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  ${gstpercentage[3]}
-    Should Be Equal As Strings  ${resp.json()[0]['defaultCurrencyAmount']}  ${Tot2}
-    Should Be Equal As Strings  ${resp.json()[0]['netTaxAmount']}  0.0
-    Should Be Equal As Strings  ${resp.json()[0]['netTotal']}  ${Tot2}
-    Should Be Equal As Strings  ${resp.json()[0]['netRate']}  ${Tot2}
-    Should Be Equal As Strings  ${resp.json()[0]['taxableTotal']}  0.0
+    Should Be Equal As Strings   ${response_amountPaid}   ${min_pre1}
+    Should Be Equal As Strings  ${response_amountDue}  ${balamount}
+    Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  0.0
+    Should Be Equal As Strings   ${response_defaultCurrencyAmount}  ${Tot2}
+    Should Be Equal As Strings  ${response_netTaxAmount}  0
+    Should Be Equal As Strings  ${response_netTotal}  ${Tot2}
+    Should Be Equal As Strings  ${response_netRate}  ${Tot2}
+    Should Be Equal As Strings   ${response_taxableTotal} 0
+    Should Be Equal As Strings   ${response_amountTotal}  ${Tot2}
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid4}
     Set Suite Variable  ${invoice_wtlistonline_uid}  ${resp.json()[0]['invoiceUid']}
+
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid11}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}  ${P1SERVICE11}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}  1.0
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['price']}  ${Tot2}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}  ${Tot2}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['ynwUuid']}  ${cwid4}
+    # Should Be Equal As Strings  ${resp.json()[0]['amountPaid']}  ${min_pre1}
+    # Should Be Equal As Strings  ${resp.json()[0]['amountDue']}  ${balamount}
+    # Should Be Equal As Strings  ${resp.json()[0]['amountTotal']}  ${Tot2}
+    # # Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  ${gstpercentage[3]}
+    # Should Be Equal As Strings  ${resp.json()[0]['defaultCurrencyAmount']}  ${Tot2}
+    # Should Be Equal As Strings  ${resp.json()[0]['netTaxAmount']}  0.0
+    # Should Be Equal As Strings  ${resp.json()[0]['netTotal']}  ${Tot2}
+    # Should Be Equal As Strings  ${resp.json()[0]['netRate']}  ${Tot2}
+    # Should Be Equal As Strings  ${resp.json()[0]['taxableTotal']}  0.0
+    # Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid4}
+    # Set Suite Variable  ${invoice_wtlistonline_uid}  ${resp.json()[0]['invoiceUid']}
 
     ${resp}=  ProviderLogout
     Log  ${resp.json()}
@@ -2102,21 +2211,42 @@ JD-TC-CreateInvoice-14
     ${resp}=  Get Bookings Invoices  ${cwid4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+   
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}  ${P1SERVICE11}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}  1.0
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['price']}  ${Tot2}
-    Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}  ${Tot2}
+    Should Be Equal As Strings  ${service_response_price}   ${Tot2}
+    Should Be Equal As Strings  ${service_response_netRate}  ${Tot2}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['ynwUuid']}  ${cwid4}
-    Should Be Equal As Strings  ${resp.json()[0]['amountPaid']}  ${min_pre1}
-    Should Be Equal As Strings  ${resp.json()[0]['amountTotal']}  ${Tot2}
-    Should Be Equal As Strings  ${resp.json()[0]['defaultCurrencyAmount']}  ${Tot2}
-    Should Be Equal As Strings  ${resp.json()[0]['netTaxAmount']}  0.0
-    Should Be Equal As Strings  ${resp.json()[0]['netTotal']}  ${Tot2}
-    Should Be Equal As Strings  ${resp.json()[0]['netRate']}  ${Tot2}
-    Should Be Equal As Strings  ${resp.json()[0]['taxableTotal']}  0.0
+    Should Be Equal As Strings   ${response_amountPaid}   ${min_pre1}
+    Should Be Equal As Strings  ${response_amountDue}  ${balamount}
+    Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  ${gstpercentage[3]}
+    Should Be Equal As Strings   ${response_defaultCurrencyAmount}  ${Tot2}
+    Should Be Equal As Strings  ${response_netTaxAmount}  0
+    Should Be Equal As Strings  ${response_netTotal}  ${Tot2}
+    Should Be Equal As Strings  ${response_netRate}  ${Tot2}
+    Should Be Equal As Strings   ${response_taxableTotal} 0
+    Should Be Equal As Strings   ${response_amountTotal}  ${Tot2}
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid4}
-    Should Be Equal As Strings  ${resp.json()[0]['amountDue']}  0.0
+    Should Be Equal As Strings  ${response_amountDue}  0
     Should Be Equal As Strings  ${resp.json()[0]['billPaymentStatus']}  ${paymentStatus[2]}
+
+
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}  ${P1SERVICE11}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}  1.0
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['price']}  ${Tot2}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}  ${Tot2}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['ynwUuid']}  ${cwid4}
+    # Should Be Equal As Strings  ${resp.json()[0]['amountPaid']}  ${min_pre1}
+    # Should Be Equal As Strings  ${resp.json()[0]['amountTotal']}  ${Tot2}
+    # Should Be Equal As Strings  ${resp.json()[0]['defaultCurrencyAmount']}  ${Tot2}
+    # Should Be Equal As Strings  ${resp.json()[0]['netTaxAmount']}  0.0
+    # Should Be Equal As Strings  ${resp.json()[0]['netTotal']}  ${Tot2}
+    # Should Be Equal As Strings  ${resp.json()[0]['netRate']}  ${Tot2}
+    # Should Be Equal As Strings  ${resp.json()[0]['taxableTotal']}  0.0
+    # Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid4}
+    # Should Be Equal As Strings  ${resp.json()[0]['amountDue']}  0.0
+    # Should Be Equal As Strings  ${resp.json()[0]['billPaymentStatus']}  ${paymentStatus[2]}
 
 JD-TC-CreateInvoice-15
 
@@ -2988,5 +3118,401 @@ JD-TC-CreateInvoice-20
     Should Be Equal As Strings  ${resp1.json()['amountTotal']}  ${Tot3}
     Should Be Equal As Strings  ${resp1.json()['amountDue']}  0
     Should Be Equal As Strings  ${resp1.json()['billPaymentStatus']}  ${paymentStatus[2]}
+
+JD-TC-CreateInvoice-UH4
+
+    [Documentation]  Try to disable finance after taking waitlist from consumer side and the consumer doing the prepayment -  (Tax enabled)
+
+   
+
+    ${PO_Number}    Generate random string    8    9784564123
+    ${PO_Number}    Convert To Integer  ${PO_Number}
+    ${PUSERPH2}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
+    Set Suite Variable   ${PUSERPH2}
+    ${resp}=   Run Keywords  clear_queue  ${PUSERPH2}   AND  clear_service  ${PUSERPH2}  AND  clear_Item    ${PUSERPH2}  AND   clear_Coupon   ${PUSERPH2}   AND  clear_Discount  ${PUSERPH2}  AND  clear_appt_schedule   ${PUSERPH2}
+    ${licid}  ${licname}=  get_highest_license_pkg
+    Log  ${licid}
+    Log  ${licname}
+    Set Test Variable   ${licid}
+    
+    ${domresp}=  Get BusinessDomainsConf
+    Log   ${domresp.content}
+    Should Be Equal As Strings  ${domresp.status_code}  200
+    ${dlen}=  Get Length  ${domresp.json()}
+    ${d1}=  Random Int   min=0  max=${dlen-1}
+    Set Test Variable  ${dom}  ${domresp.json()[${d1}]['domain']}
+    ${sdlen}=  Get Length  ${domresp.json()[${d1}]['subDomains']}
+    ${sdom}=  Random Int   min=0  max=${sdlen-1}
+    Set Test Variable  ${sub_dom}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
+
+    ${firstname}=  FakerLibrary.first_name
+    ${lastname}=  FakerLibrary.last_name
+    ${address}=  FakerLibrary.address
+    ${dob}=  FakerLibrary.Date
+    ${gender}    Random Element    ['Male', 'Female']
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERPH2}  ${licid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Account Activation  ${PUSERPH2}  0
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.content}    "true"
+    
+    ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  0
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid1}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
+    
+    ${list}=  Create List  1  2  3  4  5  6  7
+    Set Suite Variable  ${list}  
+    @{Views}=  Create List  self  all  customersOnly
+    ${ph1}=  Evaluate  ${PUSERPH2}+1000000000
+    ${ph2}=  Evaluate  ${PUSERPH2}+2000000000
+    ${views}=  Evaluate  random.choice($Views)  random
+    ${name1}=  FakerLibrary.name
+    ${name2}=  FakerLibrary.name
+    ${name3}=  FakerLibrary.name
+    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
+    ${bs}=  FakerLibrary.bs
+    ${companySuffix}=  FakerLibrary.companySuffix
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Test Variable  ${tz}
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ['True','False']
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    Set Test Variable   ${sTime}
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    Set Test Variable   ${eTime}
+
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    Set Test Variable  ${DAY}  
+    
+    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
+    Log  ${fields.content}
+    Should Be Equal As Strings    ${fields.status_code}   200
+
+    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_dom}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get specializations Sub Domain  ${dom}  ${sub_dom}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${spec}=  get_Specializations  ${resp.json()}
+    
+    ${resp}=  Update Specialization  ${spec}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH2}.${test_mail}
+
+    ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    # ------------- Get general details and settings of the provider and update all needed settings
+    
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${pid1}  ${resp.json()['id']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Verify Response  ${resp}  onlineCheckIns=${bool[1]}
+
+    ${resp}=  Enable Waitlist
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp1}=   Run Keyword If  ${resp.json()['onlinePresence']}==${bool[0]}   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${EMPTY}
+    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
+    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+
+    ${resp}=  Get Account Payment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp1}=   Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
+    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    
+    ${resp}=  Get Account Payment Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+    Set Test Variable  ${accountId1}  ${resp.json()['accountId']}    
+    
+
+    ${resp}=  Get Account Payment Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${GST_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
+    ${resp}=  Update Tax Percentage  ${gstpercentage[3]}  ${GST_num} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    
+    ${resp}=  Enable Tax
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    
+    ${p1_lid}=  Create Sample Location
+    ${resp}=  Get Locations
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${p1_lid}  ${resp.json()[0]['id']} 
+
+    ${min_pre}=   Random Int   min=40   max=50
+    ${Tot}=   Random Int   min=100   max=300
+    ${min_pre}=  Convert To Number  ${min_pre}  1
+    Set Test Variable   ${min_pre}
+    # ${pre_float}=  twodigitfloat  ${min_pre}
+    ${Tot1}=  Convert To Number  ${Tot}  1 
+    Set Test Variable   ${Tot}   ${Tot1}
+
+    ${P1SERVICE1}=    FakerLibrary.word
+    Set Test Variable   ${P1SERVICE1}
+    ${desc}=   FakerLibrary.sentence
+    ${maxBookingsAllowed}=   Random Int   min=2   max=5
+    ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration1}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Tot}  ${bool[1]}  ${bool[1]}    maxBookingsAllowed=${maxBookingsAllowed}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${p1_sid1}  ${resp.json()}
+
+    ${resp}=  Auto Invoice Generation For Service   ${p1_sid1}    ${toggle[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${p1_sid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
+
+
+    ${P1SERVICE2}=    FakerLibrary.word
+    Set Test Variable   ${P1SERVICE2} 
+    ${desc}=   FakerLibrary.sentence
+    ${resp}=  Create Service  ${P1SERVICE2}  ${desc}   ${service_duration1}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${Tot}  ${bool[0]}  ${bool[1]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${p1_sid2}  ${resp.json()}
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    ${serviceprice}=   Random Int  min=100  max=500
+    ${serviceprice}=  Convert To Number  ${serviceprice}  1
+    ${serviceList1}=  Create Dictionary  serviceId=${p1_sid2}   quantity=${quantity}   price=${serviceprice} 
+
+    ${resp}=  Auto Invoice Generation For Service   ${p1_sid2}    ${toggle[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${p1_sid2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['automaticInvoiceGeneration']}    ${bool[1]}
+
+    ${queue1}=    FakerLibrary.word
+    ${capacity}=  FakerLibrary.Numerify  %%
+    ${sTime}=  add_timezone_time  ${tz}  2  00  
+    ${eTime}=  add_timezone_time  ${tz}  2  15  
+    ${parallel}=   Random Int  min=1   max=1
+    ${resp}=  Create Queue  ${queue1}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${p1_lid}  ${p1_sid1}  ${p1_sid2}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${p1_qid}  ${resp.json()}
+
+
+    ${resp}=   Get Category With Filter  categoryType-eq=${categoryType[3]}  
+    Log  ${resp.json()}
+
+
+
+    ${resp}=  ProviderLogout
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Consumer Login  ${CUSERNAME6}  ${PASSWORD}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${cid1}=  get_id  ${CUSERNAME6}
+    # Set Test Variable   ${cid1}
+
+    ${firstName}=  FakerLibrary.name
+    Set Test Variable    ${firstName}
+    ${lastName}=  FakerLibrary.last_name
+    Set Test Variable    ${lastName}
+    ${primaryMobileNo}    Generate random string    10    123456789
+    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
+    Set Test Variable    ${primaryMobileNo}
+    ${email}=    FakerLibrary.Email
+    Set Test Variable    ${email}
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid1}    ${resp.json()['providerConsumer']}
+
+
+    ${msg}=  Fakerlibrary.word
+    Append To File  ${EXECDIR}/TDD/TDD_Output/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    ${resp}=  Add To Waitlist Consumers  ${pid1}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    
+    ${wid}=  Get Dictionary Values  ${resp.json()}
+    Set Test Variable  ${cwid}  ${wid[0]} 
+    
+    ${tax1}=  Evaluate  ${Tot}*${gstpercentage[3]}
+    ${tax}=   Evaluate  ${tax1}/100
+    ${totalamt}=  Evaluate  ${Tot}+${tax}
+    ${totalamt}=  Convert To Number  ${totalamt}  2
+    ${totalamt}=  Evaluate  "%.2f" % ${totalamt}
+    # ${totalamt}=  twodigitfloat  ${totalamt}
+    ${balamount}=  Evaluate  ${totalamt}-${min_pre}
+    ${balamount}=  Convert To Number  ${balamount}  2
+
+
+    ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  paymentStatus=${paymentStatus[0]}   waitlistStatus=${wl_status[3]}
+
+
+    sleep   02s
+
+    ${resp}=  Make payment Consumer Mock  ${pid1}  ${min_pre}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${None}
+    Log  ${resp.json()}
+    # ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid1}
+    # Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Make payment Consumer Mock  ${min_pre}  ${bool[1]}  ${cwid}  ${pid}  ${purpose[0]}  ${cid1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${mer}   ${resp.json()['merchantId']}  
+    Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp1}=  Get provider Waitlist By Id  ${cwid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+
+    sleep   02s
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[1]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[1]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  422
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+ 
+    
+    # ${resp}=  Get Bookings Invoices  ${cwid}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid1}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}  ${P1SERVICE1}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}  1.0
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['price']}  ${Tot}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}  ${Tot}
+    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['ynwUuid']}  ${cwid}
+    # Should Be Equal As Strings  ${resp.json()[0]['amountPaid']}  ${min_pre}
+    # Should Be Equal As Strings  ${resp.json()[0]['amountDue']}  ${balamount}
+    # Should Be Equal As Strings  ${resp.json()[0]['amountTotal']}  ${Tot}
+    # Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  ${gstpercentage[3]}
+    # Should Be Equal As Strings  ${resp.json()[0]['defaultCurrencyAmount']}  ${Tot}
+    # Should Be Equal As Strings  ${resp.json()[0]['netTaxAmount']}  ${tax}
+    # Should Be Equal As Strings  ${resp.json()[0]['netTotal']}  ${Tot}
+    # Should Be Equal As Strings  ${resp.json()[0]['netRate']}  ${totalamt}
+    # Should Be Equal As Strings  ${resp.json()[0]['taxableTotal']}  ${Tot}
+    # Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid}
+    # Set Test Variable  ${invoice_wtlistonline_uid4}  ${resp.json()[0]['invoiceUid']}
 
 

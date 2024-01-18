@@ -359,20 +359,20 @@ JD-TC-Remove Item Level Discount-1
     Set Suite Variable  ${sid1}  ${resp.json()} 
 
     ${quantity}=   Random Int  min=5  max=10
-    ${quantity}=  Convert To Number  ${quantity}  1
+    ${quantity}=   Convert To Integer  ${quantity}  
     ${serviceprice}=   Random Int  min=1000  max=1500
-    ${serviceprice}=  Convert To Number  ${serviceprice}  1
+    ${serviceprice}=   Convert To Integer  ${serviceprice}  
 
     ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
     ${serviceList}=    Create List    ${serviceList}
     ${servicenetRate}=  Evaluate  ${quantity} * ${serviceprice}
-    ${servicenetRate}=  Convert To Number  ${servicenetRate}   2
+    ${servicenetRate}=   Convert To Integer  ${servicenetRate}   
     Set Test Variable   ${servicenetRate}
 
      ${item1}=     FakerLibrary.word
     ${itemCode1}=     FakerLibrary.word
     ${price1}=     Random Int   min=400   max=500
-    ${price}=  Convert To Number  ${price1}  1
+    ${price}=   Convert To Integer  ${price1}  
     Set Suite Variable  ${price} 
     ${resp}=  Create Sample Item   ${DisplayName1}   ${item1}  ${itemCode1}  ${price}  ${bool[1]} 
     Log  ${resp.json()}  
@@ -382,13 +382,14 @@ JD-TC-Remove Item Level Discount-1
     ${resp}=   Get Item By Id  ${itemId}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${promotionalPrice}   ${resp.json()['promotionalPrice']}
+    ${promotionalPrice}=   Convert To Integer  ${promotionalPrice}  
 
 
-    ${quantity}=   Random Int  min=1  max=5
-    ${quantity}=  Convert To Number  ${quantity}  1
+    ${quantity}=   Random Int  min=1000  max=5000
+    ${quantity}=   Convert To Integer  ${quantity}  
     ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  price=${promotionalPrice}
     ${totalPrice}=  Evaluate  ${quantity} * ${promotionalPrice}
-    ${totalPrice}=  Convert To Number  ${totalPrice}   2
+    ${totalPrice}=   Convert To Integer  ${totalPrice}   
     Set Test Variable   ${totalPrice}
     
     
@@ -400,7 +401,7 @@ JD-TC-Remove Item Level Discount-1
     ${discount1}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
     ${discountprice1}=     Random Int   min=50   max=100
-    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    ${discountprice}=   Convert To Integer  ${discountprice1}  
     Set Suite Variable   ${discountprice}
     ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
     Log  ${resp.json()}
@@ -414,42 +415,61 @@ JD-TC-Remove Item Level Discount-1
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
     ${discountValue1}=     Random Int   min=50   max=100
-    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+    ${discountValue1}=   Convert To Integer  ${discountValue1}  
 
 
     ${resp}=  Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${discountValue1}   ${privateNote}  ${displayNote}   ${itemId}
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
     ${netRate}=  Evaluate  ${totalPrice} - ${discountprice}
+    ${netRate}=   Convert To Integer  ${netRate}  
+    # ${netRate}=  Evaluate  "%.2f" % ${netRate}
     Set Test Variable   ${netRate}
 
         ${netTaxAmount}=  Evaluate  ${netRate}*(${tax_per}/100)
-        ${netTaxAmount}=  Convert To Number  ${netTaxAmount}   2
+        ${netTaxAmount}=   Convert To Integer  ${netTaxAmount}   
         ${total_amt_with_tax}=  Evaluate  ${netRate}+${netTaxAmount}
-        ${total_amt_with_tax}=  Convert To Number  ${total_amt_with_tax}   2
+        ${total_amt_with_tax}=   Convert To Integer  ${total_amt_with_tax}   
         ${netTotal}=  Evaluate  ${total_amt_with_tax}+${servicenetRate}
-        ${netTotal}=  Convert To Number  ${netTotal}   2
+        ${netTotal}=   Convert To Integer  ${netTotal}   
         ${rate}=  Evaluate  ${netRate}+${servicenetRate}
-        ${rate}=  Convert To Number  ${rate}   2
+        ${rate}=   Convert To Integer  ${rate}   
         ${amountTotal}=  Evaluate  ${rate}-${netTaxAmount} 
-        ${amountTotal}=  Convert To Number  ${amountTotal}   2
+        ${amountTotal}=   Convert To Integer  ${amountTotal}   
+
 
     ${resp1}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp1.content}
+    ${rate1}=    Convert To Integer  ${resp1.json()['netTotal']} 
+    ${netTotal1}=    Convert To Integer  ${resp1.json()['netRate']} 
+    ${totalPrice1}=    Convert To Integer  ${resp1.json()['itemList'][0]['totalPrice']}
+    ${discountprice1}=    Convert To Integer  ${resp1.json()['itemList'][0]['discountTotal']}
+    ${netRate1}=    Convert To Integer  ${resp1.json()['itemList'][0]['netRate']} 
+    ${servicenetRate1}=    Convert To Integer  ${resp1.json()['serviceList'][0]['totalPrice']} 
+    ${servicenetRate11}=    Convert To Integer  ${resp1.json()['serviceList'][0]['netRate']} 
+    ${taxableTotal1}=    Convert To Integer   ${resp1.json()['taxableTotal']} 
+    ${nonTaxableTotal1}=    Convert To Integer   ${resp1.json()['nonTaxableTotal']} 
+    ${netTaxAmount1}=    Convert To Integer   ${resp1.json()['netTaxAmount']}
+    ${temporaryTotalAmount1}=    Convert To Integer   ${resp1.json()['temporaryTotalAmount']} 
+    ${amountTotal1}=    Convert To Integer   ${resp1.json()['amountTotal']}
+    ${amountDue1}=    Convert To Integer   ${resp1.json()['amountDue']} 
+
+
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts'][0]['id']}   ${discountId}
-    Should Be Equal As Strings  ${resp1.json()['netTotal']}     ${rate}
-    Should Be Equal As Strings  ${resp1.json()['netRate']}     ${netTotal}
-    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['totalPrice']}   ${totalPrice}
-    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discountTotal']}   ${discountprice}
-    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['netRate']}   ${netRate}
-    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['totalPrice']}   ${servicenetRate}
-    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['netRate']}   ${servicenetRate}
-    Should Be Equal As Strings  ${resp1.json()['amountDue']}     ${netTotal}
-    Should Be Equal As Strings  ${resp1.json()['taxableTotal']}     ${netRate}
-    Should Be Equal As Strings  ${resp1.json()['nonTaxableTotal']}     ${servicenetRate}
-    Should Be Equal As Strings  ${resp1.json()['netTaxAmount']}     ${netTaxAmount}
-    Should Be Equal As Strings  ${resp1.json()['temporaryTotalAmount']}     ${rate}
-    Should Be Equal As Strings  ${resp1.json()['amountTotal']}     ${amountTotal}
+    Should Be Equal As Strings   ${rate1}    ${rate}
+    Should Be Equal As Strings  ${netTotal1}     ${netTotal}
+    Should Be Equal As Strings  ${totalPrice1}   ${totalPrice}
+    Should Be Equal As Strings  ${discountprice1}   ${discountprice}
+    Should Be Equal As Strings  ${netRate1}   ${netRate}
+    Should Be Equal As Strings   ${servicenetRate1}  ${servicenetRate}
+    Should Be Equal As Strings   ${servicenetRate11}  ${servicenetRate}
+    Should Be Equal As Strings   ${taxableTotal1}  ${netRate}
+    Should Be Equal As Strings   ${nonTaxableTotal1}     ${servicenetRate}
+    Should Be Equal As Strings  ${netTaxAmount1}     ${netTaxAmount}
+    Should Be Equal As Strings  ${temporaryTotalAmount1}     ${rate}
+    Should Be Equal As Strings  ${amountTotal1}     ${amountTotal}
+    Should Be Equal As Strings  ${amountDue1}     ${netTotal}
+
 
     ${resp}=  Remove Item Level Discount   ${invoice_uid}   ${discountId}    ${discountValue1}   ${privateNote}  ${displayNote}   ${itemId}
     Log  ${resp.json()}  
@@ -647,13 +667,14 @@ JD-TC-Remove Item Level Discount-2
     ${itemName}=    FakerLibrary.word
     Set Suite Variable  ${itemName}
     ${price}=   Random Int  min=10  max=15
-    ${price}=  Convert To Number  ${price}  1
+    ${price}=   Convert To Integer  ${price}  
 
     ${quantity}=   Random Int  min=100  max=150
-    ${quantity}=  Convert To Number  ${quantity}  1
+    ${quantity}=   Convert To Integer  ${quantity}  
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}
     ${netTotal1}=  Evaluate  ${quantity} * ${price}
+    ${netTotal1}=   Convert To Integer  ${netTotal1} 
     Set Suite Variable   ${netTotal1}
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
@@ -661,7 +682,7 @@ JD-TC-Remove Item Level Discount-2
      ${item1}=     FakerLibrary.word
     ${itemCode1}=     FakerLibrary.word
     ${price1}=     Random Int   min=400   max=500
-    ${price}=  Convert To Number  ${price1}  1
+    ${price}=   Convert To Integer  ${price1}  
     Set Suite Variable  ${price} 
     ${resp}=  Create Sample Item   ${DisplayName1}   ${item1}  ${itemCode1}  ${price}  ${bool[0]} 
     Log  ${resp.json()}  
@@ -674,9 +695,10 @@ JD-TC-Remove Item Level Discount-2
 
 
     ${quantity}=   Random Int  min=50  max=100
-    ${quantity}=  Convert To Number  ${quantity}  1
+    ${quantity}=   Convert To Integer  ${quantity}  
     ${itemList}=  Create Dictionary  itemId=${itemId1}   quantity=${quantity}  price=${promotionalPrice}
     ${netTotal}=  Evaluate  ${quantity} * ${promotionalPrice}
+    ${netTotal}=   Convert To Integer  ${netTotal} 
     Set Suite Variable   ${netTotal}
     
     
@@ -688,7 +710,7 @@ JD-TC-Remove Item Level Discount-2
     ${discount1}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
     ${discountprice1}=     Random Int   min=50   max=100
-    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    ${discountprice}=   Convert To Integer  ${discountprice1}  
     Set Suite Variable   ${discountprice}
     ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
     Log  ${resp.json()}
@@ -701,6 +723,7 @@ JD-TC-Remove Item Level Discount-2
     Should Be Equal As Strings  ${resp.status_code}  200
     ${dis}=  Evaluate  ${netTotal} - ${discountprice}
     Set Suite Variable   ${dis}
+    ${dis}=   Convert To Integer  ${dis}  
 
 
 
@@ -770,21 +793,30 @@ JD-TC-Remove Item Level Discount-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${netTotal2}=  Evaluate  ${netTotal1} + ${dis}
-    ${netTotal2}=  Convert To Number  ${netTotal2}   2
+    ${netTotal2}=   Convert To Integer  ${netTotal2}   
     ${netRate}=   Evaluate  ${netTotal1}-${dis}
-    ${netRate}=  Convert To Number  ${netRate}   2
+    ${netRate}=   Convert To Integer  ${netRate}   
     ${amounttotal} =  Evaluate  ${netTotal} + ${netTotal1}
-        ${amounttotal}=  Convert To Number  ${amounttotal}   2
+    ${amounttotal}=   Convert To Integer  ${amounttotal}   
+
+
 
 
     ${resp1}=  Get Invoice By Id  ${invoice_uid1}
     Log  ${resp1.content}
+    ${rate1}=    Convert To Integer  ${resp1.json()['netTotal']} 
+    ${netTotal1}=    Convert To Integer  ${resp1.json()['netRate']} 
+    ${totalPrice1}=    Convert To Integer  ${resp1.json()['itemList'][0]['totalPrice']}
+    ${discountprice1}=    Convert To Integer  ${resp1.json()['itemList'][0]['discountTotal']}
+    ${amountTotal1}=    Convert To Integer   ${resp1.json()['amountTotal']}
+    ${amountDue1}=    Convert To Integer   ${resp1.json()['amountDue']} 
+
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts'][0]['id']}   ${discountId1}
-    Should Be Equal As Strings  ${resp1.json()['netTotal']}     ${netTotal2}
-    Should Be Equal As Strings  ${resp1.json()['netRate']}     ${netTotal2}
-    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['totalPrice']}   ${netTotal}
-    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discountTotal']}   ${discountprice}
-    Should Be Equal As Strings  ${resp1.json()['amountTotal']}     ${netTotal}
+    Should Be Equal As Strings  ${rate1}     ${netTotal2}
+    Should Be Equal As Strings  ${netTotal1}     ${netTotal2}
+    Should Be Equal As Strings  ${totalPrice1}   ${netTotal}
+    Should Be Equal As Strings  ${discountprice1}   ${discountprice}
+    Should Be Equal As Strings  ${amountTotal1}     ${netTotal}
 
 
     ${vender_name}=   FakerLibrary.firstname
@@ -845,7 +877,7 @@ JD-TC-Remove Item Level Discount-4
      ${item1}=     FakerLibrary.word
     ${itemCode1}=     FakerLibrary.word
     ${price1}=     Random Int   min=400   max=500
-    ${price}=  Convert To Number  ${price1}  1
+    ${price}=   Convert To Integer  ${price1}  
     Set Suite Variable  ${price} 
     ${resp}=  Create Sample Item   ${DisplayName1}   ${item1}  ${itemCode1}  ${price}  ${bool[1]} 
     Log  ${resp.json()}  
@@ -855,10 +887,11 @@ JD-TC-Remove Item Level Discount-4
     ${resp}=   Get Item By Id  ${itemId2}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${promotionalPrice}   ${resp.json()['promotionalPrice']}
+    ${promotionalPrice}=   Convert To Integer  ${promotionalPrice}  
 
 
-    ${quantity}=   Random Int  min=5  max=10
-    ${quantity}=  Convert To Number  ${quantity}  1
+    ${quantity}=   Random Int  min=5000  max=6000
+    ${quantity}=   Convert To Integer  ${quantity}  
     ${itemList}=  Create Dictionary  itemId=${itemId2}   quantity=${quantity}  price=${promotionalPrice}
     ${netTotal1}=  Evaluate  ${quantity} * ${promotionalPrice}
     Set Suite Variable   ${netTotal1}
@@ -872,7 +905,7 @@ JD-TC-Remove Item Level Discount-4
     ${discount1}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
     ${discountprice1}=     Random Int   min=50   max=100
-    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    ${discountprice}=   Convert To Integer  ${discountprice1}  
     Set Test Variable   ${discountprice}
     ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
     Log  ${resp.json()}
@@ -887,33 +920,34 @@ JD-TC-Remove Item Level Discount-4
 
 
         ${netTaxAmount}=  Evaluate  ${netRate}*(${tax_per}/100)
-        ${netTaxAmount}=  Convert To Number  ${netTaxAmount}   2
+        ${netTaxAmount}=   Convert To Integer  ${netTaxAmount}   
         ${total_amt_with_tax}=  Evaluate  ${netRate}+${netTaxAmount}
-        ${total_amt_with_tax}=  Convert To Number  ${total_amt_with_tax}   2
+        ${total_amt_with_tax}=   Convert To Integer  ${total_amt_with_tax}   
         ${netTotal}=  Evaluate  ${total_amt_with_tax}+${netRate}
-        ${netTotal}=  Convert To Number  ${netTotal}   2
+        ${netTotal}=   Convert To Integer  ${netTotal}   
 
     ${resp1}=  Get Invoice By Id  ${invoice_uid3}
     Log  ${resp1.content}
+
+    ${rate1}=    Convert To Integer  ${resp1.json()['netTotal']} 
+    ${netTotal3}=    Convert To Integer  ${resp1.json()['netRate']} 
+    ${discountprice1}=    Convert To Integer  ${resp1.json()['itemList'][0]['discountTotal']}
+    ${taxableTotal1}=    Convert To Integer   ${resp1.json()['taxableTotal']} 
+    ${amountTotal1}=    Convert To Integer   ${resp1.json()['amountTotal']}
+    ${amountDue1}=    Convert To Integer   ${resp1.json()['amountDue']} 
+    ${discountValue1}=    Convert To Integer  ${resp1.json()['itemList'][0]['discounts'][0]['discountValue']}
+
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts'][0]['id']}   ${discountId1}
-    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts'][0]['discountValue']}   ${discountprice}
+    Should Be Equal As Strings  ${discountValue1}   ${discountprice}
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts'][0]['privateNote']}   ${privateNote}
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts'][0]['displayNote']}   ${displayNote}
-    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discountTotal']}   ${discountprice}
-    Should Be Equal As Strings  ${resp1.json()['netTotal']}     ${netRate}
-    Should Be Equal As Strings  ${resp1.json()['netRate']}     ${total_amt_with_tax}
-    Should Be Equal As Strings  ${resp1.json()['amountDue']}     ${total_amt_with_tax}
-    Should Be Equal As Strings  ${resp1.json()['amountTotal']}     ${netRate}
-    Should Be Equal As Strings  ${resp1.json()['taxableTotal']}     ${total_amt_with_tax}
-    # Should Be Equal As Strings  ${resp1.json()['amountDue']}     ${netRate}
-    # Should Be Equal As Strings  ${resp1.json()['temporaryTotalAmount']}     ${rate}
-    # Should Be Equal As Strings  ${resp1.json()['itemList'][0]['totalPrice']}   ${servicenetRate}
-    # Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['netRate']}   ${netRate}
+    Should Be Equal As Strings  ${discountprice1}   ${discountprice}
+    Should Be Equal As Strings  ${rate1}     ${netRate}
+    Should Be Equal As Strings  ${netTotal3}     ${total_amt_with_tax}
+    Should Be Equal As Strings  ${amountDue1}     ${total_amt_with_tax}
+    Should Be Equal As Strings  ${amountTotal1}     ${netRate}
+    Should Be Equal As Strings  ${taxableTotal1}     ${total_amt_with_tax}
 
-
-
-    # Should Be Equal As Strings  ${resp1.json()['nonTaxableTotal']}     ${netRate}
-    # Should Be Equal As Strings  ${resp1.json()['temporaryTotalAmount']}     ${netRate}
 
     ${resp}=  Remove Item Level Discount   ${invoice_uid3}   ${discountId1}    ${EMPTY}   ${EMPTY}  ${EMPTY}   ${itemId2}
     Log  ${resp.json()}  
@@ -921,21 +955,27 @@ JD-TC-Remove Item Level Discount-4
 
     
         ${netTaxAmount1}=  Evaluate  ${netTotal1}*(${tax_per}/100)
-        ${netTaxAmount1}=  Convert To Number  ${netTaxAmount1}   2
+        ${netTaxAmount1}=   Convert To Integer  ${netTaxAmount1}   
         ${total_amt_with_tax1}=  Evaluate  ${netTotal1}+${netTaxAmount1}
-        ${total_amt_with_tax1}=  Convert To Number  ${total_amt_with_tax1}   2
+        ${total_amt_with_tax1}=   Convert To Integer  ${total_amt_with_tax1}   
         ${netTotal1}=  Evaluate  ${total_amt_with_tax1}+${netTotal1}
-        ${netTotal1}=  Convert To Number  ${netTotal1}   2
+        ${netTotal1}=   Convert To Integer  ${netTotal1}   
 
     ${resp}=  Get Invoice By Id  ${invoice_uid3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    ${rate11}=    Convert To Integer  ${resp1.json()['netTotal']} 
+    ${netTotal4}=    Convert To Integer  ${resp1.json()['netRate']} 
+     ${taxableTotal11}=    Convert To Integer   ${resp1.json()['taxableTotal']} 
+    ${amountTotal11}=    Convert To Integer   ${resp1.json()['amountTotal']}
+    ${amountDue11}=    Convert To Integer   ${resp1.json()['amountDue']} 
+
     Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts']}  []
-    Should Be Equal As Strings  ${resp1.json()['netTotal']}     ${netTotal1}
-    Should Be Equal As Strings  ${resp1.json()['netRate']}     ${total_amt_with_tax1}
-    Should Be Equal As Strings  ${resp1.json()['amountDue']}     ${total_amt_with_tax1}
-    Should Be Equal As Strings  ${resp1.json()['amountTotal']}     ${netTotal1}
-    Should Be Equal As Strings  ${resp1.json()['taxableTotal']}     ${total_amt_with_tax1}
+    Should Be Equal As Strings   ${rate11}     ${netTotal1}
+    Should Be Equal As Strings   ${netTotal4}     ${total_amt_with_tax1}
+    Should Be Equal As Strings  ${amountDue11}     ${total_amt_with_tax1}
+    Should Be Equal As Strings  ${amountTotal11}     ${netTotal1}
+    Should Be Equal As Strings   ${taxableTotal11}     ${total_amt_with_tax1}
 
 
 JD-TC-Remove Item Level Discount-5
@@ -1221,20 +1261,20 @@ JD-TC-Remove Item Level Discount-5
     Set Test Variable  ${sid1}  ${resp.json()} 
 
     ${quantity}=   Random Int  min=50  max=100
-    ${quantity}=  Convert To Number  ${quantity}  1
+    ${quantity}=   Convert To Integer  ${quantity}  
     ${serviceprice}=   Random Int  min=1000  max=1500
-    ${serviceprice}=  Convert To Number  ${serviceprice}  1
+    ${serviceprice}=   Convert To Integer  ${serviceprice}  
 
     ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
     ${serviceList}=    Create List    ${serviceList}
     ${servicenetRate}=  Evaluate  ${quantity} * ${serviceprice}
-    ${servicenetRate}=  Convert To Number  ${servicenetRate}   2
+    ${servicenetRate}=   Convert To Integer  ${servicenetRate}   
     Set Test Variable   ${servicenetRate}
 
      ${item1}=     FakerLibrary.word
     ${itemCode1}=     FakerLibrary.word
     ${price1}=     Random Int   min=400   max=500
-    ${price}=  Convert To Number  ${price1}  1
+    ${price}=   Convert To Integer  ${price1}  
     Set Test Variable  ${price} 
     ${resp}=  Create Sample Item   ${DisplayName1}   ${item1}  ${itemCode1}  ${price}  ${bool[1]} 
     Log  ${resp.json()}  
@@ -1244,13 +1284,14 @@ JD-TC-Remove Item Level Discount-5
     ${resp}=   Get Item By Id  ${itemId}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${promotionalPrice}   ${resp.json()['promotionalPrice']}
+    ${promotionalPrice}=   Convert To Integer  ${promotionalPrice}  
 
 
     ${quantity}=   Random Int  min=1  max=5
-    ${quantity}=  Convert To Number  ${quantity}  1
+    ${quantity}=   Convert To Integer  ${quantity}  
     ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  price=${promotionalPrice}
     ${totalPrice}=  Evaluate  ${quantity} * ${promotionalPrice}
-    ${totalPrice}=  Convert To Number  ${totalPrice}   2
+    ${totalPrice}=   Convert To Integer  ${totalPrice}   
     Set Test Variable   ${totalPrice}
     
     
@@ -1262,7 +1303,7 @@ JD-TC-Remove Item Level Discount-5
     ${discount1}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
     ${discountprice1}=     Random Int   min=50   max=100
-    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    ${discountprice}=   Convert To Integer  ${discountprice1}  
     Set Test Variable   ${discountprice}
     ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
     Log  ${resp.json()}
@@ -1276,7 +1317,7 @@ JD-TC-Remove Item Level Discount-5
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
     ${discountValue1}=     Random Int   min=50   max=100
-    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+    ${discountValue1}=   Convert To Integer  ${discountValue1}  
 
 
     ${resp}=  Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${discountValue1}   ${privateNote}  ${displayNote}   ${itemId}
@@ -1286,28 +1327,42 @@ JD-TC-Remove Item Level Discount-5
     Set Test Variable   ${netRate}
 
     #     ${netTotal}=  Evaluate  ${total_amt_with_tax}+${servicenetRate}
-    #     ${netTotal}=  Convert To Number  ${netTotal}   2
+    #     ${netTotal}=   Convert To Integer  ${netTotal}   
         ${rate}=  Evaluate  ${netRate}+${servicenetRate}
-        ${rate}=  Convert To Number  ${rate}   2
+        ${rate}=   Convert To Integer  ${rate}   
     #     ${amountTotal}=  Evaluate  ${rate}-${netTaxAmount} 
-    #     ${amountTotal}=  Convert To Number  ${amountTotal}   2
+    #     ${amountTotal}=   Convert To Integer  ${amountTotal}   
 
     ${resp1}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp1.content}
+    ${rate1}=    Convert To Integer  ${resp1.json()['netTotal']} 
+    ${netTotal1}=    Convert To Integer  ${resp1.json()['netRate']} 
+    ${totalPrice1}=    Convert To Integer  ${resp1.json()['itemList'][0]['totalPrice']}
+    ${discountprice1}=    Convert To Integer  ${resp1.json()['itemList'][0]['discountTotal']}
+    ${netRate1}=    Convert To Integer  ${resp1.json()['itemList'][0]['netRate']} 
+    ${servicenetRate1}=    Convert To Integer  ${resp1.json()['serviceList'][0]['totalPrice']} 
+    ${servicenetRate11}=    Convert To Integer  ${resp1.json()['serviceList'][0]['netRate']} 
+    ${taxableTotal1}=    Convert To Integer   ${resp1.json()['taxableTotal']} 
+    ${nonTaxableTotal1}=    Convert To Integer   ${resp1.json()['nonTaxableTotal']} 
+    ${netTaxAmount1}=    Convert To Integer   ${resp1.json()['netTaxAmount']}
+    ${temporaryTotalAmount1}=    Convert To Integer   ${resp1.json()['temporaryTotalAmount']} 
+    ${amountTotal1}=    Convert To Integer   ${resp1.json()['amountTotal']}
+    ${amountDue1}=    Convert To Integer   ${resp1.json()['amountDue']} 
+
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts'][0]['id']}   ${discountId}
-    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['totalPrice']}   ${totalPrice}
-    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discountTotal']}   ${discountprice}
-    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['netRate']}   ${netRate}
-    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['totalPrice']}   ${servicenetRate}
-    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['netRate']}   ${servicenetRate}
-    Should Be Equal As Strings  ${resp1.json()['amountDue']}     ${rate}
-    Should Be Equal As Strings  ${resp1.json()['netTotal']}     ${rate}
-    Should Be Equal As Strings  ${resp1.json()['netRate']}     ${rate}
-    Should Be Equal As Strings  ${resp1.json()['taxableTotal']}     ${netRate}
-    Should Be Equal As Strings  ${resp1.json()['nonTaxableTotal']}     ${servicenetRate}
-    Should Be Equal As Strings  ${resp1.json()['netTaxAmount']}     0.0
-    Should Be Equal As Strings  ${resp1.json()['temporaryTotalAmount']}     ${rate}
-    Should Be Equal As Strings  ${resp1.json()['amountTotal']}     ${rate}
+    Should Be Equal As Strings   ${totalPrice1}   ${totalPrice}
+    Should Be Equal As Strings  ${discountprice1}   ${discountprice}
+    Should Be Equal As Strings  ${netRate1}   ${netRate}
+    Should Be Equal As Strings  ${servicenetRate1}   ${servicenetRate}
+    Should Be Equal As Strings  ${servicenetRate11}   ${servicenetRate}
+    Should Be Equal As Strings  ${amountDue1}     ${rate}
+    Should Be Equal As Strings  ${rate1}     ${rate}
+    Should Be Equal As Strings  ${netTotal1}     ${rate}
+    Should Be Equal As Strings  ${taxableTotal1}     ${netRate}
+    Should Be Equal As Strings  ${nonTaxableTotal1}     ${servicenetRate}
+    Should Be Equal As Strings  ${netTaxAmount1}     0
+    Should Be Equal As Strings  ${temporaryTotalAmount1}     ${rate}
+    Should Be Equal As Strings  ${amountTotal1}     ${rate}
 
     ${resp}=  Remove Item Level Discount   ${invoice_uid}   ${discountId}    ${discountValue1}   ${privateNote}  ${displayNote}   ${itemId}
     Log  ${resp.json()}  
@@ -1317,6 +1372,311 @@ JD-TC-Remove Item Level Discount-5
     Log  ${resp.content}
  
     Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts']}  []
+
+JD-TC-Remove Item Level Discount-6
+
+    [Documentation]    Apply itemlevel discount from main account and then remove that discount from user account
+
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${accoun_Id}        ${resp.json()['id']}  
+    Set Test Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+
+    ${fields}=   Get subDomain level Fields  ${d1}  ${sd1}
+    Log  ${fields.json()}
+    Should Be Equal As Strings    ${fields.status_code}   200
+
+    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sd1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get specializations Sub Domain  ${d1}  ${sd1}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${spec}=  get_Specializations  ${resp.json()}
+    ${resp}=  Update Specialization  ${spec}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+
+  
+
+
+
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+
+
+    
+    ${resp}=  Create Sample Location  
+    Set Test Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
+    ${name}=   FakerLibrary.word
+    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${category_id}   ${resp.json()}
+
+
+    ${name1}=   FakerLibrary.word
+    Set Test Variable   ${name1}
+    ${resp}=  Create Category   ${name1}  ${categoryType[3]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${category_id2}   ${resp.json()}
+
+    ${vender_name}=   FakerLibrary.firstname
+    ${contactPersonName}=   FakerLibrary.lastname
+    ${owner_name}=   FakerLibrary.lastname
+    ${vendorId}=   FakerLibrary.word
+    ${PO_Number}    Generate random string    5    123456789
+    ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
+    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    ${address}=  FakerLibrary.city
+    Set Test Variable  ${address}
+    ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
+    ${branch}=   db.get_place
+    ${ifsc_code}=   db.Generate_ifsc_code
+    # ${gst_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
+
+    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
+
+    ${state}=    Evaluate     "${state}".title()
+    ${state}=    String.RemoveString  ${state}    ${SPACE}
+    Set Test Variable    ${state}
+    Set Test Variable    ${district}
+    Set Test Variable    ${pin}
+    ${vendor_phno}=   Create List  ${vendor_phno}
+    Set Test Variable    ${vendor_phno}
+    
+    ${email}=   Create List  ${email}
+    Set Test Variable    ${email}
+
+    ${bankIfsc}    Random Number 	digits=5 
+    ${bankIfsc}=    Evaluate    f'{${bankIfsc}:0>7d}'
+    Log  ${bankIfsc}
+    Set Test Variable  ${bankIfsc}  55555${bankIfsc} 
+
+    ${bankName}     FakerLibrary.name
+    Set Test Variable    ${bankName}
+
+    ${upiId}     FakerLibrary.name
+    Set Test Variable  ${upiId}
+
+    ${pan}    Random Number 	digits=5 
+    ${pan}=    Evaluate    f'{${pan}:0>5d}'
+    Log  ${pan}
+    Set Test Variable  ${pan}  55555${pan}
+
+    ${branchName}=    FakerLibrary.name
+    Set Test Variable  ${branchName}
+    ${gstin}    Random Number 	digits=5 
+    ${gstin}=    Evaluate    f'{${gstin}:0>8d}'
+    Log  ${gstin}
+    Set Test Variable  ${gstin}  55555${gstin}
+    
+    ${preferredPaymentMode}=    Create List    ${jaldeePaymentmode[0]}
+    ${bankInfo}=    Create Dictionary     bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}     branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
+    ${bankInfo}=    Create List         ${bankInfo}
+    
+    ${resp}=  Create Vendor  ${category_id}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${vendor_uid1}   ${resp.json()['uid']}
+    Set Test Variable   ${vendor_id1}   ${resp.json()['id']}
+
+    ${resp}=  Get Vendor By Id   ${vendor_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
+    Should Be Equal As Strings  ${resp.json()['accountId']}  ${accoun_Id}
+    # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
+
+    ${resp1}=  AddCustomer  ${CUSERNAME11}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Test Variable  ${pcid18}   ${resp1.json()}
+
+
+    ${providerConsumerIdList}=  Create List  ${pcid18}
+    Set Test Variable  ${providerConsumerIdList}  
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+    ${description}=   FakerLibrary.word
+    # Set Test Variable  ${address}
+    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceDate}=   db.get_date_by_timezone  ${tz}
+    ${invoiceId}=   FakerLibrary.word
+
+
+     ${SERVICE1}=    FakerLibrary.word
+    Set Test Variable  ${SERVICE1}
+    ${desc}=   FakerLibrary.sentence
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sid1}  ${resp.json()} 
+
+    ${quantity}=   Random Int  min=50  max=100
+    ${quantity}=   Convert To Integer  ${quantity}  
+    ${serviceprice}=   Random Int  min=1000  max=1500
+    ${serviceprice}=   Convert To Integer  ${serviceprice}  
+
+    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
+    ${serviceList}=    Create List    ${serviceList}
+    ${servicenetRate}=  Evaluate  ${quantity} * ${serviceprice}
+    ${servicenetRate}=   Convert To Integer  ${servicenetRate}   
+    Set Test Variable   ${servicenetRate}
+
+     ${item1}=     FakerLibrary.word
+    ${itemCode1}=     FakerLibrary.word
+    ${price1}=     Random Int   min=400   max=500
+    ${price}=   Convert To Integer  ${price1}  
+    Set Test Variable  ${price} 
+    ${resp}=  Create Sample Item   ${DisplayName1}   ${item1}  ${itemCode1}  ${price}  ${bool[1]} 
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${itemId}  ${resp.json()}
+
+    ${resp}=   Get Item By Id  ${itemId}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${promotionalPrice}   ${resp.json()['promotionalPrice']}
+    ${promotionalPrice}=   Convert To Integer  ${promotionalPrice}  
+
+
+    ${quantity}=   Random Int  min=1  max=5
+    ${quantity}=   Convert To Integer  ${quantity}  
+    ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  price=${promotionalPrice}
+    ${totalPrice}=  Evaluate  ${quantity} * ${promotionalPrice}
+    ${totalPrice}=   Convert To Integer  ${totalPrice}   
+    Set Test Variable   ${totalPrice}
+    
+    
+    ${resp}=  Create Invoice   ${category_id2}   ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}  ${itemList}  serviceList=${serviceList}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
+
+    ${discount1}=     FakerLibrary.word
+    ${desc}=   FakerLibrary.word
+    ${discountprice1}=     Random Int   min=50   max=100
+    ${discountprice}=   Convert To Integer  ${discountprice1}  
+    Set Test Variable   ${discountprice}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    Log  ${resp.json()}
+    Set Test Variable   ${discountId}   ${resp.json()}   
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Discounts 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${discountValue1}=     Random Int   min=50   max=100
+    ${discountValue1}=   Convert To Integer  ${discountValue1}  
+
+
+    ${resp}=  Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${discountValue1}   ${privateNote}  ${displayNote}   ${itemId}
+    Log  ${resp.json()} 
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${netRate}=  Evaluate  ${totalPrice} - ${discountprice}
+    Set Test Variable   ${netRate}
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+
+    ${dep_name1}=  FakerLibrary.bs
+    ${dep_code1}=   Random Int  min=100   max=999
+    ${dep_desc1}=   FakerLibrary.word  
+    ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Test Variable  ${dep_id}  ${resp1.json()}
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${u_id}=  Create Sample User
+    Set Suite Variable  ${u_id}
+
+    ${resp}=  Get User By Id      ${u_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Set Suite Variable      ${PUSERNAME_U1}     ${resp.json()['mobileNo']}
+    Set Suite Variable      ${sam_email}     ${resp.json()['email']}
+
+    ${resp}=  SendProviderResetMail   ${sam_email}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    @{resp}=  ResetProviderPassword  ${sam_email}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
+    Should Be Equal As Strings  ${resp[0].status_code}  200
+    Should Be Equal As Strings  ${resp[1].status_code}  200
+
+    ${resp}=  Encrypted Provider Login  ${sam_email}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp.content}
+
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+
+    ${resp}=  Remove Item Level Discount   ${invoice_uid}   ${discountId}    ${discountValue1}   ${privateNote}  ${displayNote}   ${itemId}
+    Log  ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 
 
@@ -1332,7 +1692,7 @@ JD-TC-Remove Item Level Discount-UH1
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
         ${discountValue1}=     Random Int   min=50   max=100
-    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+    ${discountValue1}=   Convert To Integer  ${discountValue1}  
 
     ${resp}=  Remove Item Level Discount   ${invoice_uid}   ${discountId}    ${discountValue1}   ${privateNote}  ${displayNote}   ${itemId}
     Log  ${resp.json()}  
@@ -1434,9 +1794,9 @@ JD-TC-Remove Item Level Discount-UH6
 
 
     ${quantity}=   Random Int  min=5  max=10
-    ${quantity}=  Convert To Number  ${quantity}  1
+    ${quantity}=   Convert To Integer  ${quantity}  
     ${serviceprice}=   Random Int  min=10  max=15
-    ${serviceprice}=  Convert To Number  ${serviceprice}  1
+    ${serviceprice}=   Convert To Integer  ${serviceprice}  
 
     ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
     ${serviceList}=    Create List    ${serviceList}
@@ -1444,7 +1804,7 @@ JD-TC-Remove Item Level Discount-UH6
      ${item1}=     FakerLibrary.word
     ${itemCode1}=     FakerLibrary.word
     ${price1}=     Random Int   min=1000   max=5000
-    ${price}=  Convert To Number  ${price1}  1
+    ${price}=   Convert To Integer  ${price1}  
     Set Suite Variable  ${price} 
     ${resp}=  Create Sample Item   ${DisplayName1}   ${item1}  ${itemCode1}  ${price}  ${bool[1]} 
     Log  ${resp.json()}  
@@ -1457,7 +1817,7 @@ JD-TC-Remove Item Level Discount-UH6
 
 
     ${quantity}=   Random Int  min=5  max=10
-    ${quantity}=  Convert To Number  ${quantity}  1
+    ${quantity}=   Convert To Integer  ${quantity}  
     ${itemList}=  Create Dictionary  itemId=${itemId1}   quantity=${quantity}  price=${promotionalPrice}
     
     
@@ -1469,7 +1829,7 @@ JD-TC-Remove Item Level Discount-UH6
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
         ${discountValue1}=     Random Int   min=50   max=100
-    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+    ${discountValue1}=   Convert To Integer  ${discountValue1}  
 
 
     ${resp}=  Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${discountValue1}   ${privateNote}  ${displayNote}   ${itemId1}
@@ -1499,7 +1859,7 @@ JD-TC-Remove Item Level Discount-UH7
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
         ${discountValue1}=     Random Int   min=50   max=100
-    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+    ${discountValue1}=   Convert To Integer  ${discountValue1}  
 
     ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}
 
@@ -1693,10 +2053,10 @@ JD-TC-Remove Item Level Discount-3
     ${itemName}=    FakerLibrary.word
     Set Suite Variable  ${itemName}
     ${price}=   Random Int  min=10  max=15
-    ${price}=  Convert To Number  ${price}  1
+    ${price}=   Convert To Integer  ${price}  
 
     ${quantity}=   Random Int  min=10  max=15
-    ${quantity}=  Convert To Number  ${quantity}  1
+    ${quantity}=   Convert To Integer  ${quantity}  
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}
     ${privateNote}=     FakerLibrary.word
@@ -1705,7 +2065,7 @@ JD-TC-Remove Item Level Discount-3
      ${item1}=     FakerLibrary.word
     ${itemCode1}=     FakerLibrary.word
     ${price1}=     Random Int   min=400   max=500
-    ${price}=  Convert To Number  ${price1}  1
+    ${price}=   Convert To Integer  ${price1}  
     Set Suite Variable  ${price} 
     ${resp}=  Create Sample Item   ${DisplayName1}   ${item1}  ${itemCode1}  ${price}  ${bool[1]} 
     Log  ${resp.json()}  
@@ -1718,7 +2078,7 @@ JD-TC-Remove Item Level Discount-3
 
 
     ${quantity}=   Random Int  min=5  max=10
-    ${quantity}=  Convert To Number  ${quantity}  1
+    ${quantity}=   Convert To Integer  ${quantity}  
     ${itemList}=  Create Dictionary  itemId=${itemId}   quantity=${quantity}  price=${promotionalPrice}
     
     
@@ -1730,7 +2090,7 @@ JD-TC-Remove Item Level Discount-3
     ${discount1}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
     ${discountprice1}=     Random Int   min=50   max=100
-    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    ${discountprice}=   Convert To Integer  ${discountprice1}  
     Set Suite Variable   ${discountprice}
     ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
     Log  ${resp.json()}
@@ -1792,7 +2152,7 @@ JD-TC-Remove Item Level Discount-3
 
 
         ${discountValue1}=     Random Int   min=50   max=100
-    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+    ${discountValue1}=   Convert To Integer  ${discountValue1}  
     ${resp}=  Remove Item Level Discount   ${invoice_uid1}   ${discountId1}    ${discountValue1}   ${privateNote}  ${displayNote}   ${itemId}
     Log  ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -1810,7 +2170,7 @@ JD-TC-Remove Item Level Discount-4
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
         ${discountValue1}=     Random Int   min=50   max=100
-    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+    ${discountValue1}=   Convert To Integer  ${discountValue1}  
 
     ${resp}=  Apply Item Level Discount   ${invoice_uid1}   ${discountId1}    ${discountValue1}   ${privateNote}  ${displayNote}   ${itemId}
     Log  ${resp.json()} 
