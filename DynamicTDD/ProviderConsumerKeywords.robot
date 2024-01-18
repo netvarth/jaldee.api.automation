@@ -255,3 +255,17 @@ Get provider Order By Id
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/orders/${uuid}/billdetails   expected_status=any   
     [Return]  ${resp}
+
+
+Add Profile Photo
+
+    [Arguments]    ${owner}    ${fileName}    ${fileSize}    ${action}    ${caption}    ${fileType}    ${order}
+
+    ${AttachmentsUpload}=  Create List
+    ${Attachment}=    Create Dictionary    owner=${owner}    fileName=${fileName}    fileSize=${fileSize}    action=${action}    caption=${caption}    fileType=${fileType}    order=${order}
+    Append To List  ${AttachmentsUpload}  ${Attachment}
+    
+    ${data}=    json.dumps    ${AttachmentsUpload}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw   /spconsumer/upload/profilePhoto/${owner}  data=${data}  expected_status=any
+    [Return]  ${resp}
