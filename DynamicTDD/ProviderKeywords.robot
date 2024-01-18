@@ -10076,10 +10076,10 @@ upload file to temporary location
 
 change status of the uploaded file
 
-    [Arguments]    ${status}    ${id}
+    [Arguments]    ${status}    ${driveId}
 
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  provider/fileShare/upload/${status}/${id}  expected_status=any
+    ${resp}=  PUT On Session  ynw  provider/fileShare/upload/${status}/${driveId}  expected_status=any
     Log  ${resp.content}
     [Return]  ${resp}
 
@@ -12758,5 +12758,167 @@ GetFollowUpDetailsofwl
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/waitlist/followUp/${uid}   expected_status=any
     [Return]  ${resp}
+
+
+######## New Communication URLS ############
+
+Send Attachment From Waitlist 
+    [Arguments]  ${uid}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments}
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag} 
+    ${data}=  Create Dictionary  medium=${medium}  attachments=${attachments} 
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/waitlist/share/attachments/${uid}   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+Send Attachment From Appointmnent 
+    [Arguments]  ${uid}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments}
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    ${attachments}=  Create Dictionary  owner=${owner}  ownerName=${ownerName}  fileName=${fileName}  caption=${caption}  fileSize=${fileSize}  fileType=${fileType}  order=${order}  driveId=${driveId}  action=${action}
+    ${data}=  Create Dictionary  medium=${medium}  attachments=${attachments} 
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment/share/attachments/${uid}   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+Get Attachments In Waitlist
+    [Arguments]  ${uid}
+
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/waitlist/share/attachments/${uid}   expected_status=any
+    [Return]  ${resp}
+
+
+Get Attachments In Appointment
+    [Arguments]  ${uid}
+
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/appointment/share/attachments/${uid}   expected_status=any
+    [Return]  ${resp}
+
+
+Get Donation Attachments
+    [Arguments]  ${uid}
+
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/donation/view/attachments/${uid}   expected_status=any
+    [Return]  ${resp}
+
+
+Get Order Attachments
+    [Arguments]  ${uid}
+
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/orders/view/attachments/${uid}   expected_status=any
+    [Return]  ${resp}
+
+
+Send Message With Waitlist
+    [Arguments]  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  &{kwargs}  
+    #Required- uuid- list of wl ids, attachments- list of dictionaries with file details
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    ${data}=  Create Dictionary  medium=${medium}  communicationMessage=${message}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/waitlist/communication   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+Send Message With Appointment
+    [Arguments]  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  &{kwargs}  
+    #Required- uuid- list of wl ids, attachments- list of dictionaries with file details
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    ${data}=  Create Dictionary  medium=${medium}  communicationMessage=${message}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/appointment/communication   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+Send Message With Order
+    [Arguments]  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  &{kwargs}  
+    #Required- uuid- list of wl ids, attachments- list of dictionaries with file details
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    ${data}=  Create Dictionary  medium=${medium}  communicationMessage=${message}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/orders/communication   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+Send Message With Donation
+    [Arguments]  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  &{kwargs}  
+    #Required- uuid- list of wl ids, attachments- list of dictionaries with file details
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    ${data}=  Create Dictionary  medium=${medium}  communicationMessage=${message}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/donation/communication   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+Broadcast Message to customers
+    [Arguments]  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  &{kwargs}  
+    #groupId is optional, if group id is given it will send to group, otherwise it will send to all customers in account
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    ${data}=  Create Dictionary  medium=${medium}  communicationMessage=${message}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/customers/broadcast   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+Send Message to Multiple Customers
+    [Arguments]  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  &{kwargs}  
+    #Required- consumerId- list of consumer ids, attachments- list of dictionaries with file details
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    ${data}=  Create Dictionary  medium=${medium}  communicationMessage=${message}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/waitlist/consumer/communication   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+Send Message By Chat
+    [Arguments]  ${userid}  ${consumerId}  ${message}  ${messageType}  @{attachments} 
+    #Required- uuid- list of wl ids, attachments- list of dictionaries with file details
+
+    ${messagedict}=  Create Dictionary  msg=${message}  messageType=${messageType}
+    ${data}=  Create Dictionary  provider=${userid}  message=${messagedict}  attachments=${attachments}
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/message/communications/${consumerId}   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+
 
 

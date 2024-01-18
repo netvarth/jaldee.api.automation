@@ -3299,4 +3299,115 @@ Get Service payment modes
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /consumer/payment/modes/service/${accountId}/${serviceId}/${paymentPurpose}    expected_status=any
     [Return]  ${resp}
+
+
+######## New Communication URLS ############
     
+
+Get Attachments In Waitlist By Consumer
+    [Arguments]  ${uid}
+
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /consumer/waitlist/share/attachments/${uid}   expected_status=any
+    [Return]  ${resp}
+
+
+Get Attachments In Appointment By Consumer
+    [Arguments]  ${uid}
+
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /consumer/appointment/share/attachments/${uid}   expected_status=any
+    [Return]  ${resp}
+
+
+Get Attachments In Order By Consumer
+    [Arguments]  ${uid}
+
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /consumer/orders/view/attachments/${uid}   expected_status=any
+    [Return]  ${resp}
+
+
+Get Attachments In Donation By Consumer
+    [Arguments]  ${uid}
+
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /consumer/donation/view/attachments/${uid}   expected_status=any
+    [Return]  ${resp}
+
+
+Send Attachment From Waitlist By Consumer
+    [Arguments]  ${uid}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments}
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    ${data}=  Create Dictionary  medium=${medium}  attachments=${attachments} 
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/waitlist/share/attachments/${uid}   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+Send Attachment From Appointment By Consumer 
+    [Arguments]  ${uid}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments}
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    ${data}=  Create Dictionary  medium=${medium}  attachments=${attachments} 
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/appointment/share/attachments/${uid}   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+Send Message With Waitlist By Consumer
+    [Arguments]  ${uuid}  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments} 
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    ${data}=  Create Dictionary  uuid=${uuid}  medium=${medium}  communicationMessage=${message}  attachments=${attachments}
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/appointment/communicate/message/${uuid}   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+Send Message With Appointment By Consumer
+    [Arguments]  ${uuid}  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments} 
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    ${data}=  Create Dictionary  uuid=${uuid}  medium=${medium}  communicationMessage=${message}  attachments=${attachments}
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/appointment/communicate/message/${uuid}   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+Send Message With Order By Consumer
+    [Arguments]  ${uuid}  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments} 
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    ${data}=  Create Dictionary  uuid=${uuid}  medium=${medium}  communicationMessage=${message}  attachments=${attachments}
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/orders/communicate/message/${uuid}   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+Send Message With Donation By Consumer
+    [Arguments]  ${uuid}  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments} 
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    ${data}=  Create Dictionary  uuid=${uuid}  medium=${medium}  communicationMessage=${message}  attachments=${attachments}
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/donation/communicate/message/${uuid}   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+Send Message By Chat from Consumer
+    [Arguments]  ${userid}  ${message}  ${messageType}  @{attachments} 
+
+    ${messagedict}=  Create Dictionary  msg=${message}  messageType=${messageType}
+    ${data}=  Create Dictionary  provider=${userid}  message=${messagedict}  attachments=${attachments}
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/message/communications   data=${data}  expected_status=any
+    [Return]  ${resp}
