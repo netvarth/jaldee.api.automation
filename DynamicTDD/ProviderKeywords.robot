@@ -12880,6 +12880,7 @@ Send Message With Donation
 Broadcast Message to customers
     [Arguments]  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  &{kwargs}  
     #groupId is optional, if group id is given it will send to group, otherwise it will send to all customers in account
+    #Required- attachments- list of dictionaries with file details
 
     ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
     ${data}=  Create Dictionary  medium=${medium}  communicationMessage=${message}

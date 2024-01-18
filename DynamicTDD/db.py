@@ -6469,7 +6469,8 @@ def clear_multilocation (usrid):
             dbconn.close()
 
 
-def endtime_conversion(time1,time2):     
+def endtime_conversion(time1,time2):    
+    print("In function: ", inspect.stack()[0].function) 
     if time2[-2:] == "AM" and time1[-2:] == "PM": 
         time2 = "11:59 PM" + time2[2:2] 
         return str(time1), str(time2)
@@ -6478,10 +6479,23 @@ def endtime_conversion(time1,time2):
 
 
 def calculate_age_years_months(birth_date):
-
+    print("In function: ", inspect.stack()[0].function)
     birth_date = datetime.datetime.strptime(birth_date, '%Y-%m-%d')
     current_date = datetime.datetime.now()
     delta = relativedelta.relativedelta(current_date, birth_date)
     print('Years, Months, Days between two dates is')
     
     return (delta.years, delta.months)
+
+
+def get_file_size(file):
+    print("In function: ", inspect.stack()[0].function)
+    file_size = os.stat(file)
+    return  file_size
+
+
+def get_filetype(file):
+    print("In function: ", inspect.stack()[0].function)
+    mimetype, encoding = mimetypes.guess_type(file)
+    ext= mimetypes.guess_extension(mimetype)
+    return  ext
