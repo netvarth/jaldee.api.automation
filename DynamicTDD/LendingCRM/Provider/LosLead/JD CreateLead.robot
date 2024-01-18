@@ -31,7 +31,7 @@ JD-TC-CreateLead-1
 
     [Documentation]  Create Lead with customer id where customer has all the details.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -179,7 +179,7 @@ JD-TC-CreateLead-2
 
     [Documentation]  Create Lead without creating customer.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -325,7 +325,7 @@ JD-TC-CreateLead-3
 
     [Documentation]  Create Lead with full customer details including customer id.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME201}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -502,7 +502,7 @@ JD-TC-CreateLead-4
 
     [Documentation]  Create Lead without status - status is not mandatory
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -652,7 +652,7 @@ JD-TC-CreateLead-5
 
     [Documentation]  Create Lead without progress - progress is not mandatory
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -781,7 +781,7 @@ JD-TC-CreateLead-6
 
     [Documentation]  Create Lead with different customer details
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -957,7 +957,7 @@ JD-TC-CreateLead-7
 
     [Documentation]  Create Lead without nominee details
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -1106,7 +1106,7 @@ JD-TC-CreateLead-8
 
     [Documentation]  Create Lead with customer id as NONE
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -1280,7 +1280,7 @@ JD-TC-CreateLead-9
 
     [Documentation]  create lead using EMPTY consumerEmail
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -1429,7 +1429,7 @@ JD-TC-CreateLead-10
 
     [Documentation]  create lead using EMPTY Aadhar card details.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -1578,7 +1578,7 @@ JD-TC-CreateLead-11
 
     [Documentation]  create lead using EMPTY pan card details.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -1727,7 +1727,7 @@ JD-TC-CreateLead-12
 
     [Documentation]  create lead using EMPTY bankAccountNo details.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -1876,7 +1876,7 @@ JD-TC-CreateLead-13
 
     [Documentation]  create lead using EMPTY bankIfsc details.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -2026,7 +2026,7 @@ JD-TC-CreateLead-14
 
     [Documentation]  create lead without bankIfsc details.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -2176,7 +2176,7 @@ JD-TC-CreateLead-15
 
     [Documentation]  create lead using EMPTY permanentAddress1.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -2325,7 +2325,7 @@ JD-TC-CreateLead-16
 
     [Documentation]  create lead using EMPTY permanentAddress2.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -2475,7 +2475,7 @@ JD-TC-CreateLead-17
 
     [Documentation]  create lead using EMPTY permanentDistrict.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -2625,7 +2625,7 @@ JD-TC-CreateLead-18
 
     [Documentation]  create lead using EMPTY permanentState.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -2756,7 +2756,7 @@ JD-TC-CreateLead-19
 
     [Documentation]  create lead using EMPTY permanentPin.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -2906,7 +2906,7 @@ JD-TC-CreateLead-UH1
 
     [Documentation]  Create Lead without customer details (even consumer id is None)
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3004,7 +3004,7 @@ JD-TC-CreateLead-UH2
 
     [Documentation]  Create Lead without login
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3108,7 +3108,7 @@ JD-TC-CreateLead-UH3
 
     [Documentation]  Consumer creates a lead
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3294,7 +3294,7 @@ JD-TC-CreateLead-UH4
     ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
-    Set Suite Variable  ${consumerId11}  ${resp.json()[0]['id']}
+    Set Test Variable  ${consumerId11}  ${resp.json()[0]['id']}
     Should Be Equal As Strings    ${resp.json()[0]['id']}  ${consumerId11}
     Should Be Equal As Strings    ${resp.json()[0]['firstName']}  ${consumerFirstName}
     Should Be Equal As Strings    ${resp.json()[0]['lastName']}  ${consumerLastName}
@@ -3315,7 +3315,7 @@ JD-TC-CreateLead-UH4
     Should Be Equal As Strings    ${resp.json()[0]['age']['month']}  ${agemonths}
     Should Be Equal As Strings    ${resp.json()[0]['account']}  ${account_id}
     ${fullName}   Set Variable    ${consumerFirstName} ${consumerLastName}
-    Set Suite Variable  ${fullName}
+    Set Test Variable  ${fullName}
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${accountId}
     Log   ${resp.content}
@@ -3324,7 +3324,7 @@ JD-TC-CreateLead-UH4
     ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable   ${token}  ${resp.json()['token']}
+    Set Test Variable   ${token}  ${resp.json()['token']}
 
     ${resp}=  Customer Logout   
     Log   ${resp.json()}
@@ -3333,8 +3333,8 @@ JD-TC-CreateLead-UH4
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
-    Set Suite Variable    ${PCid}   ${resp.json()['id']}
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    Set Test Variable    ${PCid}   ${resp.json()['id']}
 
     ${requestedAmount}=     Random Int  min=30000  max=600000
     ${description}=         FakerLibrary.bs
@@ -3389,7 +3389,7 @@ JD-TC-CreateLead-UH5
     ${resp}=  Provider Logout
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3466,7 +3466,7 @@ JD-TC-CreateLead-UH6
 
     [Documentation]  create lead using invalid provider customer id
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3563,7 +3563,7 @@ JD-TC-CreateLead-UH7
 
     [Documentation]  create lead using empty consumerKyc
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3659,7 +3659,7 @@ JD-TC-CreateLead-UH8
 
     [Documentation]  create lead using empty consumer firstname
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3755,7 +3755,7 @@ JD-TC-CreateLead-UH9
 
     [Documentation]  create lead using empty consumer lastname
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3851,7 +3851,7 @@ JD-TC-CreateLead-UH10
 
     [Documentation]  Add customer without customer details and create lead only using consumer id
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -3947,7 +3947,7 @@ JD-TC-CreateLead-UH11
 
     [Documentation]  create lead using empty nominee name
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4051,7 +4051,7 @@ JD-TC-CreateLead-UH12
 
     [Documentation]  create lead using empty customer dob
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4147,7 +4147,7 @@ JD-TC-CreateLead-UH13
 
     [Documentation]  create lead using empty customer consumerPhone
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4243,7 +4243,7 @@ JD-TC-CreateLead-UH14
 
     [Documentation]  create lead using customer consumerPhone without consumerPhoneCode
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4347,7 +4347,7 @@ JD-TC-CreateLead-UH15
 
     [Documentation]  create lead using customer consumerPhone and EMPTY consumerPhoneCode
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4446,7 +4446,7 @@ JD-TC-CreateLead-UH15
 
 #     [Documentation]  Create Lead without channel
 
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4555,7 +4555,7 @@ JD-TC-CreateLead-UH15
 
 #     [Documentation]  Create Lead without product
 
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4659,7 +4659,7 @@ JD-TC-CreateLead-UH15
 
 #     [Documentation]  Create Lead with invalid product id
 
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4762,7 +4762,7 @@ JD-TC-CreateLead-UH15
 
 #     [Documentation]  create lead using empty nominee type
 
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -4867,7 +4867,7 @@ JD-TC-CreateLead-UH15
 
 #     [Documentation]  create lead using empty customer gender
 
-#     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD} 
 #     Log  ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}   200
 #     ${decrypted_data}=  db.decrypt_data   ${resp.content}
