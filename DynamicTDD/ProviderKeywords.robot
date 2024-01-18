@@ -12741,3 +12741,22 @@ Change Provider Consumer Profile Status
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/customers/${consumerId}/changeStatus/${status}   expected_status=any
     [Return]  ${resp}
+
+GetFollowUpDetailsofAppmt
+
+    [Arguments]     ${uid}
+
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/appointment/followUp/${uid}   expected_status=any
+    [Return]  ${resp}
+
+
+GetFollowUpDetailsofwl
+
+    [Arguments]     ${uid}
+
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/waitlist/followUp/${uid}   expected_status=any
+    [Return]  ${resp}
+
+
