@@ -28,7 +28,7 @@ JD-TC-Communication provider with consumer-1
     clear_Providermsg  ${PUSERNAME4}
     
     ${resp}=   Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD} 
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
