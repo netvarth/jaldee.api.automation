@@ -2009,7 +2009,7 @@ GST_NUM_REQUIRED = "Gst Number required"
 PAYMENT_AMOUNT_IS_NOT_MATCHED="Payment amount is not matched with required amount"
 VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT = "Payment amount({}) is not matched with required amount({})."
 LOGIN_INVALID_URL = "Invalid URL"
-INVALID_URL = "Invalid Url"
+# INVALID_URL = "Invalid Url"
 
 
 FILE_NAME_NOT_FOUND = "File name cannot be empty"

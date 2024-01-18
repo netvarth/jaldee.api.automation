@@ -638,7 +638,7 @@ JD-TC-GetaFileusingShortUrl-UH1
     ${resp}=    Get a File Using Short Url   ${driveid098} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}                     422
-    Should Be Equal As Strings  ${resp.json()}   ${INVALID_URL}
+    Should Be Equal As Strings  ${resp.json()}   ${LOGIN_INVALID_URL}
 
   
 

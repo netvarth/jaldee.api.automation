@@ -6,6 +6,7 @@ Force Tags        Appointment
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -70,7 +71,7 @@ JD-TC-GetFollowUpDetails-1
     ${resp}=  Get Business Profile
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${pid}  ${resp.json()['id']} 
+    Set Suite Variable  ${pid}  ${resp.json()['id']} 
     Set Suite Variable  ${businessName}     ${resp.json()['businessName']}
 
     ${resp}=   Get Appointment Settings
@@ -88,12 +89,14 @@ JD-TC-GetFollowUpDetails-1
     clear_appt_schedule   ${PUSERNAME144}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable   ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}
+    Set Suite Variable      ${s_id}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -102,7 +105,7 @@ JD-TC-GetFollowUpDetails-1
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    Set Suite Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
@@ -113,19 +116,24 @@ JD-TC-GetFollowUpDetails-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
-    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
+    Set Suite Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
     ${PH_Number}    Random Number 	       digits=5 
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
-    Set Test Variable    ${consumerPhone}  555${PH_Number}
+    Set Suite Variable    ${consumerPhone}  555${PH_Number}
     Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
+    Set Suite Variable      ${consumerFirstName}
     ${consumerLastName}=    FakerLibrary.last_name  
+    Set Suite Variable      ${consumerLastName}
     ${dob}=    FakerLibrary.Date
+    Set Suite Variable      ${dob}
     ${permanentAddress1}=  FakerLibrary.address
+    Set Suite Variable      ${permanentAddress1}
     ${gender}=  Random Element    ${Genderlist}
-    Set Test Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
+    Set Suite Variable      ${gender}
+    Set Suite Variable  ${consumerEmail}  ${C_Email}${consumerPhone}${consumerFirstName}.${test_mail}
 
     ${resp}=  AddCustomer  ${consumerPhone}  firstName=${consumerFirstName}   lastName=${consumerLastName}  address=${permanentAddress1}   gender=${gender}  dob=${dob}  email=${consumerEmail}   
     Log   ${resp.json()}
@@ -134,7 +142,8 @@ JD-TC-GetFollowUpDetails-1
     ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone}
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
-    Set Test Variable  ${cid}  ${resp.json()[0]['id']}
+    Set Suite Variable  ${cid}   ${resp.json()[0]['id']}
+    Set Suite Variable  ${jcid}  ${resp.json()[0]['jaldeeConsumerDetails']['id']}
     
     ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
@@ -145,7 +154,7 @@ JD-TC-GetFollowUpDetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
           
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
-    Set Test Variable  ${apptid1}  ${apptid[0]}
+    Set Suite Variable  ${apptid1}  ${apptid[0]}
 
     ${resp}=  Get Appointment EncodedID   ${apptid1}
     Log   ${resp.json()}
@@ -155,30 +164,260 @@ JD-TC-GetFollowUpDetails-1
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid1}
-    Should Be Equal As Strings  ${resp.json()['appointmentEncId']}   ${encId}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
+    Should Be Equal As Strings  ${resp.json()['uid']}                        ${apptid1}
+    Should Be Equal As Strings  ${resp.json()['appointmentEncId']}           ${encId}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}              ${s_id}
+    Should Be Equal As Strings  ${resp.json()['schedule']['id']}             ${sch_id}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}                 ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${consumerFirstName}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${consumerLastName}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}    ${consumerLastName}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}    ${slot1}
+    Should Be Equal As Strings  ${resp.json()['appmtDate']}                  ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['appmtTime']}                  ${slot1}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}             ${lid}
+
+    ${ageyrs}  ${agemonths}=  db.calculate_age_years_months     ${dob}
+    Set Suite Variable  ${ageyrs}
+    Set Suite Variable  ${agemonths}
 
     ${resp}=    GetFollowUpDetailsofAppmt  ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['appointmentEncId']}                       ${apptid1}
-    Should Be Equal As Strings  ${resp.json()['providerAccount']['businessName']}        ${businessName}
+    Should Be Equal As Strings  ${resp.json()['providerAccount']['businessName']}                   ${businessName}
+    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}              ${consumerFirstName}
+    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}               ${consumerLastName}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}                     ${consumerFirstName}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['lastName']}                      ${consumerLastName}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['address']}                       ${permanentAddress1}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['email']}                         ${consumerEmail}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['gender']}                        ${gender}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['dob']}                           ${dob}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['phoneNo']}                       ${consumerPhone}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['jaldeeConsumer']}                ${jcid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['whatsAppNum']['number']}         ${consumerPhone}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['telegramNum']['number']}         ${consumerPhone}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['jaldeeConsumerDetails']['id']}   ${jcid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['age']['year']}                   ${ageyrs}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['age']['month']}                  ${agemonths}
+    Should Be Equal As Strings  ${resp.json()['service']['name']}                                   ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}                          ${consumerFirstName}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}                           ${consumerLastName}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['address']}                            ${permanentAddress1}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['dob']}                                ${dob}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['gender']}                             ${gender}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['age']}                                ${ageyrs}
 
-    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${consumerFirstName}
-    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}    ${consumerLastName}
-    Should Be Equal As Strings  ${resp.json()['consumer']['createdBy']['id']}            ${pid}
-    Should Be Equal As Strings  ${resp.json()['providerAccount']['businessName']}   ${businessName}
-    Should Be Equal As Strings  ${resp.json()['providerAccount']['businessName']}   ${businessName}
-    Should Be Equal As Strings  ${resp.json()['providerAccount']['businessName']}   ${businessName}
+
+JD-TC-GetFollowUpDetails-2
+
+    [Documentation]     Get GetFollowUp Details of appointment -  where appmt is Cancelled
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME144}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${reason}=  Random Element  ${cancelReason}
+    ${msg}=   FakerLibrary.sentence
+    ${resp}=    Provider Cancel Appointment  ${apptid1}  ${reason}  ${msg}  ${DAY1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    GetFollowUpDetailsofAppmt  ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['providerAccount']['businessName']}                   ${businessName}
+    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}              ${consumerFirstName}
+    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}               ${consumerLastName}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}                     ${consumerFirstName}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['lastName']}                      ${consumerLastName}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['address']}                       ${permanentAddress1}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['email']}                         ${consumerEmail}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['gender']}                        ${gender}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['dob']}                           ${dob}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['phoneNo']}                       ${consumerPhone}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['jaldeeConsumer']}                ${jcid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['whatsAppNum']['number']}         ${consumerPhone}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['telegramNum']['number']}         ${consumerPhone}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['jaldeeConsumerDetails']['id']}   ${jcid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['age']['year']}                   ${ageyrs}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['age']['month']}                  ${agemonths}
+    Should Be Equal As Strings  ${resp.json()['service']['name']}                                   ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}                          ${consumerFirstName}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}                           ${consumerLastName}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['address']}                            ${permanentAddress1}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['dob']}                                ${dob}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['gender']}                             ${gender}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['age']}                                ${ageyrs}
 
 
+JD-TC-GetFollowUpDetails-3
+
+    [Documentation]     Get GetFollowUp Details of appointment -  where appmt is Rejected
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME144}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Appointment Action   ${apptStatus[1]}   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200        
+
+    ${reason}=  Random Element  ${cancelReason}
+    ${msg}=   FakerLibrary.sentence
+    ${resp}=    Reject Appointment  ${apptid1}  ${reason}  ${msg}  ${DAY1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    GetFollowUpDetailsofAppmt  ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['providerAccount']['businessName']}                   ${businessName}
+    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}              ${consumerFirstName}
+    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}               ${consumerLastName}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}                     ${consumerFirstName}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['lastName']}                      ${consumerLastName}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['address']}                       ${permanentAddress1}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['email']}                         ${consumerEmail}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['gender']}                        ${gender}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['dob']}                           ${dob}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['phoneNo']}                       ${consumerPhone}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['jaldeeConsumer']}                ${jcid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['whatsAppNum']['number']}         ${consumerPhone}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['telegramNum']['number']}         ${consumerPhone}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['jaldeeConsumerDetails']['id']}   ${jcid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['age']['year']}                   ${ageyrs}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['age']['month']}                  ${agemonths}
+    Should Be Equal As Strings  ${resp.json()['service']['name']}                                   ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}                          ${consumerFirstName}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}                           ${consumerLastName}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['address']}                            ${permanentAddress1}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['dob']}                                ${dob}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['gender']}                             ${gender}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['age']}                                ${ageyrs}
+
+
+JD-TC-GetFollowUpDetails-4
+
+    [Documentation]     Get GetFollowUp Details of appointment -  where appmt is blocked 
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME144}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Appointment Action   ${apptStatus[1]}   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${apptfor1}=  Create Dictionary   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+
+    ${resp}=  Block Appointment For Consumer  ${s_id}  ${sch_id}  ${DAY1}  ${apptfor}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    GetFollowUpDetailsofAppmt  ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['providerAccount']['businessName']}                   ${businessName}
+    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}              ${consumerFirstName}
+    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}               ${consumerLastName}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['firstName']}                     ${consumerFirstName}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['lastName']}                      ${consumerLastName}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['address']}                       ${permanentAddress1}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['email']}                         ${consumerEmail}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['gender']}                        ${gender}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['dob']}                           ${dob}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['phoneNo']}                       ${consumerPhone}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['jaldeeConsumer']}                ${jcid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['whatsAppNum']['number']}         ${consumerPhone}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['telegramNum']['number']}         ${consumerPhone}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['jaldeeConsumerDetails']['id']}   ${jcid}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['age']['year']}                   ${ageyrs}
+    Should Be Equal As Strings  ${resp.json()['providerConsumer']['age']['month']}                  ${agemonths}
+    Should Be Equal As Strings  ${resp.json()['service']['name']}                                   ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}                          ${consumerFirstName}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}                           ${consumerLastName}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['address']}                            ${permanentAddress1}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['dob']}                                ${dob}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['gender']}                             ${gender}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['age']}                                ${ageyrs}
+
+
+JD-TC-GetFollowUpDetails-UH1
+
+    [Documentation]     Get GetFollowUp Details of appointment where appointment id is invalid
     
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME144}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     FakerLibrary.Random Int 
+
+    ${resp}=    GetFollowUpDetailsofAppmt  ${inv}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  404
+    Should Be Equal As Strings  ${resp.json()}       ${INVALID_APPOINTMENT}
+
+JD-TC-GetFollowUpDetails-UH2
+
+    [Documentation]     Get GetFollowUp Details - without login
+
+    ${resp}=    GetFollowUpDetailsofAppmt  ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  ${resp.json()}       ${SESSION_EXPIRED}
+
+JD-TC-GetFollowUpDetails-UH3
+
+    [Documentation]     Get GetFollowUp Details - consumer login
+    
+    ${resp}=  Consumer Login  ${CUSERNAME6}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    GetFollowUpDetailsofAppmt  ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  ${resp.json()}       ${NoAccess}
+
+
+JD-TC-GetFollowUpDetails-UH4
+
+    [Documentation]     Get GetFollowUp Details - with another provider login
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME145}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    GetFollowUpDetailsofAppmt  ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  ${resp.json()}       ${NO_PERMISSION}
+
+JD-TC-GetFollowUpDetails-UH5
+
+    [Documentation]     Get GetFollowUp Details - with provider consumer login
+    
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    Set Test Variable    ${PCid}   ${resp.json()['id']}
+
+    ${resp}=    GetFollowUpDetailsofAppmt  ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  400
+    Should Be Equal As Strings  ${resp.json()}       ${LOGIN_INVALID_URL}
