@@ -2059,8 +2059,8 @@ JD-TC-CreateInvoice-13
     Should Be Equal As Strings   ${response_defaultCurrencyAmount}  ${Tot2}
     Should Be Equal As Strings  ${response_netTaxAmount}  0
     Should Be Equal As Strings  ${response_netTotal}  ${Tot2}
-    Should Be Equal As Strings  ${response_netRate}  ${totalamt}
-    Should Be Equal As Strings   ${response_taxableTotal} 0
+    Should Be Equal As Strings  ${response_netRate}  ${Tot2}
+    Should Be Equal As Strings   ${response_taxableTotal}  0
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid3}
     Set Suite Variable  ${invoice_wtlistonline_uid2}  ${resp.json()[0]['invoiceUid']}
     Should Be Equal As Strings  ${resp.json()[0]['billPaymentStatus']}  ${paymentStatus[1]}
@@ -2162,7 +2162,7 @@ JD-TC-CreateInvoice-14
     Should Be Equal As Strings  ${response_netTaxAmount}  0
     Should Be Equal As Strings  ${response_netTotal}  ${Tot2}
     Should Be Equal As Strings  ${response_netRate}  ${Tot2}
-    Should Be Equal As Strings   ${response_taxableTotal} 0
+    Should Be Equal As Strings   ${response_taxableTotal}  0
     Should Be Equal As Strings   ${response_amountTotal}  ${Tot2}
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid4}
     Set Suite Variable  ${invoice_wtlistonline_uid}  ${resp.json()[0]['invoiceUid']}
@@ -2220,12 +2220,12 @@ JD-TC-CreateInvoice-14
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['ynwUuid']}  ${cwid4}
     Should Be Equal As Strings   ${response_amountPaid}   ${min_pre1}
     Should Be Equal As Strings  ${response_amountDue}  ${balamount}
-    Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  ${gstpercentage[3]}
+    Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  0.0
     Should Be Equal As Strings   ${response_defaultCurrencyAmount}  ${Tot2}
     Should Be Equal As Strings  ${response_netTaxAmount}  0
     Should Be Equal As Strings  ${response_netTotal}  ${Tot2}
     Should Be Equal As Strings  ${response_netRate}  ${Tot2}
-    Should Be Equal As Strings   ${response_taxableTotal} 0
+    Should Be Equal As Strings   ${response_taxableTotal}  0
     Should Be Equal As Strings   ${response_amountTotal}  ${Tot2}
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid4}
     Should Be Equal As Strings  ${response_amountDue}  0

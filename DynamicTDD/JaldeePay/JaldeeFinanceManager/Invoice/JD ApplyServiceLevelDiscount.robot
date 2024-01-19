@@ -500,11 +500,11 @@ JD-TC-Apply Service Level Discount-4
     ${discount1}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
     ${discountprice1}=     Random Int   min=50   max=100
-    ${discountprice}=  Convert To Number  ${discountprice1}  1
-    Set Suite Variable   ${discountprice}
-    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[0]}  ${disctype[0]}
+    ${discountprice4}=  Convert To Number  ${discountprice1}  1
+    Set Test Variable   ${discountprice4}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice4}   ${calctype[0]}  ${disctype[0]}
     Log  ${resp.json()}
-    Set Test Variable   ${discountId}   ${resp.json()}   
+    Set Test Variable   ${discountId4}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Discounts 
@@ -517,17 +517,17 @@ JD-TC-Apply Service Level Discount-4
 
 
 
-    ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${EMPTY}  ${EMPTY}  ${sid1}
+    ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${discountId4}    ${discountprice4}   ${EMPTY}  ${EMPTY}  ${sid1}
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Invoice By Id  ${invoice_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['id']}  ${discountId}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['id']}  ${discountId4}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['name']}  ${discount1}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['discountType']}  ${disctype[0]}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['discountValue']}  ${discountprice}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['discountValue']}  ${discountprice4}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['calculationType']}  ${calctype[0]}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['privateNote']}  ${EMPTY}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['displayNote']}  ${EMPTY}
