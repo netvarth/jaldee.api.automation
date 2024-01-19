@@ -12777,7 +12777,7 @@ Send Attachment From Appointmnent
     [Arguments]  ${uid}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments}
 
     ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
-    ${attachments}=  Create Dictionary  owner=${owner}  ownerName=${ownerName}  fileName=${fileName}  caption=${caption}  fileSize=${fileSize}  fileType=${fileType}  order=${order}  driveId=${driveId}  action=${action}
+    # ${attachments}=  Create Dictionary  owner=${owner}  ownerName=${ownerName}  fileName=${fileName}  caption=${caption}  fileSize=${fileSize}  fileType=${fileType}  order=${order}  driveId=${driveId}  action=${action}
     ${data}=  Create Dictionary  medium=${medium}  attachments=${attachments} 
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session

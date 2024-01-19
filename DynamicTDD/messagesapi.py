@@ -2223,3 +2223,4 @@ NO_PERMISSION_X = "Content is Protected...!! You are not permitted to view/edit 
 INVALID_PIN_LOS = "Invalid PIN"
 
 CUSTOMER_IS_INACTIVE="This [customer] is in inactive status."
+INV_DRIVE_ID = "Invalid drive Id"
