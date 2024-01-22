@@ -3411,3 +3411,17 @@ Send Message By Chat from Consumer
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/message/communications   data=${data}  expected_status=any
     [Return]  ${resp}
+
+
+upload file to temporary location consumer
+
+    [Arguments]    ${action}    ${owner}    ${ownerType}    ${ownerName}    ${fileName}    ${fileSize}    ${caption}    ${fileType}    ${uid}    ${order}
+
+    ${file}=  Create Dictionary  action=${action}    owner=${owner}    ownerType=${ownerType}    ownerName=${ownerName}    fileName=${fileName}    fileSize=${fileSize}    caption=${caption}    fileType=${fileType}    uid=${uid}    order=${order}
+    ${data}=  Create List  ${file}
+    ${data}=    json.dumps    ${data}
+
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/fileShare/upload   data=${data}  expected_status=any
+    Log  ${resp.content}
+    [Return]  ${resp}

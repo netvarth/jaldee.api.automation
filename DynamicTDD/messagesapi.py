@@ -2224,3 +2224,4 @@ INVALID_PIN_LOS = "Invalid PIN"
 
 CUSTOMER_IS_INACTIVE="This [customer] is in inactive status."
 INV_DRIVE_ID = "Invalid drive Id"
+PROVIDE_OWNER_ID = "Please provide owner id"
