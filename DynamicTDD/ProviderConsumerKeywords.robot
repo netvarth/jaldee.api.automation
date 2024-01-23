@@ -269,3 +269,40 @@ Add Profile Photo
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /spconsumer/upload/profilePhoto/${owner}  data=${data}  expected_status=any
     [Return]  ${resp}
+
+
+Create Family Member   
+    [Arguments]  ${firstName}  ${lastName}  ${dob}  ${gender}   ${phoneNo}  ${countryCode}  ${address}  &{kwargs}
+
+    ${data}=  Create Dictionary  address=${address}  lastName=${lastName}  dob=${dob}   gender=${gender}  phoneNo=${phoneNo}  countryCode=${countryCode}    address=${address}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/family/member   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Update Family Member   
+    [Arguments]   ${id}  ${parent}  ${firstName}  ${lastName}  ${dob}  ${gender}   ${phoneNo}  ${countryCode}  ${address}  &{kwargs}
+
+    ${data}=  Create Dictionary   id=${id}  parent=${parent}  address=${address}  lastName=${lastName}  dob=${dob}   gender=${gender}  phoneNo=${phoneNo}  countryCode=${countryCode}    address=${address}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /consumer/family/member   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Get Family Members
+    [Arguments]  ${consumerId}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/family/member/${consumerId}   expected_status=any   
+    [Return]  ${resp}
+
+Delete Family Members
+    [Arguments]  ${memberId}  ${consumerId} 
+    Check And Create YNW Session
+    ${resp}=    DELETE On Session    ynw    /consumer/family/member/${memberId}/${consumerId}        expected_status=any
+    [Return]  ${resp}
