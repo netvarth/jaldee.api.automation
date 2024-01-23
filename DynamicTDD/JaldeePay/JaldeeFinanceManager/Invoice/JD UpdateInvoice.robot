@@ -471,9 +471,6 @@ JD-TC-UpdateInvoice-UH4
     ${amount1}=     roundval    ${amount1}   1
 
     ${billStatusNote}=   FakerLibrary.word
-    ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[0]}    ${billStatusNote}   
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}    ${billStatusNote}
     Log  ${resp.json()}

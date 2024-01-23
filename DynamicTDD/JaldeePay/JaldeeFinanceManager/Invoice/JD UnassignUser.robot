@@ -61,7 +61,7 @@ JD-TC-UnAssign User-1
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address
     ${dob}=  FakerLibrary.Date
-    ${pin}=  get_pincode
+    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc 
     
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
@@ -256,7 +256,7 @@ JD-TC-UnAssign User-2
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address
     ${dob}=  FakerLibrary.Date
-    ${pin}=  get_pincode
+    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
@@ -367,7 +367,7 @@ JD-TC-UnAssign User-UH5
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address
     ${dob}=  FakerLibrary.Date
-    ${pin}=  get_pincode
+    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
@@ -402,7 +402,7 @@ JD-TC-UnAssign User-UH6
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address
     ${dob}=  FakerLibrary.Date
-    ${pin}=  get_pincode
+    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
