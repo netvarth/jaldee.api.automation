@@ -274,7 +274,7 @@ Add Profile Photo
 Create Family Member   
     [Arguments]  ${firstName}  ${lastName}  ${dob}  ${gender}   ${phoneNo}  ${countryCode}  ${address}  &{kwargs}
 
-    ${data}=  Create Dictionary  address=${address}  lastName=${lastName}  dob=${dob}   gender=${gender}  phoneNo=${phoneNo}  countryCode=${countryCode}    address=${address}
+    ${data}=  Create Dictionary  firstName=${firstName}  lastName=${lastName}  dob=${dob}   gender=${gender}  phoneNo=${phoneNo}  countryCode=${countryCode}    address=${address}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${data}   ${key}=${value}
     END
@@ -283,10 +283,10 @@ Create Family Member
     ${resp}=  POST On Session  ynw  /consumer/family/member   data=${data}  expected_status=any
     [Return]  ${resp}
 
-Update Family Member   
+Update Family Members
     [Arguments]   ${id}  ${parent}  ${firstName}  ${lastName}  ${dob}  ${gender}   ${phoneNo}  ${countryCode}  ${address}  &{kwargs}
 
-    ${data}=  Create Dictionary   id=${id}  parent=${parent}  address=${address}  lastName=${lastName}  dob=${dob}   gender=${gender}  phoneNo=${phoneNo}  countryCode=${countryCode}    address=${address}
+    ${data}=  Create Dictionary   id=${id}  parent=${parent}  firstName=${firstName}  lastName=${lastName}  dob=${dob}   gender=${gender}  phoneNo=${phoneNo}  countryCode=${countryCode}    address=${address}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${data}   ${key}=${value}
     END
