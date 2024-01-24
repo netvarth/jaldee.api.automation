@@ -1,0 +1,152 @@
+*** Settings ***
+Suite Teardown    Delete All Sessions
+Test Teardown     Delete All Sessions
+Force Tags        Queue
+Library           Collections
+Library           String
+Library           json
+Library           FakerLibrary
+Library           /ebs/TDD/db.py
+Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ConsumerKeywords.robot
+Variables         /ebs/TDD/varfiles/providers.py
+Variables         /ebs/TDD/varfiles/consumerlist.py 
+Variables         /ebs/TDD/varfiles/musers.py
+
+*** Variables ***
+
+${SERVICE1}  Makeup  
+${SERVICE2}  Hair makeup
+${SERVICE3}  Facial
+${SERVICE4}  Bridal makeup
+${SERVICE5}  Hair remove
+${SERVICE6}  Bleach
+${SERVICE7}  Hair cut
+${SERVICE8}  Threading
+${SERVICE9}  Threading12
+@{appointment}            Enable  Disable
+${start}    10
+
+${maxQueue}   30
+
+*** Test Cases ***
+
+JD-TC-GetQueueAvaliability-1
+
+    [Documentation]    Get Queue Avaliability - difference between start and end date is 90 ( the max number of queue is 30 )
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    clear_service   ${PUSERNAME132}
+    clear_location  ${PUSERNAME132}
+    clear_queue  ${PUSERNAME132}
+
+    ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${lid}
+
+    ${lid2}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${lid2}
+
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable  ${s_id}
+    Set Suite Variable  ${s_id1}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  90        
+    Set Suite Variable  ${DAY2}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    Set Suite Variable  ${list}
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    Set Suite Variable   ${sTime1}
+    ${eTime1}=  add_timezone_time  ${tz}  0  30  
+    Set Suite Variable   ${eTime1}
+    ${queue_name}=  FakerLibrary.bs
+    ${resp}=  Create Queue  ${queue_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  1  5  ${lid}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${q_id}  ${resp.json()}
+
+    ${DAY11}=  db.add_timezone_date  ${tz}  10        
+    Set Suite Variable  ${DAY11}
+    ${DAY22}=  db.add_timezone_date  ${tz}  20       
+    Set Suite Variable  ${DAY22}
+    ${sTime11}=  add_timezone_time  ${tz}  0  35 
+    Set Suite Variable   ${sTime1}
+    ${eTime11}=  add_timezone_time  ${tz}  0  50  
+    Set Suite Variable   ${eTime1}
+    ${queue_name2}=  FakerLibrary.bs
+    ${resp}=  Create Queue  ${queue_name2}  ${recurringtype[1]}  ${list}  ${DAY11}  ${DAY22}  ${EMPTY}  ${sTime11}  ${eTime11}  1  5  ${lid2}  ${s_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${q_id2}  ${resp.json()}
+
+    ${resp}=  Get Queue ById    ${q_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['name']}  ${queue_name} 
+    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid}
+    Should Be Equal As Strings  ${resp.json()['queueSchedule']['recurringType']}  ${recurringtype[1]}
+    Should Be Equal As Strings  ${resp.json()['queueSchedule']['repeatIntervals']}  ${list}
+    Should Be Equal As Strings  ${resp.json()['queueSchedule']['startDate']}  ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['queueSchedule']['terminator']['endDate']}  ${DAY2}
+    Should Be Equal As Strings  ${resp.json()['queueSchedule']['timeSlots'][0]['sTime']}  ${sTime1}
+    Should Be Equal As Strings  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}  ${eTime1}
+    Should Be Equal As Strings  ${resp.json()['parallelServing']}  1
+    Should Be Equal As Strings  ${resp.json()['capacity']}  5
+    Should Be Equal As Strings  ${resp.json()['queueState']}  ${Qstate[0]}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
+
+    ${resp}=  Get Queue ById    ${q_id2}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['name']}  ${queue_name2} 
+    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid2}
+    Should Be Equal As Strings  ${resp.json()['queueSchedule']['recurringType']}  ${recurringtype[1]}
+    Should Be Equal As Strings  ${resp.json()['queueSchedule']['repeatIntervals']}  ${list}
+    Should Be Equal As Strings  ${resp.json()['queueSchedule']['startDate']}  ${DAY11}
+    Should Be Equal As Strings  ${resp.json()['queueSchedule']['terminator']['endDate']}  ${DAY22}
+    Should Be Equal As Strings  ${resp.json()['queueSchedule']['timeSlots'][0]['sTime']}  ${sTime11}
+    Should Be Equal As Strings  ${resp.json()['queueSchedule']['timeSlots'][0]['eTime']}  ${eTime11}
+    Should Be Equal As Strings  ${resp.json()['parallelServing']}  1
+    Should Be Equal As Strings  ${resp.json()['capacity']}  5
+    Should Be Equal As Strings  ${resp.json()['queueState']}  ${Qstate[0]}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id1}
+
+    ${resp}=    GET Queue Availability  ${lid}  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${count}=   Get Length  ${resp.json()}
+    Should Be Equal As Strings      ${count}     ${maxQueue}
+
+
+JD-TC-GetQueueAvaliability-2
+
+    [Documentation]    Get Queue Avaliability - difference between start and end date is 10
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    GET Queue Availability  ${lid2}  ${s_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-GetQueueAvaliability-3
+
+    [Documentation]    Get Queue Avaliability - where location id and service is different queues
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    GET Queue Availability  ${lid}  ${s_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200

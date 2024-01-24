@@ -3359,7 +3359,7 @@ Send Attachment From Appointment By Consumer
 
 
 Send Message With Waitlist By Consumer
-    [Arguments]  ${uuid}  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments} 
+    [Arguments]  ${uuid}  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments}  
 
     ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
     ${data}=  Create Dictionary  uuid=${uuid}  medium=${medium}  communicationMessage=${message}  attachments=${attachments}
