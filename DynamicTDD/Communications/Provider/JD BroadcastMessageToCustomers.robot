@@ -28,10 +28,13 @@ JD-TC-BroadcastMessageToCustomers-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${accountId}  ${resp.json()['id']}
 
-    ${numbers}=  Create List
     FOR   ${i}  IN RANGE   5
-        ${CUSERPH0}=  Generate Random Test Phone Number
+        ${CUSERPH0}=  Generate Random Test Phone Number  ${CUSERNAME}
         Set Test Variable  ${CUSERPH${i}}  ${CUSERPH0}
         ${fname}=  FakerLibrary.first_name
         ${lname}=  FakerLibrary.last_name
@@ -49,36 +52,70 @@ JD-TC-BroadcastMessageToCustomers-1
         Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid${i}}
     END
 
-    ${resp}=  Provider Logout
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=  Provider Logout
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
-    FOR   ${i}  IN RANGE   5
-        ${resp}=    Send Otp For Login    ${CUSERNAME1}    ${accountId}
-        Log   ${resp.content}
-        Should Be Equal As Strings    ${resp.status_code}   200
+    # FOR   ${i}  IN RANGE   5
+    #     ${resp}=    Send Otp For Login    ${CUSERNAME1}    ${accountId}
+    #     Log   ${resp.content}
+    #     Should Be Equal As Strings    ${resp.status_code}   200
     
-        ${resp}=    Verify Otp For Login   ${CUSERNAME1}   12  
-        Log   ${resp.content}
-        Should Be Equal As Strings    ${resp.status_code}   200
-        Set Suite Variable   ${token}  ${resp.json()['token']}
+    #     ${resp}=    Verify Otp For Login   ${CUSERNAME1}   12  
+    #     Log   ${resp.content}
+    #     Should Be Equal As Strings    ${resp.status_code}   200
+    #     Set Test Variable   ${token}  ${resp.json()['token']}
 
-        ${resp}=  Customer Logout   
-        Log   ${resp.json()}
-        Should Be Equal As Strings    ${resp.status_code}    200
+    #     ${resp}=  Customer Logout   
+    #     Log   ${resp.content}
+    #     Should Be Equal As Strings    ${resp.status_code}    200
     
-        ${resp}=    ProviderConsumer Login with token    ${CUSERNAME1}    ${accountId}    ${token}    ${countryCode}
-        Log   ${resp.json()}
-        Should Be Equal As Strings    ${resp.status_code}   200
-        Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
+    #     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME1}    ${accountId}    ${token}    ${countryCode}
+    #     Log   ${resp.content}
+    #     Should Be Equal As Strings    ${resp.status_code}   200
+    #     Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-        ${resp}=  Customer Logout   
-        Log   ${resp.json()}
-        Should Be Equal As Strings    ${resp.status_code}    200
-    END
+    #     ${resp}=  Customer Logout   
+    #     Log   ${resp.content}
+    #     Should Be Equal As Strings    ${resp.status_code}    200
+    # END
 
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+    # ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    
+
+    ${msg}=   FakerLibrary.sentence
+    ${file1_details}=    Create Dictionary   action=${FileAction[0]}  owner=${accountId}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    ${file_details}=  Create List  ${file1_details}
+    ${resp}=  Broadcast Message to customers  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}  attachments=${file_details}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${msg}=   FakerLibrary.sentence
-    ${resp}=  Broadcast Message to customers  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${bool[1]}
+    FOR   ${i}  IN RANGE   5
+        ${resp}=    Send Otp For Login    ${CUSERPH${i}}    ${accountId}
+        Log   ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+    
+        ${resp}=    Verify Otp For Login   ${CUSERPH${i}}   12  
+        Log   ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+        Set Test Variable   ${token}  ${resp.json()['token']}
+
+        ${resp}=  Customer Logout   
+        Log   ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}    200
+    
+        ${resp}=    ProviderConsumer Login with token    ${CUSERPH${i}}    ${accountId}    ${token}    ${countryCode}
+        Log   ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+        # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+        ${resp}=  Get Consumer Communications
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200 
+
+        ${resp}=  Customer Logout   
+        Log   ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}    200
+    END
