@@ -291,10 +291,12 @@ JD-TC-Remove ProviderCoupon-UH1
     ${resp}=  Update bill status   ${invoice_uid}    ${billStatus[1]}    ${billStatusNote}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
+    # ${INVOICE_SETTLED}=  format String   ${INVOICE_SETTLED}   ${billStatus[1]}
+
+    ${INVOICE_STATUS}=  format String   ${INVOICE_STATUS}   ${billStatus[1]}
 
 
     ${resp}=   Remove Provider Coupon   ${invoice_uid}   ${cupn_code}
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_SETTLED}
+    Should Be Equal As Strings  ${resp.json()}   ${INVOICE_STATUS}

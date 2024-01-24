@@ -1363,7 +1363,7 @@ JD-TC-Apply Services to finance-5
     ${tax2}=  Evaluate  ${amount_tot}*${gstpercentage[3]}
     ${nettax}=   Evaluate  ${tax2}/100
     ${netRate}=  Evaluate  ${amount_tot}+${nettax}
-    ${netRate}=  twodigitfloat  ${netRate}
+    # ${netRate}=  twodigitfloat  ${netRate}
     ${amountDue}=  Evaluate  ${netRate}-${min_pre}
     ${amountDue}=  Convert To Number  ${amountDue}  2
 

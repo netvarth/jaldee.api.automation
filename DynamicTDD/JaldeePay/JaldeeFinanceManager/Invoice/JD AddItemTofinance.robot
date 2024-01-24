@@ -344,7 +344,8 @@ JD-TC-Apply Item to Finance-1
     ${resp}=  Create Sample Item   ${DisplayName1}   ${item1}  ${itemCode1}  ${price}  ${bool[0]} 
     Log  ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${itemId1}  ${resp.json()}
+    # ${itemId1}=   Convert To Integer   ${resp.json()} 
+    Set Suite Variable  ${itemId1}   ${resp.json()} 
 
     ${resp}=   Get Item By Id  ${itemId1}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -375,7 +376,8 @@ JD-TC-Apply Item to Finance-1
     ${resp}=   Get Item By Id  ${itemId2}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${promotionalPrice1}   ${resp.json()['promotionalPrice']}
-    Set Suite Variable   ${itemId3}   ${resp.json()['itemId']}
+    # ${itemId3}=   Convert To Integer   ${resp.json()['itemId']}
+    Set Suite Variable  ${itemId3}    ${resp.json()['itemId']}
 
 
 

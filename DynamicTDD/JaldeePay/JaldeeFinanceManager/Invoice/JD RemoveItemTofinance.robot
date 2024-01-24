@@ -388,7 +388,7 @@ JD-TC-Remove Item to Finance-1
 
     ${itemList2}=  Create Dictionary  itemId=${itemId2}      price=${promotionalPrice1} 
 
-    ${resp}=  RemoveServiceToFinance   ${invoice_uid}   ${itemList2}    
+    ${resp}=  RemoveServiceToFinance   ${invoice_uid}   ${itemList1}    
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 

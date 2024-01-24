@@ -2124,6 +2124,7 @@ quantity_cannot_empty=" Quantity cannot be empty"
 INVOICE_STATUS="This invoice is in the '{}' status"
 INVALID_EMAIL_ID="Invalid Email Id" 
 Draft_status="This invoice is in the 'Draft 'status" 
+CANNOT_DISABLE_FINANCE="Can not disable Finance Manager since services with amount exists"
 
 
 # ........Membership  ...............

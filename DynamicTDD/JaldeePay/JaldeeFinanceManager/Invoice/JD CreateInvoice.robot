@@ -3486,6 +3486,7 @@ JD-TC-CreateInvoice-UH4
         ${resp1}=    Enable Disable Jaldee Finance   ${toggle[1]}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  422
+        Should Be Equal As Strings  ${resp1.json()}   ${CANNOT_DISABLE_FINANCE}
     END
 
     ${resp}=  Get jp finance settings    
@@ -3494,26 +3495,6 @@ JD-TC-CreateInvoice-UH4
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
  
     
-    # ${resp}=  Get Bookings Invoices  ${cwid}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid1}
-    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}  ${P1SERVICE1}
-    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}  1.0
-    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['price']}  ${Tot}
-    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}  ${Tot}
-    # Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['ynwUuid']}  ${cwid}
-    # Should Be Equal As Strings  ${resp.json()[0]['amountPaid']}  ${min_pre}
-    # Should Be Equal As Strings  ${resp.json()[0]['amountDue']}  ${balamount}
-    # Should Be Equal As Strings  ${resp.json()[0]['amountTotal']}  ${Tot}
-    # Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  ${gstpercentage[3]}
-    # Should Be Equal As Strings  ${resp.json()[0]['defaultCurrencyAmount']}  ${Tot}
-    # Should Be Equal As Strings  ${resp.json()[0]['netTaxAmount']}  ${tax}
-    # Should Be Equal As Strings  ${resp.json()[0]['netTotal']}  ${Tot}
-    # Should Be Equal As Strings  ${resp.json()[0]['netRate']}  ${totalamt}
-    # Should Be Equal As Strings  ${resp.json()[0]['taxableTotal']}  ${Tot}
-    # Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid}
-    # Set Test Variable  ${invoice_wtlistonline_uid4}  ${resp.json()[0]['invoiceUid']}
 
 
 JD-TC-ApplyDiscountForOrder-21
@@ -3950,3 +3931,224 @@ JD-TC-ApplyDiscountForOrder-23
     ${resp}=  Get Bookings Invoices  ${orderid3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-CreateInvoice-24
+
+    [Documentation]  Try to disable finance where only one service is there with zero amount(we can disable finance manager in this case)
+
+   
+
+    ${PO_Number}    Generate random string    8    9784654123
+    ${PO_Number}    Convert To Integer  ${PO_Number}
+    ${PUSERPH5}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH5}${\n}
+    Set Suite Variable   ${PUSERPH5}
+    ${resp}=   Run Keywords  clear_queue  ${PUSERPH5}   AND  clear_service  ${PUSERPH5}  AND  clear_Item    ${PUSERPH5}  AND   clear_Coupon   ${PUSERPH5}   AND  clear_Discount  ${PUSERPH5}  AND  clear_appt_schedule   ${PUSERPH5}
+    ${licid}  ${licname}=  get_highest_license_pkg
+    Log  ${licid}
+    Log  ${licname}
+    Set Test Variable   ${licid}
+    
+    ${domresp}=  Get BusinessDomainsConf
+    Log   ${domresp.content}
+    Should Be Equal As Strings  ${domresp.status_code}  200
+    ${dlen}=  Get Length  ${domresp.json()}
+    ${d1}=  Random Int   min=0  max=${dlen-1}
+    Set Test Variable  ${dom}  ${domresp.json()[${d1}]['domain']}
+    ${sdlen}=  Get Length  ${domresp.json()[${d1}]['subDomains']}
+    ${sdom}=  Random Int   min=0  max=${sdlen-1}
+    Set Test Variable  ${sub_dom}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
+
+    ${firstname}=  FakerLibrary.first_name
+    ${lastname}=  FakerLibrary.last_name
+    ${address}=  FakerLibrary.address
+    ${dob}=  FakerLibrary.Date
+    ${gender}    Random Element    ['Male', 'Female']
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERPH5}  ${licid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Account Activation  ${PUSERPH5}  0
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.content}    "true"
+    
+    ${resp}=  Account Set Credential  ${PUSERPH5}  ${PASSWORD}  0
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH5}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pid1}  ${decrypted_data['id']}
+    # Set Test Variable  ${pid}  ${resp.json()['id']}
+    
+    ${list}=  Create List  1  2  3  4  5  6  7
+    Set Suite Variable  ${list}  
+    @{Views}=  Create List  self  all  customersOnly
+    ${ph1}=  Evaluate  ${PUSERPH5}+1000000000
+    ${ph2}=  Evaluate  ${PUSERPH5}+2000000000
+    ${views}=  Evaluate  random.choice($Views)  random
+    ${name1}=  FakerLibrary.name
+    ${name2}=  FakerLibrary.name
+    ${name3}=  FakerLibrary.name
+    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}025.${test_mail}  ${views}
+    ${bs}=  FakerLibrary.bs
+    ${companySuffix}=  FakerLibrary.companySuffix
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Test Variable  ${tz}
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ['True','False']
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
+    ${sTime}=  add_timezone_time  ${tz}  0  15  
+    Set Test Variable   ${sTime}
+    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    Set Test Variable   ${eTime}
+
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    Set Test Variable  ${DAY}  
+    
+    ${resp}=  Update Business Profile with Schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}   ${EMPTY}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${fields}=   Get subDomain level Fields  ${dom}  ${sub_dom}
+    Log  ${fields.content}
+    Should Be Equal As Strings    ${fields.status_code}   200
+
+    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_dom}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get specializations Sub Domain  ${dom}  ${sub_dom}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${spec}=  get_Specializations  ${resp.json()}
+    
+    ${resp}=  Update Specialization  ${spec}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    Set Test Variable  ${email_id}  ${P_Email}${PUSERPH5}.${test_mail}
+
+    ${resp}=  Update Email   ${pid1}   ${firstname}   ${lastname}   ${email_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    # ------------- Get general details and settings of the provider and update all needed settings
+    
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${pid1}  ${resp.json()['id']}
+    Set Test Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Verify Response  ${resp}  onlineCheckIns=${bool[1]}
+
+    ${resp}=  Enable Waitlist
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp1}=   Run Keyword If  ${resp.json()['onlinePresence']}==${bool[0]}   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${EMPTY}
+    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
+    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+
+    ${resp}=  Get Account Payment Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp1}=   Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
+    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    
+    ${resp}=  Get Account Payment Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+    Set Test Variable  ${accountId1}  ${resp.json()['accountId']}    
+    
+
+    ${resp}=  Get Account Payment Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+
+    
+    ${p1_lid}=  Create Sample Location
+    ${resp}=  Get Locations
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${p1_lid}  ${resp.json()[0]['id']} 
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Category With Filter  categoryType-eq=${categoryType[3]}  
+    Log  ${resp.json()}
+
+
+
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[1]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[1]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+      
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[0]}
+ 

@@ -59,7 +59,7 @@ JD-TC-Assign User-1
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address
     ${dob}=  FakerLibrary.Date
-    ${pin}=  get_pincode
+    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}
@@ -249,7 +249,7 @@ JD-TC-Assign User-2
     ${lastname}=  FakerLibrary.last_name
     ${address}=  get_address
     ${dob}=  FakerLibrary.Date
-    ${pin}=  get_pincode
+    ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
     
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[1]}  ${P_Email}${ph1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${ph1}  ${dep_id}  ${sub_domain_id}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
     Log   ${resp.json()}

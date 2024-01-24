@@ -12694,7 +12694,7 @@ AddItemToFinance
     ${data}=    json.dumps    ${ItemLists}  
 
    Check And Create YNW Session
-   ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/addItems    data=${data}  expected_status=any  
+   ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/additems    data=${data}  expected_status=any  
    [Return]  ${resp} 
 
 AddServiceToFinance

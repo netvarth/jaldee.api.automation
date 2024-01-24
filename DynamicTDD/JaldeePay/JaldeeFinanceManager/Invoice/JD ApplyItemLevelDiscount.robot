@@ -604,6 +604,77 @@ JD-TC-Apply Item Level Discount-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${DISCOUNT_ALREADY_USED}
 
+JD-TC-Apply Item Level Discount-UH3
+
+    [Documentation]  Apply item level discount where Invoice uid is wrong.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${invoice}=   FakerLibrary.word
+
+
+    ${resp}=   Apply Item Level Discount   ${invoice}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${itemId}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+
+JD-TC-Apply Item Level Discount-UH4
+
+    [Documentation]  Apply item level discount where discount id is wrong.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${wrongdiscount}=   FakerLibrary.RandomNumber
+
+    ${resp}=   Apply Item Level Discount   ${invoice_uid}   ${wrongdiscount}    ${discountprice}   ${privateNote}  ${displayNote}  ${itemId}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
+
+JD-TC-Apply Item Level Discount-UH5
+
+    [Documentation]  Apply item level discount where Item id is wrong.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${item}=  FakerLibrary.RandomNumber
+
+
+    ${resp}=   Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${item}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${NO_ITEM_FOUND}
+
+JD-TC-Apply Item Level Discount-UH6
+
+    [Documentation]  Apply item level discount using another provider login.
+
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+
+
+    ${resp}=   Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${itemId}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+
+
 JD-TC-Apply Item Level Discount-UH2
 
     [Documentation]  Create an invoice with itemlist and apply discount to invoice then try to apply same discount in item level.
@@ -837,75 +908,6 @@ JD-TC-Apply Item Level Discount-UH2
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-Apply Item Level Discount-UH3
-
-    [Documentation]  Apply item level discount where Invoice uid is wrong.
-
-
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${privateNote}=     FakerLibrary.word
-    ${displayNote}=   FakerLibrary.word
-    ${invoice}=   FakerLibrary.word
-
-
-    ${resp}=   Apply Item Level Discount   ${invoice}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${itemId}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
-
-JD-TC-Apply Item Level Discount-UH4
-
-    [Documentation]  Apply item level discount where discount id is wrong.
-
-
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${privateNote}=     FakerLibrary.word
-    ${displayNote}=   FakerLibrary.word
-    ${wrongdiscount}=   FakerLibrary.RandomNumber
-
-    ${resp}=   Apply Item Level Discount   ${invoice_uid}   ${wrongdiscount}    ${discountprice}   ${privateNote}  ${displayNote}  ${itemId}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
-
-JD-TC-Apply Item Level Discount-UH5
-
-    [Documentation]  Apply item level discount where Item id is wrong.
-
-
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${privateNote}=     FakerLibrary.word
-    ${displayNote}=   FakerLibrary.word
-    ${item}=  FakerLibrary.RandomNumber
-
-
-    ${resp}=   Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${item}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${NO_ITEM_FOUND}
-
-JD-TC-Apply Item Level Discount-UH6
-
-    [Documentation]  Apply item level discount using another provider login.
-
-
-    ${resp}=   Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${privateNote}=     FakerLibrary.word
-    ${displayNote}=   FakerLibrary.word
-
-
-    ${resp}=   Apply Item Level Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${itemId}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVALID_FM_INVOICE_ID}
 
 
 

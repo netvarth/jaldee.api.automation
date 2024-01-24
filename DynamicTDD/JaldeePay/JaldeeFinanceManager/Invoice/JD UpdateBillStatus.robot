@@ -110,7 +110,7 @@ JD-TC-UpdateBillStatus-1
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
     ${srv_duration}=   Random Int   min=10   max=20
-    ${maxBookingsAllowed}=   Random Int  min=1  max=5
+    ${maxBookingsAllowed}=   Random Int  min=10  max=50
     ${maxBookingsAllowed}=  Convert To Number  ${maxBookingsAllowed}  1
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[0]}  ${bool[0]}    maxBookingsAllowed=${maxBookingsAllowed}
     Log  ${resp.content}
