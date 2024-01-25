@@ -70,8 +70,8 @@ JD-TC-Apply Item Level Discount-1
     [Documentation]  Apply Item  Level Discount.
 
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+5551838
-    Set Suite Variable   ${PUSERPH0}
+    ${PUSERPH30}=  Evaluate  ${PUSERNAME}+5551838
+    Set Suite Variable   ${PUSERPH30}
     
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -94,21 +94,21 @@ JD-TC-Apply Item Level Discount-1
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}=    Random Element    ${Genderlist}
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH30}  ${licid}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Activation  ${PUSERPH0}  0
+    ${resp}=  Account Activation  ${PUSERPH30}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  "${resp.json()}"    "true"
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH30}${\n}
 
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH30}  ${PASSWORD}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH30}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -132,15 +132,15 @@ JD-TC-Apply Item Level Discount-1
     Should Be Equal As Strings  ${resp.json()['appointment']}   ${bool[1]}
     
 
-    ${accId}=  get_acc_id  ${PUSERPH0}
+    ${accId}=  get_acc_id  ${PUSERPH30}
     Set Suite Variable  ${accId}
 
     ${DAY1}=  get_date
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${PUSERPH0}+1000000000
-    ${ph2}=  Evaluate  ${PUSERPH0}+2000000000
+    ${ph1}=  Evaluate  ${PUSERPH30}+1000000000
+    ${ph2}=  Evaluate  ${PUSERPH30}+2000000000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -431,7 +431,7 @@ JD-TC-Apply Item Level Discount-2
     [Documentation]  Apply item level discount where discount price is empty.
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH30}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -473,7 +473,7 @@ JD-TC-Apply Item Level Discount-3
     [Documentation]  Apply item level discount where private note  is empty.
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH30}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -514,7 +514,7 @@ JD-TC-Apply Item Level Discount-4
     [Documentation]  Apply item level discount where display note is empty.
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH30}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -553,7 +553,7 @@ JD-TC-Apply Item Level Discount-5
     [Documentation]  Apply item level discount where private note and display note is empty.
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH30}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -592,7 +592,7 @@ JD-TC-Apply Item Level Discount-UH1
     [Documentation]   Apply Item  Level Discount(created discount value).
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH30}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -609,7 +609,7 @@ JD-TC-Apply Item Level Discount-UH3
     [Documentation]  Apply item level discount where Invoice uid is wrong.
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH30}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -627,7 +627,7 @@ JD-TC-Apply Item Level Discount-UH4
     [Documentation]  Apply item level discount where discount id is wrong.
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH30}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -644,7 +644,7 @@ JD-TC-Apply Item Level Discount-UH5
     [Documentation]  Apply item level discount where Item id is wrong.
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH30}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 

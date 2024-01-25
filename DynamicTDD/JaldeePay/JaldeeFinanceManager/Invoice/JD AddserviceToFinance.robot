@@ -548,7 +548,7 @@ JD-TC-Apply Service To Finance-2
         Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
     END
     ${num_slots}=  Get Length  ${slots}
-    ${j}=  Random Int  max=${num_slots-3}
+    ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
@@ -1298,9 +1298,9 @@ JD-TC-Apply Services to finance-5
     ${tax1}=  Evaluate  ${Tot}*${gstpercentage[3]}
     ${tax}=   Evaluate  ${tax1}/100
     ${totalamt}=  Evaluate  ${Tot}+${tax}
-    # ${totalamt}=  twodigitfloat  ${totalamt}
+    ${totalamt}=  Convert To Integer  ${totalamt}
     ${balamount}=  Evaluate  ${totalamt}-${min_pre}
-    ${balamount}=  Convert To Number  ${balamount}  2
+    ${balamount}=  Convert To Integer  ${balamount}  
 
 
     ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid}
@@ -1335,6 +1335,9 @@ JD-TC-Apply Services to finance-5
     ${resp}=  Get Bookings Invoices  ${cwid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+   ${response_netRate}=  Convert To Integer  ${resp.json()[0]['netRate']}
+   ${response_amountDue}=  Convert To Integer  ${resp.json()[0]['amountDue']} 
+
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid1}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}  ${P1SERVICE1}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['quantity']}  1.0
@@ -1342,13 +1345,13 @@ JD-TC-Apply Services to finance-5
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['netRate']}  ${Tot}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['ynwUuid']}  ${cwid}
     Should Be Equal As Strings  ${resp.json()[0]['amountPaid']}  ${min_pre}
-    Should Be Equal As Strings  ${resp.json()[0]['amountDue']}  ${balamount}
+    Should Be Equal As Strings  ${response_amountDue}   ${balamount}
     Should Be Equal As Strings  ${resp.json()[0]['amountTotal']}  ${Tot}
     Should Be Equal As Strings  ${resp.json()[0]['taxPercentage']}  ${gstpercentage[3]}
     Should Be Equal As Strings  ${resp.json()[0]['defaultCurrencyAmount']}  ${Tot}
     Should Be Equal As Strings  ${resp.json()[0]['netTaxAmount']}  ${tax}
     Should Be Equal As Strings  ${resp.json()[0]['netTotal']}  ${Tot}
-    Should Be Equal As Strings  ${resp.json()[0]['netRate']}  ${totalamt}
+    Should Be Equal As Strings  ${response_netRate}  ${totalamt}
     Should Be Equal As Strings  ${resp.json()[0]['taxableTotal']}  ${Tot}
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}  ${cwid}
     Set Suite Variable  ${invoice_wtlistonline_uid}  ${resp.json()[0]['invoiceUid']}

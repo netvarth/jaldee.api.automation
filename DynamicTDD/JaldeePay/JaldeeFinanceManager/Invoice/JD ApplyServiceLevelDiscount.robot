@@ -70,8 +70,8 @@ JD-TC-Apply Service Level Discount-1
     [Documentation]  Apply Service Level Discount.
 
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+3381834
-    Set Suite Variable   ${PUSERPH0}
+    ${PUSERPH10}=  Evaluate  ${PUSERNAME}+3381834
+    Set Suite Variable   ${PUSERPH10}
     
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -94,21 +94,21 @@ JD-TC-Apply Service Level Discount-1
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}=    Random Element    ${Genderlist}
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH10}  ${licid}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Activation  ${PUSERPH0}  0
+    ${resp}=  Account Activation  ${PUSERPH10}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  "${resp.json()}"    "true"
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH10}${\n}
 
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH10}  ${PASSWORD}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH10}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -124,15 +124,15 @@ JD-TC-Apply Service Level Discount-1
     Should Be Equal As Strings  ${resp.json()['appointment']}   ${bool[1]}
     
 
-    ${accId}=  get_acc_id  ${PUSERPH0}
+    ${accId}=  get_acc_id  ${PUSERPH10}
     Set Suite Variable  ${accId}
 
     ${DAY1}=  get_date
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
-    ${ph1}=  Evaluate  ${PUSERPH0}+1000000000
-    ${ph2}=  Evaluate  ${PUSERPH0}+2000000000
+    ${ph1}=  Evaluate  ${PUSERPH10}+1000000000
+    ${ph2}=  Evaluate  ${PUSERPH10}+2000000000
     ${views}=  Random Element    ${Views}
     ${name1}=  FakerLibrary.name
     ${name2}=  FakerLibrary.name
@@ -402,7 +402,7 @@ JD-TC-Apply Service Level Discount-2
 
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH10}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -448,7 +448,7 @@ JD-TC-Apply Service Level Discount--3
 
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH10}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -493,7 +493,7 @@ JD-TC-Apply Service Level Discount-4
 
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH10}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -542,7 +542,7 @@ JD-TC-Apply Service Level Discount-UH1
     [Documentation]   apply already applied discount.
 
 
-  ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+  ${resp}=   Encrypted Provider Login  ${PUSERPH10}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -560,7 +560,7 @@ JD-TC-Apply Service Level Discount-UH2
     [Documentation]   Discount is higher than invoice amount.
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH10}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -594,7 +594,7 @@ JD-TC-Apply Service Level Discount-UH3
     [Documentation]   Apply discount with discount price is empty.
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH10}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -611,7 +611,7 @@ JD-TC-Apply Service Level Discount-UH4
 
     [Documentation]   Apply discount where invoice_uid is wrong.
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH10}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -630,7 +630,7 @@ JD-TC-Apply Service Level Discount-UH5
     [Documentation]   Apply discount where discountid is wrong.
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH10}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -649,7 +649,7 @@ JD-TC-Apply Service Level Discount-UH6
     [Documentation]   Apply Service Level Discount where service id is wrong.
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH10}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -667,7 +667,7 @@ JD-TC-Apply Service Level Discount-UH7
     [Documentation]   Apply one service thats not added to any invoice then try to remove apply itemlevel discount using this service id.
 
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH10}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 

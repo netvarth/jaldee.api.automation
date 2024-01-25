@@ -37,7 +37,7 @@ JD-TC-Get Invoice With Filter -1
 
     [Documentation]  Get Invoice With Filter .
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME323}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -264,7 +264,7 @@ JD-TC-Get Invoice With Filter -2
 
     [Documentation]  Create multiple invoice using multiple provider consumers and GetInvoicewithFilter.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME323}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -314,22 +314,22 @@ JD-TC-Get Invoice With Filter -2
     Should Be Equal As Strings  ${resp1.json()[0]['categoryName']}  ${name1}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceLabel']}  ${invoiceLabel}
-    # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
+    Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
     Should Be Equal As Strings  ${resp1.json()[0]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceUid']}  ${invoice_uid1}
-    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceId']}  ${invoice_id}
-    Should Be Equal As Strings  ${resp1.json()[0]['providerConsumerId']}  ${pcid9}
+    Should Be Equal As Strings  ${resp1.json()[0]['providerConsumerId']}  ${pcid10}
     Should Be Equal As Strings  ${resp1.json()[1]['accountId']}  ${account_id1}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp1.json()[1]['categoryName']}  ${name1}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceLabel']}  ${invoiceLabel}
-    Should Be Equal As Strings  ${resp1.json()[1]['billedTo']}  ${address}
+    # Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${address}
     Should Be Equal As Strings  ${resp1.json()[1]['vendorUid']}  ${vendor_uid1}
     Should Be Equal As Strings  ${resp1.json()[1]['invoiceUid']}  ${invoice_uid1}
+    # Should Be Equal As Strings  ${resp1.json()[0]['invoiceId']}  ${invoice_id}
+    Should Be Equal As Strings  ${resp1.json()[1]['providerConsumerId']}  ${pcid9}
     # Should Be Equal As Strings  ${resp1.json()[1]['invoiceId']}  ${invoice_id}
-    Should Be Equal As Strings  ${resp1.json()[1]['providerConsumerId']}  ${pcid10}
-        Should Be Equal As Strings  ${resp1.json()[2]['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()[2]['accountId']}  ${account_id1}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceCategoryId']}  ${category_id2}
     Should Be Equal As Strings  ${resp1.json()[2]['categoryName']}  ${name1}
     Should Be Equal As Strings  ${resp1.json()[2]['invoiceDate']}  ${invoiceDate}
@@ -345,7 +345,7 @@ JD-TC-Get Invoice With Filter -3
 
     [Documentation]   GetInvoiceCountwithFilter using invoiceCategoryId.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME323}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -390,7 +390,7 @@ JD-TC-Get Invoice With Filter -4
 
     [Documentation]   GetInvoiceCountwithFilter using categoryName.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME323}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -434,7 +434,7 @@ JD-TC-Get Invoice With Filter -5
 
     [Documentation]   GetInvoiceCountwithFilter using invoiceDate.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME323}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -478,7 +478,7 @@ JD-TC-Get Invoice With Filter -6
 
     [Documentation]   GetInvoiceCountwithFilter using invoiceLabel.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME323}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -522,7 +522,7 @@ JD-TC-Get Invoice With Filter -7
 
     [Documentation]   GetInvoiceCountwithFilter using billedTo.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME323}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -566,7 +566,7 @@ JD-TC-Get Invoice With Filter -8
 
     [Documentation]   GetInvoiceCountwithFilter using invoiceUid.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME323}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -591,7 +591,7 @@ JD-TC-Get Invoice With Filter -9
 
     [Documentation]   GetInvoiceCountwithFilter using invoiceStatus.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME323}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

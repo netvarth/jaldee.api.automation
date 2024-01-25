@@ -385,10 +385,14 @@ JD-TC-Remove Item to Finance-1
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+
 
     ${itemList2}=  Create Dictionary  itemId=${itemId2}      price=${promotionalPrice1} 
 
-    ${resp}=  RemoveServiceToFinance   ${invoice_uid}   ${itemList1}    
+    ${resp}=  RemoveItemToFinance  ${invoice_uid}   ${itemList1}    
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
