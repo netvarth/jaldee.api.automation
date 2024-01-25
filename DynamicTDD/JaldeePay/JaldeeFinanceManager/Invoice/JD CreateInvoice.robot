@@ -2478,7 +2478,7 @@ JD-TC-CreateInvoice-15
     ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${status_id1}   ${resp.json()}
+    Set Test Variable   ${status_id1}   ${resp.json()}
 
     ${SERVICE1}=    FakerLibrary.word
     Set Suite Variable  ${SERVICE1}
