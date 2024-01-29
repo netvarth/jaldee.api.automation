@@ -12920,8 +12920,16 @@ Send Message By Chat
     [Return]  ${resp}
 
 
-GET Queue Availability
+GET Queue Availability By Location AND Service
     [Arguments]   ${locationId}  ${serviceId}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/waitlist/queues/available/${locationId}/${serviceId}  expected_status=any
+    [Return]  ${resp}
+
+
+GET Queue Availability By Location, Service and Date
+    [Arguments]   ${locationId}  ${serviceId}   ${date}
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/available/${locationId}/${serviceId}  expected_status=any
