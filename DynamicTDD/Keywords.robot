@@ -376,10 +376,10 @@ Generate Random 555 Test Phone Number
 
 Generate Random Test Phone Number
     [Arguments]    ${baseNumber}
-    ${PH_Number}    Random Number 	       digits=5
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    ${PH_Number}    Random Number 	       digits=7
+    # ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
-    ${Phone}=  Evaluate  ${baseNumber}+${PO_Number1}
+    ${Phone}=  Evaluate  ${baseNumber}+${PH_Number}
     Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${Phone}${\n}
     [Return]  ${Phone}
 

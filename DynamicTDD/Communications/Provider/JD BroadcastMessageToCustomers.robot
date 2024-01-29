@@ -9,6 +9,7 @@ Library           /ebs/TDD/db.py
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -17,6 +18,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${pngfile}      /ebs/TDD/upload.png
 ${pdffile}      /ebs/TDD/sample.pdf
+${order}    0
 
 *** Test Cases ***
 
@@ -34,22 +36,28 @@ JD-TC-BroadcastMessageToCustomers-1
     Set Test Variable    ${accountId}  ${resp.json()['id']}
 
     FOR   ${i}  IN RANGE   5
-        ${CUSERPH0}=  Generate Random Test Phone Number  ${CUSERNAME}
-        Set Test Variable  ${CUSERPH${i}}  ${CUSERPH0}
+        ${CUSERPH}=  Generate Random Test Phone Number  ${CUSERNAME}
+        Set Test Variable  ${CUSERPH${i}}  ${CUSERPH}
         ${fname}=  FakerLibrary.first_name
         ${lname}=  FakerLibrary.last_name
-        ${resp}=  AddCustomer  ${CUSERPH0}  firstName=${fname}  lastName=${lname}
+        ${resp}=  AddCustomer  ${CUSERPH}  firstName=${fname}  lastName=${lname}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${cid${i}}  ${resp.json()}
-        
-    END
-    
-    FOR   ${i}  IN RANGE   5
+
         ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${i}}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid${i}}
+        
+    END
+    
+    FOR   ${i}  IN RANGE   5
+        Log   ${CUSERPH${i}}
+        # ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${i}}
+        # Log  ${resp.content}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        # Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid${i}}
     END
 
     # ${resp}=  Provider Logout
@@ -85,6 +93,10 @@ JD-TC-BroadcastMessageToCustomers-1
 
     
 
+    # ${fileSize}=  db.get_file_size   ${pdffile}
+    ${fileSize}=  OperatingSystem.Get File Size  ${pdffile}
+    ${fileType}=  db.get_filetype  ${pdffile}
+    ${caption}=    FakerLibrary.Text
     ${msg}=   FakerLibrary.sentence
     ${file1_details}=    Create Dictionary   action=${FileAction[0]}  owner=${accountId}  fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
     ${file_details}=  Create List  ${file1_details}
@@ -106,7 +118,7 @@ JD-TC-BroadcastMessageToCustomers-1
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
     
-        ${resp}=    ProviderConsumer Login with token    ${CUSERPH${i}}    ${accountId}    ${token}    ${countryCode}
+        ${resp}=    ProviderConsumer Login with token    ${CUSERPH${i}}    ${accountId}    ${token}    ${countryCodes[0]}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}   200
         # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}

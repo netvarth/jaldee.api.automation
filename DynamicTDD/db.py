@@ -6488,10 +6488,10 @@ def calculate_age_years_months(birth_date):
     return (delta.years, delta.months)
 
 
-def get_file_size(file):
-    print("In function: ", inspect.stack()[0].function)
-    file_size = os.stat(file)
-    return  file_size
+# def get_file_size(file):
+#     print("In function: ", inspect.stack()[0].function)
+#     file_size = os.stat(file)
+#     return  file_size.st_size
 
 
 def get_filetype(file):
