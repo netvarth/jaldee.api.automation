@@ -587,7 +587,7 @@ JD-TC-Apply Service Level Discount-UH2
     ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${sid1}
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}    ${NEED_BILL_AMOUNT_HIGHER_THAN_DISCOUNT}
+    Should Be Equal As Strings  ${resp.json()}    ${NEED_AMOUNT_HIGHER_THAN_DISCOUNT}
 
 JD-TC-Apply Service Level Discount-UH3
 
