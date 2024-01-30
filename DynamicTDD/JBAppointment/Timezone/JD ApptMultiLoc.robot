@@ -2098,11 +2098,15 @@ JD-TC-Take Appointment in Different Timezone-4
     ${spec}=  get_Specializations  ${resp.json()}
     Log  ${spec}
     ${spec_len}=  Get Length  ${spec['specialization']}
-    IF  ${spec_len}>3
-        ${specials}=  Random Elements   elements=${spec['specialization']}  length=3  unique=True
-        Log  ${specials}
-        Set To Dictionary    ${spec}    specialization    ${specials}
-    END
+    ${rand_len}=  Set Variable If  ${spec_len}>3  3   ${spec_len}
+    ${specials}=  Random Elements   elements=${spec['specialization']}  length=${rand_len}  unique=True
+    Log  ${specials}
+    Set To Dictionary    ${spec}    specialization    ${specials}
+    # IF  ${spec_len}>3
+    #     ${specials}=  Random Elements   elements=${spec['specialization']}  length=${rand_len}  unique=True
+    #     Log  ${specials}
+    #     Set To Dictionary    ${spec}    specialization    ${specials}
+    # END
     ${resp}=  Update Specialization  ${spec}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -2304,7 +2308,9 @@ JD-TC-Take Appointment in Different Timezone-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${spec}=  get_specs  ${resp.json()}
-    ${spec}=  Random Elements   elements=@{spec}  length=3  unique=True
+    ${spec_len}=  Get Length  ${spec['specialization']}
+    ${rand_len}=  Set Variable If  ${spec_len}>3  3   ${spec_len}
+    ${spec}=  Random Elements   elements=@{spec}  length=${rand_len}  unique=True
     Log  ${spec}
 
     ${resp}=  Get Spoke Languages
@@ -2395,7 +2401,9 @@ JD-TC-Take Appointment in Different Timezone-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${spec}=  get_specs  ${resp.json()}
-    ${spec}=  Random Elements   elements=@{spec}  length=3  unique=True
+    ${spec_len}=  Get Length  ${spec['specialization']}
+    ${rand_len}=  Set Variable If  ${spec_len}>3  3   ${spec_len}
+    ${spec}=  Random Elements   elements=@{spec}  length=${rand_len}  unique=True
     Log  ${spec}
 
     ${resp}=  Get Spoke Languages
@@ -2580,11 +2588,15 @@ JD-TC-Take Appointment in Different Timezone-4
     ${spec}=  get_Specializations  ${resp.json()}
     Log  ${spec}
     ${spec_len}=  Get Length  ${spec['specialization']}
-    IF  ${spec_len}>3
-        ${specials}=  Random Elements   elements=${spec['specialization']}  length=3  unique=True
-        Log  ${specials}
-        Set To Dictionary    ${spec}    specialization    ${specials}
-    END
+    ${rand_len}=  Set Variable If  ${spec_len}>3  3   ${spec_len}
+    ${specials}=  Random Elements   elements=${spec['specialization']}  length=${rand_len}  unique=True
+    Log  ${specials}
+    Set To Dictionary    ${spec}    specialization    ${specials}
+    # IF  ${spec_len}>3
+    #     ${specials}=  Random Elements   elements=${spec['specialization']}  length=3  unique=True
+    #     Log  ${specials}
+    #     Set To Dictionary    ${spec}    specialization    ${specials}
+    # END
     ${resp}=  Update Specialization  ${spec}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -2772,7 +2784,9 @@ JD-TC-Take Appointment in Different Timezone-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${spec}=  get_specs  ${resp.json()}
-    ${spec}=  Random Elements   elements=@{spec}  length=3  unique=True
+    ${spec_len}=  Get Length  ${spec['specialization']}
+    ${rand_len}=  Set Variable If  ${spec_len}>3  3   ${spec_len}
+    ${spec}=  Random Elements   elements=@{spec}  length=${rand_len}  unique=True
     Log  ${spec}
 
     ${resp}=  Get Spoke Languages
@@ -2862,7 +2876,9 @@ JD-TC-Take Appointment in Different Timezone-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${spec}=  get_specs  ${resp.json()}
-    ${spec}=  Random Elements   elements=@{spec}  length=3  unique=True
+    ${spec_len}=  Get Length  ${spec['specialization']}
+    ${rand_len}=  Set Variable If  ${spec_len}>3  3   ${spec_len}
+    ${spec}=  Random Elements   elements=@{spec}  length=${rand_len}  unique=True
     Log  ${spec}
 
     ${resp}=  Get Spoke Languages
@@ -3044,11 +3060,15 @@ JD-TC-Take Appointment in Different Timezone-4
     ${spec}=  get_Specializations  ${resp.json()}
     Log  ${spec}
     ${spec_len}=  Get Length  ${spec['specialization']}
-    IF  ${spec_len}>3
-        ${specials}=  Random Elements   elements=${spec['specialization']}  length=3  unique=True
-        Log  ${specials}
-        Set To Dictionary    ${spec}    specialization    ${specials}
-    END
+    ${rand_len}=  Set Variable If  ${spec_len}>3  3   ${spec_len}
+    ${specials}=  Random Elements   elements=${spec['specialization']}  length=${rand_len}  unique=True
+    Log  ${specials}
+    Set To Dictionary    ${spec}    specialization    ${specials}
+    # IF  ${spec_len}>3
+    #     ${specials}=  Random Elements   elements=${spec['specialization']}  length=3  unique=True
+    #     Log  ${specials}
+    #     Set To Dictionary    ${spec}    specialization    ${specials}
+    # END
     ${resp}=  Update Specialization  ${spec}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -3234,7 +3254,9 @@ JD-TC-Take Appointment in Different Timezone-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${spec}=  get_specs  ${resp.json()}
-    ${spec}=  Random Elements   elements=@{spec}  length=3  unique=True
+    ${spec_len}=  Get Length  ${spec['specialization']}
+    ${rand_len}=  Set Variable If  ${spec_len}>3  3   ${spec_len}
+    ${spec}=  Random Elements   elements=@{spec}  length=${rand_len}  unique=True
     Log  ${spec}
 
     ${resp}=  Get Spoke Languages
@@ -3324,7 +3346,9 @@ JD-TC-Take Appointment in Different Timezone-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${spec}=  get_specs  ${resp.json()}
-    ${spec}=  Random Elements   elements=@{spec}  length=3  unique=True
+    ${spec_len}=  Get Length  ${spec['specialization']}
+    ${rand_len}=  Set Variable If  ${spec_len}>3  3   ${spec_len}
+    ${spec}=  Random Elements   elements=@{spec}  length=${spec_len}  unique=True
     Log  ${spec}
 
     ${resp}=  Get Spoke Languages
