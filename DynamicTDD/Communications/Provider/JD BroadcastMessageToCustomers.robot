@@ -29,13 +29,15 @@ JD-TC-BroadcastMessageToCustomers-1
     ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${accountId}  ${resp.json()['id']}
 
-    FOR   ${i}  IN RANGE   5
+    FOR   ${i}  IN RANGE   500
         ${CUSERPH}=  Generate Random Test Phone Number  ${CUSERNAME}
         Set Test Variable  ${CUSERPH${i}}  ${CUSERPH}
         ${fname}=  FakerLibrary.first_name
@@ -51,47 +53,6 @@ JD-TC-BroadcastMessageToCustomers-1
         Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid${i}}
         
     END
-    
-    FOR   ${i}  IN RANGE   5
-        Log   ${CUSERPH${i}}
-        # ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${i}}
-        # Log  ${resp.content}
-        # Should Be Equal As Strings  ${resp.status_code}  200
-        # Should Be Equal As Strings  ${resp.json()[0]['id']}  ${cid${i}}
-    END
-
-    # ${resp}=  Provider Logout
-    # Should Be Equal As Strings    ${resp.status_code}    200
-
-    # FOR   ${i}  IN RANGE   5
-    #     ${resp}=    Send Otp For Login    ${CUSERNAME1}    ${accountId}
-    #     Log   ${resp.content}
-    #     Should Be Equal As Strings    ${resp.status_code}   200
-    
-    #     ${resp}=    Verify Otp For Login   ${CUSERNAME1}   12  
-    #     Log   ${resp.content}
-    #     Should Be Equal As Strings    ${resp.status_code}   200
-    #     Set Test Variable   ${token}  ${resp.json()['token']}
-
-    #     ${resp}=  Customer Logout   
-    #     Log   ${resp.content}
-    #     Should Be Equal As Strings    ${resp.status_code}    200
-    
-    #     ${resp}=    ProviderConsumer Login with token    ${CUSERNAME1}    ${accountId}    ${token}    ${countryCode}
-    #     Log   ${resp.content}
-    #     Should Be Equal As Strings    ${resp.status_code}   200
-    #     Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
-
-    #     ${resp}=  Customer Logout   
-    #     Log   ${resp.content}
-    #     Should Be Equal As Strings    ${resp.status_code}    200
-    # END
-
-    # ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    
 
     # ${fileSize}=  db.get_file_size   ${pdffile}
     ${fileSize}=  OperatingSystem.Get File Size  ${pdffile}
@@ -104,7 +65,7 @@ JD-TC-BroadcastMessageToCustomers-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    FOR   ${i}  IN RANGE   5
+    FOR   ${i}  IN RANGE   500
         ${resp}=    Send Otp For Login    ${CUSERPH${i}}    ${accountId}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}   200
@@ -126,6 +87,8 @@ JD-TC-BroadcastMessageToCustomers-1
         ${resp}=  Get Consumer Communications
         Log   ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200 
+        Should Be Equal As Stringd  ${resp.json()['owner']['id']}      ${accountId}
+
 
         ${resp}=  Customer Logout   
         Log   ${resp.content}

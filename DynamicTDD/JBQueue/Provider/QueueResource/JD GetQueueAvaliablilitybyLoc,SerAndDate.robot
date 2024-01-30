@@ -84,10 +84,11 @@ JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-1
     ${DAY22}=  db.add_timezone_date  ${tz}  20       
     Set Suite Variable  ${DAY22}
     ${sTime11}=  add_timezone_time  ${tz}  0  35 
-    Set Suite Variable   ${sTime1}
+    Set Suite Variable   ${sTime11}
     ${eTime11}=  add_timezone_time  ${tz}  0  50  
-    Set Suite Variable   ${eTime1}
+    Set Suite Variable   ${eTime11}
     ${queue_name2}=  FakerLibrary.bs
+    Set Suite Variable      ${queue_name2}
     ${resp}=  Create Queue  ${queue_name2}  ${recurringtype[1]}  ${list}  ${DAY11}  ${DAY22}  ${EMPTY}  ${sTime11}  ${eTime11}  1  5  ${lid2}  ${s_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -129,6 +130,12 @@ JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-1
     ${resp}=    GET Queue Availability By Location, Service and Date  ${lid}  ${s_id}  ${Date} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['name']}   ${queue_name} 
+    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['terminator']['endDate']}   ${DAY2} 
+    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['timeSlots'][0]['sTime']}   ${sTime1} 
+    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['timeSlots'][0]['eTime']}   ${eTime1}  
+    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['startDate']}   ${DAY1} 
+
     
 
 JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-2
@@ -145,6 +152,11 @@ JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-2
     ${resp}=    GET Queue Availability By Location, Service and Date  ${lid2}  ${s_id1}    ${Date}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['name']}   ${queue_name2} 
+    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['terminator']['endDate']}   ${DAY22} 
+    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['timeSlots'][0]['sTime']}   ${sTime11} 
+    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['timeSlots'][0]['eTime']}   ${eTime11}  
+    Should Be Equal As Strings  ${resp.json()[0]['queueSchedule']['startDate']}   ${DAY11} 
 
 JD-TC-GETQueueAvailabilityByLocation,ServiceAndDate-3
 

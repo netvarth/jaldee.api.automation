@@ -12932,5 +12932,5 @@ GET Queue Availability By Location, Service and Date
     [Arguments]   ${locationId}  ${serviceId}   ${date}
 
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/waitlist/queues/available/${locationId}/${serviceId}  expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/waitlist/queues/${locationId}/${serviceId}/${date}  expected_status=any
     [Return]  ${resp}
