@@ -77,7 +77,7 @@ JD-TC-SendMessageWithWL-1
     Set Suite Variable    ${q_name}
     ${list}=  Create List   1  2  3  4  5  6  7
     Set Suite Variable    ${list}
-    ${strt_time}=   db.add_timezone_time  ${tz}  1  00
+    ${strt_time}=   db.subtract_timezone_time  ${tz}  1  00
     Set Suite Variable    ${strt_time}
     ${end_time}=    db.add_timezone_time  ${tz}  3  00 
     Set Suite Variable    ${end_time}  
@@ -654,4 +654,108 @@ JD-TC-SendMessageWithWL-25
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  400
     Should Be Equal As Strings  ${resp.json()}  ${LOGIN_INVALID_URL}
+
+JD-TC-SendMessageWithWL-26
+
+    [Documentation]  Send Message With Waitlist - where waitlist status is canceled/Rejected
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME299}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
+    ${attachment}=   Create List  ${attachments}
+
+
+
+
+        ${reason}=  Random Element  ${cancelReason}
+        ${msg}=   FakerLibrary.sentence
+        Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+        ${resp}=    Waitlist Action Cancel  ${wid2}  ${reason}  ${msg}  
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist By Id  ${wid2} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${uuid}=    Create List    ${wid2}  
+
+    ${resp}=    Send Message With Waitlist   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[0]}  attachments=${attachment}  uuid=${uuid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-SendMessageWithWL-27
+
+    [Documentation]  Send Message With Waitlist - where wl status is Check-in
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME299}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
+    ${attachment}=   Create List  ${attachments}
+
+    ${resp}=  Waitlist Action   ${waitlist_actions[3]}   ${wid2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist By Id  ${wid2} 
+    Log  ${resp.content}
+
+
+    ${uuid}=    Create List    ${wid2}   
+
+    ${resp}=    Send Message With Waitlist   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[0]}  attachments=${attachment}  uuid=${uuid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-SendMessageWithWL-28
+
+    [Documentation]  Send Message With Waitlist - where wl status is STARTED
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME299}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
+    ${attachment}=   Create List  ${attachments}
+
+    ${resp}=  Waitlist Action   ${waitlist_actions[1]}   ${wid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist By Id   ${wid}
+    Log  ${resp.content}
+
+
+    ${uuid}=    Create List    ${wid}   
+
+    ${resp}=    Send Message With Waitlist   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[0]}  attachments=${attachment}  uuid=${uuid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+
+JD-TC-SendMessageWithWL-29
+
+    [Documentation]  Send Message With Waitlist - where appointment status is complete
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME299}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${attachments}=  Create Dictionary  owner=${provider_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
+    ${attachment}=   Create List  ${attachments}
+
+    ${resp}=  Waitlist Action   ${waitlist_actions[4]}   ${wid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Waitlist By Id   ${wid}
+    Log  ${resp.content}
+
+
+    ${uuid}=    Create List    ${wid}   
+
+    ${resp}=    Send Message With Waitlist   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[0]}  attachments=${attachment}  uuid=${uuid}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
