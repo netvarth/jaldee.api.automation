@@ -1,5 +1,5 @@
 # import pycurl
-import random
+import random, os
 try:
     from io import StringIO  ## for Python 3
 except ImportError:
@@ -12,9 +12,11 @@ import logging
 import mimetypes
 from robot.api import logger
 
-HOST='54.215.5.201:8181'
+# HOST='54.215.5.201:8181'
+HOST = __import__(os.environ['VARFILE']).HOSTED_IP
 BASE_URL='http://'+HOST+'/superadmin/rest/mgmt'
 csv='TDD/data.csv'
+JD_BASE_URL='http://'+HOST+'/v1/rest/'
 
 def log_response(response):
     logger.info("%s Response : url=%s \n " % (response.request.method.upper(),
@@ -163,3 +165,16 @@ def create_tz(tz):
         print ("Exception at line no:", e.__traceback__.tb_lineno)
         return 0
 
+
+def validatePhoneNumber(countryCode,phoneNumber):
+    url = JD_BASE_URL + '/provider/validate/phonenumber/'+str(countryCode) +'/'+str(phoneNumber)
+    s = requests.Session()
+    try:
+        resp = s.get(url)
+        log_request(resp)
+        log_response(resp)
+        print("Response is: ", resp.json())
+        return resp
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)

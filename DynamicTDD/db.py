@@ -37,7 +37,7 @@ from base64 import b64encode, b64decode
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 import socket
-from Keywordspy import create_tz
+from Keywordspy import create_tz, validatePhoneNumber
 
 
 if os.environ['SYSTEM_ENV'] == 'Microsoft WSL':
@@ -4343,13 +4343,17 @@ def random_phone_num_generator():
             # print('country code is:'+ str(phone_number.country_code))
             print(phonenumbers.is_valid_number(phone_number))
             if phonenumbers.is_valid_number(phone_number):
-                if phone_number.country_code != 91:
-                    print(geocoder.description_for_number(phone_number, 'en'))
-                    print(region_code_for_country_code(phone_number.country_code))
-                    print("Going to return- country code: "+ str(phone_number.country_code) + " and phone number: "+ str(phone_number.national_number))
-                    # valid_number= phone_number
-                    # print("valid number: "+ str(valid_number))
-                    return phone_number
+                resp = validatePhoneNumber(phone_number.country_code, phone_number.national_number)
+                if resp.json:
+                    if phone_number.country_code != 91:
+                        print(geocoder.description_for_number(phone_number, 'en'))
+                        print(region_code_for_country_code(phone_number.country_code))
+                        print("Going to return- country code: "+ str(phone_number.country_code) + " and phone number: "+ str(phone_number.national_number))
+                        # valid_number= phone_number
+                        # print("valid number: "+ str(valid_number))
+                        return phone_number
+                    else:
+                        continue
                 else:
                     continue
             else:
