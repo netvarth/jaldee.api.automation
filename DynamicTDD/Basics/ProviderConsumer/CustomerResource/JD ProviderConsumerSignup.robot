@@ -107,7 +107,7 @@ JD-TC-providerConsumerSignup-UH2
     ${resp}=    ProviderConsumer SignUp    ${empty}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings  ${resp.json()}      ${FIRST_NAME_REQUIRED}
+    Should Be Equal As Strings  ${resp.json()}      ${CUSTOMER_FIRST_NAME_REQUIRED}
 
 JD-TC-providerConsumerSignup-UH3
   

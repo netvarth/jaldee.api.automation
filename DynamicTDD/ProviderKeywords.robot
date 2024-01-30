@@ -773,9 +773,9 @@ AddFamilyMemberByProvider
     [Return]  ${resp}
 
 AddFamilyMemberByProviderWithPhoneNo
-    [Arguments]  ${id}  ${firstname}  ${lastname}  ${dob}  ${gender}  ${PhoneNo}
+    [Arguments]  ${id}  ${firstname}  ${lastname}  ${dob}  ${gender}  ${PhoneNo}    ${countryCode}=91
     Check And Create YNW Session
-    ${data}=  Create Dictionary  parent=${id}  firstName=${firstname}  lastName=${lastname}  dob=${dob}  gender=${gender}  primaryMobileNo=${PhoneNo}
+    ${data}=  Create Dictionary  parent=${id}  firstName=${firstname}  lastName=${lastname}  dob=${dob}  gender=${gender}  phoneNo=${PhoneNo}  countryCode=${countryCode}
     ${data}=    json.dumps    ${data}
     ${resp}=  POST On Session   ynw   /provider/customers/familyMember   data=${data}  expected_status=any
     [Return]  ${resp}

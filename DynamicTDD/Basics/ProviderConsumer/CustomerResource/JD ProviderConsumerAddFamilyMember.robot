@@ -80,7 +80,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-1
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${resp1}=  AddCustomer  ${CUSERNAME11}
+    ${resp1}=  AddCustomer  ${CUSERNAME23}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${pcid18}   ${resp1.json()}
@@ -88,11 +88,11 @@ JD-TC-AddFamilyMembersForProviderConsumer-1
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
   
-    ${resp}=    Send Otp For Login    ${CUSERNAME11}    ${accountId}
+    ${resp}=    Send Otp For Login    ${CUSERNAME23}    ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME11}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME23}   12  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
@@ -101,7 +101,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME11}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -139,7 +139,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-2
     
     [Documentation]  Add two more  Family Member with same number for Provider Consumer.
     
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME11}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -226,7 +226,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-3
     
     [Documentation]  Add a Family Member without number for Provider Consumer.
     
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME11}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -241,7 +241,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-3
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()[4]['firstName']}    ${fname4}
     Should Be Equal As Strings    ${resp.json()[4]['lastName']}    ${lname}
-    Should Be Equal As Strings    ${resp.json()[4]['phoneNo']}    ${CUSERNAME11}
+    Should Be Equal As Strings    ${resp.json()[4]['phoneNo']}    ${CUSERNAME23}
     Should Be Equal As Strings    ${resp.json()[4]['parent']}    ${cid}
     Should Be Equal As Strings    ${resp.json()[4]['countryCode']}    ${countryCodes[0]}
 
@@ -249,7 +249,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-UH1
     
     [Documentation]  Add another Family Member Without Firstname.
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME11}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -267,7 +267,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-UH2
     
     [Documentation]  Add another Family Member Without LastName.
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME11}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -286,7 +286,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-UH3
     
     [Documentation]  Try to Add same Family Member.
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME11}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -305,7 +305,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-UH4
     
     [Documentation]  Add another Family Member Without dob.
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME11}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -323,7 +323,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-UH5
     
     [Documentation]  Add another Family Member Without gender.
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME11}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -341,7 +341,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-UH6
     
     [Documentation]  Add another Family Member Without Number.
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME11}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -359,7 +359,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-UH7
     
     [Documentation]  Add another Family Member Without countryCodes.
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME11}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -377,7 +377,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-UH8
     
     [Documentation]  Add another Family Member Without address.
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME11}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -395,7 +395,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-UH9
     
     [Documentation]  Add another Family Member Without countryCodes.
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME11}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME23}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -404,7 +404,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-UH9
     Should Be Equal As Strings    ${resp.status_code}    200
     ${fname1}                      FakerLibrary. name
 
-    ${resp}=    Create Family Member       ${fname1}  ${lname}  ${dob}  ${gender}   ${primnum}  ${countryCodes[2]}  ${address}
+    ${resp}=    Create Family Member       ${fname1}  ${lname}  ${dob}  ${gender}   ${primnum}  ${EMPTY}  ${address}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${COUNTRY_CODEREQUIRED}

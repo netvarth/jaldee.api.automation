@@ -33,6 +33,10 @@ JD-TC-BookingHistoryDetailsOfProviderConsumer-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    clear_service   ${PUSERNAME155}
+    clear_queue      ${PUSERNAME155}
+    clear_location   ${PUSERNAME155}
+
     ${pid}=  get_acc_id  ${PUSERNAME155}
     Set Suite Variable   ${pid}
 

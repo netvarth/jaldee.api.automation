@@ -306,3 +306,9 @@ Delete Family Members
     Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw    /consumer/family/member/${memberId}/${consumerId}        expected_status=any
     [Return]  ${resp}
+
+Get Family Member By Id
+    [Arguments]  ${memberId}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/family/member/details/${memberId}   expected_status=any   
+    [Return]  ${resp}

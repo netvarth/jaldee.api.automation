@@ -80,7 +80,7 @@ JD-TC-UpdateFamilyMembersForProviderConsumer-1
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${resp1}=  AddCustomer  ${CUSERNAME12}
+    ${resp1}=  AddCustomer  ${CUSERNAME35}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${pcid18}   ${resp1.json()}
@@ -88,11 +88,11 @@ JD-TC-UpdateFamilyMembersForProviderConsumer-1
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
   
-    ${resp}=    Send Otp For Login    ${CUSERNAME12}    ${accountId}
+    ${resp}=    Send Otp For Login    ${CUSERNAME35}    ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME12}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME35}   12  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
@@ -101,7 +101,7 @@ JD-TC-UpdateFamilyMembersForProviderConsumer-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME12}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME35}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -149,7 +149,7 @@ JD-TC-UpdateFamilyMembersForProviderConsumer-2
     
     [Documentation]   update Family Members first name.
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME12}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME35}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${fname1}                      FakerLibrary. name
@@ -171,7 +171,7 @@ JD-TC-UpdateFamilyMembersForProviderConsumer-3
     
     [Documentation]   update Family Members last name.
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME12}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME35}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${lname1}                      FakerLibrary. name
@@ -193,7 +193,7 @@ JD-TC-UpdateFamilyMembersForProviderConsumer-4
     
     [Documentation]   update Family Members dob as a string.
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME12}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME35}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${dob}                      FakerLibrary. name
@@ -215,7 +215,7 @@ JD-TC-UpdateFamilyMembersForProviderConsumer-5
     
     [Documentation]   update Family Members gender as integer.
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME12}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME35}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${gender}                      FakerLibrary. Random Number
@@ -237,7 +237,7 @@ JD-TC-UpdateFamilyMembersForProviderConsumer-6
     
     [Documentation]   update Family Members primnum as string.
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME12}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME35}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${primnum}                      FakerLibrary. name
@@ -255,46 +255,31 @@ JD-TC-UpdateFamilyMembersForProviderConsumer-6
     Should Be Equal As Strings    ${resp.json()[0]['countryCode']}    ${countryCodes[0]}
     Should Be Equal As Strings    ${resp.json()[0]['firstName']}    ${fname}
 
-JD-TC-UpdateFamilyMembersForProviderConsumer-UH
+JD-TC-UpdateFamilyMembersForProviderConsumer-UH1
     
     [Documentation]   update Family Members with invalid member id.
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME12}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME35}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${memb_id}                      FakerLibrary. Random Number
 
     ${resp}=   Update Family Members   ${memb_id}  ${cid}   ${fname}  ${lname}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}    ${FAMILY_MEMEBR_NOT_FOUND}
 
-    ${resp}=    Get Family Members   ${cid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['lastName']}    ${lname}
-    Should Be Equal As Strings    ${resp.json()[0]['phoneNo']}    ${primnum}
-    Should Be Equal As Strings    ${resp.json()[0]['parent']}    ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['countryCode']}    ${countryCodes[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['firstName']}    ${fname}
 
-JD-TC-UpdateFamilyMembersForProviderConsumer-UH
+JD-TC-UpdateFamilyMembersForProviderConsumer-UH2
     
     [Documentation]   update Family Members with invalid provider id.
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME12}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME35}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${cid}                      FakerLibrary. Random Number
 
     ${resp}=   Update Family Members   ${memb_id}  ${cid}   ${fname}  ${lname}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Family Members   ${cid}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['lastName']}    ${lname}
-    Should Be Equal As Strings    ${resp.json()[0]['phoneNo']}    ${primnum}
-    Should Be Equal As Strings    ${resp.json()[0]['parent']}    ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['countryCode']}    ${countryCodes[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['firstName']}    ${fname}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings    ${resp.json()}    ${NO_PERMISSION_TO_UPDATE_MEMBER}
