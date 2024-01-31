@@ -80,7 +80,7 @@ JD-TC-GetFamilyMemberById-1
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
-    ${resp1}=  AddCustomer  ${CUSERNAME35}
+    ${resp1}=  AddCustomer  ${CUSERNAME37}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Set Suite Variable  ${pcid18}   ${resp1.json()}
@@ -88,11 +88,11 @@ JD-TC-GetFamilyMemberById-1
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
   
-    ${resp}=    Send Otp For Login    ${CUSERNAME35}    ${accountId}
+    ${resp}=    Send Otp For Login    ${CUSERNAME37}    ${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${CUSERNAME35}   12  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME37}   12  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${token}  ${resp.json()['token']}
@@ -101,7 +101,7 @@ JD-TC-GetFamilyMemberById-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME35}    ${accountId}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME37}    ${accountId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
@@ -135,3 +135,65 @@ JD-TC-GetFamilyMemberById-1
     ${resp}=    Get Family Member By Id   ${memb_id}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['lastName']}    ${lname}
+    Should Be Equal As Strings    ${resp.json()['phoneNo']}    ${primnum}
+    Should Be Equal As Strings    ${resp.json()['parent']}    ${cid}
+    Should Be Equal As Strings    ${resp.json()['countryCode']}    ${countryCodes[0]}
+    Should Be Equal As Strings    ${resp.json()['firstName']}    ${fname}
+
+JD-TC-GetFamilyMemberById-2
+    
+    [Documentation]  Add Family Member for Provider Consumer, update the number then Get by id.
+
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME37}    ${accountId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${fname1}                      FakerLibrary. name
+
+    ${resp}=   Update Family Members   ${memb_id}  ${cid}   ${fname1}  ${lname}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Family Member By Id   ${memb_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['lastName']}    ${lname}
+    Should Be Equal As Strings    ${resp.json()['phoneNo']}    ${primnum}
+    Should Be Equal As Strings    ${resp.json()['parent']}    ${cid}
+    Should Be Equal As Strings    ${resp.json()['countryCode']}    ${countryCodes[0]}
+    Should Be Equal As Strings    ${resp.json()['firstName']}    ${fname1}
+
+JD-TC-GetFamilyMemberById-3
+    
+    [Documentation]  Delete that Family Member then Get by id.
+
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME37}    ${accountId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Delete Family Members   ${memb_id}      ${cid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Family Member By Id   ${memb_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['lastName']}    ${lname}
+    Should Be Equal As Strings    ${resp.json()['phoneNo']}    ${primnum}
+    Should Be Equal As Strings    ${resp.json()['parent']}    ${cid}
+    Should Be Equal As Strings    ${resp.json()['countryCode']}    ${countryCodes[0]}
+    Should Be Equal As Strings    ${resp.json()['firstName']}    ${fname1}
+
+JD-TC-GetFamilyMemberById-UH
+    
+    [Documentation]  Try to Get by id with invalid id.
+
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME37}    ${accountId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Family Member By Id   ${cc}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${INVALID_FAMILY_MEMBER_ID}
