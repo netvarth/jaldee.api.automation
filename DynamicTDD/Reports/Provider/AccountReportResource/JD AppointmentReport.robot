@@ -37,6 +37,7 @@ ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
 @{provider_list}
 @{multiloc_providers}
 @{multiloc_billable_providers}
+${amt_paid}   0.00
 
 *** Test Cases ***
 
@@ -1707,7 +1708,7 @@ JD-TC-Appointment_Report-4
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][0]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][0]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][0]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][0]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][0]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id201}     ${resp.json()['reportContent']['data'][0]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date1_Slot3}               ${resp.json()['reportContent']['data'][1]['1']}  # Date
@@ -1717,7 +1718,7 @@ JD-TC-Appointment_Report-4
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][1]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][1]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][1]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][1]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][1]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id202}     ${resp.json()['reportContent']['data'][1]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date2_Slot3}               ${resp.json()['reportContent']['data'][2]['1']}  # Date
@@ -1727,7 +1728,7 @@ JD-TC-Appointment_Report-4
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][2]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][2]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][2]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][2]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][2]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id203}     ${resp.json()['reportContent']['data'][2]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date2_Slot4}               ${resp.json()['reportContent']['data'][3]['1']}  # Date
@@ -1737,7 +1738,7 @@ JD-TC-Appointment_Report-4
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][3]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][3]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][3]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][3]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][3]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id204}     ${resp.json()['reportContent']['data'][3]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date3_Slot4}               ${resp.json()['reportContent']['data'][4]['1']}  # Date
@@ -1747,7 +1748,7 @@ JD-TC-Appointment_Report-4
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][4]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][4]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][4]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][4]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][4]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id205}     ${resp.json()['reportContent']['data'][4]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date3_Slot5}               ${resp.json()['reportContent']['data'][5]['1']}  # Date
@@ -1757,7 +1758,7 @@ JD-TC-Appointment_Report-4
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][5]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][5]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][5]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][5]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][5]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id206}     ${resp.json()['reportContent']['data'][5]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date4_Slot5}               ${resp.json()['reportContent']['data'][6]['1']}  # Date
@@ -1767,7 +1768,7 @@ JD-TC-Appointment_Report-4
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][6]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][6]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][6]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][6]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][6]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id207}     ${resp.json()['reportContent']['data'][6]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date4_Slot6}               ${resp.json()['reportContent']['data'][7]['1']}  # Date
@@ -1777,7 +1778,7 @@ JD-TC-Appointment_Report-4
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][7]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][7]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][7]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][7]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][7]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id208}     ${resp.json()['reportContent']['data'][7]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date5_Slot6}               ${resp.json()['reportContent']['data'][8]['1']}  # Date
@@ -1787,7 +1788,7 @@ JD-TC-Appointment_Report-4
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][8]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][8]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][8]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][8]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][8]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id209}     ${resp.json()['reportContent']['data'][8]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date5_Slot7}               ${resp.json()['reportContent']['data'][9]['1']}  # Date
@@ -1797,7 +1798,7 @@ JD-TC-Appointment_Report-4
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][9]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][9]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][9]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][9]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][9]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id210}     ${resp.json()['reportContent']['data'][9]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date6_Slot7}               ${resp.json()['reportContent']['data'][10]['1']}  # Date
@@ -1807,7 +1808,7 @@ JD-TC-Appointment_Report-4
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][10]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][10]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][10]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][10]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][10]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id211}     ${resp.json()['reportContent']['data'][10]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date6_Slot8}               ${resp.json()['reportContent']['data'][11]['1']}  # Date
@@ -1817,7 +1818,7 @@ JD-TC-Appointment_Report-4
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][11]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][11]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][11]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][11]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][11]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id212}     ${resp.json()['reportContent']['data'][11]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date7_Slot8}               ${resp.json()['reportContent']['data'][12]['1']}  # Date
@@ -1827,7 +1828,7 @@ JD-TC-Appointment_Report-4
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][12]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][12]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][12]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][12]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][12]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id213}     ${resp.json()['reportContent']['data'][12]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date7_Slot9}               ${resp.json()['reportContent']['data'][13]['1']}  # Date
@@ -1837,7 +1838,7 @@ JD-TC-Appointment_Report-4
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][13]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][13]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][13]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][13]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][13]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id214}     ${resp.json()['reportContent']['data'][13]['7']}  # ConfirmationId
 
 
@@ -1883,7 +1884,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][0]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][0]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][0]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][0]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][0]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id301}     ${resp.json()['reportContent']['data'][0]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date1_Slot3}               ${resp.json()['reportContent']['data'][1]['1']}  # Date
@@ -1893,7 +1894,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][1]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][1]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][1]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][1]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][1]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id302}     ${resp.json()['reportContent']['data'][1]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date2_Slot3}               ${resp.json()['reportContent']['data'][2]['1']}  # Date
@@ -1903,7 +1904,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][2]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][2]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][2]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][2]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][2]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id303}     ${resp.json()['reportContent']['data'][2]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date2_Slot4}               ${resp.json()['reportContent']['data'][3]['1']}  # Date
@@ -1913,7 +1914,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][3]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][3]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][3]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][3]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][3]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id304}     ${resp.json()['reportContent']['data'][3]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date3_Slot4}               ${resp.json()['reportContent']['data'][4]['1']}  # Date
@@ -1923,7 +1924,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][4]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][4]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][4]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][4]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][4]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id305}     ${resp.json()['reportContent']['data'][4]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date3_Slot5}               ${resp.json()['reportContent']['data'][5]['1']}  # Date
@@ -1933,7 +1934,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][5]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][5]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][5]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][5]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][5]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id306}     ${resp.json()['reportContent']['data'][5]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date4_Slot5}               ${resp.json()['reportContent']['data'][6]['1']}  # Date
@@ -1943,7 +1944,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][6]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][6]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][6]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][6]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][6]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id307}     ${resp.json()['reportContent']['data'][6]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date4_Slot6}               ${resp.json()['reportContent']['data'][7]['1']}  # Date
@@ -1953,7 +1954,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][7]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][7]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][7]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][7]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][7]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id308}     ${resp.json()['reportContent']['data'][7]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date5_Slot6}               ${resp.json()['reportContent']['data'][8]['1']}  # Date
@@ -1963,7 +1964,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][8]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][8]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][8]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][8]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][8]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id309}     ${resp.json()['reportContent']['data'][8]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date5_Slot7}               ${resp.json()['reportContent']['data'][9]['1']}  # Date
@@ -1973,7 +1974,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][9]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][9]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][9]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][9]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][9]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id310}     ${resp.json()['reportContent']['data'][9]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date6_Slot7}               ${resp.json()['reportContent']['data'][10]['1']}  # Date
@@ -1983,7 +1984,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][10]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][10]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][10]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][10]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][10]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id311}     ${resp.json()['reportContent']['data'][10]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date6_Slot8}               ${resp.json()['reportContent']['data'][11]['1']}  # Date
@@ -1993,7 +1994,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][11]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][11]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][11]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][11]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][11]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id312}     ${resp.json()['reportContent']['data'][11]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date7_Slot8}               ${resp.json()['reportContent']['data'][12]['1']}  # Date
@@ -2003,7 +2004,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][12]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][12]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][12]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][12]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][12]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id313}     ${resp.json()['reportContent']['data'][12]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date7_Slot9}               ${resp.json()['reportContent']['data'][13]['1']}  # Date
@@ -2013,7 +2014,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][13]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][13]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][13]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][13]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][13]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id314}     ${resp.json()['reportContent']['data'][13]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${Date8_Slot9}               ${resp.json()['reportContent']['data'][14]['1']}  # Date
@@ -2023,7 +2024,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][14]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][14]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][14]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][14]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][14]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id315}     ${resp.json()['reportContent']['data'][14]['7']}  # ConfirmationId
 
 
@@ -2034,7 +2035,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][15]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][15]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][15]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][15]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][15]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id316}     ${resp.json()['reportContent']['data'][15]['7']}  # ConfirmationId
 
 
@@ -2045,7 +2046,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][16]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][16]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][16]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][16]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][16]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id317}     ${resp.json()['reportContent']['data'][16]['7']}  # ConfirmationId
 
 
@@ -2056,7 +2057,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][17]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][17]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][17]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][17]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][17]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id318}     ${resp.json()['reportContent']['data'][17]['7']}  # ConfirmationId
 
 
@@ -2067,7 +2068,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][18]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][18]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][18]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][18]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][18]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id319}     ${resp.json()['reportContent']['data'][18]['7']}  # ConfirmationId
 
 
@@ -2078,7 +2079,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][19]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][19]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][19]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][19]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][19]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id320}     ${resp.json()['reportContent']['data'][19]['7']}  # ConfirmationId
 
 
@@ -2089,7 +2090,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][20]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][20]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][20]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][20]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][20]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id321}     ${resp.json()['reportContent']['data'][20]['7']}  # ConfirmationId
 
 
@@ -2100,7 +2101,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][21]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][21]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][21]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][21]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][21]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id322}     ${resp.json()['reportContent']['data'][21]['7']}  # ConfirmationId
 
 
@@ -2111,7 +2112,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${P1SERVICE1}        ${resp.json()['reportContent']['data'][22]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][22]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][22]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][22]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][22]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id323}     ${resp.json()['reportContent']['data'][22]['7']}  # ConfirmationId
 
 
@@ -2122,7 +2123,7 @@ JD-TC-Appointment_Report-5
     Should Be Equal As Strings  ${V1SERVICE1}        ${resp.json()['reportContent']['data'][23]['6']}  # Service
     Should Be Equal As Strings  Confirmed   ${resp.json()['reportContent']['data'][23]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][23]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][23]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][23]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id324}     ${resp.json()['reportContent']['data'][23]['7']}  # ConfirmationId
 
 
@@ -2813,7 +2814,7 @@ JD-TC-Appointment_Report-7
     Should Be Equal As Strings  ${P1SERVICE3}        ${resp.json()['reportContent']['data'][0]['6']}  # Service
     Should Be Equal As Strings  Completed   ${resp.json()['reportContent']['data'][0]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][0]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][0]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][0]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id101}     ${resp.json()['reportContent']['data'][0]['7']}  # ConfirmationId
 
     Should Be Equal As Strings  ${TODAY_sch2_Slot2}       ${resp.json()['reportContent']['data'][1]['1']}  # Date
@@ -2823,7 +2824,7 @@ JD-TC-Appointment_Report-7
     Should Be Equal As Strings  ${P1SERVICE3}        ${resp.json()['reportContent']['data'][1]['6']}  # Service
     Should Be Equal As Strings  Cancelled   ${resp.json()['reportContent']['data'][1]['8']}  # Status
     Should Be Equal As Strings  ${Checkin_mode[0]}   ${resp.json()['reportContent']['data'][1]['9']}  # Mode
-    Should Be Equal As Strings  Not paid  ${resp.json()['reportContent']['data'][1]['10']}  # PaymentStatus
+    Should Be Equal As Strings  ${amt_paid}  ${resp.json()['reportContent']['data'][1]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id102}     ${resp.json()['reportContent']['data'][1]['7']}  # ConfirmationId
 
     ${resp}=   Enable Appointment Schedule   ${sch_id2}
@@ -2859,7 +2860,21 @@ JD-TC-Appointment_Report-8
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response  ${resp}  calculationMode=${calc_mode[1]}  trnArndTime=${duration}  futureDateWaitlist=${bool[1]}  showTokenId=${bool[1]}  onlineCheckIns=${bool[1]}
     
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
     # ${highest_package}=  get_highest_license_pkg
     # Log  ${highest_package}

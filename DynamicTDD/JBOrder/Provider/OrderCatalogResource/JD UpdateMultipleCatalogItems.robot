@@ -32,6 +32,15 @@ JD-TC-Update_Multiple_Catalog_Items-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME36}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enablepos']}==${bool[0]}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

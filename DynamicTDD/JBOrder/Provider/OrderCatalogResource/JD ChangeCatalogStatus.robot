@@ -39,6 +39,15 @@ JD-TC-Change_Catalog_Status-1
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME38}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enablepos']}==${bool[0]}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     ${displayName1}=   FakerLibrary.name 
     Set Suite Variable  ${displayName1}  
