@@ -148,14 +148,14 @@ JD-TC-SendAttachmentFromWLByConsumer-1
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${acc_id}  ${que_id1}  ${CUR_DAY}  ${ser_id1}  ${cnote}  ${bool[0]}  ${self} 
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200   
     
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}   
     
     ${resp}=  Get consumer Waitlist By Id   ${wid}  ${acc_id}  
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['hasAttachment']}    ${bool[0]}
 
@@ -176,11 +176,11 @@ JD-TC-SendAttachmentFromWLByConsumer-1
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Attachments In Waitlist By Consumer    ${wid}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${cid}
     Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
@@ -191,9 +191,9 @@ JD-TC-SendAttachmentFromWLByConsumer-1
 
 
 
-JD-TC-SendAttachmentWL-2
+JD-TC-SendAttachmentWL-UH1
 
-    [Documentation]  Send Attachment Waitelist - waitlist id is invalid 
+    [Documentation]  Send Attachment Waitlist - waitlist id is invalid 
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${acc_id}
     Log   ${resp.content}
@@ -219,12 +219,13 @@ JD-TC-SendAttachmentWL-2
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Waitlist By Consumer   ${inv}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
 
-JD-TC-SendAttachmentWL-3
 
-    [Documentation]  Send Attachment Waitelist - email flag is false 
+JD-TC-SendAttachmentWL-2
+
+    [Documentation]  Send Attachment Waitlist - email flag is false 
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${acc_id}
     Log   ${resp.content}
@@ -248,11 +249,11 @@ JD-TC-SendAttachmentWL-3
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[0]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Attachments In Waitlist By Consumer     ${wid}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${cid}
     Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
@@ -261,9 +262,9 @@ JD-TC-SendAttachmentWL-3
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
 
-JD-TC-SendAttachmentWL-4
+JD-TC-SendAttachmentWL-3
 
-    [Documentation]  Send Attachment Waitelist - sms flag is false
+    [Documentation]  Send Attachment Waitlist - sms flag is false
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${acc_id}
     Log   ${resp.content}
@@ -287,11 +288,11 @@ JD-TC-SendAttachmentWL-4
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[1]}  ${boolean[0]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Attachments In Waitlist By Consumer     ${wid}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${cid}
     Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
@@ -300,9 +301,9 @@ JD-TC-SendAttachmentWL-4
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
 
-JD-TC-SendAttachmentWL-5
+JD-TC-SendAttachmentWL-4
 
-    [Documentation]  Send Attachment Waitelist - telegram flag is false
+    [Documentation]  Send Attachment Waitlist - telegram flag is false
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${acc_id}
     Log   ${resp.content}
@@ -326,11 +327,11 @@ JD-TC-SendAttachmentWL-5
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[0]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Attachments In Waitlist By Consumer     ${wid}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${cid}
     Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
@@ -339,9 +340,9 @@ JD-TC-SendAttachmentWL-5
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
 
-JD-TC-SendAttachmentWL-6
+JD-TC-SendAttachmentWL-5
 
-    [Documentation]  Send Attachment Waitelist - whats app flag is false
+    [Documentation]  Send Attachment Waitlist - whats app flag is false
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${acc_id}
     Log   ${resp.content}
@@ -365,11 +366,11 @@ JD-TC-SendAttachmentWL-6
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[0]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Attachments In Waitlist By Consumer     ${wid}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${cid}
     Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
@@ -378,9 +379,9 @@ JD-TC-SendAttachmentWL-6
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
 
-JD-TC-SendAttachmentWL-7
+JD-TC-SendAttachmentWL-6
 
-    [Documentation]  Send Attachment Waitelist - owner is empty
+    [Documentation]  Send Attachment Waitlist - owner is empty
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${acc_id}
     Log   ${resp.content}
@@ -404,11 +405,11 @@ JD-TC-SendAttachmentWL-7
     ${attachments}=  Create Dictionary  owner=${empty}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Attachments In Waitlist By Consumer     ${wid}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${cid}
     Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
@@ -417,9 +418,9 @@ JD-TC-SendAttachmentWL-7
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
 
-JD-TC-SendAttachmentWL-8
+JD-TC-SendAttachmentWL-UH2
 
-    [Documentation]  Send Attachment Waitelist - file name
+    [Documentation]  Send Attachment Waitlist - file name
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${acc_id}
     Log   ${resp.content}
@@ -443,13 +444,13 @@ JD-TC-SendAttachmentWL-8
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${empty}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${FILE_NAME_NOT_FOUND}
 
-JD-TC-SendAttachmentWL-9
+JD-TC-SendAttachmentWL-UH3
 
-    [Documentation]  Send Attachment Waitelist - file size is empty
+    [Documentation]  Send Attachment Waitlist - file size is empty
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${acc_id}
     Log   ${resp.content}
@@ -473,13 +474,13 @@ JD-TC-SendAttachmentWL-9
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${empty}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${FILE_SIZE_ERROR}
 
-JD-TC-SendAttachmentWL-10
+JD-TC-SendAttachmentWL-UH4
 
-    [Documentation]  Send Attachment Waitelist - file type is empty
+    [Documentation]  Send Attachment Waitlist - file type is empty
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${acc_id}
     Log   ${resp.content}
@@ -503,13 +504,13 @@ JD-TC-SendAttachmentWL-10
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${empty}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${FILE_TYPE_NOT_FOUND}
 
-JD-TC-SendAttachmentWL-11
+JD-TC-SendAttachmentWL-7
 
-    [Documentation]  Send Attachment Waitelist - order is empty
+    [Documentation]  Send Attachment Waitlist - order is empty
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${acc_id}
     Log   ${resp.content}
@@ -533,11 +534,11 @@ JD-TC-SendAttachmentWL-11
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Attachments In Waitlist By Consumer     ${wid}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${cid}
     Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
@@ -546,9 +547,9 @@ JD-TC-SendAttachmentWL-11
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
 
-JD-TC-SendAttachmentWL-12
+JD-TC-SendAttachmentWL-UH5
 
-    [Documentation]  Send Attachment Waitelist - drive id is empty 
+    [Documentation]  Send Attachment Waitlist - drive id is empty 
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${acc_id}
     Log   ${resp.content}
@@ -572,12 +573,16 @@ JD-TC-SendAttachmentWL-12
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
 
-JD-TC-SendAttachmentWL-13
+    ${resp}=    Get Attachments In Waitlist By Consumer     ${wid}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-    [Documentation]  Send Attachment Waitelist - action is remove
+JD-TC-SendAttachmentWL-8
+
+    [Documentation]  Send Attachment Waitlist - action is remove
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${acc_id}
     Log   ${resp.content}
@@ -601,11 +606,11 @@ JD-TC-SendAttachmentWL-13
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[2]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Attachments In Waitlist By Consumer     ${wid}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${cid}
     Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
@@ -614,9 +619,9 @@ JD-TC-SendAttachmentWL-13
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
 
-JD-TC-SendAttachmentWL-14
+JD-TC-SendAttachmentWL-UH6
 
-    [Documentation]  Send Attachment Waitelist - attachment is empty
+    [Documentation]  Send Attachment Waitlist - attachment is empty
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${acc_id}
     Log   ${resp.content}
@@ -640,13 +645,13 @@ JD-TC-SendAttachmentWL-14
     ${attachments}=  Create Dictionary  
 
     ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${INV_DRIVE_ID}
 
-JD-TC-SendAttachmentWL-15
+JD-TC-SendAttachmentWL-UH7
 
-    [Documentation]  Send Attachment Waitelist - inv drive id
+    [Documentation]  Send Attachment Waitlist - inv drive id
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${acc_id}
     Log   ${resp.content}
@@ -667,29 +672,30 @@ JD-TC-SendAttachmentWL-15
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
     Set Suite Variable    ${PCid}   ${resp.json()['id']}
 
-    ${inv}=     FakerLibrary.Random Int
+    # ${inv}=     FakerLibrary.Random Int
+    ${inv}=     Random Number  digits=3
 
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${inv}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
 
-JD-TC-SendAttachmentWL-16
+JD-TC-SendAttachmentWL-UH8
 
-    [Documentation]  Send Attachment Waitelist - without login
+    [Documentation]  Send Attachment Waitlist - without login
 
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}       ${SESSION_EXPIRED}
 
 
-JD-TC-SendAttachmentWL-17
+JD-TC-SendAttachmentWL-UH9
 
-    [Documentation]  Send Attachment Waitelist - with Provider login
+    [Documentation]  Send Attachment Waitlist - with Provider login
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME306}  ${PASSWORD}
     Log  ${resp.content}
@@ -698,7 +704,7 @@ JD-TC-SendAttachmentWL-17
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Waitlist By Consumer   ${wid}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  ${resp.json()}       ${NoAccess}
 

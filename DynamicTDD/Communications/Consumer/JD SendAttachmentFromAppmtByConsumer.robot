@@ -33,7 +33,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-1
     [Documentation]    ProviderConsumer  Send Attachment From Appmt By Consumer
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME305}  ${PASSWORD} 
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     ${accountId}=    get_acc_id       ${PUSERNAME305}
     Set Suite Variable  ${accountId}
@@ -52,22 +52,22 @@ JD-TC-SendAttachmentFromAppmtByConsumer-1
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
-    ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    ${resp}=   Get Appointment Settings
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=   Get Service
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
+
+    clear_service   ${PUSERNAME_B}
+    clear_location  ${PUSERNAME_B} 
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -76,7 +76,6 @@ JD-TC-SendAttachmentFromAppmtByConsumer-1
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -90,28 +89,28 @@ JD-TC-SendAttachmentFromAppmtByConsumer-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]} 
 
-    ${resp}=  Get Business Profile
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${pid}  ${resp.json()['id']} 
-
-    ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
-
-    ${resp}=   Get License UsageInfo 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     ${lid}=  Create Sample Location  
     Set Suite Variable  ${lid}
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${pid}  ${resp.json()['id']}  
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     # clear_appt_schedule   ${primaryMobileNo}
+    
+    ${s_id}=  Create Sample Service  ${SERVICE1}
+    Set Suite Variable  ${s_id}
+    ${s_id2}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable  ${s_id2}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -120,22 +119,18 @@ JD-TC-SendAttachmentFromAppmtByConsumer-1
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-    Set Suite Variable  ${s_id}
-    ${s_id2}=  Create Sample Service  ${SERVICE2}
-    Set Suite Variable  ${s_id2}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}    ${s_id2}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
 
@@ -263,11 +258,11 @@ JD-TC-SendAttachmentFromAppmtByConsumer-1
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Appointment By Consumer   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Attachments In Appointment By Consumer    ${apptid1}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${cid}
     Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
@@ -305,7 +300,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-2
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Appointment By Consumer   ${inv}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-SendAttachmentFromAppmtByConsumer-3
@@ -334,11 +329,11 @@ JD-TC-SendAttachmentFromAppmtByConsumer-3
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Appointment By Consumer   ${apptid1}  ${boolean[0]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Attachments In Appointment By Consumer     ${apptid1}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${cid}
     Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
@@ -373,11 +368,11 @@ JD-TC-SendAttachmentFromAppmtByConsumer-4
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Appointment By Consumer   ${apptid1}  ${boolean[1]}  ${boolean[0]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Attachments In Appointment By Consumer     ${apptid1}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${cid}
     Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
@@ -412,11 +407,11 @@ JD-TC-SendAttachmentFromAppmtByConsumer-5
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Appointment By Consumer   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[0]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Attachments In Appointment By Consumer     ${apptid1}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${cid}
     Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
@@ -451,11 +446,11 @@ JD-TC-SendAttachmentFromAppmtByConsumer-6
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Appointment By Consumer   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[0]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Attachments In Appointment By Consumer     ${apptid1}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${cid}
     Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
@@ -490,11 +485,11 @@ JD-TC-SendAttachmentFromAppmtByConsumer-7
     ${attachments}=  Create Dictionary  owner=${empty}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Appointment By Consumer   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Attachments In Appointment By Consumer     ${apptid1}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${cid}
     Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
@@ -529,7 +524,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-8
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${empty}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Appointment By Consumer   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${FILE_NAME_NOT_FOUND}
 
@@ -559,7 +554,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-9
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${empty}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Appointment By Consumer   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${FILE_SIZE_ERROR}
 
@@ -589,7 +584,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-10
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${empty}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Appointment By Consumer   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${FILE_TYPE_NOT_FOUND}
 
@@ -619,11 +614,11 @@ JD-TC-SendAttachmentFromAppmtByConsumer-11
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Appointment By Consumer   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Attachments In Appointment By Consumer     ${apptid1}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${cid}
     Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
@@ -658,7 +653,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-12
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Appointment By Consumer   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-SendAttachmentFromAppmtByConsumer-13
@@ -687,11 +682,11 @@ JD-TC-SendAttachmentFromAppmtByConsumer-13
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[2]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Appointment By Consumer   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Attachments In Appointment By Consumer     ${apptid1}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${cid}
     Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
@@ -726,7 +721,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-14
     ${attachments}=  Create Dictionary  
 
     ${resp}=  Send Attachment From Appointment By Consumer   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${INV_DRIVE_ID}
 
@@ -758,7 +753,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-15
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${inv}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Appointment By Consumer   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
 
 JD-TC-SendAttachmentFromAppmtByConsumer-16
@@ -768,7 +763,7 @@ JD-TC-SendAttachmentFromAppmtByConsumer-16
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Appointment By Consumer   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}       ${SESSION_EXPIRED}
 
@@ -778,12 +773,12 @@ JD-TC-SendAttachmentFromAppmtByConsumer-17
     [Documentation]  ProviderConsumer  Send Attachment From Appmt By Consumer - with Provider login
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME305}  ${PASSWORD} 
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${attachments}=  Create Dictionary  owner=${cid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${consumerFirstName}
 
     ${resp}=  Send Attachment From Appointment By Consumer   ${apptid1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${attachments}
-    Log  ${resp.json()}
+    Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  ${resp.json()}       ${NoAccess}
