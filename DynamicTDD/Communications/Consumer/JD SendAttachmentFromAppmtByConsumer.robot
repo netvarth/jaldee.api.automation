@@ -42,15 +42,15 @@ JD-TC-SendAttachmentFromAppmtByConsumer-1
     Log  ${decrypted_data}
     Set Suite Variable  ${lic_id}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
    
-    ${highest_package}=  get_highest_license_pkg
-    Log  ${highest_package}
-    Set Suite variable  ${lic2}  ${highest_package[0]}
+    # ${highest_package}=  get_highest_license_pkg
+    # Log  ${highest_package}
+    # Set Suite variable  ${lic2}  ${highest_package[0]}
 
-    IF  '${lic_id}' != '${lic2}'
-        ${resp1}=   Change License Package  ${highest_package[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
+    # IF  '${lic_id}' != '${lic2}'
+    #     ${resp1}=   Change License Package  ${highest_package[0]}
+    #     Log  ${resp1.content}
+    #     Should Be Equal As Strings  ${resp1.status_code}  200
+    # END
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}

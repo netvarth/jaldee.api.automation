@@ -1279,7 +1279,6 @@ JD-TC-ActivateVacation-6
     clear_appt_schedule   ${HLMUSERNAME7}
     clear_customer   ${HLMUSERNAME7}
 
-    
     ${resp}=  Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1480,7 +1479,6 @@ JD-TC-ActivateVacation-6
     Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  appointmentEncId=${encId2}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME9}
   
-
     ${resp}=  Consumer Login  ${CUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1559,7 +1557,6 @@ JD-TC-ActivateVacation-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
 
-
     ${resp}=  Activate Vacation    ${boolean[1]}  ${v4_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1593,6 +1590,192 @@ JD-TC-ActivateVacation-6
     ${resp}=  Delete Vacation  ${v4_id} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-ActivateVacation-7
+    [Documentation]  create vacation for user and try taking account level and user level appt.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pro_id}  ${decrypted_data['id']}
+
+    ${resp}=   Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+  
+    clear_service   ${HLMUSERNAME7}
+    clear_appt_schedule   ${HLMUSERNAME7}
+    clear_customer   ${HLMUSERNAME7}
+
+    ${resp}=  Get User
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    IF   not '${resp.content}' == '${emptylist}'
+        ${len}=  Get Length  ${resp.json()}
+    END
+    FOR   ${i}  IN RANGE   0   ${len}
+       
+        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+        IF   not '${user_phone}' == '${HLMUSERNAME7}'
+            clear_users  ${user_phone}
+        END
+    END
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
+    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]} 
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+
+    ${resp}=  Get Departments
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+
+    ${resp}=    Get Locations
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+
+    ${SERVICE1}=    FakerLibrary.Job
+    ${s_id}=  Create Sample Service   ${Service1}   department=${dep_id}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=30  max=60
+    ${eTime1}=  db.add_two   ${sTime1}  ${delta}   
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=1
+    ${duration}=  FakerLibrary.Random Int  min=1  max=10
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id}  ${resp.json()}
+
+    ${u_id}=  Create Sample User 
+    Set Test Variable  ${u_id}
+
+    ${resp}=  Get User By Id  ${u_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${BUSER_U3}  ${resp.json()['mobileNo']}       
+
+    ${SERVICE2}=    FakerLibrary.Job
+    ${s_id1}=  Create Sample Service For User  ${SERVICE2}  ${dep_id}  ${u_id}
+    
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta1}=  FakerLibrary.Random Int  min=30  max=60
+    ${eTime1}=  db.add_two   ${sTime1}  ${delta}  
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=1
+    ${duration1}=  FakerLibrary.Random Int  min=1  max=${delta}
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule For User  ${u_id}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id1}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedules  provider-eq=${u_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response List  ${resp}  0  id=${sch_id1}   name=${schedule_name}   apptState=${Qstate[0]}
+
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    ${list}=  Create List   1  2  3  4  5  6  7
+    ${desc}=    FakerLibrary.sentence
+    ${sTime11}=  db.get_time_by_timezone   ${tz}
+    ${delta2}=  FakerLibrary.Random Int  min=5  max=10
+    ${eTime11}=  add_two   ${sTime11}  ${delta}
+    ${DAY21}=  db.add_timezone_date  ${tz}  2  
+    ${resp}=  Create Vacation   ${desc}  ${u_id}  ${recurringtype[1]}  ${list}  ${CUR_DAY}  ${CUR_DAY}  ${EMPTY}  ${sTime11}  ${eTime11}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${vac1_id}    ${resp.json()['holidayId']}
+   
+    ${resp}=   Get Vacation     ${u_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response List   ${resp}   0  id=${vac1_id}   description=${desc}
+    Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['recurringType']}                     ${recurringtype[1]}
+    Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['repeatIntervals']}                   ${list}  
+    Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['startDate']}                         ${CUR_DAY}
+    Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['terminator']['endDate']}             ${CUR_DAY}  
+    Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['timeSlots'][0]['sTime']}             ${sTime11}  
+    Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['timeSlots'][0]['eTime']}             ${eTime11}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${sch_length}=  get_slot_length  ${delta}  ${duration}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    Should Be Equal As Integers  ${sLength}  ${sch_length}
+    ${st}=  timeto24hr  ${sTime1}
+    FOR  ${index}  IN RANGE  ${sch_length}
+        ${muldur}=  Evaluate  (${index}+1)*${duration}
+        ${et12}=  add_two  ${sTime1}  ${muldur}
+        ${et}=  timeto24hr  ${et12}
+        
+        Should Be Equal As Strings  ${resp.json()['availableSlots'][${index}]['time']}  ${st}-${et}
+        Set Test Variable  ${st}  ${et}
+        Should Be Equal As Strings  ${resp.json()['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
+    END
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${sch_length}=  get_slot_length  ${delta1}  ${duration1}
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    Should Be Equal As Integers  ${sLength}  ${sch_length}
+    ${st}=  timeto24hr  ${sTime1}
+    FOR  ${index}  IN RANGE  ${sch_length}
+        ${muldur}=  Evaluate  (${index}+1)*${duration}
+        ${et12}=  add_two  ${sTime1}  ${muldur}
+        ${et}=  timeto24hr  ${et12}
+        
+        Should Be Equal As Strings  ${resp.json()['availableSlots'][${index}]['time']}  ${st}-${et}
+        Set Test Variable  ${st}  ${et}
+        Should Be Equal As Strings  ${resp.json()['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
+    END
+
+    
+
+
+
+
+JD-TC-ActivateVacation-8
+    [Documentation]  create vacation for user in between the schedule and try taking account level and user level appt.
    
 
     

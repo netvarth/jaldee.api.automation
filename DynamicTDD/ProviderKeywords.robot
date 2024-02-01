@@ -12951,3 +12951,18 @@ Enable Disable whatsApp
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/whatsapp/${status}  expected_status=any
     [Return]  ${resp}
+
+
+Get Bill Settings
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw  /provider/bill/settings/pos  expected_status=any
+    [Return]  ${resp}
+
+Enable Disable bill
+
+    [Arguments]   ${status}
+
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw  /provider/bill/settings/${status}  expected_status=any
+    [Return]  ${resp}
