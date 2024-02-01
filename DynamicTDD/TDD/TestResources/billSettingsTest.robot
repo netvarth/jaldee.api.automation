@@ -66,10 +66,31 @@ JD-TC-LoginDetails-1
         # Set Suite Variable  ${account_id}  ${resp.json()['id']}
         # Append To File  ${EXECDIR}/TDD/providers.txt  ${pro_num},${account_id}${\n}
 
-        # ${resp}=  Get Bill Settings 
-        # Log   ${resp.content}
-        # Should Be Equal As Strings  ${resp.status_code}  200
-        # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enablepos']}    True
+        ${resp}=  Get Bill Settings 
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enablepos']}    True
+
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${resp}=  Get Bill Settings 
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${resp}=  Get Bill Settings 
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enablepos']}    True
+
+        ${resp}=  Enable Disable bill  ${bool[0]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${resp}=  Get Bill Settings 
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
         # ${resp}=   Get Sub Domain Settings    ${domain}    ${subdomain}
         # Should Be Equal As Strings    ${resp.status_code}    200
