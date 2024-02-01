@@ -1199,6 +1199,22 @@ JD-TC-Get_Cart_Details-11
     # Set Suite Variable   ${domain}    ${resp.json()['sector']}
     # Set Suite Variable   ${subDomain}    ${resp.json()['subSector']}
 
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
     ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${lic1}  ${resp.json()['accountLicense']['licPkgOrAddonId']}

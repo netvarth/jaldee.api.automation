@@ -78,6 +78,10 @@ JD-TC-Add_Items_To_Catalog-1
     ${itemCode2}=   FakerLibrary.firstname 
     Set Suite Variable  ${itemCode2}
 
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Create Order Item    ${displayName1}    ${shortDesc1}    ${itemDesc1}    ${price1}    ${bool[1]}    ${itemName1}    ${itemNameInLocal1}    ${promotionalPriceType[1]}    ${promoPrice1}   ${promotionalPrcnt1}    ${note1}    ${bool[1]}    ${bool[1]}    ${itemCode1}    ${bool[1]}    ${promotionLabelType[3]}    ${promoLabel1}      
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${Pid1}  ${resp.json()}
@@ -97,6 +101,8 @@ JD-TC-Add_Items_To_Catalog-1
     Should Be Equal As Strings  ${resp.status_code}  200    
     Verify Response  ${resp}  displayName=${displayName1}  shortDesc=${shortDesc1}   price=${price2float}   taxable=${bool[0]}   status=${status[0]}    itemName=${itemName2}  itemNameInLocal=${itemNameInLocal1}  isShowOnLandingpage=${bool[1]}   isStockAvailable=${bool[1]}   
     Verify Response  ${resp}  promotionalPriceType=${promotionalPriceType[1]}   promotionalPrice=${promoPrice1float}    promotionalPrcnt=0.0   showPromotionalPrice=${bool[1]}   itemCode=${itemCode2}   promotionLabelType=${promotionLabelType[3]}   promotionLabel=${promoLabel1}   
+
+    
 
     ${resp}=   Get Locations
     Log  ${resp.content}
