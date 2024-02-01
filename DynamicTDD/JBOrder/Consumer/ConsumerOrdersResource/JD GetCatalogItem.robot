@@ -779,7 +779,7 @@ JD-TC-GetCatalogItem-UH5
     ${resp}=  Get Item By Catalog  ${CatalogId1}   -115
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"   "${NO_ITEM_FOUND}"
+    Should Be Equal As Strings  "${resp.json()}"   "${NO_ITEMS_FOUND}"
 
 
 
