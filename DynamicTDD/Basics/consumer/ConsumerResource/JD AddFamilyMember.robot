@@ -119,7 +119,7 @@ JD-TC-AddFamilyMember-UH2
       ${resp}=                      Add Family  ${empty}  ${empty}  ${empty}  ${empty}  ${empty}  ${empty}  ${empty}   ${empty}  ${empty}  ${empty}  ${empty}  ${empty}  ${empty}  ${empty}  ${empty}
       Log                           ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}  422
-      Should Be Equal As Strings    ${resp.content}  "${FIRST_NAME_REQUIRED}"
+      Should Be Equal As Strings    ${resp.content}  "${CUSTOMER_FIRST_NAME_REQUIRED}"
 
 JD-TC-AddFamilyMember-UH3
 
