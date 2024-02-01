@@ -36,22 +36,36 @@ Customer Logout
     [Return]  ${resp}
 
 ProviderConsumer Login with token
-    [Arguments]    ${loginId}  ${accountId}  ${token}  ${countryCode}=+91
+    [Arguments]    ${loginId}  ${accountId}  ${token}  ${countryCode}=+91  &{kwargs} 
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    ${cons_params}=  Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    # Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${cons_params}   &{locparam}
     ${login}=    Create Dictionary    loginId=${loginId}  accountId=${accountId}  countryCode=${countryCode}
     ${log}=    json.dumps    ${login}
     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=${token}
+    Set To Dictionary 	${headers2} 	&{tzheaders}
     Check And Create YNW Session
-    ${resp}=    POST On Session    ynw     /consumer/login   headers=${headers2}  data=${log}   expected_status=any 
+    ${resp}=    POST On Session    ynw     /consumer/login   headers=${headers2}  data=${log}   expected_status=any   params=${cons_params}
     [Return]  ${resp}
 
 ProviderConsumer SignUp
-    [Arguments]  ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}   ${accountId}   ${countryCode}=91
+    [Arguments]  ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}   ${accountId}   ${countryCode}=91   &{kwargs} 
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    ${cons_params}=  Create Dictionary
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    # Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Set To Dictionary  ${cons_params}   &{locparam}
     ${data1}=   Create Dictionary    primaryMobileNo=${primaryMobileNo}    firstName=${firstName}   lastName=${lastName}  email=${email}  countryCode=${countryCode}
     ${data}=    Create Dictionary    userProfile=${data1}  accountId=${accountId}
     ${data}=    json.dumps    ${data}
     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=${token}
+    Set To Dictionary 	${headers2} 	&{tzheaders}
     Check And Create YNW Session
-    ${resp}=    POST On Session   ynw    /consumer    data=${data}  headers=${headers2}   expected_status=any  
+    ${resp}=    POST On Session   ynw    /consumer    data=${data}  headers=${headers2}   expected_status=any   params=${cons_params}
     [Return]  ${resp} 
 
 Update ProviderConsumer 
