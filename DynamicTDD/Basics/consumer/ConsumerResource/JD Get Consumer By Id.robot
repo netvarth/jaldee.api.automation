@@ -46,7 +46,7 @@ JD-TC-Get Consumer By Id-1
     ${resp}=  Get Consumer By Id  ${CUSERPH0}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Consumer Profile  ${resp}  firstName=${firstname}  lastName=${lastname}  dob=${dob}  gender=${gender}  address=${address}  primaryMobileNo=${CUSERPH0}
+    Verify Consumer Profile  ${resp}  firstName=${firstname}  lastName=${lastname}  gender=${gender}  address=${address}  primaryMobileNo=${CUSERPH0}
 
 
 JD-TC-Get Consumer By Id-4

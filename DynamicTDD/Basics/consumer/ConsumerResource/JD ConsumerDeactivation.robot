@@ -378,8 +378,9 @@ JD-TC-Consumer Deactivation -2
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings    ${resp.json()}    ${PHONE_NOT_REGISTERED}
 
+
 JD-TC-Consumer Deactivation -3
-    [Documentation]   ReSignup the consumer and try to get above appoiment details.
+    [Documentation]   ReSignup the consumer and try to get above appointment details.
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1001
     ${firstname}=  FakerLibrary.first_name
@@ -444,10 +445,36 @@ JD-TC-Consumer Deactivation -4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enablepos']}==${bool[0]}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enablepos']}    ${bool[1]}
+
+    # ${resp}=  Get Order Settings by account id
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Run Keyword If  ${resp.json()['enableOrder']}==${bool[0]}   Enable Order Settings
     ${resp}=  Get Order Settings by account id
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableOrder']}==${bool[0]}   Enable Order Settings
+    IF  ${resp.json()['enableOrder']}==${bool[0]}
+        ${resp1}=  Enable Order Settings
+        Log  ${resp1.json()}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+    ${resp}=  Get Order Settings by account id 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enableOrder']}    ${bool[1]}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2  
@@ -642,10 +669,32 @@ JD-TC-Consumer Deactivation -5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enablepos']}==${bool[0]}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enablepos']}    ${bool[1]}
+
     ${resp}=  Get Order Settings by account id
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableOrder']}==${bool[0]}   Enable Order Settings
+    IF  ${resp.json()['enableOrder']}==${bool[0]}
+        ${resp1}=  Enable Order Settings
+        Log  ${resp1.json()}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+    ${resp}=  Get Order Settings by account id 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enableOrder']}    ${bool[1]}
 
     ${displayName1}=   FakerLibrary.name 
     ${shortDesc1}=  FakerLibrary.Sentence   nb_words=2  
