@@ -12934,3 +12934,17 @@ GET Queue Availability By Location, Service and Date
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/${locationId}/${serviceId}/${date}  expected_status=any
     [Return]  ${resp}
+
+Enable Disable Notification 
+    [Arguments]   ${status}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/account/settings/notification/${status}  expected_status=any
+    [Return]  ${resp}
+
+Enable Disable whatsApp 
+    [Arguments]   ${status}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/account/settings/whatsapp/${status}  expected_status=any
+    [Return]  ${resp}
