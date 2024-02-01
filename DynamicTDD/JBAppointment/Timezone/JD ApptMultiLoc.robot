@@ -3419,13 +3419,13 @@ JD-TC-Take Appointment in Different Timezone-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  name=${schedule_name}  apptState=${Qstate[0]}
 
-    # USProvider-  ${acc_id1}	${us_uid1}, ${us_uid2}, 	${US_tz2}, 	${p1_us_l2},  	${p1_us_l3},  ${p1_u1_s1},  ${p1_u2_s1}, p1_u1_sch1, p1_u2_sch2, 
+    # USProvider-  ${acc_id1}	${us_uid1}, ${us_uid2}, 	 ${US_tz1}, 	${p1_us_l2},  	${p1_us_l3},  ${p1_u1_s1},  ${p1_u2_s1}, p1_u1_sch1, p1_u2_sch2, 
 
     # MEProvider- acc_id2, p2_me_l2,me-uid1, p2_u1_s1, p2_u1_sch1,p2_me_l3,me-uid2, p2_u2_s1, p2_u2_sch1,
 
     # INProvider- acc_id3, p3_in_l2,In-uid1, p3_u1_s1, p3_u1_sch1,p3_in_l3,In-uid2, p3_u2_s1, p3_u2_sch1,
 
-    ########################### Consumer 1- c1 ###########################
+    ########################### Consumer 1- c1(Us region) ###########################
     
     Comment  Consumer 1- c1
     ${firstName}=  FakerLibrary.name
@@ -3447,20 +3447,20 @@ JD-TC-Take Appointment in Different Timezone-4
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${token}  ${resp.json()['token']}
 
-    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${primaryMobileNo}  ${acc_id1}  countryCode=${CountryCode}
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${primaryMobileNo}  ${acc_id1}  countryCode=${CountryCode}  timeZone=${US_tz1}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200    
 
     ${resp}=  Customer Logout   
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}  ${acc_id1}  ${token}  countryCode=${CountryCode}
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}  ${acc_id1}  ${token}  countryCode=${CountryCode}   timeZone=${US_tz1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
 
     ############################## Take appt for USProvider user1 ##############################
-    # USProvider-  ${acc_id1}	${us_uid1}, ${us_uid2}, 	${US_tz2}, 	${p1_us_l2},  	${p1_us_l3},  ${p1_u1_s1},  ${p1_u2_s1}, p1_u1_sch1, p1_u2_sch2, 
+    # USProvider-  ${acc_id1}	${us_uid1}, ${us_uid2}, 	${US_tz1}, 	${p1_us_l2},  	${p1_us_l3},  ${p1_u1_s1},  ${p1_u2_s1}, p1_u1_sch1, p1_u2_sch2, 
     
     Comment  Consumer 1- c1- US
     ${resp}=  Get Appointment Schedules Consumer  ${us_uid1}
@@ -3500,7 +3500,7 @@ JD-TC-Take Appointment in Different Timezone-4
     Should Be Equal As Strings  ${resp.json()['uid']}   ${c1_apptid1}
 
     ############################## Take appt for USProvider user2 ##############################
-    # USProvider-  ${acc_id1}	${us_uid1}, ${us_uid2}, 	${US_tz2}, 	${p1_us_l2},  	${p1_us_l3},  ${p1_u1_s1},  ${p1_u2_s1}, p1_u1_sch1, p1_u2_sch2,  
+    # USProvider-  ${acc_id1}	${us_uid1}, ${us_uid2}, 	${US_tz1}, 	${p1_us_l2},  	${p1_us_l3},  ${p1_u1_s1},  ${p1_u2_s1}, p1_u1_sch1, p1_u2_sch2,  
 
     ${resp}=  Get Appointment Schedule ById Consumer  ${p1_u2_sch1}   ${us_uid2}
     Log  ${resp.content}
