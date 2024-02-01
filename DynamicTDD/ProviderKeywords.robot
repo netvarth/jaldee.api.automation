@@ -495,7 +495,10 @@ Create Sample Queue
     ${resp}=   Get Service
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}' or '${resp.json()[0]['serviceType']}' == '${service_type[0]}'
+    IF   '${resp.content}' == '${emptylist}'
+        ${SERVICE1}=    FakerLibrary.Word
+        ${s_id}=  Create Sample Service  ${SERVICE1}
+    ELSE IF  '${resp.json()[0]['serviceType']}' == '${service_type[0]}'
         ${SERVICE1}=    FakerLibrary.Word
         ${s_id}=  Create Sample Service  ${SERVICE1}
     ELSE
