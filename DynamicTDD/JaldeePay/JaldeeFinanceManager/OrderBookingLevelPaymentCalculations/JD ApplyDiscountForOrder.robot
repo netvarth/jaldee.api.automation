@@ -447,7 +447,7 @@ JD-TC-ApplyDiscountForOrder-UH2
     ${resp}=   Apply Discount for Order    ${orderid1}    ${discountIdG}   ${discountpriceG}    ${discount2}    ${discount2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}     ${NEED_BILL_AMOUNT_HIGHER_THAN_DISCOUNT}
+    Should Be Equal As Strings  ${resp.json()}     ${NEED_AMOUNT_HIGHER_THAN_DISCOUNT}
 
 
 JD-TC-ApplyDiscountForOrder-UH3

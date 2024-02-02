@@ -175,8 +175,9 @@ JD-TC-Get PaymentsOut Log List-1
 
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${DAY}
-    ${time_now}=    db.get_time_by_timezone  ${tz}
-    ${time_now}=    DateTime.Convert Date    ${time_now}    result_format=%H:%M:%S  
+    # ${time_now}=    db.get_time_by_timezone  ${tz}
+    # ${time_now}=    DateTime.Convert Date    ${time_now}    result_format=%H:%M:%S  
+    ${time_now}=    DateTime.Convert Date    ${tz}    result_format=%H:%M:%S  
     Set Suite Variable    ${time_now}
 
     ${resp}=  Create PaymentsOut   ${amount}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}

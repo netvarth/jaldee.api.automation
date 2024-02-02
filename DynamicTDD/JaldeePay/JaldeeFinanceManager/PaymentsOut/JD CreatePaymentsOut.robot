@@ -3296,7 +3296,7 @@ JD-TC-Create PaymentsOut-UH5
     ${resp}=  Create PaymentsOut   ${empty}  ${category_id2}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_AMOUNT}
+    Should Be Equal As Strings   ${resp.json()}   ${Please_enter_an_amount}
 
 JD-TC-Create PaymentsOut-UH6
 

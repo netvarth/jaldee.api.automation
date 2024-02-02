@@ -12,7 +12,7 @@ Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/consumerlist.py 
+Variables         /ebs/TDD/varfiles/musers.py 
 
 
 
@@ -24,7 +24,7 @@ JD-TC-GetCategorywithfilter-1
 
     [Documentation]  Create Category as Vendor and verify with id Filter.
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME94}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME319}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 

@@ -3537,7 +3537,28 @@ JD-TC-Take Appointment in Different Timezone-4
     ############################## Take appt for MEProvider user1 ##############################
     # MEProvider- acc_id2, p2_me_l2,me-uid1, p2_u1_s1, p2_u1_sch1,p2_me_l3,me-uid2, p2_u2_s1, p2_u2_sch1,
     
-    Comment  Consumer 1- c1- US
+    Comment  Consumer 1- c1- UAE
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id2}   countryCode=${CountryCode}  alternateLoginId=${email}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${primaryMobileNo}  ${acc_id2}  countryCode=${CountryCode}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=  Customer Logout   
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}  ${acc_id2}  ${token}  countryCode=${CountryCode}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+
     ${resp}=  Get Appointment Schedules Consumer  ${me_uid1}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -3617,7 +3638,27 @@ JD-TC-Take Appointment in Different Timezone-4
     ############################## Take appt for INProvider user1 ##############################
     # INProvider- acc_id3, p3_in_l2,In-uid1, p3_u1_s1, p3_u1_sch1,p3_in_l3,In-uid2, p3_u2_s1, p3_u2_sch1,
     
-    Comment  Consumer 1- c1- US
+    Comment  Consumer 1- c1- IN
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${acc_id3}   countryCode=${CountryCode}  alternateLoginId=${email}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}  ${primaryMobileNo}  ${acc_id3}  countryCode=${CountryCode}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=  Customer Logout   
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}  ${acc_id3}  ${token}   countryCode=${CountryCode}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
     ${resp}=  Get Appointment Schedules Consumer  ${IN_uid1}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -3657,7 +3698,7 @@ JD-TC-Take Appointment in Different Timezone-4
    ############################## Take appt for INProvider user2 ##############################
     # INProvider- acc_id3, p3_in_l2,In-uid1, p3_u1_s1, p3_u1_sch1,p3_in_l3,In-uid2, p3_u2_s1, p3_u2_sch1,
     
-    Comment  Consumer 1- c1- US
+     Comment  Consumer 1- c1- IN
     ${resp}=  Get Appointment Schedules Consumer  ${IN_uid2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

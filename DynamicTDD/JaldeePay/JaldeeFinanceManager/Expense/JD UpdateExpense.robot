@@ -746,7 +746,7 @@ JD-TC-UpdateExpense-UH5
     ${resp}=  Update Expense   ${expense_uid1}   ${category_id1}  ${EMPTY}  ${expenseDate}   ${expenseFor}     ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${INVALID_EXPENSE_AMOUNT}
+    Should Be Equal As Strings   ${resp.json()}   ${Please_enter_an_amount}
 
 JD-TC-UpdateExpense-UH6
 

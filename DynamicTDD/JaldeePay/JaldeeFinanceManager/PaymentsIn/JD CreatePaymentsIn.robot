@@ -383,7 +383,7 @@ JD-TC-Create PaymentsIn-UH5
     ${resp}=  Create PaymentsIn   ${EMPTY}  ${category_id2}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    ${paymentMode}    uploadedDocuments=${uploadedDocuments}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSIN_AMOUNT}
+    Should Be Equal As Strings   ${resp.json()}   ${Please_enter_an_amount}
 
 JD-TC-Create PaymentsIn-UH6
 
