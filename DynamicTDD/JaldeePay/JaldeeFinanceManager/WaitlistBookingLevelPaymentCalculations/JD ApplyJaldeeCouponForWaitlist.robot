@@ -478,7 +478,8 @@ JD-TC-ApplyJaldeeCoupon-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${qid1}  ${DAY2}  ${des}  ${bool[1]}  ${cid}
+    # ${resp}=  Add To Waitlist  ${cid}  ${ser_id1}  ${qid1}  ${DAY2}  ${des}  ${bool[1]}  ${cid}
+    ${resp}=    Add To Waitlist  ${cid}  ${ser_id1}  ${que_id1}  ${DAY}  ${desc}  ${bool[1]}  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${wid}  ${wid[0]}
