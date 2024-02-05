@@ -326,3 +326,9 @@ Get Family Member By Id
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/family/member/details/${memberId}   expected_status=any   
     [Return]  ${resp}
+
+Get Prescription By ProviderConsumer
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /spconsumer/medicalrecord/prescription   expected_status=any   
+    [Return]  ${resp}
