@@ -346,11 +346,14 @@ JD-TC-Apply Service Level Discount-1
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
-    ${serviceprice}=   Random Int  min=100  max=500
-    ${serviceprice}=  Convert To Number  ${serviceprice}  1
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+    Set Suite Variable  ${servicecharge}
 
-    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}   price=${serviceprice} 
+    ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}   price=${servicecharge} 
     ${serviceList}=    Create List    ${serviceList}
+
+    ${netrateofservice}=  Evaluate  ${servicecharge}*${quantity}
+    Set Suite Variable  ${netrateofservice}
     
     
     ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    serviceList=${serviceList}
@@ -409,9 +412,9 @@ JD-TC-Apply Service Level Discount-2
     ${discount1}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
     ${discountprice1}=     Random Int   min=50   max=100
-    ${discountprice}=  Convert To Number  ${discountprice1}  1
-    Set Suite Variable   ${discountprice}
-    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    ${discountprice2}=  Convert To Number  ${discountprice1}  1
+    Set Suite Variable   ${discountprice2}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice2}   ${calctype[1]}  ${disctype[0]}
     Log  ${resp.json()}
     Set Suite Variable   ${discountId1}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -426,7 +429,7 @@ JD-TC-Apply Service Level Discount-2
 
 
 
-    ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${discountId1}    ${discountprice}   ${EMPTY}  ${EMPTY}  ${sid1}
+    ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${discountId1}    ${discountprice2}   ${EMPTY}  ${EMPTY}  ${sid1}
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -436,7 +439,7 @@ JD-TC-Apply Service Level Discount-2
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][1]['id']}  ${discountId1}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][1]['name']}  ${discount1}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][1]['discountType']}  ${disctype[0]}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][1]['discountValue']}  ${discountprice}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][1]['discountValue']}  ${discountprice2}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][1]['calculationType']}  ${calctype[1]}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][1]['privateNote']}  ${EMPTY}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][1]['displayNote']}  ${EMPTY}
@@ -511,6 +514,11 @@ JD-TC-Apply Service Level Discount-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${discAmt}=    Evaluate  ${netrateofservice}-${discountprice}
+    ${discAmt1}=    Evaluate  ${discAmt}-${discountprice2}
+    ${dispercentage}=  Evaluate  ${discAmt1}*${discountprice4}
+    ${discountpercentage}=   Evaluate  ${dispercentage}/100
+
 
     ${discountValue1}=     Random Int   min=50   max=100
     ${discountValue1}=  Convert To Number  ${discountValue1}  1
@@ -527,7 +535,7 @@ JD-TC-Apply Service Level Discount-4
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['id']}  ${discountId4}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['name']}  ${discount1}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['discountType']}  ${disctype[0]}
-    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['discountValue']}  ${discountprice4}
+    Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['discountValue']}  ${discountpercentage}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['calculationType']}  ${calctype[0]}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['privateNote']}  ${EMPTY}
     Should Be Equal As Strings  ${resp.json()['serviceList'][0]['discounts'][2]['displayNote']}  ${EMPTY}
@@ -566,10 +574,10 @@ JD-TC-Apply Service Level Discount-UH2
 
     ${discount1}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
-    ${discountprice1}=     Random Int   min=2350   max=3500
-    ${discountprice}=  Convert To Number  ${discountprice1}  1
-    Set Suite Variable   ${discountprice}
-    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    ${discountprice1}=     Random Int   min=6000   max=8000
+    ${discountpriceUH}=  Convert To Number  ${discountprice1}  1
+    Set Suite Variable   ${discountpriceUH}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountpriceUH}   ${calctype[1]}  ${disctype[0]}
     Log  ${resp.json()}
     Set Test Variable   ${discountId}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -584,7 +592,7 @@ JD-TC-Apply Service Level Discount-UH2
     ${discountValue1}=  Convert To Number  ${discountValue1}  1
 
 
-    ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${discountId}    ${discountprice}   ${privateNote}  ${displayNote}  ${sid1}
+    ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${discountId}    ${discountpriceUH}   ${privateNote}  ${displayNote}  ${sid1}
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}    ${NEED_AMOUNT_HIGHER_THAN_DISCOUNT}

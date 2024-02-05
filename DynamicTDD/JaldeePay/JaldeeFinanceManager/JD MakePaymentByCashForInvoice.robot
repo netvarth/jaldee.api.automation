@@ -29,7 +29,7 @@ ${fileSize}  0.00458
 ${service_duration}     30
 
 @{status1}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
+@{New_status}         status1  Proceed     Unassign    Block     Delete    Remove
 ${DisplayName1}   item1_DisplayName
 
 *** Test Cases ***
@@ -37,10 +37,10 @@ JD-TC-MakePaymentByCash-1
 
     [Documentation]  provider takes waitlist and accept payment then consumer get details
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME195}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_customer   ${PUSERNAME44}
+    clear_customer   ${PUSERNAME195}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -272,7 +272,7 @@ JD-TC-MakePaymentByCash-2
 
     [Documentation]  Make payment by cash with different note.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME195}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -286,7 +286,7 @@ JD-TC-MakePaymentByCash-UH1
 
     [Documentation]  Make payment by cash with invalid invoice id.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME44}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME195}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

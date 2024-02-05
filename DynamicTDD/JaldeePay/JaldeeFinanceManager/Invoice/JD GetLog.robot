@@ -233,7 +233,8 @@ JD-TC-Get Log-1
 
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable    ${DAY}
-    ${time_now}=    db.get_time_by_timezone  ${tz}
+    # ${time_now}=    db.get_time_by_timezone  ${tz}
+    ${time_now}=    db.get_tz_time_secs  ${tz}
     # ${time_now}=    DateTime.Convert Date    ${time_now}    result_format=%H:%M:%S  
     Set Suite Variable    ${time_now}
 
@@ -335,7 +336,7 @@ JD-TC-Get Log-3
 
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Test Variable    ${DAY}
-    ${time_now}=    db.get_time_by_timezone  ${tz}
+    ${time_now}=    db.get_tz_time_secs  ${tz}   
     # ${time_now}=    DateTime.Convert Date    ${time_now}    result_format=%H:%M:%S  
     Set Test Variable    ${time_now}
 

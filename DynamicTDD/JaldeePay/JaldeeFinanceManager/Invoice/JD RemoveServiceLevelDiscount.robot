@@ -751,7 +751,7 @@ JD-TC-Remove Service Level Discount-4
     Should Be Equal As Strings  ${resp.json()['netTotal']}     ${servicenetRate}
     Should Be Equal As Strings  ${resp.json()['netRate']}     ${total_amt_with_tax1}
     Should Be Equal As Strings  ${resp.json()['amountDue']}     ${total_amt_with_tax1}
-    Should Be Equal As Strings  ${resp1.json()['taxableTotal']}     ${servicenetRate}
+    Should Be Equal As Strings  ${resp.json()['taxableTotal']}     ${servicenetRate}
     # Should Be Equal As Strings  ${resp.json()['taxableTotal']}     ${total_amt_with_tax1}
 
 

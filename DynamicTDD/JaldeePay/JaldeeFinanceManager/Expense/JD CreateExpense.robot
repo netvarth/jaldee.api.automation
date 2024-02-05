@@ -1056,7 +1056,9 @@ JD-TC-CreateExpense-UH6
 
 JD-TC-CreateExpense-UH7
     [Documentation]  Create Expense for an SP With future expense date.
+    # Now its okay.may be future its restricted
 
+    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME60}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1106,6 +1108,9 @@ JD-TC-CreateExpense-UH7
 
     ${resp}=  Create Expense  ${category_id1}  ${amount}  ${expenseDate}   ${expenseFor}   ${vendor_uid1}   ${description}   ${referenceNo}    ${employeeName}      ${itemList}     ${departmentList}    ${uploadedDocuments}   
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${EXPENSE_DATE_CANNOT_BE_EMPTY}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    # Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings  ${resp.json()}  ${EXPENSE_DATE_CANNOT_BE_EMPTY}
     

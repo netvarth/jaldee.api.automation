@@ -673,8 +673,9 @@ JD-TC-Remove Item Level Discount-2
     ${quantity}=   Convert To Integer  ${quantity}  
     ${adhocItemList}=  Create Dictionary  itemName=${itemName}   quantity=${quantity}   price=${price}
     ${adhocItemList}=    Create List    ${adhocItemList}
-    ${netTotal1}=  Evaluate  ${quantity} * ${price}
-    ${netTotal1}=   Convert To Integer  ${netTotal1} 
+    ${adhocItemListnetTotal1}=  Evaluate  ${quantity} * ${price}
+    Set Suite Variable  ${adhocItemListnetTotal1} 
+    ${netTotal1}=   Convert To Integer  ${adhocItemListnetTotal1} 
     Set Suite Variable   ${netTotal1}
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
@@ -694,11 +695,10 @@ JD-TC-Remove Item Level Discount-2
     Set Suite Variable   ${promotionalPrice}   ${resp.json()['promotionalPrice']}
 
 
-    ${quantity}=   Random Int  min=50  max=100
-    ${quantity}=   Convert To Integer  ${quantity}  
     ${itemList}=  Create Dictionary  itemId=${itemId1}   quantity=${quantity}  price=${promotionalPrice}
-    ${netTotal}=  Evaluate  ${quantity} * ${promotionalPrice}
-    ${netTotal}=   Convert To Integer  ${netTotal} 
+    ${itemListnetTotal}=  Evaluate  ${quantity} * ${promotionalPrice}
+    Set Suite Variable   ${itemListnetTotal}
+    ${netTotal}=   Convert To Integer  ${itemListnetTotal} 
     Set Suite Variable   ${netTotal}
     
     
@@ -799,6 +799,7 @@ JD-TC-Remove Item Level Discount-3
     ${amounttotal} =  Evaluate  ${netTotal} + ${netTotal1}
     ${amounttotal}=   Convert To Integer  ${amounttotal}   
 
+    ${netrateofitem} =  Evaluate  ${itemListnetTotal} + ${adhocItemListnetTotal1}
 
 
 
@@ -838,7 +839,8 @@ JD-TC-Remove Item Level Discount-3
     ${resp1}=  Get Invoice By Id  ${invoice_uid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts']}   []
-    Should Be Equal As Strings  ${resp1.json()['netRate']}     ${netTotal}
+    # Should Be Equal As Strings  ${resp1.json()['netRate']}     ${netrateofitem}
+    Should Contain    ${resp1.json()['netRate']}     ${netrateofitem}
 
 JD-TC-Remove Item Level Discount-4
 

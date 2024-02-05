@@ -328,12 +328,13 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${discAmt}=    Evaluate  ${servicecharge}-${discountprice}
+    ${discAmttt}=    Evaluate  ${servicecharge}-${discountprice}
+
 
     ${resp}=   Apply Service Level Discount for Appointment    ${apptid1}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmttt}
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
 JD-TC-ApplyServiceLevelDiscountForAppointmnet-2
@@ -375,13 +376,13 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
-    ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
-    Set Suite Variable   ${apptid1}
+    ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname}
+    Set Suite Variable   ${apptid2}
 
-    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
+    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Verify Response    ${resp}     uid=${apptid1}   appmtDate=${DAY3}   appmtTime=${slot1}
+    Verify Response    ${resp}     uid=${apptid2}   appmtDate=${DAY3}   appmtTime=${slot1}
     Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
     Should Be Equal As Strings  ${resp.json()['apptStatus']}  ${apptStatus[0]}
@@ -396,7 +397,7 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-2
 
     ${discAmt}=    Evaluate  ${servicecharge}-${discountprice}
 
-    ${resp}=   Apply Service Level Discount for Appointment    ${apptid1}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    ${resp}=   Apply Service Level Discount for Appointment    ${apptid2}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
@@ -411,7 +412,7 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-3
 
     ${discAmt}=    Evaluate  ${servicecharge}-${discountprice}
 
-    ${resp}=   Apply Service Level Discount for Appointment    ${apptid1}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
+    ${resp}=   Apply Service Level Discount for Appointment    ${apptid2}    ${discountId}   ${discountprice}    ${discount1}    ${discount1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}                  ${DISCOUNT_ALREADY_USED}
@@ -428,12 +429,12 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-4
     Set Suite Variable   ${discount2}
 
     ${desc}=   FakerLibrary.word
-    ${discountprice1}=     Random Int   min=50   max=100
-    ${discountprice}=  Convert To Number  ${discountprice1}  1
-    Set Suite Variable   ${discountprice}
-    ${resp}=   Create Discount  ${discount2}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    ${discountprice1}=     Random Int   min=1   max=40
+    ${discountprice11}=  Convert To Number  ${discountprice1}  1
+    Set Suite Variable   ${discountprice11}
+    ${resp}=   Create Discount  ${discount2}   ${desc}    ${discountprice11}   ${calctype[1]}  ${disctype[0]}
     Log  ${resp.json()}
-    Set Suite Variable   ${discountId1}   ${resp.json()}   
+    Set Test Variable   ${discountId4}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Discounts 
@@ -441,11 +442,13 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${discAmt}=    Evaluate  ${servicecharge}-${discountprice}
+    ${discAmt1}=    Evaluate  ${discAmt}-${discountprice11}
 
-    ${resp}=   Apply Service Level Discount for Appointment    ${apptid1}    ${discountId1}   ${EMPTY}    ${discount2}    ${discount2}
+
+    ${resp}=   Apply Service Level Discount for Appointment    ${apptid2}    ${discountId4}   ${EMPTY}    ${discount2}    ${discount2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt1}
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
 
 JD-TC-ApplyServiceLevelDiscountForAppointmnet-5
@@ -458,21 +461,24 @@ JD-TC-ApplyServiceLevelDiscountForAppointmnet-5
     ${discount2}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
     ${discountprice1}=     Random Int   min=5   max=10
-    ${discountprice}=  Convert To Number  ${discountprice1}  1
-    Set Suite Variable   ${discountprice}
-    ${resp}=   Create Discount  ${discount2}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
+    ${discountprice5}=  Convert To Number  ${discountprice1}  1
+    Set Test Variable   ${discountprice5}
+    ${resp}=   Create Discount  ${discount2}   ${desc}    ${discountprice5}   ${calctype[1]}  ${disctype[0]}
     Log  ${resp.json()}
-    Set Suite Variable   ${discountId1}   ${resp.json()}   
+    Set Suite Variable   ${discountId5}   ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Discounts 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${discAmt}=    Evaluate  ${servicecharge}-${discountprice}
 
-    ${resp}=   Apply Service Level Discount for Appointment    ${apptid1}    ${discountId1}   ${discountprice}    ${EMPTY}    ${EMPTY}
+    ${discAmt}=    Evaluate  ${servicecharge}-${discountprice}
+    ${discAmt1}=    Evaluate  ${discAmt}-${discountprice11}
+    ${discAmt2}=    Evaluate  ${discAmt1}-${discountprice5}
+
+    ${resp}=   Apply Service Level Discount for Appointment    ${apptid2}    ${discountId5}   ${discountprice5}    ${EMPTY}    ${EMPTY}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt}
+    Should Be Equal As Strings  ${resp.json()['netRate']}                  ${discAmt2}
     Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}         ${paymentStatus[0]}
