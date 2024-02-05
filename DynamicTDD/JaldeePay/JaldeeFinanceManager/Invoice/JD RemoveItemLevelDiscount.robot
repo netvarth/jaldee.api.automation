@@ -840,7 +840,7 @@ JD-TC-Remove Item Level Discount-3
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts']}   []
     # Should Be Equal As Strings  ${resp1.json()['netRate']}     ${netrateofitem}
-    Should Contain    ${resp1.json()['netRate']}     ${netrateofitem}
+    Should be equal    ${resp1.json()['netRate']}     ${netrateofitem}
 
 JD-TC-Remove Item Level Discount-4
 
@@ -879,7 +879,7 @@ JD-TC-Remove Item Level Discount-4
      ${item1}=     FakerLibrary.word
     ${itemCode1}=     FakerLibrary.word
     ${price1}=     Random Int   min=400   max=500
-    ${price}=   Convert To Integer  ${price1}  
+    # ${price}=   Convert To Integer  ${price1}  
     Set Suite Variable  ${price} 
     ${resp}=  Create Sample Item   ${DisplayName1}   ${item1}  ${itemCode1}  ${price}  ${bool[1]} 
     Log  ${resp.json()}  
@@ -889,11 +889,11 @@ JD-TC-Remove Item Level Discount-4
     ${resp}=   Get Item By Id  ${itemId2}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${promotionalPrice}   ${resp.json()['promotionalPrice']}
-    ${promotionalPrice}=   Convert To Integer  ${promotionalPrice}  
+    # ${promotionalPrice}=   Convert To Integer  ${promotionalPrice}  
 
 
     ${quantity}=   Random Int  min=5000  max=6000
-    ${quantity}=   Convert To Integer  ${quantity}  
+    # ${quantity}=   Convert To Integer  ${quantity}  
     ${itemList}=  Create Dictionary  itemId=${itemId2}   quantity=${quantity}  price=${promotionalPrice}
     ${netTotal1}=  Evaluate  ${quantity} * ${promotionalPrice}
     Set Suite Variable   ${netTotal1}
@@ -907,7 +907,7 @@ JD-TC-Remove Item Level Discount-4
     ${discount1}=     FakerLibrary.word
     ${desc}=   FakerLibrary.word
     ${discountprice1}=     Random Int   min=50   max=100
-    ${discountprice}=   Convert To Integer  ${discountprice1}  
+    # ${discountprice}=   Convert To Integer  ${discountprice1}  
     Set Test Variable   ${discountprice}
     ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[1]}  ${disctype[0]}
     Log  ${resp.json()}
@@ -922,33 +922,43 @@ JD-TC-Remove Item Level Discount-4
 
 
         ${netTaxAmount}=  Evaluate  ${netRate}*(${tax_per}/100)
-        ${netTaxAmount}=   Convert To Integer  ${netTaxAmount}   
+        # ${netTaxAmount}=   Convert To Integer  ${netTaxAmount}   
         ${total_amt_with_tax}=  Evaluate  ${netRate}+${netTaxAmount}
-        ${total_amt_with_tax}=   Convert To Integer  ${total_amt_with_tax}   
+        # ${total_amt_with_tax}=   Convert To Integer  ${total_amt_with_tax}   
         ${netTotal}=  Evaluate  ${total_amt_with_tax}+${netRate}
-        ${netTotal}=   Convert To Integer  ${netTotal}   
+        # ${netTotal}=   Convert To Integer  ${netTotal}   
 
     ${resp1}=  Get Invoice By Id  ${invoice_uid3}
     Log  ${resp1.content}
 
-    ${rate1}=    Convert To Integer  ${resp1.json()['netTotal']} 
-    ${netTotal3}=    Convert To Integer  ${resp1.json()['netRate']} 
-    ${discountprice1}=    Convert To Integer  ${resp1.json()['itemList'][0]['discountTotal']}
-    ${taxableTotal1}=    Convert To Integer   ${resp1.json()['taxableTotal']} 
-    ${amountTotal1}=    Convert To Integer   ${resp1.json()['amountTotal']}
-    ${amountDue1}=    Convert To Integer   ${resp1.json()['amountDue']} 
-    ${discountValue1}=    Convert To Integer  ${resp1.json()['itemList'][0]['discounts'][0]['discountValue']}
+    # ${rate1}=    Convert To Integer  ${resp1.json()['netTotal']} 
+    # ${netTotal3}=    Convert To Integer  ${resp1.json()['netRate']} 
+    # ${discountprice1}=    Convert To Integer  ${resp1.json()['itemList'][0]['discountTotal']}
+    # ${taxableTotal1}=    Convert To Integer   ${resp1.json()['taxableTotal']} 
+    # ${amountTotal1}=    Convert To Integer   ${resp1.json()['amountTotal']}
+    # ${amountDue1}=    Convert To Integer   ${resp1.json()['amountDue']} 
+    # ${discountValue1}=    Convert To Integer  ${resp1.json()['itemList'][0]['discounts'][0]['discountValue']}
 
-    Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts'][0]['id']}   ${discountId1}
-    Should Be Equal As Strings  ${discountValue1}   ${discountprice}
+    # Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts'][0]['id']}   ${discountId1}
+    # Should Be Equal As Strings  ${discountValue1}   ${discountprice}
+    # Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts'][0]['privateNote']}   ${privateNote}
+    # Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts'][0]['displayNote']}   ${displayNote}
+    # Should Be Equal As Strings  ${discountprice1}   ${discountprice}
+    # Should Be Equal As Strings  ${rate1}     ${netRate}
+    # Should Be Equal As Strings  ${netTotal3}     ${total_amt_with_tax}
+    # Should Be Equal As Strings  ${amountDue1}     ${total_amt_with_tax}
+    # # Should Be Equal As Strings  ${amountTotal1}     ${netRate}
+    # Should Be Equal As Strings  ${taxableTotal1}     ${total_amt_with_tax}
+
+    Should Be Equal As Numbers   ${resp1.json()['itemList'][0]['discounts'][0]['id']}   ${discountId1}
+    Should Be Equal As Numbers   ${resp1.json()['itemList'][0]['discountTotal']}  ${discountprice}
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts'][0]['privateNote']}   ${privateNote}
     Should Be Equal As Strings  ${resp1.json()['itemList'][0]['discounts'][0]['displayNote']}   ${displayNote}
-    Should Be Equal As Strings  ${discountprice1}   ${discountprice}
-    Should Be Equal As Strings  ${rate1}     ${netRate}
-    Should Be Equal As Strings  ${netTotal3}     ${total_amt_with_tax}
-    Should Be Equal As Strings  ${amountDue1}     ${total_amt_with_tax}
+    Should Be Equal As Numbers   ${resp1.json()['netTotal']}      ${netRate}
+    Should Be Equal As Numbers   ${resp1.json()['netRate']}      ${total_amt_with_tax}
+    Should Be Equal As Numbers   ${resp1.json()['amountDue']}    ${total_amt_with_tax}
     # Should Be Equal As Strings  ${amountTotal1}     ${netRate}
-    Should Be Equal As Strings  ${taxableTotal1}     ${total_amt_with_tax}
+    Should Be Equal As Numbers   ${resp1.json()['taxableTotal']}     ${total_amt_with_tax}
 
 
     ${resp}=  Remove Item Level Discount   ${invoice_uid3}   ${discountId1}    ${EMPTY}   ${EMPTY}  ${EMPTY}   ${itemId2}
@@ -957,27 +967,35 @@ JD-TC-Remove Item Level Discount-4
 
     
         ${netTaxAmount1}=  Evaluate  ${netTotal1}*(${tax_per}/100)
-        ${netTaxAmount1}=   Convert To Integer  ${netTaxAmount1}   
+        # ${netTaxAmount1}=   Convert To Integer  ${netTaxAmount1}   
         ${total_amt_with_tax1}=  Evaluate  ${netTotal1}+${netTaxAmount1}
-        ${total_amt_with_tax1}=   Convert To Integer  ${total_amt_with_tax1}   
+        # ${total_amt_with_tax1}=   Convert To Integer  ${total_amt_with_tax1}   
         ${netTotal1}=  Evaluate  ${total_amt_with_tax1}+${netTotal1}
-        ${netTotal1}=   Convert To Integer  ${netTotal1}   
+        # ${netTotal1}=   Convert To Integer  ${netTotal1}   
 
     ${resp}=  Get Invoice By Id  ${invoice_uid3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${rate11}=    Convert To Integer  ${resp1.json()['netTotal']} 
-    ${netTotal4}=    Convert To Integer  ${resp1.json()['netRate']} 
-     ${taxableTotal11}=    Convert To Integer   ${resp1.json()['taxableTotal']} 
-    ${amountTotal11}=    Convert To Integer   ${resp1.json()['amountTotal']}
-    ${amountDue11}=    Convert To Integer   ${resp1.json()['amountDue']} 
+    # ${netTotal4}=    Convert To Integer  ${resp1.json()['netRate']} 
+    #  ${taxableTotal11}=    Convert To Integer   ${resp1.json()['taxableTotal']} 
+    # ${amountTotal11}=    Convert To Integer   ${resp1.json()['amountTotal']}
+    # ${amountDue11}=    Convert To Integer   ${resp1.json()['amountDue']} 
+
+    # Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts']}  []
+    # Should Be Equal As Strings   ${rate11}     ${netTotal1}
+    # Should Be Equal As Strings   ${netTotal4}     ${total_amt_with_tax1}
+    # Should Be Equal As Strings  ${amountDue11}     ${total_amt_with_tax1}
+    # # Should Be Equal As Strings  ${amountTotal11}     ${netTotal1}
+    # Should Be Equal As Strings   ${taxableTotal11}     ${total_amt_with_tax1}
 
     Should Be Equal As Strings  ${resp.json()['itemList'][0]['discounts']}  []
-    Should Be Equal As Strings   ${rate11}     ${netTotal1}
-    Should Be Equal As Strings   ${netTotal4}     ${total_amt_with_tax1}
-    Should Be Equal As Strings  ${amountDue11}     ${total_amt_with_tax1}
+    Should Be Equal As Strings   ${resp1.json()['netTotal']}      ${netTotal1}
+    Should Be Equal As Strings   ${resp1.json()['netRate']}     ${total_amt_with_tax1}
+    Should Be Equal As Strings  ${resp1.json()['amountDue']}     ${total_amt_with_tax1}
     # Should Be Equal As Strings  ${amountTotal11}     ${netTotal1}
-    Should Be Equal As Strings   ${taxableTotal11}     ${total_amt_with_tax1}
+    Should Be Equal As Strings   ${resp1.json()['taxableTotal']}    ${total_amt_with_tax1}
+
 
 
 JD-TC-Remove Item Level Discount-5
