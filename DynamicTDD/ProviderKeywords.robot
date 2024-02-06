@@ -12966,3 +12966,10 @@ Enable Disable bill
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/bill/settings/${status}  expected_status=any
     [Return]  ${resp}
+
+Get Prescription Templates By Filter
+    [Arguments]   &{param}
+    Log  ${param}
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/templates   params=${param}   expected_status=any
+    [Return]  ${resp}
