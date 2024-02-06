@@ -84,7 +84,7 @@ JD-TC-Remove Discount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    ${name}=   FakerLibrary.word
+    ${name}=   FakerLibrary.name
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -101,7 +101,7 @@ JD-TC-Remove Discount-1
     ${vender_name}=   FakerLibrary.firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${owner_name}=   FakerLibrary.lastname
-    ${vendorId}=   FakerLibrary.word
+    ${vendorId}=   FakerLibrary.RandomNumber
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}

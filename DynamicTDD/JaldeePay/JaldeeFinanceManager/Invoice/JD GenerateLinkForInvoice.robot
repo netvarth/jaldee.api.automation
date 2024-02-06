@@ -77,7 +77,7 @@ JD-TC-GenerateLinkForInvoice-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    ${name}=   FakerLibrary.word
+    ${name}=   FakerLibrary.lastname
     Set Suite Variable   ${name}
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
@@ -90,7 +90,7 @@ JD-TC-GenerateLinkForInvoice-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id1}   ${resp.json()}
 
-    ${name1}=   FakerLibrary.word
+    ${name1}=   FakerLibrary.name
     Set Suite Variable   ${name1}
     ${resp}=  Create Category   ${name1}  ${categoryType[3]} 
     Log  ${resp.json()}
@@ -108,7 +108,7 @@ JD-TC-GenerateLinkForInvoice-1
     ${vender_name}=   FakerLibrary.firstname
     ${contactPersonName}=   FakerLibrary.lastname
     ${owner_name}=   FakerLibrary.lastname
-    ${vendorId}=   FakerLibrary.word
+    ${vendorId}=  FakerLibrary.RandomNumber
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
@@ -187,7 +187,7 @@ JD-TC-GenerateLinkForInvoice-1
 
     ${description}=   FakerLibrary.word
     # Set Suite Variable  ${address}
-    ${invoiceLabel}=   FakerLibrary.word
+    ${invoiceLabel}=   FakerLibrary.name
     ${invoiceDate}=   db.get_date_by_timezone  ${tz}
     ${invoiceId}=   FakerLibrary.word
 

@@ -7,6 +7,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
@@ -290,8 +291,12 @@ JD-TC-Consumer-Payment-TransactionBy UUId-1
     Should Be Equal As Strings  ${resp.json()[0]['paymentMode']}   ${payment_modes[5]}
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}   ${cwid}
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${cwid}  netTotal=${Tot}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  
     ...    billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${min_pre}    totalTaxAmount=${tax}
@@ -320,8 +325,12 @@ JD-TC-Consumer-Payment-TransactionBy UUId-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep   01s
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}   billPaymentStatus=${paymentStatus[2]}
 
@@ -386,8 +395,12 @@ JD-TC-Consumer-Payment-TransactionBy UUId-2
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}   ${wid1}
 
-    ${resp}=  Get Bill By consumer  ${wid1}  ${pid}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By consumer  ${wid1}  ${pid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${wid1}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${wid1}   billStatus=${billStatus[0]}    billPaymentStatus=${paymentStatus[2]}  totalAmountPaid=${totalamt}  amountDue=0.0
     # ...  billViewStatus=${billViewStatus[0]}
@@ -460,9 +473,14 @@ JD-TC-Consumer-Payment-TransactionBy UUId-3
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid}
     Should Be Equal As Strings  ${resp.json()[0]['ynwUuid']}   ${wid2}
     sleep  1s
-    ${resp}=  Get Bill By consumer  ${wid2}  ${pid}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By consumer  ${wid2}  ${pid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${wid2}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    
     Verify Response  ${resp}  uuid=${wid2}  netTotal=${Tot}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  netRate=${totalamount}  billPaymentStatus=${paymentStatus[2]}  totalAmountPaid=${totalamount}  amountDue=0.0    totalTaxAmount=${tax}
 
 JD-TC-Consumer-Payment-TransactionBy UUId-4

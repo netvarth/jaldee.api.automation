@@ -7,6 +7,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
@@ -140,8 +141,12 @@ JD-TC-JD-TC-GetServicePaymentModes
     
     sleep  2s
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${bill_id}  ${resp.json()['billId']}
 
@@ -434,8 +439,13 @@ JD-TC-GetBillPaymentModes-1
     
     sleep  2s
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${bill_id}  ${resp.json()['billId']}
 
@@ -591,8 +601,12 @@ JD-TC-GetBillPaymentModes-2
 
     sleep  2s
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${bill_id}  ${resp.json()['billId']}
 

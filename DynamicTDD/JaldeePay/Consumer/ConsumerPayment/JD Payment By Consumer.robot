@@ -7,6 +7,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
@@ -308,8 +309,12 @@ JD-TC-Payment By Consumer-1
     Should Be Equal As Strings  ${resp.json()[0]['paymentRefId']}   ${payref} 
     Should Be Equal As Strings  ${resp.json()[0]['paymentPurpose']}   ${purpose[0]}
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${cwid}  netTotal=${Tot1}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  
     ...   billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${min_pre1}    totalTaxAmount=${tax}
@@ -908,8 +913,12 @@ JD-TC-Payment By Consumer-4
     Should Be Equal As Strings  ${resp.json()[0]['paymentRefId']}   ${payref} 
     Should Be Equal As Strings  ${resp.json()[0]['paymentPurpose']}   ${purpose[0]}
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${cwid}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  
     ...   billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${min_pre1}   totalTaxAmount=${tax}
@@ -1071,8 +1080,12 @@ JD-TC-Payment By Consumer-5
     Should Be Equal As Strings  ${resp.json()[0]['paymentRefId']}   ${payref} 
     Should Be Equal As Strings  ${resp.json()[0]['paymentPurpose']}   ${purpose[0]}
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${cwid}  netTotal=${Tot1}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  
     ...   billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${min_pre1}     totalTaxAmount=${tax}
@@ -1164,6 +1177,22 @@ JD-TC-Payment By Consumer-6
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p2_lid}  ${resp.json()[0]['id']} 
+
+     ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
     ${min_pre}=   Random Int   min=49   max=50
     ${Tot}=   Random Int   min=499   max=500
@@ -1287,8 +1316,12 @@ JD-TC-Payment By Consumer-6
 
     sleep   03s
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid11}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid11}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${cwid}  netTotal=${Total1}  billStatus=${billStatus[0]}    netRate=${totalamt}  billPaymentStatus=${paymentStatus[2]}  totalAmountPaid=${totalamt}  amountDue=0.0  taxableTotal=${Total1}  totalTaxAmount=${tax}
     # billViewStatus=${billViewStatus[0]}
@@ -1349,15 +1382,32 @@ JD-TC-Payment By Consumer-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p1_lid}  ${resp.json()[0]['id']} 
 
-    ${min_pre1}=   Random Int   min=40   max=50
+     ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+    ${min_pre11}=   Random Int   min=40   max=50
     ${Tot}=   Random Int   min=100   max=500
-    ${min_pre1}=  Convert To Number  ${min_pre1}  1
-    ${pre_float1}=  twodigitfloat  ${min_pre1}
+    ${min_pre11}=  Convert To Number  ${min_pre11}  1
+    Set Suite Variable    ${min_pre11}
+    ${pre_float1}=  twodigitfloat  ${min_pre11}
     ${Tot1}=  Convert To Number  ${Tot}  1  
 
     ${P1SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre1}  ${Tot1}  ${bool[1]}  ${bool[1]}
+    ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre11}  ${Tot1}  ${bool[1]}  ${bool[1]}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p1_sid1}  ${resp.json()}
@@ -1394,7 +1444,7 @@ JD-TC-Payment By Consumer-UH1
     ${tax1}=  Evaluate  ${Tot1}*${gstpercentage[3]}
     ${tax}=   Evaluate  ${tax1}/100
     ${totalamt}=  Evaluate  ${Tot1}+${tax}
-    ${balamount}=  Evaluate  ${totalamt}-${min_pre1}
+    ${balamount}=  Evaluate  ${totalamt}-${min_pre11}
     Set Suite Variable    ${balamount}
     
     ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid}
@@ -1402,11 +1452,11 @@ JD-TC-Payment By Consumer-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  paymentStatus=${paymentStatus[0]}   waitlistStatus=${wl_status[3]}
     
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre1}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid1}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre11}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre1}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid1}
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre11}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"       "${PAYMENT_ALREADY_PROCESSED}"
@@ -1461,6 +1511,22 @@ JD-TC-Payment By Consumer-UH2
     ${min_pre1}=  Convert To Number  ${min_pre1}  1
     ${pre_float1}=  twodigitfloat  ${min_pre1}
     ${Tot1}=  Convert To Number  ${Tot}  1 
+
+     ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
     ${P1SERVICE1}=    FakerLibrary.word
     ${desc}=   FakerLibrary.sentence
@@ -1739,10 +1805,13 @@ JD-TC-Payment By Consumer-UH8
    ${resp}=   Encrypted Provider Login   ${PUSERNAME210}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200
     ${amount}=   Random Int   min=100   max=700
+
+    ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}=  Format String  ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}  ${balamount}  ${min_pre11}
+
     ${resp}=  Make payment Consumer Mock  ${pid11}  ${balamount}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   422
-    Should Be Equal As Strings  "${resp.json()}"  "${PAYMENT_AMOUNT_IS_NOT_MATCHED}"   	
+    Should Be Equal As Strings  "${resp.json()}"  "${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}"   	
 
 JD-TC-Payment By Consumer-UH9
     [Documentation]  Taking waitlist from consumer side and  prepay less amount while checkin more than one person
@@ -1842,7 +1911,7 @@ JD-TC-Payment By Consumer-UH10
     ${resp}=  Accept Payment  ${wid9}  ${payment_modes[0]}  ${min_pre}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"   "${NO_PERMISSION_TO_DO}"
+    Should Be Equal As Strings  "${resp.json()}"   "${NO_PERMISSION_TO}"
 
 
 JD-TC-Payment By Consumer-UH11
@@ -1894,6 +1963,22 @@ JD-TC-Payment By Consumer-UH11
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_lid}  ${resp.json()[0]['id']} 
+
+     ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
     ${min_pre1}=   Random Int   min=40   max=50
     ${Tot}=   Random Int   min=100   max=500
@@ -1961,11 +2046,13 @@ JD-TC-Payment By Consumer-UH11
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  paymentStatus=${paymentStatus[0]}   waitlistStatus=${wl_status[3]}
+
+    ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}=  Format String  ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}  ${min_amount}  ${min_pre1}
     
     ${resp}=  Make payment Consumer Mock  ${pid}  ${min_amount}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings    ${resp.json()}   ${PAYMENT_AMOUNT_IS_NOT_MATCHED}
+    Should Be Equal As Strings    ${resp.json()}   ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD}
     # Log   ${resp.content}
@@ -2026,6 +2113,22 @@ JD-TC-Payment By Consumer-UH12
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_lid}  ${resp.json()[0]['id']} 
+
+     ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
     ${min_pre1}=   Random Int   min=100   max=150
     # ${Tot}=   Random Int   min=100   max=150
@@ -2093,10 +2196,13 @@ JD-TC-Payment By Consumer-UH12
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  paymentStatus=${paymentStatus[0]}   waitlistStatus=${wl_status[3]}
+
+    ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}=  Format String  ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}  ${balamount1}  ${min_pre1}
         
     ${resp}=  Make payment Consumer Mock  ${pid}  ${balamount1}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${cid1}
     Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings    ${resp.json()}   ${VALID_PAYMENT_AMOUNT_REQUIRED_WITH_AMOUNT}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD}
     # Log  ${resp.json()}
@@ -2112,8 +2218,11 @@ JD-TC-Payment By Consumer-UH12
 
     sleep  2s
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${cwid}   amountDue=0.0  
 
@@ -2244,6 +2353,22 @@ JD-TC-Payment By Consumer-13
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
@@ -2390,8 +2515,12 @@ JD-TC-Payment By Consumer-13
     Should Be Equal As Strings  ${resp.json()[0]['paymentRefId']}   ${payref} 
     Should Be Equal As Strings  ${resp.json()[0]['paymentPurpose']}   ${purpose[0]}
 
-    ${resp}=  Get Bill By consumer  ${wid1}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${wid1}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${wid1}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${wid1}   netTotal=${Tot1}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  
     ...   billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${min_pre1}    totalTaxAmount=${tax}
@@ -2792,9 +2921,14 @@ JD-TC-Payment By Consumer-1
     Should Be Equal As Strings  ${resp.json()[0]['paymentRefId']}   ${payref} 
     Should Be Equal As Strings  ${resp.json()[0]['paymentPurpose']}   ${purpose[0]}
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     Verify Response  ${resp}  uuid=${cwid}  netTotal=${Tot1}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  
     ...   billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${min_pre1}    totalTaxAmount=${tax}
     Should Be Equal As Numbers  ${resp.json()['netRate']}   ${totalamt} 

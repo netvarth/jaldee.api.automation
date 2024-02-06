@@ -7,6 +7,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
@@ -161,6 +162,22 @@ JD-TC-paymentprofiles-1
     ${resp}=  Update Specialization  ${spec}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+     ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.content}
@@ -327,8 +344,12 @@ JD-TC-paymentprofiles-1
     
     sleep  2s
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME190}  ${PASSWORD}
@@ -552,8 +573,12 @@ JD-TC-paymentprofiles-1.1
     
     sleep  2s
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME190}  ${PASSWORD}
@@ -726,8 +751,12 @@ JD-TC-paymentprofiles-1.2
     
     sleep  2s
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME190}  ${PASSWORD}
@@ -915,8 +944,12 @@ JD-TC-paymentprofiles-1.3
     
     sleep  2s
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME190}  ${PASSWORD}
@@ -1154,8 +1187,12 @@ JD-TC-paymentprofiles-2.1
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${apptid1}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${apptid1}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Appt By Id  ${apptid1}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME190}  ${PASSWORD}
@@ -1391,8 +1428,12 @@ JD-TC-paymentprofiles-2.2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${apptid1}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${apptid1}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Appt By Id  ${apptid1}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME190}  ${PASSWORD}
@@ -1628,8 +1669,12 @@ JD-TC-paymentprofiles-2.3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${apptid1}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${apptid1}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Appt By Id  ${apptid1}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME190}  ${PASSWORD}
@@ -1894,8 +1939,12 @@ JD-TC-paymentprofiles-3.1
 
     sleep   02s
 
-    ${resp}=  Get Bill By consumer  ${orderid1}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${orderid1}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Order By Id  ${orderid1}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME190}  ${PASSWORD}
@@ -2162,8 +2211,12 @@ JD-TC-paymentprofiles-3.2
 
     sleep   02s
 
-    ${resp}=  Get Bill By consumer  ${orderid1}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${orderid1}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Order By Id  ${orderid1}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME190}  ${PASSWORD}
@@ -2300,9 +2353,13 @@ JD-TC-paymentprofiles-4.1
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${sid1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${loc_id1}
 
-    ${resp}=  Get Bill By consumer  ${don_id}  ${acc_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # *************in Donation we dont have bILLS Now***From dev**********************************
+
+    # ${resp}=  Get Bill By consumer  ${don_id}  ${acc_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+
 
     ${resp}=    Get convenienceFee Details     ${pid}    customizedJBProfile   ${don_amt}
     Log   ${resp.content}
@@ -2318,9 +2375,11 @@ JD-TC-paymentprofiles-4.1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+# *************************** 	Provider cannot create donation bill***************************
+
     ${resp}=    Get Bill By UUId  ${don_id}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
 
     ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD}
     Log  ${resp.json()}
@@ -2342,9 +2401,9 @@ JD-TC-paymentprofiles-4.1
 
     sleep   02s
 
-    ${resp}=  Get Bill By consumer  ${don_id}  ${pid}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Bill By consumer  ${don_id}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME190}  ${PASSWORD}
     Log  ${resp.json()}
@@ -2459,7 +2518,7 @@ JD-TC-paymentprofiles-P2
 
     ${msg}=  Fakerlibrary.word
     Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
-    ${resp}=  Add To Waitlist Consumers  ${pid}  ${qid}  ${DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${self}
+    ${resp}=  Add To Waitlist Consumers  ${pid}  ${qid}  ${DAY}  ${s_id1}  ${msg}  ${bool[0]}  ${self}   location=${lid}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${wid}=  Get Dictionary Values  ${resp.json()}
@@ -2488,8 +2547,12 @@ JD-TC-paymentprofiles-P2
     
     sleep  2s
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME190}  ${PASSWORD}
@@ -2800,6 +2863,23 @@ JD-TC-paymentprofiles-P3.1
     ${resp}=  Enable Tax
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
     
     ${ifsc_code}=   db.Generate_ifsc_code
     Set Suite Variable  ${ifsc_code}
@@ -2992,8 +3072,12 @@ JD-TC-paymentprofiles-P3.1
     
     sleep  2s
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
@@ -3213,8 +3297,12 @@ JD-TC-paymentprofiles-P3.2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${apptid1}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${apptid1}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Appt By Id  ${apptid1}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
@@ -3308,6 +3396,23 @@ JD-TC-paymentprofiles-P3.3
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
 
     ${resp}=  Get Order Settings by account id
     Log  ${resp.json()}
@@ -3482,8 +3587,12 @@ JD-TC-paymentprofiles-P3.3
 
     sleep   02s
 
-    ${resp}=  Get Bill By consumer  ${orderid1}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${orderid1}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Order By Id  ${orderid1}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
@@ -3636,8 +3745,12 @@ JD-TC-paymentprofiles-5
     
     sleep  2s
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
@@ -3972,9 +4085,9 @@ JD-TC-paymentprofiles-8
     Should Be Equal As Strings  ${resp.json()['service']['id']}  ${sid1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${loc_id1}
 
-    ${resp}=  Get Bill By consumer  ${don_id}  ${acc_id}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Get Bill By consumer  ${don_id}  ${acc_id}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
         
     ${resp}=  Make payment Consumer Mock  ${acc_id}  ${total_amnt}  ${purpose[5]}  ${don_id}  ${sid1}  ${bool[0]}   ${bool[1]}  ${con_id}
     Log  ${resp.json()}
@@ -4097,8 +4210,12 @@ JD-TC-paymentprofiles-9
     
     sleep  2s
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}

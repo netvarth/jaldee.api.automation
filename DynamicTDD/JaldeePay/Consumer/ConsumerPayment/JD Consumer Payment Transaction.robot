@@ -7,6 +7,7 @@ Library           json
 Library           FakerLibrary
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
@@ -330,8 +331,11 @@ JD-TC-Consumer-Payment-Transaction-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep  2s
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${cwid}  netTotal=${Tot}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  
     ...    billPaymentStatus=${paymentStatus[1]}  totalAmountPaid=${min_pre}     totalTaxAmount=${tax}
@@ -360,8 +364,11 @@ JD-TC-Consumer-Payment-Transaction-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}   billPaymentStatus=${paymentStatus[2]}
 
@@ -429,8 +436,11 @@ JD-TC-Consumer-Payment-Transaction-2
     Should Be Equal As Strings  ${resp.json()[0]['paymentPurpose']}   ${purpose[1]}
 
     sleep   02s
-    ${resp}=  Get Bill By consumer  ${wid1}  ${pid}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By consumer  ${wid1}  ${pid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get provider Waitlist By Id  ${wid1}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${wid1}   billStatus=${billStatus[0]}    billPaymentStatus=${paymentStatus[2]}   amountDue=0.0
     # ...  billViewStatus=${billViewStatus[0]}
@@ -507,8 +517,11 @@ JD-TC-Consumer-Payment-Transaction-3
     Should Be Equal As Strings  ${resp.json()[0]['paymentRefId']}   ${payref} 
     Should Be Equal As Strings  ${resp.json()[0]['paymentPurpose']}   ${purpose[0]}
 
-    ${resp}=  Get Bill By consumer  ${wid1}  ${pid}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By consumer  ${wid1}  ${pid}
+    #  Log   ${resp.json()}
+    #  Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get provider Waitlist By Id  ${wid1}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${wid1}   billStatus=${billStatus[0]}    billPaymentStatus=${paymentStatus[2]}   amountDue=0.0
     # ...  billViewStatus=${billViewStatus[1]}
@@ -661,9 +674,14 @@ JD-TC-Consumer-Payment-Transaction-5
     Should Be Equal As Strings  ${resp.json()[0]['paymentRefId']}   ${payref} 
     Should Be Equal As Strings  ${resp.json()[0]['paymentPurpose']}   ${purpose[1]}
 
-    ${resp}=  Get Bill By consumer  ${wid2}  ${pid}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By consumer  ${wid2}  ${pid}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get provider Waitlist By Id  ${wid2}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     Verify Response  ${resp}  uuid=${wid2}   billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[0]}   billPaymentStatus=${paymentStatus[2]}   amountDue=0.0   
     Should Be Equal As Numbers  ${resp.json()['totalAmountPaid']}   ${amt_float} 
     Should Be Equal As Numbers  ${resp.json()['netTotal']}   ${Tot} 
