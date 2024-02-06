@@ -351,8 +351,8 @@ JD-TC-ChangeEnqStatus-4
     ${resp}=  Get Enquiry by Uuid  ${en_uid}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
-    Should Be Equal As Strings  ${resp.json()['status']['id']}   ${status_id0}
-    Should Be Equal As Strings  ${resp.json()['status']['name']}   ${status_name0}
+    Should Be Equal As Strings  ${resp.json()['status']['id']}   ${status_id1}
+    Should Be Equal As Strings  ${resp.json()['status']['name']}   ${status_name1}
 
 
 JD-TC-ChangeEnqStatus-UH1
