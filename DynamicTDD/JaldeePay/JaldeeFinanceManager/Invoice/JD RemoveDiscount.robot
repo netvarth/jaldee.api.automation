@@ -314,8 +314,8 @@ JD-TC-Remove Discount-3
 
     ${resp}=  Generate Link For Invoice  ${invoice_uid3}   ${vendor_phn}    ${email}    ${boolean[1]}    ${boolean[0]}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${Draft_status}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings   ${resp.json()}   ${Draft_status}
 
 
     ${resp}=   Remove Discount   ${invoice_uid3}   ${discountId}    ${discountprice}   ${EMPTY}  ${EMPTY}

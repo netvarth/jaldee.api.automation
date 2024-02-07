@@ -441,7 +441,7 @@ JD-TC-GenerateLinkForInvoice-UH7
 
 JD-TC-GenerateLinkForInvoice-UH8
 
-    [Documentation]  bill status is in draft stage and Generate Link .
+    [Documentation]  bill status is in draft stage and Generate Link .(we can genrate link if the status is in draft stage)
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
     Log  ${resp.content}
@@ -503,8 +503,8 @@ JD-TC-GenerateLinkForInvoice-UH8
 
     ${resp}=  Generate Link For Invoice  ${invoice_uid1}   ${vendor_phn}    ${email}    ${boolean[1]}    ${boolean[1]}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${Draft_status}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()}   ${Draft_status}
 
 JD-TC-GenerateLinkForInvoice-UH9
 

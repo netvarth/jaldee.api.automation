@@ -1294,6 +1294,9 @@ JD-TC-Apply Services to finance-5
     
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${cwid}  ${wid[0]} 
+
+
+    sleep   02s
     
     ${tax1}=  Evaluate  ${Tot}*${gstpercentage[3]}
     ${tax}=   Evaluate  ${tax1}/100
@@ -1331,7 +1334,7 @@ JD-TC-Apply Services to finance-5
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
 
-
+    sleep  02s
     ${resp}=  Get Bookings Invoices  ${cwid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1546,7 +1549,28 @@ JD-TC-Apply Service To Finance-6
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}    location=${lid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Test Variable  ${apptid1}  ${apptid[1]}
+
+
+   ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Verify Response  ${resp}    apptStatus=${apptStatus[0]}
+
+    sleep  02s
+
+    ${resp}=  Encrypted Provider Login    ${PUSERPH0}  ${PASSWORD} 
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    sleep  02s
+#   Invoice is not generated because prepayment pending
+    ${resp1}=  Get Bookings Invoices  ${apptid1}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  422
           
 *** comment ***
 JD-TC-Apply Service Level Discount-2

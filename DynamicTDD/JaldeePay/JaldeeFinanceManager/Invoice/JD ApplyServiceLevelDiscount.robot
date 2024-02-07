@@ -644,7 +644,7 @@ JD-TC-Apply Service Level Discount-UH5
 
     ${privateNote}=     FakerLibrary.word
     ${displayNote}=   FakerLibrary.word
-    ${wrodiscount}=   FakerLibrary.RandomNumber
+    ${wrodiscount}=   Random Int  min=7000  max=7500
 
 
     ${resp}=   Apply Service Level Discount   ${invoice_uid}   ${wrodiscount}    ${discountprice}   ${privateNote}  ${displayNote}  ${sid1}

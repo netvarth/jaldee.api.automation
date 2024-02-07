@@ -248,7 +248,7 @@ JD-TC-Remove Item Level Discount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     
-    ${name}=   FakerLibrary.word
+    ${name}=   FakerLibrary.name
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1869,6 +1869,10 @@ JD-TC-Remove Item Level Discount-UH7
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp1}=  Get Invoice By Id  ${invoice_uid1}
+    Log  ${resp1.content}
 
     ${billStatusNote}=   FakerLibrary.word
     ${resp}=  Update bill status   ${invoice_uid1}    ${billStatus[1]}    ${billStatusNote}
