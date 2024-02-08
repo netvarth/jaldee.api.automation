@@ -1456,6 +1456,7 @@ JD-TC-CreateInvoice-11
     ${balamount}=  Evaluate  ${totalamt}-${min_pre}
     ${balamount}=  Convert To Integer  ${balamount}  
 
+    sleep  2s
 
     ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid1}
     Log  ${resp.json()}
@@ -2002,6 +2003,7 @@ JD-TC-CreateInvoice-13
     ${balamount}=  Evaluate  ${Tot2}-${min_pre1}
     ${balamount}=   Convert To Integer  ${balamount}  
 
+    sleep   02s
 
     ${resp}=  Get consumer Waitlist By Id  ${cwid3}  ${pid2}
     Log  ${resp.json()}
@@ -2110,6 +2112,7 @@ JD-TC-CreateInvoice-14
     ${balamount}=   Convert To Integer  ${balamount}  
 
 
+
     ${resp}=  Get consumer Waitlist By Id  ${cwid4}  ${pid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2133,21 +2136,22 @@ JD-TC-CreateInvoice-14
     ${resp1}=  Get provider Waitlist By Id  ${cwid4}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
+    sleep   02s
 
 
     ${resp}=  Get Bookings Invoices  ${cwid4}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-   ${service_response_price}=  Convert To Integer  ${resp.json()[0]['serviceList'][0]['price']} 
-   ${service_response_netRate}=  Convert To Integer  ${resp.json()[0]['serviceList'][0]['netRate']} 
-   ${response_amountPaid}=  Convert To Integer  ${resp.json()[0]['amountPaid']}
-   ${response_amountDue}=  Convert To Integer  ${resp.json()[0]['amountDue']}
-   ${response_amountTotal}=  Convert To Integer  ${resp.json()[0]['amountTotal']}
-   ${response_defaultCurrencyAmount}=  Convert To Integer  ${resp.json()[0]['defaultCurrencyAmount']}
-   ${response_netTaxAmount}=  Convert To Integer  ${resp.json()[0]['netTaxAmount']}
-   ${response_netTotal}=  Convert To Integer  ${resp.json()[0]['netTotal']}
-   ${response_netRate}=  Convert To Integer  ${resp.json()[0]['netRate']}
-   ${response_taxableTotal}=  Convert To Integer  ${resp.json()[0]['taxableTotal']}
+    ${service_response_price}=  Convert To Integer  ${resp.json()[0]['serviceList'][0]['price']} 
+    ${service_response_netRate}=  Convert To Integer  ${resp.json()[0]['serviceList'][0]['netRate']} 
+    ${response_amountPaid}=  Convert To Integer  ${resp.json()[0]['amountPaid']}
+    ${response_amountDue}=  Convert To Integer  ${resp.json()[0]['amountDue']}
+    ${response_amountTotal}=  Convert To Integer  ${resp.json()[0]['amountTotal']}
+    ${response_defaultCurrencyAmount}=  Convert To Integer  ${resp.json()[0]['defaultCurrencyAmount']}
+    ${response_netTaxAmount}=  Convert To Integer  ${resp.json()[0]['netTaxAmount']}
+    ${response_netTotal}=  Convert To Integer  ${resp.json()[0]['netTotal']}
+    ${response_netRate}=  Convert To Integer  ${resp.json()[0]['netRate']}
+    ${response_taxableTotal}=  Convert To Integer  ${resp.json()[0]['taxableTotal']}
 
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceId']}  ${p1_sid11}
     Should Be Equal As Strings  ${resp.json()[0]['serviceList'][0]['serviceName']}  ${P1SERVICE11}
@@ -2192,6 +2196,7 @@ JD-TC-CreateInvoice-14
     ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo1}    ${accountId2}  ${token1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    sleep  2s
 
     ${resp}=  Get consumer Waitlist By Id  ${cwid4}  ${pid1}
     Log  ${resp.json()}

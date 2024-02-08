@@ -10,6 +10,8 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
+Variables         /ebs/TDD/varfiles/hl_musers.py
+
 *** Variables ***
 ${nods}  0
 
@@ -106,10 +108,10 @@ JD-TC-Addaddon -3
        Should Be Equal As Strings   ${resp.status_code}   200
        Should Be Equal As Strings  ${resp.json()[0]['licPkgOrAddonId']}  ${addon_list[0][1]['addon_id']}
        Should Be Equal As Strings  ${resp.json()[0]['base']}  False
-       Should Be Equal As Strings  ${resp.json()[0]['licenseTransactionType']}  Upgrade
+       Should Be Equal As Strings  ${resp.json()[0]['licenseTransactionType']}  New
        Should Be Equal As Strings  ${resp.json()[0]['renewedDays']}  0
        Should Be Equal As Strings  ${resp.json()[0]['type']}  Production
-       Should Be Equal As Strings  ${resp.json()[0]['status']}  Active
+       Should Be Equal As Strings  ${resp.json()[0]['status']}  Not_Used
        Should Be Equal As Strings  ${resp.json()[0]['name']}  ${addon_list[0][1]['addon_name']}
 
        Should Be Equal As Strings  ${resp.json()[1]['licPkgOrAddonId']}  ${addon_list[1][0]['addon_id']}
@@ -125,7 +127,7 @@ JD-TC-Addaddon -3
        Should Be Equal As Strings  ${resp.json()[2]['licenseTransactionType']}  New
        Should Be Equal As Strings  ${resp.json()[2]['renewedDays']}  0
        Should Be Equal As Strings  ${resp.json()[2]['type']}  Production
-       Should Be Equal As Strings  ${resp.json()[2]['status']}  Expired
+       Should Be Equal As Strings  ${resp.json()[2]['status']}  Active
        Should Be Equal As Strings  ${resp.json()[2]['name']}  ${addon_list[0][0]['addon_name']}
 
 JD-TC-Addaddon -UH1
@@ -134,33 +136,42 @@ JD-TC-Addaddon -UH1
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=  Add addon  ${addon_list[0][0]['addon_id']}
        Log  ${resp.json()}
-       Should Be Equal As Strings    ${resp.status_code}   422
-       Should Be Equal As Strings   "${resp.json()}"   "${PROVIDER_CANNOT_DOWNGRADE_ADDON}"
+       Should Be Equal As Strings    ${resp.status_code}   200
+       # Should Be Equal As Strings   "${resp.json()}"   "${PROVIDER_CANNOT_DOWNGRADE_ADDON}"
        ${resp}=   Get addons auditlog
        Should Be Equal As Strings   ${resp.status_code}   200
-       Should Be Equal As Strings  ${resp.json()[0]['licPkgOrAddonId']}  ${addon_list[0][1]['addon_id']}
+
+       Should Be Equal As Strings  ${resp.json()[0]['licPkgOrAddonId']}  ${addon_list[0][0]['addon_id']}
        Should Be Equal As Strings  ${resp.json()[0]['base']}  False
-       Should Be Equal As Strings  ${resp.json()[0]['licenseTransactionType']}  Upgrade
+       Should Be Equal As Strings  ${resp.json()[0]['licenseTransactionType']}  New
        Should Be Equal As Strings  ${resp.json()[0]['renewedDays']}  0
        Should Be Equal As Strings  ${resp.json()[0]['type']}  Production
-       Should Be Equal As Strings  ${resp.json()[0]['status']}  Active
-       Should Be Equal As Strings  ${resp.json()[0]['name']}  ${addon_list[0][1]['addon_name']}
+       Should Be Equal As Strings  ${resp.json()[0]['status']}  Not_Used
+       Should Be Equal As Strings  ${resp.json()[0]['name']}  ${addon_list[0][0]['addon_name']}
 
-       Should Be Equal As Strings  ${resp.json()[1]['licPkgOrAddonId']}  ${addon_list[1][0]['addon_id']}
+       Should Be Equal As Strings  ${resp.json()[1]['licPkgOrAddonId']}  ${addon_list[0][1]['addon_id']}
        Should Be Equal As Strings  ${resp.json()[1]['base']}  False
        Should Be Equal As Strings  ${resp.json()[1]['licenseTransactionType']}  New
        Should Be Equal As Strings  ${resp.json()[1]['renewedDays']}  0
        Should Be Equal As Strings  ${resp.json()[1]['type']}  Production
-       Should Be Equal As Strings  ${resp.json()[1]['status']}  Active
-       Should Be Equal As Strings  ${resp.json()[1]['name']}  ${addon_list[1][0]['addon_name']}
+       Should Be Equal As Strings  ${resp.json()[1]['status']}  Not_Used
+       Should Be Equal As Strings  ${resp.json()[1]['name']}  ${addon_list[0][1]['addon_name']}
 
-       Should Be Equal As Strings  ${resp.json()[2]['licPkgOrAddonId']}  ${addon_list[0][0]['addon_id']}
+       Should Be Equal As Strings  ${resp.json()[2]['licPkgOrAddonId']}  ${addon_list[1][0]['addon_id']}
        Should Be Equal As Strings  ${resp.json()[2]['base']}  False
        Should Be Equal As Strings  ${resp.json()[2]['licenseTransactionType']}  New
        Should Be Equal As Strings  ${resp.json()[2]['renewedDays']}  0
        Should Be Equal As Strings  ${resp.json()[2]['type']}  Production
-       Should Be Equal As Strings  ${resp.json()[2]['status']}  Expired
-       Should Be Equal As Strings  ${resp.json()[2]['name']}  ${addon_list[0][0]['addon_name']}
+       Should Be Equal As Strings  ${resp.json()[2]['status']}  Active
+       Should Be Equal As Strings  ${resp.json()[2]['name']}  ${addon_list[1][0]['addon_name']}
+
+       Should Be Equal As Strings  ${resp.json()[3]['licPkgOrAddonId']}  ${addon_list[0][0]['addon_id']}
+       Should Be Equal As Strings  ${resp.json()[3]['base']}  False
+       Should Be Equal As Strings  ${resp.json()[3]['licenseTransactionType']}  New
+       Should Be Equal As Strings  ${resp.json()[3]['renewedDays']}  0
+       Should Be Equal As Strings  ${resp.json()[3]['type']}  Production
+       Should Be Equal As Strings  ${resp.json()[3]['status']}  Active
+       Should Be Equal As Strings  ${resp.json()[3]['name']}  ${addon_list[0][0]['addon_name']}
                                  
 JD-TC-Addaddon -UH2
        [Documentation]   Provider check to add invalid addon to an account
@@ -190,18 +201,116 @@ JD-TC-Addaddon -UH5
        ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=  Add addon   ${addon_list[1][0]['addon_id']}
-       Should Be Equal As Strings    ${resp.status_code}   422
-       Should Be Equal As Strings  "${resp.json()}"  "${ADDON_ALREADY_ADDED_IN_ACCOUNT}"
+       Log  ${resp.json()}
+       Should Be Equal As Strings    ${resp.status_code}   200
+
+       ${resp}=   Get addons auditlog
+       Log  ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+       Should Be Equal As Strings  ${resp.json()[0]['licPkgOrAddonId']}  ${addon_list[1][0]['addon_id']}
+       Should Be Equal As Strings  ${resp.json()[0]['base']}  False
+       Should Be Equal As Strings  ${resp.json()[0]['licenseTransactionType']}  New
+       Should Be Equal As Strings  ${resp.json()[0]['renewedDays']}  0
+       Should Be Equal As Strings  ${resp.json()[0]['type']}  Production
+       Should Be Equal As Strings  ${resp.json()[0]['status']}  Active
+       Should Be Equal As Strings  ${resp.json()[0]['name']}  ${addon_list[1][0]['addon_name']}
 
 JD-TC-Addaddon -UH6
        [Documentation]   Provider adding expired  addon
        ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
        ${resp}=  Add addon   ${addon_list[0][0]['addon_id']}
+       Log  ${resp.json()}
        Should Be Equal As Strings    ${resp.status_code}   422
        Should Be Equal As Strings  "${resp.json()}"  "${PROVIDER_CANNOT_DOWNGRADE_ADDON}"
-
 *** Comment ***
+
+JD-TC-Addaddon -UH7
+       [Documentation]   Provider adding 2 Multi User addon then use one full.
+
+       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       Log  ${resp.content}
+       Should Be Equal As Strings    ${resp.status_code}   200
+
+       ${p_id1}=  get_acc_id  ${HLMUSERNAME6}
+       Set Suite Variable   ${p_id1}
+
+    
+       ${resp}=   Get Business Profile
+       Log  ${resp.content}
+       Should Be Equal As Strings    ${resp.status_code}    200
+       Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+
+       ${resp}=  View Waitlist Settings
+       Log  ${resp.content}
+       Should Be Equal As Strings    ${resp.status_code}    200
+       IF  ${resp.json()['filterByDept']}==${bool[0]}
+              ${resp}=  Toggle Department Enable
+              Log  ${resp.content}
+              Should Be Equal As Strings  ${resp.status_code}  200
+
+       END
+
+       ${resp}=  Get Departments
+       Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+       IF   '${resp.content}' == '${emptylist}'
+              ${dep_name1}=  FakerLibrary.bs
+              ${dep_code1}=   Random Int  min=100   max=999
+              ${dep_desc1}=   FakerLibrary.word  
+              ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+              Log  ${resp1.content}
+              Should Be Equal As Strings  ${resp1.status_code}  200
+              Set Suite Variable  ${dep_id}  ${resp1.json()}
+       ELSE
+              Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+       END
+
+       ${up_addons}=   Get upgradable addons
+       Log  ${up_addons.json()}
+       Should Be Equal As Strings    ${up_addons.status_code}   200
+       Set Suite Variable  ${addons}  ${up_addons.json()}  
+
+       ${addon_list}=  addons_all_license_applicable  ${addons}
+       Log  ${addon_list}
+       Set Suite Variable  ${addon_list}
+
+       ${resp}=   Get addons auditlog
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
+       ${resp}=   Get License UsageInfo 
+       Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=  Add addon   ${addon_list[7][0]['addon_id']}
+       Log  ${resp.json()}
+       Should Be Equal As Strings    ${resp.status_code}   200
+    
+       ${u_id}=  Create Sample User
+       Set Suite Variable  ${u_id}
+
+       ${resp}=  Get User By Id      ${u_id}
+       Log   ${resp.json()}
+       Should Be Equal As Strings      ${resp.status_code}  200
+       Set Suite Variable      ${PUSERNAME_U1}     ${resp.json()['mobileNo']}
+
+       ${resp}=   Get addons auditlog
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
+
+       ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
+       Should Be Equal As Strings  ${resp[0].status_code}  200
+       Should Be Equal As Strings  ${resp[1].status_code}  200
+
+       ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+
 JD-TC-Addaddon -4
        [Documentation]   Provider upgrade license package to highest package then check already added addon expired
        ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 
