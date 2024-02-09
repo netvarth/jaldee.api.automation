@@ -16,7 +16,7 @@ from robot.api import logger
 HOST = __import__(os.environ['VARFILE']).HOSTED_IP
 BASE_URL='http://'+HOST+'/superadmin/rest/mgmt'
 csv='TDD/data.csv'
-JD_BASE_URL='http://'+HOST+'/v1/rest/'
+JD_BASE_URL='http://'+HOST+'/v1/rest'
 
 def log_response(response):
     logger.info("%s Response : url=%s \n " % (response.request.method.upper(),

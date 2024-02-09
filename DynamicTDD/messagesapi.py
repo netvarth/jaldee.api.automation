@@ -1180,7 +1180,7 @@ USER_NOT_FOUND_WITH_ID= "User not found with id {}"
 #consumer
 INVALID_CONS_ID= "Invalid Consumer Id"
 # INVALID_ID= "Invalid Consumer Id"
-PRO_CON_ALREADY_EXIST= "[customer] already exists"
+PRO_CON_ALREADY_EXIST= "This mobile number already exists for a different [customer]."
 ENTER_CON_PHONE_NO= "Enter Consumer phone number"
 CONSUMER_NOT_FOUND= "Consumer not found"
 CONSUMER_ALREADY_DEACTIVATED= "[customer] already deactivated"
