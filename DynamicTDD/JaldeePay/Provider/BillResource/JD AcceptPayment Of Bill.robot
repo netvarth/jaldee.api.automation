@@ -374,7 +374,7 @@ JD-TC-Accept payment of bill -UH8
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${wid1}
     ${resp}=  Accept Payment  ${wid1}  cash  200
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION_TO_DO}"
+    Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION_To}"
 
 *** Keywords ***
 Billable

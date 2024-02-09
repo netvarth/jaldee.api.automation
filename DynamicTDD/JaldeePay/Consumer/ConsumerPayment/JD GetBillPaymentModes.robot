@@ -38,6 +38,7 @@ ${jcoupon1}   CouponMul00
 *** Test Cases ***
 JD-TC-JD-TC-GetServicePaymentModes
 
+#   Get bill payment mode is not used now(year:2024)
     [Documentation]  Get Bill payment modes by consumer for bill payment purpose.(Jaldee Bank)
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
@@ -148,11 +149,17 @@ JD-TC-JD-TC-GetServicePaymentModes
     ${resp}=  Get provider Waitlist By Id  ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${bill_id}  ${resp.json()['billId']}
+    # Set Suite Variable  ${bill_id}  ${resp.json()['billId']}
 
-    ${resp}=  Get Bill payment modes    ${pid}  ${bill_id}   ${Payment_Purpose[0]}
+
+    ${resp}=  Get Service payment modes    ${pid}  ${s_id}   ${Payment_Purpose[0]}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    # ${resp}=  Get Bill payment modes    ${pid}  ${bill_id}   ${Payment_Purpose[0]}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME160}  ${PASSWORD}
     Log  ${resp.json()}
@@ -326,6 +333,23 @@ JD-TC-GetBillPaymentModes-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+
     ${SERVICE1}=    FakerLibrary.word
     Set Suite Variable   ${SERVICE1}
     ${resp}=   Create Sample Service  ${SERVICE1}
@@ -421,7 +445,7 @@ JD-TC-GetBillPaymentModes-1
     # Should Be Equal As Strings  ${resp.json()[0]['isJaldeeBank']}    ${bool[1]}
     # Set Suite Variable    ${proid}  ${resp.json()[0]['profileId']}
 
-    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre1}  ${purpose[0]}  ${cwid}  ${s_id}  ${bool[0]}   ${bool[1]}  ${cid1}    profileId=${paymentprofileid[0]}    paymentGateway=RAZORPAY    paymentSettingsId=1
+    ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre1}  ${purpose[0]}  ${cwid}  ${s_id}  ${bool[0]}   ${bool[1]}  ${cid1}    profileId=${paymentprofileid[0]}    paymentGateway=RAZORPAY    paymentSettingsId=1    
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -447,9 +471,14 @@ JD-TC-GetBillPaymentModes-1
     ${resp}=  Get provider Waitlist By Id  ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${bill_id}  ${resp.json()['billId']}
+    # Set Suite Variable  ${bill_id}  ${resp.json()['billId']}
 
-    ${resp}=  Get Bill payment modes    ${pid}  ${bill_id}   ${Payment_Purpose[0]}
+    # ${resp}=  Get Bill payment modes    ${pid}  ${bill_id}   ${Payment_Purpose[0]}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Get Service payment modes    ${pid}  ${s_id}   ${Payment_Purpose[0]}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -462,6 +491,18 @@ JD-TC-GetBillPaymentModes-2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME123}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=   Get upgradable license
+      Should Be Equal As Strings    ${resp.status_code}   200
+      Set Test Variable  ${pkgid}  ${resp.json()[0]['pkgId']} 
+      Set Test Variable  ${pkgname}  ${resp.json()[0]['pkgName']}
+      ${resp}=  Change License Package  ${pkgid}
+      Should Be Equal As Strings    ${resp.status_code}   200
+      ${resp}=  Get Active License
+      Should Be Equal As Strings    ${resp.status_code}    200
+      Should Be Equal As Strings  ${resp.json()['accountLicense']['licPkgOrAddonId']}   ${pkgid}
+      Should Be Equal As Strings  ${resp.json()['accountLicense']['name']}   ${pkgname}
+
 
     ${pid}=  get_acc_id  ${PUSERNAME123}
     Set Suite Variable   ${pid}
@@ -608,11 +649,17 @@ JD-TC-GetBillPaymentModes-2
     ${resp}=  Get provider Waitlist By Id  ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${bill_id}  ${resp.json()['billId']}
+    # Set Suite Variable  ${bill_id}  ${resp.json()['billId']}
 
-    ${resp}=  Get Bill payment modes    ${pid}  ${bill_id}   ${Payment_Purpose[1]}
+    # ${resp}=  Get Bill payment modes    ${pid}  ${bill_id}   ${Payment_Purpose[1]}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Get Service payment modes    ${pid}  ${s_id}   ${Payment_Purpose[0]}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     
 
 JD-TC-GetBillPaymentModes-UH1
@@ -637,7 +684,11 @@ JD-TC-GetBillPaymentModes-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill payment modes    ${pid}  ${bill_id}   ${Payment_Purpose[1]}
+    # ${resp}=  Get Bill payment modes    ${pid}  ${bill_id}   ${Payment_Purpose[1]}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service payment modes    ${pid}  ${s_id}   ${Payment_Purpose[1]}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -650,9 +701,13 @@ JD-TC-GetBillPaymentModes-UH2
 
     [Documentation]  Get payment modes by consumer without  login.
     
-    ${resp}=  Get Bill payment modes    ${pid}  ${bill_id}   ${Payment_Purpose[1]}
+    # ${resp}=  Get Bill payment modes    ${pid}  ${bill_id}   ${Payment_Purpose[1]}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service payment modes    ${pid}  ${s_id}   ${Payment_Purpose[1]}
     Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200   
 
 JD-TC-GetBillPaymentModes-UH3
 
@@ -662,20 +717,24 @@ JD-TC-GetBillPaymentModes-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Get Bill payment modes    ${pid}  ${bill_id}   ${Payment_Purpose[1]}
+    # ${resp}=  Get Bill payment modes    ${pid}  ${bill_id}   ${Payment_Purpose[1]}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Service payment modes    ${pid}  ${s_id}   ${Payment_Purpose[1]}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-JD-TC-GetBillPaymentModes-UH4
+# JD-TC-GetBillPaymentModes-UH4
 
-    [Documentation]  Get payment modes by consumer with giving Service id.
+#     [Documentation]  Get payment modes by consumer with giving Service id.
 
-    ${resp}=  Consumer Login  ${CUSERNAME4}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+#     ${resp}=  Consumer Login  ${CUSERNAME4}  ${PASSWORD}
+#     Log  ${resp.json()}
+#     Should Be Equal As Strings  ${resp.status_code}  200
     
-    ${resp}=  Get Bill payment modes    ${pid}  ${s_id}   ${Payment_Purpose[1]}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${INVALID_BILL_ID}
+#     ${resp}=  Get Bill payment modes    ${pid}  ${s_id}   ${Payment_Purpose[1]}
+#     Log   ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  422
+#     Should Be Equal As Strings  ${resp.json()}  ${INVALID_BILL_ID}

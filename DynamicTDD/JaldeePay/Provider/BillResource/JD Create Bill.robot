@@ -242,6 +242,10 @@ JD-TC-Create Bill -2
         ${netrate}=  Convert To Number  ${netrate}  2
         # ${netrate}=  Evaluate  round(${netrate}) 
 
+    ${resp}=  Get Waitlist level Bill Details  ${wid}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
         ${resp}=  Get Bill By UUId  ${wid}
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  uuid=${wid}  netTotal=${netTotal}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}   billPaymentStatus=${paymentStatus[0]}  totalAmountPaid=0.0   taxableTotal=${ser_amount2}  totalTaxAmount=${taxamnt}

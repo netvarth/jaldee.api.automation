@@ -68,6 +68,22 @@ JD-TC-Bill Highlevel-1
     Set Suite Variable  ${fname}  ${decrypted_data['firstName']}
     # Set Test Variable  ${p_id}  ${resp.json()['id']}
     
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+305
