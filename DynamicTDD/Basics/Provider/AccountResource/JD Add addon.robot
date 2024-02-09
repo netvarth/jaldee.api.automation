@@ -10,6 +10,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
+Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/hl_musers.py
 
 *** Variables ***
@@ -23,7 +24,7 @@ JD-TC-Addaddon-PRE
        Should Be Equal As Strings  ${domresp.status_code}  200
        ${len}=  Get Length  ${domresp.json()}
        ${len}=  Evaluate  ${len}-1
-       ${PUSERNAME}=  Evaluate  ${PUSERNAME}+40001222
+       ${PUSERNAME}=  Evaluate  ${PUSERNAME}+40011222
        Set Test Variable  ${d1}  ${domresp.json()[${len}]['domain']}    
        Set Test Variable  ${sd}  ${domresp.json()[${len}]['subDomains'][0]['subDomain']} 
        ${firstname}=  FakerLibrary.first_name
@@ -223,7 +224,7 @@ JD-TC-Addaddon -UH6
        Log  ${resp.json()}
        Should Be Equal As Strings    ${resp.status_code}   422
        Should Be Equal As Strings  "${resp.json()}"  "${PROVIDER_CANNOT_DOWNGRADE_ADDON}"
-*** Comment ***
+
 
 JD-TC-Addaddon -UH7
        [Documentation]   Provider adding 2 Multi User addon then use one full.
@@ -266,26 +267,58 @@ JD-TC-Addaddon -UH7
               Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
        END
 
-       ${up_addons}=   Get upgradable addons
-       Log  ${up_addons.json()}
-       Should Be Equal As Strings    ${up_addons.status_code}   200
-       Set Suite Variable  ${addons}  ${up_addons.json()}  
+       ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+       Should Be Equal As Strings  ${resp.status_code}  200
 
-       ${addon_list}=  addons_all_license_applicable  ${addons}
-       Log  ${addon_list}
-       Set Suite Variable  ${addon_list}
-
-       ${resp}=   Get addons auditlog
-       Log   ${resp.json()}
-       Should Be Equal As Strings   ${resp.status_code}   200
-
-       ${resp}=   Get License UsageInfo 
+       
+       ${resp}=  GET Account License details     ${p_id1}
        Log  ${resp.content}
        Should Be Equal As Strings  ${resp.status_code}  200
 
-       ${resp}=  Add addon   ${addon_list[7][0]['addon_id']}
-       Log  ${resp.json()}
-       Should Be Equal As Strings    ${resp.status_code}   200
+       ${resp}=  Get Addon Transactions details     ${p_id1}
+       Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=  Get Account Addon details  ${p_id1}  
+       Log  ${resp.content} 
+       Should be equal as strings  ${resp.status_code}       200
+
+       ${resp}=   Get Addons Metadata For Superadmin
+	Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+	Set Suite Variable    ${addon_id}      ${resp.json()[0]['addons'][1]['addonId']}
+	Set Suite Variable    ${addon_name}      ${resp.json()[0]['addons'][1]['addonName']}
+       Log   ${addon_id}
+
+       ${resp}=  Add Addons details  ${p_id1}   ${addon_id}
+	Log   ${resp.content}
+	Should Be Equal As Strings  ${resp.status_code}  200
+	${resp}=  Get Account Addon details  ${p_id1}  
+	Log  ${resp.content} 
+	should be equal as strings  ${resp.json()[0]['licPkgOrAddonId']}  ${addon_id} 
+	should be equal as strings  ${resp.json()[0]['name']}  ${addon_name}	   	  
+	Should Be Equal As Strings  ${resp.status_code}  200
+
+       # ${up_addons}=   Get upgradable addons
+       # Log  ${up_addons.json()}
+       # Should Be Equal As Strings    ${up_addons.status_code}   200
+       # Set Suite Variable  ${addons}  ${up_addons.json()}  
+
+       # ${addon_list}=  addons_all_license_applicable  ${addons}
+       # Log  ${addon_list}
+       # Set Suite Variable  ${addon_list}
+
+       # ${resp}=   Get addons auditlog
+       # Log   ${resp.json()}
+       # Should Be Equal As Strings   ${resp.status_code}   200
+
+       # ${resp}=   Get License UsageInfo 
+       # Log  ${resp.content}
+       # Should Be Equal As Strings  ${resp.status_code}  200
+
+       # ${resp}=  Add addon   ${addon_list[7][0]['addon_id']}
+       # Log  ${resp.json()}
+       # Should Be Equal As Strings    ${resp.status_code}   200
     
        ${u_id}=  Create Sample User
        Set Suite Variable  ${u_id}
@@ -310,7 +343,7 @@ JD-TC-Addaddon -UH7
        ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
        Should Be Equal As Strings  ${resp.status_code}  200
 
-
+*** Comment ***
 JD-TC-Addaddon -4
        [Documentation]   Provider upgrade license package to highest package then check already added addon expired
        ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 

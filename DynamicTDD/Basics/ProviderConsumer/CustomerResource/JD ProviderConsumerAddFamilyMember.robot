@@ -408,3 +408,146 @@ JD-TC-AddFamilyMembersForProviderConsumer-UH9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${COUNTRY_CODEREQUIRED}
+
+JD-TC-AddFamilyMembersForProviderConsumer-
+    
+    [Documentation]  create 4 family members without phonenumber for a provider consumer, verify phone number is same as that of provider consumer, delete a family member, logout and try logging in that provider consumer again.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME22}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${accountId1}=    get_acc_id       ${PUSERNAME22}
+    Set Test Variable     ${accountId1}
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
+        ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[1]}'
+        ${resp1}=   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+
+    ${resp1}=  AddCustomer  ${CUSERNAME18}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Test Variable  ${pcid18}   ${resp1.json()}
+   
+    ${resp}=  Provider Logout
+    Should Be Equal As Strings    ${resp.status_code}    200
+  
+    ${resp}=    Send Otp For Login    ${CUSERNAME18}    ${accountId1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME18}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME18}    ${accountId1}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+    ${resp}=    Get FamilyMember
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Create Family Member       ${fname}  ${lname}  ${dob}  ${gender}   ${EMPTY}  ${countryCodes[0]}  ${address}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get FamilyMember
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['firstName']}    ${fname}
+    Should Be Equal As Strings    ${resp.json()[0]['lastName']}    ${lname}
+    Should Be Equal As Strings    ${resp.json()[0]['phoneNo']}    ${CUSERNAME18}
+    Should Be Equal As Strings    ${resp.json()[0]['parent']}    ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['countryCode']}    ${countryCodes[0]}
+    Set Suite Variable     ${fid1}    ${resp.json()[0]['id']}
+
+    ${fname1}                      FakerLibrary. name
+    ${lname1}                      FakerLibrary.last_name
+
+    ${resp}=    Create Family Member       ${fname1}  ${lname1}  ${dob}  ${gender}   ${EMPTY}  ${countryCodes[0]}  ${address}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get FamilyMember
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[1]['firstName']}    ${fname1}
+    Should Be Equal As Strings    ${resp.json()[1]['lastName']}    ${lname1}
+    Should Be Equal As Strings    ${resp.json()[1]['phoneNo']}    ${CUSERNAME18}
+    Should Be Equal As Strings    ${resp.json()[1]['parent']}    ${cid}
+    Should Be Equal As Strings    ${resp.json()[1]['countryCode']}    ${countryCodes[0]}
+    Set Suite Variable     ${fid2}    ${resp.json()[1]['id']}
+
+    ${fname2}                      FakerLibrary. name
+    ${lname2}                      FakerLibrary.last_name
+
+    ${resp}=    Create Family Member       ${fname2}  ${lname2}  ${dob}  ${gender}   ${EMPTY}  ${countryCodes[0]}  ${address}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get FamilyMember
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[2]['firstName']}    ${fname2}
+    Should Be Equal As Strings    ${resp.json()[2]['lastName']}    ${lname2}
+    Should Be Equal As Strings    ${resp.json()[2]['phoneNo']}    ${CUSERNAME18}
+    Should Be Equal As Strings    ${resp.json()[2]['parent']}    ${cid}
+    Should Be Equal As Strings    ${resp.json()[2]['countryCode']}    ${countryCodes[0]}
+    Set Suite Variable     ${fid3}    ${resp.json()[2]['id']}
+
+    ${fname3}                      FakerLibrary. name
+    ${lname3}                      FakerLibrary.last_name
+
+    ${resp}=    Create Family Member       ${fname3}  ${lname3}  ${dob}  ${gender}   ${EMPTY}  ${countryCodes[0]}  ${address}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get FamilyMember
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[3]['firstName']}    ${fname3}
+    Should Be Equal As Strings    ${resp.json()[3]['lastName']}    ${lname3}
+    Should Be Equal As Strings    ${resp.json()[3]['phoneNo']}    ${CUSERNAME18}
+    Should Be Equal As Strings    ${resp.json()[3]['parent']}    ${cid}
+    Should Be Equal As Strings    ${resp.json()[3]['countryCode']}    ${countryCodes[0]}
+    Set Suite Variable     ${fid4}    ${resp.json()[3]['id']}
+
+    ${resp}=    Delete Family Members   ${fid4}      ${pcid18}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME18}    ${accountId1}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get FamilyMember
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200

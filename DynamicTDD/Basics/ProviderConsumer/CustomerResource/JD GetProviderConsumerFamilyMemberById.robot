@@ -185,7 +185,7 @@ JD-TC-GetFamilyMemberById-3
     Should Be Equal As Strings    ${resp.json()['countryCode']}    ${countryCodes[0]}
     Should Be Equal As Strings    ${resp.json()['firstName']}    ${fname1}
 
-JD-TC-GetFamilyMemberById-UH
+JD-TC-GetFamilyMemberById-UH1
     
     [Documentation]  Try to Get by id with invalid id.
 

@@ -362,7 +362,7 @@ JD-TC-DeleteFamilyMembersFormProviderConsumer-4
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-JD-TC-DeleteFamilyMembersFormProviderConsumer-UH
+JD-TC-DeleteFamilyMembersFormProviderConsumer-UH1
     
     [Documentation]  Delete member with invalid member id.
 
@@ -411,7 +411,7 @@ JD-TC-DeleteFamilyMembersFormProviderConsumer-UH
     Should Be Equal As Strings    ${resp.json()}    ${NOT_A_Familiy_Member}
 
 
-JD-TC-DeleteFamilyMembersFormProviderConsumer-UH
+JD-TC-DeleteFamilyMembersFormProviderConsumer-UH2
     
     [Documentation]  Delete member with invalid Customer id.
 
