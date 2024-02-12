@@ -122,7 +122,7 @@ JD-TC-BroadcastMessageToCustomers-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    FOR   ${i}  IN RANGE   5
+    FOR   ${i}  IN RANGE   300
         ${resp}=    Send Otp For Login    ${CUSERPH${i}}    ${accountId}
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}   200
@@ -163,6 +163,7 @@ JD-TC-BroadcastMessageToCustomers-1
         Log   ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
     END
+
 
 
 JD-TC-BroadcastMessageToCustomers-2

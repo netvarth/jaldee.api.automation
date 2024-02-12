@@ -12913,7 +12913,7 @@ Send Message to Multiple Customers
 
 Send Message By Chat
     [Arguments]  ${userid}  ${consumerId}  ${message}  ${messageType}  @{attachments} 
-    #Required- uuid- list of wl ids, attachments- list of dictionaries with file details
+    #Required-  attachments- list of dictionaries with file details
 
     ${messagedict}=  Create Dictionary  msg=${message}  messageType=${messageType}
     ${data}=  Create Dictionary  provider=${userid}  message=${messagedict}  attachments=${attachments}
