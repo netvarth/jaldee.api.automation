@@ -2041,3 +2041,16 @@ Get Appointment Reminder
     Check And Create YNW SuperAdmin Session
     ${resp}=    POST On Session    synw    /userAgent/apptNotificationTask    expected_status=any  
     [Return]  ${resp}
+
+Delete Not Used AddOn 
+    [Arguments]   ${account}    ${accLicAddonId}   &{param}  
+    # Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
+    ${resp}=    DELETE On Session    synw    account/license/${account}/licAddonId/${accLicAddonId}	   params=${param}      expected_status=any
+    [Return]  ${resp}
+
+Month Matrix Cache Task
+
+    Check And Create YNW SuperAdmin Session
+    ${resp}=   POST On Session  synw   userAgent/monthMatrixCacheTask   expected_status=any
+    [Return]  ${resp}
