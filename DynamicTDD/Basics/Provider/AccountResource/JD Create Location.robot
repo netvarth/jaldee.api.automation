@@ -462,6 +462,290 @@ JD-TC-CreateLocation-UH4
 #       Should Be Equal As Strings  "${resp.json()}"  "${LOCATION_CREATION_NOT_ALLOWED}"  
 
 #       sleep  02s
+
+JD-TC-CreateLocation-7
+	[Documentation]  Create a location using another provider langitude and lattitude details
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME7}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      clear_location   ${MUSERNAME7}
+
+      ${latti9}  ${longi9}  ${city9}  ${postcode9}=  get_lat_long_city_pin
+      ${tz9}=   db.get_Timezone_by_lat_long   ${latti9}  ${longi9}
+      Set Suite Variable  ${tz9}
+      Set Suite Variable  ${city9}
+      Set Suite Variable  ${latti9}
+      Set Suite Variable  ${longi9}
+      Set Suite Variable  ${postcode9}
+      ${parking9}    Random Element   ${parkingType}
+      Set Suite Variable  ${parking9}
+      ${24hours9}    Random Element    ${bool}
+      Set Suite Variable  ${24hours9}
+      ${DAY}=  db.get_date_by_timezone  ${tz}
+    	Set Suite Variable  ${DAY}
+	${list}=  Create List  1  2  3  4  5  6  7
+    	Set Suite Variable  ${list}
+      ${BsTime}=  add_timezone_time  ${tz}  0  15  
+      Set Suite Variable   ${BsTime}
+      ${eTime}=  add_timezone_time  ${tz}  0  30  
+      Set Suite Variable   ${eTime}
+      ${resp}=  Get Locations
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      ${resp}=  Create Location  ${city9}  ${longi8}  ${latti8}  www.${city8}.com  ${postcode8}  ${address}  ${parking8}  ${24hours8}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${BsTime}  ${eTime}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${lid9}  ${resp.json()}
+
+      ${resp}=  Get Location ById  ${lid9}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-CreateLocation-UH5
+	[Documentation]  Create a location with empty  longitude
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME9}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      clear_location   ${MUSERNAME9}
+
+      ${latti11}  ${longi11}  ${city11}  ${postcode11}=  get_lat_long_city_pin
+      ${resp}=  Get Locations
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      ${resp}=  Create Location  ${city11}  ${EMPTY}  ${latti8}  www.${city8}.com  ${postcode8}  ${address}  ${parking8}  ${24hours8}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${BsTime}  ${eTime}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  422
+      Should Be Equal As Strings  "${resp.json()}"  "${INVALID_LOGITUDE}"
+
+JD-TC-CreateLocation-UH6
+	[Documentation]  Create a location with empty lattitude 
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME9}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      clear_location   ${MUSERNAME9}
+
+      ${latti12}  ${longi12}  ${city12}  ${postcode12}=  get_lat_long_city_pin
+      ${resp}=  Get Locations
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      ${resp}=  Create Location  ${city12}  ${longi8}  ${EMPTY}  www.${city8}.com  ${postcode8}  ${address}  ${parking8}  ${24hours8}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${BsTime}  ${eTime}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  422
+      Should Be Equal As Strings  "${resp.json()}"  "${INVALID_LATTITUDE}"
+
+JD-TC-CreateLocation-UH7
+	[Documentation]  User without admin privilege try to create location
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      clear_location   ${MUSERNAME10}
+      
+      ${latti13}  ${longi13}  ${city13}  ${postcode13}=  get_lat_long_city_pin
+      Set Suite Variable  ${city13}
+      ${tz13}=   db.get_Timezone_by_lat_long   ${latti13}  ${longi13}
+      Set Suite Variable  ${tz13}
+      Set Suite Variable  ${city13}
+      Set Suite Variable  ${latti13}
+      Set Suite Variable  ${longi13}
+      Set Suite Variable  ${postcode13}
+      ${parking13}    Random Element   ${parkingType}
+      Set Suite Variable  ${parking13}
+      ${24hours13}    Random Element    ${bool}
+      Set Suite Variable  ${24hours13}
+      ${resp}=  Get Locations
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+ 
+      ${resp}=  Get Locations
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Get Business Profile
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+      Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+
+      ${resp}=  View Waitlist Settings
+      Log  ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}    200
+      IF  ${resp.json()['filterByDept']}==${bool[0]}
+            ${resp}=  Toggle Department Enable
+            Log  ${resp.content}
+            Should Be Equal As Strings  ${resp.status_code}  200
+
+      END
+
+    sleep  2s
+    ${resp}=  Get Departments
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+
+      ${resp}=  Get User
+      Log  ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}    200
+      IF   not '${resp.content}' == '${emptylist}'
+            ${len}=  Get Length  ${resp.json()}
+      END
+      FOR   ${i}  IN RANGE   0   ${len}
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${MUSERNAME10}'
+                  clear_users  ${user_phone}
+            END
+      END
+
+      ${u_id1}=  Create Sample User  admin=${bool[0]}
+      Set Suite Variable  ${u_id1}
+
+      ${resp}=  Get User By Id  ${u_id1}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${PUSERNAME_U1}  ${resp.json()['mobileNo']}
+
+      ${resp}=  Provider Logout
+      Should Be Equal As Strings    ${resp.status_code}    200
+
+      ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
+      Should Be Equal As Strings  ${resp[0].status_code}  200
+      Should Be Equal As Strings  ${resp[1].status_code}  200
+
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+      Log   ${resp.content}
+      Should Be Equal As Strings    ${resp.status_code}    200
+
+      ${resp}=  Create Location  ${city13}  ${longi13}  ${latti13}  www.${city13}.com  ${EMPTY}  ${address}  ${parking13}  ${24hours13}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${BsTime}  ${eTime}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  422
+      Should Be Equal As Strings  "${resp.json()}"  "${NOT_PERMITTED_TO_CREATE_LOCATION}"
+
+JD-TC-CreateLocation-UH8
+	[Documentation]  Disable one location then try to create disabled location .
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      clear_location   ${MUSERNAME11}
+
+      ${latti15}  ${longi15}  ${city15}  ${postcode15}=  get_lat_long_city_pin
+      ${tz15}=   db.get_Timezone_by_lat_long   ${latti15}  ${longi15}
+      Set Suite Variable  ${tz15}
+      Set Suite Variable  ${city15}
+      Set Suite Variable  ${latti15}
+      Set Suite Variable  ${longi15}
+      Set Suite Variable  ${postcode15}
+      ${parking15}    Random Element   ${parkingType}
+      Set Suite Variable  ${parking15}
+      ${24hours15}    Random Element    ${bool}
+      Set Suite Variable  ${24hours15}
+      ${resp}=  Get Locations
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      ${resp}=  Create Location  ${city13}  ${longi15}  ${latti15}  www.${city15}.com  ${postcode15}  ${EMPTY}  ${parking15}  ${24hours15}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${BsTime}  ${eTime}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Create Location  ${city15}  ${longi15}  ${latti15}  www.${city15}.com  ${postcode15}  ${EMPTY}  ${parking15}  ${24hours15}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${BsTime}  ${eTime}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${lid12}  ${resp.json()}
+
+      ${resp}=  Disable Location  ${lid12}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=  Create Location  ${city15}  ${longi15}  ${latti15}  www.${city15}.com  ${postcode15}  ${EMPTY}  ${parking15}  ${24hours15}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${BsTime}  ${eTime}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  422
+      Should Be Equal As Strings  "${resp.json()}"  "${LOCATION_EXISTS}"
+
+
+
+JD-TC-CreateLocation-8
+	[Documentation]  Create a location with empty postcode
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME8}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      clear_location   ${MUSERNAME8}
+      
+      ${latti10}  ${longi10}  ${city10}  ${postcode10}=  get_lat_long_city_pin
+      ${tz10}=   db.get_Timezone_by_lat_long   ${latti10}  ${longi10}
+      Set Suite Variable  ${tz10}
+      Set Suite Variable  ${city10}
+      Set Suite Variable  ${latti10}
+      Set Suite Variable  ${longi10}
+      Set Suite Variable  ${postcode10}
+      ${parking10}    Random Element   ${parkingType}
+      Set Suite Variable  ${parking10}
+      ${24hours10}    Random Element    ${bool}
+      Set Suite Variable  ${24hours10}
+      ${resp}=  Get Locations
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+ 
+      ${resp}=  Get Locations
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      ${resp}=  Create Location  ${city10}  ${longi10}  ${latti10}  www.${city10}.com  ${EMPTY}  ${address}  ${parking10}  ${24hours10}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${BsTime}  ${eTime}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${lid10}  ${resp.json()}
+
+JD-TC-CreateLocation-9
+	[Documentation]  Create a location with empty address
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME9}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      clear_location   ${MUSERNAME9}
+
+      ${latti14}  ${longi14}  ${city14}  ${postcode14}=  get_lat_long_city_pin
+      ${tz14}=   db.get_Timezone_by_lat_long   ${latti14}  ${longi14}
+      Set Suite Variable  ${tz14}
+      Set Suite Variable  ${city14}
+      Set Suite Variable  ${latti14}
+      Set Suite Variable  ${longi14}
+      Set Suite Variable  ${postcode14}
+      ${parking14}    Random Element   ${parkingType}
+      Set Suite Variable  ${parking14}
+      ${24hours14}    Random Element    ${bool}
+      Set Suite Variable  ${24hours14}
+      ${resp}=  Get Locations
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      ${resp}=  Create Location  ${city14}  ${longi14}  ${latti14}  www.${city14}.com  ${postcode14}  ${EMPTY}  ${parking14}  ${24hours14}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${BsTime}  ${eTime}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${lid11}  ${resp.json()}
+
+JD-TC-CreateLocation-10
+	[Documentation]   Auto detect your location then  create  location using that data.
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      clear_location   ${MUSERNAME11}
+
+      ${latti16}  ${longi16}  ${city16}  ${postcode16}=  get_lat_long_city_pin
+      ${tz16}=   db.get_Timezone_by_lat_long   ${latti16}  ${longi16}
+      Set Suite Variable  ${tz16}
+      Set Suite Variable  ${city16}
+      Set Suite Variable  ${latti16}
+      Set Suite Variable  ${longi16}
+      Set Suite Variable  ${postcode16}
+      ${parking16}    Random Element   ${parkingType}
+      Set Suite Variable  ${parking16}
+      ${24hours16}    Random Element    ${bool}
+      Set Suite Variable  ${24hours16}
+      ${resp}=  Get Locations
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+
+      ${resp}=   Get Address using lat & long   ${latti16}   ${longi16}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable   ${state}  ${resp.json()['state']['state']}
+      Set Test Variable   ${country}  ${resp.json()['country']['country']}
+
+
+
+      ${resp}=  Create Location  ${city16}  ${longi16}  ${latti16}  www.${city16}.com  ${postcode16}  ${state}  ${parking16}  ${24hours16}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${BsTime}  ${eTime}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${lid12}  ${resp.json()}
+
+
 JD-TC-VerifyCreateLocation-1
 	[Documentation]  Verify location details by provider login ${PUSERNAME5}
       ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}
@@ -610,6 +894,61 @@ JD-TC-VerifyCreateLocation-6
 	Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['timeSlots'][0]['sTime']}  ${BsTime}
 	Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['timeSlots'][0]['eTime']}  ${eTime}
 
+JD-TC-VerifyCreateLocation-7
+	[Documentation]  Verify location details by branch login
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME7}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      ${resp}=  Get Location ById  ${lid9}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Verify Response  ${resp}  place=${city9}  longitude=${longi8}  lattitude=${latti8}  pinCode=${postcode8}  address=${address}  parkingType=${parking8}  open24hours=${24hours8}  googleMapUrl=www.${city8}.com  status=ACTIVE
+      Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['recurringType']}  ${recurringtype[1]}
+      Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['repeatIntervals']}  ${list}
+   	Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['startDate']}  ${DAY}
+	Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['timeSlots'][0]['sTime']}  ${BsTime}
+	Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['timeSlots'][0]['eTime']}  ${eTime}
+
+JD-TC-VerifyCreateLocation-8
+	[Documentation]  Verify location details by branch login
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME8}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      ${resp}=  Get Location ById  ${lid10}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Verify Response  ${resp}  place=${city10}  longitude=${longi10}  lattitude=${latti10}  pinCode=${EMPTY}  address=${address}  parkingType=${parking10}  open24hours=${24hours10}  googleMapUrl=www.${city10}.com  status=ACTIVE
+      Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['recurringType']}  ${recurringtype[1]}
+      Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['repeatIntervals']}  ${list}
+   	Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['startDate']}  ${DAY}
+	Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['timeSlots'][0]['sTime']}  ${BsTime}
+	Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['timeSlots'][0]['eTime']}  ${eTime}
+
+JD-TC-VerifyCreateLocation-9
+	[Documentation]  Verify location details by branch login
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME9}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      ${resp}=  Get Location ById  ${lid11}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Verify Response  ${resp}  place=${city14}  longitude=${longi14}  lattitude=${latti14}  pinCode=${postcode14}  address=${EMPTY}  parkingType=${parking14}  open24hours=${24hours14}  googleMapUrl=www.${city14}.com  status=ACTIVE
+      Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['recurringType']}  ${recurringtype[1]}
+      Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['repeatIntervals']}  ${list}
+   	Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['startDate']}  ${DAY}
+	Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['timeSlots'][0]['sTime']}  ${BsTime}
+	Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['timeSlots'][0]['eTime']}  ${eTime}
+
+JD-TC-VerifyCreateLocation-10
+	[Documentation]  Verify location details by branch login
+      ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      ${resp}=  Get Location ById  ${lid12}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Verify Response  ${resp}  place=${city16}  longitude=${longi16}  lattitude=${latti16}  pinCode=${postcode16}  address=${state}  parkingType=${parking16}  open24hours=${24hours16}  googleMapUrl=www.${city16}.com  status=ACTIVE
+      Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['recurringType']}  ${recurringtype[1]}
+      Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['repeatIntervals']}  ${list}
+   	Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['startDate']}  ${DAY}
+	Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['timeSlots'][0]['sTime']}  ${BsTime}
+	Should Be Equal As Strings  ${resp.json()['bSchedule']['timespec'][0]['timeSlots'][0]['eTime']}  ${eTime}
 *** Keywords ***
 
 Multiple Location
