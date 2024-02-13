@@ -3283,3 +3283,21 @@ def UploadQNRfiletoTempLocation(cookie_dict, proid, qnrid, caption, mimeType, ke
 
 
 
+def ProconLogin(phno,accId,token,countrycode=91):
+    s = requests.Session()
+    url = BASE_URL+'/consumer/login'
+    try:
+        headers = {
+                'Content-type': "application/json",
+                'Accept': "application/json",
+                'Authorization': token
+            }
+        data = json.dumps({"loginId": str(phno), "accountId":str(accId), "countryCode":str(countrycode)})
+        r = s.post(url, data=data, headers=headers)
+        log_request(r)
+        log_response(r)
+        cookie_dict = s.cookies.get_dict()
+        return cookie_dict,r
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)

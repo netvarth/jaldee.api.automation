@@ -80,7 +80,6 @@ JD-TC-SendMessagebyChat-1
     Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
 
     ${file_details}=    Create Dictionary   action=${FileAction[0]}  ownerName=${ownerName}  fileName=${pdffile}  fileSize=${fileSize}  driveId=${driveId}  fileType=${fileType}  order=${order}
-    # ${file_details}=  Create List  ${file1_details}
     Set Suite Variable      ${file_details}
     
     ${resp}=        Send Message by Chat    ${ownerId}  ${consumerIdList[1]}  ${msg}  ${messageType[0]}  ${file_details} 
@@ -126,3 +125,237 @@ JD-TC-SendMessagebyChat-1
     ${resp}=  Customer Logout   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-SendMessagebyChat-UH1
+
+    [Documentation]   Send Message by chat - where owner id is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=        Send Message by Chat    ${empty}  ${consumerIdList[1]}  ${msg}  ${messageType[0]}  ${file_details} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-SendMessagebyChat-UH2
+
+    [Documentation]   Send Message by chat - where owner id is invalid
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${inv}=     FakerLibrary.Random Int
+
+    ${resp}=        Send Message by Chat    ${inv}  ${consumerIdList[1]}  ${msg}  ${messageType[0]}  ${file_details} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-SendMessagebyChat-UH3
+
+    [Documentation]   Send Message by chat - where consumer id is invalid
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${inv}=     FakerLibrary.Random Int
+
+    ${resp}=        Send Message by Chat    ${ownerId}  ${inv}  ${msg}  ${messageType[0]}  ${file_details} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-SendMessagebyChat-UH4
+
+    [Documentation]   Send Message by chat - where message is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=        Send Message by Chat    ${ownerId}  ${consumerIdList[1]}  ${empty}  ${messageType[0]}  ${file_details} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+# JD-TC-SendMessagebyChat-UH5
+
+#     [Documentation]   Send Message by chat - where message type is empty
+
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+#     Log  ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}   200
+
+#     ${resp}=        Send Message by Chat    ${ownerId}  ${consumerIdList[1]}  ${msg}  ${empty}  ${file_details} 
+#     Log  ${resp.content}
+#     Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-SendMessagebyChat-UH6
+
+    [Documentation]   Send Message by chat - where message type is enquire
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=        Send Message by Chat    ${ownerId}  ${consumerIdList[1]}  ${msg}  ${messageType[2]}  ${file_details} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+# JD-TC-SendMessagebyChat-UH7
+
+#     [Documentation]   Send Message by chat - where file details are empty list
+
+#     ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+#     Log  ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}   200
+
+#     ${resp}=        Send Message by Chat    ${ownerId}  ${consumerIdList[1]}  ${msg}  ${messageType[0]}  []
+#     Log  ${resp.content}
+#     Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-SendMessagebyChat-UH8
+
+    [Documentation]   Send Message by chat - where 
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${file}=    Create Dictionary   action=${FileAction[0]}  ownerName=${ownerName}  fileName=${pdffile}  fileSize=${fileSize}  driveId=${driveId}  fileType=${fileType}  order=${order}
+    Set Suite Variable      ${file_details}
+
+    ${resp}=        Send Message by Chat    ${ownerId}  ${consumerIdList[1]}  ${msg}  ${messageType[0]}  ${file} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-SendMessagebyChat-UH9
+
+    [Documentation]   Send Message by chat - where file action is remove
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${file}=    Create Dictionary   action=${FileAction[0]}  ownerName=${ownerName}  fileName=${pdffile}  fileSize=${fileSize}  driveId=${driveId}  fileType=${fileType}  order=${order}
+    Set Suite Variable      ${file_details}
+
+    ${resp}=        Send Message by Chat    ${ownerId}  ${consumerIdList[1]}  ${msg}  ${messageType[0]}  ${file} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-SendMessagebyChat-UH10
+
+    [Documentation]   Send Message by chat - where owner name is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${file}=    Create Dictionary   action=${FileAction[0]}  ownerName=${empty}  fileName=${pdffile}  fileSize=${fileSize}  driveId=${driveId}  fileType=${fileType}  order=${order}
+    Set Suite Variable      ${file_details}
+
+    ${resp}=        Send Message by Chat    ${ownerId}  ${consumerIdList[1]}  ${msg}  ${messageType[0]}  ${file} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-SendMessagebyChat-UH11
+
+    [Documentation]   Send Message by chat - where file name is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${file}=    Create Dictionary   action=${FileAction[0]}  ownerName=${ownerName}  fileName=${empty}  fileSize=${fileSize}  driveId=${driveId}  fileType=${fileType}  order=${order}
+    Set Suite Variable      ${file_details}
+
+    ${resp}=        Send Message by Chat    ${ownerId}  ${consumerIdList[1]}  ${msg}  ${messageType[0]}  ${file} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-SendMessagebyChat-UH12
+
+    [Documentation]   Send Message by chat - where file size is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${file}=    Create Dictionary   action=${FileAction[0]}  ownerName=${ownerName}  fileName=${pdffile}  fileSize=${empty}  driveId=${driveId}  fileType=${fileType}  order=${order}
+    Set Suite Variable      ${file_details}
+
+    ${resp}=        Send Message by Chat    ${ownerId}  ${consumerIdList[1]}  ${msg}  ${messageType[0]}  ${file} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+
+JD-TC-SendMessagebyChat-UH13
+
+    [Documentation]   Send Message by chat - where driveId is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${file}=    Create Dictionary   action=${FileAction[0]}  ownerName=${ownerName}  fileName=${pdffile}  fileSize=${fileSize}  driveId=${empty}  fileType=${fileType}  order=${order}
+    Set Suite Variable      ${file_details}
+
+    ${resp}=        Send Message by Chat    ${ownerId}  ${consumerIdList[1]}  ${msg}  ${messageType[0]}  ${file} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+
+JD-TC-SendMessagebyChat-UH14
+
+    [Documentation]   Send Message by chat - where driveId is invalid
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${inv}=     FakerLibrary.Random Int
+
+    ${file}=    Create Dictionary   action=${FileAction[0]}  ownerName=${ownerName}  fileName=${pdffile}  fileSize=${fileSize}  driveId=${inv}  fileType=${fileType}  order=${order}
+    Set Suite Variable      ${file_details}
+
+    ${resp}=        Send Message by Chat    ${ownerId}  ${consumerIdList[1]}  ${msg}  ${messageType[0]}  ${file} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+
+JD-TC-SendMessagebyChat-UH15
+
+    [Documentation]   Send Message by chat - where file type is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${file}=    Create Dictionary   action=${FileAction[0]}  ownerName=${ownerName}  fileName=${pdffile}  fileSize=${fileSize}  driveId=${driveId}  fileType=${empty}  order=${order}
+    Set Suite Variable      ${file_details}
+
+    ${resp}=        Send Message by Chat    ${ownerId}  ${consumerIdList[1]}  ${msg}  ${messageType[0]}  ${file} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+
+JD-TC-SendMessagebyChat-UH16
+
+    [Documentation]   Send Message by chat - where order is empty
+
+    ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${file}=    Create Dictionary   action=${FileAction[0]}  ownerName=${ownerName}  fileName=${pdffile}  fileSize=${fileSize}  driveId=${driveId}  fileType=${fileType}  order=${empty}
+    Set Suite Variable      ${file_details}
+
+    ${resp}=        Send Message by Chat    ${ownerId}  ${consumerIdList[1]}  ${msg}  ${messageType[0]}  ${file} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-SendMessagebyChat-UH17
+
+    [Documentation]   Send Message by chat - without login
+
+    ${resp}=        Send Message by Chat    ${ownerId}  ${consumerIdList[1]}  ${msg}  ${messageType[0]}  ${file_details} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    419
+    Should Be Equal As Strings     ${resp.json()}    ${SESSION_EXPIRED}
