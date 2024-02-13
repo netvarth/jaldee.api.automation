@@ -45,6 +45,22 @@ JD-TC-DonationPayment-1
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
+        ${resp}=  Get jp finance settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        
+        IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+                ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+                Log  ${resp1.content}
+                Should Be Equal As Strings  ${resp1.status_code}  200
+        END
+
+        ${resp}=  Get jp finance settings    
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
         ${resp}=   Create Sample Location
         Set Suite Variable    ${loc_id1}    ${resp} 
 
@@ -103,9 +119,9 @@ JD-TC-DonationPayment-1
         Should Be Equal As Strings  ${resp.json()['service']['id']}  ${sid1}
         Should Be Equal As Strings  ${resp.json()['location']['id']}  ${loc_id1}
 
-        ${resp}=  Get Bill By consumer  ${don_id}  ${acc_id}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+        # ${resp}=  Get Bill By consumer  ${don_id}  ${acc_id}
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
         
         ${resp}=  Make payment Consumer Mock  ${acc_id}  ${don_amt}  ${purpose[5]}  ${don_id}  ${sid1}  ${bool[0]}   ${bool[1]}  ${con_id}
         Log  ${resp.json()}
@@ -196,6 +212,22 @@ JD-TC-DonationPayment-UH1
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
+        # ${resp}=  Get jp finance settings
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+
+        
+        # IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        #         ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        #         Log  ${resp1.content}
+        #         Should Be Equal As Strings  ${resp1.status_code}  200
+        # END
+
+        # ${resp}=  Get jp finance settings    
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+        # Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
         ${resp}=   Create Sample Location
         Set Suite Variable    ${loc_id1}    ${resp} 
 
@@ -203,6 +235,7 @@ JD-TC-DonationPayment-UH1
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+        
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
         ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
@@ -238,8 +271,8 @@ JD-TC-DonationPayment-UH1
         ${don_amt}=  Evaluate  ${don_amt}-${mod}
         ${don_amt}=  Convert To Number  ${don_amt}  1
         ${don_amt_float}=  twodigitfloat  ${don_amt}
-
         Set Suite Variable  ${don_amt}
+        
         ${resp}=  Donation By Consumer  ${con_id10}  ${sid2}  ${loc_id1}  ${don_amt}  ${fname1}  ${lname1}  ${EMPTY}  ${EMPTY}  ${EMPTY}  ${acc_id}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200  

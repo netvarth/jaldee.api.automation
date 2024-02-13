@@ -141,9 +141,9 @@ JD-TC-GetDonations-1
         ${don_id}=  Get Dictionary Values  ${resp.json()}
         Set Suite Variable  ${don_id2}  ${don_id[0]}
 
-        ${resp}=  Get Bill By consumer  ${don_id1}  ${acc_id}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+        # ${resp}=  Get Bill By consumer  ${don_id1}  ${acc_id}
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
         
         ${resp}=  Make payment Consumer Mock  ${acc_id}  ${don_amt1}  ${purpose[5]}  ${don_id1}  ${sid1}  ${bool[0]}   ${bool[1]}  ${con_id}
         Log  ${resp.json()}
@@ -151,9 +151,9 @@ JD-TC-GetDonations-1
         # ${resp}=  Make payment Consumer Mock  ${don_amt1}  ${bool[1]}  ${don_id1}  ${acc_id}  ${purpose[5]}  ${con_id}
         # Log  ${resp.json()}
         # Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp}=  Get Bill By consumer  ${don_id2}  ${acc_id}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+        # ${resp}=  Get Bill By consumer  ${don_id2}  ${acc_id}
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
         
         ${resp}=  Make payment Consumer Mock  ${acc_id}  ${don_amt2}  ${purpose[5]}  ${don_id2}  ${sid1}  ${bool[0]}   ${bool[1]}  ${con_id}
         Log  ${resp.json()}

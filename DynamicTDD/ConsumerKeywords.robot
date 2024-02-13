@@ -3245,9 +3245,6 @@ Get Service By Location Appoinment
     [Return]  ${resp} 
 
 
-    ${resp}=    GET On Session    ynw  /consumer/appointment/service/${locationId}  expected_status=any     
-    [Return]  ${resp} 
-
 Get locations by service
     [Arguments]      ${serviceId}  
     Check And Create YNW Session

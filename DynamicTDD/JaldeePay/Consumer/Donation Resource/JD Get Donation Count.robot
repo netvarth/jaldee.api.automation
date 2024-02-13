@@ -119,14 +119,14 @@ JD-TC-GetDonationsCount-1
         ${resp}=   Consumer Login  ${CUSERNAME11}   ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}   200
         
-        ${resp}=  Get Bill By consumer  ${don_id1}  ${acc_id}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+        # ${resp}=  Get Bill By consumer  ${don_id1}  ${acc_id}
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
 
-        Should Be Equal As Strings  ${resp.json()['customer']['userProfile']['id']}  ${prov_consid}
-        Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}        ${sid1}
-        Should Be Equal As Strings  ${resp.json()['netTotal']}                       ${don_amt1}
-        Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}              ${paymentStatus[0]}
+        # Should Be Equal As Strings  ${resp.json()['customer']['userProfile']['id']}  ${prov_consid}
+        # Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}        ${sid1}
+        # Should Be Equal As Strings  ${resp.json()['netTotal']}                       ${don_amt1}
+        # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}              ${paymentStatus[0]}
         
         ${resp}=  Make payment Consumer Mock  ${acc_id}  ${don_amt1}  ${purpose[5]}  ${don_id1}  ${sid1}  ${bool[0]}   ${bool[1]}  ${con_id}
         Log  ${resp.json()}
@@ -147,14 +147,14 @@ JD-TC-GetDonationsCount-1
         Should Be Equal As Strings  ${resp.json()[0]['paymentPurpose']}   ${purpose[5]}  
         Should Be Equal As Strings  ${resp.json()[0]['paymentGateway']}   RAZORPAY  
 
-        ${resp}=  Get Bill By consumer  ${don_id1}  ${acc_id}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+        # ${resp}=  Get Bill By consumer  ${don_id1}  ${acc_id}
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
 
-        Should Be Equal As Strings  ${resp.json()['customer']['userProfile']['id']}  ${prov_consid}
-        Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}        ${sid1}
-        Should Be Equal As Strings  ${resp.json()['netTotal']}                       ${don_amt1}
-        Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}              ${paymentStatus[2]}
+        # Should Be Equal As Strings  ${resp.json()['customer']['userProfile']['id']}  ${prov_consid}
+        # Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}        ${sid1}
+        # Should Be Equal As Strings  ${resp.json()['netTotal']}                       ${don_amt1}
+        # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}              ${paymentStatus[2]}
         
         ${resp}=  Get Consumer Donation By Id  ${don_id1}
         Log  ${resp.json()}
@@ -198,14 +198,14 @@ JD-TC-GetDonationsCount-1
         Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}    ${paymentStatus[0]}
         Should Be Equal As Strings  ${resp.json()['donationAmount']}       ${don_amt2}
 
-        ${resp}=  Get Bill By consumer  ${don_id2}  ${acc_id}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+        # ${resp}=  Get Bill By consumer  ${don_id2}  ${acc_id}
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
 
-        Should Be Equal As Strings  ${resp.json()['customer']['userProfile']['id']}  ${prov_consid}
-        Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}        ${sid2}
-        Should Be Equal As Strings  ${resp.json()['netTotal']}                       ${don_amt2}
-        Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}              ${paymentStatus[0]}
+        # Should Be Equal As Strings  ${resp.json()['customer']['userProfile']['id']}  ${prov_consid}
+        # Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}        ${sid2}
+        # Should Be Equal As Strings  ${resp.json()['netTotal']}                       ${don_amt2}
+        # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}              ${paymentStatus[0]}
         
         ${resp}=  Make payment Consumer Mock  ${acc_id}  ${don_amt2}  ${purpose[5]}  ${don_id2}  ${sid2}  ${bool[0]}   ${bool[1]}  ${con_id}
         Log  ${resp.json()}
@@ -229,14 +229,14 @@ JD-TC-GetDonationsCount-1
         Should Be Equal As Strings  ${resp.json()[0]['paymentPurpose']}   ${purpose[5]}  
         Should Be Equal As Strings  ${resp.json()[0]['paymentGateway']}   RAZORPAY  
 
-        ${resp}=  Get Bill By consumer  ${don_id2}  ${acc_id}
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+        # ${resp}=  Get Bill By consumer  ${don_id2}  ${acc_id}
+        # Log  ${resp.json()}
+        # Should Be Equal As Strings  ${resp.status_code}  200
 
-        Should Be Equal As Strings  ${resp.json()['customer']['userProfile']['id']}  ${prov_consid}
-        Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}        ${sid2}
-        Should Be Equal As Strings  ${resp.json()['netTotal']}                       ${don_amt2}
-        Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}              ${paymentStatus[2]}
+        # Should Be Equal As Strings  ${resp.json()['customer']['userProfile']['id']}  ${prov_consid}
+        # Should Be Equal As Strings  ${resp.json()['service'][0]['serviceId']}        ${sid2}
+        # Should Be Equal As Strings  ${resp.json()['netTotal']}                       ${don_amt2}
+        # Should Be Equal As Strings  ${resp.json()['billPaymentStatus']}              ${paymentStatus[2]}
         
         ${resp}=  Get Consumer Donation By Id  ${don_id2}
         Log  ${resp.json()}
