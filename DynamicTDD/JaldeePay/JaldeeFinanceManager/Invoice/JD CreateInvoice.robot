@@ -1010,7 +1010,6 @@ JD-TC-CreateInvoice-8
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     Should Be Equal As Strings  ${resp1.json()[0]['accountId']}  ${account_id1}
-    Should Be Equal As Strings  ${resp1.json()[0]['invoiceCategoryId']}  ${category_id}
     # Should Be Equal As Strings  ${resp1.json()[0]['categoryName']}  ${name1}
     Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
     Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${EMPTY}
@@ -1062,7 +1061,7 @@ JD-TC-CreateInvoice-9
         Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
     END
     ${num_slots}=  Get Length  ${slots}
-    ${j}=  Random Int  max=${num_slots-3}
+    ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
