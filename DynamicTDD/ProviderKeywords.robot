@@ -12469,6 +12469,13 @@ Validate phone number
     ${resp}=   GET On Session  ynw  /provider/validate/phonenumber/${countryCode}/${phoneNumber}  expected_status=any
     [Return]  ${resp}    
 
+createInvoice for booking
+
+    [Arguments]    ${booking}     ${uid}     
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/${booking}/${uid}/createInvoice     expected_status=any    headers=${headers}
+    [Return]  ${resp}    
+
 # ................ LOS Lead ....................
 
 

@@ -159,6 +159,129 @@ JD-TC-UpdateProviderConsumer-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['firstName']}    ${fname}
 
+JD-TC-UpdateProviderConsumer-3
+
+    [Documentation]     Update a consumer's phone number with different country code and then update it back to old country code
+
+    
+    ${alt_Number}    Generate random string    5    0123456789
+    ${alt_Number}    Convert To Integer  ${alt_Number}
+    ${PO_Number}=  Get Random Valid Phone Number
+    Log  ${PO_Number}
+    ${country_code}=  Set Variable  ${PO_Number.country_code}
+    ${CUSERNAME_0}=  Set Variable  ${PO_Number.national_number}
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+    ${dob}=  FakerLibrary.Date
+    ${gender}=  Random Element    ${Genderlist}
+    ${address}=  FakerLibrary.Address
+    ${alternativeNo}=  Evaluate  ${CUSERNAME_0}+${alt_Number}
+    Set Test Variable  ${email}  ${C_Email}${CUSERNAME_0}.${test_mail}
+
+
+   ${resp}=    Send Otp For Login    ${CUSERNAME_0}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME_0}   12
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${tokens}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${CUSERNAME_0}     ${accountId}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME_0}    ${accountId}  ${tokens} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+
+    ${resp}=  Update ProviderConsumer   ${cid}  firstName=${firstname}  lastName=${lastname}    dob=${dob}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Send Verify Login Consumer   ${CUSERNAME_0}  countryCode=${country_code}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Verify Login Consumer   ${CUSERNAME_0}  ${OtpPurpose['ConsumerVerifyEmail']}  countryCode=${country_code}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Consumer Logout
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME_0}    ${accountId}  ${tokens}   countryCode=${country_code}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+
+
+    ${resp}=   Get ProviderConsumer   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['firstName']}  ${firstname}
+    Should Be Equal As Strings  ${resp.json()['lastName']}  ${lastname}
+    Should Be Equal As Strings  ${resp.json()['dob']}  ${dob} 
+
+
+    ${resp}=  Consumer Logout
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME_0}    ${accountId}  ${tokens}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  "${resp.json()}"   "${NOT_REGISTERED_CUSTOMER}"
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME_0}    ${accountId}  ${tokens}   countryCode=${country_code}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+
+    ${resp}=  Send Verify Login Consumer   ${CUSERNAME_0}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Verify Login Consumer   ${CUSERNAME_0}  ${OtpPurpose['ConsumerVerifyEmail']}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Consumer Logout
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME_0}    ${accountId}  ${tokens}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get ProviderConsumer   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['firstName']}  ${firstname}
+    Should Be Equal As Strings  ${resp.json()['lastName']}  ${lastname}
+    Should Be Equal As Strings  ${resp.json()['dob']}  ${dob} 
+
+
+    ${resp}=  Consumer Logout
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME_0}    ${accountId}  ${tokens}   countryCode=${country_code}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  "${resp.json()}"   "${NOT_REGISTERED_CUSTOMER}"
+
+
+
 JD-TC-UpdateProviderConsumer-UH1
     
     [Documentation]  update Provider Consumer With invalid Provider Consumer Id
@@ -188,3 +311,4 @@ JD-TC-UpdateProviderConsumer-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings     ${resp.json()}    ${ENTER_PROCONSUMERID}
+

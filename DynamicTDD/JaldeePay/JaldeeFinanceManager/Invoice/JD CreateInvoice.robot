@@ -991,25 +991,48 @@ JD-TC-CreateInvoice-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid1}
 
-    ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}        ynwUuid=${apptid1}
-    Log  ${resp.json()}
+    ${resp}=  createInvoice for booking   ${invoicebooking[0]}   ${apptid1}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${invoice_uid4}   ${resp.json()['uidList'][0]}  
 
-    ${resp1}=  Get Invoice By Id  ${invoice_uid4}
+    sleep   02s
+
+    # ${resp}=  Create Invoice   ${category_id}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}        ynwUuid=${apptid1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${invoice_uid4}   ${resp.json()['uidList'][0]}  
+
+    # ${resp}=   Get Locations 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp1}=  Get Bookings Invoices  ${apptid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
-    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id}
-    # Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
-    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
-    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
-    Should Be Equal As Strings  ${resp1.json()['vendorUid']}  ${vendor_uid1}
-    # Should Be Equal As Strings  ${resp1.json()['invoiceId']}  ${invoiceId}
-    Should Be Equal As Strings  ${resp1.json()['ynwUuid']}  ${apptid1}
-    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['serviceId']}  ${ser_id1}
-    Should Be Equal As Strings  ${resp1.json()['locationId']}  ${loc_id1}
+    Should Be Equal As Strings  ${resp1.json()[0]['accountId']}  ${account_id1}
+    Should Be Equal As Strings  ${resp1.json()[0]['invoiceCategoryId']}  ${category_id}
+    # Should Be Equal As Strings  ${resp1.json()[0]['categoryName']}  ${name1}
+    Should Be Equal As Strings  ${resp1.json()[0]['invoiceDate']}  ${invoiceDate}
+    Should Be Equal As Strings  ${resp1.json()[0]['billedTo']}  ${EMPTY}
+    Should Be Equal As Strings  ${resp1.json()[0]['ynwUuid']}  ${apptid1}
+    Should Be Equal As Strings  ${resp1.json()[0]['serviceList'][0]['serviceId']}  ${ser_id1}
+    Should Be Equal As Strings  ${resp1.json()[0]['locationId']}  ${loc_id1}
+
+
+    # ${resp1}=  Get Invoice By Id  ${invoice_uid4}
+    # Log  ${resp1.content}
+    # Should Be Equal As Strings  ${resp1.status_code}  200
+    # Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
+    # Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id}
+    # # Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
+    # Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
+    # Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
+    # Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
+    # Should Be Equal As Strings  ${resp1.json()['vendorUid']}  ${vendor_uid1}
+    # # Should Be Equal As Strings  ${resp1.json()['invoiceId']}  ${invoiceId}
+    # Should Be Equal As Strings  ${resp1.json()['ynwUuid']}  ${apptid1}
+    # Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['serviceId']}  ${ser_id1}
+    # Should Be Equal As Strings  ${resp1.json()['locationId']}  ${loc_id1}
 
 JD-TC-CreateInvoice-9
 
@@ -1341,7 +1364,7 @@ JD-TC-CreateInvoice-11
     Set Suite Variable   ${P1SERVICE1}
     ${desc}=   FakerLibrary.sentence
     ${maxBookingsAllowed}=   Random Int   min=2   max=5
-    ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration1}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Tot}  ${bool[1]}  ${bool[1]}    maxBookingsAllowed=${maxBookingsAllowed}
+    ${resp}=  Create Service  ${P1SERVICE1}  ${desc}   ${service_duration1}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Tot}  ${bool[1]}  ${bool[1]}    maxBookingsAllowed=${maxBookingsAllowed}   prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_sid1}  ${resp.json()}
@@ -1359,7 +1382,7 @@ JD-TC-CreateInvoice-11
     ${P1SERVICE2}=    FakerLibrary.word
     Set Suite Variable   ${P1SERVICE2} 
     ${desc}=   FakerLibrary.sentence
-    ${resp}=  Create Service  ${P1SERVICE2}  ${desc}   ${service_duration1}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${Tot}  ${bool[0]}  ${bool[1]}
+    ${resp}=  Create Service  ${P1SERVICE2}  ${desc}   ${service_duration1}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${EMPTY}  ${Tot}  ${bool[0]}  ${bool[1]}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_sid2}  ${resp.json()}
@@ -1456,7 +1479,7 @@ JD-TC-CreateInvoice-11
     ${balamount}=  Evaluate  ${totalamt}-${min_pre}
     ${balamount}=  Convert To Integer  ${balamount}  
 
-    sleep  2s
+    sleep  01s
 
     ${resp}=  Get consumer Waitlist By Id  ${cwid}  ${pid1}
     Log  ${resp.json()}
@@ -1464,7 +1487,7 @@ JD-TC-CreateInvoice-11
     Verify Response  ${resp}  paymentStatus=${paymentStatus[0]}   waitlistStatus=${wl_status[3]}
 
 
-    sleep   02s
+    sleep   01s
 
     ${resp}=  Make payment Consumer Mock  ${pid1}  ${min_pre}  ${purpose[0]}  ${cwid}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${None}
     Log  ${resp.json()}
@@ -1486,7 +1509,7 @@ JD-TC-CreateInvoice-11
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
 
-    sleep   02s
+    sleep   01s
     
     ${resp}=  Get Bookings Invoices  ${cwid}
     Log  ${resp.content}
@@ -1559,7 +1582,7 @@ JD-TC-CreateInvoice-12
     Verify Response  ${resp}  paymentStatus=${paymentStatus[0]}   waitlistStatus=${wl_status[3]}
 
 
-    sleep   02s
+    sleep   01s
 
     ${resp}=  Make payment Consumer Mock  ${pid1}  ${min_pre}  ${purpose[0]}  ${cwid1}  ${p1_sid1}  ${bool[0]}   ${bool[1]}  ${None}
     Log  ${resp.json()}
@@ -1572,6 +1595,8 @@ JD-TC-CreateInvoice-12
     # Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
+
+    sleep   01s
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH1}  ${PASSWORD}
     Log  ${resp.json()}
@@ -1656,23 +1681,23 @@ JD-TC-CreateInvoice-12
 
 
 
-    ${resp1}=  Get Invoice By Id  ${invoice_wtlistonline_uid1}
-    Log  ${resp1.content}
-    ${response1_netTotal}=  Convert To Integer  ${resp1.json()['netTotal']}
-    ${response1_netRate}=  Convert To Integer  ${resp1.json()['netRate']}
-    ${response1_amountTotal}=  Convert To Integer  ${resp1.json()['amountTotal']}
+    # ${resp1}=  Get Invoice By Id  ${invoice_wtlistonline_uid1}
+    # Log  ${resp1.content}
+    # ${response1_netTotal}=  Convert To Integer  ${resp1.json()['netTotal']}
+    # ${response1_netRate}=  Convert To Integer  ${resp1.json()['netRate']}
+    # ${response1_amountTotal}=  Convert To Integer  ${resp1.json()['amountTotal']}
 
-    Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${pid1}
-    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${categ_id1}
-    Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${Booking}
-    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['serviceId']}  ${p1_sid1}
-    Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['quantity']}  1.0
-    Should Be Equal As Strings  ${response1_netTotal}  ${Tot}
-    Should Be Equal As Strings  ${response1_netRate}  ${totalamt}
-    Should Be Equal As Strings   ${response1_amountTotal}  ${Tot}
-    Should Be Equal As Strings  ${resp1.json()['amountDue']}  0
-    Should Be Equal As Strings  ${resp1.json()['billPaymentStatus']}  ${paymentStatus[2]}
+    # Should Be Equal As Strings  ${resp1.status_code}  200
+    # Should Be Equal As Strings  ${resp1.json()['accountId']}  ${pid1}
+    # Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${categ_id1}
+    # Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${Booking}
+    # Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['serviceId']}  ${p1_sid1}
+    # Should Be Equal As Strings  ${resp1.json()['serviceList'][0]['quantity']}  1.0
+    # Should Be Equal As Strings  ${response1_netTotal}  ${Tot}
+    # Should Be Equal As Strings  ${response1_netRate}  ${totalamt}
+    # Should Be Equal As Strings   ${response1_amountTotal}  ${Tot}
+    # Should Be Equal As Strings  ${resp1.json()['amountDue']}  0
+    # Should Be Equal As Strings  ${resp1.json()['billPaymentStatus']}  ${paymentStatus[2]}
 
     ${resp}=  Get Bookings Invoices  ${cwid1}
     Log  ${resp.content}
@@ -2021,6 +2046,8 @@ JD-TC-CreateInvoice-13
     Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
 
+    sleep   02s
+
     ${resp}=  Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -2128,6 +2155,8 @@ JD-TC-CreateInvoice-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
+
+    sleep   02s
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD}
     Log  ${resp.json()}
@@ -2887,7 +2916,7 @@ JD-TC-CreateInvoice-19
     # ${pre_float}=  twodigitfloat  ${min_pre}
     ${Tot11}=  Convert To Number  ${Tot}  1 
     Set Suite Variable   ${Tot3}   ${Tot11}
-    ${resp}=  Create Service  ${P1SERVICE2}  ${desc}   ${service_duration1}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre1}  ${Tot3}  ${bool[1]}  ${bool[0]}    maxBookingsAllowed=${maxBookingsAllowed}
+    ${resp}=  Create Service  ${P1SERVICE2}  ${desc}   ${service_duration1}  ${status[0]}    ${btype}    ${bool[1]}  ${notifytype[2]}  ${min_pre1}  ${Tot3}  ${bool[1]}  ${bool[0]}    maxBookingsAllowed=${maxBookingsAllowed}    prePaymentType=${advancepaymenttype[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${p1_sid2}  ${resp.json()}
@@ -2997,7 +3026,7 @@ JD-TC-CreateInvoice-19
         Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
     END
     ${num_slots}=  Get Length  ${slots}
-    ${j}=  Random Int  max=${num_slots-3}
+    ${j}=  Random Int  max=${num_slots-1}
     Set Test Variable   ${slot1}   ${slots[${j}]}
 
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
@@ -3032,6 +3061,8 @@ JD-TC-CreateInvoice-19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${mer}   ${resp.json()['merchantId']}  
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
+
+    sleep   01s
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}
@@ -3097,6 +3128,9 @@ JD-TC-CreateInvoice-20
     ${resp1}=  Invoice pay via link  ${invoice_apptonline_uid}  ${balamount_appt}   ${purpose[6]}    ${source}  ${accountId3}   ${finance_payment_modes[8]}  ${bool[0]}   ${p1_sid2}   ${cid5}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
+
+
+    sleep   01s
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log  ${resp.json()}

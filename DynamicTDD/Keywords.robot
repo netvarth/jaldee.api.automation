@@ -149,6 +149,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{reportType}               TOKEN  APPOINTMENT  ORDER  DONATION  PAYMENT
  
 @{analyticsFrequency}       DAILY  HOURLY  MONTHLY  YEARLY  NONE
+@{invoicebooking}                  appointment  waitlist  orders  
 &{tokenAnalyticsMetrics}    PHONE_TOKEN=1  WALK_IN_TOKEN=2  ONLINE_TOKEN=3  TELE_SERVICE_TOKEN=4  TELEGRAM_TOKEN=5
 ...  TOTAL_FOR_TOKEN=6  CHECKED_IN_TOKEN=7  ARRIVED_TOKEN=8  STARTED_TOKEN=9  CANCELLED_TOKEN=10  DONE_TOKEN=11
 ...  RESCHEDULED_TOKEN=12  TOTAL_ON_TOKEN=13  WEB_TOKENS=14  IOS_TOKENS=15  TOKENS_FOR_LICENSE_BILLING=20  ANDROID_TOKENS=16
