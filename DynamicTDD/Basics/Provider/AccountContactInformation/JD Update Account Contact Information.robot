@@ -817,7 +817,7 @@ JD-TC-Update Account Contact information-6
     FOR  ${pos}  IN RANGE  ${dlen}  
         IF  '${iscorp_subdomains[${pos}]['subdomains']}' == '${subdomain}'
             Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
-            Set Suite Variable  ${userSubDomain}  ${iscorp_subdomains[0]['userSubDomain']}
+            Set Suite Variable  ${userSubDomain}  ${iscorp_subdomains[0]['userSubDomainId']}
             Exit For Loop
         ELSE
             Continue For Loop
