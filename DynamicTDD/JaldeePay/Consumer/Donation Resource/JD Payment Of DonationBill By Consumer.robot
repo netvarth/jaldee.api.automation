@@ -298,10 +298,7 @@ JD-TC-DonationPayment-UH1
         # Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"
 
 JD-TC-DonationPayment-UH2
-        [Documentation]   make payment   by provider login with empty donation id
-
-        
-
+        [Documentation]   make payment by provider login with empty donation id
 
         ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
         Log  ${resp.json()}
@@ -310,6 +307,22 @@ JD-TC-DonationPayment-UH2
         clear_service   ${PUSERNAME101}
         clear_queue      ${PUSERNAME101}
         clear_location   ${PUSERNAME101}
+
+        ${resp}=  Get jp finance settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        
+        IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+                ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+                Log  ${resp1.content}
+                Should Be Equal As Strings  ${resp1.status_code}  200
+        END
+
+        ${resp}=  Get jp finance settings    
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
         Set Suite Variable  ${acc_id12}
         ${resp}=  Make payment Consumer Mock  ${acc_id12}  ${don_amt}  ${purpose[5]}  0000  ${sid2}  ${bool[0]}   ${bool[1]}  ${con_id10}

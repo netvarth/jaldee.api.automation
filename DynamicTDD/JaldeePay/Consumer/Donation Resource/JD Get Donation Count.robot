@@ -39,6 +39,22 @@ JD-TC-GetDonationsCount-1
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
 
+        ${resp}=  Get jp finance settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        
+        IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+                ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+                Log  ${resp1.content}
+                Should Be Equal As Strings  ${resp1.status_code}  200
+        END
+
+        ${resp}=  Get jp finance settings    
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
         ${resp}=   Create Sample Location
         Set Suite Variable    ${loc_id1}    ${resp} 
 
@@ -46,6 +62,7 @@ JD-TC-GetDonationsCount-1
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
+        
         ${description}=  FakerLibrary.sentence
         ${min_don_amt1}=   Random Int   min=100   max=500
         ${mod}=  Evaluate  ${min_don_amt1}%${multiples[0]}
