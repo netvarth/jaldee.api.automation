@@ -12,6 +12,7 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/musers.py
 
 *** Variables ***
 ${nods}  0
@@ -267,6 +268,10 @@ JD-TC-Addaddon -UH7
               Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
        END
 
+       ${resp}=   Get License UsageInfo 
+       Log  ${resp.json()}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
        ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
        Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -368,6 +373,10 @@ JD-TC-Addaddon -UH7
        Should Be Equal As Strings  ${resp.status_code}  200
        Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
+       ${resp}=   Get License UsageInfo 
+       Log  ${resp.json()}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
        ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+577810
        clear_users  ${PUSERNAME_U1}
        Set Suite Variable  ${PUSERNAME_U1}
@@ -383,7 +392,7 @@ JD-TC-Addaddon -UH7
        ${employee_id}=  FakerLibrary.last_name
        Set Suite Variable  ${employee_id}
 
-       FOR   ${a}  IN RANGE   35
+       FOR   ${a}  IN RANGE   49
 
               ${PO_Number}    Generate random string    7    0123456789
               ${p_num}    Convert To Integer  ${PO_Number}
@@ -416,6 +425,10 @@ JD-TC-Addaddon -UH7
        ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
+
+       ${resp}=   Get License UsageInfo 
+       Log  ${resp.json()}
+       Should Be Equal As Strings  ${resp.status_code}  200
 
        ${resp}=   Get addons auditlog
        Log   ${resp.json()}
@@ -472,6 +485,10 @@ JD-TC-Addaddon -UH7
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
+       ${resp}=   Get License UsageInfo 
+       Log  ${resp.json()}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
        ${resp}=   Get addons auditlog
        Log   ${resp.json()}
        Should Be Equal As Strings   ${resp.status_code}   200
@@ -492,6 +509,186 @@ JD-TC-Addaddon -UH7
        Should Be Equal As Strings  ${resp.json()[0]['status']}  Active
        Should Be Equal As Strings  ${resp.json()[0]['name']}  ${addon_name1}
 
+JD-TC-Addaddon -UH
+       [Documentation]   Adding 2 Queues/Schedules/Services Addon.
+
+       ${resp}=   Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD} 
+       Log  ${resp.content}
+       Should Be Equal As Strings    ${resp.status_code}   200
+
+       ${p_id1}=  get_acc_id  ${MUSERNAME10}
+       Set Suite Variable   ${p_id1}
+
+    
+       ${resp}=   Get Business Profile
+       Log  ${resp.content}
+       Should Be Equal As Strings    ${resp.status_code}    200
+       Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+
+       ${resp}=  View Waitlist Settings
+       Log  ${resp.content}
+       Should Be Equal As Strings    ${resp.status_code}    200
+       IF  ${resp.json()['filterByDept']}==${bool[0]}
+              ${resp}=  Toggle Department Enable
+              Log  ${resp.content}
+              Should Be Equal As Strings  ${resp.status_code}  200
+
+       END
+
+       ${resp}=  Get Departments
+       Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+       IF   '${resp.content}' == '${emptylist}'
+              ${dep_name1}=  FakerLibrary.bs
+              ${dep_code1}=   Random Int  min=100   max=999
+              ${dep_desc1}=   FakerLibrary.word  
+              ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+              Log  ${resp1.content}
+              Should Be Equal As Strings  ${resp1.status_code}  200
+              Set Suite Variable  ${dep_id}  ${resp1.json()}
+       ELSE
+              Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+       END
+
+       ${resp}=   Get License UsageInfo 
+       Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=  Get upgradable license 
+       Log   ${resp.json()}
+       Should Be Equal As Strings    ${resp.status_code}   200
+
+       ${len}=  Get Length  ${resp.json()}
+       ${len}=  Evaluate  ${len}-1
+       Set Test Variable  ${licId1}  ${resp.json()[${len}]['pkgId']}
+
+       ${resp}=  Change License Package  ${licId1}
+       Should Be Equal As Strings    ${resp.status_code}   200
+
+       ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       
+       # ${resp}=  GET Account License details     ${p_id1}
+       # Log  ${resp.content}
+       # Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=  Get Addon Transactions details     ${p_id1}
+       Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=  Get Account Addon details  ${p_id1}  
+       Log  ${resp.content} 
+       Should be equal as strings  ${resp.status_code}       200
+
+# --------------------------  Queues/Schedules/Services - 25 Count ---------------------
+       ${resp}=   Get Addons Metadata For Superadmin
+	Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+	Set Suite Variable    ${addon_id}      ${resp.json()[5]['addons'][0]['addonId']}
+	Set Suite Variable    ${addon_name}      ${resp.json()[5]['addons'][0]['addonName']}
+       Log   ${addon_id}
+
+       ${resp}=  Add Addons details  ${p_id1}   ${addon_id}
+	Log   ${resp.content}
+	Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=  Get Addon Transactions details     ${p_id1}
+       Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+	${resp}=  Get Account Addon details  ${p_id1}  
+	Log  ${resp.content} 
+	should be equal as strings  ${resp.json()[0]['licPkgOrAddonId']}  ${addon_id} 
+	should be equal as strings  ${resp.json()[0]['name']}  ${addon_name}	   	  
+	Should Be Equal As Strings  ${resp.status_code}  200
+
+# --------------------------  Queues/Schedules/Services - 50 Count ---------------------
+       ${resp}=   Get Addons Metadata For Superadmin
+	Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+	Set Suite Variable    ${addon_id1}      ${resp.json()[5]['addons'][1]['addonId']}
+	Set Suite Variable    ${addon_name1}      ${resp.json()[5]['addons'][1]['addonName']}
+       Log   ${addon_id1}
+
+       ${resp}=  Add Addons details  ${p_id1}   ${addon_id1}
+	Log   ${resp.content}
+	Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=  Get Addon Transactions details     ${p_id1}
+       Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+	${resp}=  Get Account Addon details  ${p_id1}  
+	Log  ${resp.content} 
+	Should Be Equal As Strings  ${resp.status_code}  200
+	should be equal as strings  ${resp.json()[0]['licPkgOrAddonId']}  ${addon_id1} 
+	should be equal as strings  ${resp.json()[0]['name']}  ${addon_name1}	   
+
+       should be equal as strings  ${resp.json()[1]['licPkgOrAddonId']}  ${addon_id} 
+	should be equal as strings  ${resp.json()[1]['name']}  ${addon_name}	
+
+       ${resp}=   Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD} 
+       Log  ${resp.content}
+       Should Be Equal As Strings    ${resp.status_code}   200
+
+       FOR   ${a}  IN RANGE   30
+
+              ${description}=  FakerLibrary.sentence
+              ${ser_durtn}=   Random Int   min=2   max=10
+              ${ser_amount}=   Random Int   min=100   max=1000
+              ${ser_amount1}=   Convert To Number   ${ser_amount}
+              ${SERVICE}=    FakerLibrary.word
+              Set Test Variable  ${SERVICE${a}}  ${SERVICE}
+
+              ${resp}=  Create Service  ${SERVICE${a}}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]}      department=${dep_id}
+              Log  ${resp.json()}
+              Should Be Equal As Strings  ${resp.status_code}  200  
+              Set Test Variable  ${sid${a}}  ${resp.json()}
+
+       END
+
+       ${resp}=  Get Service Count
+       Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+
+       ${resp}=   Month Matrix Cache Task
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
+       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       Log  ${resp.content}
+       Should Be Equal As Strings    ${resp.status_code}   200
+
+       ${resp}=   Get License UsageInfo 
+       Log  ${resp.json()}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=   Get addons auditlog
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
+       Should Be Equal As Strings  ${resp.json()[1]['licPkgOrAddonId']}  ${addon_id}   
+       Should Be Equal As Strings  ${resp.json()[1]['base']}  False
+       Should Be Equal As Strings  ${resp.json()[1]['licenseTransactionType']}  New
+       Should Be Equal As Strings  ${resp.json()[1]['renewedDays']}  0
+       Should Be Equal As Strings  ${resp.json()[1]['type']}  Production
+       Should Be Equal As Strings  ${resp.json()[1]['status']}  Active
+       Should Be Equal As Strings  ${resp.json()[1]['name']}  ${addon_name}
+
+       Should Be Equal As Strings  ${resp.json()[0]['licPkgOrAddonId']}  ${addon_id1}   
+       Should Be Equal As Strings  ${resp.json()[0]['base']}  False
+       Should Be Equal As Strings  ${resp.json()[0]['licenseTransactionType']}  New
+       Should Be Equal As Strings  ${resp.json()[0]['renewedDays']}  0
+       Should Be Equal As Strings  ${resp.json()[0]['type']}  Production
+       Should Be Equal As Strings  ${resp.json()[0]['status']}  Active
+       Should Be Equal As Strings  ${resp.json()[0]['name']}  ${addon_name1}
+       
+       	  
 
 *** Comment ***
 JD-TC-Addaddon -4
