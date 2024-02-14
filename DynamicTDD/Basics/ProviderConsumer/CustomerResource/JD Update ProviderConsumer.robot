@@ -312,3 +312,98 @@ JD-TC-UpdateProviderConsumer-UH2
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings     ${resp.json()}    ${ENTER_PROCONSUMERID}
 
+JD-TC-Update Account Contact information-13
+	[Documentation]  Get account contact information of a provider and then do consumer signup with same number and update consumer details and check new change in provider side
+    
+    ${domresp}=  Get BusinessDomainsConf
+    Should Be Equal As Strings  ${domresp.status_code}  200
+    ${len}=  Get Length  ${domresp.json()}
+    ${len}=  Evaluate  ${len}-1
+    ${PUSERNAME_N}=  Evaluate  ${PUSERNAME}+406380222
+    Set Test Variable  ${d1}  ${domresp.json()[${len}]['domain']}    
+    Set Test Variable  ${sd}  ${domresp.json()[${len}]['subDomains'][0]['subDomain']} 
+    ${firstname}=  FakerLibrary.first_name
+    ${lastname}=  FakerLibrary.last_name
+    ${highest_package}=  get_highest_license_pkg
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd}  ${PUSERNAME_N}   ${highest_package[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Activation  ${PUSERNAME_N}  0
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Set Credential  ${PUSERNAME_N}  ${PASSWORD}  0
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_N}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pro_idN}  ${decrypted_data['id']}
+
+    # Set Test Variable  ${pro_idN}  ${resp.json()['id']}
+    Set Test Variable  ${PUSERNAME_N}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_N}${\n}  
+    
+    Set Test Variable    ${first-name}    ${decrypted_data['firstName']}  
+    Set Test Variable    ${last-name}     ${decrypted_data['lastName']} 
+    ${pid4}=  get_acc_id  ${PUSERNAME_N}  
+
+    ${resp}=   Create Sample Location
+    Set Test Variable    ${loc_id1}    ${resp}
+
+    ${resp}=  Get Account contact information
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['account']}              ${pid4}
+    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}   ${PUSERNAME_N}
+    Should Be Equal As Strings  ${resp.json()['contactFirstName']}     ${first-name}
+    Should Be Equal As Strings  ${resp.json()['contactLastName']}      ${last-name}
+    Should Be Equal As Strings  ${resp.json()['emailVerified']}        ${bool[0]} 
+    Should Be Equal As Strings  ${resp.json()['phoneVerified']}         ${bool[1]} 
+    Set Suite Variable  ${country_code}   ${resp.json()['countryCode']} 
+    
+    ${firstname}=  FakerLibrary.first_name
+    ${lastname}=  FakerLibrary.last_name
+    ${dob}=  FakerLibrary.Date
+    ${gender}=  Random Element    ${Genderlist}
+    ${address}=  FakerLibrary.Address
+    ${alternativeNo}=  Evaluate  ${PUSERNAME23}+76068
+    Set Test Variable  ${email}  ${firstname}${PUSERNAME_N}${C_Email}.${test_mail}
+    ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${PUSERNAME_N}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Consumer Activation  ${PUSERNAME_N}  1
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Consumer Set Credential  ${PUSERNAME_N}  ${PASSWORD}  1
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Consumer Login  ${PUSERNAME_N}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${newNo}=  Evaluate  ${PUSERNAME}+77898
+    ${resp}=  Update Consumer Profile With Emailid    ${firstname}  ${lastname}  ${address}   ${dob}  ${gender}  ${email}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Send Verify Login Consumer   ${newNo}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Verify Login Consumer   ${newNo}  5
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_N}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${pid5}=  get_acc_id  ${PUSERNAME_N} 
+
+    ${resp}=  Get Account contact information
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.json()['account']}              ${pid5}
+    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}   ${newNo}
+    Should Be Equal As Strings  ${resp.json()['contactFirstName']}     ${firstname}
+    Should Be Equal As Strings  ${resp.json()['contactLastName']}      ${lastname}
+    Should Be Equal As Strings  ${resp.json()['primaryEmail']}         ${email}
+    Should Be Equal As Strings  ${resp.json()['emailVerified']}        ${bool[0]} 
+    Should Be Equal As Strings  ${resp.json()['phoneVerified']}        ${bool[1]} 
+
