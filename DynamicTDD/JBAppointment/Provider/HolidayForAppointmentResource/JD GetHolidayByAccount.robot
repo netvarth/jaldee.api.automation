@@ -147,6 +147,20 @@ JD-TC-GetHolidays-1
     Should Be Equal As Strings   ${resp.json()['holidaySchedule']['terminator']['endDate']}             ${DAY2}  
     Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['sTime']}             ${cur_time2}  
     Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['eTime']}             ${eTime2}
+
+    ${resp}=   Get Holiday By Account
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response List  ${resp}  1  id=${holidayId2}
+    Should Be Equal As Strings   ${resp.json()[1]['holidaySchedule']['startDate']}                         ${DAY2}
+    Should Be Equal As Strings   ${resp.json()[1]['holidaySchedule']['terminator']['endDate']}             ${DAY2}  
+    Should Be Equal As Strings   ${resp.json()[1]['holidaySchedule']['timeSlots'][0]['sTime']}             ${cur_time2}  
+    Should Be Equal As Strings   ${resp.json()[1]['holidaySchedule']['timeSlots'][0]['eTime']}             ${eTime2}
+
+    Verify Response List  ${resp}  0  id=${holidayId1}
+    Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['startDate']}                         ${DAY1}
+    Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['terminator']['endDate']}             ${DAY}  
+    Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['timeSlots'][0]['sTime']}             ${cur_time1}  
+    Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['timeSlots'][0]['eTime']}             ${eTime1}
   
   
 JD-TC-GetHolidays-UH1      

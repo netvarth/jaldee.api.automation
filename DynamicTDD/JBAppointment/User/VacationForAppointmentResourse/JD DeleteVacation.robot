@@ -597,4 +597,185 @@ JD-TC-DeleteVacation-UH7
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
 
 
+JD-TC-DeleteVacation-6
+    [Documentation]  Set user n account level holiday for same day and time and remove user level holiday 
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME123}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.add_timezone_date  ${tz}  3  
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=30  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${desc}=    FakerLibrary.word
+    ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${DAY}  ${DAY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${desc}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${hId1}    ${resp.json()['holidayId']}
+
+    ${resp}=   Get Holiday By Id  ${hId1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings   ${resp.status_code}  200 
+    Should Be Equal As Strings   ${resp.json()['id']}  ${hId1} 
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['startDate']}                         ${DAY}
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['terminator']['endDate']}             ${DAY}  
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['sTime']}             ${sTime1}  
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['eTime']}             ${eTime1}
+
+    ${resp}=   Get Holiday By Account
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${u_id1}=  Create Sample User 
+    Set Suite Variable  ${u_id1}
+
+    ${resp}=  Get User By Id  ${u_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${BUSER_U1}  ${resp.json()['mobileNo']}
+
+    ${desc1}=    FakerLibrary.word
+    ${resp}=  Create Vacation   ${desc1}  ${u_id1}  ${recurringtype[1]}  ${list}  ${DAY}  ${DAY}  ${EMPTY}  ${sTime1}  ${eTime1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings   ${resp.status_code}     200
+    Set Suite Variable  ${u1_vac1}    ${resp.json()['holidayId']}
+
+    ${resp}=  Get Vacation By Id  ${u1_vac1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()['id']}  ${u1_vac1} 
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['startDate']}                         ${DAY}
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['terminator']['endDate']}             ${DAY}  
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['sTime']}             ${sTime1}  
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['eTime']}             ${eTime1}
+
+    ${resp}=  Get Vacation    ${u_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Holiday By Account
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp} =   Delete Vacation    ${u1_vac1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Vacation By Id    ${u1_vac1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}     ${HOLIDAY_NOT_FOUND}
+
+    ${resp}=   Get Holiday By Id  ${hId1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings   ${resp.status_code}  200 
+    Should Be Equal As Strings   ${resp.json()['id']}  ${hId1} 
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['startDate']}                         ${DAY}
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['terminator']['endDate']}             ${DAY}  
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['sTime']}             ${sTime1}  
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['eTime']}             ${eTime1}
+
+    ${resp}=   Get Holiday By Account
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+
+JD-TC-DeleteVacation-7
+    [Documentation]  Set user n account level holiday for same day and time and remove account level holiday
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME123}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+
+    ${DAY}=  db.get_date_by_timezone  ${tz}
+    # ${DAY1}=  db.add_timezone_date  ${tz}  3  
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${delta}=  FakerLibrary.Random Int  min=30  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${desc}=    FakerLibrary.word
+    ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${DAY}  ${DAY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${desc}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${hId1}    ${resp.json()['holidayId']}
+
+    ${resp}=   Get Holiday By Id  ${hId1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings   ${resp.status_code}  200 
+    Should Be Equal As Strings   ${resp.json()['id']}  ${hId1} 
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['startDate']}                         ${DAY}
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['terminator']['endDate']}             ${DAY}  
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['sTime']}             ${sTime1}  
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['eTime']}             ${eTime1}
+
+    ${resp}=   Get Holiday By Account
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${u_id1}=  Create Sample User 
+    Set Suite Variable  ${u_id1}
+
+    ${resp}=  Get User By Id  ${u_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${BUSER_U1}  ${resp.json()['mobileNo']}
+
+    ${desc1}=    FakerLibrary.word
+    ${resp}=  Create Vacation   ${desc1}  ${u_id1}  ${recurringtype[1]}  ${list}  ${DAY}  ${DAY}  ${EMPTY}  ${sTime1}  ${eTime1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings   ${resp.status_code}     200
+    Set Suite Variable  ${u1_vac1}    ${resp.json()['holidayId']}
+
+    ${resp}=  Get Vacation By Id  ${u1_vac1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()['id']}  ${u1_vac1} 
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['startDate']}                         ${DAY}
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['terminator']['endDate']}             ${DAY}  
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['sTime']}             ${sTime1}  
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['eTime']}             ${eTime1}
+
+    ${resp}=  Get Vacation    ${u_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Holiday By Account
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Delete Holiday  ${holidayId}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Holiday By Id  ${hId1}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"    "${HOLIDAY_NOT_FOUND}" 
+
+    ${resp}=  Get Vacation By Id  ${u1_vac1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()['id']}  ${u1_vac1} 
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['startDate']}                         ${DAY}
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['terminator']['endDate']}             ${DAY}  
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['sTime']}             ${sTime1}  
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['eTime']}             ${eTime1}
+
+    ${resp}=   Get Holiday By Account
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
 
