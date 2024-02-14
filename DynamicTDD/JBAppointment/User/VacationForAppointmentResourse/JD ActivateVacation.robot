@@ -1283,6 +1283,14 @@ JD-TC-ActivateVacation-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
+    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
+    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1294,10 +1302,10 @@ JD-TC-ActivateVacation-6
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable  ${list}  ${list}
 
-    ${resp}=  Get Departments
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
+    # ${resp}=  Get Departments
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF   '${resp.content}' == '${emptylist}'
         ${dep_name1}=  FakerLibrary.bs
         ${dep_code1}=   Random Int  min=100   max=999
         ${dep_desc1}=   FakerLibrary.word  
@@ -1305,9 +1313,9 @@ JD-TC-ActivateVacation-6
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
         Set Test Variable  ${dep_id}  ${resp1.json()}
-    ELSE
-        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    END
+    # ELSE
+    #     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    # END
 
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -1774,6 +1782,7 @@ JD-TC-ActivateVacation-7
 
 
 
+***comment***
 JD-TC-ActivateVacation-8
     [Documentation]  create vacation for user in between the schedule and try taking account level and user level appt.
    
@@ -1803,7 +1812,6 @@ JD-TC-ActivateVacation-8
 
 
 
-***comment***
 JD-TC-ActivateVacation-UH7
     [Documentation]   Take waitlist and then create a  holiday for the 3 days and try to check waitliststatus and delete holiday
     

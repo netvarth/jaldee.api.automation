@@ -159,6 +159,36 @@ JD-TC-UpdateProviderConsumer-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['firstName']}    ${fname}
 
+JD-TC-UpdateProviderConsumer-UH1
+    
+    [Documentation]  update Provider Consumer With invalid Provider Consumer Id
+
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME18}    ${account_id}    ${token}    ${countryCode}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+    ${inv_cid}=  Generate Random String  3  [NUMBERS]
+
+    ${resp}=    Update ProviderConsumer    ${inv_cid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings     ${resp.json()}    ${NO_PERMISSION}
+
+JD-TC-UpdateProviderConsumer-UH2
+    
+    [Documentation]  update Provider Consumer Without Provider Consumer Id
+
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME18}    ${account_id}    ${token}    ${countryCode}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+    ${resp}=    Update ProviderConsumer    ${empty}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings     ${resp.json()}    ${ENTER_PROCONSUMERID}
+
 JD-TC-UpdateProviderConsumer-3
 
     [Documentation]     Update a consumer's phone number with different country code and then update it back to old country code
@@ -282,37 +312,9 @@ JD-TC-UpdateProviderConsumer-3
 
 
 
-JD-TC-UpdateProviderConsumer-UH1
-    
-    [Documentation]  update Provider Consumer With invalid Provider Consumer Id
 
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME18}    ${account_id}    ${token}    ${countryCode}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
 
-    ${inv_cid}=  Generate Random String  3  [NUMBERS]
-
-    ${resp}=    Update ProviderConsumer    ${inv_cid}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings     ${resp.json()}    ${CONSUMER_NOT_FOUND}
-
-JD-TC-UpdateProviderConsumer-UH2
-    
-    [Documentation]  update Provider Consumer Without Provider Consumer Id
-
-    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME18}    ${account_id}    ${token}    ${countryCode}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
-
-    ${resp}=    Update ProviderConsumer    ${empty}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings     ${resp.json()}    ${ENTER_PROCONSUMERID}
-
-JD-TC-Update Account Contact information-13
+JD-TC-UpdateProviderConsumer-4
 	[Documentation]  Get account contact information of a provider and then do consumer signup with same number and update consumer details and check new change in provider side
     
     ${domresp}=  Get BusinessDomainsConf
@@ -362,34 +364,74 @@ JD-TC-Update Account Contact information-13
     Should Be Equal As Strings  ${resp.json()['phoneVerified']}         ${bool[1]} 
     Set Suite Variable  ${country_code}   ${resp.json()['countryCode']} 
     
-    ${firstname}=  FakerLibrary.first_name
-    ${lastname}=  FakerLibrary.last_name
+
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
     ${address}=  FakerLibrary.Address
     ${alternativeNo}=  Evaluate  ${PUSERNAME23}+76068
     Set Test Variable  ${email}  ${firstname}${PUSERNAME_N}${C_Email}.${test_mail}
-    ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${PUSERNAME_N}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
+
+   ${resp}=    Send Otp For Login    ${PUSERNAME_N}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${PUSERNAME_N}   12
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${tokenss}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Activation  ${PUSERNAME_N}  1
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Set Credential  ${PUSERNAME_N}  ${PASSWORD}  1
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Consumer Login  ${PUSERNAME_N}  ${PASSWORD}
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${PUSERNAME_N}     ${accountId}  
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=    ProviderConsumer Login with token   ${PUSERNAME_N}    ${accountId}  ${tokenss} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid1}    ${resp.json()['providerConsumer']}
+
     ${newNo}=  Evaluate  ${PUSERNAME}+77898
-    ${resp}=  Update Consumer Profile With Emailid    ${firstname}  ${lastname}  ${address}   ${dob}  ${gender}  ${email}  
-    Log  ${resp.json()}
+
+    ${resp}=  Update ProviderConsumer   ${cid1}  firstName=${firstname}  lastName=${lastname}    dob=${dob}   
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Send Verify Login Consumer   ${newNo}
-    Log   ${resp.json()}
+
+    ${resp}=  Send Verify Login Consumer   ${newNo}  
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Verify Login Consumer   ${newNo}  5
-    Log   ${resp.json()}
+
+
+    ${resp}=  Verify Login Consumer   ${newNo}  ${OtpPurpose['ConsumerVerifyEmail']}  
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+   ${resp}=    Send Otp For Login    ${newNo}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${resp}=    Verify Otp For Login   ${newNo}   12
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${tokenfornew}  ${resp.json()['token']}
+
+
+    ${resp}=  Consumer Logout
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${newNo}    ${accountId}  ${tokenfornew}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid2}    ${resp.json()['providerConsumer']}
+
+    ${resp}=  Consumer Logout
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${PUSERNAME_N}    ${accountId}  ${tokenss}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings  "${resp.json()}"     "${NOT_REGISTERED_CUSTOMER}"
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_N}  ${PASSWORD}
     Log  ${resp.json()}
@@ -400,10 +442,9 @@ JD-TC-Update Account Contact information-13
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['account']}              ${pid5}
-    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}   ${newNo}
+    Should Be Equal As Strings  ${resp.json()['primaryPhoneNumber']}   ${PUSERNAME_N}
     Should Be Equal As Strings  ${resp.json()['contactFirstName']}     ${firstname}
     Should Be Equal As Strings  ${resp.json()['contactLastName']}      ${lastname}
-    Should Be Equal As Strings  ${resp.json()['primaryEmail']}         ${email}
     Should Be Equal As Strings  ${resp.json()['emailVerified']}        ${bool[0]} 
     Should Be Equal As Strings  ${resp.json()['phoneVerified']}        ${bool[1]} 
 

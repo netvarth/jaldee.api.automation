@@ -261,6 +261,20 @@ JD-TC-Apply ProviderCoupon-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${couponId}  ${resp.json()}
 
+    ${resp}=  Get Coupon By Id  ${couponId} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Should Be Equal As Strings  ${resp.json()['couponRules']['published']}  ${bool[0]}
+    
+    ${resp}=  Publish Provider Coupon    ${couponId}   ${ST_DAY}    ${EN_DAY}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+
+    ${resp}=  Get Coupon By Id  ${couponId} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Should Be Equal As Strings  ${resp.json()['couponRules']['published']}  ${bool[1]}
+
     ${referenceNo}=   Random Int  min=5  max=200
     ${referenceNo}=  Convert To String  ${referenceNo}
 
@@ -365,6 +379,17 @@ JD-TC-ProviderCouponBill-2
     ${resp}=  Get Coupon By Id  ${coupon_id1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=  Publish Provider Coupon    ${coupon_id1}   ${ST_DAY}    ${EN_DAY}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+
+    ${resp}=  Get Coupon By Id  ${coupon_id1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    Should Be Equal As Strings  ${resp.json()['couponRules']['published']}  ${bool[1]}
+
+
 
     ${resp1}=  AddCustomer  ${CUSERNAME12}
     Log  ${resp1.content}
