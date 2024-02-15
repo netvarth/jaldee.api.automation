@@ -3690,6 +3690,11 @@ JD-TC-AddCustomer-25
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email_verified']}  ${bool[0]}
      Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['favourite']}  ${bool[0]}
 
+     ${resp}=  Get LastManualIdOfcustomer
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings   ${resp.json()}   ${jaldeeid}
+
 
 JD-TC-AddCustomer-26
      [Documentation]  Add a customer by provider and do a provider consumer signup for that customer

@@ -12980,3 +12980,42 @@ Get Prescription Templates By Filter
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/templates   params=${param}   expected_status=any
     [Return]  ${resp}
+
+######## Style config ############
+AddOrUpdate UserStyle
+    [Arguments]   ${userid}   ${color}    &{kwargs}
+    ${data}=   Create Dictionary    userid=${userid}  color=${color}   
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    Log  ${data}
+    ${data}=   json.dumps   ${data}
+    Check And Create YNW Session
+    ${resp}=   POST On Session  ynw  /provider/styleconfig/styletype/UsersStyleConfig     data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+AddOrUpdate DashboardStyle
+    [Arguments]   ${userid}   ${defaultBookingView}   ${dashboardActions}   &{kwargs}
+    ${data}=   Create Dictionary    userid=${userid}  defaultBookingView=${defaultBookingView}    dashboardActions=${dashboardActions}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    Log  ${data}
+    ${data}=   json.dumps   ${data}
+    Check And Create YNW Session
+    ${resp}=   POST On Session  ynw  /provider/styleconfig/styletype/DashboardStyleConfig     data=${data}  expected_status=any
+    [Return]  ${resp}
+
+
+Get StyleConfig
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/styleconfig  params=${param}  expected_status=any
+    [Return]  ${resp}
+
+
+Get LastManualIdOfcustomer
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/customers/patientId  expected_status=any
+    [Return]  ${resp}
