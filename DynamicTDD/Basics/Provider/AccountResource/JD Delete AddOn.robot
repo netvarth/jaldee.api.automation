@@ -134,13 +134,7 @@ JD-TC-Delete addon -1
        Log   ${resp.json()}
        Should Be Equal As Strings   ${resp.status_code}   200
 
-       Should Be Equal As Strings  ${resp.json()[1]['licPkgOrAddonId']}  ${addon_id}   
-       Should Be Equal As Strings  ${resp.json()[1]['base']}  False
-       Should Be Equal As Strings  ${resp.json()[1]['licenseTransactionType']}  New
-       Should Be Equal As Strings  ${resp.json()[1]['renewedDays']}  0
-       Should Be Equal As Strings  ${resp.json()[1]['type']}  Production
-       Should Be Equal As Strings  ${resp.json()[1]['status']}  Active
-       Should Be Equal As Strings  ${resp.json()[1]['name']}  ${addon_name}
+       Should Not Contain  ${resp.json()}  ${addon2_id}
 
        Should Be Equal As Strings  ${resp.json()[0]['licPkgOrAddonId']}  ${addon_id1}   
        Should Be Equal As Strings  ${resp.json()[0]['base']}  False
@@ -151,7 +145,7 @@ JD-TC-Delete addon -1
        Should Be Equal As Strings  ${resp.json()[0]['name']}  ${addon_name1}
 
 
-JD-TC-Addaddon -UH1
+JD-TC-Delete addon -UH1
        [Documentation]   Try to delete using addon.
 
        ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
@@ -177,7 +171,7 @@ JD-TC-Addaddon -UH1
        Log  ${resp.json()}
        Should Be Equal As Strings  ${resp.status_code}  200
 
-       FOR   ${a}  IN RANGE   5
+       FOR   ${a}  IN RANGE   28
 
               ${PO_Number}    Generate random string    7    0123456789
               ${p_num}    Convert To Integer  ${PO_Number}
@@ -202,9 +196,13 @@ JD-TC-Addaddon -UH1
        ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
        Should Be Equal As Strings  ${resp.status_code}  200
 
+       ${resp}=   Get addons auditlog
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
        ${resp}=   Delete Not Used AddOn         ${p_id1}    ${addon1_id}
     #    Log   ${resp.json()}
-       Should Be Equal As Strings   ${resp.status_code}   200
+       Should Be Equal As Strings   ${resp.status_code}   422
 
        ${resp}=   Month Matrix Cache Task
        Log   ${resp.json()}
@@ -218,8 +216,47 @@ JD-TC-Addaddon -UH1
        Log   ${resp.json()}
        Should Be Equal As Strings   ${resp.status_code}   200
 
-JD-TC-Addaddon -UH2
+JD-TC-Delete addon -UH2
        [Documentation]   Try to delete Used_Up status addon.
+
+       ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       
+       # ${resp}=  GET Account License details     ${p_id1}
+       # Log  ${resp.content}
+       # Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=  Get Addon Transactions details     ${p_id1}
+       Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=  Get Account Addon details  ${p_id1}  
+       Log  ${resp.content} 
+       Should be equal as strings  ${resp.status_code}       200
+
+# --------------------------  Multi User - 25 Count ---------------------
+       ${resp}=   Get Addons Metadata For Superadmin
+	Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+	Set Suite Variable    ${addon_id}      ${resp.json()[6]['addons'][0]['addonId']}
+	Set Suite Variable    ${addon_name}      ${resp.json()[6]['addons'][0]['addonName']}
+       Log   ${addon_id}
+
+       ${resp}=  Add Addons details  ${p_id1}   ${addon_id}
+	Log   ${resp.content}
+	Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=  Get Addon Transactions details     ${p_id1}
+       Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+	${resp}=  Get Account Addon details  ${p_id1}  
+	Log  ${resp.content} 
+	should be equal as strings  ${resp.json()[0]['licPkgOrAddonId']}  ${addon_id} 
+	should be equal as strings  ${resp.json()[0]['name']}  ${addon_name}	   	  
+	Should Be Equal As Strings  ${resp.status_code}  200
+	Set Suite Variable    ${addon_id}      ${resp.json()[0]['accountLicId']}
 
        ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
        Log  ${resp.content}
@@ -232,7 +269,7 @@ JD-TC-Addaddon -UH2
        ${pin}=  get_pincode
        ${user_dis_name}=  FakerLibrary.last_name
 
-       FOR   ${a}  IN RANGE   96
+       FOR   ${a}  IN RANGE   50
 
               ${PO_Number}    Generate random string    7    0123456789
               ${p_num}    Convert To Integer  ${PO_Number}
@@ -274,11 +311,13 @@ JD-TC-Addaddon -UH2
        Should Be Equal As Strings   ${resp.status_code}   200
 
 
-JD-TC-Addaddon -UH3
+JD-TC-Delete addon -UH3
        [Documentation]   Try to delete with Invalid addon id.
 
        ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
        Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${pin}=  get_pincode
 
        ${resp}=   Delete Not Used AddOn         ${p_id1}    ${pin}
     #    Log   ${resp.json()}
