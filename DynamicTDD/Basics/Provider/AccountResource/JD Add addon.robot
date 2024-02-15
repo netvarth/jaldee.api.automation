@@ -510,6 +510,75 @@ JD-TC-Addaddon -UH7
        Should Be Equal As Strings  ${resp.json()[0]['name']}  ${addon_name1}
 
 JD-TC-Addaddon -UH
+       [Documentation]   Try to use both addon fully .
+
+       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       Log  ${resp.content}
+       Should Be Equal As Strings    ${resp.status_code}   200
+
+       ${pin}=  get_pincode
+       ${user_dis_name}=  FakerLibrary.last_name
+
+       FOR   ${a}  IN RANGE   45
+
+              ${PO_Number}    Generate random string    7    0123456789
+              ${p_num}    Convert To Integer  ${PO_Number}
+              ${PUSERNAME}=  Evaluate  ${PUSERNAME}+${p_num}
+              Set Test Variable  ${PUSERNAME${a}}  ${PUSERNAME}
+
+              ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${EMPTY}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME${a}}  ${dep_id}  ${sub_domain_id}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}  
+              Log   ${resp.json()}
+              Should Be Equal As Strings  ${resp.status_code}  200
+              Set Suite Variable  ${u_id${a}}  ${resp.json()}
+
+              ${resp}=  Get User By Id      ${u_id${a}}
+              Log   ${resp.json()}
+              Should Be Equal As Strings      ${resp.status_code}  200
+
+       END
+
+       
+       ${resp}=   Get User Count
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
+       ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+
+       ${resp}=   Month Matrix Cache Task
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
+       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       Log  ${resp.content}
+       Should Be Equal As Strings    ${resp.status_code}   200
+
+       ${resp}=   Get License UsageInfo 
+       Log  ${resp.json()}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=   Get addons auditlog
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
+       Should Be Equal As Strings  ${resp.json()[1]['licPkgOrAddonId']}  ${addon_id}   
+       Should Be Equal As Strings  ${resp.json()[1]['base']}  False
+       Should Be Equal As Strings  ${resp.json()[1]['licenseTransactionType']}  New
+       Should Be Equal As Strings  ${resp.json()[1]['renewedDays']}  0
+       Should Be Equal As Strings  ${resp.json()[1]['type']}  Production
+       Should Be Equal As Strings  ${resp.json()[1]['status']}  Used_Up
+       Should Be Equal As Strings  ${resp.json()[1]['name']}  ${addon_name}
+
+       Should Be Equal As Strings  ${resp.json()[0]['licPkgOrAddonId']}  ${addon_id1}   
+       Should Be Equal As Strings  ${resp.json()[0]['base']}  False
+       Should Be Equal As Strings  ${resp.json()[0]['licenseTransactionType']}  New
+       Should Be Equal As Strings  ${resp.json()[0]['renewedDays']}  0
+       Should Be Equal As Strings  ${resp.json()[0]['type']}  Production
+       Should Be Equal As Strings  ${resp.json()[0]['status']}  Used_Up
+       Should Be Equal As Strings  ${resp.json()[0]['name']}  ${addon_name1}
+
+JD-TC-Addaddon -UH
        [Documentation]   Adding 2 Queues/Schedules/Services Addon.
 
        ${resp}=   Encrypted Provider Login  ${MUSERNAME10}  ${PASSWORD} 
@@ -638,7 +707,7 @@ JD-TC-Addaddon -UH
               ${ser_durtn}=   Random Int   min=2   max=10
               ${ser_amount}=   Random Int   min=100   max=1000
               ${ser_amount1}=   Convert To Number   ${ser_amount}
-              ${SERVICE}=    FakerLibrary.word
+              ${SERVICE}=    FakerLibrary.name
               Set Test Variable  ${SERVICE${a}}  ${SERVICE}
 
               ${resp}=  Create Service  ${SERVICE${a}}   ${description}   ${ser_durtn}   ${status[0]}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${ser_amount1}  ${bool[0]}   ${bool[0]}      department=${dep_id}

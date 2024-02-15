@@ -114,12 +114,15 @@ JD-TC-Delete addon -1
 
 	${resp}=  Get Account Addon details  ${p_id1}  
 	Log  ${resp.content} 
-	should be equal as strings  ${resp.json()[0]['licPkgOrAddonId']}  ${addon_id1} 
-	should be equal as strings  ${resp.json()[0]['name']}  ${addon_name1}	   	  
 	Should Be Equal As Strings  ${resp.status_code}  200
+	should be equal as strings  ${resp.json()[0]['licPkgOrAddonId']}  ${addon_id1} 
+	should be equal as strings  ${resp.json()[0]['name']}  ${addon_name1}	  
+	Set Suite Variable    ${addon1_id}      ${resp.json()[0]['accountLicId']}
+	Set Suite Variable    ${addon2_id}      ${resp.json()[1]['accountLicId']}
 
 
-       ${resp}=   Delete Not Used AddOn         ${p_id1}    ${addon_id}
+
+       ${resp}=   Delete Not Used AddOn         ${p_id1}    ${addon2_id}
     #    Log   ${resp.json()}
        Should Be Equal As Strings   ${resp.status_code}   200
 
@@ -170,6 +173,10 @@ JD-TC-Addaddon -UH1
        ${employee_id}=  FakerLibrary.last_name
        Set Suite Variable  ${employee_id}
 
+       ${resp}=   Get License UsageInfo 
+       Log  ${resp.json()}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
        FOR   ${a}  IN RANGE   5
 
               ${PO_Number}    Generate random string    7    0123456789
@@ -188,10 +195,14 @@ JD-TC-Addaddon -UH1
 
        END
 
+       ${resp}=   Get User Count
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
        ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
        Should Be Equal As Strings  ${resp.status_code}  200
 
-       ${resp}=   Delete Not Used AddOn         ${p_id1}    ${addon_id1}
+       ${resp}=   Delete Not Used AddOn         ${p_id1}    ${addon1_id}
     #    Log   ${resp.json()}
        Should Be Equal As Strings   ${resp.status_code}   200
 
@@ -199,6 +210,76 @@ JD-TC-Addaddon -UH1
        Log   ${resp.json()}
        Should Be Equal As Strings   ${resp.status_code}   200
 
+       ${resp}=   Get License UsageInfo 
+       Log  ${resp.json()}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
        ${resp}=   Get addons auditlog
        Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
+JD-TC-Addaddon -UH2
+       [Documentation]   Try to delete Used_Up status addon.
+
+       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       Log  ${resp.content}
+       Should Be Equal As Strings    ${resp.status_code}   200
+
+       ${resp}=   Get License UsageInfo 
+       Log  ${resp.json()}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${pin}=  get_pincode
+       ${user_dis_name}=  FakerLibrary.last_name
+
+       FOR   ${a}  IN RANGE   96
+
+              ${PO_Number}    Generate random string    7    0123456789
+              ${p_num}    Convert To Integer  ${PO_Number}
+              ${PUSERNAME}=  Evaluate  ${PUSERNAME}+${p_num}
+              Set Test Variable  ${PUSERNAME${a}}  ${PUSERNAME}
+
+              ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${EMPTY}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME${a}}  ${dep_id}  ${sub_domain_id}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}  
+              Log   ${resp.json()}
+              Should Be Equal As Strings  ${resp.status_code}  200
+              Set Suite Variable  ${u_id${a}}  ${resp.json()}
+
+              ${resp}=  Get User By Id      ${u_id${a}}
+              Log   ${resp.json()}
+              Should Be Equal As Strings      ${resp.status_code}  200
+
+       END
+
+       ${resp}=   Get User Count
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
+       ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=   Delete Not Used AddOn         ${p_id1}    ${addon1_id}
+    #    Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
+       ${resp}=   Month Matrix Cache Task
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
+       ${resp}=   Get License UsageInfo 
+       Log  ${resp.json()}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=   Get addons auditlog
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
+
+JD-TC-Addaddon -UH3
+       [Documentation]   Try to delete with Invalid addon id.
+
+       ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=   Delete Not Used AddOn         ${p_id1}    ${pin}
+    #    Log   ${resp.json()}
        Should Be Equal As Strings   ${resp.status_code}   200
