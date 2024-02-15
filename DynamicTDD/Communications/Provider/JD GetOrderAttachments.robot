@@ -22,15 +22,16 @@ ${fileSize}     0.00458
 
 *** Test Cases ***
 
-JD-TC-SendMessageFromOrder-1
-    [Documentation]    Send Message From Order.
+JD-TC-GetOrderAttachments-1
 
-    clear_queue    ${PUSERNAME250}
-    clear_service  ${PUSERNAME250}
-    clear_customer   ${PUSERNAME250}
-    clear_Item   ${PUSERNAME250}
+    [Documentation]    Get Order Attachments
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    clear_queue    ${PUSERNAME251}
+    clear_service  ${PUSERNAME251}
+    clear_customer   ${PUSERNAME251}
+    clear_Item   ${PUSERNAME251}
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME251}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -38,12 +39,12 @@ JD-TC-SendMessageFromOrder-1
     Set Suite Variable  ${pid}  ${decrypted_data['id']}
     Set Suite Variable  ${pdrname}  ${decrypted_data['userName']}
     
-    ${accId}=  get_acc_id  ${PUSERNAME250}
+    ${accId}=  get_acc_id  ${PUSERNAME251}
     Set Suite Variable  ${accId}
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME250}.${test_mail}
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME251}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -226,12 +227,11 @@ JD-TC-SendMessageFromOrder-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-
     ${resp}=   Get Order By Id  ${accId}  ${orderid1}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME251}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -275,259 +275,51 @@ JD-TC-SendMessageFromOrder-1
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
-JD-TC-SendMessageFromOrder-UH1
+JD-TC-GetOrderAttachments-UH1
 
-    [Documentation]    Send Message From Order - caption is empty
+    [Documentation]    Get Order Attachments  - where order id is inalid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME251}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Send Message With Order   ${empty}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  attachments=${attachment}  uuid=${uuid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${MASS_COMMUNICATION_NOT_EMPTY}
+    ${inv}=     FakerLibrary.Random Int
 
-JD-TC-SendMessageFromOrder-UH2
+    ${resp}=    Get Order Attachments   ${inv}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}    200 
 
-    [Documentation]    Send Message From Order - email flag is false
+JD-TC-GetOrderAttachments-UH2
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    [Documentation]    Get Order Attachments  - with consumer login
 
-    ${resp}=    Send Message With Order   ${caption1}  ${boolean[0]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  attachments=${attachment}  uuid=${uuid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
 
-JD-TC-SendMessageFromOrder-UH3
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    [Documentation]    Send Message From Order - sms flag is false
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=    Get Order Attachments   ${orderid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}    400
+    Should Be Equal As Strings  ${resp.json()}  ${LOGIN_INVALID_URL}
 
-    ${resp}=    Send Message With Order   ${caption1}  ${boolean[1]}  ${boolean[0]}  ${boolean[1]}  ${boolean[1]}  attachments=${attachment}  uuid=${uuid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+JD-TC-GetOrderAttachments-UH3
 
-JD-TC-SendMessageFromOrder-UH4
+    [Documentation]    Get Order Attachments  - without login  
 
-    [Documentation]    Send Message From Order - telegram flag is false
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Send Message With Order   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[0]}  ${boolean[1]}  attachments=${attachment}  uuid=${uuid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-JD-TC-SendMessageFromOrder-UH5
-
-    [Documentation]    Send Message From Order - whats app flag is false
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Send Message With Order   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[0]}  attachments=${attachment}  uuid=${uuid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-JD-TC-SendMessageFromOrder-UH6
-
-    [Documentation]    Send Message From Order - attachment is empty list
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${emptylist}=   Create List
-
-    ${resp}=    Send Message With Order   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  attachments=${emptylist}  uuid=${uuid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-JD-TC-SendMessageFromOrder-UH7
-
-    [Documentation]    Send Message From Order - uuid is empty list
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${emptylist}=   Create List
-
-    ${resp}=    Send Message With Order   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  attachments=${attachment}  uuid=${emptylist}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${ENTER_UUID}
-
-JD-TC-SendMessageFromOrder-UH8
-
-    [Documentation]    Send Message From Order - owner is empty
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${attachments}=  Create Dictionary  owner=${empty}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
-    ${attachment2}=   Create List  ${attachments}
-
-    ${resp}=    Send Message With Order   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  attachments=${attachment2}  uuid=${uuid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-JD-TC-SendMessageFromOrder-UH9
-
-    [Documentation]    Send Message From Order - owner is invalid
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${inv}=  FakerLibrary.Random Int
-
-    ${attachments}=  Create Dictionary  owner=${inv}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
-    ${attachment2}=   Create List  ${attachments}
-
-    ${resp}=    Send Message With Order   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  attachments=${attachment2}  uuid=${uuid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-JD-TC-SendMessageFromOrder-10
-
-    [Documentation]    Send Message From Order - file name is empty
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${attachments}=  Create Dictionary  owner=${pid}  fileName=${empty}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
-    ${attachment2}=   Create List  ${attachments}
-
-    ${resp}=    Send Message With Order   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  attachments=${attachment2}  uuid=${uuid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${FILE_NAME_NOT_FOUND}
-
-JD-TC-SendMessageFromOrder-UH11
-
-    [Documentation]    Send Message From Order - file size is empty
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${attachments}=  Create Dictionary  owner=${pid}  fileName=${fileName}  fileSize=${empty}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
-    ${attachment2}=   Create List  ${attachments}
-
-    ${resp}=    Send Message With Order   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  attachments=${attachment2}  uuid=${uuid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${FILE_SIZE_ERROR}
-
-JD-TC-SendMessageFromOrder-UH12
-
-    [Documentation]    Send Message From Order - filr type is empty
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${attachments}=  Create Dictionary  owner=${pid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${empty}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
-    ${attachment2}=   Create List  ${attachments}
-
-    ${resp}=    Send Message With Order   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  attachments=${attachment2}  uuid=${uuid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${FILE_TYPE_NOT_FOUND}
-
-JD-TC-SendMessageFromOrder-UH13
-
-    [Documentation]    Send Message From Order - order is empty
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${attachments}=  Create Dictionary  owner=${pid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${empty}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
-    ${attachment2}=   Create List  ${attachments}
-
-    ${resp}=    Send Message With Order   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  attachments=${attachment2}  uuid=${uuid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-JD-TC-SendMessageFromOrder-UH14
-
-    [Documentation]    Send Message From Order - drive id is empty
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${attachments}=  Create Dictionary  owner=${pid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${empty}  action=${file_action[0]}  ownerName=${pdrname}
-    ${attachment2}=   Create List  ${attachments}
-
-    ${resp}=    Send Message With Order   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  attachments=${attachment2}  uuid=${uuid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-JD-TC-SendMessageFromOrder-UH15
-
-    [Documentation]    Send Message From Order - drivr id is invalid
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${inv}=  FakerLibrary.Random INt
-
-    ${attachments}=  Create Dictionary  owner=${pid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${inv}  action=${file_action[0]}  ownerName=${pdrname}
-    ${attachment2}=   Create List  ${attachments}
-
-    ${resp}=    Send Message With Order   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  attachments=${attachment2}  uuid=${uuid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}  ${INV_DRIVE_ID}
-
-JD-TC-SendMessageFromOrder-UH16
-
-    [Documentation]    Send Message From Order - file action id remove
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${attachments}=  Create Dictionary  owner=${pid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[3]}  ownerName=${pdrname}
-    ${attachment2}=   Create List  ${attachments}
-
-    ${resp}=    Send Message With Order   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  attachments=${attachment2}  uuid=${uuid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-JD-TC-SendMessageFromOrder-UH17
-
-    [Documentation]    Send Message From Order - owner name is empty
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME250}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${attachments}=  Create Dictionary  owner=${pid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${empty}
-    ${attachment2}=   Create List  ${attachments}
-
-    ${resp}=    Send Message With Order   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  attachments=${attachment2}  uuid=${uuid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-JD-TC-SendMessageFromOrder-UH18
-
-    [Documentation]    Send Message From Order - without login
-
-    ${resp}=    Send Message With Order   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  attachments=${attachment}  uuid=${uuid}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  419
+    ${resp}=    Get Order Attachments   ${orderid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}    419
     Should Be Equal As Strings  ${resp.json()}  ${SESSION_EXPIRED}

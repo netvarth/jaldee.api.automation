@@ -3422,3 +3422,29 @@ upload file to temporary location consumer
     ${resp}=  POST On Session  ynw  /consumer/fileShare/upload   data=${data}  expected_status=any
     Log  ${resp.content}
     [Return]  ${resp}
+
+Send Message With Waitlist consumer
+    [Arguments]  ${provider}  ${uuid}  ${message}  ${messagetype}  &{kwargs}  
+
+    ${message}=  Create Dictionary  msg=${message}  messageType=${messagetype}
+    ${data}=  Create Dictionary  provider=${provider}  message=${message}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/waitlist/communication/${uuid}   data=${data}  expected_status=any
+    [Return]  ${resp}
+
+Send Message With Appoinment consumer
+    [Arguments]  ${provider}  ${uuid}  ${message}  ${messagetype}  &{kwargs}  
+
+    ${message}=  Create Dictionary  msg=${message}  messageType=${messagetype}
+    ${data}=  Create Dictionary  provider=${provider}  message=${message}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/appointment/communicate/message/${uuid}   data=${data}  expected_status=any
+    [Return]  ${resp}
