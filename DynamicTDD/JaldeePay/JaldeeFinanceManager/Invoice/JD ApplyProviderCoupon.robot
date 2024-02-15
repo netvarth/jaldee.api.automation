@@ -157,7 +157,7 @@ JD-TC-Apply ProviderCoupon-1
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    Set Test Variable  ${email1}  ${vender_name}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
@@ -175,7 +175,7 @@ JD-TC-Apply ProviderCoupon-1
     ${vendor_phno}=   Create List  ${vendor_phno}
     Set Suite Variable    ${vendor_phno}
     
-    ${email}=   Create List  ${email}
+    ${email}=   Create List  ${email1}
     Set Suite Variable    ${email}
 
     ${bankIfsc}    Random Number 	digits=5 
@@ -230,7 +230,7 @@ JD-TC-Apply ProviderCoupon-1
     ${SERVICE1}=    FakerLibrary.word
     Set Suite Variable  ${SERVICE1}
     ${desc}=   FakerLibrary.sentence
-    ${servicecharge}=   Random Int  min=100  max=500
+    ${servicecharge}=   Random Int  min=200  max=500
     ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}    department=${dep_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -360,8 +360,9 @@ JD-TC-ProviderCouponBill-2
     ${amount}=  FakerLibrary.Pyfloat  positive=True  left_digits=1  right_digits=1
     ${cupn_code}=   FakerLibrary.word
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
-    ${eTime}=  add_timezone_time  ${tz}  0  45  
+    # ${sTime}=  db.subtract_timezone_time  ${tz}  0  15
+    ${sTime}=   db.subtract_timezone_time  ${tz}  2  55
+    ${eTime}=  add_timezone_time  ${tz}  5  45  
     ${ST_DAY}=  db.get_date_by_timezone  ${tz}
     ${EN_DAY}=  db.add_timezone_date  ${tz}   10
     ${min_bill_amount}=   Random Int   min=100   max=150
@@ -443,25 +444,36 @@ JD-TC-ProviderCouponBill-2
 
     ${serviceList}=  Create Dictionary  serviceId=${sid1}   quantity=${quantity}  price=${serviceprice}
     ${serviceList}=    Create List    ${serviceList}
-    
-    
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}
-    Log  ${resp.json()}
+
+
+    ${resp}=  createInvoice for booking   ${invoicebooking[1]}   ${wid}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
+
+
+    ${resp1}=  Get Bookings Invoices  ${wid}
+    Log  ${resp1.content}
+    Should Be Equal As Strings  ${resp1.status_code}  200
+    Set Suite Variable   ${invoice_uid1}   ${resp1.json()[0]['invoiceUid']} 
+    
+    
+    # ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}   serviceList=${serviceList}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]} 
 
     ${resp}=  Get Coupons 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
 
-    ${resp}=   Apply Provider Coupon   ${invoice_uid}   ${cupn_code}
+    ${resp}=   Apply Provider Coupon   ${invoice_uid1}   ${cupn_code}
     Log  ${resp.json()} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
 
-    ${resp}=  Get Invoice By Id  ${invoice_uid}
+    ${resp}=  Get Invoice By Id  ${coupon_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['providerCoupons'][0]['couponCode']}  ${cupn_code}
