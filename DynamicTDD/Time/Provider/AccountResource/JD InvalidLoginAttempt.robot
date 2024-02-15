@@ -28,7 +28,7 @@ InvalidLoginAttempt
     ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}  countryCode=${countryCode}
     ${log}=    json.dumps    ${login}
     ${resp}=    POST On Session    ynw    /provider/login    data=${log}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Test Cases ***
 

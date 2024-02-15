@@ -35,7 +35,7 @@ ${digits}       0123456789
 #         Run Keyword If     '${check}' == 'True'   Append To List   ${provider_list}  ${PUSERNAME${a}}
         
 #     END
-#     [Return]  ${provider_list}
+#     RETURN  ${provider_list}
 
 *** Test Cases ***
 JD-TC-ChangeAppointmentStatus-1

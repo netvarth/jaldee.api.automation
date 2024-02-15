@@ -39,7 +39,7 @@ ${AE_tz}   Asia/Dubai
 #     END
 #     # Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
 #     ${resp}=    POST On Session    ynw    /consumer/login    data=${log}  expected_status=any   headers=${cons_headers}
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 
 

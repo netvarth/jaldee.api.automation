@@ -21,7 +21,7 @@ Get Finance Status By categorytype
     [Arguments]   ${categoryType}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/status/type/${categoryType}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Variables ***
 

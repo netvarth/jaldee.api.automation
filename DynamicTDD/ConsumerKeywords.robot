@@ -25,7 +25,7 @@ Consumer Login
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=    POST On Session    ynw    /consumer/login    data=${log}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Consumer Logout
@@ -33,7 +33,7 @@ Consumer Logout
     ${cons_headers}=  Create Dictionary  &{headers} 
     Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw    /consumer/login  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 
@@ -49,7 +49,7 @@ Send Reset Email
     Check And Create YNW Session
     ${data}=    json.dumps    ${countryCode}
     ${resp}=    POST On Session    ynw   /consumer/login/reset/${email}   data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Reset Password
@@ -66,7 +66,7 @@ Reset Password
     ${login}=    Create Dictionary    loginId=${email}  password=${pswd}  countryCode=${countryCode}
     ${log}=    json.dumps    ${login}
     ${respk}=  PUT On Session  ynw  /consumer/login/reset/${key}  data=${log}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}  ${respk}
+    RETURN  ${resp}  ${respk}
 
     
 Consumer Creation
@@ -74,7 +74,7 @@ Consumer Creation
     ${usp}=    Create Dictionary   firstName=${firstname}  lastName=${lastname}  address=${address}  primaryMobileNo=${primaryNo}  alternativePhoneNo=${alternativeNo}  dob=${dob}  gender=${gender}  email=${email}  countryCode=${countryCode}
     ${auth}=    Create Dictionary    userProfile=${usp}
     ${apple}=    json.dumps    ${auth}
-    [Return]  ${apple}
+    RETURN  ${apple}
 
 
 Consumer SignUp
@@ -88,7 +88,7 @@ Consumer SignUp
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /consumer   data=${apple}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Consumer Activation
@@ -104,7 +104,7 @@ Consumer Activation
     Check And Create YNW Session
     ${key}=   verify accnt  ${email}  ${purpose}
     ${resp_val}=  POST On Session   ynw  /consumer/${key}/verify   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp_val}
+    RETURN  ${resp_val}
 
 
 Consumer Set Credential
@@ -119,7 +119,7 @@ Consumer Set Credential
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=    PUT On Session    ynw    /consumer/${key}/activate   data=${apple}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Send Verify Login Consumer
@@ -132,7 +132,7 @@ Send Verify Login Consumer
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  POST On Session    ynw  /consumer/login/verifyLogin/${loginid}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Check Consumer Exists
@@ -147,7 +147,7 @@ Check Consumer Exists
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  GET On Session    ynw  /consumer/${loginid}/check    data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Verify Login Consumer
@@ -163,7 +163,7 @@ Verify Login Consumer
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=    PUT On Session    ynw    /consumer/login/${key}/verifyLogin    data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Consumer 
@@ -179,7 +179,7 @@ Update Consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    PATCH On Session    ynw    /consumer/signUp    data=${apple}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Consumer By Id
     [Arguments]  ${email}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -192,7 +192,7 @@ Get Consumer By Id
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=    GET On Session    ynw   /consumer/${id}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Consumer Change Password
@@ -207,14 +207,14 @@ Consumer Change Password
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=    PUT On Session   ynw    /consumer/login/chpwd  data=${apple}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Consumer Waitlist
     [Arguments]    ${service_id}  ${partySize}  ${consumerNote}  
     ${service}=     Create Dictionary    id=${service_id}
     ${apple}=  Create Dictionary   service=${service}  partySize=${partySize}  consumerNote=${consumerNote}
-    [Return]  ${apple}
+    RETURN  ${apple}
     
 
 # Add To Waitlist Consumer
@@ -225,7 +225,7 @@ Consumer Waitlist
 #     ${apple}=    json.dumps    ${apple}
 #     Check And Create YNW Session
 #     ${resp}=    POST On Session   ynw    /consumer/waitlist  data=${apple}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-#     [Return]  ${resp}
+#     RETURN  ${resp}
     
 
 Consumer Add To Waitlist with Phone no
@@ -249,7 +249,7 @@ Consumer Add To Waitlist with Phone no
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /consumer/waitlist  data=${apple}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Consumer Add To WL With Virtual Service
@@ -273,7 +273,7 @@ Consumer Add To WL With Virtual Service
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}   params=${cons_params}   expected_status=any   headers=${cons_headers} 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Virtual Service Checkin with Mode
@@ -297,7 +297,7 @@ Virtual Service Checkin with Mode
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -325,7 +325,7 @@ Consumer Add To WL With Virtual Service For User
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Add To Waitlist Children Consumer
@@ -347,7 +347,7 @@ Add To Waitlist Children Consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /consumer/waitlist  data=${apple}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # View Waitlistee <-> Get consumer Waitlist By Id
 # View Waitlistee
@@ -357,7 +357,7 @@ Add To Waitlist Children Consumer
 #     Check And Create YNW Session
 #     Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
 #     ${resp}=  GET On Session  ynw  /consumer/waitlist/${id}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 Get Waitlist Consumer
     [Arguments]    &{kwargs}
@@ -369,7 +369,7 @@ Get Waitlist Consumer
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${kwargs}   &{locparam}
     ${resp}=  GET On Session  ynw  /consumer/waitlist  params=${kwargs}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Cancel Waitlist
@@ -385,7 +385,7 @@ Cancel Waitlist
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  PUT On Session  ynw  /consumer/waitlist/cancel/${id}  data=${auth}   params=${cons_params}   expected_status=any  headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Approximate Waiting Time Consumer
@@ -398,7 +398,7 @@ Approximate Waiting Time Consumer
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=    GET On Session    ynw  /consumer/waitlist/appxWaitingTime  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Consumer Profile
@@ -418,7 +418,7 @@ Update Consumer Profile
     ${apple}=    json.dumps    ${usp}
     Check And Create YNW Session
     ${resp}=    PATCH On Session    ynw    /consumer    data=${apple}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Consumer Profile With Emailid
@@ -433,7 +433,7 @@ Update Consumer Profile With Emailid
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    PATCH On Session    ynw    /consumer    data=${apple}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Waitlist Id Consumer
@@ -446,7 +446,7 @@ Get Waitlist Id Consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/waitlist/${id}/${date}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 Reveal Phone Number
@@ -459,7 +459,7 @@ Reveal Phone Number
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /consumer/providers/revealPhoneNo/${accid}/${status}   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
     
     
 Add Rating
@@ -474,7 +474,7 @@ Add Rating
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/waitlist/rating  params=${cons_params}  data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
     
 Update Rating Waitlist
@@ -489,7 +489,7 @@ Update Rating Waitlist
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /consumer/waitlist/rating  params=${cons_params}  data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Verify Consumer Profile
@@ -505,7 +505,7 @@ Familymember Creation
     ${up}=  Create Dictionary  firstName=${firstname}  lastName=${lastname}  dob=${dob}  gender=${gender}
     ${data}=  Create Dictionary   userProfile=${up}
     ${data}=  json.dumps  ${data}
-    [Return]  ${data}
+    RETURN  ${data}
 
 
 AddFamilyMember
@@ -519,7 +519,7 @@ AddFamilyMember
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/familyMember   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 DeleteFamilyMember
@@ -532,7 +532,7 @@ DeleteFamilyMember
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    DELETE On Session  ynw  /consumer/familyMember/${id}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 ListFamilyMember
@@ -545,7 +545,7 @@ ListFamilyMember
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session   ynw   /consumer/familyMember   params=${kwargs}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 ConsumerFamilyMember Waitlist
@@ -553,7 +553,7 @@ ConsumerFamilyMember Waitlist
     ${service}=     Create Dictionary    id=${service_id}
     ${member}=     Create Dictionary    id=${mem_id}
     ${apple}=  Create Dictionary   service=${service}  partySize=${partySize}  consumerNote=${consumerNote}  waitlistingFor=${member}
-    [Return]  ${apple}
+    RETURN  ${apple}
 
 
 Add To Waitlist ConsumerFamilyMember
@@ -568,7 +568,7 @@ Add To Waitlist ConsumerFamilyMember
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /consumer/waitlist  data=${apple}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 UpdateFamilymember Creation
@@ -576,7 +576,7 @@ UpdateFamilymember Creation
     ${up}=  Create Dictionary   id=${mem_id}  firstName=${firstname}  lastName=${lastname}  dob=${dob}  gender=${gender}
     ${data}=  Create Dictionary     userProfile=${up}
     ${data}=  json.dumps  ${data}
-    [Return]  ${data}
+    RETURN  ${data}
 
 
 UpdateFamilyMember
@@ -591,7 +591,7 @@ UpdateFamilyMember
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /consumer/familyMember   data=${data}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 Add To Waitlist Consumer FamilymemberChildren
@@ -614,7 +614,7 @@ Add To Waitlist Consumer FamilymemberChildren
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /consumer/waitlist  data=${apple}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 Get Waitlist Consumer Count
@@ -627,7 +627,7 @@ Get Waitlist Consumer Count
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/waitlist/count  params=${kwargs}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}  
+    RETURN  ${resp}  
 
     
 CommunicationBetweenConsumerAndProvider
@@ -642,7 +642,7 @@ CommunicationBetweenConsumerAndProvider
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/waitlist/communicate/${uuid}  data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers} 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 List Favourite Provider
@@ -655,7 +655,7 @@ List Favourite Provider
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/providers   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Add Favourite Provider
@@ -668,7 +668,7 @@ Add Favourite Provider
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/providers/${provider_id}   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Remove Favourite Provider
@@ -681,7 +681,7 @@ Remove Favourite Provider
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /consumer/providers/${provider_id}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 Get Bill By Consumer
@@ -694,7 +694,7 @@ Get Bill By Consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /consumer/bill/${id}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
  
  
 Get S3 Url
@@ -707,7 +707,7 @@ Get S3 Url
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/login/s3Url   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 Get Consumer Communications
@@ -720,7 +720,7 @@ Get Consumer Communications
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/communications   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 # Reading Provider Communications
@@ -729,7 +729,7 @@ Get Consumer Communications
 #     ${data}=  json.dumps  ${data}
 #     Check And Create YNW Session
 #     ${resp}=  PUT On Session  ynw  /consumer/communications/readMessages/${providerId}/${messageIds}   data=${data}  expected_status=any   headers=${cons_headers}
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 
 Reading Provider Communications
@@ -744,7 +744,7 @@ Reading Provider Communications
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /consumer/communications/readMessages/${providerId}/${messageIds}   data=${data}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Consumer Communications Unread Count
@@ -757,7 +757,7 @@ Get Consumer Communications Unread Count
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/communications/unreadCount   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Consumer Communications Unread Messages
@@ -770,7 +770,7 @@ Get Consumer Communications Unread Messages
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/communications/unreadMessages   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 General Communication with Provider
     [Arguments]    ${communicationMessage}   ${acc_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -784,7 +784,7 @@ General Communication with Provider
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/communications   data=${data}   params=${cons_params}   expected_status=any   headers=${cons_headers}  
-    [Return]  ${resp}  	
+    RETURN  ${resp}  	
 
 
 General Communication with User
@@ -799,7 +799,7 @@ General Communication with User
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/communications   data=${data}   params=${cons_params}   expected_status=any   headers=${cons_headers}  
-    [Return]  ${resp}  	
+    RETURN  ${resp}  	
 
     
 Add To Waitlist Consumers
@@ -827,7 +827,7 @@ Add To Waitlist Consumers
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Add To Waitlist Consumers with mode
@@ -855,7 +855,7 @@ Add To Waitlist Consumers with mode
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Add To Waitlist Consumer For User
@@ -884,7 +884,7 @@ Add To Waitlist Consumer For User
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 # Delete Waitlist Consumer
 #     [Arguments]  ${uuid}  ${accId}  ${CancelReason}=${waitlist_cancl_reasn[4]}    ${CommunicationMessage}=other   &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -902,7 +902,7 @@ Add To Waitlist Consumer For User
 #     Set To Dictionary  ${cons_params}   &{locparam}
     
 #     ${resp}=  DELETE On Session  ynw  /consumer/waitlist/${uuid}  data=${auth}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-#     [Return]  ${resp} 
+#     RETURN  ${resp} 
 
 
 Get consumer Waitlist By Id
@@ -915,7 +915,7 @@ Get consumer Waitlist By Id
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/waitlist/${uuid}  params=${cons_params}   expected_status=any   headers=${cons_headers} 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get consumer Waitlist 
     [Arguments]   &{params}
@@ -927,7 +927,7 @@ Get consumer Waitlist
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/waitlist/  params=${cons_params}   expected_status=any   headers=${cons_headers}   
-    [Return]  ${resp}   
+    RETURN  ${resp}   
 
 Get Future Waitlist 
     [Arguments]  &{params} 
@@ -939,7 +939,7 @@ Get Future Waitlist
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/waitlist/future  params=${cons_params}   expected_status=any   headers=${cons_headers}   
-    [Return]  ${resp}            
+    RETURN  ${resp}            
     
     
 Get Future Waitlist Count   
@@ -952,7 +952,7 @@ Get Future Waitlist Count
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/waitlist/future/count  params=${cons_params}   expected_status=any   headers=${cons_headers}   
-    [Return]  ${resp} 
+    RETURN  ${resp} 
     
 Get Waiting Time Of queues
     [Arguments]  ${locationId}  ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -964,7 +964,7 @@ Get Waiting Time Of queues
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  consumer/waitlist/${locationId}/waitingTime  params=${cons_params}   expected_status=any   headers=${cons_headers}   
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Make Payment Consumer
     [Arguments]  ${amount}  ${mode}  ${uuid}  ${accid}  ${purpose}  ${c_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -979,7 +979,7 @@ Make Payment Consumer
     ${data}=  Create Dictionary  amount=${amount}  paymentMode=${mode}  uuid=${uuid}  accountId=${accid}  purpose=${purpose}  custId=${c_id}
     ${data}=  json.dumps  ${data}
     ${resp}=  POST On Session    ynw  /consumer/payment  data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # Make Payment Consumer Mock
 #     [Arguments]  ${amount}  ${response}  ${uuid}  ${accid}  ${purpose}  ${c_id}
@@ -987,7 +987,7 @@ Make Payment Consumer
 #     ${data}=  Create Dictionary  amount=${amount}  paymentMode=Mock  uuid=${uuid}  mockResponse=${response}  accountId=${accid}  purpose=${purpose}  custId=${c_id}  
 #     ${data}=  json.dumps  ${data}
 #     ${resp}=  POST On Session    ynw  /consumer/payment  data=${data}  expected_status=any   headers=${cons_headers}
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 
 Make Payment Consumer Mock
@@ -1008,7 +1008,7 @@ Make Payment Consumer Mock
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session    ynw  /consumer/payment  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Payment Consumer
@@ -1021,7 +1021,7 @@ Get Payment Consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/payment/${uuid}  params=${cons_params}  expected_status=any   headers=${cons_headers}     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get conspayment profiles
@@ -1034,7 +1034,7 @@ Get conspayment profiles
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=   GET On Session  ynw  /consumer/payment/paymentProfiles   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get conspayment profiles By Id
@@ -1047,7 +1047,7 @@ Get conspayment profiles By Id
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=   GET On Session  ynw  /consumer/payment/paymentProfiles/${profileId}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Rating
     [Arguments]   ${timeZone}=Asia/Kolkata  &{kwargs}
@@ -1059,7 +1059,7 @@ Get Rating
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/waitlist/rating  params=${kwargs}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Queue By Location and service 
     [Arguments]  ${locationId}  ${serviceId}  ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1071,7 +1071,7 @@ Get Queue By Location and service
     Set To Dictionary  ${cons_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=    GET On Session    ynw  /consumer/waitlist/queues/${locationId}/${serviceId}    params=${cons_params}   expected_status=any   headers=${cons_headers}     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Service By Location   
     [Arguments]  ${locationId}   &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1083,7 +1083,7 @@ Get Service By Location
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/waitlist/services/${locationId}   params=${cons_params}   expected_status=any   headers=${cons_headers}     
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 Get history Waitlist 
     [Arguments]  &{cons_params} 
@@ -1094,7 +1094,7 @@ Get history Waitlist
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/waitlist/history  params=${cons_params}   expected_status=any   headers=${cons_headers}   
-    [Return]  ${resp}      
+    RETURN  ${resp}      
 
 AddFamilyMemberWithPhNo
     [Arguments]   ${firstname}  ${lastname}  ${Mobile}  ${dob}  ${gender}   &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1110,7 +1110,7 @@ AddFamilyMemberWithPhNo
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session  
     ${resp}=  POST On Session  ynw  /consumer/familyMember   data=${data}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}    
+    RETURN  ${resp}    
 
 Get history Waitlist Count
     [Arguments]   &{cons_params} 
@@ -1121,7 +1121,7 @@ Get history Waitlist Count
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  consumer/waitlist/history/count  params=${cons_params}   expected_status=any   headers=${cons_headers}   
-    [Return]  ${resp}          
+    RETURN  ${resp}          
 
 Get Queue By Location and service By Date 
     [Arguments]  ${locationId}  ${serviceId}  ${Date}  ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1133,7 +1133,7 @@ Get Queue By Location and service By Date
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/waitlist/queues/${locationId}/${serviceId}/${Date}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
-    [Return]  ${resp}   
+    RETURN  ${resp}   
 
 Send Bill Email
     [Arguments]   ${uuid}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1145,7 +1145,7 @@ Send Bill Email
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/bill/email/${uuid}   params=${cons_params}  expected_status=any   headers=${cons_headers}  
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 Apply Jaldee Coupon At Selfpay
     [Arguments]   ${uuid}  ${coupon_code}  ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1157,7 +1157,7 @@ Apply Jaldee Coupon At Selfpay
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/jaldee/coupons/${coupon_code}/${uuid}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Add To Waitlist Consumers with JCoupon
@@ -1182,7 +1182,7 @@ Add To Waitlist Consumers with JCoupon
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Services in Department By Consumer
     [Arguments]   ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1194,7 +1194,7 @@ Get Services in Department By Consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/waitlist/department/services  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable location sharing by consumer
     [Arguments]  ${pId}   ${waitlist_id}  ${Phonenumber}  ${travelMode}  ${startTimeMode}  ${lattitude}  ${longitude}   ${shareLocStatus}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1209,7 +1209,7 @@ Enable location sharing by consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session  
     ${resp}=    POST On Session    ynw  /consumer/waitlist/saveMyLoc/${waitlist_id}   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable location sharing by consumer
     [Arguments]  ${waitlist_id}   ${accid}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1221,13 +1221,13 @@ Disable location sharing by consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw  /consumer/waitlist/unshareMyLoc/${waitlist_id}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # Enable tracking by consumer
 #     [Arguments]     ${waitlist_id}
 #     Check And Create YNW Session  
 #     ${resp}=    PUT On Session    ynw  /consumer/waitlist/start/mytracking/${waitlist_id}   expected_status=any   headers=${cons_headers}
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 Enable tracking by consumer
     [Arguments]    ${waitlist_id}   ${accid}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1239,7 +1239,7 @@ Enable tracking by consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /consumer/waitlist/start/mytracking/${waitlist_id}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}    
+    RETURN  ${resp}    
 
 Update consumer location
     [Arguments]   ${pId}  ${waitlist_id}  ${lattitude}  ${longitude}   &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1253,7 +1253,7 @@ Update consumer location
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /consumer/waitlist/update/latlong/${waitlist_id}   data=${data}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 update consumer travelmode
     [Arguments]   ${pId}  ${waitlist_id}  ${travelMode}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1267,7 +1267,7 @@ update consumer travelmode
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /consumer/waitlist/update/travelmode/${waitlist_id}   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 check start status
     [Arguments]   ${pId}  ${waitlist_id}   &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1283,7 +1283,7 @@ check start status
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session   ynw  /consumer/waitlist/status/mytracking/${waitlist_id}   params=${cons_params}  expected_status=any   headers=${cons_headers}  
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Appointment Schedules Consumer
     [Arguments]  ${acct_id}   &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1296,7 +1296,7 @@ Get Appointment Schedules Consumer
     Check And Create YNW Session
     # Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
     ${resp}=  GET On Session  ynw  /consumer/appointment/schedule    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Appointment Schedule ById Consumer
     [Arguments]  ${scheduleId}  ${acct_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1309,7 +1309,7 @@ Get Appointment Schedule ById Consumer
     Check And Create YNW Session
     # Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
     ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/${scheduleId}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Appointment Slots By Schedule and Date
     [Arguments]  ${scheduleId}  ${date}  ${acct_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1322,7 +1322,7 @@ Get Appointment Slots By Schedule and Date
     Check And Create YNW Session
     # Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
     ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/${scheduleId}/${date}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get All Schedule Slots Today By Location and Service
     [Arguments]  ${acct_id}  ${locationId}  ${serviceId}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1334,7 +1334,7 @@ Get All Schedule Slots Today By Location and Service
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/today/location/${locationId}/service/${serviceId}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get All Schedule Slots By Date Location and Service
     [Arguments]  ${acct_id}  ${date}  ${locationId}  ${serviceId}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1346,7 +1346,7 @@ Get All Schedule Slots By Date Location and Service
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/date/${date}/location/${locationId}/service/${serviceId}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Next Available Appointment Slots By ScheduleId
@@ -1359,7 +1359,7 @@ Get Next Available Appointment Slots By ScheduleId
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/nextAvailable/${scheduleId}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Next Available Appointment Time
@@ -1372,7 +1372,7 @@ Get Next Available Appointment Time
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/nextAvailableApptTime    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Appmt Schedule By ServiceId and LocationId
@@ -1385,7 +1385,7 @@ Get Appmt Schedule By ServiceId and LocationId
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/appointment/schedule/location/${locationId}/service/${serviceId}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Appmt Schedule By ServiceId_LocationId and Date
@@ -1398,7 +1398,7 @@ Get Appmt Schedule By ServiceId_LocationId and Date
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/appointment/schedule/location/${locationId}/service/${serviceId}/date/${DATE}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Donation By Consumer
@@ -1417,7 +1417,7 @@ Donation By Consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw  /consumer/donation   data=${data}  expected_status=any   headers=${cons_headers}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Consumer Donation By Id
     [Arguments]  ${id}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1429,7 +1429,7 @@ Get Consumer Donation By Id
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /consumer/donation/${id}   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Donations By Consumer
     [Arguments]    &{kwargs}
@@ -1441,7 +1441,7 @@ Get Donations By Consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/donation   params=${kwargs}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Donation Count By Consumer
     [Arguments]    &{kwargs}
@@ -1453,7 +1453,7 @@ Get Donation Count By Consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/donation/count  params=${kwargs}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Donation Service By Consumer
     [Arguments]  ${acct_id}   &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1465,7 +1465,7 @@ Get Donation Service By Consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/donation/services    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Payment Details
     [Arguments]   &{cons_params}
@@ -1476,7 +1476,7 @@ Get Payment Details
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /consumer/payment     params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Payment Details By UUId
     [Arguments]  ${uuid}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1488,7 +1488,7 @@ Get Payment Details By UUId
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /consumer/payment/details/${uuid}  params=${cons_params}  expected_status=any   headers=${cons_headers} 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Individual Payment Records
     [Arguments]  ${id}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1500,7 +1500,7 @@ Get Individual Payment Records
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /consumer/payment/${id}   params=${cons_params}   expected_status=any   headers=${cons_headers}   
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Take Appointment For Provider 
     [Arguments]    ${accid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1521,7 +1521,7 @@ Take Appointment For Provider
     # Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
     # ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  expected_status=any   headers=${cons_headers}
     ${resp}=  POST On Session  ynw   url=/consumer/appointment  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Take Phonein Appointment For Provider 
     [Arguments]    ${accid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1537,7 +1537,7 @@ Take Phonein Appointment For Provider
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Take Appointment For User 
@@ -1555,7 +1555,7 @@ Take Appointment For User
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Take Appointment For Provider with Phone no
@@ -1572,7 +1572,7 @@ Take Appointment For Provider with Phone no
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -1591,7 +1591,7 @@ Take Virtual Service Appointment For Provider
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Phone-in Virtual Service Appointment For Provider 
@@ -1609,7 +1609,7 @@ Phone-in Virtual Service Appointment For Provider
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -1629,7 +1629,7 @@ Take Virtual Service Appointment For User
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Take Appointment with ApptMode For Provider
@@ -1646,7 +1646,7 @@ Take Appointment with ApptMode For Provider
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get consumer Appointment By Id
     [Arguments]   ${accId}  ${appmntId}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1658,7 +1658,7 @@ Get consumer Appointment By Id
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  url=/consumer/appointment/${appmntId}?account=${accId}   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Consumer Waitlist By EncodedId
     [Arguments]    ${W_Enc_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1670,7 +1670,7 @@ Get Consumer Waitlist By EncodedId
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /consumer/waitlist/enc/${W_Enc_id}   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Consumer Appointment By EncodedId
     [Arguments]    ${A_Enc_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1682,7 +1682,7 @@ Get Consumer Appointment By EncodedId
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /consumer/appointment/enc/${A_Enc_id}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
   
 Cancel Appointment By Consumer
     [Arguments]  ${appmntId}  ${acct_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1694,7 +1694,7 @@ Cancel Appointment By Consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /consumer/appointment/cancel/${appmntId}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Consumer Appointments Today
     [Arguments]  ${timeZone}=Asia/Kolkata  &{kwargs}  #&{kwargs}
@@ -1706,7 +1706,7 @@ Get Consumer Appointments Today
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /consumer/appointment/today  params=${kwargs}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Appmt Service By LocationId
     [Arguments]   ${locationId}   &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1718,7 +1718,7 @@ Get Appmt Service By LocationId
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/appointment/service/${locationId}   params=${cons_params}  expected_status=any   headers=${cons_headers} 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Consumer Appmt Today Count
     [Arguments]   &{kwargs}  
@@ -1730,7 +1730,7 @@ Get Consumer Appmt Today Count
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/appointment/today/count  params=${kwargs}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Consumer Appointments 
     [Arguments]   &{kwargs}
@@ -1742,7 +1742,7 @@ Get Consumer Appointments
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /consumer/appointment  params=${kwargs}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 #Livetracking
 Enable apptment SaveMyLocation by consumer
@@ -1758,7 +1758,7 @@ Enable apptment SaveMyLocation by consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /consumer/appointment/saveMyLoc/${Appmt_id}   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Locate apptment consumer
     [Arguments]   ${appmt_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1770,7 +1770,7 @@ Locate apptment consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /consumer/appointment/live/locate/distance/time/${appmt_id}   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Start apptment tracking by consumer
@@ -1783,7 +1783,7 @@ Start apptment tracking by consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  url=/consumer/appointment/start/mytracking/${appmt_id}?account=${accId}   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Stop apptment tracking by consumer
     [Arguments]   ${appmt_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1795,7 +1795,7 @@ Stop apptment tracking by consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw  /consumer/appointment/stop/mytracking/${appmt_id}   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get apptment Livetrack Status
     [Arguments]   ${appmt_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1807,7 +1807,7 @@ Get apptment Livetrack Status
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/appointment/status/mytracking/${appmt_id}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Disable apptment unshareMylocation by consumer
@@ -1820,7 +1820,7 @@ Disable apptment unshareMylocation by consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw  url=/consumer/appointment/unshareMyLoc/${appmt_id}?account=${accId}   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Consumer apptment latlong
@@ -1835,7 +1835,7 @@ Update Consumer apptment latlong
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw   /consumer/appointment/update/latlong/${appmt_id}   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Update Consumer apptment MyLocation
     [Arguments]   ${pId}  ${appmt_id}  ${lattitude}  ${longitude}   &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1849,7 +1849,7 @@ Update Consumer apptment MyLocation
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw   /consumer/appointment/updateMyLoc/${appmt_id}   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update consumer apptment tavelmode
     [Arguments]   ${pId}  ${appmt_id}  ${travelMode}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1863,7 +1863,7 @@ Update consumer apptment tavelmode
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /consumer/appointment/update/travelmode/${appmt_id}   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Consumer Future Appointments
     [Arguments]    &{kwargs}
@@ -1875,7 +1875,7 @@ Get Consumer Future Appointments
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/appointment/future    params=${kwargs}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Consumer Future Appointments Count
     [Arguments]    &{kwargs}
@@ -1887,7 +1887,7 @@ Get Consumer Future Appointments Count
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/appointment/future/count   params=${kwargs}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add Appointment Rating
 	[Arguments]  ${accid}  ${uuid}  ${stars}  ${feedback}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1901,7 +1901,7 @@ Add Appointment Rating
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/appointment/rating  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Appointment Rating
 	[Arguments]  ${accid}  ${uuid}  ${stars}  ${feedback}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1915,7 +1915,7 @@ Update Appointment Rating
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /consumer/appointment/rating  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 Get Appointment Rating
     [Arguments]    &{kwargs}
@@ -1927,7 +1927,7 @@ Get Appointment Rating
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/appointment/rating  params=${kwargs}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
    
 Get Consumer Appointments History
     [Arguments]     &{kwargs}
@@ -1939,7 +1939,7 @@ Get Consumer Appointments History
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/appointment/history   params=${kwargs}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Consumer Appointments History Count
     [Arguments]     &{kwargs}
@@ -1951,7 +1951,7 @@ Get Consumer Appointments History Count
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/appointment/history/count   params=${kwargs}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Waitlist Meeting Details
     [Arguments]  ${uid}  ${mode}  ${acc}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1963,7 +1963,7 @@ Get Waitlist Meeting Details
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  url=/consumer/waitlist/${uid}/meetingDetails/${mode}?account=${acc}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Appointment Meeting Details
     [Arguments]  ${uid}  ${mode}  ${acc}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1975,7 +1975,7 @@ Get Appointment Meeting Details
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  url=/consumer/appointment/${uid}/meetingDetails/${mode}?account=${acc}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Availability Of Queue By Consumer
     [Arguments]  ${locationId}  ${serviceId}  ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -1987,7 +1987,7 @@ Availability Of Queue By Consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /consumer/waitlist/queues/available/${locationId}/${serviceId}   params=${cons_params}   expected_status=any   headers=${cons_headers}     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Reschedule Appointment
@@ -2002,7 +2002,7 @@ Reschedule Appointment
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw   /consumer/appointment/reschedule   params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 Reschedule Waitlist
@@ -2017,7 +2017,7 @@ Reschedule Waitlist
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw   /consumer/waitlist/reschedule   params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get consumer Appointment MR By Id
@@ -2030,7 +2030,7 @@ Get consumer Appointment MR By Id
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/appointment/mr/${appmntId}   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get consumer Waitlist MR By Id
@@ -2043,7 +2043,7 @@ Get consumer Waitlist MR By Id
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/waitlist/mr/${uuid}   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Consumer Delivery Address
@@ -2059,7 +2059,7 @@ Update Consumer Delivery Address
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /consumer/deliveryAddress    data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Consumer Delivery Address
@@ -2072,7 +2072,7 @@ Get Consumer Delivery Address
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/deliveryAddress   params=${kwargs}   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # -------------------------
 
@@ -2099,7 +2099,7 @@ Create Order For HomeDelivery
     Set To Dictionary  ${form_headers}   &{tzheaders}
     # Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  ShoppingCartUpload   ${Cookie}   ${accId}   ${order}  ${form_headers}  &{kwargs}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Create Order For Pickup
@@ -2126,7 +2126,7 @@ Create Order For Pickup
     Set To Dictionary  ${form_headers}   &{tzheaders}
     # Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  ShoppingCartUpload   ${Cookie}   ${accId}   ${order}  ${form_headers}  &{kwargs}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Create Order For Electronic Delivery
@@ -2151,7 +2151,7 @@ Create Order For Electronic Delivery
     Set To Dictionary  ${form_headers}   &{tzheaders}
     # Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  ShoppingCartUpload   ${Cookie}   ${accId}   ${order}  ${form_headers}  &{kwargs}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Get Cart Details
@@ -2175,7 +2175,7 @@ Get Cart Details
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   url=/consumer/orders/amount  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -2193,7 +2193,7 @@ Upload ShoppingList Image for Pickup
     Set To Dictionary  ${form_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  OrderImageUpload   ${Cookie}   ${accId}   ${caption}   ${order}  ${form_headers}  &{kwargs}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Upload ShoppingList Image for HomeDelivery
@@ -2215,7 +2215,7 @@ Upload ShoppingList Image for HomeDelivery
     Set To Dictionary  ${form_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  OrderImageUpload   ${Cookie}   ${accId}   ${caption}   ${order}  ${form_headers}  &{kwargs}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Get Order By Id
@@ -2228,7 +2228,7 @@ Get Order By Id
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  url=/consumer/orders/${uuid}   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Order By Criteria
@@ -2241,7 +2241,7 @@ Get Order By Criteria
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/orders  params=${kwargs}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Consumer Order Count By Criteria
@@ -2254,7 +2254,7 @@ Get Consumer Order Count By Criteria
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/orders/count  params=${kwargs}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Catalog By AccId
@@ -2269,7 +2269,7 @@ Get Catalog By AccId
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/orders/catalogs/${accId}   params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Pickup Dates By Catalog
@@ -2282,7 +2282,7 @@ Get Pickup Dates By Catalog
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   url=/consumer/orders/catalogs/pickUp/dates/${catalogId}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get HomeDelivery Dates By Catalog
@@ -2295,7 +2295,7 @@ Get HomeDelivery Dates By Catalog
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   url=/consumer/orders/catalogs/delivery/dates/${catalogId}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Future Order 
@@ -2308,7 +2308,7 @@ Get Future Order
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/orders/future  params=${kwargs}   expected_status=any   headers=${cons_headers}   
-    [Return]  ${resp}            
+    RETURN  ${resp}            
     
     
 Get Future Order Count 
@@ -2321,7 +2321,7 @@ Get Future Order Count
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/orders/future/count  params=${kwargs}   expected_status=any   headers=${cons_headers}   
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Get StoreContact Info
@@ -2334,7 +2334,7 @@ Get StoreContact Info
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/orders/settings/store/contact/info/${accId}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Order Settings of Provider
@@ -2347,7 +2347,7 @@ Get Order Settings of Provider
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  url=/consumer/orders/settings?account=${accId}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Email For Order
@@ -2361,7 +2361,7 @@ Update Email For Order
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw   url=/consumer/orders/${uid}/email   params=${cons_params}   data=${email}   expected_status=any   headers=${cons_headers} 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Item By Catalog
@@ -2375,7 +2375,7 @@ Get Item By Catalog
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/orders/catalog/${catalogId}/item/${itemId}   params=${cons_params}   expected_status=any   headers=${cons_headers}
 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Cancel Order By Consumer
@@ -2388,7 +2388,7 @@ Cancel Order By Consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw   url=/consumer/orders/${uid}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Order By EncodedId
@@ -2401,7 +2401,7 @@ Get Order By EncodedId
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /consumer/orders/enc/${encId}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
  
 Get Consumer Order History 
@@ -2413,7 +2413,7 @@ Get Consumer Order History
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /consumer/orders/history  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Consumer Order History Count
@@ -2425,7 +2425,7 @@ Get Consumer Order History Count
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/orders/history/count  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Add Order Rating
@@ -2440,7 +2440,7 @@ Add Order Rating
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/orders/rating  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Order Rating
@@ -2455,7 +2455,7 @@ Update Order Rating
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /consumer/orders/rating  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Get Order Rating
@@ -2468,7 +2468,7 @@ Get Order Rating
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/orders/rating  params=${kwargs}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Consumer Waitlist Attachment
@@ -2481,7 +2481,7 @@ Get Consumer Waitlist Attachment
    Set To Dictionary  ${cons_params}   &{locparam}
    Check And Create YNW Session
    ${resp}=    GET On Session    ynw  /consumer/waitlist/attachment/${uuid}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Get Consumer Wallet
@@ -2494,7 +2494,7 @@ Get Consumer Wallet
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/wallet/eligible  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get All Jaldee Cash Available
@@ -2507,7 +2507,7 @@ Get All Jaldee Cash Available
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/wallet/cash/available  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Jaldee Cash Available By Id 
@@ -2520,7 +2520,7 @@ Get Jaldee Cash Available By Id
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/wallet/cash/${jcashid}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Jaldee Cash Details
@@ -2533,7 +2533,7 @@ Get Jaldee Cash Details
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/wallet/cash/info  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Jaldee Cash Expired
@@ -2546,7 +2546,7 @@ Get Jaldee Cash Expired
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/wallet/cash/expired  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Remaining Amount To Pay
@@ -2560,7 +2560,7 @@ Get Remaining Amount To Pay
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   url=/consumer/wallet/redeem/remaining/amt?useJcash=${useJcash}&useJcredit=${useJcredit}&advancePayAmount=${AdvanceAmt}     expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Total JCash And Credit Amount
@@ -2573,7 +2573,7 @@ Get Total JCash And Credit Amount
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/wallet/redeem/eligible/amt     expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Total Credit Available
@@ -2586,7 +2586,7 @@ Get Total Credit Available
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/wallet/credit     expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Make Jcash Payment Consumer Mock
@@ -2601,7 +2601,7 @@ Make Jcash Payment Consumer Mock
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session    ynw  /consumer/payment/wallet  data=${data}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Waitlist AdvancePayment Details
@@ -2626,7 +2626,7 @@ Waitlist AdvancePayment Details
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /consumer/waitlist/advancePayment   data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}    
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Appointment AdvancePayment Details
@@ -2643,7 +2643,7 @@ Appointment AdvancePayment Details
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   url=/consumer/appointment/advancePayment?account=${accId}  data=${data}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Appointment AdvancePayment Details without Coupon
@@ -2660,7 +2660,7 @@ Appointment AdvancePayment Details without Coupon
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   url=/consumer/appointment/advancePayment?account=${accId}  data=${data}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Consumer View Questionnaire
@@ -2673,7 +2673,7 @@ Consumer View Questionnaire
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session   ynw  /consumer/questionnaire/service/${serviceId}/consumer/${consumerId}   params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Donation Questionnaire By Id    
     [Arguments]  ${accid}   ${don_id}   &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -2685,7 +2685,7 @@ Get Donation Questionnaire By Id
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/questionnaire/donation/${don_id}  params=${cons_params}   expected_status=any   headers=${cons_headers}   
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Consumer Validate Questionnaire
@@ -2700,7 +2700,7 @@ Consumer Validate Questionnaire
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /consumer/questionnaire/validate  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Consumer Change Answer Status for Waitlist
     [Arguments]  ${accid}   ${wlId}  ${fileId}  ${labelname}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -2716,7 +2716,7 @@ Consumer Change Answer Status for Waitlist
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /consumer/waitlist/questionnaire/upload/status/${wlId}  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}    
+    RETURN  ${resp}    
 
 
 Consumer Change Answer Status for Appointment
@@ -2733,7 +2733,7 @@ Consumer Change Answer Status for Appointment
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /consumer/appointment/questionnaire/upload/status/${apptId}  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}  
+    RETURN  ${resp}  
 
 
 Consumer Revalidate Questionnaire
@@ -2747,7 +2747,7 @@ Consumer Revalidate Questionnaire
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /consumer/questionnaire/resubmit/validate  data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Consumer Questionnaire By uuid For Waitlist
     [Arguments]  ${uuid}   ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -2759,7 +2759,7 @@ Get Consumer Questionnaire By uuid For Waitlist
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  url=/consumer/waitlist/questionnaire/${uuid}   params=${cons_params}   expected_status=any   headers=${cons_headers}     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Consumer Questionnaire By uuid For Appmnt
     [Arguments]  ${uuid}   ${accId}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -2771,7 +2771,7 @@ Get Consumer Questionnaire By uuid For Appmnt
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  url=/consumer/appointment/questionnaire/${uuid}   params=${cons_params}  expected_status=any   headers=${cons_headers}     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Consumer SignUp Via QRcode
     [Arguments]  ${firstname}  ${lastname}  ${primaryNo}   ${countryCode}   ${aacid}    ${email}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -2786,7 +2786,7 @@ Consumer SignUp Via QRcode
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /consumer   data=${data}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get NextAvailableSchedule appt consumer
@@ -2799,7 +2799,7 @@ Get NextAvailableSchedule appt consumer
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /consumer/appointment/schedule/nextAvailableSchedule/${pid}-${lid}-${u_id}    params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get payment modes
@@ -2812,7 +2812,7 @@ Get payment modes
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /consumer/payment/modes/${accountId}/${serviceId}/${paymentPurpose}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Questionnaire By CatalogID    
     [Arguments]  ${catalogId1}  ${account_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -2824,7 +2824,7 @@ Get Questionnaire By CatalogID
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  url=/consumer/questionnaire/order/${catalogId1}  params=${cons_params}  expected_status=any   headers=${cons_headers}     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Consumer Get Order Questionnaire By uuid 
     [Arguments]  ${uuid}  ${account_id}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -2836,7 +2836,7 @@ Consumer Get Order Questionnaire By uuid
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/orders/questionnaire/${uuid}  params=${cons_params}  expected_status=any   headers=${cons_headers}     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Consumer Upload Status for Appnt
     [Arguments]  ${uuid}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -2848,7 +2848,7 @@ Consumer Upload Status for Appnt
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /consumer/appointment/serviceoption/upload/status/${uuid}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get service options for an item
     [Arguments]  ${item}  ${accountId}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -2861,7 +2861,7 @@ Get service options for an item
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   url=/consumer/questionnaire/serviceoptions/order/item/${item}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]    ${resp} 
+    RETURN    ${resp} 
 
 Get Service Options By Service
     [Arguments]      ${ser_id}  ${consumer}   ${accountId}   &{kwargs}  #${timeZone}=Asia/Kolkata 
@@ -2874,7 +2874,7 @@ Get Service Options By Service
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   url=/consumer/questionnaire/serviceoptions/${ser_id}/${consumer}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Service Options By Order
     [Arguments]      ${catalogid}   ${accountId}  &{kwargs}  #${timeZone}=Asia/Kolkata 
@@ -2886,7 +2886,7 @@ Get Service Options By Order
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   url=/consumer/questionnaire/serviceoptions/order/${catalogid}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Service Options By Donation
     [Arguments]   ${uuid}   ${accountId}  &{kwargs}  #${timeZone}=Asia/Kolkata 
@@ -2898,7 +2898,7 @@ Get Service Options By Donation
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   url=/consumer/questionnaire/serviceoptions/donation/${uuid}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Status Of Service Option Item
     [Arguments]  ${accountId}  ${uuid}  @{filedata}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -2912,7 +2912,7 @@ Change Status Of Service Option Item
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  url=/consumer/orders/item/serviceoption/upload/status/${uuid}  params=${cons_params}  data=${data}   expected_status=any   headers=${cons_headers}
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 Change Status Of Service Option Appmt
     [Arguments]  ${accountId}  ${uuid}  @{filedata}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -2926,7 +2926,7 @@ Change Status Of Service Option Appmt
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  url=/consumer/appointment/serviceoption/upload/status/${uuid}  params=${cons_params}  data=${data}   expected_status=any   headers=${cons_headers}
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 Change Status Of Service Option Waitlist
     [Arguments]  ${accountId}  ${uuid}  @{filedata}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -2940,7 +2940,7 @@ Change Status Of Service Option Waitlist
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  url=/consumer/waitlist/serviceoption/upload/status/${uuid}  params=${cons_params}  data=${data}   expected_status=any   headers=${cons_headers}
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 Change Status Of Service Option Order
     [Arguments]  ${accountId}  ${uuid}  @{filedata}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -2954,7 +2954,7 @@ Change Status Of Service Option Order
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  url=/consumer/orders/serviceoption/upload/status/${uuid}  params=${cons_params}  data=${data}   expected_status=any   headers=${cons_headers}
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 Change Status Of Service Option Donation
     [Arguments]  ${accountId}  ${uuid}  @{filedata}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -2968,7 +2968,7 @@ Change Status Of Service Option Donation
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  url=/consumer/donation/serviceoption/upload/status/${uuid}  params=${cons_params}  data=${data}   expected_status=any   headers=${cons_headers}
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 
 Create Payment Link For Donation
@@ -2989,7 +2989,7 @@ Create Payment Link For Donation
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  url=/consumer/payment/generate/paylink   params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}    
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Donation Details
     [Arguments]  ${uuid}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -3001,7 +3001,7 @@ Get Donation Details
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/payment/paylink/donation/${uuid}  params=${cons_params}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Donation Payment Via Link
     [Arguments]  ${acc_id}  ${custId}  ${amount}  ${isInternational}  ${paymentMode}  ${purpose}  ${serviceId}   ${source}   ${uuid}  ${pay_link}  ${response}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -3017,7 +3017,7 @@ Donation Payment Via Link
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session   
     ${resp}=  POST On Session  ynw  /consumer/payment/paylink/donation  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add Family
     [Arguments]                   ${firstname}   ${lastname}   ${dob}   ${gender}   ${email}   ${city}   ${state}   ${address}   ${primarynum}   ${alternativenum}   ${countrycode}   ${countryCodet}   ${numbert}   ${countryCodew}   ${numberw}   &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -3034,7 +3034,7 @@ Add Family
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=                      POST On Session  ynw   /consumer/familyMember    json=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers}
-    [Return]                      ${resp}
+    RETURN                      ${resp}
 
 Get Seropt By CatalogId
     [Arguments]    ${catalogId}  ${channel}  ${accid}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -3048,7 +3048,7 @@ Get Seropt By CatalogId
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  url=/consumer/questionnaire/serviceoption/order/catalog/item/${catalogId}/${channel}?account=${accid}    expected_status=any   headers=${cons_headers}
 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Order For Item Consumer
 
@@ -3067,7 +3067,7 @@ Order For Item Consumer
     END
     ${order}=  Create Dictionary  homeDelivery=${homeDelivery}  homeDeliveryAddress=${homeDeliveryAddress}   catalog=${catalog}  orderFor=${orderFor}    orderItem=${orderitem}   orderDate=${orderDate}   timeSlot=${timeSlot}  phoneNumber=${phoneNumber}  countryCode=${countryCode}  email=${email}  coupons=${coupons}
     
-    [Return]  ${order} 
+    RETURN  ${order} 
 
 Create Order With Service Options Consumer
     [Arguments]    ${cookie}  &{kwargs}
@@ -3086,7 +3086,7 @@ Create Order With Service Options Consumer
     # Set To Dictionary  ${form_headers}   &{tzheaders}
     # Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  ShoppingCartUpload   ${Cookie}  ${account_id}   ${order}  ${form_headers}  &{kwargs}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Order For AuthorDemy
@@ -3114,7 +3114,7 @@ Create Order For AuthorDemy
     # Set To Dictionary  ${form_headers}   &{tzheaders}
     # Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  ShoppingCartUpload   ${Cookie}   ${accId}   ${order}  ${form_headers}  &{kwargs}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Get Consumer
@@ -3128,7 +3128,7 @@ Get Consumer
     Set To Dictionary  ${form_headers}   &{tzheaders}
     Set To Dictionary  ${kwargs}   &{locparam}
     ${resp}=    GET On Session    ynw   /consumer    params=${kwargs}  expected_status=any   headers=${form_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Users By Loc and AccId
@@ -3142,7 +3142,7 @@ Get Users By Loc and AccId
     Set To Dictionary  ${form_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=    GET On Session     ynw   /consumer/users/${accountId}/${locationId}  params=${cons_params}  expected_status=any   headers=${form_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 #   Appt Request
@@ -3165,7 +3165,7 @@ Consumer Create Appt Service Request
     Set To Dictionary  ${form_headers}   &{tzheaders}
     Set To Dictionary  ${cons_params}   &{locparam}
     ${resp}=  POST On Session  ynw  url=/consumer/appointment/service/request?account=${accId}  params=${cons_params}  data=${data}  expected_status=any   headers=${form_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Consumer Get Appt Service Request
@@ -3179,7 +3179,7 @@ Consumer Get Appt Service Request
     Set To Dictionary  ${form_headers}   &{tzheaders}
     Set To Dictionary  ${kwargs}   &{locparam}
     ${resp}=    GET On Session    ynw   /consumer/appointment/service/request  params=${kwargs}  expected_status=any   headers=${form_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Consumer Get Appt Service Request Count
@@ -3193,7 +3193,7 @@ Consumer Get Appt Service Request Count
     Set To Dictionary  ${form_headers}   &{tzheaders}
     Set To Dictionary  ${kwargs}   &{locparam}
     ${resp}=    GET On Session    ynw   /consumer/appointment/service/request/count   params=${kwargs}  expected_status=any   headers=${form_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 #    Jaldee Video Call
 
@@ -3213,7 +3213,7 @@ Consumer Video Call ready
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /consumer/waitlist/videocall/ready   data=${data}  params=${cons_params}  expected_status=any   headers=${form_headers}
     Log  ${resp.content}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -3229,7 +3229,7 @@ Get convenienceFee Details
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  /consumer/payment/modes/MockConvenienceFee/${accountId}   params=${cons_params}  data=${data}   expected_status=any  headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Service By Location Appoinment   
@@ -3242,20 +3242,20 @@ Get Service By Location Appoinment
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /consumer/appointment/service/${locationId}  params=${cons_params}  expected_status=any  headers=${cons_headers}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Get locations by service
     [Arguments]      ${serviceId}  
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw   /consumer/service/${serviceId}/location    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Booking Invoices
      [Arguments]      ${ynwuuid}  
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw   /consumer/jp/finance/invoice/ynwuid/${ynwuuid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get invoices bydate
@@ -3264,7 +3264,7 @@ Get invoices bydate
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw   /consumer/jp/finance/invoice/bydate   data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Invoice pay via link
     [Arguments]  ${uuid}  ${amount}  ${purpose}   ${source}  ${accountId}  ${paymentMode}  ${isInternational}  ${serviceId}  ${custId}   &{kwargs}
@@ -3281,21 +3281,21 @@ Invoice pay via link
     Set To Dictionary  ${cons_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=   POST On Session  ynw  /consumer/jp/finance/pay   params=${cons_params}  data=${data}   expected_status=any  headers=${cons_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Consumer Deactivation
     
     Check And Create YNW Session
     ${headers2}=     Create Dictionary    Content-Type=application/json  
     ${resp}=    DELETE On Session    ynw    /consumer/login/deActivate      expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Service payment modes
     [Arguments]  ${accountId}   ${serviceId}   ${paymentPurpose}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /consumer/payment/modes/service/${accountId}/${serviceId}/${paymentPurpose}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 ######## New Communication URLS ############
@@ -3306,7 +3306,7 @@ Get Attachments In Waitlist By Consumer
 
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /consumer/waitlist/share/attachments/${uid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Attachments In Appointment By Consumer
@@ -3314,7 +3314,7 @@ Get Attachments In Appointment By Consumer
 
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /consumer/appointment/share/attachments/${uid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Attachments In Order By Consumer
@@ -3322,7 +3322,7 @@ Get Attachments In Order By Consumer
 
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /consumer/orders/view/attachments/${uid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Attachments In Donation By Consumer
@@ -3330,7 +3330,7 @@ Get Attachments In Donation By Consumer
 
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /consumer/donation/view/attachments/${uid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Send Attachment From Waitlist By Consumer
@@ -3341,7 +3341,7 @@ Send Attachment From Waitlist By Consumer
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/waitlist/share/attachments/${uid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Send Attachment From Appointment By Consumer 
@@ -3352,7 +3352,7 @@ Send Attachment From Appointment By Consumer
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/appointment/share/attachments/${uid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Send Message With Waitlist By Consumer
@@ -3363,7 +3363,7 @@ Send Message With Waitlist By Consumer
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/appointment/communicate/message/${uuid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Send Message With Appointment By Consumer
@@ -3374,7 +3374,7 @@ Send Message With Appointment By Consumer
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/appointment/communicate/message/${uuid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Send Message With Order By Consumer
@@ -3385,7 +3385,7 @@ Send Message With Order By Consumer
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/orders/communicate/message/${uuid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Send Message With Donation By Consumer
@@ -3396,7 +3396,7 @@ Send Message With Donation By Consumer
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/donation/communicate/message/${uuid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Send Message By Chat from Consumer
@@ -3407,7 +3407,7 @@ Send Message By Chat from Consumer
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/message/communications   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 upload file to temporary location consumer
@@ -3421,7 +3421,7 @@ upload file to temporary location consumer
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/fileShare/upload   data=${data}  expected_status=any
     Log  ${resp.content}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Send Message With Waitlist consumer
     [Arguments]  ${provider}  ${uuid}  ${message}  ${messagetype}  &{kwargs}  
@@ -3434,7 +3434,7 @@ Send Message With Waitlist consumer
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/waitlist/communication/${uuid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Send Message With Appoinment consumer
     [Arguments]  ${provider}  ${uuid}  ${message}  ${messagetype}  &{kwargs}  
@@ -3447,4 +3447,4 @@ Send Message With Appoinment consumer
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/appointment/communicate/message/${uuid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}

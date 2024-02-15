@@ -18,7 +18,7 @@ Get payment modes
     [Arguments]  ${accountId}   ${serviceId}   ${paymentPurpose}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /consumer/payment/modes/service/${accountId}/${serviceId}/${paymentPurpose}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get convenienceFee Details 
     [Arguments]  ${accountId}     ${profileId}    ${amount}
@@ -26,7 +26,7 @@ Get convenienceFee Details
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  /consumer/payment/modes/convenienceFee/${accountId}   data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 PP For Default PP
     [Arguments]   ${acc_id}  ${jaldeeBank}    &{kwargs}
@@ -38,7 +38,7 @@ PP For Default PP
     END
     Check And Create YNW SuperAdmin Session
     ${resp}=   PUT On Session  synw  url=/payment/advancePayBank?accountId=${acc_id}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 *** Variables ***

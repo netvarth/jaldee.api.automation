@@ -17,7 +17,7 @@ Get Team By Filter
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/user/teams   params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 ***Test Cases***

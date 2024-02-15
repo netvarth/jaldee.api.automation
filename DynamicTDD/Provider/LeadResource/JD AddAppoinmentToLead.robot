@@ -161,4 +161,4 @@ Add Appoinment To Lead
     [Arguments]    ${leadUid}     ${appointmentId}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw     /provider/lead/${leadUid}/appointment/${appointmentId}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}

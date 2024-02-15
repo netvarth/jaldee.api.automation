@@ -24,19 +24,19 @@ Create Receivable
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/receivable    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Receivable List with filter
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/jp/finance/receivable    params=${param}    expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Receivable List with Count filter
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/jp/finance/receivable/count    params=${param}    expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Variables ***
 

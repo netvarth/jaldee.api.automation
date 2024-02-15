@@ -39,7 +39,7 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 #     ${data}=  json.dumps  ${data}
 #     Check And Create YNW Session
 #     ${resp}=  PUT On Session  ynw   /provider/loanapplication/attachments  data=${data}  expected_status=any
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
     
 
@@ -67,7 +67,7 @@ Delete Loan Attachment
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/attachments  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 *** Variables ***

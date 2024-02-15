@@ -35,7 +35,7 @@ Get Billable Subdomain
             Should Be Equal As Strings    ${resp.status_code}    200
             Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[1]}'
     END
-    [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
+    RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
 
 
 # Billable
@@ -59,7 +59,7 @@ Get Billable Subdomain
 #         Set Suite Variable  ${check}    ${resp2.json()['serviceBillable']} 
 #         Run Keyword If     '${check}' == 'True'   Append To List   ${provider_list}  ${PUSERNAME${a}}
 #     END
-#     [Return]  ${provider_list}
+#     RETURN  ${provider_list}
 
 *** Test Cases ***
 

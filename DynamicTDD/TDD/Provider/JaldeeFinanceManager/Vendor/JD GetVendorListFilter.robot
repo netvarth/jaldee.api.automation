@@ -20,7 +20,7 @@ Get Vendor List with filter
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/jp/finance/vendor    params=${param}    expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 *** Test Cases ***

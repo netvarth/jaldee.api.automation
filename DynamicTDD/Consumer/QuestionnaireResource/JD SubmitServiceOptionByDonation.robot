@@ -47,7 +47,7 @@ Strip and split string
    Log List   ${final_list}
    Log   ${final_list}
 
-   [Return]  ${final_list}
+   RETURN  ${final_list}
 
 
 Comapre Lists without order
@@ -61,7 +61,7 @@ Comapre Lists without order
     Log Many  ${status} 	${value}
     ${val}=  Run Keyword If   '${status}' == 'FAIL'  Set Variable  ${bool[0]}
     ...  ELSE	 Set Variable    ${bool[1]}
-    [Return]  ${val}
+    RETURN  ${val}
 
 Check Answers
     [Arguments]  ${resp}  ${data}  

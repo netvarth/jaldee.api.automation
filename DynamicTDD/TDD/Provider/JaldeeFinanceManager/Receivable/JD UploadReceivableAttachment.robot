@@ -24,7 +24,7 @@ Create Receivable
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/receivable    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Upload Finance Receivable Attachment
     [Arguments]    ${receivable_uid}      @{vargs}
@@ -42,7 +42,7 @@ Upload Finance Receivable Attachment
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/receivable/${receivable_uid}/attachments  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 *** Variables ***
 

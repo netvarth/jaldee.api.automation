@@ -59,7 +59,7 @@ Get Account Aggregation
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/accountaggregatestatus/${loanApplicationUid}/${kycId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Test Cases ***
 

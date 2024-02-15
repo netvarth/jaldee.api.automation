@@ -37,13 +37,13 @@ Get Billable Subdomain
             Should Be Equal As Strings    ${resp.status_code}    200
             Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[1]}'
     END
-    [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
+    RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
 
 Get coupon list by service and location id for appointment
     [Arguments]   ${serviceId}    ${locationId}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /consumer/appointment/service/${serviceId}/location/${locationId}/coupons  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Test Cases ***
 

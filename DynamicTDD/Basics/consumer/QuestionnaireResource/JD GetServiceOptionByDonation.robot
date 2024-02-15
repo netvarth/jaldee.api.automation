@@ -47,7 +47,7 @@ Strip and split string
    Log List   ${final_list}
    Log   ${final_list}
 
-   [Return]  ${final_list}
+   RETURN  ${final_list}
 
 Open given Excel file
     [Arguments]    ${xlFile}  ${doc id}

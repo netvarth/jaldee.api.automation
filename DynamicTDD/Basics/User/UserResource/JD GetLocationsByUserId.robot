@@ -31,7 +31,7 @@ Get Locations By UserId
     Set To Dictionary  ${pro_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    Get On Session    ynw    provider/user/${userid}/location       params=${pro_params}   expected_status=any  
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 ***Test Cases***

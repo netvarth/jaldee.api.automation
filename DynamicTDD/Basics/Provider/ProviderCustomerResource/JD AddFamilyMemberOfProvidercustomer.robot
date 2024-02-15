@@ -23,7 +23,7 @@ Add FamilyMember For ProviderConsumer1
         Set To Dictionary 	${data} 	${key}=${value}
       END
     ${resp}=                      POST On Session  ynw   /consumer/familyMember   json=${data}    expected_status=any
-    [Return]                      ${resp}
+    RETURN                      ${resp}
 
 
 *** Test Cases ***

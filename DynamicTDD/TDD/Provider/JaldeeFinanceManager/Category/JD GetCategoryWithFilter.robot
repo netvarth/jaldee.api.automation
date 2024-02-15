@@ -22,7 +22,7 @@ Get Category With Filter
     [Arguments]   &{param}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/category/list    params=${param}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 *** Test Cases ***

@@ -36,7 +36,7 @@ Update Expense Status
      
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/expense/${uid}/${expenseStatus}     expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Test Cases ***
 

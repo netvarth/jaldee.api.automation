@@ -48,7 +48,7 @@ ${digits}       0123456789
 #         Set Test Variable  ${check}    ${resp2.json()['serviceBillable']} 
 #         Run Keyword If     '${check}' == 'True'   Append To List   ${provider_list}  ${PUSERNAME${a}}
 #     END
-#     [Return]  ${provider_list}  ${multiloc_providers}
+#     RETURN  ${provider_list}  ${multiloc_providers}
 
 
 

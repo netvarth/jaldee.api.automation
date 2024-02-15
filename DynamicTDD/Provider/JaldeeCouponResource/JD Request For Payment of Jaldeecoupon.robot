@@ -35,7 +35,7 @@ Get Billable Subdomain
             ${Status}=   Run Keyword And Return Status   Run Keywords   Should Be ${bool[1]}   '${resp.json()['maxPartySize']}' > '${1}'  AND   Should Be ${bool[1]}  '${resp.json()['serviceBillable']}' == '${bool[1]}'
             Exit For Loop IF  ${Status}
     END
-    [Return]  ${subdomain}  ${Status}
+    RETURN  ${subdomain}  ${Status}
 
 
 *** Test Cases ***

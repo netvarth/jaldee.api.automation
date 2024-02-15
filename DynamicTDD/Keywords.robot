@@ -260,7 +260,7 @@ Login
     ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}  countryCode=${countryCode}
     ${log}=    json.dumps    ${login}
     Create Session    ynw    ${BASE_URL}  headers=${headers}
-    [Return]  ${log}
+    RETURN  ${log}
 
 Check And Create YNW Session
     # ${res}=     Run Keyword And Return Status   GET On Session    ynw    /
@@ -276,7 +276,7 @@ Create And Verify Alert
     Should Be Equal As Strings    ${resp_post.status_code}    200
     ${resp_get}=    GET On Session    ynw    provider/alerts/${resp_post.json()}   expected_status=any
     Should Be Equal As Strings    ${resp_get.status_code}    200
-    [Return]    ${resp_get}
+    RETURN    ${resp_get}
 
 Verify Response
     [Arguments]  ${resp}  &{kwargs}
@@ -289,7 +289,7 @@ Get Slot
     [Arguments]    &{kwargs}
     Check And Create YNW Session
     ${resp_get}=    GET On Session  ynw  /provider/appointments/availability  params=${kwargs}   expected_status=any
-    [Return]    ${resp_get}
+    RETURN    ${resp_get}
 
 Verify Response List
     [Arguments]  ${resp}  ${no}   &{kwargs}
@@ -309,27 +309,27 @@ Cloud Search
     [Arguments]    &{kwargs}
     Create Session  cs  ${SEARCH_END}
     ${resp}=    GET On Session  cs  /2013-01-01/search   params=${kwargs}   expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 Get Location Suggestion
     [Arguments]    ${sug}
     Check And Create YNW Session
     ${sug}=  Create Dictionary    criteria=${sug}
     ${resp}=    GET On Session  ynw  /provider/search/suggester/location  params=${sug}   expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
     
 Get Specialization Suggestion
     [Arguments]    ${sug}
     Check And Create YNW Session
     ${sug}=  Create Dictionary    criteria=${sug}
     ${resp}=    GET On Session  ynw  /provider/search/suggester/specialization  params=${sug}   expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
  
 Convert To twodigitfloat
     [Arguments]  ${value}
     ${value_float}=  twodigitfloat  ${value}
     ${value_float}=  Evaluate  ${value_float} * 1
-    [Return]  ${value_float}
+    RETURN  ${value_float}
 
 
 Get Random Valid Phone Number
@@ -373,7 +373,7 @@ Generate Random 555 Test Phone Number
     Log  ${PH_Number}
     Set Suite Variable    ${Phone}  555${PH_Number}
     Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${Phone}${\n}
-    [Return]  ${Phone}
+    RETURN  ${Phone}
     
 
 Generate Random Test Phone Number
@@ -383,7 +383,7 @@ Generate Random Test Phone Number
     Log  ${PH_Number}
     ${Phone}=  Evaluate  ${baseNumber}+${PH_Number}
     Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${Phone}${\n}
-    [Return]  ${Phone}
+    RETURN  ${Phone}
 
 
 # Set TZ Header
@@ -411,6 +411,6 @@ Generate Random Test Phone Number
 #     # Log  ${params}
 #     # Log  ${cons_headers}
 #     Log  ${kwargs}
-#     [Return]  ${tzheaders}  ${kwargs}  ${locparam}
+#     RETURN  ${tzheaders}  ${kwargs}  ${locparam}
     
     

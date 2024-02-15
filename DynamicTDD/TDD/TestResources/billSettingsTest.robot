@@ -20,7 +20,7 @@ Get Bill Settings
 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/bill/settings/pos  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Disable bill
 
@@ -28,7 +28,7 @@ Enable Disable bill
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/bill/settings/${status}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 *** Test Cases ***

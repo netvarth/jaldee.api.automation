@@ -1557,6 +1557,8 @@ JD-TC-CreateHoliday-8
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    # -------------------User1-----------------------
+
     ${resp}=  SendProviderResetMail   ${BUSER_U1}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1574,7 +1576,7 @@ JD-TC-CreateHoliday-8
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
 
     ${SERVICE1}=    FakerLibrary.Word
-    ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
+    ${s_id1}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id1}
 
     ${DAY1}=  get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10          
@@ -1587,16 +1589,123 @@ JD-TC-CreateHoliday-8
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule For User  ${u_id}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule For User  ${u_id1}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${sch_id}  ${resp.json()}
+    Set Suite Variable  ${sch_id1}  ${resp.json()}
 
-    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
+    Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name}  apptState=${Qstate[0]}
 
     ${resp}=  Provider Logout
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    # -------------------User2-----------------------
+
+    ${resp}=  SendProviderResetMail   ${BUSER_U2}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    @{resp}=  ResetProviderPassword  ${BUSER_U2}  ${PASSWORD}  2
+    Should Be Equal As Strings  ${resp[0].status_code}  200
+    Should Be Equal As Strings  ${resp[1].status_code}  200
+
+    ${resp}=   Encrypted Provider Login  ${BUSER_U2}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+
+    ${SERVICE1}=    FakerLibrary.Word
+    ${s_id2}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id2}
+
+    # ${DAY1}=  get_date_by_timezone  ${tz}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10          
+    # ${list}=  Create List  1  2  3  4  5  6  7
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    # ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    # ${eTime1}=  add_two   ${sTime1}  ${delta}
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    # ${maxval}=  Convert To Integer   ${delta/2}
+    # ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule For User  ${u_id2}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sch_id2}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id2}   name=${schedule_name}  apptState=${Qstate[0]}
+
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+# -------------------Account-----------------------
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME145}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${holidayname}=   FakerLibrary.word
+    ${list}=  Create List   1  2  3  4  5  6  7
+    ${desc}=    FakerLibrary.sentence
+    # ${sTime11}=  db.get_time_by_timezone   ${tz}
+    # ${delta}=  FakerLibrary.Random Int  min=5  max=10
+    # ${eTime11}=  add_two   ${sTime11}  ${delta}
+    ${DAY21}=  db.add_timezone_date  ${tz}  2  
+    ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  description${SPACE}is${SPACE}${desc}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${hId1}    ${resp.json()['holidayId']}
+   
+    ${resp}=   Get Holiday By Id  ${hId1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings   ${resp.status_code}  200
+
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    # -------------------User1-----------------------
+
+    ${resp}=   Encrypted Provider Login  ${BUSER_U1}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+
+        Should Be Equal As Integers  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']}   0   
+
+    END
+
+    # -------------------User2-----------------------
+
+    ${resp}=   Encrypted Provider Login  ${BUSER_U2}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY1}  ${s_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+
+        Should Be Equal As Integers  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']}   0   
+
+    END

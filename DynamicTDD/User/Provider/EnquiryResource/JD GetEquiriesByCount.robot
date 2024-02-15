@@ -41,7 +41,7 @@ Multiple Users branches
         END
     END
 
-    [Return]  ${multiuser_list}
+    RETURN  ${multiuser_list}
 
 *** Test Cases ***
 JD-TC-Get Enquiries For Branch-1

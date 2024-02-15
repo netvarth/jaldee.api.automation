@@ -19,13 +19,13 @@ Get Service payment modes
     [Arguments]  ${accountId}   ${serviceId}   ${paymentPurpose}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /consumer/payment/modes/service/${accountId}/${serviceId}/${paymentPurpose}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get payment modes
     [Arguments]  ${accountId}   ${serviceId}   ${paymentPurpose}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /consumer/payment/modes/service/${accountId}/${serviceId}/${paymentPurpose}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # Get convenienceFee Details 
 #     [Arguments]  ${accountId}     ${profileId}    ${amount}
@@ -40,7 +40,7 @@ Get payment modes
 #     ${data}=  json.dumps  ${data}
 #     Check And Create YNW Session
 #     ${resp}=   PUT On Session  ynw  /consumer/payment/modes/convenienceFee/${accountId}   data=${data}   expected_status=any
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 Get convenienceFee Details 
     [Arguments]  ${accountId}     ${profileId}    ${amount}
@@ -48,7 +48,7 @@ Get convenienceFee Details
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  /consumer/payment/modes/MockConvenienceFee/${accountId}   data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # Get Billable Subdomain
 #     [Arguments]   ${domain}  ${jsondata}  ${posval}  
@@ -59,7 +59,7 @@ Get convenienceFee Details
 #             Should Be Equal As Strings    ${resp.status_code}    200
 #             Exit For Loop IF  '${resp.json()['serviceBillable']}' == 'True'
 #     END
-#     [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
+#     RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
 
 Get Billable Subdomain
     [Arguments]   ${domain}  ${jsondata}  ${posval}  
@@ -72,7 +72,7 @@ Get Billable Subdomain
             ${Status}=   Run Keyword And Return Status   Run Keywords   Should Be ${bool[1]}   '${resp.json()['maxPartySize']}' > '${1}'  AND   Should Be ${bool[1]}  '${resp.json()['serviceBillable']}' == '${bool[1]}'
             Exit For Loop IF  ${Status}
     END
-    [Return]  ${subdomain}  ${Status}
+    RETURN  ${subdomain}  ${Status}
 
 *** Variables ***
 

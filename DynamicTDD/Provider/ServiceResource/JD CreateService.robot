@@ -69,7 +69,7 @@ ${zero_amt}   ${0.0}
 #                 Should Be Equal As Strings    ${resp.status_code}    200
 #                 Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
 #         END
-#         [Return]  ${multiloc_providers}
+#         RETURN  ${multiloc_providers}
 
 *** Test Cases ***
 
@@ -2029,7 +2029,7 @@ Non Billable
         Exit For Loop IF     '${check}' == 'False'
        
      END 
-     [Return]   ${MUSERNAME${a}}
+     RETURN   ${MUSERNAME${a}}
 
 
 Disable Services
@@ -2099,4 +2099,4 @@ wlsettings
 #        ${resp}=  Create Service  ${SERVICE1}  ${description}   30   ACTIVE   ${btype}   ${notify}  ${notifytype}   ${EMPTY}   500   True   False
 #        Should Be Equal As Strings  ${resp.status_code}  422
 #        Should Be Equal As Strings  "${resp.json()}"  "minimum pre payment should be entered and it should be equal to or higher than one"
-#        [Return]   True
+#        RETURN   True

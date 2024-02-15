@@ -22,7 +22,7 @@ Update Vendor Status
      
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/vendor/${vendorUId}/${vendorStatus}     expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 *** Test Cases ***

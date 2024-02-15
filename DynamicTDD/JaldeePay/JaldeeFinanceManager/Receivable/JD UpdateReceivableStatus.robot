@@ -20,7 +20,7 @@ Update Receivable Status
     [Arguments]    ${ReceivableUid}     ${status} 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/receivable/${ReceivableUid}/${status}     expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Receivable
 
@@ -32,7 +32,7 @@ Create Receivable
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/receivable    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Variables ***
 

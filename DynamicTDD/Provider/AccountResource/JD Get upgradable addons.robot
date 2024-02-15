@@ -98,7 +98,7 @@ Addons Metadata
               Set Test variable  ${addon_id}  ${addon_resp.json()[${len1}]['addons'][${index}]['addonId']}
               Append To List  ${list}    ${addon_id}
        END
-       [Return]  ${list}
+       RETURN  ${list}
 
 UpgradeAddons Metadata
        [Arguments]  ${len1}  ${len2}  ${list}
@@ -106,7 +106,7 @@ UpgradeAddons Metadata
               Set Test variable  ${addon_id}  ${upgradable_addons.json()[${len1}]['addons'][${index}]['addonId']}
               Append To List  ${list}    ${addon_id}
        END
-       [Return]  ${list}
+       RETURN  ${list}
 
 Upgradable Addons
        [Arguments]  ${len}  ${list}  ${j}

@@ -22,7 +22,7 @@ DeActivate Service Provider
     
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw   provider/login/deActivate   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Test Cases ***
 

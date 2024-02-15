@@ -37,7 +37,7 @@ Get Date Time via Timezone
     # END
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  provider/location/date/${zone}/${loc}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 *** Test Cases ***  

@@ -99,7 +99,7 @@ Account with Multiple Users in NBFC
         END
     END
    
-    [Return]  ${MUSERNAME${a}}
+    RETURN  ${MUSERNAME${a}}
 
 Loan Application Branchapproval
 
@@ -110,7 +110,7 @@ Loan Application Branchapproval
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/branchapproval    data=${data}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create and Update Account level cdl setting
 
@@ -125,7 +125,7 @@ Create and Update Account level cdl setting
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /provider/cdlsetting/account   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Generate Otp for co-applicant Phone
 
@@ -135,7 +135,7 @@ Generate Otp for co-applicant Phone
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/loanapplication/generate/coapplicant/phoneotp  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Verify Otp for co-applicant Phone
 
@@ -146,7 +146,7 @@ Verify Otp for co-applicant Phone
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/loanapplication/verify/coapplicant/${otp}/phoneotp  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Generate Otp for co-applicant Email
 
@@ -156,7 +156,7 @@ Generate Otp for co-applicant Email
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/loanapplication/generate/coapplicant/emailotp  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Verify Otp for co-applicant Email
 
@@ -167,7 +167,7 @@ Verify Otp for co-applicant Email
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/loanapplication/verify/coapplicant/${otp}/emailotp     data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update CoApplicant Aadhaar
 
@@ -187,7 +187,7 @@ Update CoApplicant Aadhaar
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/loanapplication/updatekyc/document/UID  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update CoApplicant Pan
 
@@ -207,7 +207,7 @@ Update CoApplicant Pan
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/loanapplication/updatekyc/document/Pan  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update CoApplicant Details
     [Arguments]    ${id}  ${originUid}   ${customerFirstName}  ${customerLastName}  ${customerPhoneCode}  ${customerPhone}    ${dob}   ${gender}   ${maritalStatus}
@@ -222,14 +222,14 @@ Update CoApplicant Details
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/loanapplication/${originUid}/updatekyc  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Delete CoApplicant Details
     [Arguments]    ${loanApplicationUid}  ${kycId}
 
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw   /provider/loanapplication/${loanApplicationUid}/kyc/${kycId}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Attachments
 
@@ -249,7 +249,7 @@ Update Attachments
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /loanapplication/${loanApplicationUid}/kyc/${kycId}/attachments  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Test Cases ***
 

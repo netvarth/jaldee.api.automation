@@ -257,7 +257,7 @@ Get Corporate Subdomain
             Should Be Equal As Strings    ${resp.status_code}    200
             Exit For Loop IF  '${resp.json()['isCorp']}' == '${bool[1]}'
     END
-    [Return]  ${subdomain}   ${subdomain_id} 
+    RETURN  ${subdomain}   ${subdomain_id} 
 
 Get Non-Corporate Subdomain
     [Arguments]   ${domain}  ${jsondata}  ${posval}  
@@ -268,4 +268,4 @@ Get Non-Corporate Subdomain
             Should Be Equal As Strings    ${resp.status_code}    200
             Exit For Loop IF  '${resp.json()['isCorp']}' == '${bool[0]}'
     END
-    [Return]  ${subdomain}  
+    RETURN  ${subdomain}  

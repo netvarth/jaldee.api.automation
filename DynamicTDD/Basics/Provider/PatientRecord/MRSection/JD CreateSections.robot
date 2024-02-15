@@ -21,7 +21,7 @@ GEt Create Section Template
 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/domaindefaulttemplates    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Variables ***
 

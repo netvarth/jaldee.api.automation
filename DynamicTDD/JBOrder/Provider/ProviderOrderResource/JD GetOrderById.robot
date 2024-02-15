@@ -28,7 +28,7 @@ Get Order Time
         Append To List   ${stimes}   ${resp.json()[${i}]['timeSlots'][${j}]['sTime']}
         Append To List   ${etimes}   ${resp.json()[${i}]['timeSlots'][${j}]['eTime']}
     END
-    [Return]    ${stimes}     ${etimes}
+    RETURN    ${stimes}     ${etimes}
 
 
 

@@ -28,7 +28,7 @@ check corp
         Log  ${is_corp}
         Exit For Loop If  '${is_corp}' == '${iscorpval}'
     END
-    [Return]   ${is_corp}
+    RETURN   ${is_corp}
 
 *** Test Cases ***
 JD-TC-CreateAppointmentQueueSet-1

@@ -51,14 +51,14 @@ ${DisplayName1}   item1_DisplayName
 #     ${data}=  json.dumps  ${data}
 #     Check And Create YNW Session
 #     ${resp}=  POST On Session  ynw  /provider/bill/coupons   data=${data}  expected_status=any
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 
 # TimeSpecs
 #     [Arguments]  ${rectype}  ${rint}  ${startDate}  ${endDate}  ${noocc}     
 #     ${terminator}=  Create Dictionary  endDate=${endDate}  noOfOccurance=${noocc}
 #     ${ts}=  Create Dictionary  recurringType=${rectype}  repeatIntervals=${rint}  startDate=${startDate}  terminator=${terminator}  
-#     [Return]  ${ts}
+#     RETURN  ${ts}
 *** Test Cases ***
 
 JD-TC-Apply ProviderCoupon-1

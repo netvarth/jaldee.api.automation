@@ -18,7 +18,7 @@ Get Bill payment modes
     [Arguments]  ${accountId}   ${billId}   ${paymentPurpose}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /consumer/payment/modes/bill/${accountId}/${billId}/${paymentPurpose}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 *** Variables ***

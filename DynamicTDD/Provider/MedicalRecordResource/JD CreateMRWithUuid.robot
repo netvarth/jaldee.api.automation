@@ -37,7 +37,7 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 #    ${data}=  json.dumps  ${data}
 #    Check And Create YNW Session
 #    ${resp}=  POST On Session  ynw  /provider/mr/${uuid}  data=${data}  expected_status=any
-#    [Return]  ${resp}
+#    RETURN  ${resp}
 
 Create MR With uuid
     [Arguments]  ${uuid}  ${bookingType}  ${consultationMode}   ${mrConsultationDate}  ${state}    &{kwargs}
@@ -49,7 +49,7 @@ Create MR With uuid
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/mr/${uuid}  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 clinical Notes Attachments
     [Arguments]  ${type}  ${clinicalNote}   @{vargs}  &{kwargs}
@@ -63,7 +63,7 @@ clinical Notes Attachments
     END
 
     ${clinicalNotes}=  Create Dictionary  type=${type}  clinicalNotes=${clinicalNote}  attachments=${AttachmentList} 
-    [Return]  ${clinicalNotes}
+    RETURN  ${clinicalNotes}
 
 *** Variables ***
 ${SERVICE1}               SERVICE1

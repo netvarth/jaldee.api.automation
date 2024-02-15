@@ -49,7 +49,7 @@ Billable Domain Providers
         Set Suite Variable   ${check}    ${resp2.json()['serviceBillable']} 
         Run Keyword If    '${check}' == 'True' and '${check1}' == '${pkg_id[0]}'   Append To List   ${provider_list}   ${PUSERNAME${a}}
     END
-    [Return]  ${provider_list}
+    RETURN  ${provider_list}
 
 Get Billable Subdomain
     [Arguments]   ${domain}  ${jsondata}  ${posval}  
@@ -62,7 +62,7 @@ Get Billable Subdomain
             ${Status}=   Run Keyword And Return Status   Run Keywords   Should Be True   '${resp.json()['maxPartySize']}' > '${1}'  AND   Should Be True  '${resp.json()['serviceBillable']}' == '${bool[1]}'
             Exit For Loop IF  ${Status}
     END
-    [Return]  ${subdomain}  ${Status}
+    RETURN  ${subdomain}  ${Status}
 
 
 

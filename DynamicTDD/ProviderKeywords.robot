@@ -18,18 +18,18 @@ Library           FakerLibrary
 Get BusinessDomainsConf
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /ynwConf/businessDomains   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Licensable Packages
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/license/packages  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 User Creation
     [Arguments]  ${firstname}  ${lastname}  ${yemail}  ${sector}  ${sub_sector}  ${ph}  ${licPkgId}  ${countryCode}=91
     ${usp}=    Create Dictionary   firstName=${firstname}  lastName=${lastname}  email=${yemail}  primaryMobileNo=${ph}  countryCode=${countryCode}
     ${data}=  Create Dictionary  userProfile=${usp}  sector=${sector}  subSector=${sub_sector}  licPkgId=${licPkgId}
-    [Return]  ${data}
+    RETURN  ${data}
 
 Account SignUp
     [Arguments]  ${firstname}  ${lastname}  ${yemail}  ${sector}  ${sub_sector}  ${ph}  ${licPkgId}   ${countryCode}=91
@@ -37,7 +37,7 @@ Account SignUp
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /provider    data=${data}  expected_status=any  
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Claim SignUp
     [Arguments]  ${firstname}  ${lastname}  ${yemail}  ${sector}  ${sub_sector}  ${ph}  ${licPkgId}  ${acid}
@@ -46,7 +46,7 @@ Claim SignUp
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /provider    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Account Activation
@@ -54,7 +54,7 @@ Account Activation
     Check And Create YNW Session
     ${key}=   verify accnt  ${email}  ${purpose}
     ${resp_val}=  POST On Session   ynw  /provider/${key}/verify  expected_status=any
-    [Return]  ${resp_val}
+    RETURN  ${resp_val}
 
 Account Set Credential
     [Arguments]  ${email}  ${password}  ${purpose}  ${countryCode}=91
@@ -62,34 +62,34 @@ Account Set Credential
     ${key}=   verify accnt  ${email}  ${purpose}
     ${apple}=    json.dumps    ${auth}
     ${resp}=    PUT On Session    ynw    /provider/${key}/activate    data=${apple}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 ProviderLogin
     [Arguments]    ${usname}  ${passwrd}   ${countryCode}=91
     ${log}=  Login  ${usname}  ${passwrd}   countryCode=${countryCode}
     ${resp}=    POST On Session    ynw    /provider/login    data=${log}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 ProviderLogout
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /provider/login  expected_status=any
-    [Return]  ${resp}       
+    RETURN  ${resp}       
 
     
 Phone Numbers
     [Arguments]  ${lbl}  ${res}  ${inst}  ${perm}
     ${ph}=  Create Dictionary  label=${lbl}  resource=${res}  instance=${inst}  permission=${perm}
-    [Return]  ${ph}
+    RETURN  ${ph}
 
 Emails
     [Arguments]  ${e_lbl}  ${e_res}  ${e_inst}  ${e_perm}
     ${em}=  Create Dictionary  label=${e_lbl}  resource=${e_res}  instance=${e_inst}  permission=${e_perm}
-    [Return]  ${em} 
+    RETURN  ${em} 
 
 Timeslot
     [Arguments]  ${sTime}  ${eTime}
     ${time}=  Create Dictionary  sTime=${sTime}  eTime=${eTime}
-    [Return]  ${time}
+    RETURN  ${time}
  
     
 Business Profile
@@ -103,14 +103,14 @@ Business Profile
     ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}  phoneNumbers=${ph_nos}  emails=${emails}
     ${data}=  json.dumps  ${data}
     Log  ${data}
-    [Return]  ${data}
+    RETURN  ${data}
 
 Create Business Profile
     [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}
     ${data}=  Business Profile  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  provider/bProfile  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 TimeSpec
     [Arguments]  ${rectype}  ${rint}  ${startDate}  ${endDate}  ${noocc}  ${sTime}  ${eTime} 
@@ -118,7 +118,7 @@ TimeSpec
     ${time}=  Create Dictionary  sTime=${sTime}  eTime=${eTime}
     ${timeslot}=  Create List  ${time}
     ${ts}=  Create Dictionary  recurringType=${rectype}  repeatIntervals=${rint}  startDate=${startDate}  terminator=${terminator}  timeSlots=${timeslot}
-    [Return]  ${ts}
+    RETURN  ${ts}
 
 Create Business Profile without details
     [Arguments]  ${bName}  ${bDesc}  ${shname}   ${ph1}   ${email1}
@@ -128,7 +128,7 @@ Create Business Profile without details
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  provider/bProfile  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Business Profile without schedule
     [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${pin}  ${adds}   ${ph1}  ${ph2}  ${email1}  ${lid}
@@ -139,7 +139,7 @@ Create Business Profile without schedule
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  provider/bProfile  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Business Profile with schedule only
     [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${lid}
@@ -149,14 +149,14 @@ Business Profile with schedule only
     ${b_loc}=  Create Dictionary  id=${lid}  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  bSchedule=${bs}  pinCode=${pin}  address=${adds}
     ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}
     ${data}=  json.dumps  ${data}
-    [Return]  ${data} 
+    RETURN  ${data} 
     
 Create Business Profile with schedule only
     [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${lid}
     ${data}=  Business Profile with schedule only  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${lid}
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  provider/bProfile  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Business Profile with location only
@@ -166,7 +166,7 @@ Create Business Profile with location only
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  provider/bProfile  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Business Profile with location only
@@ -176,7 +176,7 @@ Update Business Profile with location only
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  provider/bProfile  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Business Profile with schedule
@@ -192,14 +192,14 @@ Business Profile with schedule
         Set To Dictionary 	${data} 	${key}=${value}
     END
     ${data}=  json.dumps  ${data}
-    [Return]  ${data}
+    RETURN  ${data}
 
 Update Business Profile with schedule
     [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
     ${data}=  Business Profile with schedule  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${pin}  ${adds}  ${ph1}  ${ph2}  ${email1}  ${lid}  &{kwargs}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Business Profile without schedule
     [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${pin}  ${adds}   ${ph1}  ${ph2}  ${email1}  ${lid}
@@ -210,7 +210,7 @@ Update Business Profile without schedule
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Business Profile without details
     [Arguments]  ${bName}  ${bDesc}  ${shname}   ${ph1}   ${email1}
@@ -220,7 +220,7 @@ Update Business Profile without details
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 Update Business Profile without phone and email
@@ -229,18 +229,18 @@ Update Business Profile without phone and email
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Business Profile
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/bProfile  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Update Domain And SubDomain
     [Arguments]   ${dom}  ${subdom}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/${dom}/${subdom}  expected_status=any
-    [Return]  ${resp}    
+    RETURN  ${resp}    
 
 Create Location
     [Arguments]  ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  &{kwargs}
@@ -254,7 +254,7 @@ Create Location
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/locations  data=${data}  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 Create Sample Location
     FOR   ${i}  IN RANGE   5
@@ -278,7 +278,7 @@ Create Sample Location
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking_type}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    [Return]  ${resp.json()}
+    RETURN  ${resp.json()}
 
 Check Location Exists
     [Arguments]   ${city}
@@ -310,7 +310,7 @@ Create Sample Item
    ${resp}=    Create Order Item    ${displayName}    ${shortDesc}    ${itemDesc}    ${price}    ${taxable}    ${itemName}    ${itemNameInLocal}    ${promotionalPriceType[1]}    ${promoPrice}    ${promotionalPrcnt}    ${note}    ${bool[1]}    ${bool[1]}    ${itemCode}    ${showPromoPrice}    ${promotionLabelType[2]}    ${promoLabel}   
    Log  ${resp.content}
    Should Be Equal As Strings  ${resp.status_code}  200
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Create Location without schedule
@@ -319,18 +319,18 @@ Create Location without schedule
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/locations  data=${data}  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
     
 Get Location ById
     [Arguments]  ${id}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/locations/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Locations
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/locations  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Location with schedule
     [Arguments]   ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${lid}
@@ -341,7 +341,7 @@ Update Location with schedule
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/locations  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Location
     [Arguments]   ${place}  ${longi}  ${latti}  ${g_url}  ${pin}  ${add}  ${pt}  ${oh}  ${lid}
@@ -349,7 +349,7 @@ Update Location
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/locations  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 UpdateBaseLocation
     [Arguments]   ${lid}
@@ -357,25 +357,25 @@ UpdateBaseLocation
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bProfile/baseLocation/${lid}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Location
    [Arguments]   ${id}
    Check And Create YNW Session
    ${resp}=    DELETE On Session    ynw  /provider/locations/${id}/disable  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
     
 Enable Location
    [Arguments]   ${id}
    Check And Create YNW Session
    ${resp}=    PUT On Session    ynw  /provider/locations/${id}/enable  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Get Location Suggester
    [Arguments]  &{kwargs}
    Check And Create YNW Session
    ${resp}=    GET On Session    ynw   /provider/search/suggester/location  params=${kwargs}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Create Holiday For User
@@ -385,28 +385,28 @@ Create Holiday For User
     ${data}=  Create Dictionary  startDay=${day}  description=${desc}  nonWorkingHours=${nwh}  provider=${user_id}
     ${data}=  json.dumps  ${data}
     ${resp}=  POST On Session  ynw  /provider/settings/nonBusinessDays  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Search Status
    Check And Create YNW Session
    ${resp}=    GET On Session    ynw   /provider/search  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Enable Search Data
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/search/ENABLE  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Search Data
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/search/DISABLE  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create SocialMedia
     [Arguments]  ${resource}  ${value}
     ${data}=  Create Dictionary  resource=${resource}  value=${value}  
-    [Return]  ${data}
+    RETURN  ${data}
        
 
 Update Social Media Info
@@ -415,7 +415,7 @@ Update Social Media Info
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session 
     ${resp}=  PUT On Session  ynw  /provider/bProfile/socialMedia  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Queue
@@ -439,7 +439,7 @@ Queue
         Append To List  ${services}  ${service}
     END
     ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  parallelServing=${parallel}  capacity=${capacity}  location=${location}  services=${services}
-    [Return]  ${data}
+    RETURN  ${data}
 
 
 Create Queue
@@ -448,7 +448,7 @@ Create Queue
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/waitlist/queues  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Queue For User
@@ -464,7 +464,7 @@ Queue For User
         Append To List  ${services}  ${service}
     END
    ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  parallelServing=${parallel}  capacity=${capacity}  location=${location}  provider=${user_id}  services=${services}
-   [Return]  ${data}
+   RETURN  ${data}
 
 
 Create Queue For User
@@ -473,7 +473,7 @@ Create Queue For User
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/waitlist/queues  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
    
 Create Sample Queue
@@ -524,7 +524,7 @@ Create Sample Queue
     Should Be Equal As Strings  ${resp.status_code}  200
     ${data}=  Create Dictionary   queue_id=${resp.json()}   service_id=${s_id}   location_id=${lid}    service_name=${SERVICE1}
     Log  ${data}
-    [Return]   ${data}
+    RETURN   ${data}
 
 
 Sample Queue 
@@ -551,7 +551,7 @@ Sample Queue
     ${resp}=  Create Queue  ${queue1}  Weekly  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${parallel}  ${capacity}  ${lid}  @{vargs}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    [Return]   ${resp}
+    RETURN   ${resp}
 
     
 Queue With TokenStart
@@ -566,7 +566,7 @@ Queue With TokenStart
         Append To List  ${services}  ${service}
    END
    ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  parallelServing=${parallel}  capacity=${capacity}  location=${location}  tokenStarts=${token_start}  services=${services}
-   [Return]  ${data}
+   RETURN  ${data}
 
    
 Create Queue With TokenStart
@@ -575,7 +575,7 @@ Create Queue With TokenStart
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/waitlist/queues  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Queue without Service
@@ -583,7 +583,7 @@ Queue without Service
    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
    ${location}=  Create Dictionary  id=${loc}
    ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  parallelServing=${parallel}  capacity=${capacity}  location=${location} 
-   [Return]  ${data}
+   RETURN  ${data}
 
 
 Create Queue without Service
@@ -592,7 +592,7 @@ Create Queue without Service
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/waitlist/queues  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Queue without Service For User
@@ -601,7 +601,7 @@ Queue without Service For User
    ${location}=  Create Dictionary  id=${loc}
    ${user_id}=  Create Dictionary  id=${u_id}
    ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  parallelServing=${parallel}  capacity=${capacity}  location=${location}  provider=${user_id}  services=${None}
-   [Return]  ${data}
+   RETURN  ${data}
 
 
 Create Queue without Service For User
@@ -610,7 +610,7 @@ Create Queue without Service For User
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/waitlist/queues  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Update Queue
@@ -620,7 +620,7 @@ Update Queue
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/queues  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 Update Queue For User
@@ -630,7 +630,7 @@ Update Queue For User
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/queues  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 Update Queue without service
@@ -640,53 +640,53 @@ Update Queue without service
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/queues  data=${data}  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
    
 Get Queues
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Queue ById
     [Arguments]  ${id}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Queues Counts
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/count  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Queue
     [Arguments]  ${qid}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/queues/${qid}/enable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Queue
     [Arguments]  ${qid}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/queues/${qid}/disable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Queue Location
     [Arguments]  ${locationId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/${locationId}/location  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Queue Location and Date
     [Arguments]  ${locationId}  ${date}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/${locationId}/location/${date}  expected_status=any
-    [Return]  ${resp}    
+    RETURN  ${resp}    
 
 View Waitlist Settings
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/settings/waitlistMgr  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Waitlist Settings
     [Arguments]   ${calculationmode}   ${TrnArndTime}  ${futuredatewaitlist}  ${showTokenId}  ${onlineChckin}  ${notification}  ${maxPartySize}
@@ -694,7 +694,7 @@ Update Waitlist Settings
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/waitlistMgr   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Send Verify Login
     [Arguments]  ${loginid}  ${countryCode}=91
@@ -702,7 +702,7 @@ Send Verify Login
     ${body}=     Create Dictionary   countryCode=${countryCode}
     ${data}=    json.dumps    ${body}
     ${resp}=  POST On Session    ynw  /provider/login/verifyLogin/${loginid}   params=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Verify Login
     [Arguments]  ${loginid}  ${purpose}  ${countryCode}=91
@@ -711,20 +711,20 @@ Verify Login
     ${key}=   verify accnt  ${loginid}  ${purpose}
     ${data}=    json.dumps    ${auth}
     ${resp}=    PUT On Session    ynw    /provider/login/${key}/verifyLogin    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Provider By Id
     [Arguments]  ${email}
     Check And Create YNW Session
     ${id}=  get_id  ${email}
     ${resp}=    GET On Session    ynw   /provider/profile/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Consumer By Account
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /consumer  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Verify user profile
     [Arguments]  ${resp}  &{kwargs}
@@ -738,7 +738,7 @@ Provider Change Password
     ${apple}=    json.dumps    ${auth}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw   /provider/login/chpwd    data=${apple}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 SendProviderResetMail
    [Arguments]    ${email}  ${countryCode}=91
@@ -746,7 +746,7 @@ SendProviderResetMail
 #    ${body}=     Create Dictionary   countryCode=${countryCode}
    ${data}=    json.dumps    ${countryCode}
    ${resp}=  POST On Session  ynw     /provider/login/reset/${email}   data=${data}  expected_status=any
-   [Return]  ${resp}  
+   RETURN  ${resp}  
 
 
 ResetProviderPassword
@@ -757,14 +757,14 @@ ResetProviderPassword
     ${login}=    Create Dictionary  password=${pswd}  countryCode=${countryCode}
     ${log}=    json.dumps    ${login}
     ${respk}=  PUT On Session  ynw  /provider/login/reset/${key}  data=${log}  expected_status=any  headers=${headers}
-    [Return]  ${resp}  ${respk}
+    RETURN  ${resp}  ${respk}
 
 Verify OTP
     [Arguments]  ${email}  ${purpose}
     ${key}=  verify accnt  ${email}   ${purpose}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw    /provider/login/reset/${key}/validate  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 AddFamilyMemberByProvider
@@ -773,7 +773,7 @@ AddFamilyMemberByProvider
     ${data}=  Create Dictionary  parent=${id}  firstName=${firstname}  lastName=${lastname}  dob=${dob}  gender=${gender} 
     ${data}=    json.dumps    ${data}
     ${resp}=  POST On Session   ynw   /provider/customers/familyMember   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 AddFamilyMemberByProviderWithPhoneNo
     [Arguments]  ${id}  ${firstname}  ${lastname}  ${dob}  ${gender}  ${PhoneNo}    ${countryCode}=91
@@ -781,78 +781,78 @@ AddFamilyMemberByProviderWithPhoneNo
     ${data}=  Create Dictionary  parent=${id}  firstName=${firstname}  lastName=${lastname}  dob=${dob}  gender=${gender}  phoneNo=${PhoneNo}  countryCode=${countryCode}
     ${data}=    json.dumps    ${data}
     ${resp}=  POST On Session   ynw   /provider/customers/familyMember   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 ListFamilyMemberByProvider
     [Arguments]   ${id}
     Check And Create YNW Session
     ${resp}=  GET On Session   ynw   /provider/customers/familyMember/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add addon 
     [Arguments]    ${addonId}
     Check And Create YNW Session
     ${resp}=   POST On Session   ynw   /provider/license/addon/${addonId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove addon
     [Arguments]    ${addonId}
     Check And Create YNW Session
     ${resp}=   DELETE On Session   ynw   /provider/license/addon/${addonId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Active License 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/license  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get license auditlog
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/license/auditlog  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
    
    
 Get addons auditlog
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/license/addon/auditlog  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Addons Metadata
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/license/addonmetadata  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get upgradable license 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/license/upgradablePackages  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get upgradable addons
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/license/upgradableAddons  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change License Package 
     [Arguments]    ${licPkgId}
     Check And Create YNW Session
     ${resp}=   PUT On Session   ynw   /provider/license/${licPkgId}  expected_status=any
-    [Return]  ${resp}  
+    RETURN  ${resp}  
 
 Get SubscriptionTypes 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  provider/license/getSubscriptionTypes  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Subscription
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/license/getSubscription  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Change Bill Cycle
     [Arguments]    ${cycle}
     Check And Create YNW Session
     ${resp}=   PUT On Session   ynw   /provider/license/billing/${cycle}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Add adword
    [Arguments]    ${adwordName}
@@ -860,32 +860,32 @@ Add adword
    ${data}=    json.dumps    ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/license/adwords/create  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
    
 Get adword
    Check And Create YNW Session
    ${resp}=   GET On Session  ynw  /provider/license/adwords  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
    
 Delete adword
     [Arguments]    ${adwordId}
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  provider/license/adwords/${adwordId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Customer Creation
     [Arguments]  ${firstname}  ${lastname}   ${primaryNo}   ${ydob}  ${ygender}  ${yemail}  ${jid}  ${countryCode}=91
     ${up}=  Create Dictionary  firstName=${firstname}  lastName=${lastname}  address=${EMPTY}  primaryMobileNo=${primaryNo}  dob=${ydob}  gender=${ygender}  email=${yemail}  countryCode=${countryCode}   jaldeeId=${jid}
     ${data}=  Create Dictionary  userProfile=${up}
     ${data}=  json.dumps  ${data}
-    [Return]  ${data}
+    RETURN  ${data}
     
 Customer Creation after updation
     [Arguments]  ${firstname}  ${lastname}   ${primaryNo}   ${ydob}  ${ygender}  ${yemail}  ${c_id}  ${jid}  ${address}   ${countryCode}=91
     ${up}=  Create Dictionary  id=${c_id}  firstName=${firstname}  lastName=${lastname}  address=${address}  phoneNo=${primaryNo}  dob=${ydob}  gender=${ygender}  email=${yemail}  countryCode=${countryCode}   jaldeeId=${jid}
     ${data}=  Create Dictionary  userProfile=${up}
     ${data}=  json.dumps  ${data}
-    [Return]  ${data}
+    RETURN  ${data}
 
 
 AddCustomer
@@ -900,7 +900,7 @@ AddCustomer
     Check And Create YNW Session
     # ${data}=  Create Dictionary  phoneNo=${primaryNo}  firstName=${firstname}  lastName=${lastname}  countryCode=${countryCode}
     ${resp}=  POST On Session  ynw  url=/provider/customers  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 AddCustomer with email
     [Arguments]  ${firstname}  ${lastname}  ${address}  ${yemail}  ${ygender}  ${ydob}  ${primaryNo}   ${jid}  ${countryCode}=91  
@@ -908,7 +908,7 @@ AddCustomer with email
     ${data}=  Create Dictionary  firstName=${firstname}  lastName=${lastname}  address=${address}  email=${yemail}  gender=${ygender}  dob=${ydob}  phoneNo=${primaryNo}  countryCode=${countryCode}  jaldeeId=${jid}
     ${data}=  json.dumps  ${data}
     ${resp}=  POST On Session  ynw  /provider/customers  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 AddCustomer without email
@@ -917,7 +917,7 @@ AddCustomer without email
     ${data}=  Create Dictionary  firstName=${firstname}  lastName=${lastname}  address=${address}   gender=${ygender}  dob=${ydob}  phoneNo=${primaryNo}  countryCode=${countryCode}  jaldeeId=${jid}
     ${data}=  json.dumps  ${data}
     ${resp}=  POST On Session  ynw  /provider/customers  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 UpdateCustomer
 	[Arguments]  ${firstname}  ${lastname}  ${primaryNo}  ${ydob}  ${ygender}  ${yemail}  ${c_id}   ${jid}  ${address}=${EMPTY}  &{kwargs}
@@ -929,7 +929,7 @@ UpdateCustomer
         Set To Dictionary  ${data}   ${key}=${value}
     END
     ${resp}=  PUT On Session  ynw  /provider/customers  data=${data}  expected_status=any
-	[Return]  ${resp}
+	RETURN  ${resp}
 
 UpdateCustomer with email
     [Arguments]  ${c_id}   ${firstname}  ${lastname}  ${address}  ${yemail}  ${ygender}  ${ydob}  ${primaryNo}   ${jid}   ${countryCode}=91  &{kwargs}
@@ -941,7 +941,7 @@ UpdateCustomer with email
         Set To Dictionary  ${data}   ${key}=${value}
     END
     ${resp}=  PUT On Session  ynw  /provider/customers  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 UpdateCustomer without email
     [Arguments]  ${c_id}   ${firstname}  ${lastname}  ${address}   ${ygender}  ${ydob}  ${primaryNo}   ${jid}   ${countryCode}=91  
@@ -949,7 +949,7 @@ UpdateCustomer without email
     ${data}=  Create Dictionary  id=${c_id}  firstName=${firstname}  lastName=${lastname}  address=${address}  gender=${ygender}  dob=${ydob}  phoneNo=${primaryNo}  countryCode=${countryCode}  jaldeeId=${jid}
     ${data}=  json.dumps  ${data}
     ${resp}=  PUT On Session  ynw  /provider/customers  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Customer Details
@@ -963,38 +963,38 @@ Update Customer Details
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/customers  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 GetCustomer
     [Arguments]  &{param} 
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/customers  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 GetCustomer ById  
 	[Arguments]  ${customerId}   
 	Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/customers/${customerId}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 DeleteCustomer
 	[Arguments]  ${customerId}  
 	Check And Create YNW Session
     ${resp}=   DELETE On Session  ynw  /provider/customers/${customerId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 ActivateCustomer
 	[Arguments]  ${customerId}
 	Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  /provider/customers/activate/${customerId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get consumercount
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/customers/count  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Account Payment Settings
     [Arguments]   ${onlinePayment}   ${payTm}   ${dcOrCcOrNb}   ${payTmLinkedPhoneNumber}  ${panCardNumber}   ${bankAccountNumber}   ${bankName}   ${ifscCode}   ${nameOnPanCard}   ${accountHolderName}  ${branchCity}   ${businessFilingStatus}   ${accountType}
@@ -1002,12 +1002,12 @@ Update Account Payment Settings
     ${data}=   json.dumps   ${data}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  /provider/payment/settings   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Account Payment Settings
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/payment/settings   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Create Item
    [Arguments]   ${dsplyName}   ${shrtDes}   ${dsplyDes}   ${price}  ${taxable}
@@ -1015,18 +1015,18 @@ Create Item
    ${auth}=    json.dumps    ${auth}
    Check And Create YNW Session 
    ${resp}=    POST On Session    ynw  /provider/items   data=${auth}  expected_status=any
-   [Return]  ${resp}   
+   RETURN  ${resp}   
    
 Get Item By Id
     [Arguments]   ${id}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/items/${id}  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
     
 Get Items 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/items  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
     
 Update Item 
    [Arguments]     ${itemId}   ${dsplyName}   ${shrtDes}   ${dsplyDes}   ${price}   ${taxable}
@@ -1034,25 +1034,25 @@ Update Item
    ${auth}=    json.dumps    ${auth}
    Check And Create YNW Session  
    ${resp}=    PUT On Session    ynw  /provider/items   data=${auth}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
   
 Delete Item 
    [Arguments]   ${id}
    Check And Create YNW Session
    ${resp}=    DELETE On Session    ynw  /provider/items/${id}  expected_status=any 
-   [Return]  ${resp}  
+   RETURN  ${resp}  
    
 Enable Item 
    [Arguments]   ${id}
    Check And Create YNW Session
    ${resp}=    PUT On Session    ynw  /provider/items/enable/${id}  expected_status=any 
-   [Return]  ${resp}   
+   RETURN  ${resp}   
 
 Disable Item
     [Arguments]   ${id}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/items/disable/${id}   expected_status=any
-    [Return]  ${resp}    
+    RETURN  ${resp}    
    
 Create Discount 
     [Arguments]  ${name}   ${description}   ${discValue}   ${calculationType}  ${discType}
@@ -1060,36 +1060,36 @@ Create Discount
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/bill/discounts   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
         
 Get Discounts 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/bill/discounts  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Discount By Id
     [Arguments]  ${dicountId}   
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/bill/discounts/${dicountId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Delete Discount 
     [Arguments]  ${dicountId}   
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /provider/bill/discounts/${dicountId}  expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Enable Discount
     [Arguments]  ${dicountId}   
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bill/discounts/${dicountId}/enable  expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
        
 Disable Discount
     [Arguments]  ${dicountId}   
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bill/discounts/${dicountId}/disable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Discount
     [Arguments]    ${id}   ${name}   ${description}   ${discValue}   ${calculationType}
@@ -1097,25 +1097,25 @@ Update Discount
     ${data}=  json.dumps  ${data} 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bill/discounts   data=${data}  expected_status=any
-    [Return]  ${resp}  
+    RETURN  ${resp}  
     
 Delete Coupon 
     [Arguments]  ${couponId}   
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /provider/bill/coupons/${couponId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Enable Coupon
     [Arguments]  ${couponId}   
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bill/coupons/${couponId}/enable   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Coupon
     [Arguments]  ${couponId}   
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bill/coupons/${couponId}/disable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Coupon 
     [Arguments]    ${id}   ${name}   ${description}   ${amount}   ${calculationType}
@@ -1123,12 +1123,12 @@ Update Coupon
     ${data}=  json.dumps  ${data} 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bill/coupons   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Calculation Types coupon 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/bill/coupons/calculationtypes  expected_status=any
-    [Return]  ${resp}   
+    RETURN  ${resp}   
     
 Create Coupon 
     [Arguments]  ${name}   ${description}   ${amount}   ${calculationType}
@@ -1136,28 +1136,28 @@ Create Coupon
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/bill/coupons   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Coupons 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/bill/coupons   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Coupon By Id
     [Arguments]  ${couponId}   
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/bill/coupons/${couponId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Tax
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw  /provider/payment/tax/enable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Tax
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw  /provider/payment/tax/disable   expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Create virtual Service
@@ -1170,7 +1170,7 @@ Create virtual Service
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session  
     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Virtual Service For User
     [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   ${virtualServiceType}  ${virtualCallingModes}   ${depid}   ${u_id}  &{kwargs}
@@ -1182,14 +1182,14 @@ Create Virtual Service For User
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session  
     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Enable Disable Virtual Service
    [Arguments]  ${status}  
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  provider/account/settings/virtualServices/${status}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Update Virtual Calling Mode
@@ -1201,13 +1201,13 @@ Update Virtual Calling Mode
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/virtualCallingModes   data=${data}  expected_status=any
     Log  ${resp.content}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Virtual Calling Mode
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/account/settings/virtualCallingModes  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # Create Service
 #     [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   
@@ -1215,7 +1215,7 @@ Get Virtual Calling Mode
 #     ${data}=  json.dumps  ${data}
 #     Check And Create YNW Session  
 #     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 Create Service
     [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   &{kwargs}
@@ -1228,7 +1228,7 @@ Create Service
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session  
     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Service with info
@@ -1238,7 +1238,7 @@ Create Service with info
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session  
     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Service with info
@@ -1248,7 +1248,7 @@ Update Service with info
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session  
     ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 Create Service With serviceType
@@ -1257,7 +1257,7 @@ Create Service With serviceType
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session  
     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Sample Service
@@ -1269,7 +1269,7 @@ Create Sample Service
     ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}  ${status[0]}  ${btype}  ${bool[1]}  ${notifytype[2]}  ${min_pre}  ${Total}  ${bool[0]}  ${bool[0]}   &{kwargs}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    [Return]  ${resp.json()}
+    RETURN  ${resp.json()}
 
 
 Create Sample Service with Prepayment
@@ -1279,7 +1279,7 @@ Create Sample Service with Prepayment
     ${resp}=  Create Service  ${Service_name}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${prepayment_amt}  ${servicecharge}  ${bool[1]}  ${bool[0]}  &{kwargs}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
-    [Return]  ${resp.json()}
+    RETURN  ${resp.json()}
 
 
 Create Sample Service with Prepayment For User
@@ -1289,7 +1289,7 @@ Create Sample Service with Prepayment For User
     ${resp}=  Create Service For User  ${Service_name}  ${desc}   ${srv_duration}  ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}  ${prepayment_amt}  ${servicecharge}  ${bool[1]}  ${bool[0]}  ${depid}  ${u_id}  &{kwargs}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
-    [Return]  ${resp.json()}
+    RETURN  ${resp.json()}
 
 
 Create Sample Service For User
@@ -1297,7 +1297,7 @@ Create Sample Service For User
     ${resp}=  Create Service For User  ${Service_name}  Description   2  ACTIVE  Waitlist  True  email  45  500  False  False  ${depid}   ${u_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    [Return]  ${resp.json()}
+    RETURN  ${resp.json()}
 
 Create Service Department
     [Arguments]  ${name}  ${desc}  ${durtn}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  ${depid}  
@@ -1305,7 +1305,7 @@ Create Service Department
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session  
     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Service For User
     [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  ${depid}   ${u_id}  &{kwargs}
@@ -1317,7 +1317,7 @@ Create Service For User
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session  
     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Service For User
     [Arguments]  ${id}   ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  ${depid}   ${u_id}
@@ -1326,7 +1326,7 @@ Update Service For User
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # Update Service
 #     [Arguments]  ${id}   ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  
@@ -1334,7 +1334,7 @@ Update Service For User
 #     ${data}=  json.dumps  ${data}
 #     Check And Create YNW Session
 #     ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 Update Service
     [Arguments]  ${id}   ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}  &{kwargs}
@@ -1347,7 +1347,7 @@ Update Service
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Service With Service Type
     [Arguments]  ${id}   ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   ${serviceType} 
@@ -1355,7 +1355,7 @@ Update Service With Service Type
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Virtual Service
     [Arguments]  ${id}   ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   ${serviceType}   ${virtualCallingModes}
@@ -1363,112 +1363,112 @@ Update Virtual Service
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/services  data=${data}  expected_status=any
-    [Return]  ${resp}   
+    RETURN  ${resp}   
 
 
 Get Service
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/services  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Service By Id
     [Arguments]  ${id}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/services/${id}  expected_status=any
-    [Return]  ${resp}  
+    RETURN  ${resp}  
 
 Get Service Count
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/services/count  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get ServiceImage
     [Arguments]  ${id}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  provider/services/serviceGallery/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable service 
    [Arguments]  ${id}  
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/services/${id}/Enable  expected_status=any
-   [Return]  ${resp}  
+   RETURN  ${resp}  
    
 Disable service 
    [Arguments]  ${id} 
    Check And Create YNW Session
    ${resp}=  DELETE On Session  ynw  /provider/services/${id}/Disable  expected_status=any
-   [Return]  ${resp}     
+   RETURN  ${resp}     
    
 Delete Service
    [Arguments]  ${id}  
    Check And Create YNW Session
    ${resp}=  DELETE On Session  ynw  /provider/services/${id}  expected_status=any
-   [Return]  ${resp}   
+   RETURN  ${resp}   
     
 Get business Domain
      Check And Create YNW Session
      ${resp}=  GET On Session  ynw  /ynwConf/businessDomains  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
 Get subDomain level Fields
      [Arguments]  ${domain}  ${subdomain}
      Check And Create YNW Session
      ${resp}=  GET On Session  ynw  /provider/ynwConf/dataModel/${domain}/${subdomain}  expected_status=any
-     [Return]  ${resp}     
+     RETURN  ${resp}     
   
 Get Domain level Fields
      [Arguments]  ${domain}
      Check And Create YNW Session
      ${resp}=  GET On Session  ynw  /provider/ynwConf/dataModel/${domain}  expected_status=any
-     [Return]  ${resp}     
+     RETURN  ${resp}     
          
 Update Domain_Level
      [Arguments]   ${data}
      ${data}=    json.dumps    ${data}  
      Check And Create YNW Session
      ${resp}=  PUT On Session  ynw  /provider/bProfile/domain  data=${data}  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
 Get Licenses
 	Check And Create YNW Session
 	${resp}=  GET On Session  ynw  /provider/license  expected_status=any
-	[Return]  ${resp}
+	RETURN  ${resp}
     
 update license
 	[Arguments]  ${licPkgId}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/license/${licPkgId}  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 		
 Get Audit Logs
     [Arguments]    &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/auditlogs    params=${kwargs}  expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 Enable Online Checkin
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/waitlistMgr/onlineCheckIns/Enable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Online Checkin
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/waitlistMgr/onlineCheckIns/Disable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Future Checkin
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/waitlistMgr/futureCheckIns/Enable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Future Checkin
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/waitlistMgr/futureCheckIns/Disable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add Delay
     [Arguments]  ${qid}  ${time}  ${msg}  ${sndmsg}
@@ -1476,31 +1476,31 @@ Add Delay
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/waitlist/queues/${qid}/delay  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Delay
     [Arguments]  ${qid}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/${qid}/delay  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Queue Waiting Time
     [Arguments]  ${qid}  ${date}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/${qid}/${date}/waitingTime  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Queue Length
     [Arguments]  ${qid}  ${date}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/${qid}/${date}/length  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Queue Of A Service
     [Arguments]  ${loc}  ${service}  ${date}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/${loc}/location/${service}/service/${date}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Waiting Time Of Providers
     [Arguments]  @{ids} 
@@ -1511,24 +1511,24 @@ Get Waiting Time Of Providers
     	${pid}=  Catenate 	SEPARATOR=,	${pid} 	${ids[${index}]}
     END
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/waitingTime/${pid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Last Computed waitingTime
     [Arguments]  ${qid}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/${qid}/lastComputedWaitingTime  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Features
     [Arguments]  ${subdomain}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/ynwConf/features/${subdomain}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Business schedules
 	Check and Create YNW Session
 	${resp}=  GET On Session   ynw  /provider/ynwConf/bSchedule  expected_status=any
-	[return]  ${resp}
+	RETURN  ${resp}
 
 Create Alert
     [Arguments]  ${s_id}  ${c_id}  ${subc_id}  ${text}  ${sev}  ${ack}  ${sub}
@@ -1539,51 +1539,51 @@ Create Alert
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  provider/alerts  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Alert ById
      [Arguments]  ${alertId}
      Check And Create YNW Session
      ${resp}=  GET On Session  ynw  /provider/alerts/${alertId}  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
 Get Alerts
      [Arguments]    &{kwargs}
      Check And Create YNW Session
      ${resp}=  GET On Session  ynw  /provider/alerts   params=${kwargs}   expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
 Delete Alerts
      Check And Create YNW Session
      ${resp}=  DELETE On Session  ynw  /provider/alerts  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
 Acknowldge Alert
      [Arguments]  ${alertId}
      Check And Create YNW Session
      ${resp}=  PUT On Session  ynw  /provider/alerts/${alertId}  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
 Delete Alert ById
      [Arguments]  ${alertId}
      Check And Create YNW Session
      ${resp}=  DELETE On Session  ynw  /provider/alerts/${alertId}  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
 Get Alerts Count
      Check And Create YNW Session
      ${resp}=  GET On Session  ynw  /provider/alerts/count  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
 Get Alerts From Superadmin
      Check And Create YNW Session
      ${resp}=  GET On Session  ynw  /provider/alerts/superadmin  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
 Get Default Messages
      Check And Create YNW Session
      ${resp}=  GET On Session  ynw  /provider/ynwConf/messages  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
 Update Service Provider
      [Arguments]  ${id}  ${firstName}  ${lastName}  ${gender}  ${dob}
@@ -1592,7 +1592,7 @@ Update Service Provider
      ${data}=    json.dumps    ${data}
      Check And Create YNW Session
      ${resp}=  PATCH On Session  ynw  provider/profile  data=${data}  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
 Update Service Provider With Emailid
      [Arguments]  ${id}  ${firstName}  ${lastName}  ${gender}  ${dob}  ${email}
@@ -1601,13 +1601,13 @@ Update Service Provider With Emailid
      ${data}=    json.dumps    ${data}
      Check And Create YNW Session
      ${resp}=  PATCH On Session  ynw  provider/profile  data=${data}  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
        
 Get Provider Details
      [Arguments]  ${providerId}
      Check And Create YNW Session
      ${resp}=  GET On Session  ynw  /provider/profile/${providerId}  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
 
 Communication consumers
@@ -1616,7 +1616,7 @@ Communication consumers
      ${data}=  json.dumps  ${data}
      Check And Create YNW Session  
      ${resp}=  POST On Session  ynw  /provider/communications/${consumerId}  data=${data}  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
 
 User Consumer Communication 
@@ -1625,101 +1625,101 @@ User Consumer Communication
      ${data}=  json.dumps  ${data}
      Check And Create YNW Session  
      ${resp}=  POST On Session  ynw  /provider/communications/${consumerId}  data=${data}  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
      
 Get provider communications
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/communications  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 Get User communications
     [Arguments]   ${userId}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/user/communication/${userId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 Reading Consumer Communications
     [Arguments]   ${consumerId}   ${messageIds}   ${providerId}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/communications/readMessages/${consumerId}/${messageIds}/${providerId}  expected_status=any
-    [Return]  ${resp}    
+    RETURN  ${resp}    
 
 
 Get provider Unread message Count
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/communications/unreadCount  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
     
 Get GalleryOrlogo image
     [Arguments]  ${target}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/${target}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
    	
 Get specializations Sub Domain
     [Arguments]  ${domain}  ${subDomain}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /ynwConf/specializations/${domain}/${subDomain}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
    	
 Get Terminologies
     [Arguments]  ${domain}  ${subDomain}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /ynwConf/terminologies/${domain}/${subDomain}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Global Filters
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /ynwConf/refinedFilters  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 Get Domain Filters 
     [Arguments]  ${domain}  
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /ynwConf/refinedFilters/${domain}  expected_status=any
-    [Return]  ${resp}   
+    RETURN  ${resp}   
     
 Get SubDomain Filters  
     [Arguments]  ${domain}  ${subDomain}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /ynwConf/refinedFilters/${domain}/${subDomain}  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
     
 Get Search Labels   
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /ynwConf/searchLabels  expected_status=any
-    [Return]  ${resp}  
+    RETURN  ${resp}  
     
 Get Domain Settings    
     [Arguments]  ${domain}  
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /ynwConf/settings/${domain}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Sub Domain Settings  
     [Arguments]  ${domain}  ${subDomain}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /ynwConf/settings/${domain}/${subDomain}  expected_status=any
-    [Return]  ${resp}  
+    RETURN  ${resp}  
 
 Get paymentTypes
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /ynwConf/paymentTypes  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
     
 Get parkingTypes
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /ynwConf/parkingTypes  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get verifyLevels 
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /ynwConf/verifyLevels  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
     
 Update Privacy Setting
     [Arguments]  ${ph1}  ${email}
@@ -1727,22 +1727,22 @@ Update Privacy Setting
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/privacySettings  data=${data}  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
     
 Get Privacy Setting 
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw   /provider/privacySettings  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
            
 Enable Waitlist
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/waitlist/Enable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Waitlist
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/waitlist/Disable   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add To Waitlist
     [Arguments]   ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}  @{fids}  &{kwargs}
@@ -1772,7 +1772,7 @@ Add To Waitlist
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  provider/waitlist  params=${pro_params}  data=${data}  expected_status=any   headers=${headers}  
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add To Waitlist with mode
     [Arguments]   ${waitlistMode}  ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}   @{fids}  &{kwargs}
@@ -1797,7 +1797,7 @@ Add To Waitlist with mode
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  provider/waitlist  params=${pro_params}  data=${data}  expected_status=any  headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add To Waitlist with PhoneNo
     [Arguments]   ${consid}  ${service_id}  ${qid}  ${date}  ${waitlistPhoneNumber}  ${country_code}  @{fids}   &{kwargs}
@@ -1823,7 +1823,7 @@ Add To Waitlist with PhoneNo
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  provider/waitlist  params=${pro_params}  data=${data}  expected_status=any  headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add To Waitlist By User
     [Arguments]   ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}  ${user_id}  @{fids}    &{kwargs}
@@ -1852,7 +1852,7 @@ Add To Waitlist By User
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  provider/waitlist  params=${pro_params}  data=${data}  expected_status=any  headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add To Waitlist Block
     [Arguments]    ${qid}   ${service_id}  ${serviceType}   ${date}  ${consumerNote}   ${ignorePrePayment}  ${waitlistingFor}  &{kwargs}
@@ -1868,7 +1868,7 @@ Add To Waitlist Block
     Set To Dictionary  ${pro_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  provider/waitlist/block  params=${pro_params}  data=${data}  expected_status=any  headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Confirm Wailtlist Block
     [Arguments]   ${cons_id}  ${wid}   ${waitlistingFor}  &{kwargs}
@@ -1883,7 +1883,7 @@ Confirm Wailtlist Block
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  provider/waitlist/confirm  params=${pro_params}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Waitlist Unblock
     [Arguments]    ${wid}  &{kwargs} 
@@ -1895,7 +1895,7 @@ Waitlist Unblock
     Set To Dictionary  ${pro_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  provider/waitlist/unblock/${wid}  params=${pro_params}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Provider Add To WL With Virtual Service
@@ -1922,7 +1922,7 @@ Provider Add To WL With Virtual Service
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  provider/waitlist  params=${pro_params}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Waitlist By Id
@@ -1935,7 +1935,7 @@ Get Waitlist By Id
     Set To Dictionary  ${pro_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/${wid}  params=${pro_params}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 	     
 Get Waitlist Today
@@ -1947,7 +1947,7 @@ Get Waitlist Today
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/today  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Waitlist Count Today
     [Arguments]    &{kwargs}
@@ -1958,7 +1958,7 @@ Get Waitlist Count Today
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/today/count  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Waitlist Future
     [Arguments]     &{kwargs}
@@ -1969,7 +1969,7 @@ Get Waitlist Future
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/future/  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Waitlist Count Future
     [Arguments]     &{kwargs}
@@ -1980,7 +1980,7 @@ Get Waitlist Count Future
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/future/count  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Waitlist History
     [Arguments]    &{kwargs}
@@ -1991,7 +1991,7 @@ Get Waitlist History
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/history  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Waitlist Count History
     [Arguments]    &{kwargs}
@@ -2002,7 +2002,7 @@ Get Waitlist Count History
     Set To Dictionary  ${kwargs}   &{locparam}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/history/count  params=${kwargs}  expected_status=any
-    [Return]  ${resp}    
+    RETURN  ${resp}    
 
 # Get Waitlisted Consumers and Get Waitlisted Consumers Count Urls commented from rest side     
 # Respective suites commented and moved to tdd.
@@ -2014,7 +2014,7 @@ Get Waitlist Count History
 #     Set To Dictionary  ${kwargs}   &{locparam}
 #     Check And Create YNW Session
 #     ${resp}=    GET On Session    ynw  /provider/waitlist/consumers  params=${kwargs}  expected_status=any
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 # Get Waitlisted Consumers Count
 #     [Arguments]    &{kwargs}
@@ -2024,13 +2024,13 @@ Get Waitlist Count History
 #     Set To Dictionary  ${kwargs}   &{locparam}
 #     Check And Create YNW Session
 #     ${resp}=    GET On Session    ynw  /provider/waitlist/consumers/count  params=${kwargs}  expected_status=any
-#     [Return]  ${resp}    
+#     RETURN  ${resp}    
 
 Waitlist Action
     [Arguments]  ${action}  ${id} 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/${id}/${action}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Waitlist Action Cancel
     [Arguments]  ${ids}  ${CR}  ${CM}
@@ -2038,13 +2038,13 @@ Waitlist Action Cancel
     ${apple}=  json.dumps  ${auth}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/${ids}/CANCEL  data=${apple}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Waitlist State Changes
     [Arguments]    ${uuid}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/states/${uuid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 CommunicationBetweenProviderAndConsumer
 	[Arguments]  ${uuid}  ${msg}
@@ -2052,7 +2052,7 @@ CommunicationBetweenProviderAndConsumer
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session  
     ${resp}=  POST On Session  ynw  /provider/waitlist/communicate/${uuid}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Property File
     ${prop}=  Create Dictionary  caption=firstImage
@@ -2066,14 +2066,14 @@ uploadGalleryImages
     Property File
     # ${resp}=  uploadGalleryImage
     ${resp}=  galleryImgUpload   ${Cookie}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 uploadGalleryImageFile
     [Arguments]  ${file}   ${Cookie}
     Property File
     # ${resp}=  uploadGalleryImage  ${file}
     ${resp}=  galleryImgUpload   ${Cookie}  ${file}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 uploadGalleryImageMultiple
     [Arguments]  ${Cookie}
@@ -2085,7 +2085,7 @@ uploadGalleryImageMultiple
     Create File  TDD/Gallery.json  ${prop} 
     # ${resp}=  uploadGalleryImage  flag=2
     ${resp}=  galleryImgUpload  ${Cookie}   flag=2
-    [Return]  ${resp} 
+    RETURN  ${resp} 
    
 uploadLogoImages
     [Arguments]  ${Cookie}
@@ -2094,7 +2094,7 @@ uploadLogoImages
     Create File  TDD/logo.json  ${prop}  
     # ${resp}=  uploadLogoImage
     ${resp}=  uploadProviderLogo   ${cookie}  
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 uploadLogoImagesofUSER
@@ -2104,7 +2104,7 @@ uploadLogoImagesofUSER
     Create File  TDD/logo.json  ${prop}  
     # ${resp}=  uploadLogoImageofUSER   ${providerId} 
     ${resp}=  uploadUserLogo  ${cookie}   ${providerId}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 uploadServiceImages
@@ -2116,7 +2116,7 @@ uploadServiceImages
     Create File  TDD/Service.json  ${prop}
     # ${resp}=  uploadServiceImage  ${id}
     ${resp}=  serviceImgUpload  ${id}  ${cookie}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 uploadItemImages
@@ -2127,7 +2127,7 @@ uploadItemImages
     ${prop}=  json.dumps  ${prop}
     Create File  TDD/proper.json  ${prop} 
     ${resp}=  itemImgUpload  ${iId}  ${cookie}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 uploadItemGroupImages
@@ -2138,7 +2138,7 @@ uploadItemGroupImages
     ${prop}=  json.dumps  ${prop}
     Create File  TDD/proper.json  ${prop} 
     ${resp}=  ItemGroupImgUpload  ${itemgroupId}  ${Img}  ${cookie}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 uploadCatalogImages
@@ -2149,7 +2149,7 @@ uploadCatalogImages
     ${prop}=  json.dumps  ${prop}
     Create File  TDD/proper.json  ${prop}  
     ${resp}=  CatalogImgUpload  ${catalogId}  ${cookie}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Waitlist Rating
@@ -2158,7 +2158,7 @@ Waitlist Rating
    ${data}=    json.dumps    ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/waitlist/rating  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
    
 Update Rating
    [Arguments]  ${uuid}  ${stars}  ${feedback}
@@ -2166,44 +2166,44 @@ Update Rating
    ${data}=    json.dumps    ${data}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/waitlist/rating  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
    
 Create provider Note
    [Arguments]  ${uuid}  ${mesage}
    ${mesage}=  json.dumps  ${mesage}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/waitlist/notes/${uuid}   data=${mesage}   expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 get provider Note
    [Arguments]    ${consumerId}
    Check And Create YNW Session
    ${resp}=    GET On Session    ynw  /provider/waitlist/${consumerId}/notes  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
    
 Get Invoices 
     [Arguments]  ${status}
    Check And Create YNW Session
    ${resp}=    GET On Session    ynw  /provider/license/invoices/${status}/status  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Get Invoice By uuid
    [Arguments]  ${uuid}
    Check And Create YNW Session
    ${resp}=    GET On Session    ynw  /provider/license/invoices/${uuid}   expected_status=any  
-   [Return]  ${resp}  
+   RETURN  ${resp}  
 
 Service Bill
    [Arguments]  ${serrs}  ${serviceId}  ${srQua}  @{srDic}   
    ${service}=  Create Dictionary  reason=${serrs}  serviceId=${serviceId}  discountIds=${srDic}  quantity=${srQua}
-   [Return]  ${service}   
+   RETURN  ${service}   
 
 
 # Item Bill 
 #    [Arguments]  ${rsitm}  ${itemId}  ${itmqua}   @{itmdisc}  
 #    ${items}=  Create Dictionary  reason=${rsitm}  itemId=${itemId}   discountIds=${itmdisc}  quantity=${itmqua}
-#    [Return]  ${items}  
+#    RETURN  ${items}  
 
 Item Bill
     [Arguments]  ${rsitm}  ${itemId}  ${itmqua}  @{itmdisc}   &{kwargs} 
@@ -2213,57 +2213,57 @@ Item Bill
         Set To Dictionary  ${items}   ${key}=${value}
     END
     Log  ${items}
-    [Return]  ${items}  
+    RETURN  ${items}  
 
 
 Item Bill with Price
    [Arguments]  ${rsitm}  ${itemId}  ${itmqua}   ${price}   @{itmdisc}  
    ${items}=  Create Dictionary  reason=${rsitm}  itemId=${itemId}   discountIds=${itmdisc}  quantity=${itmqua}  price=${price}
-   [Return]  ${items}
+   RETURN  ${items}
 
 Service Discount
     [Arguments]  ${serId}  @{serDis}
     ${serdis}=   Create Dictionary  serviceId=${serId}  discountIds=${serDis}
-    [Return]  ${serdis}
+    RETURN  ${serdis}
 
 Item Discount
     [Arguments]  ${itemId}  @{itDis}
     ${itdis}=   Create Dictionary  itemId=${itemId}  discountIds=${itDis}
-    [Return]  ${itdis}
+    RETURN  ${itdis}
 
 Bill Discount Input
     [Arguments]  ${bId}  ${pnote}  ${cnote}
     ${bdis}=   Create Dictionary  id=${bId}  privateNote=${pnote}  displayNote=${cnote}
-    [Return]  ${bdis}
+    RETURN  ${bdis}
 
 Bill Discount Adhoc Input
     [Arguments]  ${bId}  ${pnote}  ${cnote}   ${value}
     ${bdis}=   Bill Discount Input  ${bId}  ${pnote}  ${cnote}
     Set To Dictionary  ${bdis}  discValue=${value}
-    [Return]  ${bdis}
+    RETURN  ${bdis}
 
 Bill Discount
     [Arguments]  ${bId}  @{bDis}
     ${bdis}=   Create Dictionary  id=${bId}  discounts=${bDis}
-    [Return]  ${bdis}
+    RETURN  ${bdis}
 
 Remove Bill Discount
     [Arguments]  ${bId}  ${dis}
     ${dis}=  Create Dictionary  id=${dis}
     ${dis}=  Create List  ${dis}
     ${bdis}=   Create Dictionary  id=${bId}  discounts=${dis}
-    [Return]  ${bdis}
+    RETURN  ${bdis}
 
 Provider Coupons
     [Arguments]  ${bId}  @{cIds}
     ${pc}=   Create Dictionary  id=${bId}  couponIds=${cIds}
-    [Return]  ${pc} 
+    RETURN  ${pc} 
    
 Get Bill By UUId   
    [Arguments]  ${uuid}
    Check And Create YNW Session
    ${resp}=    GET On Session    ynw  /provider/bill/${uuid}   expected_status=any
-   [Return]  ${resp} 
+   RETURN  ${resp} 
 
 
 Get Bill Count
@@ -2271,33 +2271,33 @@ Get Bill Count
     [Arguments]      &{param}
     Check And Create YNW Session
     ${resp}=    Get On Session    ynw    /provider/bill/count      params=${param}   expected_status=any  
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Bill  
    [Arguments]  ${uuid}  ${action}  ${data}
     ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=    PUT On Session    ynw  /provider/bill/${action}/${uuid}    data=${data}  expected_status=any  
-   [Return]  ${resp} 
+   RETURN  ${resp} 
 
 Remove JC from bill  
    [Arguments]  ${uuid}  ${action}  ${data}
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=    PUT On Session    ynw  /provider/bill/${action}/${uuid}    data=${data}  expected_status=any  
-   [Return]  ${resp} 
+   RETURN  ${resp} 
 
 Settl Bill
    [Arguments]  ${uuid}   
    Check And Create YNW Session
    ${resp}=    PUT On Session    ynw  /provider/bill/settlebill/${uuid}  expected_status=any
-   [Return]  ${resp} 
+   RETURN  ${resp} 
 
 Get Bill By Status   
    [Arguments]  ${status}
    Check And Create YNW Session
    ${resp}=    GET On Session    ynw  /provider/bill/status/${status}   expected_status=any
-   [Return]  ${resp}   
+   RETURN  ${resp}   
 
 Accept Payment
    [Arguments]  ${uuid}  ${acceptPaymentBy}  ${amount}  
@@ -2305,35 +2305,35 @@ Accept Payment
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=    POST On Session    ynw  /provider/bill/acceptPayment    data=${data}  expected_status=any  
-   [Return]  ${resp} 
+   RETURN  ${resp} 
 
 Get Payment By UUId
    [Arguments]  ${uuid}
    Check And Create YNW Session
    ${resp}=    GET On Session    ynw  /provider/payment/details/${uuid}   expected_status=any
-   [Return]  ${resp}   
+   RETURN  ${resp}   
 
 Get Payment By Individual
    [Arguments]  ${id}
    Check And Create YNW Session
    ${resp}=    GET On Session    ynw  /provider/payment/${id}   expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Get License Metadata
    Check And Create YNW Session
    ${resp}=    GET On Session    ynw  /provider/license/licensemetadata   expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Claim Account
     [Arguments]  ${acid}
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw  /provider/claim/${acid}   expected_status=any 
-    [Return]  ${resp}   
+    RETURN  ${resp}   
 
 Get badge
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/ynwConf/badges   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
    
 Make Payment Mock
     [Arguments]  ${amount}  ${response}  ${uuid}  ${purpose}
@@ -2341,7 +2341,7 @@ Make Payment Mock
     ${data}=  Create Dictionary  amount=${amount}  paymentMode=Mock  uuid=${uuid}  mockResponse=${response}  purpose=${purpose}
     ${data}=  json.dumps  ${data}
     ${resp}=  POST On Session    ynw  /provider/payment  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Make Payment
     [Arguments]  ${amount}  ${mode}  ${uuid}  ${purpose}
@@ -2349,7 +2349,7 @@ Make Payment
     ${data}=  Create Dictionary  amount=${amount}  paymentMode=${mode}  uuid=${uuid}   purpose=${purpose}
     ${data}=  json.dumps  ${data}
     ${resp}=  POST On Session    ynw  /provider/payment  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Update Tax Percentage
     [Arguments]  ${taxPercentage}  ${gstNumber}  
@@ -2357,88 +2357,88 @@ Update Tax Percentage
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/payment/tax   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Tax Percentage
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/payment/tax  expected_status=any
-    [Return]  ${resp}   
+    RETURN  ${resp}   
 
 Get Adword Count
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/license/adwords/count  expected_status=any
-    [Return]  ${resp}     
+    RETURN  ${resp}     
 
 Get Spoke Languages
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  ynwConf/spokenLangs  expected_status=any
-    [Return]  ${resp}    
+    RETURN  ${resp}    
 
 Get Jaldee Coupons By Provider
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jaldee/coupons  expected_status=any
-    [Return]  ${resp}  
+    RETURN  ${resp}  
 
 Enable Jaldee Coupon By Provider
     [Arguments]  ${coupon_code}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/jaldee/coupons/${coupon_code}/enable   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Jaldee Coupon By Provider
     [Arguments]  ${coupon_code}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/jaldee/coupons/${coupon_code}/disable   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Jaldee Coupons By Coupon_code
     [Arguments]  ${coupon_code}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jaldee/coupons/${coupon_code}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Jaldee Coupon Stats By Coupon_code
     [Arguments]  ${coupon_code}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jaldee/coupons/${coupon_code}/stats  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Apply Jaldee Coupon By Provider
     [Arguments]  ${coupon_code}  ${wid}
     ${coupon_code}=  json.dumps  ${coupon_code}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bill/addJaldeeCoupons/${wid}   data=${coupon_code}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Reimburse Reports By Provider
     [Arguments]  ${Day1}  ${Day2}   
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/jaldee/coupons/jcreports/reimburse/${Day1}/${Day2}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Reimburse Reports By Provider
     [Arguments]    &{kwargs}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jaldee/coupons/jcreports/reimburse  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Reimburse Reports By Provider By InvoiceId
     [Arguments]  ${invoice_id} 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jaldee/coupons/jcreports/reimburse/${invoice_id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Request For Payment of Jaldeecoupon
     [Arguments]  ${invoice_id}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/jaldee/coupons/jcreports/reimburse/${invoice_id}/requestPayment  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Set Fixed Waiting Time
     [Arguments]  ${uuid}  ${waiting_time}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/${uuid}/${waiting_time}/waitingTime  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Subdomain Level Field For Doctor 
     [Arguments]  ${subdomain}
@@ -2450,7 +2450,7 @@ Update Subdomain Level Field For Doctor
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bProfile/${subdomain}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Mandatory Fields BeautyCare
     [Arguments]  ${subdomain}
@@ -2471,7 +2471,7 @@ Update Mandatory Fields BeautyCare
 Is Available Queue Now
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/waitlist/queues/isAvailableNow/today  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Instant Queue
     [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}  @{vargs}
@@ -2485,7 +2485,7 @@ Instant Queue
             Append To List  ${services}  ${service}
     END
     ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  parallelServing=${parallel}  capacity=${capacity}  location=${location}  services=${services}
-    [Return]  ${data}
+    RETURN  ${data}
 
 Create Instant Queue
     [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}  @{vargs}
@@ -2493,7 +2493,7 @@ Create Instant Queue
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/waitlist/queues/instant  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Instant Queue without Service
@@ -2501,7 +2501,7 @@ Instant Queue without Service
    ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${EMPTY}  ${stime}  ${etime}
    ${location}=  Create Dictionary  id=${loc}
    ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}  parallelServing=${parallel}  capacity=${capacity}  location=${location}  services=${None}
-   [Return]  ${data}
+   RETURN  ${data}
 
 Create Instant Queue without Service
     [Arguments]  ${name}  ${rt}   ${ri}   ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}
@@ -2509,7 +2509,7 @@ Create Instant Queue without Service
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/waitlist/queues/instant  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Instant Queue
     [Arguments]  ${qid}  ${name}   ${rt}   ${ri}   ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}  @{vargs}
@@ -2518,7 +2518,7 @@ Update Instant Queue
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/queues/instant  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Instant Queue without service
     [Arguments]  ${qid}  ${name}  ${rt}   ${ri}  ${sDate}     ${eDate}    ${stime}    ${etime}    ${parallel}  ${capacity}  ${loc}
@@ -2527,45 +2527,45 @@ Update Instant Queue without service
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/queues/instant  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Queue by Filter
     [Arguments]   ${filterArg}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/filter   params=${filterArg}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Token
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/waitlistMgr/showTokenId/Enable   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Token
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/waitlistMgr/showTokenId/Disable   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Online Checkin In Queue
     [Arguments]   ${queue_id}  ${status}
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  /provider/waitlist/queues/onlineCheckIn/${status}/${queue_id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Future Checkin In Queue
     [Arguments]   ${queue_id}  ${status}
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  /provider/waitlist/queues/futureCheckIn/${status}/${queue_id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Toggle Department Enable
 	Check And Create YNW Session
     ${resp}=  PUT On Session    ynw  /provider/settings/waitlistMgr/department/Enable   expected_status=any
-    [Return]  ${resp}   
+    RETURN  ${resp}   
  
 Toggle Department Disable
 	Check And Create YNW Session
     ${resp}=  PUT On Session    ynw  /provider/settings/waitlistMgr/department/Disable   expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 Create Department
     [Arguments]  ${dep_name}  ${dep_code}  ${dep_desc}   @{vargs}
@@ -2573,19 +2573,19 @@ Create Department
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/departments  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Department
    [Arguments]  ${depid} 
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/departments/${depid}/disable  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Enable Department
    [Arguments]  ${depid} 
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/departments/${depid}/enable  expected_status=any
-   [Return]  ${resp} 
+   RETURN  ${resp} 
    
 Create Department With ServiceName
     [Arguments]  ${dep_name}  ${dep_code}  ${dep_desc}  @{vargs}
@@ -2593,18 +2593,18 @@ Create Department With ServiceName
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/departments  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Department ById
     [Arguments]   ${dep_id}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/departments/${dep_id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Departments
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/departments  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Department
     [Arguments]  ${dep_id}  ${dep_name}  ${dep_code}  ${dep_desc}  @{vargs}
@@ -2612,13 +2612,13 @@ Update Department
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/departments/${dep_id}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Services in Department
     [Arguments]   ${dep_id}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/departments/${dep_id}/service   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add Services To Department
     [Arguments]  ${dep_id}  @{vargs}
@@ -2626,19 +2626,19 @@ Add Services To Department
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/departments/${dep_id}/service  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Delete Service ById In A Department
    [Arguments]   ${dep_id}  ${service_id}
    Check And Create YNW Session
    ${resp}=    DELETE On Session    ynw  /provider/departments/${dep_id}/service/${service_id}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Change Department Status
    [Arguments]   ${dep_id}  ${status}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/departments/${dep_id}/${status}   expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Branch Signup
    [Arguments]  ${cop_id}  ${name}  ${code}  ${reg_code}  ${email}  ${desc}  ${pass}  ${p_name}  ${p_l_name}  ${city}  ${state}  ${address}  ${mob_no}  ${al_phone}  ${dob}  ${gender}  ${p_email}  ${country_code}  ${is_admin}  ${sector}  ${sub_sector}  ${licpkg}  @{vargs}
@@ -2648,7 +2648,7 @@ Branch Signup
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw   /sa/branch   data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Branch_Profile
@@ -2661,7 +2661,7 @@ Branch_Profile
     ${emails}=  Create List  ${email1}
     ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}  phoneNumbers=${ph_nos}  emails=${emails}
     ${data}=  json.dumps  ${data}
-    [Return]  ${data}
+    RETURN  ${data}
 
 Branch Business Profile
     [Arguments]   ${acct_id}  ${bName}  ${bDesc}  ${shname}   ${place}   ${longi}  ${latti}  ${g_url}  ${pin}  ${adds}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${ph1}  ${ph2}  ${email1}
@@ -2669,14 +2669,14 @@ Branch Business Profile
     ${pro_params}=  Create Dictionary  account=${acct_id}
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  /sa/bProfile  data=${data}    params=${pro_params}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable/Disable Branch Search Data
     [Arguments]   ${acct_id}  ${status}
     ${pro_params}=  Create Dictionary  account=${acct_id}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /sa/search/${status}    params=${pro_params}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Department For Branch
     [Arguments]  ${acct_id}  ${dep_name}  ${dep_code}  ${dep_desc}  ${status}  @{vargs}
@@ -2685,7 +2685,7 @@ Create Department For Branch
     ${pro_params}=  Create Dictionary  account=${acct_id}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /sa/branch/department  data=${data}   params=${pro_params}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Branch SP Creation
     [Arguments]  ${p_name}  ${p_l_name}  ${city}  ${state}  ${address}  ${mob_no}  ${al_phone}  ${dob}  ${gender}  ${p_email}  ${country_code}  ${is_admin}  ${sector}  ${sub_sector}  ${licpkg}  ${dept_code}  ${branch_code}  ${pass}  @{vargs}
@@ -2694,7 +2694,7 @@ Branch SP Creation
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /sa/branch/provider   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Branch SP Business Profile
     [Arguments]   ${acct_id}  ${bName}  ${bDesc}  ${shname}   ${place}   ${longi}  ${latti}  ${g_url}  ${pin}  ${adds}  ${pt}  ${oh}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${ph1}  ${ph2}  ${email1}
@@ -2702,7 +2702,7 @@ Branch SP Business Profile
     ${pro_params}=  Create Dictionary  account=${acct_id}
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  /sa/bProfile  data=${data}    params=${pro_params}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Branch Level Update Subdomain Level Field For Doctor 
      [Arguments]  ${subdomain}  ${acct_id}
@@ -2715,19 +2715,19 @@ Branch Level Update Subdomain Level Field For Doctor
      ${pro_params}=  Create Dictionary  account=${acct_id}
      Check And Create YNW Session
      ${resp}=  PUT On Session  ynw  /sa/branch/provider/bProfile/${subdomain}  data=${data}  params=${pro_params}  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
 Get Server Time
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/server/date  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Subdomain_Level
      [Arguments]  ${data}  ${subdomain}
      ${data}=  json.dumps  ${data}
      Check And Create YNW Session
      ${resp}=  PUT On Session  ynw  /provider/bProfile/${subdomain}  data=${data}  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
 Update Specialization
     [Arguments]  ${data}    
@@ -2735,7 +2735,7 @@ Update Specialization
     Log  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 Provider Notification Settings     
@@ -2744,7 +2744,7 @@ Provider Notification Settings
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${value}=  POST On Session  ynw  /provider/settings/notification   data=${data}  expected_status=any
-    [Return]  ${value}
+    RETURN  ${value}
 
 
 Update Provider Notification Settings
@@ -2753,48 +2753,48 @@ Update Provider Notification Settings
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${value}=  PUT On Session  ynw  /provider/settings/notification   data=${data}  expected_status=any
-    [Return]  ${value}       
+    RETURN  ${value}       
 
 
 Get Provider Notification Settings
     Check And Create YNW Session
     ${value}=  GET On Session  ynw  provider/settings/notification  expected_status=any
-    [Return]  ${value}
+    RETURN  ${value}
 
 View HS Settings
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/settings/homeservice   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable HS
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/homeservice/Enable   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable HS
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/homeservice/Disable   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Online HS
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/homeservice/onlineHs/Enable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Online HS
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/homeservice/onlineHs/Disable   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Future HS
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/homeservice/futureHs/Enable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Future HS
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/homeservice/futureHs/Disable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update HS Settings
     [Arguments]   ${enableHomeService}   ${onlineHs}  ${futureHs}    ${notification}    ${otpVerificationType}   ${liveArrivalNotificationType}
@@ -2802,7 +2802,7 @@ Update HS Settings
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/homeservice   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create ValueSet For Label
     [Arguments]  @{vargs}
@@ -2814,7 +2814,7 @@ Create ValueSet For Label
         ${values}=  Create Dictionary  value=${vargs[${index}]}  shortValue=${vargs[${index2}]}
         Append To List  ${values_set}  ${values}
     END
-    [Return]  ${values_set}
+    RETURN  ${values_set}
 
 Create NotificationSet For Label
     [Arguments]  @{vargs}
@@ -2826,7 +2826,7 @@ Create NotificationSet For Label
         ${values}=  Create Dictionary  values=${vargs[${index}]}  messages=${vargs[${index2}]}
         Append To List  ${values_set}  ${values}
     END
-    [Return]  ${values_set}
+    RETURN  ${values_set}
 
 Create Label
     [Arguments]  ${l_name}  ${display_name}  ${desc}  ${values}  ${notifications}
@@ -2834,18 +2834,18 @@ Create Label
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/waitlist/label   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Labels
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/label  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Label By Id
     [Arguments]   ${label_id}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/label/${label_id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Label
     [Arguments]  ${label_id}  ${l_name}  ${display_name}  ${desc}  ${values}  ${notifications}
@@ -2853,19 +2853,19 @@ Update Label
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/label   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Delete Label
    [Arguments]   ${id}
    Check And Create YNW Session
    ${resp}=    DELETE On Session    ynw  /provider/waitlist/label/${id}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 EnableDisable Label
     [Arguments]  ${id}  ${status}
     Check And Create YNW Session
     ${resp}=    PUT On Session     ynw   /provider/waitlist/label/${id}/${status}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Fieldlist For QueueSet
     [Arguments]  @{vargs}
@@ -2880,7 +2880,7 @@ Create Fieldlist For QueueSet
         ${values}=  Create Dictionary  name=${vargs[${index}]}  displayName=${vargs[${index2}]}  defaultValue=${vargs[${index3}]}  label=${vargs[${index4}]}  order=${vargs[${index5}]}
         Append To List  ${field_list}  ${values}
     END
-    [Return]  ${field_list}
+    RETURN  ${field_list}
 
 
 Create Appointment QueueSet for Branch
@@ -2908,7 +2908,7 @@ Create Appointment QueueSet for Branch
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment/statusBoard/queueSet  params=${pro_params}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Appointment QueueSet for Provider
     [Arguments]   ${s_name}  ${display_name}  ${desc}  ${field_list}   ${service}   ${label1}   ${label2}   ${apptSchdl}   ${appt_status}    @{queueSetFor}  &{kwargs}
@@ -2938,7 +2938,7 @@ Create Appointment QueueSet for Provider
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment/statusBoard/queueSet   params=${pro_params}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 # Create QueueSet
@@ -2961,7 +2961,7 @@ Create QueueSet for Branch
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/waitlist/statusBoard/queueSet   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create QueueSet for provider
@@ -2983,46 +2983,46 @@ Create QueueSet for provider
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/waitlist/statusBoard/queueSet   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 Get AppointmentQueueSet By Id
     [Arguments]   ${id}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/statusBoard/queueSet/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get AppointmentQueueSet
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/statusBoard/queueSet  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get WaitlistQueueSets
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/statusBoard/queueSet  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get WaitlistQueueSet By Id
     [Arguments]   ${id}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/statusBoard/queueSet/${id}  expected_status=any
-    [Return]  ${resp}   
+    RETURN  ${resp}   
 
 
 Delete AppointmentQueue By id
     [Arguments]   ${id}
     Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw  /provider/appointment/statusBoard/queueSet/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Delete WaitlistQueueSet By Id
    [Arguments]   ${id}
    Check And Create YNW Session
    ${resp}=    DELETE On Session    ynw  /provider/waitlist/statusBoard/queueSet/${id}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Update Appoinment QueueSet for Branch
@@ -3043,7 +3043,7 @@ Update Appoinment QueueSet for Branch
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session   
     ${resp}=  PUT On Session  ynw  /provider/appointment/statusBoard/queueSet   data=${data}  expected_status=any
-    [Return]  ${resp}   
+    RETURN  ${resp}   
 
 Update Appoinment QueueSet for Provider
     [Arguments]   ${s_id}   ${s_name}  ${display_name}  ${desc}  ${field_list}    ${service}     ${label1}   ${label2}   ${apptSchdl}   ${appt_status}       @{queueSetFor}
@@ -3063,7 +3063,7 @@ Update Appoinment QueueSet for Provider
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session   
     ${resp}=  PUT On Session  ynw  /provider/appointment/statusBoard/queueSet   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update QueueSet Waitlist for Branch
@@ -3085,7 +3085,7 @@ Update QueueSet Waitlist for Branch
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/statusBoard/queueSet   data=${data}  expected_status=any
-    [Return]  ${resp}   
+    RETURN  ${resp}   
 
 
 Update QueueSet Waitlist for Provider
@@ -3107,7 +3107,7 @@ Update QueueSet Waitlist for Provider
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/statusBoard/queueSet   data=${data}  expected_status=any
-    [Return]  ${resp}   
+    RETURN  ${resp}   
 
 
 Create Metric For Status Board
@@ -3120,7 +3120,7 @@ Create Metric For Status Board
         ${ids}=  Create Dictionary   position=${matrics[${index}]}  sbId=${matrics[${index2}]}
         Append To List  ${list}  ${ids}
     END
-    [Return]  ${list}
+    RETURN  ${list}
 
 
 Create Status Board waitlist
@@ -3129,27 +3129,27 @@ Create Status Board waitlist
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/waitlist/statusBoard   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get WaitlistStatus Boards
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/statusBoard  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Get WaitlistStatus Board By Id
     [Arguments]   ${id}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/statusBoard/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Delete Waitlist Status Board By Id
    [Arguments]   ${id}
    Check And Create YNW Session
    ${resp}=    DELETE On Session    ynw  /provider/waitlist/statusBoard/${id}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Create Status Board Appointment
@@ -3158,27 +3158,27 @@ Create Status Board Appointment
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment/statusBoard   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get AppointmentStatusBoards
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/statusBoard  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Appoinment StatusBoard By Id
     [Arguments]   ${id}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/statusBoard/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Delete Appointment Status Board By Id
     [Arguments]   ${id}
    Check And Create YNW Session
    ${resp}=    DELETE On Session    ynw  /provider/appointment/statusBoard/${id}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Update Status Board Appoinment
@@ -3187,7 +3187,7 @@ Update Status Board Appoinment
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/appointment/statusBoard   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Status Board Waitlist
@@ -3196,7 +3196,7 @@ Update Status Board Waitlist
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/statusBoard   data=${data}  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
     
 Enable JDN for Label
@@ -3205,7 +3205,7 @@ Enable JDN for Label
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /provider/settings/jdn/enable    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable JDN for Percent
     [Arguments]    ${displayNote}   ${discPercentage}   ${discMax}   
@@ -3213,17 +3213,17 @@ Enable JDN for Percent
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /provider/settings/jdn/enable    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get JDN 
     Check and Create YNW Session
 	${resp}=  GET On Session   ynw  /provider/settings/jdn  expected_status=any
-	[return]  ${resp}
+	RETURN  ${resp}
 
 Disable JDN
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/jdn/disable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update JDN with Label
     [Arguments]    ${label}   ${displayNote}   
@@ -3231,7 +3231,7 @@ Update JDN with Label
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session   ynw    /provider/settings/jdn    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update JDN with Percentage
     [Arguments]    ${displayNote}   ${discPercentage}   ${discMax}   
@@ -3239,13 +3239,13 @@ Update JDN with Percentage
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session   ynw   /provider/settings/jdn    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Join to Corporate
     [Arguments]  ${corpUid}  
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/corp/joinCorp/${corpUid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Switch To Corporate
     [Arguments]  ${corporateName}   ${corporateCode}    ${multilevel}  
@@ -3253,13 +3253,13 @@ Switch To Corporate
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/corp/switchToCorp   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Branch User Creation
     [Arguments]  ${firstname}  ${lastname}   ${primaryMobileNo}   ${email}  ${subSector}   ${commonPassword}  ${departmentCode}   ${countryCode}=91
     ${usp}=    Create Dictionary   firstName=${firstname}  lastName=${lastname}   primaryMobileNo=${primaryMobileNo}  email=${email}  countryCode=${countryCode}
     ${data}=  Create Dictionary  userProfile=${usp}   subSector=${subSector}  commonPassword=${commonPassword}   departmentCode=${departmentCode}
-    [Return]  ${data}
+    RETURN  ${data}
 
 Create Branch SP
     [Arguments]  ${firstname}  ${lastname}   ${primaryMobileNo}  ${email}  ${subSector}  ${commonPassword}  ${departmentCode}
@@ -3267,7 +3267,7 @@ Create Branch SP
     ${data}=   json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /provider/branch/createSp    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create SP With Pseudo Corp and Branch
     [Arguments]  ${firstname}  ${lastname}   ${primaryMobileNo}  ${email}  ${subSector}  ${commonPassword}  ${departmentCode}
@@ -3275,19 +3275,19 @@ Create SP With Pseudo Corp and Branch
     ${data}=   json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /provider/corp/createProvider     data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Branch SP By Id
     [Arguments]   ${branch_id}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/branch/${branch_id}/accounts   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Manage Branch SP 
     [Arguments]   ${branch_id}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/branch/manage/${branch_id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Consumer Notification Settings
     [Arguments]  ${resource_type}  ${event_type}  ${email}  ${sms}  ${push_notf}  ${common_msg}  ${persons_ahead}  &{kwargs}
@@ -3298,26 +3298,26 @@ Create Consumer Notification Settings
     ${data}=   json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /provider/consumerNotification/settings   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Consumer Notification Settings
     Check and Create YNW Session
 	${resp}=  GET On Session   ynw  /provider/consumerNotification/settings   expected_status=any
-	[return]  ${resp}
+	RETURN  ${resp}
 
 
 Get Notification Settings of Consumer By User
     [Arguments]  ${provider}
     Check and Create YNW Session
 	${resp}=  GET On Session   ynw   /provider/consumerNotification/settings/provider/${provider}   expected_status=any
-	[return]  ${resp}
+	RETURN  ${resp}
 
 
 Get Notification Settings of User
     [Arguments]  ${providerId}
     Check and Create YNW Session
 	${resp}=  GET On Session   ynw   /provider/settings/notification/${providerId}   expected_status=any
-	[return]  ${resp}
+	RETURN  ${resp}
 
 
 Update Consumer Notification Settings
@@ -3326,7 +3326,7 @@ Update Consumer Notification Settings
     ${data}=   json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session   ynw    /provider/consumerNotification/settings   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Notification Settings of Consumer By User
@@ -3335,7 +3335,7 @@ Update Notification Settings of Consumer By User
     ${data}=   json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session   ynw    /provider/consumerNotification/settings/provider   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Notification Settings of User
@@ -3344,7 +3344,7 @@ Update Notification Settings of User
     ${data}=   json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session   ynw    /provider/settings/notification   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Consumer Mass Communication
@@ -3352,7 +3352,7 @@ Consumer Mass Communication
     ${input}=  Create Dictionary  email=${email}  sms=${sms}  pushNotification=${push_notf}  telegram=${telegram}
     ${data}=  Create Dictionary  medium=${input}  communicationMessage=${msg}  uuid=${vargs}
     ${resp}=    Imageupload.providerWLMassCom   ${cookie}     ${data}     @{fileswithcaption}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create HowDoYouHearUs
@@ -3362,25 +3362,25 @@ Create HowDoYouHearUs
     ${key}=   verify accnt    ${phone}   0
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw  /provider/${key}/howDoYouHear    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get SalesChannel
 
     Check and Create YNW Session
 	${resp}=  GET On Session   ynw   /provider/salesChannel  expected_status=any
-	[return]  ${resp}
+	RETURN  ${resp}
 
 Get SalesChannelByID
     [Arguments]  ${scid}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/salesChannel/${scId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Locate consumer
     [Arguments]  ${waitlist_id}
     Check And Create YNW Session  
     ${resp}=    POST On Session    ynw  /provider/waitlist/live/locate/distance/time/${waitlist_id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Address using lat & long
     [Arguments]  ${lattitude}  ${longitude}
@@ -3388,7 +3388,7 @@ Get Address using lat & long
     ${data}=   json.dumps   ${data}
     Check And Create YNW Session  
     ${resp}=    POST On Session    ynw  /provider/signup/location   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Address from zipcode
     [Arguments]  ${pincode}
@@ -3396,7 +3396,7 @@ Get Address from zipcode
     ${data}=   json.dumps   ${data}
     Check And Create YNW Session  
     ${resp}=    POST On Session    ynw  /provider/signup/location/zipcode   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Address from city
     [Arguments]  ${city}
@@ -3405,14 +3405,14 @@ Get Address from city
     ${data}=   json.dumps   ${data}
     Check And Create YNW Session  
     ${resp}=    POST On Session    ynw  /provider/signup/location/address   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Add SalesChannel
     [Arguments]  ${sc_code}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw   /provider/salesChannel/${sc_code}   expected_status=any
-    [Return]   ${resp}
+    RETURN   ${resp}
 
 
 Create StatusBoard Container
@@ -3421,13 +3421,13 @@ Create StatusBoard Container
     ${data}=   json.dumps    ${sb}
     Check And Create YNW Session
     ${resp}=   POST On Session   ynw   /provider/statusBoard/container   data=${data}  expected_status=any
-    [Return]   ${resp}
+    RETURN   ${resp}
 
 
 Get SatusBoard Container
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/statusBoard/container   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Change SatusBoard Container
@@ -3436,14 +3436,14 @@ Change SatusBoard Container
    ${data}=   json.dumps    ${sb}
    Check And Create YNW Session
    ${resp}=   PUT On Session   ynw   /provider/statusBoard/container/${con_id}   data=${data}  expected_status=any
-   [Return]   ${resp}
+   RETURN   ${resp}
 
     
 Get StatusBoard Container ById
     [Arguments]   ${containerId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/statusBoard/container/${containerId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable calling status Checkin
     [Arguments]  ${uid}    
@@ -3451,7 +3451,7 @@ Enable calling status Checkin
     ${data}=   json.dumps   ${data}
     Check And Create YNW Session  
     ${resp}=   PUT On Session   ynw   /provider/waitlist/callingStatus/${uid}/Enable   data=${data}  expected_status=any
-    [Return]   ${resp}
+    RETURN   ${resp}
 
 Disable calling status Checkin
     [Arguments]  ${uid}    
@@ -3459,7 +3459,7 @@ Disable calling status Checkin
     ${data}=   json.dumps   ${data}
     Check And Create YNW Session  
     ${resp}=   PUT On Session   ynw   /provider/waitlist/callingStatus/${uid}/Disable   data=${data}  expected_status=any
-    [Return]   ${resp}
+    RETURN   ${resp}
 
 
 Queue TimeInterval 
@@ -3474,7 +3474,7 @@ Queue TimeInterval
         Append To List  ${services}  ${service}
    END
    ${data}=  Create Dictionary  name=${name}  queueSchedule=${bs}   parallelServing=${parallel}  capacity=${capacity}  location=${location}  timeInterval=${timeinterval}  appointment=${appointment}  services=${services}
-   [Return]  ${data}
+   RETURN  ${data}
 
 
 Create Queue timeinterval
@@ -3483,7 +3483,7 @@ Create Queue timeinterval
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/waitlist/queues  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Update Queue TimeInterval
@@ -3493,54 +3493,54 @@ Update Queue TimeInterval
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/queues  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Enable Queue Appointment
     [Arguments]  ${queueId}
     Check And Create YNW Session  
     ${resp}=   PUT On Session   ynw   /provider/waitlist/queues/appointment/Enable/${queueId}  expected_status=any
-    [Return]   ${resp}
+    RETURN   ${resp}
 
 Disable Queue Appointment
     [Arguments]  ${queueId}
     Check And Create YNW Session   
     ${resp}=   PUT On Session   ynw   /provider/waitlist/queues/appointment/Disable/${queueId}  expected_status=any
-    [Return]   ${resp}
+    RETURN   ${resp}
 
 Enable OnlinePresence
     Check And Create YNW Session  
     ${resp}=   PUT On Session   ynw   /provider/onlinePresence/Enable  expected_status=any
-    [Return]   ${resp}
+    RETURN   ${resp}
 
 Disable OnlinePresence
     Check And Create YNW Session  
     ${resp}=   PUT On Session   ynw   /provider/onlinePresence/Disable  expected_status=any
-    [Return]   ${resp}
+    RETURN   ${resp}
 
 Get OnlinePresence
     Check And Create YNW Session  
     ${resp}=   GET On Session   ynw   /provider/account/settings  expected_status=any
-    [Return]   ${resp}
+    RETURN   ${resp}
 
 Post CustomID
     [Arguments]  ${customId}
     Check And Create YNW Session  
     ${resp}=   POST On Session   ynw   /provider/business/${customId}  expected_status=any
-    [Return]   ${resp}
+    RETURN   ${resp}
     
 
 Get CustomID
     [Arguments]  ${customId}
     Check And Create YNW Session  
     ${resp}=   POST On Session   ynw   /provider/business/${customId}  expected_status=any
-    [Return]   ${resp}
+    RETURN   ${resp}
 
 
 Change StatusBoard Status
     [Arguments]  ${id}  ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/statusBoard/dimension/${id}/${status}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create User
     [Arguments]  ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}  ${countryCode}  ${mob_no}  ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num}   @{vargs} 
@@ -3553,7 +3553,7 @@ Create User
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/user    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update User
     [Arguments]  ${id}  ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}  ${countryCode}  ${mob_no}  ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num}    &{kwargs}
@@ -3566,45 +3566,45 @@ Update User
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/user/${id}   data=${data}  expected_status=any
-    [Return]  ${resp}        
+    RETURN  ${resp}        
     
 Get User
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/user   params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get User By Id
     [Arguments]  ${id}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/user/${id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get User Count
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/user/count   params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 EnableDisable User
     [Arguments]  ${id}  ${status}
     Check And Create YNW Session
     ${resp}=    PUT On Session     ynw   /provider/user/${status}/${id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Domain_Level Of User
      [Arguments]   ${data}  ${u_id}
      ${data}=    json.dumps    ${data}
      Check And Create YNW Session
      ${resp}=  PUT On Session  ynw  /provider/user/providerBprofile/domain/${u_id}  data=${data}  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
 Update Sub_Domain_Level Of User
      [Arguments]   ${data}  ${sub_domain_id}  ${u_id}
      ${data}=    json.dumps    ${data}
      Check And Create YNW Session
      ${resp}=  PUT On Session  ynw  /provider/user/providerBprofile/${sub_domain_id}/${u_id}  data=${data}  expected_status=any
-     [Return]  ${resp}
+     RETURN  ${resp}
 
 User Profile Creation
     [Arguments]  ${b_name}  ${b_desc}  ${spec}  ${lan}  ${sub_domain}  ${id}
@@ -3612,13 +3612,13 @@ User Profile Creation
     ${data}=  Create Dictionary  businessName=${b_name}  businessDesc=${b_desc}  specialization=${spec}  languagesSpoken=${lan}  userSubdomain=${sub_domain}
     ${data}=    json.dumps    ${data}
     ${resp}=  PATCH On Session  ynw  /provider/user/providerBprofile/${id}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get User Profile
     [Arguments]  ${id}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/user/providerBprofile/${id}   expected_status=any  
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 User Profile Updation
     [Arguments]  ${b_name}  ${b_desc}  ${spec}  ${lan}  ${sub_domain}  ${id}
@@ -3626,13 +3626,13 @@ User Profile Updation
     ${data}=  Create Dictionary  businessName=${b_name}  businessDesc=${b_desc}  specialization=${spec}  languagesSpoken=${lan}  userSubdomain=${sub_domain}
     ${data}=    json.dumps    ${data}
     ${resp}=  PUT On Session  ynw  /provider/user/providerBprofile/${id}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Link Profile
     [Arguments]  ${p_id}  ${u_pro_id}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/user/providerBprofile/linkProfile/${p_id}/${u_pro_id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update SocialMedia Of User
     [Arguments]  ${id}  @{data}    
@@ -3640,13 +3640,13 @@ Update SocialMedia Of User
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session 
     ${resp}=  PUT On Session  ynw  /provider/user/providerBprofile/socialMedia/${id}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Users By Department
     [Arguments]  ${d_id}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/user/providerByDepartmentId/${d_id}   expected_status=any  
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create educational qualification
     [Arguments]    ${sts}   ${u_id}    ${gender}    @{vargs}     
@@ -3665,7 +3665,7 @@ Create educational qualification
     ${data}=   json.dumps  ${eduqua}
     Check And Create YNW Session
     ${resp}=    PUT On Session     ynw    /provider/user/providerBprofile/${sts}/${u_id}     data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 Get Locations By UserId
@@ -3679,20 +3679,20 @@ Get Locations By UserId
     Set To Dictionary  ${pro_params}   &{locparam}
     Check And Create YNW Session
     ${resp}=    Get On Session    ynw    provider/user/${userid}/location       params=${pro_params}   expected_status=any  
-    [Return]  ${resp}   
+    RETURN  ${resp}   
 
 
 Update User Search Status
     [Arguments]  ${sts}  ${u_id}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/user/search/${sts}/${u_id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get User Search Status
     [Arguments]  ${u_id}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/user/search/${u_id}   expected_status=any  
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Team For User
     [Arguments]  ${name}  ${team_size}  ${desc}
@@ -3700,7 +3700,7 @@ Create Team For User
     ${data}=  Create Dictionary  name=${name}  size=${team_size}  description=${desc}
     ${data}=  json.dumps  ${data}
     ${resp}=  POST On Session  ynw  /provider/user/team   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Team For User
     [Arguments]  ${team_id}  ${name}  ${team_size}  ${desc}
@@ -3708,37 +3708,37 @@ Update Team For User
     ${data}=  Create Dictionary  name=${name}  size=${team_size}  description=${desc}
     ${data}=  json.dumps  ${data}
     ${resp}=  PUT On Session  ynw  /provider/user/team/${team_id}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Team By Id
     [Arguments]  ${t_id}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/user/team/${t_id}   expected_status=any  
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Teams
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/user/team   params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Activate&Deactivate Team
     [Arguments]  ${team_id}  ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/user/team/${team_id}/${status}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get User Stat Count
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/report/user   params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get User Stat Details
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/report/user/info   params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Assign Business_loc To User
     [Arguments]  ${userIds}  @{bussLocations} 
@@ -3746,7 +3746,7 @@ Assign Business_loc To User
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session 
     ${resp}=  PUT On Session  ynw  /provider/user/updateBusinessLoc  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Assign Team To User
     [Arguments]  ${user_ids}  @{data}    
@@ -3754,66 +3754,66 @@ Assign Team To User
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session 
     ${resp}=  PUT On Session  ynw  /provider/user/updateTeam  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 InternalStatuses_permissions
     [Arguments]  ${user_ids}  ${rols}  @{data}    
     ${data}=  Create Dictionary  users=${user_ids}  roles=${rols}   teams=${data}                                                                                                                        
-    [Return]  ${data}
+    RETURN  ${data}
 
 Create_InternalStatus
     [Arguments]  ${id}  ${dis_name}  ${sers}  ${dis_order}  ${prev_sts}  ${perm}
     ${data}=  Create Dictionary  id=${id}  displayName=${dis_name}  services=${sers}  displayOrder=${dis_order}  prevStatuses=${prev_sts}  permissions=${perm}
-    [Return]  ${data}
+    RETURN  ${data}
 
 Setting InternalStatuses
     [Arguments]  @{kwargs}
     Log  ${kwargs}
     ${data1}=  Create Dictionary  status=${kwargs}
     ${data}=  Create Dictionary  internalStatus=${data1}
-    [Return]  ${data}
+    RETURN  ${data}
 
 Internal_UserAccessScope_Json
     [Arguments]  ${internal_data}  ${userscope_data}
     ${data}=  Create Dictionary
     Set to Dictionary      ${data}    internalStatus=${internal_data['internalStatus']}
     Set to Dictionary      ${data}    userAccessScope=${userscope_data['userAccessScope']}
-    [Return]  ${data}
+    RETURN  ${data}
 
 Get InternalStatuses by uid
     [Arguments]  ${uid}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/waitlist/internalStatuses/${uid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Waitlist Apply Internal Status
     [Arguments]  ${uid}  ${internal_sts}
     Check And Create YNW Session
     ${resp}=    PUT On Session     ynw   /provider/waitlist/applyInternalStatus/${uid}/${internal_sts}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Appointment Apply Internal Status
     [Arguments]  ${uid}  ${internal_sts}
     Check And Create YNW Session
     ${resp}=    PUT On Session     ynw   /provider/appointment/applyInternalStatus/${uid}/${internal_sts}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Waitlist Internal Sts ActivityLog
     [Arguments]  ${uid}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/waitlist/internalStatuses/log/${uid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Appointment Internal Sts ActivityLog
     [Arguments]  ${uid}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/internalStatuses/log/${uid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Generate Invoice
    Check And Create YNW Session
    ${resp}=    PUT On Session    ynw  /provider/license/subscription    expected_status=any  
-   [Return]  ${resp} 
+   RETURN  ${resp} 
 
 
 Generate Report REST details  
@@ -3822,7 +3822,7 @@ Generate Report REST details
     ${jdata}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/report   data=${jdata}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Save Report Criteria
@@ -3832,7 +3832,7 @@ Save Report Criteria
     ${jdata}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/report/ops    data=${jdata}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Report Criteria
@@ -3842,13 +3842,13 @@ Update Report Criteria
     ${jdata}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/report/ops    data=${jdata}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Report Criteria
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/report/criteria   expected_status=any  
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Delete Report Criteria
@@ -3857,14 +3857,14 @@ Delete Report Criteria
     ${jdata}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw  /provider/report/ops    data=${jdata}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Appointment Status
     [Arguments]  ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/appointment/${status}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 JaldeeId Format  
     [Arguments]  ${customerseries}  ${prefi}  ${sufi}
@@ -3872,7 +3872,7 @@ JaldeeId Format
     ${jdata}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/jaldeeIdFormat/${customerseries}   data=${jdata}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Account Settings
     [Arguments]  ${enasms}  ${jinten}  ${custserenum}  ${prefi}  ${sufi}
@@ -3881,7 +3881,7 @@ Account Settings
     ${jdata}=  json.dumps  ${data}
     Check And Create YNW Session
     ${response}=  POST On Session  ynw  /provider/account/settings  data=${jdata}  expected_status=any
-    [Return]  ${response}
+    RETURN  ${response}
 
 Update Accountsettings 
     [Arguments]  ${enasms}  ${jinten}  ${custserenum}  ${prefi}  ${sufi}
@@ -3890,29 +3890,29 @@ Update Accountsettings
     ${jdata}=  json.dumps  ${data}
     Check And Create YNW Session
     ${response}=  PUT On Session  ynw  /provider/account/settings  data=${jdata}  expected_status=any
-    [Return]  ${response}
+    RETURN  ${response}
 
 Get Accountsettings
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/account/settings  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Sms Status
     [Arguments]  ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/sms/${status}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Sms Count
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/account/settings/smsCount  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Waitlist Status
     [Arguments]  ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/waitlist/${status}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Appointment Schedule
     [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}   ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
@@ -3927,7 +3927,7 @@ Appointment Schedule
         Append To List  ${services}  ${service}
     END
     Run Keyword If  ${len}>0  Set To Dictionary  ${data}  services=${services}
-    [Return]  ${data}
+    RETURN  ${data}
 
 Create Appointment Schedule
     [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}   ${consumerParallelServing}    ${loc}  ${timeduration}  ${batch}  @{vargs}
@@ -3935,7 +3935,7 @@ Create Appointment Schedule
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=  POST On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Appointment Schedule For User
     [Arguments]  ${userid}  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${parallel}    ${consumerParallelServing}   ${loc}  ${timeduration}  ${batch}  @{vargs}
@@ -3945,68 +3945,68 @@ Create Appointment Schedule For User
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=  POST On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Appointment Schedule ById
     [Arguments]   ${schId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/${schId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Appointment Schedule
     [Arguments]   ${schId}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/appointment/schedule/${schId}/ENABLED   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Appointment Schedule
     [Arguments]   ${schId}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/appointment/schedule/${schId}/DISABLED   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Appointment Schedules
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/schedule  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # Get Appointment Slots By Date Schedule
 #     [Arguments]    ${scheduleId}   ${date}
 #     Check And Create YNW Session
 #     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/${scheduleId}/${date}  expected_status=any
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 Get Appointment Slots By Date Schedule
     [Arguments]    ${scheduleId}   ${date}   ${service}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/${scheduleId}/${date}/${service}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Next Available Appointment Slot
     [Arguments]   ${schId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/nextAvailableTime  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Next Available Appointment Schedule
     [Arguments]   ${schId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/nextAvailable/${schId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Appointment Schedule by location and service
 	[Arguments]	 ${locationId}	${serviceId}
 	Check And Create YNW Session
 	${resp}=  GET On Session  ynw  /provider/appointment/schedule/location/${locationId}/service/${serviceId}  expected_status=any
-	[Return]   ${resp}
+	RETURN   ${resp}
 
 Get Appointment Schedule by date
 	[Arguments]	 ${date}
 	Check And Create YNW Session
 	${resp}=  GET On Session  ynw  /provider/appointment/schedule/date/${date}  expected_status=any
-	[Return]   ${resp}
+	RETURN   ${resp}
 
 
 Update Appointment Schedule
@@ -4016,7 +4016,7 @@ Update Appointment Schedule
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=  PUT On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 Create CustomeView
@@ -4053,7 +4053,7 @@ Create CustomeView
 	${data}=  json.dumps  ${data}	
 	Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/customView   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
    
 
 Create CustomeView Appointment
@@ -4091,7 +4091,7 @@ Create CustomeView Appointment
 	${data}=  json.dumps  ${data}	
 	Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/customView   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update CustomeView Appointment
 	[Arguments]   ${id}   ${name}  ${merged}  ${departmentId}  ${serviceId}   ${usersId}   ${Scheduleid}   ${type}
@@ -4129,7 +4129,7 @@ Update CustomeView Appointment
 	${data}=  json.dumps  ${data}	
 	Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/customView/${id}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update CustomeView
@@ -4167,42 +4167,42 @@ Update CustomeView
 	${data}=  json.dumps  ${data}	
 	Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/customView/${id}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get CustomeView By Id
     [Arguments]  ${id}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/customView/${id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get CustomeView
 	[Arguments]    &{kwargs}	
 	Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/customView   params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Delete CustomeView
     [Arguments]  ${id}
     Check And Create YNW Session
     ${resp}=    DELETE On Session     ynw   /provider/customView/${id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Enable Waitlist Batch
     [Arguments]   ${queueId} 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/waitlist/queues/batch/${queueId}/true  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Disable Waitlist Batch
     [Arguments]   ${queueId}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/waitlist/queues/batch/${queueId}/false  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add Batch Name
     [Arguments]   ${queueId}  ${prefix}  ${suffix}
@@ -4210,21 +4210,21 @@ Add Batch Name
     ${data}=   Create Dictionary   prefix=${prefix}   suffix=${suffix}
     ${data}=    json.dumps    ${data}
     ${resp}=    PUT On Session    ynw  /provider/waitlist/queues/batch/pattern/${queueId}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Enable Disbale Global Livetrack
     [Arguments]   ${status}  
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/account/settings/livetrack/${status}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Enable Disbale Service Livetrack
     [Arguments]   ${serviceId}   ${status}  
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/services/livetrack/${status}/${serviceId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Create StatusBoardnew
     [Arguments]  ${name}  ${displayname}  ${layout}  ${serviceRoom}  ${status}  ${container}  ${metric_list}  ${intervel}  ${title1}  ${title2}  ${title3}  ${title11}
@@ -4235,14 +4235,14 @@ Create StatusBoardnew
     ${data}=  json.dumps  ${dic}
     Check And Create YNW Session
     ${resp}=  POST On Session   ynw   /provider/statusBoard/dimension   data=${data}  expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 DonationFundRaising flag
     [Arguments]  ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw   /provider/account/settings/donationFundRaising/${status}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Donation Service
@@ -4257,28 +4257,28 @@ Create Donation Service
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session  
     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Donation By Id
     [Arguments]  ${d_id}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/donation/${d_id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Donations
     [Arguments]    &{kwargs}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/donation   params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Donation Count
     [Arguments]    &{kwargs}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/donation/count  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Set jaldeeIntegration Settings
@@ -4287,14 +4287,14 @@ Set jaldeeIntegration Settings
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  /provider/account/settings/jaldeeIntegration    data=${data}  expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get jaldeeIntegration Settings
     
     Check And Create YNW Session 
     ${resp}=  GET On Session  ynw   /provider/account/settings/jaldeeIntegrationSettings  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 User Take Appointment For Consumer 
@@ -4316,7 +4316,7 @@ User Take Appointment For Consumer
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  params=${pro_params}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Take Appointment For Consumer 
@@ -4337,7 +4337,7 @@ Take Appointment For Consumer
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  params=${pro_params}    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Take Appointment with Phone no
@@ -4350,7 +4350,7 @@ Take Appointment with Phone no
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Take Virtual Service Appointment For Consumer
@@ -4364,7 +4364,7 @@ Take Virtual Service Appointment For Consumer
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Take Virtual Service Appointment For Consumer with Mode
     [Arguments]   ${apptMode}  ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${CallingModes}  ${CallingModes_id1}  ${appmtFor}
@@ -4377,7 +4377,7 @@ Take Virtual Service Appointment For Consumer with Mode
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Take Appointment with Appointment Mode 
     [Arguments]   ${apptMode}   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}
@@ -4388,7 +4388,7 @@ Take Appointment with Appointment Mode
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 User Take Appointment with Appointment Mode 
     [Arguments]   ${userid}  ${apptMode}   ${consid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}
@@ -4400,37 +4400,37 @@ User Take Appointment with Appointment Mode
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Appointment By Id
     [Arguments]  ${appmntId}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/appointment/${appmntId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Waitlist EncodedId
     [Arguments]    ${W_Enc_id}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/waitlist/encId/${W_Enc_id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Waitlist By EncodedID
     [Arguments]    ${Enc_id}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/waitlist/enc/${Enc_id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Appointment EncodedID
     [Arguments]    ${uuid}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/encId/${uuid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Appointment By EncodedId
     [Arguments]    ${encId}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/enc/${encId}   expected_status=any
-    [Return]  ${resp}    
+    RETURN  ${resp}    
 
 Provider Cancel Appointment
     [Arguments]  ${appmntId}  ${cancelReason}  ${message}   ${date}
@@ -4438,7 +4438,7 @@ Provider Cancel Appointment
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/Cancelled/${appmntId}    data=${data}  expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Reject Appointment
     [Arguments]  ${appmntId}  ${rejectReason}  ${message}   ${date}  
@@ -4446,38 +4446,38 @@ Reject Appointment
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/Rejected/${appmntId}    data=${data}  expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Appointment Action 
     [Arguments]   ${status}   ${appmntId}   
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/${status}/${appmntId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Enable Future Appointment
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/apptMgr/futureAppt/Enable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Future Appointment
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/apptMgr/futureAppt/Disable   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Today Appointment
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/apptMgr/todayAppt/Enable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Today Appointment
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/apptMgr/todayAppt/Disable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Appointment Settings
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/settings/apptMgr  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 Update Appointmet Settings
     [Arguments]   ${enableToday}   ${futureAppt}
@@ -4485,41 +4485,41 @@ Update Appointmet Settings
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session     ynw   /provider/settings/apptMgr   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Appointment
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/appointment/Enable   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Appointment
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/appointment/Disable   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Appointment Status
     [Arguments]   ${uuid}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/state/${uuid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Enable Calling Status
     [Arguments]   ${uid}   
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  /provider/appointment/callingStatus/${uid}/Enable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Calling Status
     [Arguments]   ${uid}   
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  /provider/appointment/callingStatus/${uid}/Disable  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Appointment Action for Batch
     [Arguments]   ${scheduleId}   ${status}   ${batch}   
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  /provider/appointment/statusChangeByBatch/${scheduleId}/${status}/${batch}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add Label for Appointment
     [Arguments]  ${appmntId}  ${labelname}  ${label_value}
@@ -4527,7 +4527,7 @@ Add Label for Appointment
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment/addLabel/${appmntId}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Label Dictionary
     [Arguments]  @{kwargs}
@@ -4537,7 +4537,7 @@ Create Label Dictionary
             Set To Dictionary  ${data}   ${key}=${value}
     END
     Log  ${data}
-    [Return]  ${data}
+    RETURN  ${data}
 
 
 Add Label for Multiple Appointment
@@ -4551,13 +4551,13 @@ Add Label for Multiple Appointment
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment/labelBatch  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Appointment Label
     [Arguments]   ${apptId}  ${label}
     Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw  /provider/appointment/removeLabel/${apptId}/${label}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Label from Multiple Appointments
     [Arguments]  ${labelname_list}  @{appmntId}
@@ -4570,7 +4570,7 @@ Remove Label from Multiple Appointments
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /provider/appointment/masslabel  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Add Label for Waitlist
@@ -4579,7 +4579,7 @@ Add Label for Waitlist
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/waitlist/label/${WaitlistId}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add Label for Multiple Waitlist
     [Arguments]  ${label_dict}  @{WaitlistId}
@@ -4592,14 +4592,14 @@ Add Label for Multiple Waitlist
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/waitlist/labelBatch  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Remove Waitlist Label
     [Arguments]   ${WaitlistId}  ${label}
     Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw  /provider/waitlist/label/${WaitlistId}/${label}  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Remove Label from Multiple Waitlist
@@ -4613,7 +4613,7 @@ Remove Label from Multiple Waitlist
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /provider/waitlist/masslabel  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Add Note to Appointment
@@ -4622,49 +4622,49 @@ Add Note to Appointment
     ${note}=    json.dumps    ${note}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment/note/${appmntId}  data=${note}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Appointment Note
     [Arguments]   ${uuid}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/note/${uuid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Future Appointments
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/future  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Future Appointment Count
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/future/count  params=${kwargs}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Appointments Today
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/today  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Today Appointment Count
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/today/count  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Appointments History
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/history  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Appointment History Count
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/history/count  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Waitlist Meeting Request
     [Arguments]   ${uuid}  ${type}  @{recipients}
@@ -4673,13 +4673,13 @@ Create Waitlist Meeting Request
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/waitlist/${uuid}/createmeetingrequest   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Waitlist Meeting Request
     [Arguments]  ${uid}   ${mode}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/waitlist/${uid}/meetingDetails/${mode}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Appointment Meeting Request
@@ -4689,14 +4689,14 @@ Create Appointment Meeting Request
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment/${uid}/createmeetingrequest   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Appointment Meeting Request
     [Arguments]   ${uid}   ${mode}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/${uid}/meetingDetails/${mode}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Billable Subdomain
     [Arguments]   ${domain}  ${jsondata}  ${posval}  
@@ -4707,7 +4707,7 @@ Get Billable Subdomain
             Should Be Equal As Strings    ${resp.status_code}    200
             Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[1]}'
     END
-    [Return]  ${subdomain}  
+    RETURN  ${subdomain}  
 
 Rate Appointment
     [Arguments]   ${uid}  ${star}  ${feedback}
@@ -4715,7 +4715,7 @@ Rate Appointment
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw  /provider/appointment/rating    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Provider Update Appointment Rating
     [Arguments]    ${uid}  ${star}  ${feedback}
@@ -4723,19 +4723,19 @@ Provider Update Appointment Rating
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session   ynw  /provider/appointment/rating    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Batch For Appointment
     [Arguments]   ${ScheduleId} 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw   /provider/appointment/schedule/batch/${ScheduleId}/True  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Batch For Appointment
     [Arguments]   ${ScheduleId}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw   /provider/appointment/schedule/batch/${ScheduleId}/False  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add Appmt Batch Name
     [Arguments]   ${ScheduleId}  ${prefix}  ${suffix}
@@ -4743,7 +4743,7 @@ Add Appmt Batch Name
     ${data}=   Create Dictionary   prefix=${prefix}   suffix=${suffix}
     ${data}=    json.dumps    ${data}
     ${resp}=    PUT On Session    ynw  /provider/appointment/schedule/batch/pattern/${ScheduleId}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Appmt Status by BatchId
     [Arguments]   ${batchId}  ${status}  ${Date}
@@ -4751,7 +4751,7 @@ Change Appmt Status by BatchId
     ${data}=   Create Dictionary   date=${Date}
     ${data}=    json.dumps    ${data}
     ${resp}=    PUT On Session    ynw  /provider/appointment/statusChangeByBatch/${batchId}/${status}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Cancel Appointment by Batch
     [Arguments]   ${batchId}  ${status}   ${Date}   ${cancelReason}
@@ -4759,7 +4759,7 @@ Cancel Appointment by Batch
     ${data}=   Create Dictionary      date=${Date}   cancelReason=${cancelReason}
     ${data}=    json.dumps    ${data}
     ${resp}=    PUT On Session    ynw  /provider/appointment/statusChangeByBatch/${batchId}/${status}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Reject Appointment by Batch
     [Arguments]   ${batchId}  ${status}  ${Date}   ${rejectReason}
@@ -4767,7 +4767,7 @@ Reject Appointment by Batch
     ${data}=   Create Dictionary   date=${Date}   rejectReason=${rejectReason}
     ${data}=    json.dumps    ${data}
     ${resp}=    PUT On Session    ynw  /provider/appointment/statusChangeByBatch/${batchId}/${status}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Change multiple Appmt Status
@@ -4776,7 +4776,7 @@ Change multiple Appmt Status
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw   /provider/appointment/multiStatusChange/${statuschange}   data=${data}  expected_status=any
     Log  ${resp}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Waitlist Action multiple account
     [Arguments]   ${waitlist_actions[4]}    @{vargs}
@@ -4784,74 +4784,74 @@ Waitlist Action multiple account
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw   /provider/waitlist/multiStatusChange/${waitlist_actions[4]}   data=${data}  expected_status=any
     Log  ${resp}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Appmt Schedule AvailableNow
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/availableNow  expected_status=any
-    [Return]  ${resp}    
+    RETURN  ${resp}    
     
 Get Appointment Schedule Count
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/count   params=${kwargs}  expected_status=any
-    [Return]  ${resp}    
+    RETURN  ${resp}    
 
 Enable Future Appointment By Schedule Id
     [Arguments]   ${schedule_id}
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  /provider/appointment/schedule/futureAppt/true/${schedule_id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Future Appointment By Schedule Ids
     [Arguments]   ${schedule_id}
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  /provider/appointment/schedule/futureAppt/false/${schedule_id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Today Appointment By Schedule Id
     [Arguments]   ${schedule_id}
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  /provider/appointment/schedule/todayAppt/true/${schedule_id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Disable Today Appointment By Schedule Id
     [Arguments]   ${schedule_id}
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  /provider/appointment/schedule/todayAppt/false/${schedule_id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Consumer Mass Communication for Appt
     [Arguments]  ${cookie}  ${email}  ${sms}  ${push_notf}  ${telegram}   ${msg}    ${fileswithcaption}    @{vargs}  
     ${input}=  Create Dictionary  email=${email}  sms=${sms}  pushNotification=${push_notf}     telegram=${telegram}
     ${data}=  Create Dictionary  medium=${input}  communicationMessage=${msg}  uuid=${vargs}
     ${resp}=     Imageupload.PAppMassCommMultiFile   ${cookie}     ${data}    @{fileswithcaption}
-    [Return]  ${resp}
+    RETURN  ${resp}
                      
 Get Appmt Schedule AvailableNow By ProviderId   
     [Arguments]     ${providerId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/availableNow/${providerId}   expected_status=any
-    [Return]  ${resp}          
+    RETURN  ${resp}          
 
 Get AppmtSchedule NextAvailableTime By ScheduleId
     [Arguments]  ${scheduleId}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/appointment/schedule/nextAvailableTime/${scheduleId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get NextAvailableSchedule By Provider Location
     [Arguments]  ${P_accountId}   ${locationId}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/appointment/schedule/nextAvailableSchedule/${P_accountId}-${locationId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get NextAvailableSchedule By Provider Location and User
     [Arguments]  ${B_accountId}   ${locationId}  ${userId}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/appointment/schedule/nextAvailableSchedule/${B_accountId}-${locationId}-${userId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get NextAvailableSchedule By multi Provider Location and User
     [Arguments]  @{kwargs}
@@ -4859,7 +4859,7 @@ Get NextAvailableSchedule By multi Provider Location and User
     ${len}=   Get Length  ${kwargs}
     ${data}=  Catenate  SEPARATOR=,  @{kwargs}
     ${resp}=    GET On Session    ynw   /provider/appointment/schedule/nextAvailableSchedule/${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 Update FamilymemberByprovidercustomer
@@ -4868,14 +4868,14 @@ Update FamilymemberByprovidercustomer
     ${data}=  Create Dictionary  parent=${id}  id=${memid}   firstName=${firstname}  lastName=${lastname}  dob=${dob}  gender=${gender}  
     ${data}=    json.dumps    ${data}
     ${resp}=  PUT On Session   ynw   /provider/customers/familyMember   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 DeleteFamilymemberByprovidercustomer
 	[Arguments]    ${memberId}   ${consumerId}
 	Check And Create YNW Session
     ${resp}=   DELETE On Session  ynw  /provider/customers/familyMember/${memberId}/${consumerId}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Add Appointment Schedule Delay
@@ -4884,18 +4884,18 @@ Add Appointment Schedule Delay
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment/schedule/${schedulId}/delay  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Appointment Schedule Delay
     [Arguments]  ${schedulId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/${schedulId}/delay  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Account contact information
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/contact  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 Update Account contact information
     [Arguments]  ${primaryphnNumber}  ${primeryEmail}  ${secondaryphnnumber}  ${whatsappPhnNumber}  ${secondaryEmail}  ${salutation}  ${contactFirstName}  ${contactLastName}   ${countryCode}  ${whatsAppCountryCode}  ${secondaryCountryCode}
@@ -4904,7 +4904,7 @@ Update Account contact information
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/contact  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 Create Sample Schedule
@@ -4925,7 +4925,7 @@ Create Sample Schedule
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}   ${consumerParallelServing}   ${lid}  ${duration}  ${bool[0]}  @{vargs}
     Should Be Equal As Strings  ${resp.status_code}  200
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Email 
@@ -4935,27 +4935,27 @@ Update Email
     ${data}=  Create Dictionary   basicInfo=${data}
     ${data}=    json.dumps    ${data}
     ${resp}=  PUT On Session   ynw   /provider/email/notification   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 # Availability Of Queue By Provider
 #     [Arguments]  ${locationId}   ${serviceId}  
 #     Check And Create YNW Session
 #     ${resp}=  GET On Session  ynw    /consumer/waitlist/queues/available/${locationId}/${serviceId}   expected_status=any
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 
 Get License UsageInfo
    Check And Create YNW Session
    ${resp}=    GET On Session    ynw  /provider/license/usageInfo  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Get Monthly Schedule Availability by Location and Service
     [Arguments]  ${Location_id}   ${Service_id}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/appointment/availability/location/${Location_id}/service/${Service_id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 # Create MR With uuid
@@ -4976,7 +4976,7 @@ Get Monthly Schedule Availability by Location and Service
 #    ${data}=  json.dumps  ${data}
 #    Check And Create YNW Session
 #    ${resp}=  POST On Session  ynw  /provider/mr/${uuid}  data=${data}  expected_status=any
-#    [Return]  ${resp}
+#    RETURN  ${resp}
 
 Create MR With uuid
     [Arguments]  ${uuid}  ${bookingType}  ${consultationMode}   ${mrConsultationDate}  ${state}    &{kwargs}
@@ -4988,7 +4988,7 @@ Create MR With uuid
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/mr/${uuid}  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 clinical Notes Attachments
     [Arguments]  ${type}  ${clinicalNote}   @{vargs}  &{kwargs}
@@ -5002,25 +5002,25 @@ clinical Notes Attachments
     END
 
     ${clinicalNotes}=  Create Dictionary  type=${type}  clinicalNotes=${clinicalNote}  attachments=${AttachmentList} 
-    [Return]  ${clinicalNotes}
+    RETURN  ${clinicalNotes}
 
 
 Get MR By Id
     [Arguments]  ${mrid}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/mr/${mrid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get MedicalRecords
     [Arguments]    &{kwargs}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/mr   params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Appointment Messages
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/ynwConf/appointment/messages  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Reschedule Consumer Appointment
     [Arguments]  ${appt_id}   ${time_slot}   ${date}   ${sch_id}
@@ -5028,7 +5028,7 @@ Reschedule Consumer Appointment
     ${data}=  Create Dictionary  uid=${appt_id}   time=${time_slot}  date=${date}   schedule=${sch_id}  
     ${data}=    json.dumps    ${data}
     ${resp}=  PUT On Session   ynw   /provider/appointment/reschedule   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # Create MR prescription by mr id
 #    [Arguments]  ${mrId}   @{vargs}
@@ -5049,7 +5049,7 @@ Reschedule Consumer Appointment
 #    ${loan}=  json.dumps  ${loan}
 #    Check And Create YNW Session
 #    ${resp}=  POST On Session  ynw  /provider/mr/prescription/${mrId}  data=${loan}  expected_status=any
-#    [Return]  ${resp}
+#    RETURN  ${resp}
 
    
 Create MR prescription by mr id
@@ -5068,14 +5068,14 @@ Create MR prescription by mr id
     ${prescriptions}=  json.dumps  ${prescriptions}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/mr/prescription/${mrId}  data=${prescriptions}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get MR prescription 
     [Arguments]  ${mrId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/mr/prescription/${mrId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 # Update MR prescription
@@ -5097,7 +5097,7 @@ Get MR prescription
 #     ${loan}=  json.dumps  ${loan}
 #     Check And Create YNW Session
 #     ${resp}=  PUT On Session  ynw  /provider/mr/prescription/${mrId}  data=${loan}  expected_status=any
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 Update MR prescription
     [Arguments]  ${mrId}   ${notes}  @{vargs}
@@ -5115,7 +5115,7 @@ Update MR prescription
     ${prescriptions}=  json.dumps  ${prescriptions}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/mr/prescription/${mrId}  data=${prescriptions}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -5125,13 +5125,13 @@ Reschedule Consumer Checkin
     ${data}=  Create Dictionary  ynwUuid=${wl_id}  date=${date}   queue=${q_id}  
     ${data}=  json.dumps  ${data}
     ${resp}=  PUT On Session   ynw   /provider/waitlist/reschedule   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get bsconf Messages
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/ynwConf/messages  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Disable Token Id
     [Arguments]   ${showTokenId}
@@ -5139,7 +5139,7 @@ Enable Disable Token Id
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/waitlistMgr   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # Create MR clinical notes by mr id
 #     [Arguments]  ${mrId}   ${symptoms}   ${allergies}  ${diagnosis}   ${complaints}  ${misc_notes}   ${observations}   ${vaccinationHistory}   
@@ -5147,7 +5147,7 @@ Enable Disable Token Id
 #     ${data}=  Create Dictionary  symptoms=${symptoms}  allergies=${allergies}   diagnosis=${diagnosis}   complaints=${complaints}   misc_notes=${misc_notes}  observations=${observations}   vaccinationHistory=${vaccinationHistory}  
 #     ${data}=    json.dumps    ${data}
 #     ${resp}=  POST On Session  ynw  /provider/mr/clinicalNotes/${mrId}  data=${data}  expected_status=any
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 Create MR clinical notes by mr id
     [Arguments]  ${mrId}     ${type}  ${clinicalNote}   @{vargs}
@@ -5165,13 +5165,13 @@ Create MR clinical notes by mr id
     ${data}=  Create List    ${data}
     ${data}=    json.dumps    ${data}
     ${resp}=  POST On Session  ynw  /provider/mr/clinicalNotes/${mrId}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get MR clinical notes
     [Arguments]  ${mrId}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/mr/clinicalNotes/${mrId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # Update MR clinical notes
 #     [Arguments]  ${mrId}   ${symptoms}   ${allergies}  ${diagnosis}   ${complaints}  ${misc_notes}   ${observations}   ${vaccinationHistory} 
@@ -5179,7 +5179,7 @@ Get MR clinical notes
 #     ${data}=  Create Dictionary  symptoms=${symptoms}  allergies=${allergies}   diagnosis=${diagnosis}   complaints=${complaints}   misc_notes=${misc_notes}  observations=${observations}   vaccinationHistory=${vaccinationHistory}  
 #     ${data}=    json.dumps    ${data}
 #     ${resp}=  PUT On Session  ynw  /provider/mr/clinicalNotes/${mrId}  data=${data}  expected_status=any
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 Update MR clinical notes
     [Arguments]  ${mrId}     ${type}  ${clinicalNote}   @{vargs}
@@ -5197,7 +5197,7 @@ Update MR clinical notes
     ${data}=  Create List    ${data}
     ${data}=    json.dumps    ${data}
     ${resp}=  PUT On Session  ynw  /provider/mr/clinicalNotes/${mrId}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Share Prescription
     [Arguments]  ${mrId}   ${msg}  ${html}   ${email}  ${sms}  ${push}  ${expirableLink}  ${expireTimeInMinuts}
@@ -5206,7 +5206,7 @@ Share Prescription
     ${data}=  Create Dictionary  message=${msg}   html=${html}   medium=${medium}  expirableLink=${expirableLink}   expireTimeInMinuts=${expireTimeInMinuts}
     ${data}=    json.dumps    ${data}
     ${resp}=  POST On Session  ynw  /provider/mr/sharePrescription/${mrId}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 uploadDigitalSign
     [Arguments]   ${id}  ${cookie}
@@ -5214,13 +5214,13 @@ uploadDigitalSign
     ${prop}=  json.dumps  ${prop}
     Create File  TDD/sign.json  ${prop}  
     ${resp}=  digitalSignUpload  ${id}  ${cookie}
-    [Return]  ${resp}       
+    RETURN  ${resp}       
 
 Get digital sign
     [Arguments]  ${providerId}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/user/digitalSign/${providerId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 uploadPrescriptionImage
     [Arguments]   ${mrid}  ${cookie}
@@ -5230,7 +5230,7 @@ uploadPrescriptionImage
     ${prop}=  json.dumps  ${prop}
     Create File  TDD/prescription.json  ${prop}
     ${resp}=  prescriptionImgUpload  ${mrid}  ${cookie}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 uploadClinicalnotesImage
     [Arguments]   ${mrid}  ${cookie}
@@ -5240,7 +5240,7 @@ uploadClinicalnotesImage
     ${prop}=  json.dumps  ${prop}
     Create File  TDD/clinicalnotes.json  ${prop}
     ${resp}=  clinicalnotesImgUpload  ${mrid}  ${cookie}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # Create MR with patientId
 #    [Arguments]  ${patientId}  ${bookingType}  ${consultationMode}  ${complaints}  ${symptoms}  ${allergies}  ${vaccinationHistory}  ${observations}  ${diagnosis}  ${misc_notes}   ${mrConsultationDate}  ${state}   @{vargs}
@@ -5264,7 +5264,7 @@ uploadClinicalnotesImage
 #    ${data}=  json.dumps  ${data}
 #    Check And Create YNW Session
 #    ${resp}=  POST On Session  ynw  /provider/mr/patient/${patientId}  data=${data}  expected_status=any
-#    [Return]  ${resp}
+#    RETURN  ${resp}
 
 
 Create MR with patientId
@@ -5286,7 +5286,7 @@ Create MR with patientId
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/mr/patient/${patientId}  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Billable Domain Providers
@@ -5310,7 +5310,7 @@ Billable Domain Providers
         Set Suite Variable  ${check}    ${resp2.json()['serviceBillable']} 
         Run Keyword If     '${check}' == 'True'   Append To List   ${provider_list}  ${PUSERNAME${a}}
     END
-    [Return]  ${provider_list}
+    RETURN  ${provider_list}
 
 
 Multiloc and Billable Providers
@@ -5351,40 +5351,40 @@ Multiloc and Billable Providers
         Run Keyword If     '${check}' == 'True'   Append To List   ${provider_list}  ${PUSERNAME${a}}
         # Run Keyword If    '${status}' == 'PASS' and '${check}' == 'True'   Append To List  ${multiloc_billable_providers}  ${PUSERNAME${a}}
     END
-    # [Return]  ${provider_list}  ${multiloc_providers}  ${multiloc_billable_providers}
-    [Return]  ${provider_list}  ${multiloc_providers}
+    # RETURN  ${provider_list}  ${multiloc_providers}  ${multiloc_billable_providers}
+    RETURN  ${provider_list}  ${multiloc_providers}
 
 
 Get Patient Previous Visit
     [Arguments]  ${patientId}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/mr/patientPreviousVisit/${patientId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Patient Previous Visit Count
     [Arguments]  ${patientId}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/mr/patientPreviousVisit/count/${patientId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get MR Auditlogs by MR Id
     [Arguments]  ${mrId}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/mr/auditLog/${mrId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Enable Order Settings
    Check And Create YNW Session
    ${resp}=    PUT On Session    ynw  /provider/order/settings/true   expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Disable Order Settings
    Check And Create YNW Session
    ${resp}=    PUT On Session    ynw  /provider/order/settings/false   expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Create Order Settings
@@ -5393,13 +5393,13 @@ Create Order Settings
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/order/settings  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Order Settings by account id
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/order/settings   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Order Settings
@@ -5408,19 +5408,19 @@ Update Order Settings
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/order/settings  data=${data}  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Get Order Settings Status
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/order/settings/status   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Order Settings Contact info
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/order/settings/contact/info   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Store Contact info
@@ -5435,7 +5435,7 @@ Update Store Contact info
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/order/settings/contact/info  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Order Item
@@ -5444,7 +5444,7 @@ Create Order Item
    ${data}=    json.dumps    ${data}
    Check And Create YNW Session 
    ${resp}=    POST On Session    ynw  /provider/items   data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Create Virtual Order Item
@@ -5457,7 +5457,7 @@ Create Virtual Order Item
    ${data}=    json.dumps    ${data}
    Check And Create YNW Session 
    ${resp}=    POST On Session    ynw  /provider/items   data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Update Order Item
@@ -5466,7 +5466,7 @@ Update Order Item
    ${data}=    json.dumps    ${data}
    Check And Create YNW Session 
    ${resp}=    PUT On Session    ynw  /provider/items   data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 
@@ -5480,14 +5480,14 @@ Update Virtual Order Item
    ${data}=    json.dumps    ${data}
    Check And Create YNW Session 
    ${resp}=    PUT On Session    ynw  /provider/items   data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Get Item By Criteria
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/items  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Add Item Label
@@ -5501,14 +5501,14 @@ Add Item Label
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/items/label/${itemId}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Remove Item Label
 	[Arguments]    ${itemId}   ${LabelName}
 	Check And Create YNW Session
     ${resp}=   DELETE On Session  ynw  /provider/items/label/${itemId}/${LabelName}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Order By Provider For Pickup
@@ -5533,7 +5533,7 @@ Create Order By Provider For Pickup
     END
     Log  ${order} 
     ${resp}=  OrderItemByProvider   ${Cookie}   ${order}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Order By Provider For HomeDelivery
@@ -5557,7 +5557,7 @@ Create Order By Provider For HomeDelivery
     END
     Log  ${order} 
     ${resp}=  OrderItemByProvider   ${Cookie}   ${order}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Order By Provider For Electronic Delivery
@@ -5576,7 +5576,7 @@ Create Order By Provider For Electronic Delivery
 
     ${order}=    Create Dictionary   catalog=${catalog}  orderFor=${orderfor}  consumer=${Cid}  orderItem=${orderitem}   orderNote=${orderNote}  orderDate=${orderDate}  phoneNumber=${phoneNumber}  email=${email}  countryCode=${countryCode}
     ${resp}=  OrderItemByProvider   ${Cookie}   ${order}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Upload ShoppingList By Provider for Pickup
@@ -5587,7 +5587,7 @@ Upload ShoppingList By Provider for Pickup
     ${timeSlot}=  Create Dictionary  sTime=${sTime1}   eTime=${eTime1}
     ${order}=  Create Dictionary  storePickup=${storePickup}  catalog=${catalog}  orderFor=${orderFor}  consumer=${Cid}  orderDate=${Date}   timeSlot=${timeSlot}  phoneNumber=${phoneNumber}  countryCode=91  email=${email}
     ${resp}=  OrderImageUploadByProvider   ${Cookie}   ${caption}   ${order}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Upload ShoppingList By Provider for HomeDelivery
@@ -5598,7 +5598,7 @@ Upload ShoppingList By Provider for HomeDelivery
     ${timeSlot}=  Create Dictionary  sTime=${sTime1}   eTime=${eTime1}
     ${order}=  Create Dictionary  homeDelivery=${homeDelivery}  homeDeliveryAddress=${homeDeliveryAddress}   catalog=${catalog}  orderFor=${orderFor}  consumer=${Cid}  orderDate=${Date}   timeSlot=${timeSlot}  phoneNumber=${phoneNumber}  countryCode=91  email=${email}
     ${resp}=  OrderImageUploadByProvider   ${Cookie}   ${caption}   ${order}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Create Catalog For ShoppingCart
@@ -5612,7 +5612,7 @@ Create Catalog For ShoppingCart
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session 
     ${resp}=  POST On Session  ynw  /provider/catalog  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -5627,7 +5627,7 @@ Update Catalog For ShoppingCart
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session 
     ${resp}=  PUT On Session  ynw  /provider/catalog  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Catalog For ShoppingList
@@ -5641,7 +5641,7 @@ Create Catalog For ShoppingList
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session 
     ${resp}=  POST On Session  ynw  /provider/catalog  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Catalog For ShoppingList
@@ -5655,7 +5655,7 @@ Update Catalog For ShoppingList
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session 
     ${resp}=  PUT On Session  ynw  /provider/catalog  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Order Mass Communication
@@ -5667,28 +5667,28 @@ Order Mass Communication
     # ${data}=   json.dumps    ${data}
     # Check And Create YNW Session
     # ${resp}=    POST On Session   ynw    /provider/orders/consumerMassCommunication     data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 Get Order Catalog
     [Arguments]  ${CatalogId}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/catalog/${CatalogId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Catalog By Criteria
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/catalog  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Change Catalog Status
     [Arguments]  ${catalogId}   ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/catalog/${catalogId}/${status}   expected_status=any  
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Add Items To Catalog
@@ -5696,14 +5696,14 @@ Add Items To Catalog
     ${Items}=  json.dumps  ${Items}
     Check And Create YNW Session 
     ${resp}=  POST On Session  ynw  /provider/catalog/${CatalogId}/items  data=${Items}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Item From Catalog
     [Arguments]  ${CatalogId}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/catalog/${CatalogId}/items   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Single Catalog Item
@@ -5712,7 +5712,7 @@ Update Single Catalog Item
    ${data}=    json.dumps    ${data}
    Check And Create YNW Session 
    ${resp}=    PUT On Session    ynw  /provider/catalog/item   data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Update Multiple Catalog Items
@@ -5720,7 +5720,7 @@ Update Multiple Catalog Items
    ${Items_List}=  json.dumps  ${Items_List}
    Check And Create YNW Session 
    ${resp}=    PUT On Session    ynw  /provider/catalog/${CatalogId}/items   data=${Items_List}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Remove Multiple Items From Catalog
@@ -5730,20 +5730,20 @@ Remove Multiple Items From Catalog
     ${data}=    json.dumps    ${data}
 	Check And Create YNW Session
     ${resp}=   DELETE On Session  ynw  /provider/catalog/${CatalogId}/items   data=${data}  expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Remove Single Item From Catalog
 	[Arguments]    ${CatalogId}   ${itemId}
 	Check And Create YNW Session
     ${resp}=   DELETE On Session  ynw  /provider/catalog/${CatalogId}/item/${itemId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Default Catalog Status
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/catalog/statuses   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create MR 
@@ -5757,7 +5757,7 @@ Create MR
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/mr/${uuid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Share Prescription Thirdparty
     [Arguments]  ${mrId}   ${msg}  ${html}  ${phone}  ${email}  ${expirableLink}  ${expireTimeInMinuts}  ${countryCode}=91   
@@ -5766,7 +5766,7 @@ Share Prescription Thirdparty
     ${data}=  Create Dictionary  message=${msg}   html=${html}   shareThirdParty=${shareThirdParty}   expirableLink=${expirableLink}   expireTimeInMinuts=${expireTimeInMinuts}   countryCode=${countryCode}
     ${data}=    json.dumps    ${data}
     ${resp}=  POST On Session  ynw  /provider/mr/sharePrescription/thirdParty/${mrId}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Block Appointment For Consumer
     [Arguments]    ${service_id}  ${schedule_id}  ${appmtDate}  ${appmtFor}
@@ -5776,7 +5776,7 @@ Block Appointment For Consumer
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment/block  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Confirm Blocked Appointment
@@ -5786,14 +5786,14 @@ Confirm Blocked Appointment
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/appointment/confirm  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Unblock Appointment Slot
     [Arguments]    ${appointment_id}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/appointment/unblock/${appointment_id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 # Update MR by mr id
@@ -5817,7 +5817,7 @@ Unblock Appointment Slot
 #    ${data}=  json.dumps  ${data}
 #    Check And Create YNW Session
 #    ${resp}=  PUT On Session  ynw  /provider/mr/${mrid}  data=${data}  expected_status=any
-#    [Return]  ${resp}
+#    RETURN  ${resp}
 
 
 # Update MR by mr id
@@ -5838,7 +5838,7 @@ Unblock Appointment Slot
 #    ${data}=  json.dumps  ${data}
 #    Check And Create YNW Session
 #    ${resp}=  PUT On Session  ynw  /provider/mr/${mrid}  data=${data}  expected_status=any
-#    [Return]  ${resp}
+#    RETURN  ${resp}
 
 Update MR by mr id
     [Arguments]  ${mrid}  ${bookingType}  ${consultationMode}    ${mrConsultationDate}  ${state}    &{kwargs}
@@ -5850,7 +5850,7 @@ Update MR by mr id
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/mr/${mrid}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 # Add Label for Customer
@@ -5860,7 +5860,7 @@ Update MR by mr id
 #     ${data}=    json.dumps    ${data}
 #     Check And Create YNW Session
 #     ${resp}=  POST On Session  ynw  /provider/customers/label  data=${data}  expected_status=any
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 Add Labels for Customers
     [Arguments]  ${label_dict}  @{pc_id}
@@ -5873,7 +5873,7 @@ Add Labels for Customers
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/customers/label   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Remove Labels from Customers
@@ -5887,13 +5887,13 @@ Remove Labels from Customers
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /provider/customers/masslabel  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Customer Label
     [Arguments]   ${proConId}  ${labelName}
     Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw  /provider/customers/${proConId}/label/${labelName}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Order For HomeDelivery
     [Arguments]    ${uid}  ${homeDelivery}  ${homeDeliveryAddress}  ${stime}  ${etime}   ${orderDate}  ${phoneNumber}   ${email}  ${countryCode}
@@ -5902,7 +5902,7 @@ Update Order For HomeDelivery
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/orders  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Order For Pickup
     [Arguments]    ${uid}  ${storePickup}   ${stime}  ${etime}   ${orderDate}  ${phoneNumber}   ${email}  ${countryCode}
@@ -5911,7 +5911,7 @@ Update Order For Pickup
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/orders  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Order For Electronic Delivery
@@ -5920,7 +5920,7 @@ Update Order For Electronic Delivery
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/orders  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Order Items By Provider
@@ -5937,55 +5937,55 @@ Update Order Items By Provider
     ${data}=  json.dumps  ${orderitem}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/orders/item/${uuid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Order by uid
     [Arguments]     ${uid}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/orders/${uid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Order Status 
     [Arguments]  ${uuid}  ${orderAction}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/orders/${uuid}/${orderAction}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Order Status Changes by uid 
     [Arguments]   ${uuid}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/orders/states/${uuid}  expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Order By Criterias
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/orders  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Order count by Criterias
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/orders/count  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Order By enclosed ID 
     [Arguments]   ${encId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/orders/enc/${encId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Future Order By Criterias
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/orders/future  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Future Order count by Criterias
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/orders/future/count  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Delivery charge 
     [Arguments]  ${action}  ${uuid}  ${Deliverycharge}
@@ -5993,19 +5993,19 @@ Update Delivery charge
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  /provider/bill/${action}/${uuid}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Order History By Criterias
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/orders/history  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Order History count by Criterias
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/orders/history/count  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Add Label for Order
@@ -6014,14 +6014,14 @@ Add Label for Order
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/orders/label/${OrderId}   data=${data}  expected_status=any
-    [Return]  ${resp}  
+    RETURN  ${resp}  
 
 
 Remove Label for Order
     [Arguments]  ${OrderId}  ${label}  
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /provider/orders/label/${OrderId}/${label}   expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Create Sample Label
@@ -6039,7 +6039,7 @@ Create Sample Label
     ${resp}=  Create Label  ${labelname[0]}  ${labelname[1]}  ${label_desc}  ${ValueSet}  ${NotificationSet}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    [Return]  ${resp.json()} 
+    RETURN  ${resp.json()} 
 
 
 Add Label for Multiple Order
@@ -6053,7 +6053,7 @@ Add Label for Multiple Order
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/orders/labelBatch  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 MultiLocation Domain Providers
@@ -6092,20 +6092,20 @@ MultiLocation Domain Providers
         Should Be Equal As Strings    ${resp.status_code}    200
 	    Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
     END
-    [Return]  ${multiloc_providers}
+    RETURN  ${multiloc_providers}
 
 Update Delivery Address
     [Arguments]  ${proConsumerId}   @{vargs}
     ${data}=   json.dumps    ${vargs}
     Check And Create YNW Session
     ${resp}=    PUT On Session   ynw    /provider/orders/consumer/${proConsumerId}/deliveryAddress     data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Delivery Address
     [Arguments]  ${proConsumerId}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/orders/consumer/${proConsumerId}/deliveryAddress  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Customer Group
@@ -6119,7 +6119,7 @@ Create Customer Group
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${response}=  POST On Session  ynw  /provider/customers/group  data=${data}  expected_status=any
-   [Return]  ${response}
+   RETURN  ${response}
 
 
 
@@ -6128,14 +6128,14 @@ Get Customer Groups
    
    Check And Create YNW Session
    ${response}=  GET On Session  ynw  /provider/customers/group  expected_status=any
-   [Return]  ${response}
+   RETURN  ${response}
 
 
 Get Customer Group by id
    [Arguments]  ${groupId}
    Check And Create YNW Session
    ${response}=  GET On Session  ynw  /provider/customers/group/${groupId}  expected_status=any
-   [Return]  ${response}
+   RETURN  ${response}
 
 
 Update Customer Group
@@ -6149,21 +6149,21 @@ Update Customer Group
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${response}=  PUT On Session  ynw  /provider/customers/group/  data=${data}  expected_status=any
-   [Return]  ${response}
+   RETURN  ${response}
 
 
 Enable Customer Group
     [Arguments]  ${groupId}
     Check And Create YNW Session
     ${response}=  PUT On Session  ynw  /provider/customers/group/${groupId}/ENABLE    expected_status=any
-    [Return]  ${response}
+    RETURN  ${response}
 
 
 Disable Customer Group
     [Arguments]  ${groupId}
     Check And Create YNW Session
     ${response}=  PUT On Session  ynw  /provider/customers/group/${groupId}/DISABLE    expected_status=any
-    [Return]  ${response}
+    RETURN  ${response}
 
 
 # Add Customers to Group
@@ -6171,7 +6171,7 @@ Disable Customer Group
 #     ${data}=   json.dumps    ${proConId}
 #     Check And Create YNW Session
 #     ${response}=    POST On Session   ynw    /provider/customers/group/${groupName}   data=${data}  expected_status=any
-#     [Return]  ${response}
+#     RETURN  ${response}
 
 
 Add Customers to Group
@@ -6180,14 +6180,14 @@ Add Customers to Group
     ${data}=   json.dumps    ${data}
     Check And Create YNW Session
     ${response}=    POST On Session   ynw    /provider/customers/group/addGroup   data=${data}  expected_status=any
-    [Return]  ${response}
+    RETURN  ${response}
 
 Add MemberId for a consumer in group 
 
     [Arguments]    ${groupName}      ${proConId}    ${memberId}
     Check And Create YNW Session
     ${response}=    POST On Session   ynw    /provider/customers/groupMemId/${groupName}/${proConId}/${memberId}    expected_status=any
-    [Return]  ${response}
+    RETURN  ${response}
     
 
 Get Member Id of a consumer in a group 
@@ -6195,21 +6195,21 @@ Get Member Id of a consumer in a group
     [Arguments]  ${groupName}   ${proConId}  
     Check And Create YNW Session
     ${response}=    GET On Session   ynw    provider/customers/groupMemId/${groupName}/${proConId}    expected_status=any
-    [Return]  ${response}
+    RETURN  ${response}
 
 Update Member Id for a consumer in a group 
 
     [Arguments]  ${groupName}   ${proConId}  ${memId}
     Check And Create YNW Session
     ${response}=    PUT On Session   ynw    provider/customers/groupMemId/${groupName}/${proConId}/${memId}   expected_status=any
-    [Return]  ${response}
+    RETURN  ${response}
 
  
 Remove Customer from Group
     [Arguments]  ${groupName}   ${proConId}
     Check And Create YNW Session
     ${response}=    DELETE On Session   ynw    /provider/customers/${proConId}/group/${groupName}   expected_status=any    
-    [Return]  ${response}
+    RETURN  ${response}
 
 
 Remove Multiple Customer from Group
@@ -6217,14 +6217,14 @@ Remove Multiple Customer from Group
     ${data}=   json.dumps    ${proConId}
     Check And Create YNW Session
     ${response}=    DELETE On Session   ynw    /provider/customers/group/${groupName}   data=${data}  expected_status=any
-    [Return]  ${response}
+    RETURN  ${response}
 
 
 Get Customer Count in Group
    [Arguments]  ${groupId}
    Check And Create YNW Session
    ${response}=  GET On Session  ynw  /provider/customers/group/count/${groupId}  expected_status=any
-   [Return]  ${response}
+   RETURN  ${response}
 
 
 Create Holiday
@@ -6237,19 +6237,19 @@ Create Holiday
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/settings/nonBusinessDays/holiday  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Activate Holiday
     [Arguments]  ${status}  ${holidayId}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/settings/nonBusinessDays/holiday/mark/${status}/${holidayId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Holiday By Id
     [Arguments]  ${holidayId}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/settings/nonBusinessDays/holiday/${holidayId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Holiday
     [Arguments]   ${id}  ${desc}  ${rectype}  ${repint}  ${startDate}  ${endDate}  ${noocc}  ${sTime}  ${eTime}  
@@ -6261,18 +6261,18 @@ Update Holiday
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/settings/nonBusinessDays/holiday  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Delete Holiday
     [Arguments]  ${holidayId}
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /provider/settings/nonBusinessDays/holiday/${holidayId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Holiday By Account
     Check And Create YNW Session 
     ${resp}=  GET On Session  ynw  /provider/settings/nonBusinessDays/holiday  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Next Availability
     [Arguments]  ${rectype}  ${repint}  ${startDate}  ${endDate}  ${noocc}  ${sTime}  ${eTime}  ${rectype1}  ${repint1}  ${startDate1}  ${endDate1}  ${noocc1}  ${sTime1}  ${eTime1}  
@@ -6290,28 +6290,28 @@ Get Next Availability
     ${data}=  json.dumps  ${data}    
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/settings/nonBusinessDays/holiday/availability   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Provider Waitlist Attachment
    [Arguments]      ${uuid}
    Check And Create YNW Session
    ${resp}=    GET On Session    ynw  /provider/waitlist/attachment/${uuid}      expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Get Provider Appointment Attachment
    [Arguments]      ${uuid}
    Check And Create YNW Session
    ${resp}=    GET On Session    ynw  /provider/appointment/attachment/${uuid}      expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Get Provider Consumer Orders
    [Arguments]      ${proconsid}
    Check And Create YNW Session
    ${resp}=    GET On Session    ynw  /provider/orders/customer/${proconsid}      expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Create Vacation 
@@ -6324,13 +6324,13 @@ Create Vacation
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/vacation/vacations  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Activate Vacation
     [Arguments]   ${status}   ${vacationId}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/vacation/mark/${status}/${vacationId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Vacation 
 	[Arguments]    ${id}  ${desc}  ${pid}  ${rectype}  ${repint}  ${startDate}  ${endDate}  ${noocc}  ${sTime}  ${eTime}  
@@ -6342,27 +6342,27 @@ Update Vacation
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/vacation/vacations  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 Get Vacation By Id
 	[Arguments]    ${vacationId}	
 	Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/vacation/vacations/${vacationId}   expected_status=any
-    [Return]  ${resp}  
+    RETURN  ${resp}  
 
 Get Vacation
 	[Arguments]    ${providerId}
 	Check And Create YNW Session
 	${resp}=  GET On Session  ynw  /provider/vacation/getvacation/${providerId}    expected_status=any
-	[Return]  ${resp}  
+	RETURN  ${resp}  
 
 
 Delete Vacation
     [Arguments]  ${vacationId}
     Check And Create YNW Session
     ${resp}=  DELETE On Session   ynw   /provider/vacation/vacations/${vacationId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Vacation Next Availability 
     [Arguments]  ${rectype}  ${repint}  ${startDate}  ${endDate}  ${noocc}  ${sTime}  ${eTime}  ${rectype1}  ${repint1}  ${startDate1}  ${endDate1}  ${noocc1}  ${sTime1}  ${eTime1}  
@@ -6380,7 +6380,7 @@ Get Vacation Next Availability
     ${data}=  json.dumps  ${data}    
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/vacation/availability   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 Create Provider Coupon 
@@ -6398,7 +6398,7 @@ Create Provider Coupon
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/bill/coupons   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Provider Coupon 
@@ -6416,7 +6416,7 @@ Update Provider Coupon
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bill/coupons   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 Publish Provider Coupon
@@ -6426,7 +6426,7 @@ Publish Provider Coupon
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  /provider/bill/coupons/${coupon_id}/publish  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 Add Multiple Labels for Order
@@ -6440,7 +6440,7 @@ Add Multiple Labels for Order
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/orders/labelsBatch  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Multiple Labels from Order
     [Arguments]  ${labelname_list}  @{OrderId}
@@ -6453,77 +6453,77 @@ Remove Multiple Labels from Order
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /provider/orders/masslabel   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get waitlist Service By Location   
     [Arguments]  ${locationId}   
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/services/${locationId}  expected_status=any     
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 Get Appoinment Service By Location   
     [Arguments]  ${locationId}   
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/appointment/service/${locationId}  expected_status=any     
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 Get Questionnaire List By Provider      
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/questionnaire  expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Provider Questionnaire By Id    
     [Arguments]  ${qnrid}   
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/questionnaire/${qnrid}  expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Questionnaire for Consumer     
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/questionnaire/consumer  expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Consumer Questionnaire By Channel and ServiceID    
     [Arguments]  ${serviceId}  ${channel}   ${consumerid}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/questionnaire/service/${serviceId}/${channel}/consumer/${consumerid}  expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Provider Change Questionnaire Status    
     [Arguments]  ${qnrid}   ${status}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/questionnaire/change/${status}/${qnrid}  expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Run JCash Expiry Agent
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/credit/jcash/removeExpired     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get LocByPincode
     [Arguments]  ${pincode} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/account/settings/locByPincode/${pincode}  expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get LocationsByPincode
     [Arguments]  ${pincode}  
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/account/settings/locations/${pincode}   expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Is Available Queue Now ByProviderId
     [Arguments]  ${uid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/waitlist/queues/isAvailableNow/today/${uid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Assign provider Waitlist
     [Arguments]    ${uid}  ${providerid}  
@@ -6532,7 +6532,7 @@ Assign provider Waitlist
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/waitlist/update  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Assign provider Appointment 
     [Arguments]    ${uid}  ${providerid}  
@@ -6541,7 +6541,7 @@ Assign provider Appointment
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/appointment/update  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Un Assign provider waitlist
     [Arguments]    ${uid}  ${providerid}  
@@ -6550,7 +6550,7 @@ Un Assign provider waitlist
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/waitlist/unassign  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Make Available
@@ -6561,13 +6561,13 @@ Make Available
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/waitlist/queues/available  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Terminate Availability Queue
     [Arguments]  ${queueId}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/queues//instant/terminate/${queueId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Un Assign provider Appointment 
@@ -6577,14 +6577,14 @@ Un Assign provider Appointment
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/appointment/unassign  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Delete Gallery Image
     [Arguments]  ${name}
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /provider/gallery/${name}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Sample Donation
@@ -6602,7 +6602,7 @@ Create Sample Donation
     ${resp}=  Create Donation Service  ${Service_name}   ${description}   ${0}   ${btype}    ${bool[1]}    ${notifytype[2]}  ${EMPTY}  ${bool[0]}   ${bool[0]}  ${service_type[0]}  ${min_don_amt}  ${max_don_amt}  ${multiples[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
-    [Return]  ${resp.json()}
+    RETURN  ${resp.json()}
 
 
 Create Sample User
@@ -6643,7 +6643,7 @@ Create Sample User
 
     ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME_U1}  ${dep_id}  ${sub_domain_id}  ${admin}  ${countryCodes[1]}  ${whpnum}  ${countryCodes[1]}  ${tlgnum}  
     Should Be Equal As Strings  ${resp.status_code}  200
-    [Return]  ${resp.json()}
+    RETURN  ${resp.json()}
 
 
 Provider Validate Questionnaire
@@ -6652,7 +6652,7 @@ Provider Validate Questionnaire
     Log  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/questionnaire/validate  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Provider Change Answer Status for Waitlist
@@ -6661,7 +6661,7 @@ Provider Change Answer Status for Waitlist
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/waitlist/questionnaire/upload/status/${wlId}  data=${data}  expected_status=any
-    [Return]  ${resp}    
+    RETURN  ${resp}    
 
 
 Provider Change Answer Status for Appointment
@@ -6670,7 +6670,7 @@ Provider Change Answer Status for Appointment
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/appointment/questionnaire/upload/status/${apptId}  data=${data}  expected_status=any
-    [Return]  ${resp}  
+    RETURN  ${resp}  
 
 Assign Team To Checkin
     [Arguments]  ${waitlist_id}  ${team_id}  
@@ -6678,7 +6678,7 @@ Assign Team To Checkin
     ${data}=  Create Dictionary  ynwUuid=${waitlist_id}  teamId=${team_id} 
     ${data}=  json.dumps  ${data}
     ${resp}=  PUT On Session  ynw  /provider/waitlist/assignTeam   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Assign Team To Appointment
@@ -6687,7 +6687,7 @@ Assign Team To Appointment
     ${data}=  Create Dictionary  uid=${appt_id}  teamId=${team_id} 
     ${data}=  json.dumps  ${data}
     ${resp}=  PUT On Session  ynw  /provider/appointment/assignTeam   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Provider Revalidate Questionnaire
@@ -6695,37 +6695,37 @@ Provider Revalidate Questionnaire
     Log  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/questionnaire/resubmit/validate  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Questionnaire By uuid For Waitlist
     [Arguments]  ${uuid} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/waitlist/questionnaire/${uuid}  expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Provider Change Questionnaire release Status For waitlist
     [Arguments]  ${releaseStatus}  ${uuid}  ${id}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/waitlist/questionnaire/change/${releaseStatus}/${uuid}/${id}   expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Provider Change Questionnaire release Status For Appmt
     [Arguments]  ${releaseStatus}  ${uuid}  ${id}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/appointment/questionnaire/change/${releaseStatus}/${uuid}/${id}   expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Questionnaire By uuid For Appmt
     [Arguments]  ${uuid} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/appointment/questionnaire/${uuid}  expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Label Permissions
     [Arguments]  ${user_ids}  ${rols}  ${label_id}  @{data}    
     ${data}=  Create Dictionary  users=${user_ids}  roles=${rols}   labelId=${label_id}   teams=${data}                                                                                                                        
-    [Return]  ${data}
+    RETURN  ${data}
 
 
 Setting Label Permissions
@@ -6733,7 +6733,7 @@ Setting Label Permissions
     Log  ${kwargs}
     ${data1}=  Create Dictionary  permissions=${kwargs}
     ${data}=  Create Dictionary  labelPermission=${data1}
-    [Return]  ${data}
+    RETURN  ${data}
 
 
 LabelPrmissions_UserAccessScope_Json
@@ -6741,13 +6741,13 @@ LabelPrmissions_UserAccessScope_Json
     ${data}=  Create Dictionary
     Set to Dictionary      ${data}    labelPermission=${label_permissions['labelPermission']}
     Set to Dictionary      ${data}    userAccessScope=${userscope_data['userAccessScope']}
-    [Return]  ${data}
+    RETURN  ${data}
 
 
 User Roles
     [Arguments]  ${roleId}  ${displayName}   @{capabilities}    
     ${data}=  Create Dictionary  users=${user_ids}  roles=${rols}   labelId=${label_id}   teams=${data}                                                                                                                        
-    [Return]  ${data}
+    RETURN  ${data}
 
 
 Setting User Roles
@@ -6755,21 +6755,21 @@ Setting User Roles
     Log  ${kwargs}
     ${data1}=  Create Dictionary  roles=${kwargs}
     ${data}=  Create Dictionary  userRoles=${data1}
-    [Return]  ${data}
+    RETURN  ${data}
 
 
 User Scopes
     [Arguments]  ${depts}  ${teams}  ${users}   ${unassigned}  ${internalStatuses}   ${businessLocations}  ${services}  ${pinCodes}   ${checkins}  ${orders}  ${appmnts}
     ${data}=  Create Dictionary  depts=${depts}  teams=${teams}   users=${users}   unassigned=${unassigned}  internalStatuses=${internalStatuses} 
     ...     businessLocations=${businessLocations}   services=${services}  pinCodes=${pinCodes}   checkins=${checkins}  orders=${orders}   appmnts=${appmnts}                                                                                                          
-    [Return]  ${data}
+    RETURN  ${data}
 
 
 Role Scopes
     [Arguments]  ${depts}  ${roles}  ${teams}  ${labels}  ${orders}  ${checkins}  ${appmnts}  ${unassigned}  ${internalStatuses}   ${businessLocations}  ${services}  ${pinCodes}   
     ${data}=  Create Dictionary  depts=${depts}  roles=${roles}  teams=${teams}   labels=${labels}   orders=${orders}   checkins=${checkins}     appmnts=${appmnts}  
     ...     pinCodes=${pinCodes}   services=${services}  unassigned=${unassigned}  internalStatuses=${internalStatuses}   businessLocations=${businessLocations}                                                                                                               
-    [Return]  ${data}
+    RETURN  ${data}
 
 
 Setting User Access Scopes
@@ -6780,7 +6780,7 @@ Setting User Access Scopes
     ${data1}=  Create List  ${data1}
     ${data}=  Create Dictionary  scopeTypes=${scopeTypes}   accesssScope=${data1}
     ${result}=  Create Dictionary  userAccessScope=${data}  
-    [Return]  ${result}
+    RETURN  ${result}
 
 Set Price Variation Per Schedule
     [Arguments]  ${schedule_id}  ${service_id}  ${price}
@@ -6790,20 +6790,20 @@ Set Price Variation Per Schedule
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/appointment/schedule/price   data=${data}  expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Price Variation Per Schedule
     [Arguments]  ${serviceId} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/appointment/schedule/${serviceId}/pricelist  expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Sample Donation For User
     [Arguments]  ${Service_name}   ${depid}   ${u_id}
     ${resp}=  Create Service For User   ${Service_name}  Description   2  ACTIVE  Waitlist  True  email  45  500  False  False   ${depid}   ${u_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    [Return]  ${resp.json()}
+    RETURN  ${resp.json()}
 
 Get Account Level Analytics
     [Arguments]   ${metricId}  ${dateFrom}  ${dateTo}  ${frequency}  &{kwargs}
@@ -6814,7 +6814,7 @@ Get Account Level Analytics
     END
     # ${resp}=    GET On Session    ynw   /provider/analytics/account  params=${kwargs}  expected_status=any
     ${resp}=    GET On Session    ynw   /provider/analytics/account  params=${pro_params}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Account Level Analytics Acc To config
     [Arguments]     ${dateFrom}    &{kwargs}
@@ -6826,19 +6826,19 @@ Get Account Level Analytics Acc To config
     Log  ${data}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/analytics  params=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get UserLevel Analytics
     [Arguments]   &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/analytics/user  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Flush Analytics Data to DB
     [Arguments]
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/analytics/db/flush  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 User Take Virtual Service Appointment For Consumer
@@ -6853,7 +6853,7 @@ User Take Virtual Service Appointment For Consumer
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Provider Add To WL With Virtual Service For User
     [Arguments]   ${userid}  ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}  ${waitlistMode}   ${virtualService}  @{fids}
@@ -6872,7 +6872,7 @@ Provider Add To WL With Virtual Service For User
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  provider/waitlist  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create virtual Service with dept
     [Arguments]  ${name}  ${desc}  ${durtn}  ${status}  ${bType}  ${notfcn}  ${notiTp}   ${minPrePaymentAmount}   ${totalAmount}  ${isPrePayment}  ${taxable}   ${virtualServiceType}  ${virtualCallingModes}  ${depid}
@@ -6880,7 +6880,7 @@ Create virtual Service with dept
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session  
     ${resp}=  POST On Session  ynw  /provider/services  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Bank Details
     [Arguments]   ${bankName}   ${bankAccountNumber}   ${ifscCode}   ${nameOnPanCard}   ${accountHolderName}  ${branchCity}
@@ -6896,20 +6896,20 @@ Create Bank Details
     ${data}=   json.dumps   ${data}
     Check And Create YNW Session
     ${resp}=   POST On Session  ynw  provider/payment/settings/bankInfo     data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Bank Details
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/payment/settings/bankInfo   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 Get Bank Details By Id
     [Arguments]  ${bankid} 
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/payment/settings/bankInfo/${bankid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 Update Bank Details
@@ -6921,7 +6921,7 @@ Update Bank Details
     ${data}=   json.dumps   ${data}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  provider/payment/settings/bankInfo/${bankid}     data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Destination Bank
@@ -6930,7 +6930,7 @@ Update Destination Bank
     ${data}=   json.dumps   ${data}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  provider/account/settings/updateDestBank     data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Payment Profile  
@@ -6939,14 +6939,14 @@ Payment Profile
     ${data}=   Create Dictionary    id=${id}  displayName=${displayName}  desc=${desc}  type=${type}   txnTypes=${txnTypes}  destBank=${destBank}
     ...    default=${default}   paymode=${paymode}  indiaPay=${indiaPay}  indianPaymodes=${indianPaymodes}  internationalPay=${internationalPay}
     ...    internationalPaymodes=${internationalPaymodes}  splitPayment=${splitPayment}  destBanks=${destBanks}  fromBank=${fromBank}    
-    [Return]  ${data}
+    RETURN  ${data}
 
 
 Setting Payment Profile
     [Arguments]  @{kwargs}
     Log  ${kwargs}
     ${data}=  Create Dictionary  profiles=${kwargs}
-    [Return]  ${data}
+    RETURN  ${data}
 
 
 Payment Profile Json
@@ -6954,20 +6954,20 @@ Payment Profile Json
     ${data}=  Create Dictionary   
     Set to Dictionary      ${data}    paymentProfiles=${paymentProfiles}
     ${data}=   json.dumps   ${data}
-    [Return]  ${data}
+    RETURN  ${data}
 
 
 Get payment profiles
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/payment/paymentProfiles    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get payment profile By Id
     [Arguments]   ${bankid}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/payment/paymentProfiles/${bankid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Assign Profile To Service
@@ -6975,14 +6975,14 @@ Assign Profile To Service
    ${data}=   json.dumps   ${service_ids}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw   /provider/services/assignPayProfile/${profileId}   data=${data}   expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Enable Disable Online Payment
    [Arguments]  ${status}  
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  provider/payment/${status}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Create Sample Payment Profile
@@ -7030,33 +7030,33 @@ Create Sample Payment Profile
     
     ${combined_json}=  Payment Profile Json  ${profiles1}   
    
-    [Return]   ${GST_num1}   ${bank_id1}   ${combined_json}
+    RETURN   ${GST_num1}   ${bank_id1}   ${combined_json}
 
 
 Get Filter Comm
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/communications/filterComm     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get NextAvailableSchedule appt Provider
     [Arguments]      ${pid}    ${lid}   ${prov_id}            
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/schedule/nextAvailableSchedule/${pid}-${lid}-${prov_id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
       
 Get Questionnaire By uuid For Order
     [Arguments]  ${uuid} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/orders/questionnaire/${uuid}  expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Provider Change Questionnaire release Status For Order
     [Arguments]  ${releaseStatus}  ${uuid}  ${id}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/orders/questionnaire/change/${releaseStatus}/${uuid}/${id}   expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Provider Change Answer Status for order
     [Arguments]  ${uuid}   @{filedata}
@@ -7064,19 +7064,19 @@ Provider Change Answer Status for order
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/orders/questionnaire/upload/status/${uuid}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Consumer Questionnaire By Channel and OrderID    
     [Arguments]  ${catalogId}  ${channel}   ${consumerid}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/questionnaire/order/${catalogId}/${channel}/consumer/${consumerid}  expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Appointment Details with apptid  
     [Arguments]   ${apptid}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/appointment/appointmentDetails/${apptid}  expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -7129,8 +7129,8 @@ Multiloc and Billable highest license Providers
         Run Keyword If     '${check}' == 'True' and '${check1}' == '${pkg_id[0]}'  Append To List   ${provider_list}  ${PUSERNAME${a}}
         # Run Keyword If    '${status}' == 'PASS' and '${check}' == 'True'   Append To List  ${multiloc_billable_providers}  ${PUSERNAME${a}}
     END
-    # [Return]  ${provider_list}  ${multiloc_providers}  ${multiloc_billable_providers}
-    [Return]  ${provider_list}  ${multiloc_providers}
+    # RETURN  ${provider_list}  ${multiloc_providers}  ${multiloc_billable_providers}
+    RETURN  ${provider_list}  ${multiloc_providers}
 
 Create Sample Catalog
     [Arguments]    ${catalogName}  ${timezone}  @{vargs} 
@@ -7180,14 +7180,14 @@ Create Sample Catalog
     ${resp}=  Create Catalog For ShoppingCart   ${catalogName}  ${catalogDesc}   ${catalogSchedule}   ${orderType}   ${paymentType}  ${orderStatuses}   ${catalogItem}   ${minNumberItem}   ${maxNumberItem}    ${cancelationPolicy}   catalogStatus=${catStatus}   pickUp=${pickUp}   homeDelivery=${homeDelivery}   showPrice=${boolean[1]}   advanceAmount=${advanceAmount}   showContactInfo=${boolean[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    [Return]  ${resp.json()}
+    RETURN  ${resp.json()}
 
 
 Get Service Options By Serviceid and Channel
     [Arguments]     ${serviceid}   ${channel}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  url=/provider/questionnaire/serviceoption/${serviceId}/${channel}  expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 
 Add Delay on Multiple Appointments
@@ -7204,32 +7204,32 @@ Add Delay on Multiple Appointments
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/appointment/addDelayOnMultipleAppointment   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Service Options for Donation By Serviceid
     [Arguments]     ${serviceid}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  url=/provider/questionnaire/serviceoptions/donation/${serviceId}  expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 Provider Upload Status for Appnt
     [Arguments]  ${apptId}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/appointment/serviceoption/upload/status/${apptId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Service Options For Order By Catalogueid and Channel
     [Arguments]     ${catalogueid}   ${channel}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  url=/provider/questionnaire/serviceoption/order/${catalogueId}/${channel}  expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 
 Get Report Status By Token Id
     [Arguments]  ${reportTokenId}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/report/status/${reportTokenId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Report By Status
     [Arguments]  @{kwargs}
@@ -7237,7 +7237,7 @@ Get Report By Status
     ${len}=   Get Length  ${kwargs}
     ${data}=  Catenate  SEPARATOR=,  @{kwargs}
     ${resp}=    GET On Session     ynw   /provider/report/status/cache/${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # ..............CRM Keywords................
 
@@ -7254,7 +7254,7 @@ Create Task
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/task/  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Update Task
@@ -7269,7 +7269,7 @@ Update Task
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/task/${task_id}  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Create Lead
@@ -7286,76 +7286,76 @@ Create Lead
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/lead  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Lead By Id
     [Arguments]   ${en_uid}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/lead/${en_uid}  expected_status=any
-    [Return]  ${resp}  
+    RETURN  ${resp}  
 
 
 Get Leads
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/lead  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Enable Disable CRM
    [Arguments]  ${status}  
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  provider/account/settings/crm/${status}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Get Lead Category Type
    Check And Create YNW Session
    ${resp}=  GET On Session  ynw  provider/lead/category  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Get Task Status
    Check And Create YNW Session
    ${resp}=  GET On Session  ynw  provider/task/status  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Get Task Priority
    Check And Create YNW Session
    ${resp}=  GET On Session  ynw  provider/task/priority  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Get Task Category Type
    Check And Create YNW Session
    ${resp}=  GET On Session  ynw  provider/task/category  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Get Task Type
    Check And Create YNW Session
    ${resp}=  GET On Session  ynw  provider/task/type  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Get Consumer Tasks
    Check And Create YNW Session
    ${resp}=  GET On Session  ynw  provider/task/consumer  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Get Provider Tasks
     [Arguments]  &{filters}
    Check And Create YNW Session
    ${resp}=  GET On Session  ynw  provider/task/provider  params=${filters}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Get Task By Id
    [Arguments]  ${task_uid}
    Check And Create YNW Session
    ${resp}=  GET On Session  ynw  provider/task/${task_uid}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Add Notes To Task
    [Arguments]  ${task_id}   ${notes}
@@ -7363,7 +7363,7 @@ Add Notes To Task
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  provider/task/${task_id}/notes   data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Create Task Appt Details
    [Arguments]  ${task_uid}
@@ -7371,27 +7371,27 @@ Create Task Appt Details
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  provider/task/appointment  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Change Task Status
    [Arguments]    ${task_uid}     ${statusId}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw    provider/task/${taskUid}/status/${statusId}     expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Change Task Priority
    [Arguments]     ${task_uid}      ${priorityId}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw    /provider/task/${taskUid}/priority/${priorityId}     expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Change Assignee
    [Arguments]  ${task_uid}   ${u_id}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  provider/task/${task_uid}/assignee/${u_id}   expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Add Task Progress For User
    [Arguments]    ${task_uid}    ${progressValue}    ${note}
@@ -7399,7 +7399,7 @@ Add Task Progress For User
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  PUT On Session    ynw    provider/task/${task_uid}/progress/${progressValue}  data=${data}     expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Change User Task Status
     [Arguments]     ${task_uid}     ${actualResult}     ${actualPotential}      ${closingNote}
@@ -7407,7 +7407,7 @@ Change User Task Status
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session  YNW  provider/task/${task_uid}/status/closed   data=${data}   expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 Change User Task Closing Details
     [Arguments]     ${task_uid}     ${actualResult}     ${actualPotential}      ${closingNote}
@@ -7415,33 +7415,33 @@ Change User Task Closing Details
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session  YNW  provider/task/${task_uid}/closingdetails  data=${data}   expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 Change User Task Status Closed
     [Arguments]     ${task_uid}
     Check And Create YNW Session
     ${resp}=    PUT On Session  YNW  provider/task/${task_uid}/status/closed   expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 Get Task Audit Logs
     [Arguments]     ${task_uid}   &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    provider/task/activity/${task_uid}    params=${kwargs}  expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 
 Enable Disable Task
    [Arguments]  ${status}  
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  provider/account/settings/task/${status}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Enable Disable Lead
    [Arguments]  ${status}  
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  provider/account/settings/lead/${status}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Create SubTask
    [Arguments]  ${task_uid}  ${title}  ${desc}  ${user_type}   ${cat_type}  ${task_type}  ${locationId}  &{kwargs}
@@ -7455,54 +7455,54 @@ Create SubTask
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/task/  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Get Task Progress
     [Arguments]     ${task_id} 
     Check And Create YNW Session
     ${resp}=  GET On Session   ynw   /provider/task/${task_id}/progresslog   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Remove Task Assignee
    [Arguments]  ${task_uid}  
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  provider/task/${task_uid}/assignee/remove   expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Remove Task Manager
    [Arguments]  ${task_uid}  
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  provider/task/${task_uid}/manager/remove   expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Get Lead Type
    Check And Create YNW Session
    ${resp}=  GET On Session  ynw  provider/lead/type  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Get Lead Status
    Check And Create YNW Session
    ${resp}=  GET On Session  ynw  provider/lead/status  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Get Lead Priority
    Check And Create YNW Session
    ${resp}=  GET On Session  ynw  provider/lead/priority  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Get Leads With Filter
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/lead  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Lead Count
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/lead/count  params=${kwargs}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Task Master
 
@@ -7517,13 +7517,13 @@ Create Task Master
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw    /provider/task/master    data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Get Task Master By Id
     [Arguments]   ${taskMasterId} 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw    /provider/task/master/${taskMasterId}      expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add Lead Notes
    [Arguments]    ${lead_uid}    ${note}
@@ -7531,61 +7531,61 @@ Add Lead Notes
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw    provider/lead/${lead_uid}/note    data=${data}   expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
    
 Get Task Master With Filter
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/task/master   params=${kwargs}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Lead Assignee
    [Arguments]    ${lead_uid}     ${u_id}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw    provider/lead/${lead_uid}/assignee/${u_id}     expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Change Lead Manager
    [Arguments]    ${lead_uid}     ${u_id}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw    provider/lead/${lead_uid}/manager/${u_id}     expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Change Lead Priority
    [Arguments]    ${lead_uid}     ${priority_id}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw    provider/lead/${lead_uid}/priority/${priority_id}     expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Change Lead Status
    [Arguments]    ${lead_uid}     ${statusId}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw    provider/lead/${lead_uid}/status/${statusId}     expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Remove Lead Manager
     [Arguments]    ${leadUid}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw    provider/lead/${leadUid}/manager/remove     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Lead Assignee
     [Arguments]    ${leadUid}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw    provider/lead/${leadUid}/assignee/remove     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Lead Notes
    [Arguments]    ${lead_uid}   
    Check And Create YNW Session
    ${resp}=  GET On Session  ynw    provider/lead/${lead_uid}/notes    expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Transfer Lead Location
    [Arguments]    ${lead_uid}     ${loc_id}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw    provider/lead/${lead_uid}/location/${loc_id}     expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Update Lead
     [Arguments]  ${id}  ${title}  ${desc}  ${status}   ${priority}  ${location_id}  ${customerid}  ${assignee}   &{kwargs}
@@ -7604,13 +7604,13 @@ Update Lead
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/lead/${id}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Task Manager
    [Arguments]     ${task_uid}      ${managerId}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw    /provider/task/${taskUid}/manager/${managerId}     expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Create Task With Multiple Assignee
    [Arguments]  ${title}  ${desc}  ${user_type}   ${cat_type}  ${task_type}  ${locationId}   &{kwargs}
@@ -7624,31 +7624,31 @@ Create Task With Multiple Assignee
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=   POST On Session   ynw   /provider/task/multipleAssignee   data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Add Lead Token
     [Arguments]    ${lead_uid}     ${waitlistUid}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw    provider/lead/${lead_uid}/waitlist/${waitlistUid}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Lead Tokens
     [Arguments]    ${leadUid}     
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw     provider/lead/${leadUid}/waitlist      expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Lead Activity Log
     [Arguments]    ${leadUid}     
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw     /provider/lead/${leadUid}/getactivity          expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Questionnaire By uuid For Lead
     [Arguments]  ${uuid} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/lead/questionnaire/${uuid}  expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Provider Change Answer Status for Lead
     [Arguments]  ${uuid}   @{filedata}
@@ -7656,13 +7656,13 @@ Provider Change Answer Status for Lead
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/lead/questionnaire/upload/status/${uuid}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Provider Change Questionnaire release Status For Lead
     [Arguments]  ${releaseStatus}  ${uuid}  ${id}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/lead/questionnaire/change/${releaseStatus}/${uuid}/${id}   expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -7675,13 +7675,13 @@ Update Order Notification
     ${data}=   json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session   ynw    /provider/orders/questionnaire/notification/${uuid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Single Token Status
     [Arguments]     ${task_id}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/report/status/cache/token/${task_id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # ..............JALDEE DRIVE................
 Get List Of Shared 0wners 
@@ -7690,7 +7690,7 @@ Get List Of Shared 0wners
     Log  ${providerId}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    provider/fileShare/${ownerType}/${providerId}    expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -7698,7 +7698,7 @@ Get by Criteria
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/fileShare     params=${param}  expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
       
 
@@ -7706,25 +7706,25 @@ Delete Jaldeedrive File
     [Arguments]    ${fileId}
     Check And Create YNW Session
     ${resp}=    DELETE On Session  ynw   /provider/fileShare/${fileId}  expected_status=any  
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Count of Files in a filter 
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/fileShare/count     params=${param}   expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Count File In a filter By provider 
     [Arguments]   ${providerId}      &{param}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/fileShare/count/${providerId}      params=${param}     expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get total Storage usage
     [Arguments]  
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/fileShare/storage        expected_status=any     
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Remove Share files 
@@ -7733,13 +7733,13 @@ Remove Share files
     ${data}=  json.dumps  ${data}
 	Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /provider/fileShare/sharefiles/${fileId}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Encoded Short Url
     [Arguments]    ${fileid}   ${sharetype}   ${sharedtoId}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   provider/fileShare/shortUrl/encoded/${fileid}-${sharetype}-${sharedtoId}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -7747,7 +7747,7 @@ Get a File Using Short Url
     [Arguments]   ${driveid}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   provider/fileShare/shortUrl/${driveid}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Share files 
     [Arguments]   ${sharedto}     ${attachments}
@@ -7758,7 +7758,7 @@ Share files
     ${data}=  json.dumps  ${data2}
     Check And Create YNW Session
     ${resp}=  POST On Session   ynw   /provider/fileShare/sharefiles   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Upload To Private Folder
 
@@ -7766,21 +7766,21 @@ Upload To Private Folder
   #  ${data}=  json.dumps   ${list}
     Check And Create YNW Session
     ${resp}=  POST On Session   ynw   /provider/fileShare/upload/${Folder}/${providerid}     json=${list}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Upload Status
 
     [Arguments]    ${status}    ${fileid} 
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw   /provider/fileShare/upload/${status}/${fileid}        expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
    
 
 Get Provider service options for an item
     [Arguments]  ${item}     ${channel}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   url=/provider/questionnaire/serviceoption/order/item/${item}/${channel}   expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 Change Provider Status Of Service Option Item
     [Arguments]  ${uuid}  @{filedata}
@@ -7788,7 +7788,7 @@ Change Provider Status Of Service Option Item
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  url=/provider/orders/item/serviceoption/upload/status/${uuid}   data=${data}   expected_status=any
-    [Return]    ${resp} 
+    RETURN    ${resp} 
 
 Change Provider Status Of Service Option Waitlist
     [Arguments]  ${uuid}  @{filedata}
@@ -7796,7 +7796,7 @@ Change Provider Status Of Service Option Waitlist
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  url=/provider/waitlist/serviceoption/upload/status/${uuid}   data=${data}   expected_status=any
-    [Return]    ${resp} 
+    RETURN    ${resp} 
 
 Change Provider Status Of Service Option Appointment
     [Arguments]  ${uuid}  @{filedata}
@@ -7804,7 +7804,7 @@ Change Provider Status Of Service Option Appointment
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  url=/provider/appointment/serviceoption/upload/status/${uuid}   data=${data}   expected_status=any
-    [Return]    ${resp} 
+    RETURN    ${resp} 
 
 Change Provider Status Of Service Option Order
     [Arguments]  ${uuid}  @{filedata}
@@ -7812,7 +7812,7 @@ Change Provider Status Of Service Option Order
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  url=/provider/orders/serviceoption/upload/status/${uuid}   data=${data}   expected_status=any
-    [Return]    ${resp} 
+    RETURN    ${resp} 
 
 
 # ..............ENQUIRY..............................
@@ -7820,32 +7820,32 @@ Change Provider Status Of Service Option Order
 Get Provider Enquiry Category
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   url=/provider/enquire/category   expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 
 Get Provider Enquiry Type
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   url=/provider/enquire/type   expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 
 Get Provider Enquiry Status
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   url=/provider/enquire/status   expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 
 Get Provider Enquiry Priority
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   url=/provider/enquire/priority   expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 
 Get Enquiry Template
     [Arguments]  &{filters}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   url=/provider/enquire/master   params=${filters}  expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 
 Enquiry
@@ -7858,7 +7858,7 @@ Enquiry
     Set To Dictionary  ${data}  &{kwargs}
     Log  ${data}
 
-    [Return]  ${data}
+    RETURN  ${data}
 
 
 Create Enquiry
@@ -7874,28 +7874,28 @@ Create Enquiry
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   url=/provider/enquire  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Enquiry with filter
     [Arguments]  &{filters}
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  url=/provider/enquire  params=${filters}  expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 
 Get Enquiry count with filter
     [Arguments]  &{filters}
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  url=/provider/enquire/count  params=${filters}  expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 
 Get Enquiry by Uuid
     [Arguments]  ${enquireUid}
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  url=/provider/enquire/${enquireUid}  expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 
 Update Enquiry
@@ -7911,35 +7911,35 @@ Update Enquiry
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   url=provider/enquire/${enquireUid}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Change Enquiry Status
     [Arguments]  ${enquireUid}  ${statusId}
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  url=/provider/enquire/${enquireUid}/status/${statusId}  expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 
 Get Service Options By Catalogueid and Channel
     [Arguments]     ${catalogueid}   ${channel}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  url=/provider/questionnaire/serviceoption/order/catalog/item/${catalogueId}/${channel}  expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 
 Get Lead Templates
     [Arguments]    &{kwargs}     
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw     /provider/lead/master    params=${kwargs}      expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Change Task Status to Complete
     [Arguments]    ${task_uid}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw    /provider/task/${taskUid}/status/closed     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create KYC
@@ -7960,13 +7960,13 @@ Create KYC
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   url=/provider/KYC/create  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get KYC
     [Arguments]    ${uuid}   
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   url=/provider/KYC/${uuid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update KYC 
@@ -7987,7 +7987,7 @@ Update KYC
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/KYC/update/${originUid}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change KYC Status
     [Arguments]      ${originUid}    ${statusId}        &{kwargs}
@@ -7997,7 +7997,7 @@ Change KYC Status
     ${result}=    Set Variable    ${data.content}    
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/KYC/proceed/status/${statusId}  data=${result}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Process CRIF Inquiry
@@ -8006,27 +8006,27 @@ Process CRIF Inquiry
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=    POST On Session    ynw  /provider/crif/processinquiry      data=${data}     expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get CRIF Inquiry
     
     [Arguments]  ${leadUid} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/crif/inquiry/${leadUid}           expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get States
 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/crif/indianstates          expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Status change crif
 
     [Arguments]  ${leadUid} 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/lead/${leadUid}/status/creditscoregenerated           expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Process CRIF Inquiry with kyc
@@ -8035,14 +8035,14 @@ Process CRIF Inquiry with kyc
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=    POST On Session    ynw  /provider/crif/processinquiry      data=${data}     expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get CRIF Inquiry with kyc
     
     [Arguments]  ${leadUid}   ${kycId}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw     provider/crif/inquiry/${leadUid}/kyc/${kycId}       expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -8051,14 +8051,14 @@ Get Qnr for login status
     [Arguments]  ${leadUid}  
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw     /provider/lead/questionnaire/status/${leadUid}    expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Status Lead
 
     [Arguments]     ${leadstatus}   ${leadUid}  
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/lead/questionnaire/proceed/${leadstatus}/${leadUid}    expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Redirect lead 
 
@@ -8067,7 +8067,7 @@ Redirect lead
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=    PUT On Session    ynw     /provider/lead/${leadUid}/redirect/status/${statusId}    data=${data}    expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Rejected lead
 
@@ -8075,38 +8075,38 @@ Rejected lead
     ${data}=   Create Dictionary   note=${note}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/lead/${leaduid}/rejected     data=${data}    expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get JaldeeBank Statement By Provider
     [Arguments]   ${fromdate}  ${todate}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw   /provider/payment/jBankStatements/${fromdate}/${todate}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Task Status to Proceed
     [Arguments]    ${enquireUid}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw    /provider/enquire/${enquireUid}/status/done    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Task Status to Closed
     [Arguments]    ${enquireUid}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw    /provider/enquire/${enquireUid}/status/closed    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Task Status to Rejected
     [Arguments]    ${enquireUid}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw    /provider/enquire/${enquireUid}/status/rejected    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Task Status to Pending
     [Arguments]    ${enquireUid}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw    /provider/enquire/${enquireUid}/status/pending    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Order For Item
     [Arguments]    ${Consumer_id}  ${orderfor}  ${catalog_id}   ${homeDelivery}  ${homeDeliveryAddress}  ${stime}  ${etime}   ${orderDate}  ${phoneNumber}   ${email}  ${orderNote}  ${countryCode}  @{vargs}
@@ -8125,7 +8125,7 @@ Order For Item
     END
     ${order}=    Create Dictionary  homeDelivery=${homeDelivery}  homeDeliveryAddress=${homeDeliveryAddress}   catalog=${catalog}  orderFor=${orderfor}  consumer=${Cid}  timeSlot=${time}  orderItem=${orderitem}   orderNote=${orderNote}  orderDate=${orderDate}  phoneNumber=${phoneNumber}  email=${email}  countryCode=${countryCode}
     # ${order}=  json.dumps  ${order}
-    [Return]  ${order}
+    RETURN  ${order}
 
 Create Order With Service Options
     [Arguments]    ${cookie}  &{kwargs}
@@ -8137,18 +8137,18 @@ Create Order With Service Options
     ${order}=  Set Variable  ${kwargs['order']}
     # Log  ${order} 
     ${resp}=  OrderItemByProvider   ${Cookie}   ${order}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Release Appmt Qnr For Consumer
     [Arguments]    ${questId}  ${uuid}  ${releaseStatus}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw    /provider/appointment/questionnaire/${releaseStatus}/consumer/${questId}/${uuid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Enquiry Internal Status
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw   /provider/enquire/internalstatus    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update and Proceed Enquiry to Status
     [Arguments]    ${enquireUid}  ${statusId}  ${location_id}  ${customer_id}  &{kwargs}
@@ -8158,7 +8158,7 @@ Update and Proceed Enquiry to Status
     Log  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw    /provider/enquire/${enquireUid}/proceed/status/${statusId}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Reject Enquiry
     
@@ -8167,38 +8167,38 @@ Reject Enquiry
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=    PUT On Session    ynw  /provider/enquire/${enquireUid}/reject  data=${data}  expected_status=any
-    [Return]  ${resp}  
+    RETURN  ${resp}  
    
 
 AppmtEnableEditToConsumer
     [Arguments]    ${questId}  ${uuid}  ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw    /provider/appointment/questionnaire/edit/${status}/consumer/${questId}/${uuid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Release Order Qnr For Consumer
     [Arguments]    ${questId}  ${uuid}  ${releaseStatus}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw    /provider/orders/questionnaire/${releaseStatus}/consumer/${questId}/${uuid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 OrderEnableEditToConsumer
     [Arguments]    ${questId}  ${uuid}  ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw    /provider/orders/questionnaire/edit/${status}/consumer/${questId}/${uuid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Release Wl Qnr For Consumer
     [Arguments]    ${questId}  ${uuid}  ${releaseStatus}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw    /provider/waitlist/questionnaire/${releaseStatus}/consumer/${questId}/${uuid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 WlEnableEditToConsumer
     [Arguments]    ${questId}  ${uuid}  ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw    /provider/waitlist/questionnaire/edit/${status}/consumer/${questId}/${uuid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Order By Provider For AuthorDemy
@@ -8218,27 +8218,27 @@ Create Order By Provider For AuthorDemy
 
     ${order}=    Create Dictionary   catalog=${catalog}  orderFor=${orderfor}  consumer=${Cid}  orderItem=${orderitem}   orderNote=${orderNote}  orderDate=${orderDate}  phoneNumber=${phoneNumber}  email=${email}  countryCode=${countryCode}
     ${resp}=  OrderItemByProvider   ${Cookie}   ${order}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 # Get Account Settings from Cache
 #     [Arguments]    ${uid}  ${user_id}  ${json_names}
 #     Check And Create YNW Session
 #     ${resp}=  GET On Session  ynw  /provider/account/settings/config/${uid}/${user_id}/${json_names}   expected_status=any
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 
 Get Account Settings from Cache
     [Arguments]    ${uid}  ${json_names}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/account/settings/config/${uid}/${json_names}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Licensable Metrices
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/license/metric  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 Create Prescription Template
@@ -8256,25 +8256,25 @@ Create Prescription Template
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/mr/prescription/template  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Prescription Template
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/mr/prescription/template  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Prescription Template By Id 
     [Arguments]  ${id}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/mr/prescription/template/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Template
     [Arguments]    ${id}
     Check And Create YNW Session
     ${resp}=   DELETE On Session   ynw   /provider/mr/prescription/template/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Prescription Template
     [Arguments]      ${id}  ${templateName}  @{vargs}
@@ -8292,7 +8292,7 @@ Update Prescription Template
     Check And Create YNW Session
 
     ${resp}=  PUT On Session  ynw  /provider/mr/prescription/template  data=${prescriptions}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 #Loan Application
 
@@ -8300,43 +8300,43 @@ Get Loan Application Category
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/category  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Loan Application Type
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/type  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Loan Application Status
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/status  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Loan Application Sub-Status
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/substatus  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Loan Application Product
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loan/products  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Loan Application Scheme
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loan/schemes  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Loan Application SP Internal Status
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/sp/internalstatus  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Loan Application
 
@@ -8369,7 +8369,7 @@ Create Loan Application
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/loanapplication  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Loan Application
 
@@ -8398,7 +8398,7 @@ Update Loan Application
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/loanapplication/${loanApplicationRefNo}  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -8407,7 +8407,7 @@ Get Loan Application With Filter
     [Arguments]    &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Loan Application Count with filter
 
@@ -8415,7 +8415,7 @@ Get Loan Application Count with filter
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/count  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Loan Application by loanApplicationRefNo
 
@@ -8423,7 +8423,7 @@ Get Loan Application by loanApplicationRefNo
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/${loanApplicationRefNo}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Approval Loan Application
 
@@ -8431,7 +8431,7 @@ Approval Loan Application
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/approvalrequest    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Reject Loan Application
@@ -8443,7 +8443,7 @@ Reject Loan Application
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationRefNo}/reject  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Loan Application Status
 
@@ -8451,7 +8451,7 @@ Change Loan Application Status
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationRefNo}/status/${statusId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Loan Application Sub-Status
 
@@ -8459,7 +8459,7 @@ Change Loan Application Sub-Status
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationRefNo}/substatus/${substatusId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Loan Application Status with sp
    
@@ -8467,7 +8467,7 @@ Change Loan Application Status with sp
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationRefNo}/sp/publicnotes  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 #Partner
 
@@ -8498,19 +8498,19 @@ Create Partner
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/partner  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Partner Category
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/partner/category  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Partner Type
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/partner/type  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Draft a Partner
@@ -8539,7 +8539,7 @@ Draft a Partner
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/partner/draft   data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -8576,7 +8576,7 @@ Update Partner
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  provider/partner/${partnerUid}   data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Partner by UID
@@ -8584,7 +8584,7 @@ Get Partner by UID
     [Arguments]     ${partnerUid}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw    /provider/partner/${partnerUid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Partner-With Filter
@@ -8593,7 +8593,7 @@ Get Partner-With Filter
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/partner   params=${param}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Partner Count-With Filter 
@@ -8602,7 +8602,7 @@ Get Partner Count-With Filter
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/partner/count  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Approved Partner
 
@@ -8612,7 +8612,7 @@ Approved Partner
     ${data}=  json.dumps  ${note}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/partner/${partnerUid}/approved  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Suspended Partner
 
@@ -8622,7 +8622,7 @@ Suspended Partner
     ${data}=  json.dumps  ${note}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/partner/${partnerUid}/suspended  data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Reject Partner
 
@@ -8632,7 +8632,7 @@ Reject Partner
     ${data}=  json.dumps  ${note}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/partner/${partnerUid}/rejected  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Assignee
 
@@ -8640,7 +8640,7 @@ Remove Assignee
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   url=/provider/loanapplication/${loanApplicationUid}/assignee/remove  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Loan Assignee
 
@@ -8648,7 +8648,7 @@ Change Loan Assignee
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   url=/provider/loanapplication/${loanApplicationUid}/assignee/${userId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Loan Application Approval
 
@@ -8656,7 +8656,7 @@ Loan Application Approval
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   url=/provider/loanapplication/${loanApplicationUid}/approvalrequest  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -8670,7 +8670,7 @@ Create Partner User
     ${data}=  json.dumps  ${PartnerUser}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/partner/${partnerUid}/user    data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Partner User
 
@@ -8682,7 +8682,7 @@ Update Partner User
     ${data}=  json.dumps  ${PartnerUser}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/partner/${partnerUid}/user/${userId}    data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Partner User
 
@@ -8690,7 +8690,7 @@ Get Partner User
     
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/partner/${partnerUid}/users   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 #Otp For Phone Number
 Generate Loan Application Otp for Phone Number
@@ -8702,7 +8702,7 @@ Generate Loan Application Otp for Phone Number
     # ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /provider/loanapplication/generate/phone   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 #Verify Otp for phone
 Verify Phone Otp and Create Loan Application
@@ -8727,7 +8727,7 @@ Verify Phone Otp and Create Loan Application
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/loanapplication/verify/${otp}/phone  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Verify Phone and Create Loan Application with customer details
@@ -8761,7 +8761,7 @@ Verify Phone and Create Loan Application with customer details
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/loanapplication/verify/${otp}/phone  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 # Otp For Email
@@ -8774,7 +8774,7 @@ Generate Loan Application Otp for Email
     # ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /provider/loanapplication/generate/email  data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # Verify Otp for Email
 Verify Email Otp and Create Loan Application
@@ -8787,7 +8787,7 @@ Verify Email Otp and Create Loan Application
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  url=/provider/loanapplication/verify/${otp}/email  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Requst For Aadhar Validation
 
@@ -8807,7 +8807,7 @@ Requst For Aadhar Validation
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/loanapplication/update/UID  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Requst For Pan Validation
 
@@ -8827,7 +8827,7 @@ Requst For Pan Validation
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/loanapplication/update/Pan  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add loan Bank Details
 
@@ -8847,7 +8847,7 @@ Add loan Bank Details
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/loanapplication/bank  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update loan Bank Details
 
@@ -8867,7 +8867,7 @@ Update loan Bank Details
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/loanapplication/bank  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Verify loan Bank
 
@@ -8881,7 +8881,7 @@ Verify loan Bank
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/verify/bank  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Verify loan Details
 
@@ -8905,7 +8905,7 @@ Verify loan Details
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/loanapplication/request  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get loan Bank
 
@@ -8913,7 +8913,7 @@ Get loan Bank
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/bank/${id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get loan Bank Details
 
@@ -8921,7 +8921,7 @@ Get loan Bank Details
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/${loanApplicationUid}/bankdetails   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Otp for Consumer Acceptance Phone
 
@@ -8932,7 +8932,7 @@ Otp for Consumer Acceptance Phone
 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /provider/loanapplication/generate/acceptance   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Otp for Consumer Loan Acceptance Phone
 
@@ -8942,7 +8942,7 @@ Otp for Consumer Loan Acceptance Phone
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/loanapplication/verify/${uid}/acceptance/${otp}/phone  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Otp for Consumer Acceptance Email
 
@@ -8953,7 +8953,7 @@ Otp for Consumer Acceptance Email
     # ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /provider/loanapplication/generate/acceptance/email  data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Verify Otp for Consumer Acceptance Email
 
@@ -8963,7 +8963,7 @@ Verify Otp for Consumer Acceptance Email
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/loanapplication/verify/${uid}/acceptance/${otp}/email  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Refresh loan Bank Details Aadhaar
     
@@ -8971,7 +8971,7 @@ Refresh loan Bank Details Aadhaar
     
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/loanapplication/aadhar/status/${uid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Loan Application Action Required
     
@@ -8981,7 +8981,7 @@ Loan Application Action Required
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/loanapplication/${loanApplicationUid}/actionrequired/spinternalstatus/${statusId}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Loan Application Action Completed
 
@@ -8991,7 +8991,7 @@ Loan Application Action Completed
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/loanapplication/${loanApplicationUid}/actioncompleted  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update loan Application Kyc Details
     
@@ -9007,7 +9007,7 @@ Update loan Application Kyc Details
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/loanapplication/kyc/update  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Loan Application Manual Approval
 
@@ -9020,7 +9020,7 @@ Loan Application Manual Approval
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   url=/provider/loanapplication/${loanApplicationUid}/manualapproval    data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Loan Approval
 
@@ -9031,7 +9031,7 @@ Loan Approval
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/loanapplication/${loanApplicationUid}/approval  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Delete Loan Attachment
     [Arguments]    ${Uid}   ${customerPhone}    ${ownerid}        ${fileName}      ${fileSize}        ${caption}    ${fileType}    ${action}       ${type}   ${order}  &{kwargs}
@@ -9057,13 +9057,13 @@ Delete Loan Attachment
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/attachments  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get User Available
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/user/available   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Reminder
@@ -9076,7 +9076,7 @@ Create Reminder
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=  POST On Session  ynw  /provider/mr/reminder  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Reminder
@@ -9089,26 +9089,26 @@ Update Reminder
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=  PUT On Session  ynw  /provider/mr/reminder/${reminder_id}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Reminders
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/mr/reminder  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Reminders With Filter
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/mr/reminders  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Delete Reminder
    [Arguments]   ${reminder_id}
    Check And Create YNW Session
    ${resp}=    DELETE On Session    ynw  /provider/mr/reminder/${reminder_id}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 LoanApplication Remark
 
@@ -9119,7 +9119,7 @@ LoanApplication Remark
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/loanapplication/remark   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add General Notes
 
@@ -9130,7 +9130,7 @@ Add General Notes
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/loanapplication/${uid}/note   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 #   Appt Request
 
@@ -9150,21 +9150,21 @@ Provider Create Appt Service Request
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment/service/request  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Provider Get Appt Service Request
     [Arguments]    &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/appointment/service/request    params=${kwargs}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Provider Get Appt Service Request Count
     [Arguments]    &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/appointment/service/request/count   params=${kwargs}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Confirm Appt Service Request
@@ -9182,21 +9182,21 @@ Confirm Appt Service Request
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/appointment/service/request/changestatus/confirmed  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Reject Appt Service Request
     [Arguments]    ${appmntId}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/appointment/service/request/reject/${appmntId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Partner Approval Request
 
     [Arguments]    ${partnerUid}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/partner/${partnerUid}/approvalrequest   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Partner Approved
 
@@ -9207,7 +9207,7 @@ Partner Approved
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/partner/${partnerUid}/approved    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Scheme
 
@@ -9219,7 +9219,7 @@ Create Scheme
 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /provider/loan/scheme   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Scheme
 
@@ -9230,14 +9230,14 @@ Update Scheme
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/loan/scheme/${id}   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Loan Application By uid
 
     [Arguments]    ${loanApplicationUid}   
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/loanapplication/${loanApplicationUid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Sales Officer
@@ -9255,7 +9255,7 @@ Update Sales Officer
 
     Check And Create YNW Session 
     ${resp}=    PUT On Session  ynw  /provider/partner/${ptnruid}/updatesalesofficer    data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Credit Officer
 
@@ -9272,7 +9272,7 @@ Update Credit Officer
 
     Check And Create YNW Session 
     ${resp}=    PUT On Session  ynw  /provider/partner/${ptnruid}/updatecreditofficer    data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Activate Partner
 
@@ -9280,7 +9280,7 @@ Activate Partner
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/partner/${partnerUid}/active/${activeStatus}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 # ......RBAC......
@@ -9290,14 +9290,14 @@ Get Default Capabilities
     [Arguments]    ${feature}   
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/user/defaultCapabilities/${feature}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Default Roles With Capabilities
     [Arguments]    ${feature}   
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/user/defaultRolesCapabilities/${feature}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create User With Roles And Scope
@@ -9311,7 +9311,7 @@ Create User With Roles And Scope
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/user    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update User With Roles And Scope
     [Arguments]  ${id}  ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${user_type}  ${pincode}  ${countryCode}  ${mob_no}  ${dept_id}  ${sub_domain}  ${admin}  ${whatsApp_countrycode}  ${WhatsApp_num}  ${telegram_countrycode}  ${telegram_num}   ${userRoles}   &{kwargs}
@@ -9324,27 +9324,27 @@ Update User With Roles And Scope
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/user/${id}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Update Managers To user
     [Arguments]    ${user_id}   ${manager_ids}
     ${data}=  json.dumps  ${manager_ids}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/user/${user_id}/updateManager  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Manager List of User
     [Arguments]    ${user_id}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/user/${user_id}/getManager    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get User Scope By Id
     [Arguments]    ${user_id}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/user/${user_id}/roles    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Append User Scope
@@ -9353,7 +9353,7 @@ Append User Scope
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/user/${feature}/appendScope    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Replace User Scope
@@ -9362,14 +9362,14 @@ Replace User Scope
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/user/${feature}/replaceScope    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Team Scope By Id
     [Arguments]    ${teamId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/user/team/${teamId}/roles    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Append Team Scope
@@ -9378,7 +9378,7 @@ Append Team Scope
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/user/${feature}/team/appendScope    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Replace Team Scope
     [Arguments]  ${feature}  ${team_ids}  ${userRoles} 
@@ -9386,13 +9386,13 @@ Replace Team Scope
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/user/${feature}/team/replaceScope    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Disable RBAC
    [Arguments]  ${status}  
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  provider/account/settings/rbac/${status}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Create Role
     [Arguments]     ${roleName}    ${description}    ${featureName}    ${capabilityList}
@@ -9401,19 +9401,19 @@ Create Role
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  provider/accessscope/role    data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get roles
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/accessscope/roles  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get roles by id
     [Arguments]    ${id}
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/accessscope/role/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Role
     [Arguments]      ${id}       ${roleName}    ${description}    ${featureName}    ${capabilityList}
@@ -9422,32 +9422,32 @@ Update Role
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/accessscope/role/${id}    data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update role status
     [Arguments]        ${id}    ${status}   
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/accessscope/role/${id}/${status}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Restore roles
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/accessscope/roles/restoreDefaults    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Restore role by id
     [Arguments]        ${roleId}
     
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/accessscope/roles/restoreDefaults/${roleId}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Disable CDL RBAC
     [Arguments]  ${status}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  provider/account/settings/cdlrbac/${status}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 #    CDL Setings
@@ -9466,27 +9466,27 @@ Create and Update Account level cdl setting
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /provider/cdlsetting/account   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get account level cdl setting
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/cdlsetting/account   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get List of CDL Settings by filter
 
     [Arguments]    &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/cdlsetting  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Count of CDL Settings by filter
 
     [Arguments]    &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/cdlsetting/count  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create BranchMaster
 
@@ -9498,7 +9498,7 @@ Create BranchMaster
 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /provider/branchmaster   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update BranchMaster
 
@@ -9510,62 +9510,62 @@ Update BranchMaster
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/branchmaster/${branchId}   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get BranchMaster
 
     [Arguments]    &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/branchmaster  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get BranchMaster Count
 
     [Arguments]    &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/branchmaster/count  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Branch By Id
 
     [Arguments]    ${branchId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/branchmaster/${branchId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Branch Status
     
     [Arguments]    ${branchid}    ${activeStatus}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/branchmaster/${branchId}/status/${activeStatus}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Disable Branch
 
     [Arguments]    ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/account/settings/branchMaster/${status}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
         
 Enable Disable CDL
 
     [Arguments]    ${status}   
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/cdl/${status}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Draft LoanApplication
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/draft  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 sales officer verification
 
     [Arguments]    ${partnerUid}   ${required}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/partner/${partnerUid}/salesofficerverification/${required}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Partner Loan Application Action Required
@@ -9574,13 +9574,13 @@ Partner Loan Application Action Required
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/actionrequired/spinternalstatus/${spinternalstatus}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Loan Application ProductCategory
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanproduct/category  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Loan Application ProductSubCategory
 
@@ -9588,7 +9588,7 @@ Get Loan Application ProductSubCategory
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanproduct/category/${loanProductCategoryId}/subcategory  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Loan Application Operational Approval
@@ -9599,7 +9599,7 @@ Loan Application Operational Approval
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/operationalapproval  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Generate Otp for Guarantor Phone
 
@@ -9609,7 +9609,7 @@ Generate Otp for Guarantor Phone
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/loanapplication/generate/guarantor/phone  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Verify Otp for Guarantor Phone
 
@@ -9623,7 +9623,7 @@ Verify Otp for Guarantor Phone
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/loanapplication/verify/${otp}/guarantor/phone  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 salesofficer Approval
 
@@ -9638,7 +9638,7 @@ salesofficer Approval
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/loanapplication/${uid}/approval   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Partner Accepted
 
@@ -9652,7 +9652,7 @@ Partner Accepted
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/partner/acceptance  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Avaliable Tenures
@@ -9661,7 +9661,7 @@ Get Avaliable Tenures
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loan/scheme/${lid}/availabletenures  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Avaliable Scheme
 
@@ -9669,7 +9669,7 @@ Get Avaliable Scheme
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/${uid}/availableschemes  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Assigning Branches to Users
 
@@ -9680,7 +9680,7 @@ Assigning Branches to Users
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/user/updateBranchMaster   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Loan EMI Details
     
@@ -9688,13 +9688,13 @@ Get Loan EMI Details
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/${loanApplicationUid}/loanemi  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Address Relation Type
     
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/addressrelationtype  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Account Aggregation
     
@@ -9702,7 +9702,7 @@ Account Aggregation
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/loanapplication/accountaggregate/${loanApplicationUid}/${kycId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Account Aggregation
     
@@ -9710,13 +9710,13 @@ Get Account Aggregation
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/accountaggregatestatus/${loanApplicationUid}/${kycId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Generate CDL Dropdowns
     
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/loanapplication/csms/settings  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Cancel Loan Application
 
@@ -9724,7 +9724,7 @@ Cancel Loan Application
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/cancel    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Generate Credit Score-MAFIL Score
@@ -9735,7 +9735,7 @@ Generate Credit Score-MAFIL Score
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/csms/generatescore    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add General Notes/Remarks
     
@@ -9746,7 +9746,7 @@ Add General Notes/Remarks
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/note    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 # .....CDL Communication .......
@@ -9761,7 +9761,7 @@ Send Message
 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /${user}/communicate/communicationDetail   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Communication Between Two UserTypes
@@ -9770,7 +9770,7 @@ Get Communication Between Two UserTypes
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   ${user}/communicate/${userId1}/communicationDetail/${userId2}/${userType}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Full Communication Of User
@@ -9779,7 +9779,7 @@ Get Full Communication Of User
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   ${user}/communicate/${userId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Read Status
 
@@ -9791,7 +9791,7 @@ Change Read Status
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /${user}/communicate/communicationDetailToRead   data=${data}   params=${pro_params}  expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 # ...... Item Grouping......
@@ -9801,7 +9801,7 @@ Enable Disable Item Group
    [Arguments]   ${status}
    Check And Create YNW Session
    ${resp}=    PUT On Session    ynw  /provider/account/settings/itemGroup/${status}  expected_status=any 
-   [Return]  ${resp}  
+   RETURN  ${resp}  
 
 Create Item Group
 
@@ -9810,7 +9810,7 @@ Create Item Group
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/items/itemGroup   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Item Group
 
@@ -9819,20 +9819,20 @@ Update Item Group
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/items/itemGroup/${ItemGroupId}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Item Group
     
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/items/itemGroup   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Item Group By Id
     
     [Arguments]    ${ItemGroupId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/items/itemGroup/${ItemGroupId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Delete Item Group By Id
@@ -9840,7 +9840,7 @@ Delete Item Group By Id
     [Arguments]    ${ItemGroupId}
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw   /provider/items/itemGroup/${ItemGroupId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Delete Item Group Image 
@@ -9848,7 +9848,7 @@ Delete Item Group Image
     [Arguments]    ${ItemGroupId}  ${imgname}
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw   /provider/items/itemGroup/${ItemGroupId}/image/${imgname}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Add Items To Item Group
@@ -9857,7 +9857,7 @@ Add Items To Item Group
     ${Items}=  json.dumps  ${Items}
     Check And Create YNW Session 
     ${resp}=  PUT On Session  ynw  /provider/items/group/${ItemGroupId}  data=${Items}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Delete Items From Item Group
@@ -9866,7 +9866,7 @@ Delete Items From Item Group
     ${Items}=  json.dumps  ${Items}
 	Check And Create YNW Session
     ${resp}=   DELETE On Session  ynw  /provider/items/group/${ItemGroupId}  data=${Items}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Add Items To Multiple Item Group
@@ -9875,7 +9875,7 @@ Add Items To Multiple Item Group
     ${ItemGroups}=  json.dumps  ${ItemGroupIds}
     Check And Create YNW Session 
     ${resp}=  PUT On Session  ynw  /provider/items/group/item/${itemId}  data=${ItemGroups}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Delete Items From Multiple Item Group
@@ -9884,7 +9884,7 @@ Delete Items From Multiple Item Group
     ${ItemGroups}=  json.dumps  ${ItemGroupIds}
 	Check And Create YNW Session
     ${resp}=   DELETE On Session  ynw  /provider/items/group/item/${itemId}  data=${ItemGroups}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -9897,7 +9897,7 @@ Loan Application Branchapproval
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/branchapproval    data=${data}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -9914,7 +9914,7 @@ Add Business Logo
     ${data}=    json.dumps    ${AttachmentsUpload}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/upload/businessLogo  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Remove Business Logo
@@ -9928,14 +9928,14 @@ Remove Business Logo
     ${data}=    json.dumps    ${AttachmentsUpload}
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw   /provider/remove/businessLogo  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Business Logo
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/businessLogo  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Add Department Icon
@@ -9949,7 +9949,7 @@ Add Department Icon
     ${data}=    json.dumps    ${AttachmentsUpload}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/departments/upload/icon/${deptid}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Remove Department Icon
@@ -9963,7 +9963,7 @@ Remove Department Icon
     ${data}=    json.dumps    ${AttachmentsUpload}
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw   /provider/departments/remove/icon/${deptid}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -9973,7 +9973,7 @@ Get Department Icon
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   url=/provider/departments/${deptid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 #   MFA Login
@@ -9984,7 +9984,7 @@ Multi Factor Authentication
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/account/settings/mfa/${toggle}       expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Multi Factor Authentication ProviderLogin
@@ -9999,7 +9999,7 @@ Multi Factor Authentication ProviderLogin
     ${data}=  json.dumps  ${data}
     
     ${resp}=    POST On Session    ynw    /provider/login    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # ....Jaldee Video call...
 
@@ -10008,7 +10008,7 @@ Get Video Call Minutes
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/account/settings/videoCallMinutes  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create video Call Meeting Link
@@ -10017,7 +10017,7 @@ Create video Call Meeting Link
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/video/adhoc/start/consumer/${prov_cons_id}     expected_status=any
     Log  ${resp.content}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get video Link Status 
@@ -10026,7 +10026,7 @@ Get video Link Status
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/video/adhoc/${meeting_id}/link/status     expected_status=any
     Log  ${resp.content}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get video Status 
@@ -10035,7 +10035,7 @@ Get video Status
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/video/adhoc/${meeting_id}/status     expected_status=any
     Log  ${resp.content}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Virtual Calling Modes
 
@@ -10046,7 +10046,7 @@ Update Virtual Calling Modes
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/virtualCallingModes   data=${data}  expected_status=any
     Log  ${resp.content}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Provider Video Call ready
 
@@ -10057,7 +10057,7 @@ Provider Video Call ready
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/waitlist/videocall/ready   data=${data}  expected_status=any
     Log  ${resp.content}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 #.........REST API for Uploading file to temporary location............
@@ -10074,7 +10074,7 @@ upload file to temporary location
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/fileShare/upload   data=${data}  expected_status=any
     Log  ${resp.content}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 change status of the uploaded file
@@ -10084,7 +10084,7 @@ change status of the uploaded file
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  provider/fileShare/upload/${status}/${driveId}  expected_status=any
     Log  ${resp.content}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 # .....Jaldee Homeo....
@@ -10098,7 +10098,7 @@ Apply Labels To Service
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/services/applyLabel/${service_id}    data=${data}  expected_status=any
     Log  ${resp.content}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # .....Employee login....
 
@@ -10108,7 +10108,7 @@ EmployeeLogin
     ${log}=    json.dumps    ${log}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/login    data=${log}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -10118,7 +10118,7 @@ EmployeeLogin
 IVR_Config_Json
 
     [Arguments]    @{dict1}
-    [Return]  ${dict1}
+    RETURN  ${dict1}
 
 Create_IVR_Settings
 
@@ -10128,14 +10128,14 @@ Create_IVR_Settings
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    url=/provider/ivr/settings    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 enable and disable IVR
 
     [Arguments]    ${status}
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/account/settings/ivr/${status}    expected_status=any    headers=${headers}
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 Incall IVR
 
@@ -10144,7 +10144,7 @@ Incall IVR
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    url=/provider/ivr/incall?account=${account}    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 innode IVR 
 
@@ -10153,7 +10153,7 @@ innode IVR
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    url=/provider/ivr/innode?account=${account}    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Aftercall IVR
 
@@ -10162,33 +10162,33 @@ Aftercall IVR
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    url=/provider/ivr?account=${account}    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Ivr Details By Filter
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/ivr  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 create a call back
 
     [Arguments]    ${uid}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/ivr/callback/${uid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Ivr By Uid
 
     [Arguments]    ${uid}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/ivr/${uid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get IVR Count
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/ivr/count  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Assign IVR User
 
@@ -10197,14 +10197,14 @@ Assign IVR User
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/ivr/assign    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Ivr By reference id
 
     [Arguments]    ${Refr_id}
     Check And Create YNW Session
     ${resp}=    Get On Session    ynw   /provider/ivr/reference/${Refr_id}     expected_status=any
-    [Return]    ${resp}
+    RETURN    ${resp}
 
 Unassign IVR User
 
@@ -10213,20 +10213,20 @@ Unassign IVR User
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/ivr/unassign    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update User Availability
 
     [Arguments]    ${userId}    ${available}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/ivr/users/${userId}/${available}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get IVR Setting
     
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/ivr/settings  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update IVR Settings
 
@@ -10236,28 +10236,28 @@ Update IVR Settings
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    url=/provider/ivr/settings?account=${account}    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 IVR Request Call Back Token
 
     [Arguments]    ${uid}
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/ivr/request/callback/${uid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 IVR Remove Call Back Request
 
     [Arguments]    ${uid}
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/ivr/remove/callback/${uid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update IVR Call Status
 
     [Arguments]    ${uid}    ${status}
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/ivr/status/${uid}/${status}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get IVR Graph Details
 
@@ -10266,26 +10266,26 @@ Get IVR Graph Details
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/ivr/graph  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Delete All IVR Records
 
     Check And Create YNW Session
     ${resp}=    DELETE On Session  ynw  /provider/ivr/users  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get IVR Users
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/ivr/users  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get IVR Before The Questionnaire
 
     [Arguments]    ${channel}
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/questionnaire/ivr/call/${channel}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add Notes To IVR
 
@@ -10296,7 +10296,7 @@ Add Notes To IVR
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /provider/ivr/notes/${uuid}    data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Upload QNR File to Temp Location
 
@@ -10313,7 +10313,7 @@ Upload QNR File to Temp Location
     ${files}    Create Dictionary  requests  ${file1}  files  ${file2}
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /provider/questionnaire/upload/file     files=${files}   expected_status=any    headers=${headers2}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get IVR User Details
 
@@ -10321,7 +10321,7 @@ Get IVR User Details
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/ivr/user/settings/${userType}/${userId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Delete User Details
 
@@ -10329,19 +10329,19 @@ Delete User Details
 
     Check And Create YNW Session
     ${resp}=    DELETE On Session  ynw  /provider/ivr/users/${userId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get All IVR User Details
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/ivr/user/settings   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get IVR User Avaliability
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/ivr/user/availability   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Submit IVR Qnr
 
@@ -10349,7 +10349,7 @@ Submit IVR Qnr
 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /provider/ivr/questionnaire/submit/${uuid}    data=${data}       expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get All IVR Qnr
 
@@ -10357,7 +10357,7 @@ Get All IVR Qnr
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/ivr/questionnaire/${uuid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 IVR Change Release Status Of Questionnaire
 
@@ -10365,7 +10365,7 @@ IVR Change Release Status Of Questionnaire
 
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  provider/ivr/questionnaire/change/${releaseStatus}/${uuid}/${id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Resubmit IVR Qnr
 
@@ -10373,13 +10373,13 @@ Resubmit IVR Qnr
 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /provider/ivr/questionnaire/resubmit/${uuid}    data=${data}       expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Provider Schedule
     [Arguments]  ${name}  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}  ${scheduleState}  ${providerId}
     ${bs}=  TimeSpec  ${rt}  ${ri}  ${sDate}  ${eDate}  ${noo}  ${stime}  ${etime}
     ${data}=  Create Dictionary  name=${name}  scheduleTime=${bs}  scheduleState=${scheduleState}  providerId=${providerId}
-    [Return]  ${data}
+    RETURN  ${data}
 
 Create Provider Schedule
 
@@ -10389,13 +10389,13 @@ Create Provider Schedule
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=  POST On Session  ynw  /provider/schedule  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get all schedules of an account 
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/schedule   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Provider Schedule
 
@@ -10408,7 +10408,7 @@ Update Provider Schedule
     END 
     ${data}=  json.dumps  ${data}
     ${resp}=  PUT On Session  ynw  /provider/schedule  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Scheduled Using Id
 
@@ -10416,7 +10416,7 @@ Get Scheduled Using Id
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/schedule/${schid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable And Disable A Schedule
 
@@ -10424,7 +10424,7 @@ Enable And Disable A Schedule
 
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/schedule/${scheduleState}/${id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get User-Specific Schedules 
 
@@ -10432,7 +10432,7 @@ Get User-Specific Schedules
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/schedule/user/${userid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 IVR Update User Language
 
@@ -10443,7 +10443,7 @@ IVR Update User Language
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/ivr/users/${userId}    data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Available Providers In A Time Range
 
@@ -10453,7 +10453,7 @@ Get Available Providers In A Time Range
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/schedule/availableUser    data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 # ........ Membership Service ............
@@ -10467,7 +10467,7 @@ Create Membership Service
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /provider/membership/service    data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Membership Service by id
 
@@ -10475,7 +10475,7 @@ Get Membership Service by id
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/membership/service/${memberid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Membership Service 
 
@@ -10485,7 +10485,7 @@ Update Membership Service
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/membership/service/${memberServiceId}    data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Disable Membership service 
 
@@ -10493,7 +10493,7 @@ Enable Disable Membership service
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/membership/${status}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Membership 
 
@@ -10503,7 +10503,7 @@ Create Membership
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /consumer/membership    data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Membership By Id
 
@@ -10511,7 +10511,7 @@ Get Membership By Id
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/membership/${member_id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Disable Member Service 
 
@@ -10519,31 +10519,31 @@ Enable Disable Member Service
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/membership/service/${serviceId}/status/${status}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Membership Service 
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/membership/service  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Membership Service Count
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/membership/service/count  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Member
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/membership  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Member Count
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/membership/count  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Approve Member 
 
@@ -10553,14 +10553,14 @@ Approve Member
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/membership/status/${memberId}    data=${data}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Before Questionnaire Membership
 
     [Arguments]    ${account}    ${serviceId}    ${channel}
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  url=/consumer/questionnaire/memberservice/${serviceId}/${channel}?account=${account}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Submit Member Qnr
 
@@ -10568,7 +10568,7 @@ Submit Member Qnr
 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  url=/consumer/membership/questionnaire/submit/${uuid}?account=${account}    data=${data}       expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 get all Member questionnaire
 
@@ -10576,7 +10576,7 @@ get all Member questionnaire
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  url=/consumer/membership/questionnaire/${uid}?account=${account}      expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Release Status Of Member Questionnaire
 
@@ -10584,7 +10584,7 @@ Change Release Status Of Member Questionnaire
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /consumer/membership/questionnaire/change/${releaseStatus}/${uuid}/${id}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Resubmit Member Questionnaire
 
@@ -10592,7 +10592,7 @@ Resubmit Member Questionnaire
 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  url=/consumer/membership/questionnaire/resubmit/${uuid}?account=${account}    data=${data}       expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Membership 
 
@@ -10602,7 +10602,7 @@ Update Membership
     ${data}=    json.dumps    ${data} 
     Check And Create YNW Session
     ${resp}=    PUT On Session  ynw  /provider/membership/${memberId}    data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get MemberService by Consumer
 
@@ -10610,7 +10610,7 @@ Get MemberService by Consumer
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  url=/consumer/membership/services?account=${accountId}       expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Member Creation From Provider Dashboard
 
@@ -10621,7 +10621,7 @@ Member Creation From Provider Dashboard
 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /provider/membership/member   data=${data}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Submit Provider Member Qnr
 
@@ -10629,7 +10629,7 @@ Submit Provider Member Qnr
 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /provider/membership/questionnaire/submit/${memberId}    data=${data}       expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Resubmit Provider Member Qnr
 
@@ -10637,7 +10637,7 @@ Resubmit Provider Member Qnr
 
     Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /provider/membership/questionnaire/resubmit/${memberId}    data=${data}       expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Provider Member Qnr
 
@@ -10645,7 +10645,7 @@ Get Provider Member Qnr
 
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw  /provider/membership/questionnaire/${memberId}        expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 # ........Finance Manager.............
@@ -10656,7 +10656,7 @@ Enable Disable Jaldee Finance
    [Arguments]  ${status}  
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/settings/jaldeeFinance/${status}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Create Category
@@ -10666,7 +10666,7 @@ Create Category
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/category    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Category
 
@@ -10675,7 +10675,7 @@ Update Category
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/category/${category_id}    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Category Status
@@ -10685,7 +10685,7 @@ Update Category Status
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/category/${category_id}/${status}    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Category By Id
@@ -10693,35 +10693,35 @@ Get Category By Id
     [Arguments]   ${category_id}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/category/${category_id}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Category With Filter
 
     [Arguments]   &{param}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/category/list    params=${param}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Default Category By Type
 
     [Arguments]   ${typeEnum}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/category/default/${typeEnum}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update default category by type
 
     [Arguments]   ${categoryid}   ${categoryTypeEnum}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/jp/finance/category/${categoryid}/${categoryTypeEnum}/default    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Category By CategoryType
 
     [Arguments]   ${categoryType}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/category/type/${categoryType}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Vendor
@@ -10738,7 +10738,7 @@ Create Vendor
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/vendor    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Vendor
@@ -10753,7 +10753,7 @@ Update Vendor
     ${data}=    json.dumps    ${data}  
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/vendor/${vendor_uid}     data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Vendor By Id
@@ -10761,7 +10761,7 @@ Get Vendor By Id
     [Arguments]   ${vendor_id}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/vendor/${vendor_id}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Upload Finance Attachment
     [Arguments]    ${categoryId}      ${categoryType}      @{vargs}
@@ -10779,7 +10779,7 @@ Upload Finance Attachment
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/category/${categoryId}/${categoryType}/attachments  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Create Finance Status
 
@@ -10788,7 +10788,7 @@ Create Finance Status
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/status    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Finance Status
 
@@ -10797,53 +10797,53 @@ Update Finance Status
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/status/${status_id}   data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get jp finance settings
  
    Check And Create YNW Session
    ${resp}=  GET On Session  ynw  /provider/jp/finance/settings  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Enable Disable Jaldee Finance Status
 
    [Arguments]  ${Status_id}    ${status}  
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/status/${Status_id}/${status}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Get Finance Status By Id
 
     [Arguments]   ${Status_id}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/status/${Status_id}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get default status
 
     [Arguments]   ${categoryType}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/status/default/${categoryType}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Set default status
 
    [Arguments]   ${Status_id}    ${Category_type}  
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/status/${Status_id}/${Category_type}/default   expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Get Vendor List with Count filter
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/jp/finance/vendor/count    params=${param}    expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Vendor List with filter
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/jp/finance/vendor    params=${param}    expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Vendor Status
 
@@ -10851,7 +10851,7 @@ Update Vendor Status
      
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/vendor/${vendorUId}/${vendorStatus}     expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Upload Finance Vendor Attachment
     [Arguments]    ${vendorUid}      @{vargs}
@@ -10869,7 +10869,7 @@ Upload Finance Vendor Attachment
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/vendor/${vendorUid}/attachments  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Create Expense
 
@@ -10881,7 +10881,7 @@ Create Expense
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/expense    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Expense
 
@@ -10893,28 +10893,28 @@ Update Expense
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/expense/${uid}    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Expense By Id
 
     [Arguments]   ${uid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  provider/jp/finance/expense/${uid}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Expense With Filter
 
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/expense    params=${param}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Expense Count With Filter
 
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/expense/count    params=${param}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Upload Finance Expense Attachment
     [Arguments]    ${expenseUid}      @{vargs}
@@ -10932,7 +10932,7 @@ Upload Finance Expense Attachment
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/expense/${expenseUid}/attachments  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Create Invoice
 
@@ -10954,7 +10954,7 @@ Create Invoice
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/invoice    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Invoice
 
@@ -10966,14 +10966,14 @@ Update Invoice
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uid}    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Invoice By Id
 
     [Arguments]   ${uid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/${uid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 Get Date Time by Timezone
@@ -10982,7 +10982,7 @@ Get Date Time by Timezone
     ${loc}=  Random Element    ${loc}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/location/date/${zone}/${loc}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Encrypted Provider Login
@@ -10991,7 +10991,7 @@ Encrypted Provider Login
     ${encrypted_data}=  db.ecrypt_data  ${data}
     ${data}=    json.dumps    ${encrypted_data}
     ${resp}=    POST On Session    ynw    /provider/login/encrypt    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Invoice With Filter
@@ -10999,28 +10999,28 @@ Get Invoice With Filter
     [Arguments]   &{param}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/    params=${param}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Invoice Count With Filter
 
     [Arguments]   &{param}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/count    params=${param}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Assign User
 
     [Arguments]    ${InvoiceUid}     ${userId}     
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${InvoiceUid}/user/assign/${userId}      expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 UnAssign User
 
     [Arguments]    ${invocieUid}      
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${invocieUid}/user/unassign      expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Upload Finance Invoice Attachment
     [Arguments]    ${invoiceUid}      @{vargs}
@@ -11038,7 +11038,7 @@ Upload Finance Invoice Attachment
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/invoice/${invoiceUid}/attachments  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 
 Create PaymentsOut
@@ -11060,7 +11060,7 @@ Create PaymentsOut
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/paymentsOut    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update PaymentsOut
 
@@ -11074,28 +11074,28 @@ Update PaymentsOut
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsOut/${payable_uid}     data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get PaymentsOut By Id
 
     [Arguments]   ${uid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsOut/${uid}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get PaymentsOut With Filter
 
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsOut    params=${param}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get PaymentsOut Count With Filter
 
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsOut/count    params=${param}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Upload Finance PaymentsOut Attachment
     [Arguments]    ${payable_uid}      @{vargs}
@@ -11113,14 +11113,14 @@ Upload Finance PaymentsOut Attachment
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/paymentsOut/${payable_uid}/attachments  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Update PaymentsOut Status
 
     [Arguments]    ${payableUid}     ${status} 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsOut/${payableUid}/${status}     expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create CDL Enquiry
@@ -11133,7 +11133,7 @@ Create CDL Enquiry
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/enquire  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Draft Loan Application
 
@@ -11145,7 +11145,7 @@ Draft Loan Application
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanuid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 Save Customer Details 
@@ -11159,7 +11159,7 @@ Save Customer Details
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanuid}   data=${data}  expected_status=any
-    [Return]  ${resp}  
+    RETURN  ${resp}  
 
 Equifax Report 
 
@@ -11169,7 +11169,7 @@ Equifax Report
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/loanapplication/equifaxreport   data=${data}  expected_status=any
-    [Return]  ${resp}  
+    RETURN  ${resp}  
 
 MAFIL Score
 
@@ -11179,7 +11179,7 @@ MAFIL Score
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/csms/generatescore   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Cibil Score
 
@@ -11190,7 +11190,7 @@ Cibil Score
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/cibilscore   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Retainrejected Loan Application
 
@@ -11201,7 +11201,7 @@ Retainrejected Loan Application
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/retainrejected  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Perfios Score
@@ -11212,7 +11212,7 @@ Perfios Score
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /provider/provider/loanapplication/perfios   data=${data}  expected_status=any
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 Account with Multiple Users in NBFC
 
@@ -11248,14 +11248,14 @@ Account with Multiple Users in NBFC
         END
     END
    
-    [Return]  ${MUSERNAME${a}}
+    RETURN  ${MUSERNAME${a}}
 
 Get default status by type
 
     [Arguments]  ${typeName}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/status/default/${typeName}/     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get status count
@@ -11263,14 +11263,14 @@ Get status count
     [Arguments]   &{param} 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/status/list/count   params=${param}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get status list filter
 
     [Arguments]   &{param} 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/status/list   params=${param}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update default status
@@ -11278,7 +11278,7 @@ Update default status
     [Arguments]    ${id}  ${typeName}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/jp/finance/status/${id}/${typeName}/default     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 # -------------- Patient Records-----------
 
 Add Patient Medical History
@@ -11295,7 +11295,7 @@ Add Patient Medical History
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=    POST On Session    ynw    provider/medicalrecord/medicalHistory    data=${data}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Patient Medical History
 
@@ -11311,19 +11311,19 @@ Update Patient Medical History
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=    PUT On Session    ynw    provider/medicalrecord/medicalHistory/${id}    data=${data}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Delete Patient Medical History
     Check And Create YNW Session
     [Arguments]    ${medicalHistoryId}  
     ${resp}=    DELETE On Session    ynw   /provider/medicalrecord/medicalHistory/${medicalHistoryId}        expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Patient Medical History
     Check And Create YNW Session
     [Arguments]    ${providerConsumerId}  
     ${resp}=    GET On Session    ynw    /provider/medicalrecord/medicalHistory/${providerConsumerId}        expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Provider Consumer Add Notes
     [Arguments]    ${providerConsumerId}  ${title}  ${description}  ${viewByUsers}
@@ -11331,7 +11331,7 @@ Provider Consumer Add Notes
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=    POST On Session    ynw    /provider/customers/notes    data=${data}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Provider Consumer Notes
     [Arguments]    ${id}  ${title}  ${description}  ${viewByUsers}
@@ -11339,19 +11339,19 @@ Update Provider Consumer Notes
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=    PUT On Session    ynw    /provider/customers/notes    data=${data}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Delete Provider Consumer Notes
     [Arguments]    ${notesId}  
     Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw    /provider/customers/notes/${notesId}        expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Provider Consumer Notes
     [Arguments]    ${providerConsumerId}  
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/customers/notes/${providerConsumerId}        expected_status=any
-    [Return]  ${resp}  
+    RETURN  ${resp}  
 
 
 
@@ -11369,7 +11369,7 @@ Create DentalRecord
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/dental  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update DentalRecord
@@ -11386,37 +11386,37 @@ Update DentalRecord
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/dental  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update DentalRecord Status
     Check And Create YNW Session
     [Arguments]      ${dentalid}   ${healthRecordSectionEnum} 
     ${resp}=    PUT On Session    ynw   /provider/dental/${dentalid}/status/${healthRecordSectionEnum}       expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Delete DentalRecord
     Check And Create YNW Session
     [Arguments]    ${Id}  
     ${resp}=    DELETE On Session    ynw    /provider/dental/${Id}       expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get DentalRecord ById
     Check And Create YNW Session
     [Arguments]     ${Id}  
     ${resp}=    GET On Session    ynw    /provider/dental/${Id}        expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get DentalRecord ByProviderConsumerId
     Check And Create YNW Session
     [Arguments]     ${Id}  
     ${resp}=    GET On Session    ynw    /provider/dental/providerconsumer/${Id}        expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get DentalRecord ByCaseId
     Check And Create YNW Session
     [Arguments]     ${Id}  
     ${resp}=    GET On Session    ynw   /provider/dental/mr/${Id}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Case Category
@@ -11429,14 +11429,14 @@ Create Case Category
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/case/category  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Case Category
 
     [Arguments]     ${Id}  
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/medicalrecord/case/category/${id}        expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Case Category
 
@@ -11448,12 +11448,12 @@ Update Case Category
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/case/category/${id}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Case Category Filter
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/case/category      expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Case Type
 
@@ -11465,14 +11465,14 @@ Create Case Type
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/case/type  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Case Type
 
     [Arguments]     ${Id}  
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/medicalrecord/case/type/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Case Type
     [Arguments]     ${id}  ${name}  ${aliasName}  ${status}  &{kwargs}
@@ -11483,12 +11483,12 @@ Update Case Type
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/case/type/${id}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Case Type Filter
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/case/type      expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create MR Case
     [Arguments]      ${category}  ${type}  ${doctor}  ${consumer}   ${title}  ${description}  &{kwargs}
@@ -11499,13 +11499,13 @@ Create MR Case
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/case  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get MR Case By UID
      [Arguments]     ${uid}  
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/medicalrecord/case/${uid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update MR Case
     [Arguments]      ${uid}  ${title}  ${description}   &{kwargs}
@@ -11516,25 +11516,25 @@ Update MR Case
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/case/${uid}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Case Filter
     [Arguments]    &{kwargs} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/case   params=${kwargs}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Case Status
     [Arguments]      ${uid}  ${statusName} 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/case/${uid}/status/${statusName}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Case Count Filter
     [Arguments]    &{kwargs} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/case     params=${kwargs}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Treatment Plan
 
@@ -11552,7 +11552,7 @@ Create Treatment Plan
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/treatment  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Treatment Plan
 
@@ -11565,44 +11565,44 @@ Update Treatment Plan
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/treatment  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Treatment Plan Work status
     [Arguments]     ${treatmentId}  ${workId}  ${status}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/treatment/${treatmentId}/${workId}/${status}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Work list in Treatment Plan
     [Arguments]     ${treatmentId}    ${works}
     ${data}=  json.dumps  ${works}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/treatment/work/${treatmentId}    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Treatment Plan By Id
     [Arguments]     ${id}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/${Id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Treatment Plan By case Id
     [Arguments]     ${uid}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/case/${uid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get NonDental Treatment Plan By case Id
     [Arguments]     ${uid}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/nondental/case/${uid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Delete Treatment Plan Work By id
     [Arguments]     ${id}
     Check And Create YNW Session
     ${resp}=   DELETE On Session  ynw  /provider/medicalrecord/treatment/work/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -11619,7 +11619,7 @@ Create MedicalRecordPrescription Template
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=    POST On Session    ynw    /provider/medicalrecord/prescription/template    data=${data}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update MedicalRecordPrescription Template
     [Arguments]    ${id}  ${templateName}    @{vargs}
@@ -11634,25 +11634,25 @@ Update MedicalRecordPrescription Template
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=    PUT On Session    ynw    /provider/medicalrecord/prescription/template    data=${data}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Prescription Template
     Check And Create YNW Session
     [Arguments]    ${temId} 
     ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/prescription/template/${temId}       expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Prescription Template By Account Id
 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/template      expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get MedicalPrescription Template By Id
     [Arguments]    ${temId} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/template/${temId}      expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Prescription 
     [Arguments]    ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}      @{vargs}    &{kwargs}
@@ -11670,7 +11670,7 @@ Create Prescription
     END
     ${data}=  json.dumps  ${data}
     ${resp}=    POST On Session    ynw    /provider/medicalrecord/prescription    data=${data}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Prescription 
     [Arguments]    ${prescriptionUId}   ${providerConsumerId}    ${userId}    ${caseId}       ${dentalRecordId}    ${html}    @{vargs}  &{kwargs}
@@ -11688,38 +11688,38 @@ Update Prescription
     END
     ${data}=  json.dumps  ${data}
     ${resp}=    PUT On Session    ynw    /provider/medicalrecord/prescription/${prescriptionUId}    data=${data}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Prescription By Provider consumer Id
     [Arguments]    ${providerConsumerId} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/${providerConsumerId}      expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Prescription 
     Check And Create YNW Session
     [Arguments]    ${prescriptionUId}
     ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/prescription/${prescriptionUId}       expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Prescription By Filter
     [Arguments]    &{kwargs} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription   params=${kwargs}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Prescription Count By Filter
     [Arguments]    &{param} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/count   params=${param}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Prescription By UID
     [Arguments]    ${uid}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/prescription/uid/${uid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Sections 
@@ -11741,7 +11741,7 @@ Create Sections
     END
     ${data}=  json.dumps  ${data}
     ${resp}=    POST On Session    ynw    /provider/medicalrecord/section    data=${data}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update MR Sections
     [Arguments]    ${uid}    ${sectionType}   ${sectionValue}   ${attachments}   @{vargs}   &{kwargs}
@@ -11759,43 +11759,43 @@ Update MR Sections
     END
     ${data}=  json.dumps  ${data}
     ${resp}=    PUT On Session    ynw    /provider/medicalrecord/section/${uid}   data=${data}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Section Template
 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw   /provider/medicalrecord/section/createdefaulttemplates    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Section Template
     [Arguments]    ${caseUid} 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/template/case/${caseUid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Sections By UID
     [Arguments]    ${uid}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/${uid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Sections Filter
     [Arguments]    &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/section    params=${kwargs}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get MR Sections By Case
     [Arguments]    ${uid}
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/medicalrecord/section/case/${uid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Delete MR Sections 
     Check And Create YNW Session
     [Arguments]    ${uid} 
     ${resp}=    DELETE On Session    ynw    /provider/medicalrecord/section/${uid}       expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Share Prescription To Patient
     [Arguments]   ${prescriptionUid}   ${msg}   ${email}   ${telegram}  ${sms}    ${whatsapp}  
@@ -11804,7 +11804,7 @@ Share Prescription To Patient
     ${data}=  Create Dictionary  message=${msg}   medium=${medium}  
     ${data}=    json.dumps    ${data}
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/sharePrescription/${prescriptionUid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Share Prescription To ThirdParty
     [Arguments]   ${prescriptionUid}   ${msg}   ${email}     ${sms}    ${whatsapp}  ${telegram}
@@ -11812,19 +11812,19 @@ Share Prescription To ThirdParty
     ${data}=  Create Dictionary  message=${msg}   email=${email}    sms=${sms}   whatsapp=${whatsapp}   telegram=${telegram} 
     ${data}=    json.dumps    ${data}
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/sharePrescription/thirdParty/${prescriptionUid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get Treatment Plan By ProviderConsumer Id
     [Arguments]     ${id}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/consumer/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Treatment Plan By Dental Id
     [Arguments]     ${id}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/medicalrecord/treatment/dental/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # --------- Finance ----------
 Auto Invoice Generation For Catalog
@@ -11832,14 +11832,14 @@ Auto Invoice Generation For Catalog
    [Arguments]  ${catalogId}      ${toggle} 
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/catalog/${catalogId}/invoicegeneration/${toggle}   expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Auto Invoice Generation For Service
 
    [Arguments]  ${serviceId}      ${toggle} 
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/services/${serviceId}/invoicegeneration/${toggle}   expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Create PaymentsIn
 
@@ -11855,7 +11855,7 @@ Create PaymentsIn
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/paymentsIn    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update PaymentsIn
     [Arguments]    ${payable_uid}  ${amount}  ${payableCategoryId}  ${receivedDate}   ${payableLabel}    ${vendorUid}    ${paymentMode}   &{kwargs}
@@ -11868,14 +11868,14 @@ Update PaymentsIn
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsIn/${payable_uid}     data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get PaymentsIn By Id
 
     [Arguments]   ${uid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn/${uid}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get PaymentsIn With Filter
@@ -11883,35 +11883,35 @@ Get PaymentsIn With Filter
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn   params=${param}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get PaymentsIn Count With Filter
 
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn/count    params=${param}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update PaymentsIn Status
 
     [Arguments]    ${payableUid}     ${status} 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/paymentsIn/${payableUid}/${status}     expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get PaymentsOut Log List UId
 
     [Arguments]   ${uid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsOut/${uid}/statelist     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get PaymentsIn Log List UId
 
     [Arguments]   ${uid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/paymentsIn/${uid}/statelist     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Upload Finance PaymentsIn Attachment
     [Arguments]    ${payable_uid}      @{vargs}
@@ -11929,7 +11929,7 @@ Upload Finance PaymentsIn Attachment
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/paymentsIn/${payable_uid}/attachments  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Generate Link For Invoice
 
@@ -11939,14 +11939,14 @@ Generate Link For Invoice
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=    POST On Session    ynw    /provider/jp/finance/pay/createLink    data=${data}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Payment Link Details
 
     [Arguments]   ${paylink}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/link/${paylink}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Apply Discount
 
@@ -11958,7 +11958,7 @@ Apply Discount
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/discount    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Apply Jaldee Coupon
 
@@ -11970,7 +11970,7 @@ Apply Jaldee Coupon
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Apply Provider Coupon
@@ -11983,7 +11983,7 @@ Apply Provider Coupon
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/providercoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Apply Service Level Discount
 
@@ -11995,7 +11995,7 @@ Apply Service Level Discount
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/serviceleveldiscount/${serviceId}    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Remove Discount
@@ -12008,7 +12008,7 @@ Remove Discount
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/remove/discount    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Remove Jaldee Coupon
@@ -12021,7 +12021,7 @@ Remove Jaldee Coupon
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/remove/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Remove Provider Coupon
@@ -12034,7 +12034,7 @@ Remove Provider Coupon
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/remove/providercoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Finance Service
 
@@ -12049,7 +12049,7 @@ Update Finance Service
     ${data}=    json.dumps    ${serviceList}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/updateservices    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Service Level Discount
 
@@ -12061,7 +12061,7 @@ Remove Service Level Discount
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/remove/serviceleveldiscount/${serviceId}    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Invoice Items
 
@@ -12076,7 +12076,7 @@ Update Invoice Items
     ${data}=    json.dumps    ${ItemList}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/updateitems    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Apply Item Level Discount
 
@@ -12088,7 +12088,7 @@ Apply Item Level Discount
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/apply/itemleveldiscount/${itemId}    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Item Level Discount
 
@@ -12100,7 +12100,7 @@ Remove Item Level Discount
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${uuid}/remove/itemleveldiscount/${itemId}    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Bill Status
 
@@ -12109,7 +12109,7 @@ Update Bill Status
     Check And Create YNW Session
     ${data}=  json.dumps  ${data}
     ${resp}=  PUT On Session  ynw   /provider/jp/finance/invoice/${invoiceUid}/billstatus/${billStatus}     data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Apply Provider Coupon for waitlist
 
@@ -12121,7 +12121,7 @@ Apply Provider Coupon for waitlist
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/apply/providercoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Provider Coupon for waitlist
 
@@ -12133,7 +12133,7 @@ Remove Provider Coupon for waitlist
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/remove/providercoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Apply Service Level Discount for waitlist
 
@@ -12145,7 +12145,7 @@ Apply Service Level Discount for waitlist
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/apply/serviceleveldiscount    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Service Level Discount for waitlist
 
@@ -12157,21 +12157,21 @@ Remove Service Level Discount for waitlist
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/remove/serviceleveldiscount    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Invoice Log List UId
 
     [Arguments]   ${uid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/${uid}/invoicestatelog     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update bill view status
 
     [Arguments]   ${uid}    ${billViewStatus}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/jp/finance/invoice/${uid}/billviewstatus/${billViewStatus}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Share invoice as pdf 
     [Arguments]    ${uuid}   ${emailNotification}    ${email}   ${html}  &{kwargs}
@@ -12182,7 +12182,7 @@ Share invoice as pdf
     ${data}=    json.dumps    ${data}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/jp/finance/invoice/${uuid}/createSharePdf    data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Apply Jaldee Coupon for waitlist
@@ -12195,7 +12195,7 @@ Apply Jaldee Coupon for waitlist
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Jaldee Coupon for waitlist
 
@@ -12207,14 +12207,14 @@ Remove Jaldee Coupon for waitlist
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/waitlist/${uuid}/remove/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Waitlist level Bill Details
 
     [Arguments]   ${uuid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/${uuid}/billdetails     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Apply Jaldee Coupon for Appointment
 
@@ -12226,7 +12226,7 @@ Apply Jaldee Coupon for Appointment
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Jaldee Coupon for Appointment
 
@@ -12238,7 +12238,7 @@ Remove Jaldee Coupon for Appointment
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/remove/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Apply Provider Coupon for Appointment
 
@@ -12250,7 +12250,7 @@ Apply Provider Coupon for Appointment
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/apply/providercoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Provider Coupon for Appointment
 
@@ -12262,7 +12262,7 @@ Remove Provider Coupon for Appointment
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/remove/providercoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Apply Service Level Discount for Appointment
 
@@ -12274,7 +12274,7 @@ Apply Service Level Discount for Appointment
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/apply/serviceleveldiscount    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Remove Service Level Discount for Appointment
@@ -12287,7 +12287,7 @@ Remove Service Level Discount for Appointment
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/appointment/${uuid}/remove/serviceleveldiscount    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 Get Appointment level Bill Details
@@ -12295,7 +12295,7 @@ Get Appointment level Bill Details
     [Arguments]   ${uuid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/appointment/${uuid}/billdetails     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Category List Configuration
@@ -12303,33 +12303,33 @@ Get Category List Configuration
     [Arguments]   ${categoryType}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/category/config/${categoryType}       expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Copy Category Status List Configuration
 
     [Arguments]   ${categoryType}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/jp/finance/config/${categoryType}       expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Status List Configuration
 
     [Arguments]   ${categoryType}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/status/config/${categoryType}       expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get finance Confiq
  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/jp/finance/config/Invoice     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get default finance category Confiq
  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/category/default/Invoice     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Apply Discount for Order
 
@@ -12341,7 +12341,7 @@ Apply Discount for Order
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/apply/discount    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Discount for Order
 
@@ -12353,7 +12353,7 @@ Remove Discount for Order
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/remove/discount    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Apply Jaldee Coupon for Order
 
@@ -12365,7 +12365,7 @@ Apply Jaldee Coupon for Order
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/apply/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Jaldee Coupon for Order
 
@@ -12377,7 +12377,7 @@ Remove Jaldee Coupon for Order
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/remove/jaldeecoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Apply Provider Coupon for Order
 
@@ -12389,7 +12389,7 @@ Apply Provider Coupon for Order
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/apply/providercoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Provider Coupon for Order
 
@@ -12401,14 +12401,14 @@ Remove Provider Coupon for Order
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/orders/${uuid}/remove/providercoupon    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Order level Bill Details
 
     [Arguments]   ${uuid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/orders/${uuid}/billdetails     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Make Payment By Cash 
@@ -12421,7 +12421,7 @@ Make Payment By Cash
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/payment/acceptPayment    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Make Payment By Cash For Invoice
 
@@ -12433,7 +12433,7 @@ Make Payment By Cash For Invoice
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/pay/acceptPayment    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Appointment Reminder Settings
     [Arguments]  ${resource_type}  ${event_type}  ${email}  ${sms}  ${push_notf}  ${common_msg}  ${reminder_time}
@@ -12442,39 +12442,39 @@ Create Appointment Reminder Settings
     ${data}=   json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /provider/consumerNotification/settings   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Bookings Invoices
      [Arguments]      ${ynwuuid}  
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw   /provider/jp/finance/invoice/ynwuid/${ynwuuid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Invoice Status
 
     [Arguments]    ${InvoiceUid}     ${userId}     
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${InvoiceUid}/${userId}     expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get next invoice Id
     [Arguments]   ${locationId}    
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/invoice/${locationId}/nextInvoiceId     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Validate phone number
     [Arguments]     ${countryCode}  ${phoneNumber}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/validate/phonenumber/${countryCode}/${phoneNumber}  expected_status=any
-    [Return]  ${resp}    
+    RETURN  ${resp}    
 
 createInvoice for booking
 
     [Arguments]    ${booking}     ${uid}     
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/${booking}/${uid}/createInvoice     expected_status=any    headers=${headers}
-    [Return]  ${resp}    
+    RETURN  ${resp}    
 
 # ................ LOS Lead ....................
 
@@ -12486,14 +12486,14 @@ Create Lead Status LOS
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/los/lead/status  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Lead Status by id LOS
     [Arguments]      ${id}  
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/los/lead/status/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Lead Status LOS
     [Arguments]      ${id}   ${name}   ${status}
@@ -12502,13 +12502,13 @@ Update Lead Status LOS
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/los/lead/status/${id}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Lead Status LOS
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/los/lead/status  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Lead Progress LOS
     [Arguments]      ${name}  
@@ -12517,14 +12517,14 @@ Create Lead Progress LOS
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/los/lead/progress  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Lead Progress by id LOS
     [Arguments]      ${id}  
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/los/lead/progress/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Lead Progress LOS
     [Arguments]      ${id}   ${name}   ${status}
@@ -12533,13 +12533,13 @@ Update Lead Progress LOS
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/los/lead/progress/${id}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Lead Progress LOS
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/los/lead/progress  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Lead Credit Status LOS 
     [Arguments]      ${name}  
@@ -12548,14 +12548,14 @@ Create Lead Credit Status LOS
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/los/lead/creditstatus  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Lead Credit Status by id LOS
     [Arguments]      ${id}  
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/los/lead/creditstatus/${id}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Lead Credit Status LOS
     [Arguments]      ${id}   ${name}   ${status}
@@ -12564,13 +12564,13 @@ Update Lead Credit Status LOS
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/los/lead/creditstatus/${id}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Lead Credit Status LOS
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/los/lead/creditstatus  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # Create Lead LOS     
 #     [Arguments]     ${channel}   ${losProduct}   ${statusid}   ${statusname}    ${progressid}   ${progressname}   ${requestedAmount}   ${description}   ${consumerId}   ${consumerFirstName}   ${consumerLastName}   ${dob}   ${gender}   ${consumerPhoneCode}   ${consumerPhone}   ${consumerEmail}   ${aadhaar}   ${pan}   ${bankAccountNo}   ${bankIfsc}   ${permanentAddress1}   ${permanentAddress2}   ${permanentDistrict}   ${permanentState}   ${permanentPin}   ${nomineeType}   ${nomineeName}
@@ -12582,7 +12582,7 @@ Get Lead Credit Status LOS
 #     ${data}=  Create Dictionary  losProduct=${losProduct}  status=${status}  progress=${progress}  requestedAmount=${requestedAmount}  description=${description}  consumerKyc=${consumerKyc}
 #     ${data}=    json.dumps    ${data}
 #     ${resp}=  POST On Session  ynw  /provider/los/lead/channel/${channel}   data=${data}  expected_status=any
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 Create Lead LOS     
     [Arguments]  ${channel}  ${description}  ${losProduct}  ${requestedAmount}  &{kwargs}
@@ -12594,14 +12594,14 @@ Create Lead LOS
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/los/lead/channel/${channel}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Lead LOS 
     [Arguments]      ${uid}  
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/los/lead/${uid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Updtae Lead LOS    
     [Arguments]     ${uid}   ${description}  ${losProduct}  ${requestedAmount}  &{kwargs}
@@ -12613,42 +12613,42 @@ Updtae Lead LOS
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Lead By Filter LOS
     [Arguments]   &{param}
     Log  ${param}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/los/lead   params=${param}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Lead Count By Filter LOS
     [Arguments]   &{param}
     Log  ${param}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/los/lead/count   params=${param}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Lead Status LOS
     [Arguments]     ${uid}  ${id}
 
     Check And Create YNW Session  
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/status/${id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Lead Credit Status LOS
     [Arguments]     ${uid}  ${id}
 
     Check And Create YNW Session  
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/creditstatus/${id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Lead Progress LOS
     [Arguments]     ${uid}  ${id}
 
     Check And Create YNW Session  
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/progress/${id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 update lead assignees LOS    
     [Arguments]     ${uid}  @{vargs}
@@ -12665,35 +12665,35 @@ update lead assignees LOS
     
     Check And Create YNW Session   
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/assignees    data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Generate CIBIL LOS   
     [Arguments]     ${uid}
 
     Check And Create YNW Session  
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/generate/cibil   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Generate EQUIFAX LOS
     [Arguments]     ${uid}
 
     Check And Create YNW Session  
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/generate/equifax   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Generate Loan Application LOS
     [Arguments]     ${uid}
 
     Check And Create YNW Session  
     ${resp}=  PUT On Session  ynw  /provider/los/lead/${uid}/generate/loanapplication   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Audit Log or History LOS
     [Arguments]     ${uid}
 
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/los/lead/${uid}/auditlog   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 AddItemToFinance
    [Arguments]  ${uuid}   ${ItemLists}  &{kwargs}
@@ -12705,7 +12705,7 @@ AddItemToFinance
 
    Check And Create YNW Session
    ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/additems    data=${data}  expected_status=any  
-   [Return]  ${resp} 
+   RETURN  ${resp} 
 
 AddServiceToFinance
 
@@ -12718,7 +12718,7 @@ AddServiceToFinance
 
    Check And Create YNW Session
    ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/addservices    data=${data}  expected_status=any  
-   [Return]  ${resp} 
+   RETURN  ${resp} 
 
 RemoveServiceToFinance
 
@@ -12731,7 +12731,7 @@ RemoveServiceToFinance
 
    Check And Create YNW Session
    ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/removeservices    data=${data}  expected_status=any  
-   [Return]  ${resp} 
+   RETURN  ${resp} 
 
 RemoveItemToFinance
 
@@ -12744,13 +12744,13 @@ RemoveItemToFinance
 
    Check And Create YNW Session
    ${resp}=    PUT On Session    ynw   /provider/jp/finance/invoice/${uuid}/removeitems    data=${data}  expected_status=any  
-   [Return]  ${resp} 
+   RETURN  ${resp} 
 
 Change Provider Consumer Profile Status 
     [Arguments]    ${consumerId}   ${status}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/customers/${consumerId}/changeStatus/${status}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 GetFollowUpDetailsofAppmt
 
@@ -12758,7 +12758,7 @@ GetFollowUpDetailsofAppmt
 
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/appointment/followUp/${uid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 GetFollowUpDetailsofwl
@@ -12767,7 +12767,7 @@ GetFollowUpDetailsofwl
 
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/waitlist/followUp/${uid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 ######## New Communication URLS ############
@@ -12780,7 +12780,7 @@ Send Attachment From Waitlist
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/waitlist/share/attachments/${uid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Send Attachment From Appointmnent 
@@ -12792,7 +12792,7 @@ Send Attachment From Appointmnent
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment/share/attachments/${uid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Attachments In Waitlist
@@ -12800,7 +12800,7 @@ Get Attachments In Waitlist
 
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/waitlist/share/attachments/${uid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Attachments In Appointment
@@ -12808,7 +12808,7 @@ Get Attachments In Appointment
 
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/appointment/share/attachments/${uid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Donation Attachments
@@ -12816,7 +12816,7 @@ Get Donation Attachments
 
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/donation/view/attachments/${uid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Order Attachments
@@ -12824,7 +12824,7 @@ Get Order Attachments
 
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/orders/view/attachments/${uid}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Send Message With Waitlist
@@ -12839,7 +12839,7 @@ Send Message With Waitlist
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/waitlist/communication   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Send Message With Appointment
@@ -12854,7 +12854,7 @@ Send Message With Appointment
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment/communication   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Send Message With Order
@@ -12869,7 +12869,7 @@ Send Message With Order
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/orders/communication   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Send Message With Donation
@@ -12884,7 +12884,7 @@ Send Message With Donation
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/donation/communication   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Broadcast Message to customers
@@ -12900,7 +12900,7 @@ Broadcast Message to customers
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/customers/broadcast   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Send Message to Multiple Customers
@@ -12915,7 +12915,7 @@ Send Message to Multiple Customers
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/waitlist/consumer/communication   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Send Message By Chat
@@ -12927,7 +12927,7 @@ Send Message By Chat
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/message/communications/${consumerId}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 GET Queue Availability By Location AND Service
@@ -12935,7 +12935,7 @@ GET Queue Availability By Location AND Service
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/available/${locationId}/${serviceId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 GET Queue Availability By Location, Service and Date
@@ -12943,28 +12943,28 @@ GET Queue Availability By Location, Service and Date
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/${locationId}/${serviceId}/${date}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Disable Notification 
     [Arguments]   ${status}
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/notification/${status}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Disable whatsApp 
     [Arguments]   ${status}
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/whatsapp/${status}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Bill Settings
 
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw  /provider/bill/settings/pos  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Disable bill
 
@@ -12972,14 +12972,14 @@ Enable Disable bill
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw  /provider/bill/settings/${status}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Prescription Templates By Filter
     [Arguments]   &{param}
     Log  ${param}
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/templates   params=${param}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 ######## Style config ############
 AddOrUpdate UserStyle
@@ -12992,7 +12992,7 @@ AddOrUpdate UserStyle
     ${data}=   json.dumps   ${data}
     Check And Create YNW Session
     ${resp}=   POST On Session  ynw  /provider/styleconfig/styletype/UsersStyleConfig     data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 AddOrUpdate DashboardStyle
@@ -13005,17 +13005,17 @@ AddOrUpdate DashboardStyle
     ${data}=   json.dumps   ${data}
     Check And Create YNW Session
     ${resp}=   POST On Session  ynw  /provider/styleconfig/styletype/DashboardStyleConfig     data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get StyleConfig
     [Arguments]    &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/styleconfig  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get LastManualIdOfcustomer
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/customers/patientId  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}

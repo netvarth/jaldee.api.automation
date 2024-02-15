@@ -40,7 +40,7 @@ ${digits}       0123456789
 #         Set Suite Variable  ${check}    ${resp2.json()['serviceBillable']} 
 #         Run Keyword If     '${check}' == 'True'   Append To List   ${provider_list}  ${PUSERNAME${a}}
 #     END
-#     [Return]  ${provider_list}
+#     RETURN  ${provider_list}
 
 
 # *** Comment ***

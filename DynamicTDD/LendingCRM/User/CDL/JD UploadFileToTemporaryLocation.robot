@@ -98,7 +98,7 @@ Account with Multiple Users in NBFC
         END
     END
 
-    [Return]  ${MUSERNAME${a}}
+    RETURN  ${MUSERNAME${a}}
 
 
 *** Test Cases ***

@@ -30,7 +30,7 @@ ${fileSize}  0.00458
 Get Expense Without Filter 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/expense        expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Test Cases ***
 

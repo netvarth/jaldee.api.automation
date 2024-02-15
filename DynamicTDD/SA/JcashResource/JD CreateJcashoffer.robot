@@ -1207,7 +1207,7 @@ Create JCash Offer
     Log  ${data}
     Check And Create YNW SuperAdmin Session
     ${resp}=    POST On Session   synw   /jcash/offer    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 

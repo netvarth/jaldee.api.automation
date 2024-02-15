@@ -24,7 +24,7 @@ Cancel Loan Application
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/cancel    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Loan Application Branchapproval
 
@@ -35,7 +35,7 @@ Loan Application Branchapproval
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/loanapplication/${loanApplicationUid}/branchapproval    data=${data}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create and Update Account level cdl setting
 
@@ -50,7 +50,7 @@ Create and Update Account level cdl setting
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /provider/cdlsetting/account   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Variables ***
 

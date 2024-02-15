@@ -1400,7 +1400,7 @@ Billable
         Exit For Loop IF     '${check}' == 'True'
 
     END
-    [Return]  ${PUSERNAME${a}}
+    RETURN  ${PUSERNAME${a}}
 
 
 Non Billable
@@ -1425,7 +1425,7 @@ Non Billable
         Exit For Loop IF     '${check}' == 'False'
        
      END 
-     [Return]   ${MUSERNAME${a}}
+     RETURN   ${MUSERNAME${a}}
 
 
 
@@ -1461,7 +1461,7 @@ Non Billable
 #                 Should Be Equal As Strings    ${resp.status_code}    200
 #                 Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
 #         END
-#         [Return]  ${multiloc_providers}
+#         RETURN  ${multiloc_providers}
 
 
 Disable Services

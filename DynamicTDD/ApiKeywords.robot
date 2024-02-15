@@ -19,13 +19,13 @@ Enable Disable API gateway
     [Arguments]  ${status}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  provider/account/settings/${status}/apiGateway   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get SP Token
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/account/settings/apiGateway  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Check And Create ApiYNW Session
@@ -42,7 +42,7 @@ Create User Token
     ${apiheaders}=     Create Dictionary    Content-Type=application/json    authorization=${sptoken}
     Check And Create ApiYNW Session
     ${resp}=    POST On Session    apiynw    provider/login    data=${log}  expected_status=any  headers=${apiheaders}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Leads Details
@@ -50,7 +50,7 @@ Get Leads Details
     ${apiheaders}=     Create Dictionary    Content-Type=application/json    authorization=${user_token}
     Check And Create ApiYNW Session
     ${resp}=    GET On Session    apiynw    lms/leads    expected_status=any  headers=${apiheaders}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Leads Count
@@ -58,7 +58,7 @@ Get Leads Count
     ${apiheaders}=     Create Dictionary    Content-Type=application/json    authorization=${user_token}
     Check And Create ApiYNW Session
     ${resp}=    GET On Session    apiynw    lms/leads/count    expected_status=any  headers=${apiheaders}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Customer Details
@@ -66,7 +66,7 @@ Get Customer Details
     ${apiheaders}=     Create Dictionary    Content-Type=application/json    authorization=${user_token}
     Check And Create ApiYNW Session
     ${resp}=    GET On Session    apiynw    lms/customers    expected_status=any  headers=${apiheaders}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Customer Count
@@ -74,7 +74,7 @@ Get Customer Count
     ${apiheaders}=     Create Dictionary    Content-Type=application/json    authorization=${user_token}
     Check And Create ApiYNW Session
     ${resp}=    GET On Session    apiynw    lms/customers/count    expected_status=any  headers=${apiheaders}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Leads Details With Filter
@@ -82,7 +82,7 @@ Get Leads Details With Filter
     ${apiheaders}=     Create Dictionary    Content-Type=application/json    authorization=${user_token}
     Check And Create ApiYNW Session
     ${resp}=    GET On Session    apiynw    lms/lead  params=${kwargs}    expected_status=any  headers=${apiheaders}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get KYC Details 
@@ -90,7 +90,7 @@ Get KYC Details
     ${apiheaders}=     Create Dictionary    Content-Type=application/json    authorization=${user_token}
     Check And Create ApiYNW Session
     ${resp}=    GET On Session    apiynw    lms/kyc/${lead_uid}    expected_status=any  headers=${apiheaders}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Loan Applications 
@@ -98,7 +98,7 @@ Get Loan Applications
     ${apiheaders}=     Create Dictionary    Content-Type=application/json    authorization=${user_token}
     Check And Create ApiYNW Session
     ${resp}=    GET On Session    apiynw    cdl/loanapplications   params=${kwargs}   expected_status=any  headers=${apiheaders}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Loan Applications Count
@@ -106,7 +106,7 @@ Get Loan Applications Count
     ${apiheaders}=     Create Dictionary    Content-Type=application/json    authorization=${user_token}
     Check And Create ApiYNW Session
     ${resp}=    GET On Session    apiynw    cdl/loanapplications/count   params=${kwargs}  expected_status=any  headers=${apiheaders}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Loan Applications By Uid
@@ -114,4 +114,4 @@ Get Loan Applications By Uid
     ${apiheaders}=     Create Dictionary    Content-Type=application/json    authorization=${user_token}
     Check And Create ApiYNW Session
     ${resp}=    GET On Session    apiynw    cdl/loanapplications/${loan_uid}    expected_status=any  headers=${apiheaders}
-    [Return]  ${resp}
+    RETURN  ${resp}

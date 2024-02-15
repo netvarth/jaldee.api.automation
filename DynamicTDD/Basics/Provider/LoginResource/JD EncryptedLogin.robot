@@ -41,7 +41,7 @@ Encrypted Provider Login
     # ${string}=    Convert To String    ${encrypted_data}
     ${data}=    json.dumps    ${encrypted_data}
     ${resp}=    POST On Session    ynw    /provider/login/encrypt    data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 *** Test Cases ***

@@ -19,7 +19,7 @@ Update Invoice Status
     [Arguments]    ${InvoiceUid}     ${userId}     
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw    /provider/jp/finance/invoice/${InvoiceUid}/${userId}     expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Variables ***
 

@@ -46,14 +46,14 @@ Multiple Users branches
         END
     END
 
-    [Return]  ${multiuser_list}
+    RETURN  ${multiuser_list}
 
 Remove Co-Applicant
 
     [Arguments]    ${uuid}    ${applicantId}
     Check And Create YNW Session
     ${resp}=   DELETE On Session   ynw   /provider/KYC/coapplicant/${applicantId}/${uuid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Variables ***
 ${self}     0

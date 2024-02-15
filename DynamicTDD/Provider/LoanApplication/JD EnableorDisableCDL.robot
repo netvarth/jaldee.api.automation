@@ -22,21 +22,21 @@ Change Sp Internal Status
     [Arguments]    ${loanApplicationUid}   ${internalStatus}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/loanapplication/${loanApplicationUid}/spinternalstatus/${internalStatus}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Loan Application By uid
 
     [Arguments]    ${loanApplicationUid}   
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/loanapplication/${loanApplicationUid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Enable Disable CDL
 
     [Arguments]    ${status}   
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/cdl/${status}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 *** Variables ***

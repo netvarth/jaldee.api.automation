@@ -17,7 +17,7 @@ Enabling Disabling User Availability
     [Arguments]  ${userId}  ${status}
     Check And Create YNW Session
     ${resp}=    PUT On Session     ynw   /provider/user/${userId}/available/${status}   expected_status=any
-    [Return]  ${resp}  
+    RETURN  ${resp}  
 
 *** Variables ***
 ${SERVICE1}  Makeup  

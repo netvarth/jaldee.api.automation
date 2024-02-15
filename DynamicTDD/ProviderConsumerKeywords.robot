@@ -18,7 +18,7 @@ Send Otp For Login
     ${body}=    json.dumps    ${data}
     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
     ${resp}=    POST On Session    ynw    /consumer/oauth/identify    data=${body}  headers=${headers2}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Verify Otp For Login
     [Arguments]  ${loginid}  ${purpose}
@@ -26,14 +26,14 @@ Verify Otp For Login
     ${key}=   verify accnt  ${loginid}  ${purpose}
     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
     ${resp}=    POST On Session    ynw    /consumer/oauth/otp/${key}/verify  headers=${headers2}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Customer Logout 
     # [Arguments]    ${token}
     Check And Create YNW Session
     ${headers2}=     Create Dictionary    Content-Type=application/json    #Authorization=${token}
     ${resp}=    DELETE On Session    ynw    /consumer/login       expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 ProviderConsumer Login with token
     [Arguments]    ${loginId}  ${accountId}  ${token}  ${countryCode}=+91  &{kwargs} 
@@ -49,7 +49,7 @@ ProviderConsumer Login with token
     Set To Dictionary 	${headers2} 	&{tzheaders}
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /consumer/login   headers=${headers2}  data=${log}   expected_status=any   params=${cons_params}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 ProviderConsumer SignUp
     [Arguments]  ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}   ${accountId}   ${countryCode}=91   &{kwargs} 
@@ -66,7 +66,7 @@ ProviderConsumer SignUp
     Set To Dictionary 	${headers2} 	&{tzheaders}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw    /consumer    data=${data}  headers=${headers2}   expected_status=any   params=${cons_params}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 Update ProviderConsumer 
     [Arguments]    ${cid}    &{kwargs}
@@ -79,12 +79,12 @@ Update ProviderConsumer
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /spconsumer/  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get ProviderConsumer
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /spconsumer/     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add FamilyMember For ProviderConsumer
     [Arguments]                   ${firstname}   ${lastname}   ${dob}   ${gender}   ${email}   ${city}   ${state}   ${address}   ${primarynum}   ${alternativenum}   ${countrycode}   ${countryCodet}   ${numbert}   ${countryCodew}   ${numberw}
@@ -94,58 +94,58 @@ Add FamilyMember For ProviderConsumer
     ${userProfile}=               Create Dictionary    firstName=${firstname}   lastName=${lastname}   dob=${dob}   gender=${gender}   email=${email}   city=${city}  state=${state}   address=${address}  primaryMobileNo=${primarynum}   alternativePhoneNo=${alternativenum}   countryCode=${countrycode}  telegramNum=${telegramNum}   whatsAppNum=${whatsAppNum}
     ${data}=                      Create Dictionary    userProfile=${userProfile}
     ${resp}=                      POST On Session  ynw   /spconsumer/familyMember    json=${data}    expected_status=any
-    [Return]                      ${resp}
+    RETURN                      ${resp}
 
 Get FamilyMember
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /spconsumer/familyMember     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Delete ProCons FamilyMember
     [Arguments]  ${Famid}
     Check And Create YNW Session  
     ${resp}=  DELETE On Session  ynw  /spconsumer/familyMember/${Famid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Booking History OF Provider Consumer
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /spconsumer/bookings/history     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Today Booking History OF Provider Consumer
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /spconsumer/bookings/today     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Upcoming Booking details Of Provider Consumer
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /spconsumer/bookings/future     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 GetGroupById
 	[Arguments]  ${groupid}
 	Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /spconsumer/group/${groupid}  expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Group
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /spconsumer/group     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 ProviderConsumer View Questionnaire
     # [Arguments]      ${jdid}    ${proid}
     Check And Create YNW Session
     ${resp}=  GET On Session   ynw     /provider/questionnaire/consumer   expected_status=any          
      #url=/provider/providerCustomer/${jdid}?account=${proid}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 ProviderConsumer Deactivation
     
     Check And Create YNW Session
     # ${headers2}=     Create Dictionary    Content-Type=application/json  
     ${resp}=    DELETE On Session    ynw    /provider${SPACE}consumer/login/deActivate        expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -169,7 +169,7 @@ Communication between Provider_consumer and provider
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /spconsumer/communicate/communicationDetail  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Communication
@@ -178,7 +178,7 @@ Get Communication
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /spconsumer/communicate/${proconId}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Read Count
@@ -190,7 +190,7 @@ Update Read Count
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /spconsumer/communicate/communicationDetailToRead  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Inactive ProviderCustomer 
 
@@ -198,7 +198,7 @@ Inactive ProviderCustomer
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/customers/${consumerId}/changeStatus/${status}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 #----------- LOS LEAD ---------
@@ -213,7 +213,7 @@ PC Create Lead LOS
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/los/lead/channel/${channel}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 PC Get Lead By Uid LOS
 
@@ -221,7 +221,7 @@ PC Get Lead By Uid LOS
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/los/lead/${uid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 PC Update Lead LOS    
 
@@ -234,41 +234,41 @@ PC Update Lead LOS
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /consumer/los/lead/${uid}   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 PC Get Lead By Filter LOS
     [Arguments]   &{param}
 
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /consumer/los/lead   params=${param}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 PC Get Lead Count By Filter LOS
     [Arguments]   &{param}
 
     Check And Create YNW Session  
     ${resp}=  GET On Session  ynw  /consumer/los/lead/count   params=${param}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get provider Waitlist By Id
     [Arguments]  ${uuid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/waitlist/${uuid}/billdetails   expected_status=any   
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get provider Appt By Id
     [Arguments]  ${uuid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/appointment/${uuid}/billdetails   expected_status=any   
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get provider Order By Id
     [Arguments]  ${uuid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/orders/${uuid}/billdetails   expected_status=any   
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Add Profile Photo
@@ -282,7 +282,7 @@ Add Profile Photo
     ${data}=    json.dumps    ${AttachmentsUpload}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw   /spconsumer/upload/profilePhoto/${owner}  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Create Family Member   
@@ -295,7 +295,7 @@ Create Family Member
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/family/member   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Family Members
     [Arguments]   ${id}  ${parent}  ${firstName}  ${lastName}  ${dob}  ${gender}   ${phoneNo}  ${countryCode}  ${address}  &{kwargs}
@@ -307,28 +307,28 @@ Update Family Members
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /consumer/family/member   data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Family Members
     [Arguments]  ${consumerId}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/family/member/${consumerId}   expected_status=any   
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Delete Family Members
     [Arguments]  ${memberId}  ${consumerId} 
     Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw    /consumer/family/member/${memberId}/${consumerId}        expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Family Member By Id
     [Arguments]  ${memberId}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/family/member/details/${memberId}   expected_status=any   
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Prescription By ProviderConsumer
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /spconsumer/medicalrecord/prescription   expected_status=any   
-    [Return]  ${resp}
+    RETURN  ${resp}

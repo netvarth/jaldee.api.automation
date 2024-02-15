@@ -31,14 +31,14 @@ ${SPASSWORD}              Netvarth1
 #     ${log}=    json.dumps    ${login}
 #     Check And Create YNW Session    
 #     # ${BASE_URL}  headers=${headers}
-#     [Return]  ${log}
+#     RETURN  ${log}
 
 InvalidLoginAttempt
     [Arguments]    ${usname}  ${passwrd}    ${countryCode}=+91
     ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}  countryCode=${countryCode}
     ${log}=    json.dumps    ${login}
     ${resp}=    POST On Session    ynw    /provider/login    data=${log}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Test Cases ***
 JD-TC-InvalidLoginAttempt-1

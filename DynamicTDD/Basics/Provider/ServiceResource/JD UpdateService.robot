@@ -638,7 +638,7 @@ Billable
         Exit For Loop IF     '${check}' == 'True'
 
     END
-    [Return]  ${PUSERNAME${a}}
+    RETURN  ${PUSERNAME${a}}
 
 Non Billable
 
@@ -664,7 +664,7 @@ Non Billable
         Exit For Loop IF     '${check}' == 'False'
        
      END
-     [Return]  ${PUSERNAME${a}} 
+     RETURN  ${PUSERNAME${a}} 
 
 
 

@@ -54,7 +54,7 @@ Multiloc and Billable Providers
         Run Keyword If     '${check}' == 'True'   Append To List   ${provider_list}  ${PUSERNAME${a}}
         Run Keyword If    '${status}' == 'PASS' and '${check}' == 'True'   Append To List  ${multiloc_billable_providers}  ${PUSERNAME${a}}
     END
-    [Return]  ${provider_list}  ${multiloc_providers}  ${multiloc_billable_providers}
+    RETURN  ${provider_list}  ${multiloc_providers}  ${multiloc_billable_providers}
 
 *** Test Cases ***
 JD-TC-GetFutureAppointmentCount-1

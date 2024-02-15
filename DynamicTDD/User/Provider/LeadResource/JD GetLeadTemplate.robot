@@ -599,6 +599,6 @@ Get Lead Templates
     [Arguments]    &{kwargs}     
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw     /provider/lead/master    params=${kwargs}      expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 

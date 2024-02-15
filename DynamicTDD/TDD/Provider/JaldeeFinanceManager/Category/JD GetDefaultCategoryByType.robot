@@ -33,14 +33,14 @@ Get Default Category By Type
     [Arguments]   ${typeEnum}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/category/default/${typeEnum}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update default category by type
 
     [Arguments]   ${categoryid}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/jp/finance/category/${categoryid}/Vendor/default    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 *** Test Cases ***

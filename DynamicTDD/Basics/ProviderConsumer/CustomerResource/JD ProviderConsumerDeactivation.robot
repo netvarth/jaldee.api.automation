@@ -24,7 +24,7 @@ Consumer Deactivation
     Check And Create YNW Session
     ${headers2}=     Create Dictionary    Content-Type=application/json  
     ${resp}=    DELETE On Session    ynw    /spconsumer/login/deActivate      expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 *** Test Cases ***
 

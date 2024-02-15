@@ -28,7 +28,7 @@ Variables         /ebs/TDD/varfiles/providers.py
 #     Check And Create YNW Session
 #     ${resp}=  PUT On Session  ynw  /provider/account/settings/virtualCallingModes   data=${data}  expected_status=any
 #     Log  ${resp.content}
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 
 *** Variables ***

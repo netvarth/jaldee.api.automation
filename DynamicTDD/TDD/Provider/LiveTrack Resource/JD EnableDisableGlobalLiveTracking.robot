@@ -42,7 +42,7 @@ Get provider by license
         Exit For Loop IF  ${resp.json()['accountLicense']['licPkgOrAddonId']} == ${lic_id}
 
     END
-    [Return]  ${Provider_PH}
+    RETURN  ${Provider_PH}
 
 *** Test Case ***
 

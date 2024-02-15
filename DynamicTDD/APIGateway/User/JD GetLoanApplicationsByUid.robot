@@ -88,7 +88,7 @@ ${emiPaidAmountMonthly}    2000
 #         END
 #     END
    
-#     [Return]  ${MUSERNAME${a}}
+#     RETURN  ${MUSERNAME${a}}
 
 
 *** Test Cases ***

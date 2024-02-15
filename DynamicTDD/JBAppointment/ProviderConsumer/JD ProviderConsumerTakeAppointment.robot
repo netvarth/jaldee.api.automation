@@ -18,13 +18,13 @@ Add FamilyMember As ProviderConsumer
     [Arguments]   ${fam_id}   ${procon_id}   ${accountId} 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  url=/consumer/familyMember/providerconsumer/${fam_id}/${procon_id}?account=${accountId}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get ProviderConsumer FamilyMember
     [Arguments]   ${Jcon_id}   ${accountId} 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  url=/consumer/familyMember/providerconsumer/${Jcon_id}?account=${accountId}     expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Variables ***
 

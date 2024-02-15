@@ -19,13 +19,13 @@ Get Service payment modes
     [Arguments]  ${accountId}   ${serviceId}   ${paymentPurpose}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /consumer/payment/modes/service/${accountId}/${serviceId}/${paymentPurpose}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 Get payment modes
     [Arguments]  ${accountId}   ${serviceId}   ${paymentPurpose}
     Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /consumer/payment/modes/service/${accountId}/${serviceId}/${paymentPurpose}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # Get convenienceFee Details 
 #     [Arguments]  ${accountId}     ${profileId}    ${amount}
@@ -40,7 +40,7 @@ Get payment modes
 #     ${data}=  json.dumps  ${data}
 #     Check And Create YNW Session
 #     ${resp}=   PUT On Session  ynw  /consumer/payment/modes/convenienceFee/${accountId}   data=${data}   expected_status=any
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 
 Get convenienceFee Details 
     [Arguments]  ${accountId}     ${profileId}    ${amount}
@@ -48,7 +48,7 @@ Get convenienceFee Details
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=   PUT On Session  ynw  /consumer/payment/modes/MockConvenienceFee/${accountId}   data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Variables ***
 

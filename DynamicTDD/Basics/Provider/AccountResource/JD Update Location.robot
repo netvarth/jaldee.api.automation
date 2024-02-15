@@ -604,4 +604,4 @@ Multiple Location
       # ${business_conf}=  json.loads  ${business_conf}
       Set Suite Variable  ${dom}  ${business_conf[${index}]['domain']}
       Set Suite Variable  ${sub_dom}  ${business_conf[${index}]['subDomains'][0]['subDomain']}
-      [Return]  ${dom}  ${sub_dom}
+      RETURN  ${dom}  ${sub_dom}

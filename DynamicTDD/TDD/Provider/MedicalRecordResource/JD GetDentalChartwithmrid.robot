@@ -50,7 +50,7 @@ dental surface
     # ${status}=  Create Dictionary  status=${status}  chiefComplaint=${procedure}    notes=${notes}    attachments=${attachments}
     ${surface}=    Create Dictionary    occlusal=${occlusal}    mesial=${mesial}    distal=${distal}    buccal=${buccal}    lingual=${lingual}    incisal=${incisal}    
     ${teeth}=    Create Dictionary  toothId=${toothId}    surface=${surface}    status=${status}  chiefComplaint=${boolean}    notes=${notes}    attachments=${attachments}
-    [Return]  ${teeth}
+    RETURN  ${teeth}
 
 Create Medical Record With Dental Chart
 
@@ -64,7 +64,7 @@ Create Medical Record With Dental Chart
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/mr/${uid}  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Create Dental Chart With patientId
 
@@ -78,7 +78,7 @@ Create Dental Chart With patientId
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/mr/patient/${id}  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 Create Dental Chart with MR id
 
@@ -91,13 +91,13 @@ Create Dental Chart with MR id
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/mr/dentalchart/${mrid}  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
    
 Get dental chart with mr id
     [Arguments]     ${mrId}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/mr/dentalchart/${mrId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Test Cases ***
 

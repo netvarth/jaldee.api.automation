@@ -609,6 +609,45 @@ JD-TC-DeleteVacation-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${up_addons}=   Get upgradable addons
+    Log  ${up_addons.json()}
+    Should Be Equal As Strings    ${up_addons.status_code}   200
+    Set Test Variable    ${addon_id}      ${resp.json()[6]['addons'][0]['addonId']}
+	Set Test Variable    ${addon_name}      ${resp.json()[6]['addons'][0]['addonName']}
+
+    ${resp}=  Add addon  ${addon_list[0][0]['addon_id']}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${dep_name1}=  FakerLibrary.bs
+        ${dep_code1}=   Random Int  min=100   max=999
+        ${dep_desc1}=   FakerLibrary.word  
+        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
+
     ${DAY}=  db.get_date_by_timezone  ${tz}
     # ${DAY1}=  db.add_timezone_date  ${tz}  3  
     ${sTime1}=  db.get_time_by_timezone  ${tz}
@@ -685,6 +724,13 @@ JD-TC-DeleteVacation-6
 
     ${resp}=   Get Holiday By Account
     Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # Delete existing holiday for next case
+
+    ${resp}=   Delete Holiday  ${hId1}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=   Get Holiday By Account
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
@@ -776,6 +822,14 @@ JD-TC-DeleteVacation-7
     ${resp}=   Get Holiday By Account
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+
+JD-TC-DeleteVacation-8
+    [Documentation]  2 users create vacation with same date and time, one user deletes vacation, other user's vacation should be intact.
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME123}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 

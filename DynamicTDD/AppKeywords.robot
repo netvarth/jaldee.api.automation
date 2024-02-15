@@ -34,45 +34,45 @@ App Login
     ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}  countryCode=${countryCode}
     ${log}=    json.dumps    ${login}
     App Check And Create YNW Session   ${headers}
-    [Return]  ${log}
+    RETURN  ${log}
 
 App Consumer SignUp
     [Arguments]  ${headers}  ${firstname}  ${lastname}  ${address}  ${primaryNo}  ${alternativeNo}  ${dob}  ${gender}  ${email}   ${countryCode}=+91
     ${apple}=  Consumer Creation  ${firstname}  ${lastname}  ${address}  ${primaryNo}  ${alternativeNo}  ${dob}  ${gender}  ${email}   countryCode=${countryCode}    
     App Check And Create YNW Session   ${headers}
     ${resp}=    POST On Session    ynw    /consumer   data=${apple}  expected_status=any   headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 App Consumer Activation
     [Arguments]  ${headers}  ${email}  ${purpose}
     App Check And Create YNW Session   ${headers}
     ${key}=   verify accnt  ${email}  ${purpose}
     ${resp_val}=  POST On Session   ynw  /consumer/${key}/verify   expected_status=any   headers=${headers}
-    [Return]  ${resp_val}
+    RETURN  ${resp_val}
 
 App Consumer Login
     [Arguments]    ${headers}  ${usname}  ${passwrd}  ${countryCode}=+91
     ${log}=  App Login  ${headers}  ${usname}  ${passwrd}   countryCode=${countryCode}
     ${resp}=    POST On Session    ynw    /consumer/login    data=${log}  expected_status=any   headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 App Consumer Logout
     [Arguments]  ${headers}
     App Check And Create YNW Session   ${headers}
     ${resp}=    DELETE On Session    ynw    /consumer/login  expected_status=any  headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 App ProviderLogin
     [Arguments]    ${headers}  ${usname}  ${passwrd}   ${countryCode}=91
     ${log}=  App Login  ${headers}  ${usname}  ${passwrd}   countryCode=${countryCode}
     ${resp}=    POST On Session    ynw    /provider/login    data=${log}  expected_status=any  headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 App ProviderLogout
     [Arguments]  ${headers}
     App Check And Create YNW Session    ${headers}
     ${resp}=  DELETE On Session  ynw  /provider/login  expected_status=any   headers=${headers}
-    [Return]  ${resp}       
+    RETURN  ${resp}       
 
 App Add To Waitlist Consumers
     [Arguments]  ${headers}  ${accId}  ${queueId}  ${date}  ${serviceId}  ${consumerNote}  ${revealPhone}  @{vargs}   
@@ -91,20 +91,20 @@ App Add To Waitlist Consumers
     ${data}=  json.dumps  ${data}
     App Check And Create YNW Session  ${headers}
     ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${param}   expected_status=any   headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 App Get consumer Waitlist By Id
     [Arguments]  ${headers}  ${uuid}  ${accId}
     ${param}=  Create Dictionary  account=${accId}
     App Check And Create YNW Session   ${headers}
     ${resp}=  GET On Session  ynw  /consumer/waitlist/${uuid}  params=${param}   expected_status=any   headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 App GetCustomer
     [Arguments]  ${headers}  &{param}
     App Check And Create YNW Session  ${headers}
     ${resp}=   GET On Session  ynw  /provider/customers  params=${param}  expected_status=any   headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 App Add To Waitlist
     [Arguments]   ${headers}  ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}  @{fids}
@@ -122,7 +122,7 @@ App Add To Waitlist
     ${data}=  json.dumps  ${data}
     App Check And Create YNW Session  ${headers}
     ${resp}=  POST On Session  ynw  provider/waitlist  data=${data}  expected_status=any  headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 App Add To Waitlist with mode
     [Arguments]   ${headers}  ${waitlistMode}  ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}   @{fids}
@@ -140,7 +140,7 @@ App Add To Waitlist with mode
     ${data}=  json.dumps  ${data}
     App Check And Create YNW Session  ${headers}
     ${resp}=  POST On Session  ynw  provider/waitlist  data=${data}  expected_status=any  headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 App Add To Waitlist Consumers with mode
     [Arguments]  ${headers}  ${waitlistMode}  ${accId}  ${queueId}  ${date}  ${serviceId}  ${consumerNote}  ${revealPhone}  @{vargs}   
@@ -159,13 +159,13 @@ App Add To Waitlist Consumers with mode
     ${data}=  json.dumps  ${data}
     App Check And Create YNW Session  ${headers}
     ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${param}   expected_status=any   headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 App Get Locations
     [Arguments]  ${headers}
     App Check And Create YNW Session   ${headers}
     ${resp}=    GET On Session    ynw   /provider/locations  expected_status=any   headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 App Get Waiting Time Of Providers
     [Arguments]  ${headers}  @{ids} 
@@ -176,7 +176,7 @@ App Get Waiting Time Of Providers
     	${pid}=  Catenate 	SEPARATOR=,	${pid} 	${ids[${index}]}
     END
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues/waitingTime/${pid}  expected_status=any  headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 App Take Appointment For Provider 
     [Arguments]    ${headers}  ${accid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}
@@ -186,13 +186,13 @@ App Take Appointment For Provider
     ${data}=  json.dumps  ${data}
     App Check And Create YNW Session  ${headers}
     ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  expected_status=any  headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 App Get consumer Appointment By Id
     [Arguments]   ${headers}  ${accId}  ${appmntId}
     App Check And Create YNW Session  ${headers}
     ${resp}=  GET On Session  ynw  url=/consumer/appointment/${appmntId}?account=${accId}   expected_status=any  headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 App Take Appointment For Consumer 
@@ -204,35 +204,35 @@ App Take Appointment For Consumer
     ${data}=  json.dumps  ${data}
     App Check And Create YNW Session  ${headers}
     ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any  headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 App Get Appmt Service By LocationId
     [Arguments]   ${headers}   ${locationId}   
     App Check And Create YNW Session  ${headers}
     ${resp}=    GET On Session    ynw  /consumer/appointment/service/${locationId}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Scale Account Activation
     [Arguments]  ${key}
     Check And Create YNW Session
     ${resp_val}=  POST On Session   ynw  /provider/${key}/verify  expected_status=any
-    [Return]  ${resp_val}
+    RETURN  ${resp_val}
 
 Scale Account Set Credential
     [Arguments]   ${key}  ${purpose}  ${countryCode}=91
     ${auth}=     Create Dictionary   password=${password}  countryCode=${countryCode}
     ${apple}=    json.dumps    ${auth}
     ${resp}=    PUT On Session    ynw    /provider/${key}/activate    data=${apple}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 App Get Appointment Slots By Schedule and Date
     [Arguments]  ${headers}  ${scheduleId}  ${date}  ${acct_id}
     ${params}=  Create Dictionary  account=${acct_id}
     App Check And Create YNW Session  ${headers}
     ${resp}=  GET On Session  ynw  /consumer/appointment/schedule/${scheduleId}/${date}    params=${params}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 App Create Order For HomeDelivery
     [Arguments]   ${headers}  ${Cookie}   ${accId}   ${orderFor}    ${CatalogId}   ${homeDelivery}    ${homeDeliveryAddress}  ${sTime1}    ${eTime1}   ${orderDate}    ${phoneNumber}    ${email}  ${countryCode}  ${coupons}  @{vargs}        
@@ -250,7 +250,7 @@ App Create Order For HomeDelivery
 
     ${order}=  Create Dictionary  homeDelivery=${homeDelivery}  homeDeliveryAddress=${homeDeliveryAddress}   catalog=${catalog}  orderFor=${orderFor}    orderItem=${orderitem}   orderDate=${orderDate}   timeSlot=${timeSlot}  phoneNumber=${phoneNumber}  countryCode=${countryCode}  email=${email}  coupons=${coupons}
     ${resp}=  Imageupload.Shopping Cart Upload     ${Cookie}   ${accId}   ${order}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 App Create Order For Pickup
@@ -270,21 +270,21 @@ App Create Order For Pickup
 
     ${order}=  Create Dictionary  storePickup=${storePickup}   catalog=${catalog}  orderFor=${orderFor}    orderItem=${orderitem}   orderDate=${orderDate}   timeSlot=${timeSlot}  phoneNumber=${phoneNumber}  countryCode=${countryCode}  email=${email}  coupons=${coupons}
     ${resp}=  Imageupload.Shopping Cart Upload     ${Cookie}   ${accId}   ${order}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 App Get Order By Id
     [Arguments]    ${headers}  ${accId}   ${uuid}
     App Check And Create YNW Session  ${headers}
     ${resp}=  GET On Session  ynw  url=/consumer/orders/${uuid}?account=${accId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 App Get Appointment Slots By Date Schedule
     [Arguments]    ${headers}  ${scheduleId}   ${date}   ${service}
     App Check And Create YNW Session  ${headers}
     ${resp}=  GET On Session  ynw  /provider/appointment/schedule/${scheduleId}/${date}/${service}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 App Take Appointment with Appointment Mode 
@@ -296,7 +296,7 @@ App Take Appointment with Appointment Mode
     ${data}=  json.dumps  ${data}
     App Check And Create YNW Session  ${headers}
     ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any  headers=${sp_app_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -306,14 +306,14 @@ Android App Login
     ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}  countryCode=${countryCode}
     ${log}=    json.dumps    ${login}
     Create Session    ynw    ${BASE_URL}  headers=${app_headers}
-    [Return]  ${log}
+    RETURN  ${log}
 
 Android SP App Login
     [Arguments]    ${usname}  ${passwrd}  ${countryCode}=+91
     ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}  countryCode=${countryCode}
     ${log}=    json.dumps    ${login}
     Create Session    ynw    ${BASE_URL}  headers=${sp_app_headers}
-    [Return]  ${log}
+    RETURN  ${log}
 
 Android App Check And Create YNW Session
     ${res}=   Session Exists    ynw
@@ -334,47 +334,47 @@ Android App Consumer SignUp
     ${apple}=  Consumer Creation  ${firstname}  ${lastname}  ${address}  ${primaryNo}  ${alternativeNo}  ${dob}  ${gender}  ${email}   countryCode=${countryCode}    
     Android App Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /consumer   data=${apple}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Android App Consumer Activation
     [Arguments]  ${email}  ${purpose}
     Android App Check And Create YNW Session
     ${key}=   verify accnt  ${email}  ${purpose}
     ${resp_val}=  POST On Session   ynw  /consumer/${key}/verify   expected_status=any
-    [Return]  ${resp_val}
+    RETURN  ${resp_val}
 
 Android App Consumer Login
     [Arguments]    ${usname}  ${passwrd}  ${countryCode}=+91
     ${log}=  Android App Login  ${usname}  ${passwrd}   countryCode=${countryCode}
     ${resp}=    POST On Session    ynw    /consumer/login    data=${log}  expected_status=any  headers=${app_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Android App Consumer Logout
     Android App Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw    /consumer/login  expected_status=any   headers=${app_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Android ProviderLogin
     [Arguments]    ${usname}  ${passwrd}   ${countryCode}=91
     ${log}=  Android App Login  ${usname}  ${passwrd}   countryCode=${countryCode}
     ${resp}=    POST On Session    ynw    /provider/login    data=${log}  expected_status=any  headers=${app_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Android SP ProviderLogin
     [Arguments]    ${usname}  ${passwrd}   ${countryCode}=91
     ${log}=  Android SP App Login  ${usname}  ${passwrd}   countryCode=${countryCode}
     ${resp}=    POST On Session    ynw    /provider/login    data=${log}  expected_status=any   headers=${sp_app_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Android ProviderLogout
     Android App Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /provider/login  expected_status=any
-    [Return]  ${resp}       
+    RETURN  ${resp}       
 
 Android SP ProviderLogout
     SP App Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /provider/login  expected_status=any
-    [Return]  ${resp}       
+    RETURN  ${resp}       
 
 Android Create Order For HomeDelivery
     [Arguments]   ${Cookie}   ${accId}   ${orderFor}    ${CatalogId}   ${homeDelivery}    ${homeDeliveryAddress}  ${sTime1}    ${eTime1}   ${orderDate}    ${phoneNumber}    ${email}  ${countryCode}  ${coupons}  @{vargs}        
@@ -392,13 +392,13 @@ Android Create Order For HomeDelivery
 
     ${order}=  Create Dictionary  homeDelivery=${homeDelivery}  homeDeliveryAddress=${homeDeliveryAddress}   catalog=${catalog}  orderFor=${orderFor}    orderItem=${orderitem}   orderDate=${orderDate}   timeSlot=${timeSlot}  phoneNumber=${phoneNumber}  countryCode=${countryCode}  email=${email}  coupons=${coupons}
     ${resp}=  Imageupload.AndroidShoppingCartUpload   ${Cookie}   ${accId}   ${order}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 Android Get Order By Id
     [Arguments]    ${accId}   ${uuid}
     Android App Check And Create YNW Session
     ${resp}=  GET On Session  ynw  url=/consumer/orders/${uuid}?account=${accId}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Android Add To Waitlist Consumers
     [Arguments]  ${accId}  ${queueId}  ${date}  ${serviceId}  ${consumerNote}  ${revealPhone}  @{vargs}   
@@ -417,14 +417,14 @@ Android Add To Waitlist Consumers
     ${data}=  json.dumps  ${data}
     Android App Check And Create YNW Session
     ${resp}=    POST On Session  ynw  /consumer/waitlist   data=${data}  params=${param}   expected_status=any   headers=${app_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Android Get consumer Waitlist By Id
     [Arguments]  ${uuid}  ${accId}
     ${param}=  Create Dictionary  account=${accId}
     Android App Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/waitlist/${uuid}  params=${param}   expected_status=any   headers=${app_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Android Take Appointment For Provider 
     [Arguments]    ${accid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}
@@ -434,20 +434,20 @@ Android Take Appointment For Provider
     ${data}=  json.dumps  ${data}
     Android App Check And Create YNW Session
     ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  expected_status=any  headers=${app_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Android Get consumer Appointment By Id
     [Arguments]   ${accId}  ${appmntId}
     Android App Check And Create YNW Session
     ${resp}=  GET On Session  ynw  url=/consumer/appointment/${appmntId}?account=${accId}   expected_status=any  headers=${app_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Android GetCustomer
     [Arguments]  &{param}
     SP App Check And Create YNW Session
     ${resp}=   GET On Session  ynw  /provider/customers  params=${param}  expected_status=any   headers=${sp_app_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Android Add To Waitlist
@@ -466,7 +466,7 @@ Android Add To Waitlist
     ${data}=  json.dumps  ${data}
     SP App Check And Create YNW Session
     ${resp}=  POST On Session  ynw  provider/waitlist  data=${data}  expected_status=any  headers=${sp_app_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Android Add To Waitlist with mode
     [Arguments]   ${waitlistMode}  ${consid}  ${service_id}  ${qid}  ${date}  ${consumerNote}  ${ignorePrePayment}   @{fids}
@@ -484,20 +484,20 @@ Android Add To Waitlist with mode
     ${data}=  json.dumps  ${data}
     SP App Check And Create YNW Session
     ${resp}=  POST On Session  ynw  provider/waitlist  data=${data}  expected_status=any  headers=${sp_app_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Android Flush Analytics Data to DB
     [Arguments]
     SP App Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/analytics/db/flush  expected_status=any  headers=${sp_app_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Android Get Account Level Analytics
     [Arguments]   ${metricId}  ${dateFrom}  ${dateTo}  ${frequency}  &{kwargs}
     ${params}=  Create Dictionary  metricId=${metricId}  dateFrom=${dateFrom}  dateTo=${dateTo}  frequency=${frequency}
     SP App Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/analytics/account  params=${params}  expected_status=any  headers=${sp_app_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Android Take Appointment For Consumer 
@@ -509,7 +509,7 @@ Android Take Appointment For Consumer
     ${data}=  json.dumps  ${data}
     SP App Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any  headers=${sp_app_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Android Take Appointment with Appointment Mode 
@@ -521,7 +521,7 @@ Android Take Appointment with Appointment Mode
     ${data}=  json.dumps  ${data}
     SP App Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/appointment  data=${data}  expected_status=any  headers=${sp_app_headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Android Create Order For Pickup
@@ -541,7 +541,7 @@ Android Create Order For Pickup
 
     ${order}=  Create Dictionary  storePickup=${storePickup}   catalog=${catalog}  orderFor=${orderFor}    orderItem=${orderitem}   orderDate=${orderDate}   timeSlot=${timeSlot}  phoneNumber=${phoneNumber}  countryCode=${countryCode}  email=${email}  coupons=${coupons}
     ${resp}=  Imageupload.AndroidSPShoppingCartUpload   ${Cookie}   ${accId}   ${order}
-    [Return]  ${resp} 
+    RETURN  ${resp} 
 
 
 

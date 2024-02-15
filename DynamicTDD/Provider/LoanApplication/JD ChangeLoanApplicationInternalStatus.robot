@@ -24,7 +24,7 @@ Enable Disable CDL
     
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/cdl/${status}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Variables ***
 

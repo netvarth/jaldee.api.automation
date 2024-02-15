@@ -26,7 +26,7 @@ Get Billable Subdomain
             Should Be Equal As Strings    ${resp.status_code}    200
             Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[1]}'
     END
-    [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
+    RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
 
 
 
@@ -39,7 +39,7 @@ Get Non Billable Subdomain
             Should Be Equal As Strings    ${resp.status_code}    200
             Exit For Loop IF  '${resp.json()['serviceBillable']}' == '${bool[0]}'
     END
-    [Return]  ${subdomain}  ${resp.json()['serviceBillable']}
+    RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
 
 
 *** Variables ***

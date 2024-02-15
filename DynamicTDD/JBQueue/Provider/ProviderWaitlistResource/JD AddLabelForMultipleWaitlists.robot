@@ -51,7 +51,7 @@ MultiLocation
         Should Be Equal As Strings    ${resp.status_code}    200
 	    Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
     END
-    [Return]  ${multiloc_providers}
+    RETURN  ${multiloc_providers}
 
 
 *** Test Cases ***

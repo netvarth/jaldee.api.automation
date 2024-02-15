@@ -24,14 +24,14 @@ Create Receivable
     ${data}=    json.dumps    ${data}   
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /provider/jp/finance/receivable    data=${data}  expected_status=any    headers=${headers}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Receivable By Id
 
     [Arguments]   ${recUid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/receivable/${recUid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 *** Variables ***
 

@@ -21,7 +21,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Licence Billing Detail
     Check And Create YNW Session
     ${resp}=   GET On Session   ynw   /provider/license/billing  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 ***Variables***

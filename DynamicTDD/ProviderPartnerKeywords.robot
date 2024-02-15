@@ -20,7 +20,7 @@ Identify Partner
     ${log}=    json.dumps    ${otp}
     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
     ${resp}=    POST On Session    ynw    /partner/oauth/identify    data=${log}  headers=${headers2}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Verify Otp For Login Partner
     [Arguments]  ${loginid}  ${purpose}
@@ -28,7 +28,7 @@ Verify Otp For Login Partner
     ${key}=   verify accnt  ${loginid}  ${purpose}
     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
     ${resp}=    POST On Session    ynw    /partner/oauth/otp/${key}/verify  headers=${headers2}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Partner Login
     [Arguments]    ${loginId}  ${accountId}  ${token}  ${countryCode}=+91
@@ -37,7 +37,7 @@ Partner Login
     ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=${token}
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /partner/login   headers=${headers2}  data=${log}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Partner Logout 
@@ -45,7 +45,7 @@ Partner Logout
     Check And Create YNW Session
     ${headers2}=     Create Dictionary    Content-Type=application/json  
     ${resp}=    DELETE On Session    ynw    /partner/login       expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Login Partner with Password
@@ -54,7 +54,7 @@ Login Partner with Password
     ${log}=    json.dumps    ${login}
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /partner/login   data=${log}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Partner Reset Password
@@ -63,7 +63,7 @@ Partner Reset Password
     ${log}=    json.dumps    ${login}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw   /partner/login/reset/password   data=${log}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -74,51 +74,51 @@ Complete Partner Reset Password
     ${headers2}=     Create Dictionary    Content-Type=application/json    authorization=${token}
     Check And Create YNW Session
     ${resp}=    POST On Session   ynw   /partner/login/reset/password   headers=${headers2}  data=${log}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Partner Loan Application Category
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /partner/loanapplication/category    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
     
 
 Get Partner Loan Application Type
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /partner/loanapplication/type  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Partner Loan Application Status
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /partner/loanapplication/status  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Partner Loan Application Sub-Status
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /partner/loanapplication/substatus  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Partner Loan Application Product
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /partner/loan/products  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Partner Loan Application Scheme
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /partner/loan/schemes  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Partner Loan Application SP Internal Status
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /partner/loanapplication/sp/internalstatus  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Create Partner Loan Application
 
@@ -151,7 +151,7 @@ Create Partner Loan Application
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /partner/loanapplication  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Partner Loan Application
 
@@ -179,7 +179,7 @@ Update Partner Loan Application
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /partner/loanapplication/${loanApplicationRefNo}  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 
@@ -188,7 +188,7 @@ Get Partner Loan Application With Filter
     [Arguments]    &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /partner/loanapplication  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Partner Loan Application Count with filter
 
@@ -196,7 +196,7 @@ Get Partner Loan Application Count with filter
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /partner/loanapplication/count  params=${param}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Partner Loan Application by loanApplicationUid
 
@@ -204,7 +204,7 @@ Get Partner Loan Application by loanApplicationUid
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /partner/loanapplication/${loanApplicationUid}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Cancel Partner Loan Application
 
@@ -212,7 +212,7 @@ Cancel Partner Loan Application
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /partner/loanapplication/${loanApplicationUid}/cancel    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Redirect Partner Loan Application
 
@@ -220,7 +220,7 @@ Redirect Partner Loan Application
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /partner/loanapplication/${loanApplicationUid}/redirect    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
     
 # Approval Partner Loan Application
@@ -229,7 +229,7 @@ Redirect Partner Loan Application
 
 #     Check And Create YNW Session
 #     ${resp}=  PUT On Session  ynw   /partner/loanapplication/${loanApplicationUid}/approvalrequest    expected_status=any
-#     [Return]  ${resp}
+#     RETURN  ${resp}
 Partner Loan Application Approval
 
     [Arguments]    ${loanApplicationUid}    ${Schemeid} 
@@ -240,7 +240,7 @@ Partner Loan Application Approval
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /partner/loanapplication/${loanApplicationUid}/approvalrequest     data=${data}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Partner Loan Application Manual Approval
@@ -251,14 +251,14 @@ Partner Loan Application Manual Approval
     ${ManualApproval}=     Create Dictionary    loanScheme=${loanScheme}    invoiceAmount=${invoiceAmount}    downpaymentAmount=${downpaymentAmount}    requestedAmount=${requestedAmount}  sanctionedAmount=${sanctionedAmount}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /partner/loanapplication/${loanApplicationUid}/manualapproval  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 Reject Partner Loan Application
 
     [Arguments]    ${loanApplicationUid}
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /partner/loanapplication/${loanApplicationUid}/reject  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Partner Loan Application Status
 
@@ -266,7 +266,7 @@ Change Partner Loan Application Status
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /partner/loanapplication/${loanApplicationUid}/status/${statusId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Partner Loan Application Sub-Status
 
@@ -274,7 +274,7 @@ Change Partner Loan Application Sub-Status
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /partner/loanapplication/${loanApplicationRefNo}/substatus/${substatusId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Partner Loan Application Status with sp
    
@@ -282,7 +282,7 @@ Change Partner Loan Application Status with sp
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /partner/loanapplication/${loanApplicationRefNo}/sp/publicnotes  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Remove Partner Loan Assignee
 
@@ -290,7 +290,7 @@ Remove Partner Loan Assignee
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /partner/loanapplication/${loanApplicationUid}/assignee/remove  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Change Partner Loan Assignee
 
@@ -298,7 +298,7 @@ Change Partner Loan Assignee
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /partner/loanapplication/${loanApplicationUid}/assignee/${userId}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Partner Generate Loan Application Otp For Phone Number
 
@@ -309,7 +309,7 @@ Partner Generate Loan Application Otp For Phone Number
     # ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /partner/loanapplication/generate/phone   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Partner Verify Otp for phone
 
@@ -336,7 +336,7 @@ Partner Verify Otp for phone
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /partner/loanapplication/verify/${otp}/phone  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Partner Verify Number and Create Loan Application with customer details
@@ -371,7 +371,7 @@ Partner Verify Number and Create Loan Application with customer details
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /partner/loanapplication/verify/${otp}/phone  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Partner Otp For Email
@@ -383,7 +383,7 @@ Partner Otp For Email
     # ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /partner/loanapplication/generate/email  data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Partner Verify Otp for Email
 
@@ -396,7 +396,7 @@ Partner Verify Otp for Email
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /partner/loanapplication/verify/${otp}/phone  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Requst For Partner Aadhar Validation
 
@@ -416,7 +416,7 @@ Requst For Partner Aadhar Validation
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /partner/loanapplication/update/UID  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Requst For Partner Pan Validation
 
@@ -436,7 +436,7 @@ Requst For Partner Pan Validation
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /partner/loanapplication/update/Pan  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Add Partner loan Bank Details
 
@@ -456,7 +456,7 @@ Add Partner loan Bank Details
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /partner/loanapplication/bank  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Update Partner loan Bank Details
 
@@ -476,7 +476,7 @@ Update Partner loan Bank Details
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /partner/loanapplication/bank  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Verify Partner loan Bank
 
@@ -489,7 +489,7 @@ Verify Partner loan Bank
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /partner/loanapplication/verify/bank  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 # Verify Partner loan Bank Details
 
@@ -521,7 +521,7 @@ Get Partner loan Bank
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /partner/loanapplication/bank/${id}   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Partner loan Bank Details
 
@@ -529,7 +529,7 @@ Get Partner loan Bank Details
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /partner/loanapplication/${loanApplicationUid}/bankdetails   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Generate Phone Partner Creation
 
@@ -544,7 +544,7 @@ Generate Phone Partner Creation
 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /provider/partner/generate/phone   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Verify Phone Partner Creation
 
@@ -562,7 +562,7 @@ Verify Phone Partner Creation
 
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/partner/verify/${otp}/phone  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Otp for Partner Acceptance Phone
 
@@ -573,7 +573,7 @@ Otp for Partner Acceptance Phone
 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /partner/generate/acceptance   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Partner Loan Application Action Completed
 
@@ -583,7 +583,7 @@ Partner Loan Application Action Completed
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /partner/loanapplication/${loanApplicationUid}/actioncompleted  data=${data}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Partner Add General Notes
 
@@ -594,7 +594,7 @@ Partner Add General Notes
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /partner/loanapplication/${uid}/note   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Verify Partner loan Bank Details
 
@@ -613,7 +613,7 @@ Verify Partner loan Bank Details
 
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /partner/loanapplication/request  data=${loan}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Generate OTP for partner Email
@@ -624,7 +624,7 @@ Generate OTP for partner Email
 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /provider/partner/generate/email   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Verify OTP for Partner Email
@@ -637,7 +637,7 @@ Verify OTP for Partner Email
 
     Check And Create YNW Session
     ${resp}=    POST On Session    ynw     /provider/partner/verify/${otp}/email   data=${data}  expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Partner Customers
 
@@ -645,13 +645,13 @@ Get Partner Customers
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/partner/${partnerId}/customers   expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 Get Partner Loan Application Consumer Details with filter
     [Arguments]    &{filters}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /partner/loanapplication/consumers/details  params=${filters}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Partner Loan Application by loanApplicationRefNo
@@ -659,14 +659,14 @@ Get Partner Loan Application by loanApplicationRefNo
 
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /partner/loanapplication/${loanApplicationRefNo}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Get Partner Loan Application By uid
     [Arguments]    ${loanApplicationUid}   
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /partner/loanapplication/${loanApplicationUid}    expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Partner Aadhar
@@ -681,7 +681,7 @@ Update Partner Aadhar
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/partner/update/UID   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Aadhaar Status
@@ -690,7 +690,7 @@ Aadhaar Status
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/partner/aadhar/status/${uid}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Partner Pan
@@ -705,7 +705,7 @@ Update Partner Pan
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/partner/update/Pan   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Update Partner Bank
@@ -723,7 +723,7 @@ Update Partner Bank
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/partner/bank   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Verify Partner Bank
@@ -738,7 +738,7 @@ Verify Partner Bank
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/partner/verify/bank   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Validate Gst 
@@ -750,7 +750,7 @@ Validate Gst
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/partner/validate/gst/${uid}   data=${data}   expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Partner Details
@@ -768,7 +768,7 @@ Partner Details
 
     Check And Create YNW Session
     ${resp}=    PUT On Session    ynw     /provider/partner/${uid}   data=${data}  expected_status=any 
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Partner upload file to temporary location
@@ -782,7 +782,7 @@ Partner upload file to temporary location
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /partner/fileShare/upload   data=${data}  expected_status=any
     Log  ${resp.content}
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 
 Partner change status of the uploaded file
@@ -792,5 +792,5 @@ Partner change status of the uploaded file
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /partner/fileShare/upload/${status}/${id}  expected_status=any
     Log  ${resp.content}
-    [Return]  ${resp}
+    RETURN  ${resp}
 

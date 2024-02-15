@@ -21,7 +21,7 @@ iphone App Login
     ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}  countryCode=${countryCode}
     ${log}=    json.dumps    ${login}
     Create Session    ynw    ${BASE_URL}  headers=${iphone_headers}
-    [Return]  ${log}
+    RETURN  ${log}
 
 iphone App Check And Create YNW Session
     ${res}=   Session Exists    ynw
@@ -35,23 +35,23 @@ iphone App Consumer SignUp
     ${apple}=  Consumer Creation  ${firstname}  ${lastname}  ${address}  ${primaryNo}  ${alternativeNo}  ${dob}  ${gender}  ${email}   countryCode=${countryCode}    
     iphone App Check And Create YNW Session
     ${resp}=    POST On Session    ynw    /consumer   data=${apple}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 iphone App Consumer Activation
     [Arguments]  ${email}  ${purpose}
     iphone App Check And Create YNW Session
     ${key}=   verify accnt  ${email}  ${purpose}
     ${resp_val}=  POST On Session   ynw  /consumer/${key}/verify   expected_status=any
-    [Return]  ${resp_val}
+    RETURN  ${resp_val}
 
 iphone App Consumer Login
     [Arguments]    ${usname}  ${passwrd}  ${countryCode}=+91
     ${log}=  Android App Login  ${usname}  ${passwrd}   countryCode=${countryCode}
     ${resp}=    POST On Session    ynw    /consumer/login    data=${log}  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 
 iphone App Consumer Logout
     iphone App Check And Create YNW Session
     ${resp}=    DELETE On Session    ynw    /consumer/login  expected_status=any
-    [Return]  ${resp}
+    RETURN  ${resp}
 

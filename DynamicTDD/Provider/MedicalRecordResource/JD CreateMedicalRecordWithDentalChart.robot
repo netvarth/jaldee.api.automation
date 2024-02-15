@@ -50,7 +50,7 @@ dental surface
     # ${status}=  Create Dictionary  status=${status}  chiefComplaint=${boolean}    notes=${notes}    attachments=${attachments}
     ${surface}=    Create Dictionary    occlusal=${occlusal}    mesial=${mesial}    distal=${distal}    buccal=${buccal}    lingual=${lingual}    incisal=${incisal}    
     ${teeth}=    Create Dictionary  toothId=${toothId}    dentalState=${dentalState}    surface=${surface}    status=${status}  chiefComplaint=${boolean}    notes=${notes}    chiefIssue=${chiefIssue}    attachments=${attachments}
-    [Return]  ${teeth}
+    RETURN  ${teeth}
 
 Create Medical Record With Dental Chart
 
@@ -64,7 +64,7 @@ Create Medical Record With Dental Chart
    ${data}=  json.dumps  ${data}
    Check And Create YNW Session
    ${resp}=  POST On Session  ynw  /provider/mr/${uid}  data=${data}  expected_status=any
-   [Return]  ${resp}
+   RETURN  ${resp}
 
 *** Test Cases ***
 

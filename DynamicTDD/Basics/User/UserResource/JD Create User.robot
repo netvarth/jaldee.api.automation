@@ -46,7 +46,7 @@ Get branch by license
         Exit For Loop IF  ${resp.json()['accountLicense']['licPkgOrAddonId']} == ${lic_id}
 
     END
-    [Return]  ${Branch_PH}
+    RETURN  ${Branch_PH}
 
 ***Test Cases***
 
