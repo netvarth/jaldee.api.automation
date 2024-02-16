@@ -1242,7 +1242,7 @@ JD-TC-ActivateVacation-5
 
 
 JD-TC-ActivateVacation-6
-    [Documentation]  Take account level and user level appmnt and create a user level vacation and check account level waitlist status
+    [Documentation]  Take account level and user level appmnt and create a user level vacation and check account level appointment status
 
     
     ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD}
@@ -1779,6 +1779,347 @@ JD-TC-ActivateVacation-7
 
     
 
+JD-TC-ActivateVacation-UH6
+    [Documentation]  Take consumer side appointment and then create a vacation and consumer try to reschedule appointment to that vecation time.
+
+    ${iscorp_subdomains}=  get_iscorp_subdomains  1
+    Log  ${iscorp_subdomains}
+    Set Test Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
+    Set Test Variable  ${sub_domains}   ${iscorp_subdomains[0]['subdomains']}
+    Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[0]['subdomainId']}
+    ${firstname_A}=  FakerLibrary.first_name
+    ${lastname_A}=  FakerLibrary.last_name
+    ${MUSERNAME_E2}=  Evaluate  ${MUSERNAME}+778805876
+    ${highest_package}=  get_highest_license_pkg
+    ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E2}    ${highest_package[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Activation  ${MUSERNAME_E2}  0
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Account Set Credential  ${MUSERNAME_E2}  ${PASSWORD}  0
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E2}${\n}
+    Set Suite Variable  ${MUSERNAME_E2}
+    ${id}=  get_id  ${MUSERNAME_E2}
+    ${bs}=  FakerLibrary.bs
+
+    ${pid_B16}=  get_acc_id  ${MUSERNAME_E2}
+    Set Suite Variable  ${pid_B16}
+
+    
+    ${ph1}=  Evaluate  ${MUSERNAME_E2}+1000880001
+    ${ph2}=  Evaluate  ${MUSERNAME_E2}+2000880001
+    ${views}=  Random Element    ${Views}
+    ${name1}=  FakerLibrary.name
+    ${name2}=  FakerLibrary.name
+    ${name3}=  FakerLibrary.name
+    ${ph_nos1}=  Phone Numbers  ${name1}  PhoneNo  ${ph1}  ${views}
+    ${ph_nos2}=  Phone Numbers  ${name2}  PhoneNo  ${ph2}  ${views}
+    ${emails1}=  Emails  ${name3}  Email  ${P_Email}181.${test_mail}  ${views}
+    ${bs}=  FakerLibrary.bs
+    ${companySuffix}=  FakerLibrary.companySuffix
+    # ${city}=   FakerLibrary.state
+    # ${latti}=  get_latitude
+    # ${longi}=  get_longitude
+    # ${postcode}=  FakerLibrary.postcode
+    # ${address}=  get_address
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    Set Suite Variable  ${tz}
+    ${parking}   Random Element   ${parkingType}
+    ${24hours}    Random Element    ${bool}
+    ${desc}=   FakerLibrary.sentence
+    ${url}=   FakerLibrary.url
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  ${DAY1}
+    ${list}=  Create List  1  2  3  4  5  6  7
+    Set Suite Variable  ${list}  ${list}
+    
+    ${sTime}=  db.subtract_timezone_time  ${tz}  3  00
+    Set Suite Variable  ${BsTime30}  ${sTime}
+    ${eTime}=  add_timezone_time  ${tz}  4  30  
+    Set Suite Variable  ${BeTime30}  ${eTime}
+    ${resp}=  Update Business Profile with schedule  ${bs}  ${desc}   ${companySuffix}  ${city}   ${longi}  ${latti}  ${url}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime}  ${eTime}  ${postcode}  ${address}  ${ph_nos1}  ${ph_nos2}  ${emails1}  ${EMPTY}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    sleep   02s
+
+    ${resp}=  Get Business Profile
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${fields}=   Get subDomain level Fields  ${domains}  ${sub_domains}
+    Log  ${fields.json()}
+    Should Be Equal As Strings    ${fields.status_code}   200
+
+    ${virtual_fields}=  get_Subdomainfields  ${fields.json()}
+
+    ${resp}=  Update Subdomain_Level  ${virtual_fields}  ${sub_domains}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get specializations Sub Domain  ${domains}  ${sub_domains}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${spec}=  get_Specializations  ${resp.json()}
+    ${resp}=  Update Specialization  ${spec}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}
+        ${resp}=  Enable Waitlist
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    sleep   01s
+
+    ${resp}=  Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[0]} 
+    ${resp}=  Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+    
+    ${resp}=  Appointment Status   ${toggle[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Accountsettings  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response   ${resp}    waitlist=${bool[0]}   appointment=${bool[1]}   
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
+    sleep  2s
+    ${resp}=  Get Departments
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${dep_id0}  ${resp.json()['departments'][0]['departmentId']}
+    
+    ${number}=  Random Int  min=22000  max=23999
+    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+${number}
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+    ${dob}=  FakerLibrary.Date
+    ${pin}=  get_pincode
+
+    ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id0}  ${sub_domain_id}  ${bool[0]}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${countryCodes[0]}  ${PUSERNAME_U1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${user_id}  ${resp.json()}
+
+    ${resp}=  Get User
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+   
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    Set Suite Variable  ${DAY2}
+    ${list}=  Create List  1  2  3  4  5  6  7
+
+    Set Suite Variable  ${list}
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    Set Suite Variable   ${sTime1}
+    ${eTime1}=  add_timezone_time  ${tz}  2  00  
+    Set Suite Variable   ${eTime1}
+   
+    ${resp}=    Get Locations
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${locid}   ${resp.json()[0]['id']}
+
+    ${description}=  FakerLibrary.sentence
+    ${dur}=  FakerLibrary.Random Int  min=10  max=20
+    ${amt}=  FakerLibrary.Random Int  min=200  max=500
+    ${amt}=  Convert To Number  ${amt}  1
+    ${resp}=  Create Service For User  ${SERVICE1}  ${description}   ${dur}  ${status[0]}  ${bType}  ${bool[0]}   ${notifytype[0]}  0  ${amt}  ${bool[0]}  ${bool[0]}  ${dep_id0}  ${user_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${service_id}  ${resp.json()}
+    
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=1
+    ${duration}=  FakerLibrary.Random Int  min=1  max=10
+    ${bool1}=  Random Element  ${bool}
+    ${noOfOccurance}=  Random Int  min=5  max=15
+    ${resp}=  Create Appointment Schedule For User  ${user_id}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${noOfOccurance}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${locid}  ${duration}  ${bool1}   ${service_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${schedule_id}  ${resp.json()}
+    
+    ${resp}=  Consumer Login  ${CUSERNAME6}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${uname}  ${resp.json()['userName']}
+    ${JC_id01}=  get_id  ${CUSERNAME6} 
+    
+    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${schedule_id}   ${pid_B16}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
+    @{slots}=  Create List
+    FOR   ${i}  IN RANGE   0   ${no_of_slots}
+        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+    END
+    ${num_slots}=  Get Length  ${slots}
+    ${p}=  Random Int  max=${num_slots-1}
+    Set Suite Variable   ${slot1}   ${slots[${p}]}
+
+    ${q}=  Random Int  max=${num_slots-2}
+    Set Test Variable   ${slot2}   ${slots[${q}]}
+
+    ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable    ${CUR_DAY}
+
+    ${pcid1}=  get_id  ${CUSERNAME6}
+    ${appt_for1}=  Create Dictionary  id=${self}   apptTime=${slot1}  
+    ${apptfor1}=   Create List  ${appt_for1}
+    ${cnote}=   FakerLibrary.name
+    ${resp}=   Take Appointment For User    ${pid_B16}  ${service_id}  ${schedule_id}  ${CUR_DAY}  ${cnote}  ${user_id}   ${apptfor1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200    
+    ${apptid}=  Get Dictionary Values  ${resp.json()}
+    Set Suite Variable  ${apptid02}  ${apptid[0]}
+   
+    ${resp}=   Get consumer Appointment By Id   ${pid_B16}  ${apptid02}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid02}
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   1
+
+    ${desc}=    FakerLibrary.name
+    Set Test Variable      ${desc}
+    ${resp}=  Create Vacation   ${desc}  ${user_id}  ${recurringtype[1]}  ${list}  ${EN_DAY}  ${EN_DAY}  0  ${sTime1}  ${eTime1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${v_id2}    ${resp.json()['holidayId']}
+    Should Be Equal As Strings   ${resp.json()['waitlistCount']}   0
+    Should Be Equal As Strings   ${resp.json()['apptCount']}       0
+
+    ${resp}=   Get Vacation    ${user_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    Set Suite Variable  ${v_id2}  ${resp.json()[0]['id']} 
+    Verify Response List   ${resp}   0  id=${v_id2}   description=${desc}  
+    Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['recurringType']}                     ${recurringtype[1]}
+    Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['repeatIntervals']}                   ${list}  
+    Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['startDate']}                         ${EN_DAY}
+    Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['terminator']['endDate']}             ${EN_DAY}  
+    Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['timeSlots'][0]['sTime']}             ${sTime1}  
+    Should Be Equal As Strings   ${resp.json()[0]['holidaySchedule']['timeSlots'][0]['eTime']}             ${eTime1}
+       
+    ${resp}=  Get Appointment By Id   ${apptid02}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
+
+    ${resp}=  Activate Vacation    ${boolean[1]}  ${v_id2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    sleep   04s
+
+    ${resp}=  ProviderLogout
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Consumer Login  ${CUSERNAME6}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${uname}  ${resp.json()['userName']}
+    ${JC_id01}=  get_id  ${CUSERNAME6} 
+
+    ${resp}=  Reschedule Appointment   ${pid_B16}   ${apptid02}  ${slot2}  ${EN_DAY}  ${schedule_id}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"  "${APPOINTMET_SLOT_NOT_AVAILABLE}"
+
+JD-TC-ActivateVacation-UH7
+    [Documentation]  Provider try to followup appointment to non working day of user.
+
+    ${resp}=  Consumer Login  ${CUSERNAME6}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${pcid1}=  get_id  ${CUSERNAME6}
+    ${appt_for1}=  Create Dictionary  id=${self}   apptTime=${slot1}  
+    ${apptfor1}=   Create List  ${appt_for1}
+    ${cnote}=   FakerLibrary.name
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   1
+
+
+    ${resp}=   Take Appointment For User    ${pid_B16}  ${service_id}  ${schedule_id}  ${EN_DAY}  ${cnote}  ${user_id}   ${apptfor1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422 
+    Should Be Equal As Strings  "${resp.json()}"  "${APPOINTMET_SLOT_NOT_AVAILABLE}"
+
+
+JD-TC-ActivateVacation-UH8
+    [Documentation]  Disable user and try to take appointment for that user in a non working day.
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+        
+        ${reason}=  Random Element  ${cancelReason}
+        ${msg}=   FakerLibrary.sentence
+        Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+        ${resp}=    Provider Cancel Appointment  ${apptid02}  ${reason}  ${msg}  ${CUR_DAY}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  EnableDisable User  ${user_id}  ${toggle[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Consumer Login  ${CUSERNAME6}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Set Test Variable  ${uname}  ${resp.json()['userName']}
+
+    ${pcid1}=  get_id  ${CUSERNAME6}
+    ${appt_for1}=  Create Dictionary  id=${self}   apptTime=${slot1}  
+    ${apptfor1}=   Create List  ${appt_for1}
+    ${cnote}=   FakerLibrary.name
+    ${EN_DAY}=  db.add_timezone_date  ${tz}   1
+
+    ${resp}=   Take Appointment For User    ${pid_B16}  ${service_id}  ${schedule_id}  ${EN_DAY}  ${cnote}  ${user_id}   ${apptfor1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422   
+    Should Be Equal As Strings  "${resp.json()}"  "${SCHEDULE_DISABLED}"
+
+  
 
 
 
@@ -1947,5 +2288,165 @@ JD-TC-ActivateVacation-UH7
     Should Be Equal As Strings  ${resp.json()['consumer']['id']}                  ${pcid6}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}         ${pcid6}
 
-      
+JD-TC-ActivateHoliday-1
+    [Documentation]  Provider create appointment schedule and today appointment is enabled and take appointment 
+    ...              then create a holiday and after activate call check appmt status
+                   
+    
+    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${jdconID}   ${resp.json()['id']}
+    Set Suite Variable  ${fname}   ${resp.json()['firstName']}
+    Set Suite Variable  ${lname}   ${resp.json()['lastName']}
+
+    ${resp}=  Consumer Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Appointment Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+
+    clear_service   ${PUSERNAME186}
+    clear_location  ${PUSERNAME186}
+    clear_customer   ${PUSERNAME186}
+
+    ${resp}=   Get Service
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Locations
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get jaldeeIntegration Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+
+    ${resp}=   Get Appointment Settings
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
+
+    ${lid1}=  Create Sample Location  
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    clear_appt_schedule   ${PUSERNAME186}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    ${list}=  Create List  1  2  3  4  5  6  7
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${eTime1}=  add_timezone_time  ${tz}  2  00  
+    ${SERVICE1}=    FakerLibrary.Word
+    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${schedule_name}=  FakerLibrary.bs
+    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${duration}=  FakerLibrary.Random Int  min=1  max=10
+    ${bool1}=  Random Element  ${bool}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid1}  ${duration}  ${bool1}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}
+
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
+    Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][1]['time']}
+
+    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${cid}   ${resp.json()}
+    
+    ${apptfor1}=  Create Dictionary  id=${cid}   apptTime=${slot1}
+    ${apptfor}=   Create List  ${apptfor1}
+    
+    ${cnote}=   FakerLibrary.word
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+          
+    ${apptid1}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
+    Set Test Variable  ${apptid1}  ${apptid1[0]}
+
+    ${resp}=  Get Appointment EncodedID   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${encId}=  Set Variable   ${resp.json()}
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()['appointmentEncId']}   ${encId}
+    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID}
+    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname}
+    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname}
+    Should Be Equal As Strings  ${resp.json()['service']['id']}   ${s_id}
+    Should Be Equal As Strings  ${resp.json()['schedule']['id']}   ${sch_id}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
+    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot1}
+    Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid1}
+
+    # ${cur_time}=  db.get_time_by_timezone   ${tz}  
+    ${cur_time}=  db.get_time_by_timezone  ${tz}  
+    ${DAY}=  db.add_timezone_date  ${tz}  3  
+    ${desc}=    FakerLibrary.name
+    ${resp}=  Create Holiday   ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY}  ${EMPTY}  ${cur_time}  ${eTime1}  ${desc}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${holidayId}    ${resp.json()['holidayId']}
+    Should Be Equal As Strings   ${resp.json()['apptCount']}   1
+
+    ${resp}=   Get Holiday By Id   ${holidayId}
+    Log   ${resp.json()}
+    Should Be Equal As Strings   ${resp.status_code}  200 
+    Verify Response    ${resp}  description=${desc}  id=${holidayId} 
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['recurringType']}                     ${recurringtype[1]}
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['repeatIntervals']}                   ${list}  
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['startDate']}                         ${DAY1}
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['terminator']['endDate']}             ${DAY}  
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['sTime']}             ${cur_time}  
+    Should Be Equal As Strings   ${resp.json()['holidaySchedule']['timeSlots'][0]['eTime']}             ${eTime1}
   
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
+
+    ${resp}=   Activate Holiday  ${boolean[1]}  ${holidayId}
+    Log   ${resp.json()}
+    Should Be Equal As Strings   ${resp.status_code}  200 
+    sleep   04s
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uid']}   ${apptid1}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[4]}
+
+
