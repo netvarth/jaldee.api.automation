@@ -32,9 +32,9 @@ ${fileSize}     0.00458
 
 *** Test Cases ***
 
-JD-TC-Take Appointment-1
+JD-TC-SendMessageWithAppmt-1
 
-    [Documentation]  Consumer takes appointment for a valid Provider
+    [Documentation]  Send Message With Appmt
 
     ${multilocdoms}=  get_mutilocation_domains
     Log  ${multilocdoms}
@@ -252,6 +252,7 @@ JD-TC-Take Appointment-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
     Set Suite Variable    ${PCid}   ${resp.json()['id']}
+    Set Suite Variable    ${PCname}   ${resp.json()['userName']}
 
     ${resp}=  Get Appointment Schedules Consumer  ${pid}
     Log  ${resp.content}
@@ -289,20 +290,6 @@ JD-TC-Take Appointment-1
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    Should Be Equal As Strings  ${resp.json()['uid']}                                           ${apptid1}
-    Should Be Equal As Strings  ${resp.json()['consumer']['id']}                                ${cid}
-    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}          ${fname}
-    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}           ${lname}
-    Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['primaryMobileNo']}    ${ph_no}
-    Should Be Equal As Strings  ${resp.json()['service']['id']}                                 ${s_id}
-    Should Be Equal As Strings  ${resp.json()['schedule']['id']}                                ${sch_id}
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}                                    ${appt_status[1]}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}                      ${fname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}                       ${lname}
-    Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}                       ${slot1}
-    Should Be Equal As Strings  ${resp.json()['appmtDate']}                                     ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot1}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${lid}
 
     ${message}=  Fakerlibrary.Sentence
     Set Suite variable    ${message}
@@ -316,15 +303,456 @@ JD-TC-Take Appointment-1
     ${fileName}=    FakerLibrary.firstname
     Set Suite variable    ${fileName}
 
-    ${resp}    upload file to temporary location consumer    ${file_action[0]}    ${PCid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}
+    ${resp}    upload file to temporary location consumer    ${file_action[0]}    ${PCid}    ${ownerType[0]}    ${PCname}    ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}    ${EMPTY}    ${order}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200 
     Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
 
-    ${attachments}=  Create Dictionary  owner=${PCid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${pdrname}
+    ${attachments}=  Create Dictionary  owner=${PCid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${PCname}
     ${attachment}=   Create List  ${attachments}
     Set Suite Variable      ${attachment}
 
     ${resp}=    Send Message With Appoinment consumer  ${PCid}  ${apptid1}  ${message}  ${messageType[0]}  attachments=${attachment}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Attachments In Appointment By Consumer    ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
+    Should Be Equal As Strings  ${resp.json()[0]['fileSize']}       ${fileSize}
+    Should Be Equal As Strings  ${resp.json()[0]['fileType']}       ${fileType1}
+    Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
+
+
+JD-TC-SendMessageWithAppmt-UH1
+
+	[Documentation]  Send Message With Appmt - where provider id is empty
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Send Message With Appoinment consumer  ${empty}  ${apptid1}  ${message}  ${messageType[0]}  attachments=${attachment}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-SendMessageWithAppmt-UH2
+
+	[Documentation]  Send Message With Appmt - where provider id is invalid
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${inv}=     FakerLibrary.Random Int
+
+    ${resp}=    Send Message With Appoinment consumer  ${inv}  ${apptid1}  ${message}  ${messageType[0]}  attachments=${attachment}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-SendMessageWithAppmt-UH3
+
+	[Documentation]  Send Message With Appmt - waitilist id is invalid
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${inv}=     FakerLibrary.Random Int
+
+    ${resp}=    Send Message With Appoinment consumer  ${PCid}  ${inv}  ${message}  ${messageType[0]}  attachments=${attachment}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   404
+    Should Be Equal As Strings    ${resp.json()}        ${INVALID_APPOINTMENT}
+
+
+JD-TC-SendMessageWithAppmt-UH4
+
+	[Documentation]  Send Message With Appmt - message is empty
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Send Message With Appoinment consumer  ${PCid}  ${apptid1}  ${empty}  ${messageType[0]}  attachments=${attachment}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-SendMessageWithAppmt-UH5
+
+	[Documentation]  Send Message With Appmt - where message type is enquiry
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Send Message With Appoinment consumer  ${PCid}  ${apptid1}  ${message}  ${messageType[1]}  attachments=${attachment}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-SendMessageWithAppmt-UH6
+
+	[Documentation]  Send Message With Appmt - where owner is empty
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${attachments}=  Create Dictionary  owner=${empty}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${PCname}
+    ${attachment2}=   Create List  ${attachments}
+
+    ${resp}=    Send Message With Appoinment consumer  ${PCid}  ${apptid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-SendMessageWithAppmt-UH7
+
+	[Documentation]  Send Message With Appmt - owner is invalid
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${inv}=     FakerLibrary.Random Int
+
+    ${attachments}=  Create Dictionary  owner=${inv}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${PCname}
+    ${attachment2}=   Create List  ${attachments}
+
+    ${resp}=    Send Message With Appoinment consumer  ${PCid}  ${apptid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-SendMessageWithAppmt-UH8
+
+	[Documentation]  Send Message With Appmt - file name is empty
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${attachments}=  Create Dictionary  owner=${PCid}  fileName=${empty}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${PCname}
+    ${attachment2}=   Create List  ${attachments}
+
+    ${resp}=    Send Message With Appoinment consumer  ${PCid}  ${apptid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${FILE_NAME_NOT_FOUND}
+
+JD-TC-SendMessageWithAppmt-UH9
+
+	[Documentation]  Send Message With Appmt - where file size is empty
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${attachments}=  Create Dictionary  owner=${PCid}  fileName=${fileName}  fileSize=${empty}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${PCname}
+    ${attachment2}=   Create List  ${attachments}
+
+    ${resp}=    Send Message With Appoinment consumer  ${PCid}  ${apptid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${FILE_SIZE_ERROR}
+
+JD-TC-SendMessageWithAppmt-UH10
+
+	[Documentation]  Send Message With Appmt - where file type is empty
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${attachments}=  Create Dictionary  owner=${PCid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${empty}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${PCname}
+    ${attachment2}=   Create List  ${attachments}
+
+    ${resp}=    Send Message With Appoinment consumer  ${PCid}  ${apptid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${FILE_TYPE_NOT_FOUND}
+
+JD-TC-SendMessageWithAppmt-UH11
+
+	[Documentation]  Send Message With Appmt - order id empty
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${attachments}=  Create Dictionary  owner=${PCid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${empty}  driveId=${driveId}  action=${file_action[0]}  ownerName=${PCname}
+    ${attachment2}=   Create List  ${attachments}
+
+    ${resp}=    Send Message With Appoinment consumer  ${PCid}  ${apptid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-SendMessageWithAppmt-UH12
+
+	[Documentation]  Send Message With Appmt -drive id is empty
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${attachments}=  Create Dictionary  owner=${PCid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${empty}  action=${file_action[0]}  ownerName=${PCname}
+    ${attachment2}=   Create List  ${attachments}
+
+    ${resp}=    Send Message With Appoinment consumer  ${PCid}  ${apptid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${S3_SERVICE_UPLOAD_FAILED}
+
+JD-TC-SendMessageWithAppmt-UH13
+
+	[Documentation]  Send Message With Appmt - drive id id invalid
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${inv}=     FakerLibrary.Random Int
+
+    ${attachments}=  Create Dictionary  owner=${PCid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${inv}  action=${file_action[0]}  ownerName=${PCname}
+    ${attachment2}=   Create List  ${attachments}
+
+    ${resp}=    Send Message With Appoinment consumer  ${PCid}  ${apptid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${INV_DRIVE_ID}
+
+JD-TC-SendMessageWithAppmt-UH14
+
+	[Documentation]  Send Message With Appmt - file action is remove
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${attachments}=  Create Dictionary  owner=${PCid}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${PCname}
+    ${attachment2}=   Create List  ${attachments}
+
+    ${resp}=    Send Message With Appoinment consumer  ${PCid}  ${apptid1}  ${message}  ${messageType[2]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-SendMessageWithAppmt-UH15
+
+	[Documentation]  Send Message With Appmt - attachment is empty list
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${attachment2}=   Create List
+
+    ${resp}=    Send Message With Appoinment consumer  ${PCid}  ${apptid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-SendMessageWithAppmt-UH16
+
+	[Documentation]  Send Message With Appmt - without login 
+
+    ${resp}=    Send Message With Appoinment consumer  ${PCid}  ${apptid1}  ${message}  ${messageType[0]}  attachments=${attachment}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}

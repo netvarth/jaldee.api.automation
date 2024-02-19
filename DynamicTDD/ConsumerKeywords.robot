@@ -3355,50 +3355,6 @@ Send Attachment From Appointment By Consumer
     RETURN  ${resp}
 
 
-Send Message With Waitlist By Consumer
-    [Arguments]  ${uuid}  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments}  
-
-    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
-    ${data}=  Create Dictionary  uuid=${uuid}  medium=${medium}  communicationMessage=${message}  attachments=${attachments}
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/appointment/communicate/message/${uuid}   data=${data}  expected_status=any
-    RETURN  ${resp}
-
-
-Send Message With Appointment By Consumer
-    [Arguments]  ${uuid}  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments} 
-
-    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
-    ${data}=  Create Dictionary  uuid=${uuid}  medium=${medium}  communicationMessage=${message}  attachments=${attachments}
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/appointment/communicate/message/${uuid}   data=${data}  expected_status=any
-    RETURN  ${resp}
-
-
-Send Message With Order By Consumer
-    [Arguments]  ${uuid}  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments} 
-
-    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
-    ${data}=  Create Dictionary  uuid=${uuid}  medium=${medium}  communicationMessage=${message}  attachments=${attachments}
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/orders/communicate/message/${uuid}   data=${data}  expected_status=any
-    RETURN  ${resp}
-
-
-Send Message With Donation By Consumer
-    [Arguments]  ${uuid}  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  @{attachments} 
-
-    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
-    ${data}=  Create Dictionary  uuid=${uuid}  medium=${medium}  communicationMessage=${message}  attachments=${attachments}
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/donation/communicate/message/${uuid}   data=${data}  expected_status=any
-    RETURN  ${resp}
-
-
 Send Message By Chat from Consumer
     [Arguments]  ${userid}  ${message}  ${messageType}  @{attachments} 
 
@@ -3447,4 +3403,33 @@ Send Message With Appoinment consumer
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/appointment/communicate/message/${uuid}   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+
+Send Message With Donation By Consumer
+   
+    [Arguments]   ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  ${uuid}  &{kwargs}  
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    ${data}=  Create Dictionary  medium=${medium}  communicationMessage=${message}  uuid=${uuid}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/donation/communication   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Send Message With Order By Consumer
+   
+    [Arguments]  ${uid}  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  ${uuid}  &{kwargs}  
+
+    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
+    ${data}=  Create Dictionary  medium=${medium}  communicationMessage=${message}  uuid=${uuid}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/orders/communicate/message/${uid}   data=${data}  expected_status=any
     RETURN  ${resp}
