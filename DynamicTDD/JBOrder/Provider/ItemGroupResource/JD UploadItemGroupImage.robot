@@ -543,7 +543,7 @@ JD-TC-UploadItemGroupImage-UH1
     Should Be Equal As Strings  "${resp.json()}"  "${NO_ITEM_FOUND}"
     
 
-*** comment ***
+*** Comments ***
 
 # .....Not done from dev side(bmp format)
 

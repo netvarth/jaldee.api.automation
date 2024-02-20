@@ -1709,7 +1709,7 @@ JD-TC-GetAuditLog -42
     Should Be Equal As Strings  ${resp.json()[0]['userType']}   PROVIDER
   
 
-*** Comment ***
+*** Comments ***
 JD-TC-GetAuditLog -37
     Comment   Provider get Audit log when Update a customer
     ${resp}=  Encrypted Provider Login  ${PUSERNAME5}  ${PASSWORD}

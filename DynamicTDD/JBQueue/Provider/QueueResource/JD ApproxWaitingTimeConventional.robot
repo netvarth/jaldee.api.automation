@@ -1557,7 +1557,7 @@ JD-TC-Approximate Waiting Time Conventional-6
     Verify Response List  ${resp}  6  ynwUuid=${wid7}  appxWaitingTime=${wait_time2}
       
 
-*** comment ***
+*** Comments ***
 
 JD-TC-Approximate Waiting Time Conventional-5
     [Documentation]   Check queue waiting time when batch mode enabled

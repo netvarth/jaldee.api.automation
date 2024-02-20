@@ -405,7 +405,7 @@ JD-TC-JD S3-12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-*** comment ***         
+*** Comments ***         
     sleep  30s
 JD-TC-VerifyJD S3-1
     [Documentation]  Verification of get business profile of ${PUSERNAME80}

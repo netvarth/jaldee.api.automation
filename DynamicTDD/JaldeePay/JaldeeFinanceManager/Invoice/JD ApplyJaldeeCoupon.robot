@@ -362,7 +362,7 @@ JD-TC-Apply JaldeeCoupon-1
 #     Log  ${resp.content}
 #     Should Be Equal As Strings  ${resp.status_code}  200
 
-# *** comment ***
+# *** Comments ***
 JD-TC-ApplyJaldeeCoupon-2
     [Documentation]    Provider trying to apply default enabled coupon
 
@@ -621,7 +621,7 @@ JD-TC-ApplyJaldeeCoupon-3
 
 
 
-*** comment ***
+*** Comments ***
 JD-TC-Apply ProviderCoupon-2
 	[Documentation]  Create two jaldee coupons and provider coupons and apply in a bill and also add discount
     
@@ -858,7 +858,7 @@ JD-TC-Apply ProviderCoupon-2
     Should Be Equal As Strings  ${resp.json()['jaldeeCoupons'][0]['discount']}  ${Jamount1}
     Should Be Equal As Strings  ${resp.json()['jaldeeCoupons'][0]['date']}  ${DAY1}
 
-*** comment ***
+*** Comments ***
 JD-TC-Apply ProviderCoupon-3
 
     [Documentation]   using jaldee coupon in different payment status with adding service quantity

@@ -29,7 +29,7 @@ JD-TC-GetNextAvailableAppointmentTime-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
 
-*** comment ***
+*** Comments ***
     ${accId}=  get_acc_id  ${PUSERNAME140}
     Set Suite Variable  ${accId}
     clear_service   ${PUSERNAME140}

@@ -46,7 +46,7 @@ JD-TC-Get PartnerLoanApplicationbyloanApplicationUid-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-*** comment ***
+*** Comments ***
 
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
@@ -275,7 +275,7 @@ JD-TC-Get PartnerLoanApplicationbyloanApplicationUid-1
     Should Be Equal As Strings   ${resp.json()['consumerPhoto'][0]['order']}  ${order}
     Should Be Equal As Strings   ${resp.json()['consumerPhoto'][0]['action']}  ${LoanAction[0]}
 
-*** comment ***
+*** Comments ***
 
 JD-TC-GetLoanApplicationbyRefNo-UH1
                                   

@@ -191,7 +191,7 @@ JD-TC-Create_Catalog_For_ShoppingCart-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-*** comment ***
+*** Comments ***
     ${resp}=  Create Catalog For ShoppingCart   ${catalogName1}  ${catalogDesc}   ${catalogSchedule}   ${orderType1}   ${paymentType}   ${orderStatus_list}   ${catalogItem}   ${minNumberItem}   ${maxNumberItem}    ${cancelationPolicy}   catalogStatus=${catalogStatus}   pickUp=${pickUp}   homeDelivery=${homeDelivery}   showPrice=${boolean[1]}   advanceAmount=${advanceAmount}   showContactInfo=${boolean[1]}   howFar=${far}   howSoon=${soon}   preInfo=${preInfo}   postInfo=${postInfo}    
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

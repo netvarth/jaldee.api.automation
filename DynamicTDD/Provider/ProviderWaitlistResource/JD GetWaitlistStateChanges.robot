@@ -26,7 +26,7 @@ JD-TC-WaitlistStateChange-1
       clear_queue       ${PUSERNAME171}
       ${resp}=  Encrypted Provider Login  ${PUSERNAME171}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-*** comment ***
+*** Comments ***
       ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
       ${list}=  Create List   1  2  3  4  5  6  7
       ${loc_id1}=  Create Sample Location

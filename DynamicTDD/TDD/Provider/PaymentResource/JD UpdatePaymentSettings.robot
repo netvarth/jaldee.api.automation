@@ -19,7 +19,7 @@ JD-TC-Update Account Payment Settings-1
        ${domresp}=  Get BusinessDomainsConf
        Should Be Equal As Strings  ${domresp.status_code}  200
 
-*** comment ***
+*** Comments ***
        ${len}=  Get Length  ${domresp.json()}
        ${len}=  Evaluate  ${len}-1
        Set Suite Variable  ${d1}  ${domresp.json()[${len}]['domain']}    

@@ -582,7 +582,7 @@ JD-TC-GetWaitingTimeOfProviders-UH5
     Should Be Equal As Strings  ${resp.json()[0]['message']}  ${ONLINE_CHECKIN_NOT_AVAILABLE}    
     # Should Be Equal As Strings  ${resp.json()[0]['message']}  ${ONLINE_CHECK_IN_ARE_OFF}
 
-*** Comment ***
+*** Comments ***
 NW-TC-GetWaitingTimeOfProviders-UH6
     [Documentation]  Get Waiting Time Of provider url using location disabled
     ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}

@@ -116,7 +116,7 @@ JD-TC-CreateVendor-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-# *** comment ***
+# *** Comments ***
 JD-TC-CreateVendor-UH1
 
     [Documentation]  Create Vendor for an SP without address.
@@ -306,7 +306,7 @@ JD-TC-CreateVendor-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${FIELD_CANT_BE_EMPTY}
-# *** comment ***
+# *** Comments ***
 
 JD-TC-CreateVendor-UH4
 

@@ -154,7 +154,7 @@ Testing timezones
 
 
     
-*** comment ***
+*** Comments ***
 
     ${PH1}  FakerLibrary.Phone Number
     ${PH1}  FakerLibrary.Phone Number
@@ -166,7 +166,7 @@ Testing timezones
     ${CC1}  country_calling_code
     ${CC1}  country_calling_code
 
-*** comment ***
+*** Comments ***
     # Ref: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
     # Ref: https://www.nationsonline.org/oneworld/country_code_list.htm
 
@@ -235,7 +235,7 @@ Testing timezones
     # ${latti}  ${longi}  ${city}  ${country_abbr}  ${AE_tz}=  FakerLibrary.Local Latlng  country_code=ARE  coords_only=False
     
     
-*** comment ***
+*** Comments ***
 
     Log  ${CURDIR}
     Log  ${EXECDIR} 

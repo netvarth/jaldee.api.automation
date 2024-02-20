@@ -39,7 +39,7 @@ JD-TC-SwitchToConsumer-UH2
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings  "${resp.json()}"  "${NOT_REGISTERED_PROVIDER}"
 
-*** Comment ***
+*** Comments ***
     #     ${resp}=  ConsumerLogin  ${PUSERNAME22}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  401

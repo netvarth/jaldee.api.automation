@@ -49,7 +49,7 @@ JD-TC-GetPayLinkDetails-1
     Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
 
-*** comment ***
+*** Comments ***
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}

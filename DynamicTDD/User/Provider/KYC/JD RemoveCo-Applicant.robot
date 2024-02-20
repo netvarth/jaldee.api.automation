@@ -411,7 +411,7 @@ JD-TC-Remove Co-Applicant -1
     Should Be Equal As Strings      ${resp.json()[2]['relationName']}  ${relationName3}
     Should Be Equal As Strings      ${resp.json()[2]['permanentAddress']}  ${permanentAddress3}
     Should Be Equal As Strings      ${resp.json()[2]['permanentCity']}  ${permanentCity3}
-*** comment ***
+*** Comments ***
 JD-TC-Remove Co-Applicant -UH1
     [Documentation]  Create Kyc with Co-Applicants then Remove two time one Co-Applicant .
 

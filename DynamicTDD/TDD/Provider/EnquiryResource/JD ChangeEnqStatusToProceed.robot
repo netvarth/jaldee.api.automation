@@ -33,7 +33,7 @@ JD-TC-ChangeEnqStatusToProceed-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-*** COMMENT ***
+*** Comments ***
     
     ${resp}=   Encrypted Provider Login  ${PUSERNAME62}  ${PASSWORD} 
     Log  ${resp.content}

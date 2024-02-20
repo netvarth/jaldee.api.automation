@@ -96,7 +96,7 @@ Check Answers
 JD-TC-ResubmitQuestionnaireForDonation-1
 
     comment   Donation provider side submit and resubmit urls commented out in rest.
-*** Comment ***
+*** Comments ***
     [Documentation]  Resubmit the same answers for Donation Questionnaire
 
     ${wb}=  readWorkbook  ${xlFile}

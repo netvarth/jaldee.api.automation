@@ -431,7 +431,7 @@ JD-TC-ResetPassword-4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     
-*** comment ***
+*** Comments ***
 
 
 JD-TC-ResetPassword-5

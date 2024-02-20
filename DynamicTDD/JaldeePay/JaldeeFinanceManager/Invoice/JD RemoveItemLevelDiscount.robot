@@ -1893,7 +1893,7 @@ JD-TC-Remove Item Level Discount-UH7
     Should Be Equal As Strings  ${resp.json()}   ${INVOICE_STATUS}
 
 
-*** comment ***
+*** Comments ***
 JD-TC-Remove Item Level Discount-3
 
     [Documentation]  login another user who have no admin privilage and try to remove discount from his login .-------------Will come this in next version ,when rbac comes-------------------

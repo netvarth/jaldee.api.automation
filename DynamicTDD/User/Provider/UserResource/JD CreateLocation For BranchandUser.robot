@@ -571,7 +571,7 @@ JD-TC-VerifyCreateLocation-6
 	# Should Be Equal As Strings  ${resp.json()[3]['bSchedule']['timespec'][0]['startDate']}  ${DAY}
 	# Should Be Equal As Strings  ${resp.json()[3]['bSchedule']['timespec'][0]['timeSlots'][0]['sTime']}  ${sTime1}
 	# Should Be Equal As Strings  ${resp.json()[3]['bSchedule']['timespec'][0]['timeSlots'][0]['eTime']}  ${eTime1}
-*** comment ***
+*** Comments ***
 JD-TC-CreateLocation-UH5
       [Documentation]   Try to Create more than one location in multipleLocation false domain 
       ${domains}=  get_notiscorp_subdomains_with_no_multilocation  0

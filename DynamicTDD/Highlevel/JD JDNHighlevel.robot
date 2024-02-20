@@ -1863,7 +1863,7 @@ JD-TC-JDN Highlevel-12
    
 
 
-*** comment ***
+*** Comments ***
 JD-TC-JDN Highlevel-7
 	[Documentation]  Update JDN and check bill after applying provider discount, provider coupon, Jaldee Coupon and item to non taxable services.
 

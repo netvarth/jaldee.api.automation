@@ -33,7 +33,7 @@ JD-TC-ChangeEnqStatusToPending-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-*** COMMENT ***
+*** Comments ***
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME66}  ${PASSWORD} 
     Log  ${resp.content}

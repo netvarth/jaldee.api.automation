@@ -58,7 +58,7 @@ JD-TC-GetDonationDetails-1
         ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
         Log  ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-*** comment ***
+*** Comments ***
         clear_queue      ${PUSERNAME150}
         clear_location   ${PUSERNAME150}
         clear_service    ${PUSERNAME150}

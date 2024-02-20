@@ -169,7 +169,7 @@ JD-TC-GetWaitlistById-UH3
       Should Be Equal As Strings  "${resp.json()}"    "${LOGIN_NO_ACCESS_FOR_URL}"
 
  
-*** Comment ***
+*** Comments ***
 JD-TC-GetWaitlistById-4
       Comment   Get Waitlist after disabling queue
       ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}

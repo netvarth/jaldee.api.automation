@@ -590,7 +590,7 @@ JD-TC-CreateCatalogForAuthorDemy-8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-*** comment ***
+*** Comments ***
 JD-TC-CreateCatalogForAuthorDemy-9
 
     [Documentation]  Provider Create order catalog for AuthorDemy and create order for home delivery.

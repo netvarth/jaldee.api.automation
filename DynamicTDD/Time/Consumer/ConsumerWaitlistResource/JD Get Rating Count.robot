@@ -346,7 +346,7 @@ JD-TC-Get Waitist Rating-4
     Should Be Equal As Strings  ${resp.json()[0]['uuid']}  ${uuid8} 
 
 
-*** Comment ***
+*** Comments ***
 
 
 JD-TC-Get Waitist Rating-

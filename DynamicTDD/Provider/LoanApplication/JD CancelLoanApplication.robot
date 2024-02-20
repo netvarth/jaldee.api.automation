@@ -663,7 +663,7 @@ JD-TC-CancelLoanApplication-1
     ${resp}=    Get Loan Application By uid  ${loanuid} 
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
-*** comment ***
+*** Comments ***
 
 JD-TC-CancelLoanApplication-2
                                   

@@ -401,7 +401,7 @@ JD-TC-GetQuestionnaireByUuidForOrder-1
     Should Be Equal As Strings   ${resp.json()[0]['questionnaireId']}  ${qnrid}
     Should Be Equal As Strings  ${resp.json()[0]['id']}   ${id}
 
-*** Comment ***
+*** Comments ***
 
 
 D-TC-GetQuestionnaireByUuidForOrder-2

@@ -156,7 +156,7 @@ JD-TC-Provider_Signup-1
         
     END
 
-*** COMMENT ***
+*** Comments ***
 JD-TC-Consumer_Signup-1
     [Documentation]   Consumer Signup
 
@@ -189,7 +189,7 @@ JD-TC-Consumer_Signup-1
 
 
 
-*** COMMENT ***
+*** Comments ***
 JD-TC-AddToWL-1
     [Documentation]   Add To waitlist
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}

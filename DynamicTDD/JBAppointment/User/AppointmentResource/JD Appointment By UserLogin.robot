@@ -4957,7 +4957,7 @@ JD-TC-AppointmentByUserLogin-29
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
-# *** Comment ***
+# *** Comments ***
 
 JD-TC-AppointmentByUserLogin-30
     [Documentation]   provider takes appointment for an instant appointment schedule

@@ -302,7 +302,7 @@ JD-TC-Update Case Type-UH3
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
    
 
-*** comment ***
+*** Comments ***
 
 JD-TC-Update Case Type-UH1
 

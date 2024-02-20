@@ -159,7 +159,7 @@ JD-TC-UpdateandProceedEnquiry-1
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
-# *** comment ***
+# *** Comments ***
     clear_customer   ${BUSER}
 
     

@@ -1024,7 +1024,7 @@ JD-TC-UpdateWaitlistSettings-UH6
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   "${resp.json()}"    "${PARTY_SIZE_GREATER}"
 
-*** Comment ***
+*** Comments ***
 JD-TC-UpdateWaitlistSettings-7
     [Documentation]  Set SendNotification  to true and verify
     ${resp}=  Encrypted Provider Login  ${PUSERNAME214}  ${PASSWORD}

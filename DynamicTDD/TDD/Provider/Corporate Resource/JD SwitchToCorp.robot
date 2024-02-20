@@ -22,7 +22,7 @@ JD-TC-SwitchToCorp-1
     Log   ${domresp.json()}
     Should Be Equal As Strings  ${domresp.status_code}  200
 
-*** Comment ***
+*** Comments ***
 
     ${dlen}=  Get Length  ${domresp.json()}
     FOR  ${pos}  IN RANGE  ${dlen}  

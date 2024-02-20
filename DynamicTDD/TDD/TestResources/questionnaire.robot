@@ -266,7 +266,7 @@ JD-TC-ServiceOptionPaymentForItem-4
     ${cat_name}=     FakerLibrary.job
     ${CatalogId1}=   Create Sample Catalog  ${cat_name}   ${tz}  ${item_id1}
 
-# <!-- *** Comment *** -->
+# <!-- *** Comments *** -->
 
     ${resp}=  Get Order Catalog    ${catalogid1}  
     Log  ${resp.content}
@@ -465,7 +465,7 @@ JD-TC-ServiceOptionPaymentForItem-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-*** Comment ***
+*** Comments ***
 
     # ${cnames_len}=  Get Length  ${unique_cnames}
     # FOR  ${i}  IN RANGE   ${cnames_len}

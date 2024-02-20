@@ -30,7 +30,7 @@ JD-TC-Create Lucene Search Documentation-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-*** Comment ***
+*** Comments ***
 
     ${PH_Number}=  Generate Random Phone Number
     ${Cons_num}=  Convert To Integer    ${PH_Number}

@@ -151,7 +151,7 @@ JD-TC-GetJaldeeCouponsCount -UH3
     Should Be Equal As Strings   "${resp.json()}"   "${SESSION_EXPIRED_IN_SA}"
 
 
-*** Comment ***
+*** Comments ***
     
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Log  ${DAY}

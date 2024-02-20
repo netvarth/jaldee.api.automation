@@ -333,7 +333,7 @@ JD-TC-UpdateFamilyMember-UH2
       # Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION_TO_UPDATE_MEMBER}"
      
 
-*** Comment ***
+*** Comments ***
 JD-TC-UpdateFamilyMember-CLEAR
       ${resp}=  Consumer Login  ${CUSERNAME31}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200

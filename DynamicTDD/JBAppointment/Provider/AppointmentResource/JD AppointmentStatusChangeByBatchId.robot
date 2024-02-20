@@ -35,7 +35,7 @@ JD-TC-Appointment Statuschange By Batch-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     comment  Dev can not fix this error immediate.
-*** comment ***
+*** Comments ***
 #   Dev can not fix this error immediate.
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Change License Package  ${pkgid[0]}

@@ -2010,7 +2010,7 @@ JD-TC- Create Bill -UH8
         ${resp}=  Waitlist Action Cancel  ${wid}   ${cancel}  ${msg} 
         Should Be Equal As Strings  ${resp.status_code}  200 
 
-*** Comment ***
+*** Comments ***
 JD-TC- Create Bill -24
 
         [Documentation]   Create Bill for service GST Number not updated  

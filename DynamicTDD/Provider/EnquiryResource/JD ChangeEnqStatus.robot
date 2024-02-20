@@ -343,7 +343,7 @@ JD-TC-ChangeEnqStatus-UH1
 
 
 
-*** Comment ***
+*** Comments ***
 JD-TC-ChangeEnqStatus-1
     [Documentation]   Change Enquiry Status new to Assigned
 

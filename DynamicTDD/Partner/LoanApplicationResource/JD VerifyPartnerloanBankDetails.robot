@@ -353,7 +353,7 @@ JD-TC-Verify Partner loan Bank Details-1
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-*** comment ***
+*** Comments ***
 
 JD-TC-Verify Partner loan Bank Details-2
                                   

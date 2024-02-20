@@ -75,7 +75,7 @@ JD-TC-Create Scheme-1
     Set Suite Variable    ${maxAmount}
     Set Suite Variable    ${description}
 
-*** comment ***
+*** Comments ***
 
     ${resp}=    Create Scheme    ${account}    ${schemeName}    ${schemeAliasName}    ${CrmSchemeType[1]}    ${schemeRate}    ${noOfRepayment}    ${noOfAdvancePayment}    ${noOfAdvanceSuggested}    ${serviceCharge}    ${insuranceCharge}    ${minAmount}    ${maxAmount}    ${toggle[0]}    ${description}
     Log  ${resp.content}

@@ -70,7 +70,7 @@ JD-TC-Get coupon list by service and location id for appointment-1
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.content}
-# *** comment ***
+# *** Comments ***
     Should Be Equal As Strings    ${resp.status_code}    200
     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
     Set Suite Variable  ${PUSERNAME_B}
@@ -357,7 +357,7 @@ JD-TC-Get coupon list by service and location id for appointment-1
     ${resp}=  Get coupon list by service and location id for appointment  ${s_id}    ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-*** comment ***
+*** Comments ***
 JD-TC-ApplyJaldeeCoupon-1
     [Documentation]  Provider apply a coupon after waitlist
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+100110103

@@ -1148,7 +1148,7 @@ JD-TC-BranchCreditOfficerWithRBAC-2
     Should Be Equal As Strings     ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['isRejected']}    ${bool[1]}
 
-# *** comment ***
+# *** Comments ***
 
 JD-TC-BranchCreditOfficerWithRBAC-3
                                   

@@ -886,7 +886,7 @@ JD-TC-ApplyProviderCouponforwaitlist-UH9
     Should Be Equal As Strings  "${resp.json()}"   "${COUPON_NOT_APPLICABLE_NOW}"
 
 
-*** comment ***
+*** Comments ***
 JD-TC-ApplyProviderCouponforwaitlist-4
       [Documentation]  Apply provider coupon to waitlist having  taxable service (account is also tax enabled).
     ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 

@@ -56,7 +56,7 @@ JD-TC-EnableDisableServiceLiveTrack-1
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+1082258
     Set Suite Variable   ${PUSERPH0}
 
-*** comment ***
+*** Comments ***
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
     Log  ${licname}

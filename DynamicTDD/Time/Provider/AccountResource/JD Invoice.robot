@@ -1085,7 +1085,7 @@ JD-TC-Invoice-7
     # Should Be Equal As Strings  ${resp.json()[0]['discount']['discount'][0]['discountedAmt']}  ${discamnt}
 
 
-*** Comment ***   
+*** Comments ***   
 JD-TC-Invoice-4
     [Documentation]   check monthly invoice
     change_system_date  -5

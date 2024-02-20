@@ -459,7 +459,7 @@ JD-TC-Update Treatment Plan-UH6
 
 
 
-*** comment ***
+*** Comments ***
 JD-TC-Update Treatment Plan-UH3
 
     [Documentation]   Update Treatment Plan where casedto is empty     #Dev didnot check case dto in update section.also we cant set empty value here

@@ -43,7 +43,7 @@ ${digits}       0123456789
 #     RETURN  ${provider_list}
 
 
-# *** Comment ***
+# *** Comments ***
 *** Test Cases ***
 
 JD-TC-Take Appointment-1
@@ -4912,7 +4912,7 @@ JD-TC-Take Appointment-29
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
-# *** Comment ***
+# *** Comments ***
 
 JD-TC-Take Appointment-30
     [Documentation]   provider takes appointment for an instant appointment schedule

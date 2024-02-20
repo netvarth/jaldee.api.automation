@@ -476,7 +476,7 @@ JD-TC-Update Dental Record-UH3
     Should Be Equal As Strings              ${resp.status_code}   401
     Should Be Equal As Strings              ${resp.json()}   ${NoAccess}
 
-*** comment ***
+*** Comments ***
 
 JD-TC-Update Dental Record-9
 

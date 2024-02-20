@@ -108,7 +108,7 @@ JD-TC-ServiceOptionPaymentForOrder-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-*** comment ***
+*** Comments ***
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1207,7 +1207,7 @@ JD-TC-ServiceOptionPaymentForOrder-4
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-*** comment ***
+*** Comments ***
 
 JD-TC-ServiceOptionPaymentForOrder-5
     [Documentation]  Resubmit service option for Order with Payment

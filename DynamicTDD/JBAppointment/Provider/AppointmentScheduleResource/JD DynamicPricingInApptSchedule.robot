@@ -958,7 +958,7 @@ JD-TC-DynamicPricingInSchedule-3
 
 
 
-*** comment *** 
+*** Comments *** 
 
     ${resp}=  Get Appointment By Id  ${apptid1}
     Log   ${resp.json()}

@@ -28,7 +28,7 @@ JD-TC-GetLastComputedwaitingTime-1
     [Documentation]  Get Last Computed waitingTime
     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-*** Comment ***
+*** Comments ***
     ${resp}=  Update Waitlist Settings  ${calc_mode[1]}  0  true  true  true  true  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${DAY1}=  db.get_date_by_timezone  ${tz}

@@ -294,7 +294,7 @@ JD-TC-Create_Instant_Schedule-UH13
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings    ${resp.json()}    ${NoAccess}
 
-*** comment ***
+*** Comments ***
 
 JD-TC-Create_Instant_Schedule-UH11
 

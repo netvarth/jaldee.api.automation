@@ -281,7 +281,7 @@ JD-TC-SubmitQuestionnaireForLead-1
     # ${resp}=  Provider Logout
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
-# *** comment ***
+# *** Comments ***
 JD-TC-SubmitQuestionnaireForLead-2
     [Documentation]  Submit questionnaire for Lead after Change lead status to assigned
 

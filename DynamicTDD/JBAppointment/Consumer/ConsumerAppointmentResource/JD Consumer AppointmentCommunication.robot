@@ -81,7 +81,7 @@ JD-TC-ConsumerAppointmentCommunication-1
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-# *** Comment ***
+# *** Comments ***
     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_H}+15566001

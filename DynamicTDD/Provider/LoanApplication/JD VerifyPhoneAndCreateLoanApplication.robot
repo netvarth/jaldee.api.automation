@@ -2767,7 +2767,7 @@ JD-TC-CreateLoanApplication-UH3
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.json()}    ${APPLICANT_DETAILS_MISSING}    
 
-*** comment ***
+*** Comments ***
 
 JD-TC-CreateLoanApplication-UH4
                                   

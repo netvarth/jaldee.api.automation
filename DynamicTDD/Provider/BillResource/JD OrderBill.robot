@@ -42,7 +42,7 @@ JD-TC-ProviderCouponBill-1
     Set Suite Variable    ${accId}
     ${id}=  get_id  ${PUSERNAME101}
     Set Suite Variable  ${id}
-*** comment ***
+*** Comments ***
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200

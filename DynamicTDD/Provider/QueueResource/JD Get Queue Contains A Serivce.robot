@@ -358,7 +358,7 @@ JD-TC-GetQueueService-UH6
     Should Be Equal As Strings  "${resp.json()}"  "${GIVEN_SERVICE_NOT_FOUND_IN_LOCATION}"
 
 
-*** Comment ***
+*** Comments ***
 
 JD-TC-GetQueueService-UH6
     [Documentation]    search on a holiday

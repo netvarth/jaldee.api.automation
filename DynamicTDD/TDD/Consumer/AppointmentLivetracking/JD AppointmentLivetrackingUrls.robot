@@ -23,7 +23,7 @@ JD-TC-Consumer Appointment Livetrack-1
     [Documentation]  Consumer  Sharing livetrack location before one hour and Travel mode is DRIVING  to start by consumer  
     ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-*** comment ***
+*** Comments ***
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Change License Package  ${pkgid[0]}
     Should Be Equal As Strings    ${resp.status_code}   200

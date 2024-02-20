@@ -937,7 +937,7 @@ JD-TC-RedirectLeadStatus-1
         ${resp1}=   Provider Change Questionnaire Status  ${id1}  ${status[0]}  
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
-# *** comment ***  
+# *** Comments ***  
    ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -978,7 +978,7 @@ JD-TC-RedirectLeadStatus-1
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
 
-# *** comment ***
+# *** Comments ***
      ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1025,7 +1025,7 @@ JD-TC-RedirectLeadStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
    
-# *** comment ***
+# *** Comments ***
     
     
 
@@ -1316,7 +1316,7 @@ JD-TC-RedirectLeadStatus-1
     Should Be Equal As Strings  ${resp.json()['kycCreated']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['status']['id']}   ${status_id8}
 
-# *** comment ***
+# *** Comments ***
   
 JD-TC-RedirectLeadStatus-2
 

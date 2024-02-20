@@ -759,7 +759,7 @@ JD-TC-Addaddon -UH
        
        	  
 
-*** Comment ***
+*** Comments ***
 JD-TC-Addaddon -4
        [Documentation]   Provider upgrade license package to highest package then check already added addon expired
        ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 

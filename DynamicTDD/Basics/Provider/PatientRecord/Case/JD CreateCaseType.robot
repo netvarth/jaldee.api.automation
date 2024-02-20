@@ -219,7 +219,7 @@ JD-TC-Create Case Type-UH2
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
 
-*** comment ***
+*** Comments ***
 JD-TC-Create Case Type-UH3
 
     [Documentation]    Create Case type with another provider login

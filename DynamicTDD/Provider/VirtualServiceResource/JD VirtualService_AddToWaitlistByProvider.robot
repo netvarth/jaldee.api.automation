@@ -2418,7 +2418,7 @@ JD-TC-VirtualService_Add To WaitlistByProvider-UH3
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-*** comment ***
+*** Comments ***
 JD-TC-VirtualService_Add To WaitlistByProvider-UH4
 	[Documentation]  Add Comsumer To Waitlist for the Same Services Two Times
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}

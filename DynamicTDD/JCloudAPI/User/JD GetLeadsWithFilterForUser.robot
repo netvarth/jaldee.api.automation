@@ -786,7 +786,7 @@ JD-TC-GetLeadsWithFilterForUser-16
     Verify Response List    ${resp}    0     employeeName=${user_name}
     ...   customerName=${uname}  phoneNumber=${phoneNo}  isConfirmed=${bool[0]}
 
-*** comment ***
+*** Comments ***
 JD-TC-GetLeadsWithFilterForUser-17
 
     [Documentation]   Get api lead details for a user having one lead.
@@ -1029,7 +1029,7 @@ JD-TC-GetLeadsWithFilterForUser-17
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
 
-# *** comment ***
+# *** Comments ***
      ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

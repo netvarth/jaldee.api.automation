@@ -224,7 +224,7 @@ JD-TC-Create Enquiry For SP-2
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-#*** Comment ***
+#*** Comments ***
 JD-TC-Create Enquiry For SP-3
     [Documentation]   Create Enquiry with category. 
 

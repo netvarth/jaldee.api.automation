@@ -5870,7 +5870,7 @@ JD-TC-GetAppointmentToday-UH3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-*** comment ***
+*** Comments ***
 
 JD-TC-GetAppointmentToday-29
     [Documentation]  Get provider's appointments today filtered by isApptDelayed 

@@ -4921,9 +4921,9 @@ JD-TC-JcashPaymentByConsumer-clear
 #     Verify Response  ${resp}  paymentStatus=${paymentStatus[1]}     waitlistStatus=${wl_status[0]}
 #     ...                       jCashUsedAmt=${max_limit}             creditUsedAmt=0.0
 
-# *** comment ***
+# *** Comments ***
 
-*** comment ***
+*** Comments ***
 
 JD-TC-JcashPaymentByConsumer-3
 

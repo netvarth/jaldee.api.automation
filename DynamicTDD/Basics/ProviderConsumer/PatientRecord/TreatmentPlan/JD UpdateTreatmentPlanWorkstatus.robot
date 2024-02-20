@@ -324,7 +324,7 @@ JD-TC-Update Treatment Plan Work status-UH6
     Should Be Equal As Strings    ${resp.json()}   ${STATUS_OPEN}
 
 
-*** comment ***
+*** Comments ***
 
 JD-TC-Update Treatment Plan Work status-UH6
 

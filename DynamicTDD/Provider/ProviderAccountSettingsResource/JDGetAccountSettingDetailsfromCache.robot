@@ -223,7 +223,7 @@ JD-TC-GetAccountSettingsfromCache-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-*** comment ***
+*** Comments ***
 JD-TC-GetAccountSettingsfromCache-4
 
     [Documentation]    Get donation services from cache by provider login

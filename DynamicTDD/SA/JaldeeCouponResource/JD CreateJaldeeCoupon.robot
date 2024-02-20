@@ -926,7 +926,7 @@ JD-TC-CreateJaldeeCoupon-UH35
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${JC_CONSUMERLIMIT_PER_PROVIDER_INVALID}"
 
-*** Comment ***
+*** Comments ***
 JD-TC-CreateJaldeeCoupon-UH3
     [Documentation]   Create a coupon which is already created coupon name
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}

@@ -206,7 +206,7 @@ JD-TC-CreateOrder-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-*** comment ***
+*** Comments ***
 JD-TC-CreateOrder-2
     [Documentation]    Place an order By Consumer for family member.
 
@@ -1248,7 +1248,7 @@ JD-TC-CreateOrder-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-*** comment ***
+*** Comments ***
 JD-TC-CreateOrder-8
     [Documentation]  same consumer place an oder for both pick up and home delivery from different providers.
 

@@ -501,7 +501,7 @@ JD-TC-Create Sections-8
     Should Be Equal As Strings     ${resp.json()[0]['updatedDate']}    ${DAY1}
     Should Be Equal As Strings     ${resp.json()[0]['updatedDateString']}    ${DAY1} ${UpdatedTime}
 
-*** comment ***
+*** Comments ***
 JD-TC-Create Sections-7
 
     [Documentation]    Create Sections with valid details then filter by spInternalStatus.

@@ -1474,7 +1474,7 @@ JD-TC-CreateService-UH11
         Should Be Equal As Strings  ${resp.status_code}  200
         Verify Response  ${resp}  name=${SERVICE1}  description=${desc}  serviceDuration=${srv_duration}  totalAmount=${servicecharge}  status=${status[0]}  isPrePayment=${bool[0]}  #resoucesRequired=${resoucesRequired}
 
-# *** COMMENT ***
+# *** Comments ***
 JD-TC-CreateService-20 
 
         [Documentation]   Create Service for a user

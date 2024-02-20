@@ -3736,7 +3736,7 @@ JD-TC-AccountLevelAnalytics-22
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY1}
     
 
-# *** comment ***
+# *** Comments ***
 
 JD-TC-AccountLevelAnalytics-23
     [Documentation]   change status from arrived to rejected and check ARRIVED_APPMT and CANCELLED_APPMT metrics
@@ -6990,7 +6990,7 @@ JD-TC-AccountLevelAnalytics-34
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['amount']}   ${def_amt}
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY2}
 
-*** comment ***
+*** Comments ***
 JD-TC-AccountLevelAnalytics-35
     [Documentation]   Provider Reschedules a started appointment taken from consumer side (online appointment) and check ONLINE_APPMT, CONFIRMED_APPMT, STARTED_APPMT and RESCHEDULED_APPMT metrics
 
@@ -7044,7 +7044,7 @@ JD-TC-AccountLevelAnalytics-44
     
 
 
-*** Comment ***
+*** Comments ***
 
 
 

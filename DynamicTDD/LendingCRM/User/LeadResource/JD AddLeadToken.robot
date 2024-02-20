@@ -1247,7 +1247,7 @@ JD-TC-AddLeadToken-UH2
 
 
 
-# *** comment ***
+# *** Comments ***
 JD-TC-AddLeadToken-8
 
     [Documentation]  Create a lead for user Then Add Two times same Waitlist .

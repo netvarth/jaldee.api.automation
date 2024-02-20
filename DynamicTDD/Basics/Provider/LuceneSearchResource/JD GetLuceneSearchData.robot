@@ -155,7 +155,7 @@ JD-TC-Get Lucene Search Documentation-1
         Should Be Equal As Strings    ${resp.status_code}    200
         Should Be Equal As Strings    ${resp.json()[0]['id']}    ${cid}
     END
-# *** comment ***
+# *** Comments ***
 JD-TC-Get Lucene Search Documentation-2
     [Documentation]   Get Lucene Search Documentation by emailid .
 

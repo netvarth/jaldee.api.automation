@@ -22,7 +22,7 @@ JD-TC-GetUserRoles-1
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-*** comment ***
+*** Comments ***
     ${pid}=  get_acc_id  ${HLMUSERNAME1}
 
     ${resp}=  View Waitlist Settings

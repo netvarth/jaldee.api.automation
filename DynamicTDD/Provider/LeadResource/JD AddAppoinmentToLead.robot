@@ -31,7 +31,7 @@ JD-TC-AddLeadAppoinment-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${p_id}    ${resp.json()['id']}
     # ${p_id}=  get_acc_id  ${MUSERNAME61}
-*** comment ***
+*** Comments ***
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

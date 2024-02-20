@@ -54,7 +54,7 @@ JD-TC-License Metric-1
     Comment  Gallery limit set to 1MB IN licenseconfig.json 
     ${resp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${resp.status_code}  200
-*** Comment ***
+*** Comments ***
     Set Test Variable  ${d1}  ${resp.json()[0]['domain']}
     Set Test Variable  ${sd1}  ${resp.json()[0]['subDomains'][0]['subDomain']}
     ${resp}=  Account SignUp  biju  x  ${None}  ${d1}  ${sd1}  ${PUSERNAME}    1
@@ -296,7 +296,7 @@ JD-TC-License Metric-10
 
 
 
-*** Comment ***
+*** Comments ***
 ${resp}=   Get Service
     Should Be Equal As Strings  ${resp.status_code}  200  
     Set Test Variable  ${sid}  ${resp.json()[0]['id']} 

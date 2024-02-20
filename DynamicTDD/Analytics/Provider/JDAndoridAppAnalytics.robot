@@ -1213,7 +1213,7 @@ JD-TC-AndroidLevelAnalytics-7
 
 
 
-*** comment ***
+*** Comments ***
 JD-TC-AndroidLevelAnalytics-8
 
     [Documentation]   take WALK_IN_ORDER for a provider trough SP_APPand check account level analytics for ANDROID_ORDER and WEB_ORDER matrix.
@@ -1345,7 +1345,7 @@ JD-TC-AndroidLevelAnalytics-8
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY1}
 
 
-*** comment ***
+*** Comments ***
 JD-TC-AndroidLevelAnalytics-9
 
     [Documentation]   take PHONE_IN_ORDER for a provider trough SP_APPand check account level analytics for ANDROID_ORDER and WEB_ORDER matrix.

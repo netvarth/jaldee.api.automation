@@ -500,7 +500,7 @@ JD-TC-ProviderCouponBill-2
     Should Be Equal As Strings  ${resp.json()['amountDue']}        ${ser_amount2}   
     Should Be Equal As Strings  ${resp.json()['netRate']}          ${ser_amount2}   
 
-*** comment ***
+*** Comments ***
 JD-TC-ProviderCouponBill-3
 
     [Documentation]  Apply two provider coupon to bill having non taxable service.

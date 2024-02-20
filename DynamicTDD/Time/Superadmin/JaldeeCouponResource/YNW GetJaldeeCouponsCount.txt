@@ -251,7 +251,7 @@ JD-TC-GetJaldeeCouponsCount -UH3
     Should Be Equal As Strings   ${resp.json()}   "Session Expired"
 
 
-*** Comment ***
+*** Comments ***
     change_system_date  13
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Log  ${DAY}

@@ -1666,7 +1666,7 @@ JD-TC-Appointment_Report-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-# *** comment ***
+# *** Comments ***
 
 JD-TC-Appointment_Report-4
     [Documentation]  Generate NEXT_WEEK Appointment_report of a provider using Schedule_Id

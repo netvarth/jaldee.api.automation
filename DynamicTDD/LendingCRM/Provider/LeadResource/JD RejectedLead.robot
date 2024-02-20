@@ -291,7 +291,7 @@ JD-TC-RejectLeadStatus-1
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
 
-# *** comment ***
+# *** Comments ***
      ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -375,7 +375,7 @@ JD-TC-RejectLeadStatus-1
     # ${resp}=  Get Questionnaire List   ${account_id}  
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
-# *** comment ***
+# *** Comments ***
     
     
 
@@ -996,7 +996,7 @@ JD-TC-RejectLeadStatus-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['status']['id']}   ${Lstatus_id3}
-*** comment ***
+*** Comments ***
 JD-TC-RejectLeadStatus-2
     [Documentation]  lead status changed kyc updated to rejected with qns
 

@@ -41,7 +41,7 @@ JD-TC-Share consumer location-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-*** Comment ***
+*** Comments ***
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+100100319
     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
@@ -253,7 +253,7 @@ JD-TC-Share consumer location-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-#*** Comment ***
+#*** Comments ***
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}

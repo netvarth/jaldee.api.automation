@@ -486,7 +486,7 @@ JD-TC-ChangeLeadManager-UH5
     ${resp}=    Change Lead Manager    ${leUid5}    ${u_id}
     Log  ${resp.content}
 
-*** comment ***
+*** Comments ***
 JD-TC-ChangeLeadManager-
 
     [Documentation]  Change lead manager after closed the lead.

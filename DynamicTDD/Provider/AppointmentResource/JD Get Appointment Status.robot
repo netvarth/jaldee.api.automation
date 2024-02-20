@@ -1061,7 +1061,7 @@ JD-TC-GetAppointmentStatus-UH3
     # Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  ${empty_list}
-*** comment ***
+*** Comments ***
 JD-TC-Verify-GetAppointmentStatus-2
     [Documentation]  Check status Confirmed after prepayment.
 

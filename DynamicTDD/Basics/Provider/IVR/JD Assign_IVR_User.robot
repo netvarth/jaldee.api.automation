@@ -532,7 +532,7 @@ JD-TC-Assign_IVR_User-UH8
     Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
 
 
-*** comment ***
+*** Comments ***
 JD-TC-Assign_IVR_User-UH6
 
     [Documentation]   Assign IVR User with usertype is empty

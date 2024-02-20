@@ -1572,7 +1572,7 @@ JD-TC-Apply Service To Finance-6
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  422
           
-*** comment ***
+*** Comments ***
 JD-TC-Apply Service Level Discount-2
 
     [Documentation]   Apply discount with empty private note and display note.

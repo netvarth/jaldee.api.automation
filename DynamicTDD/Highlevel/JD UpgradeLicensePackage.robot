@@ -78,7 +78,7 @@ Jaldee-TC-Upgrade License Package-1
     ${resp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${resp.status_code}  200
 
-*** comment ***
+*** Comments ***
     Set Test Variable  ${d1}  ${resp.json()[0]['domain']}
     Set Test Variable  ${sd1}  ${resp.json()[0]['subDomains'][0]['subDomain']}
     ${resp}=  Account SignUp  subair  nv  ${None}  ${d1}  ${sd1}  ${PUSERNAMETRIAL1}    8

@@ -647,7 +647,7 @@ JD-TC-VerifyOtpforConsumerAcceptanceEmail-2
     Should Be Equal As Strings     ${resp.json()['loanApplicationKycList'][0]['permanentCity']}    ${permanentCity}
     Should Be Equal As Strings     ${resp.json()['loanApplicationKycList'][0]['currentAddress1']}    ${currentAddress1}
     Should Be Equal As Strings     ${resp.json()['loanApplicationKycList'][0]['currentPin']}    ${pin}
-# *** comment ***
+# *** Comments ***
 # <----------------------------- KYC Details ------------------------------------------>
 # <----------------------------- Loan Details ------------------------------------------>
 
@@ -922,7 +922,7 @@ JD-TC-VerifyOtpforConsumerAcceptanceEmail-3
     ...  currentAddress1=velloor    currentCity=malappuram    currentPin=679581    currentState=Kerala
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
-# *** comment ***
+# *** Comments ***
 # <----------------------------- KYC Details ------------------------------------------>
 # <----------------------------- Loan Details ------------------------------------------>
 

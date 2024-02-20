@@ -215,7 +215,7 @@ JD-TC-Update Dental Record Status-UH3
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings              ${resp.json()}   ${NoAccess}
 
-*** comment ***
+*** Comments ***
 JD-TC-Update Dental Record Status-UH1
 
     [Documentation]    Update Dental record status with invalid dental record status.

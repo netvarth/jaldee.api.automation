@@ -360,7 +360,7 @@ JD-TC-ProviderGetQuestionnaireById-1
         
     END
 
-*** COMMENT *** 
+*** Comments *** 
 
 JD-TC-ProviderGetQuestionnaireById-2
     [Documentation]  Get questionnaire by id after uploading the same file again

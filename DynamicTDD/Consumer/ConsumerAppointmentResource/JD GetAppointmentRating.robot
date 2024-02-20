@@ -601,7 +601,7 @@ JD-TC-GetAppointmentRating-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  	[]
 
-*** comment ***
+*** Comments ***
 
 JD-TC-GetAppointmentRating-UH1
 

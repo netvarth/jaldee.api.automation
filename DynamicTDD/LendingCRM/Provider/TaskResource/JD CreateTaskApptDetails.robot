@@ -68,7 +68,7 @@ JD-TC-CreateTaskApptdetails-1
     Set Test Variable  ${task_id1}  ${task_id[0]}
     Set Suite Variable  ${task_uid1}  ${task_id[1]}
 
-*** comment ***
+*** Comments ***
     ${resp}=    Create Task Appt Details   ${task_uid1}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

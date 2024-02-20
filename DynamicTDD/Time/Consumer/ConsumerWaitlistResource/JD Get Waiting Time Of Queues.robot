@@ -14,7 +14,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
 
 
-# *** Comment ***
+# *** Comments ***
 *** Test Cases ***
 
 JD-TC-Get Waiting time of queue-1
@@ -30,7 +30,7 @@ JD-TC-Get Waiting time of queue-1
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME192}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-*** comment ***
+*** Comments ***
     ${pid}=  get_acc_id  ${PUSERNAME192}
     Set Suite Variable  ${pid} 
     ${DAY}=  db.get_date_by_timezone  ${tz}    

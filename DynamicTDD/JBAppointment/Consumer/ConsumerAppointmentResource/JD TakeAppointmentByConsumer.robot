@@ -4929,7 +4929,7 @@ JD-TC-Take Appointment-UH15
     # Should Be Equal As Strings  ${resp.status_code}  200 
     # Verify Response             ${resp}     uid=${apptid1}   appmtDate=${DAY3}   appmtTime=${slot1}
   
-*** comment ***
+*** Comments ***
 
 JD-TC-Take Appointment-22
     [Documentation]  International Consumer takes appointment for a provider

@@ -3634,7 +3634,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-26
     ${resp}=  Get Account Level Analytics  ${tokenAnalyticsMetrics['BRAND_NEW_TOKENS']}  ${DAY1}  ${DAY1}  ${analyticsFrequency[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-*** comment ***
+*** Comments ***
 
 JD-TC-AccountLevelAnalyticsforWaitlist-27
     [Documentation]   take a future checkin and check account level analytics for CHECKED_IN_TOKEN and ONLINE_TOKEN metrics for future date.

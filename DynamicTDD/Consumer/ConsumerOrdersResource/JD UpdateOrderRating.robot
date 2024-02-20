@@ -269,7 +269,7 @@ JD-TC-UpdateOrderRating-1
     Should Be Equal As Strings  ${resp.json()[0]['stars']}              ${rating12}
     Should Be Equal As Strings  ${resp.json()[0]['feedback'][0]['comments']}  ${comment}
     Should Be Equal As Strings  ${resp.json()[0]['feedback'][1]['comments']}  ${comment2}
-*** comment ***  
+*** Comments ***  
 JD-TC-UpdateOrderRating-2
 
 	[Documentation]    Consumer Rating multiple orders.

@@ -286,7 +286,7 @@ JD-TC-ChangeLoanApplication-1
     ${resp}=  Change Loan Application Status   ${loan_uuid}   ${status_id0}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
-*** comment ***
+*** Comments ***
 
 JD-TC-ChangeLoanApplication-2
                                   

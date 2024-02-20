@@ -296,7 +296,7 @@ JD-TC-QnrForLeadStatuschange-1
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings   ${qns.json()['status']}  ${status[0]}
 
-   # *** comment ***
+   # *** Comments ***
     ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

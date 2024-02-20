@@ -134,7 +134,7 @@ Testing named arguments
 
 #     # ${NeededString}=    Fetch From Left    Raigarh    (
 
-*** Comment ***
+*** Comments ***
 country_locale
     ${Language_code} =  FakerLibrary.Language_code
     ${Locale} =  FakerLibrary.Locale

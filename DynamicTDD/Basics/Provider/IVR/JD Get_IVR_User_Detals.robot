@@ -515,7 +515,7 @@ JD-TC-Get_IVR_USER_DETAILS-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings    ${resp.content}    ${empty}
 
-*** comment ***
+*** Comments ***
 JD-TC-Get_IVR_USER_DETAILS-UH6
 
     [Documentation]   Get IVR user details where user id is empty

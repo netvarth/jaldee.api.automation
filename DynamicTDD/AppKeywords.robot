@@ -300,7 +300,7 @@ App Take Appointment with Appointment Mode
 
 
 
-*** comment ***
+*** Comments ***
 Android App Login
     [Arguments]    ${usname}  ${passwrd}  ${countryCode}=+91
     ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}  countryCode=${countryCode}

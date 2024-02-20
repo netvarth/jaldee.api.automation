@@ -125,7 +125,7 @@ JD-TC-ProviderResubmitServiceOptionForOrder-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-*** comment ***
+*** Comments ***
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200

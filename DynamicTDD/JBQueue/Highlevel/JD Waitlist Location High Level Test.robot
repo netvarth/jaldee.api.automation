@@ -682,7 +682,7 @@ JD-TC-Waitlist Location High Level Test Case-5-Verify
 
 
 
-*** Comment ***
+*** Comments ***
 JD-TC-Waitlist Location High Level Test Case-9
     Comment  disable  location and check queue status
     ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}

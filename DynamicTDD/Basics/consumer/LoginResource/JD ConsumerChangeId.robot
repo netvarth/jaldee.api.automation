@@ -246,7 +246,7 @@ JD-TC-Update consumer number-2
     Should Be Equal As Strings  "${resp.json()}"   "${NOT_REGISTERED_CUSTOMER}"
 
 
-# *** comment ***
+# *** Comments ***
 JD-TC-Update consumer number-3
 
     [Documentation]     Update a consumer's phone number with different country code and then update it back to old country code

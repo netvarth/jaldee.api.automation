@@ -662,7 +662,7 @@ JD-TC-AddOrderRating-4
     Should Be Equal As Strings  ${resp.json()[0]['stars']}              ${rating1}
     Should Be Equal As Strings  ${resp.json()[0]['feedback'][0]['comments']}  ${empty}
 
-*** comment ***
+*** Comments ***
 JD-TC-AddOrderRating-5
 
 	[Documentation]    Rate Order by provider login.   

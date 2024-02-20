@@ -980,7 +980,7 @@ JD-TC-ApplyProviderCouponForAppointmnet-5
 
 
 
-*** comment ***
+*** Comments ***
 JD-TC-ApplyProviderCouponForAppointmnet-2
     [Documentation]   Provider Create Coupon  with Percentage Calculation Type,Then apply for Appointment.
 

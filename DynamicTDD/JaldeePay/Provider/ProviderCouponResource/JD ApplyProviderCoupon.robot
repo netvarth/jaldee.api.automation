@@ -279,7 +279,7 @@ JD-TC-Apply ProviderCoupon-1
     Should Be Equal As Strings  ${resp.json()['providerCoupons'][0]['discount']}  ${pc_amount}
 
 # JD-TC-Apply ProviderCoupon-2
-*** comment ***
+*** Comments ***
 
 JD-TC-ProviderCouponBill-1
 

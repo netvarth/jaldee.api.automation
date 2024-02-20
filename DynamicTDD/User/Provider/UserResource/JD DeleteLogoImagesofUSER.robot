@@ -276,7 +276,7 @@ JD-TC-Delete Logo Image of USER-UH4
    # Should Be Equal As Strings  ${resp.json()['logo']['url']}   ${url2} 
     Should Be Equal As Strings  ${resp.json()['logo']['type']}  ${type1}
 
-*** comment ***
+*** Comments ***
 
 JD-TC-Delete Logo Image of USER-UH5
     [Documentation]   User Delete Logo image without creating user profile

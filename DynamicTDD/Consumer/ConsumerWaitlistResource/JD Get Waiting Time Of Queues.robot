@@ -29,7 +29,7 @@ JD-TC-Get Waiting time of queue-1
     Log  ${multilocdoms}
     Set Suite Variable  ${dom}  ${multilocdoms[0]['domain']}
     Set Suite Variable  ${sub_dom}  ${multilocdoms[0]['subdomains'][0]}
-*** comment ***
+*** Comments ***
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_W}=  Evaluate  ${PUSERNAME}+5566012

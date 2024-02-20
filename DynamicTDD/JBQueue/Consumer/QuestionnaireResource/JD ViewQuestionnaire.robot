@@ -837,7 +837,7 @@ JD-TC-GetQuestionnaireforConsumer-UH6
     
 
 
-*** Comment ***
+*** Comments ***
 JD-TC-GetQuestionnaireforConsumer-4
     [Documentation]  Get service questionnaire with answers. (only questions with scope as consumer will have answers available)
     comment   answers are not available in this url

@@ -711,7 +711,7 @@ JD-TC-CreateReminder-UH15
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${INVALID_START_END_DATE}"
 
-*** comment ***
+*** Comments ***
 JD-TC-CreateReminder-22
 
     [Documentation]    create a reminder after deactivate the provider consumer account.

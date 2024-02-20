@@ -131,7 +131,7 @@ JD-TC-CheckDepartment-2
 
     END
 
-*** Comment ***
+*** Comments ***
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-17
     [Documentation]   create virtual service for a user
@@ -278,7 +278,7 @@ JD-TC-CreateVirtualService-(Billable Subdomain)-17
     Should Be Equal As Strings  ${resp.json()['virtualCallingModes'][1]['instructions']}    ${Desc2}
 
 
-*** Comment ***
+*** Comments ***
 
 
 JD-TC-CreateVirtualService-(Billable Subdomain)-17

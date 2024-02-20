@@ -52,7 +52,7 @@ JD-TC-Get SalesChannelById1
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200  
-*** comment ***
+*** Comments ***
     ${resp}=  Get SC Configuration
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 

@@ -39,7 +39,7 @@ JD-TC-CreateLoanApplication-1
     ${resp}=  Consumer Login  ${CUSERNAME14}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
-*** comment ***
+*** Comments ***
     Set Suite Variable  ${fname}   ${resp.json()['firstName']}
     Set Suite Variable  ${lname}   ${resp.json()['lastName']}
 
@@ -2859,7 +2859,7 @@ JD-TC-CreateLoanApplication-UH3
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.json()}    ${APPLICANT_DETAILS_MISSING}    
 
-*** comment ***
+*** Comments ***
 
 JD-TC-CreateLoanApplication-UH4
                                   

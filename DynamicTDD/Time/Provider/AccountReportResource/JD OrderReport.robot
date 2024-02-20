@@ -906,7 +906,7 @@ JD-TC-OrderReport-1
 
     resetsystem_time
     
-*** comment *** 
+*** Comments *** 
 
 JD-TC-OrderReport-2
     [Documentation]     Provider Create Order for consumers and their family members and Generate order report

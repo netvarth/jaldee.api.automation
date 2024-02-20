@@ -2548,7 +2548,7 @@ JD-TC-Payment By Consumer-UH13
 
 
 
-*** comment ***
+*** Comments ***
 JD-TC-Payment By Consumer-1
     [Documentation]  Taking waitlist from consumer side and the consumer doing the prepayment  first then full payment
    

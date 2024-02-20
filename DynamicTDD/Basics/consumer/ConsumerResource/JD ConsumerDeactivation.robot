@@ -78,7 +78,7 @@ JD-TC-Consumer Deactivation -1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-# *** comment ***
+# *** Comments ***
     ${resp}=  Consumer Activation  ${CUSERPH0}  1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

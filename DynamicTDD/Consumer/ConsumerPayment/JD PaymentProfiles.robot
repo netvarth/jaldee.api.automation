@@ -4315,7 +4315,7 @@ JD-TC-paymentprofiles-10
     
 
 
-*** comment ***
+*** Comments ***
 
 
 JD-TC-paymentprofiles-4

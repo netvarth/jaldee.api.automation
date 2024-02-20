@@ -101,7 +101,7 @@ JD-TC-ServiceOptionOrderPayment-1
     Should Be Equal As Strings    ${resp.status_code}    200
     # ${p_id}=  get_acc_id            ${PUSERNAME12}
     
-*** comment ***
+*** Comments ***
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}

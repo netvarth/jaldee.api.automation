@@ -28,7 +28,7 @@ JD-TC-GetLeadTemplates-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${provider_id}  ${resp.json()['id']}
-# *** comment ***
+# *** Comments ***
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -475,7 +475,7 @@ JD-TC-GetLeadTemplates-9
     Should Be Equal As Strings    ${resp.json()[0]['priority']['value']['name']}    ${priority_name2}
 
 
-*** comment ***
+*** Comments ***
 
 JD-TC-AddLeadToken-UH4
     [Documentation]  GetLeadToken with consumer login.

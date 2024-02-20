@@ -90,7 +90,7 @@ JD-TC-ResubmitServiceOptionsForDonation-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-*** Comment ***
+*** Comments ***
 
     ${resp}=  Get Business Profile
     Should Be Equal As Strings  ${resp.status_code}  200

@@ -677,7 +677,7 @@ JD-TC-LoanApplication-1
     Should Be Equal As Strings   ${resp.json()[0]['spInternalStatus']}  ${LoanApplicationSpInternalStatus[4]}
     Should Be Equal As Strings   ${resp.json()[0]['isActionRequired']}  ${bool[0]}
 
-# *** comment ***
+# *** Comments ***
 
 JD-TC-GetLoanApplicationwithFilter-2
                                   
@@ -1203,7 +1203,7 @@ JD-TC-GetLoanApplicationwithFilter-23
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-*** comment ***
+*** Comments ***
 JD-TC-GetLoanApplicationwithFilter-16
                                   
     [Documentation]               Create Loan Application and get the loan with referenceNo filter.

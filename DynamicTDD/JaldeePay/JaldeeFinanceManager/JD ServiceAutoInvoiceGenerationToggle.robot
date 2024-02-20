@@ -174,7 +174,7 @@ JD-TC-AutoInvoiceGeneration-UH6
     Should Be Equal As Strings  ${resp.json()}  ${JALDEE_FINANCE_DISABLED}
 
 
-*** comment ***
+*** Comments ***
 JD-TC-AutoInvoiceGeneration-UH1
 
     [Documentation]  Service price is zero-Then try to enable auto invoice generation flag  .(UI NOT Using this url -Dev also)

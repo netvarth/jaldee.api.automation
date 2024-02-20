@@ -247,7 +247,7 @@ JD-TC-RejectLoanApplication-1
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-*** comment ***
+*** Comments ***
 JD-TC-RejectLoanApplication-2
                                   
     [Documentation]               Reject Loan Application  after update loan application

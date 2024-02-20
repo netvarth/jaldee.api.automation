@@ -307,7 +307,7 @@ JD-TC-SubmitQuestionnaireForOrder-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Check Answers   ${resp}  ${data}
 
-# *** Comment ***
+# *** Comments ***
 
 JD-TC-SubmitQuestionnaireForOrder-2
     [Documentation]  Submit questionnaire for Order after starting Order

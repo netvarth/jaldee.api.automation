@@ -270,7 +270,7 @@ JD-TC-Get PartnerLoanApplicationbyloanApplicationUid-1
     Should Be Equal As Strings   ${resp.json()['consumerPhoto'][0]['order']}  ${order}
     Should Be Equal As Strings   ${resp.json()['consumerPhoto'][0]['action']}  ${LoanAction[0]}
 
-*** comment ***
+*** Comments ***
 
 JD-TC-GetLoanApplicationbyRefNo-UH1
                                   

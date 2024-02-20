@@ -576,7 +576,7 @@ JD-TC-Approx Waiting Time-4
         ...         ELSE   Set Variable  ${wtime}
         Verify Response List  ${resp}  ${i}  ynwUuid=${wid${i+1}}  appxWaitingTime=${wtime}  waitlistStatus=${wl_status[1]}
     END
-*** comment ***
+*** Comments ***
 JD-TC-Approx Waiting Time-5
     [Documentation]   Check approximate waiting time when calculation mode is ML, batch is enabled, and 1st and 4th waitlists are cancelled
 

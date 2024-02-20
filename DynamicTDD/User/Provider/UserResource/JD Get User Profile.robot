@@ -130,7 +130,7 @@ JD-TC-GetUserProfile-UH3
      Should Be Equal As Strings  ${resp.status_code}  422
      Should Be Equal As Strings  "${resp.json()}"  "${USER_NOT_FOUND_WITH_ID}"
 
-*** comment ***
+*** Comments ***
 JD-TC-GetUserProfile-UH4
      [Documentation]  Get a user profile for profile not created user
      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}

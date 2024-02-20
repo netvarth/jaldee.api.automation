@@ -201,7 +201,7 @@ JD-TC-Addaddon -UH6
        Should Be Equal As Strings    ${resp.status_code}   422
        Should Be Equal As Strings  "${resp.json()}"  "${PROVIDER_CANNOT_DOWNGRADE_ADDON}"
 
-*** Comment ***
+*** Comments ***
 JD-TC-Addaddon -4
        [Documentation]   Provider upgrade license package to highest package then check already added addon expired
        ${resp}=   Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD} 

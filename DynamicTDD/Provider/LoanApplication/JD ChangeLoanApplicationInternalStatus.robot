@@ -697,7 +697,7 @@ JD-TC-Change SpInternal Status-1
     Log    ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings   ${resp.json()[0]['spInternalStatus']}  ${sp_status[0]}
-*** comment ***
+*** Comments ***
 JD-TC-Change SpInternal Status-2
                                   
     [Documentation]                change sp internal status ConsumerAccepted to PartnerAccepted.

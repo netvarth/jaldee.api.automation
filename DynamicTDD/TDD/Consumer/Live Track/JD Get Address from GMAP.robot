@@ -20,7 +20,7 @@ JD-TC-Get location using lattitde and longitude
     [Documentation]  Get location from google map using lattitude and longitude
     ${resp}=  Encrypted Provider Login  ${PUSERNAME189}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-*** Comment ***
+*** Comments ***
 
     ${latti}  ${longi}  ${place}=  get_lat_long_city
     ${resp}=   Get Address using lat & long   ${latti}   ${longi}

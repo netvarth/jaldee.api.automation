@@ -320,7 +320,7 @@ JD-TC-Check Notification-1
 
 
     
-*** Comment ***
+*** Comments ***
 JD-TC-Check Notification-1
 	Comment   Check Notification send to next and next to next person after start a waitlist and parallel serving as 3
 	${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}

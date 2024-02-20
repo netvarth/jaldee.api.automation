@@ -34,7 +34,7 @@ JD-TC-GetAppointmentMRById-1
     Set Suite Variable  ${dom}  ${multilocdoms[0]['domain']}
     Set Suite Variable  ${sub_dom}  ${multilocdoms[0]['subdomains'][0]}
 
-*** comment ***
+*** Comments ***
 #  Commented because this url is not in use now
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name

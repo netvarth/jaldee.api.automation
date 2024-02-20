@@ -1613,7 +1613,7 @@ JD-TC-Bill Highlevel-17
     Should Be Equal As Strings  ${resp.json()['providerUsage']['reimbursed']}  0.0
 
 
-*** comment ***
+*** Comments ***
 JD-TC-Bill Highlevel-18    
     [Documentation]  Create bill for having taxable service and non taxable service and 50% reiumbursement coupon applied and coupon amount is more than non taxable service amount    
     

@@ -893,7 +893,7 @@ JD-TC-AddLabelForMultipleOrders-3
     Should Be Equal As Strings    ${resp.status_code}    200
     Verify Response  ${resp}   orderStatus=${orderStatuses[0]}   label=${label_lbl1}
 
-*** comment ***
+*** Comments ***
 JD-TC-AddLabelForMultipleOrders-4
 
     [Documentation]  Add label to already labeled orders.

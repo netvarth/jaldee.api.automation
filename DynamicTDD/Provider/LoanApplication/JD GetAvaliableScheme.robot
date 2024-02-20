@@ -879,7 +879,7 @@ JD-TC-Get Avaliable Scheme-UH3
     Should Be Equal As Strings   ${resp.json()}  ${NoAccess}
 
 
-*** comment ***
+*** Comments ***
 JD-TC-Get Avaliable Scheme-7
                                   
     [Documentation]               Create a loan And try to Get Avaliable Scheme after reject.

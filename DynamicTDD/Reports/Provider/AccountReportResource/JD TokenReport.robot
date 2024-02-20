@@ -3614,7 +3614,7 @@ JD-TC-Token_Report-13
     Should Be Equal As Strings  ${DAY1}               ${resp.json()['reportContent']['date']}
     Should Be Equal As Strings  ${EMPTY_List}               ${resp.json()['reportContent']['data']}  # Data
 
-# *** comment ***
+# *** Comments ***
 JD-TC-Verify-1-Token_Report-13  
     [Documentation]  Token report after completing prepayment of a Physical service (Independent_SP)
     
@@ -3784,7 +3784,7 @@ JD-TC-Verify-2-Token_Report-13
     Should Be Equal As Strings  Fully paid  ${resp.json()['reportContent']['data'][0]['10']}  # PaymentStatus
     Set Suite Variable  ${conf_id19-3}     ${resp.json()['reportContent']['data'][0]['7']}  # ConfirmationId
 
-# *** comment ***
+# *** Comments ***
 
 JD-TC-Verify-3-Token_Report-13
     [Documentation]  Token report When cancel waitlist after completing Full payment of a Physical service (Independent_SP)

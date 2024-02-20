@@ -265,7 +265,7 @@ JD-TC-RedirectLoanApplication-1
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-*** comment ***
+*** Comments ***
 
 JD-TC-RedirectLoanApplication-2
                                   

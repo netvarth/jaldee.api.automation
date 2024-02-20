@@ -127,7 +127,7 @@ Appointment Details
     ${apptid}=                      Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable               ${apptid1}  ${apptid[0]}
 
-*** comment ***
+*** Comments ***
 #Get appointment details url commented from dev side
 
     ${resp}=  Get Appointment Details with apptid   ${apptid1}

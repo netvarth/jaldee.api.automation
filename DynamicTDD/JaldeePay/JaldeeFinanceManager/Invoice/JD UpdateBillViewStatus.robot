@@ -64,7 +64,7 @@ JD-TC-UpdateBillViewStatus-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 #-------------------------- Dev deleted this url from finance--------------------------------
-*** comment ***
+*** Comments ***
 
     ${resp}=   Get Service
     Log   ${resp.json()}

@@ -1100,7 +1100,7 @@ TC-Add Delay On Multiple Appointments-UH3
     Should Be Equal As Strings  ${resp.status_code}  422 
     Should Be Equal As Strings  "${resp.json()}"  "${APPOINTMENT_DELAY_MISSING}"
 
-*** comment ***
+*** Comments ***
 TC-Add Delay On Multiple Appointments-UH4
     [Documentation]  Add Delay provider's appointments  with Provider login and empty Medium.
 

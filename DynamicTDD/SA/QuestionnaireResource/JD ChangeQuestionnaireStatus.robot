@@ -68,7 +68,7 @@ JD-TC-ChangeQuestionnaireStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-# *** comment ***
+# *** Comments ***
 
 
     # ${resp}=   Get Service
@@ -119,7 +119,7 @@ JD-TC-ChangeQuestionnaireStatus-1
     # Should Be Equal As Strings  ${sa_resp.status_code}  200
     # ${len}=  Get Length  ${sa_resp.json()}
 
-    # *** comment ***
+    # *** Comments ***
 
     ${resp}=   Get Service
     Log   ${resp.json()}

@@ -223,7 +223,7 @@ JD-TC-Create Case Category-UH2
 
 
 
-*** comment ***
+*** Comments ***
 
 JD-TC-Create Case Category-UH3
 

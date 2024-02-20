@@ -125,7 +125,7 @@ JD-TC-ResetPassword-UH5
     # Should Be Equal As Strings  ${resp[0].status_code}  404
     # Should Be Equal As Strings  ${resp[1].status_code}  404
 
-*** Comment ***
+*** Comments ***
 JD-TC-ResetPassword-UH5
     Comment    Reset password using non verified email
     ${resp}=  SendProviderResetMail  ${PUSERNAME3} 

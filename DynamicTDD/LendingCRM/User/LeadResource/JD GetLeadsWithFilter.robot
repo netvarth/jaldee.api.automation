@@ -603,7 +603,7 @@ JD-TC-GetLeadWithFilter-26
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()[0]['category']['name']}          ${category_name1}  
 
-*** comment ***
+*** Comments ***
 JD-TC-GetLeadWithFilter-12
     [Documentation]   Create Lead to a valid provider Filter by generatedBy.
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}

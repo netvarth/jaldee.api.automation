@@ -37,7 +37,7 @@ JD-TC-ConfirmBlockWaitlist-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
 
-# *** comment ***
+# *** Comments ***
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
@@ -325,7 +325,7 @@ JD-TC-ConfirmBlockWaitlist-2
     Should Be Equal As Strings  ${resp.json()['service']['id']}                   ${ser_id1}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname1}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['lastName']}   ${lname1}
-# *** comment ***
+# *** Comments ***
 JD-TC-ConfirmBlockWaitlist-3
     [Documentation]   Confirm a blocked check in for future date.
 

@@ -96,7 +96,7 @@ JD-TC-LoanSanction-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-*** comment ***
+*** Comments ***
 
 # .....commented bcoz the loan sanction flow changed.......
 
@@ -857,7 +857,7 @@ JD-TC-LoanSanction-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-*** comment ***
+*** Comments ***
 JD-TC-GetLeadsWithFilterForUser-2
 
     [Documentation]   Redirect to lead from CRIF.

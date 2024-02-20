@@ -120,7 +120,7 @@ JD-TC-Get Prescription Template By Account Id-UH2
     Should Be Equal As Strings    ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-*** comment ***
+*** Comments ***
 
 JD-TC-Get Prescription Template By Account Id-2
 

@@ -2569,7 +2569,7 @@ JD-TC-PaymentProfileForPayment---12
 
 
 
-*** comment ***
+*** Comments ***
 JD-TC-PaymentProfileForPrepayment-2
 
     [Documentation]  Create multiple payment profile.
@@ -2663,7 +2663,7 @@ JD-TC-PaymentProfileForPrepayment-2
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-# *** comment ***
+# *** Comments ***
 
 JD-TC-PaymentProfileForPrepayment-1
 

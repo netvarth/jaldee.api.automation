@@ -1096,7 +1096,7 @@ JD-TC-ChangeLeadStatusbyuser-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['kycCreated']}  ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['status']['id']}   ${status_Lid8}
-*** comment ***
+*** Comments ***
 JD-TC-ChangeLeadStatusbyuser-3
     [Documentation]  lead status change  Sales Verified  to login with qns
  

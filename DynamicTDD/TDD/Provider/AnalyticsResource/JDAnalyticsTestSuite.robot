@@ -36,7 +36,7 @@ JD-TC-AccountLevelAnalytics-1
         Should Be Equal As Strings    ${resp.status_code}    200
 
     END
-*** comment ***
+*** Comments ***
     # ------------ Sign up a provider with highest licence package and random domain and subdomain.
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}

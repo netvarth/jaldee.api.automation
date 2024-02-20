@@ -37,7 +37,7 @@ JD-TC-CustomViewAPIS-1
     # Log   ${domresp.content}
     # Should Be Equal As Strings  ${domresp.status_code}  200
     # ${dlen}=  Get Length  ${domresp.json()}
-# *** Comment ***
+# *** Comments ***
     # FOR  ${pos}  IN RANGE  ${dlen}  
     #     Set Suite Variable  ${d1}  ${domresp.json()[${pos}]['domain']}
     #     ${sd1}  ${check}=  Get Billable Subdomain  ${d1}  ${domresp}  ${pos}  
@@ -65,7 +65,7 @@ JD-TC-CustomViewAPIS-1
         END
     END
 
-# *** Comment ***
+# *** Comments ***
 
     ${pid}=  get_acc_id  ${MUSERNAME0}
     Set Suite Variable  ${pid}

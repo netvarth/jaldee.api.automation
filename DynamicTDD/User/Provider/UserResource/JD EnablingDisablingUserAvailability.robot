@@ -399,7 +399,7 @@ JD-TC-Enabling and Disabling User Availability-5
     Should Be Equal As Strings     ${resp.status_code}    200
 
 
-*** comment ***
+*** Comments ***
 
 JD-TC-Enabling and Disabling User Availability-6
      [Documentation]   create loan when user Availability is Online then change status to Away and do next step.

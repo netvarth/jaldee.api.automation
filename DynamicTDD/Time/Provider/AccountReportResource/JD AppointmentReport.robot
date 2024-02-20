@@ -1364,7 +1364,7 @@ JD-TC-Appointment_Report-1
 
     resetsystem_time
 
-*** comment ***
+*** Comments ***
 JD-TC-Appointment_Report-2
     [Documentation]  Generate LAST_WEEK Appointment_report using "consumer or family_member_id" individually for filtering
     resetsystem_time

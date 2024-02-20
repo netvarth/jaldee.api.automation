@@ -1008,7 +1008,7 @@ JD-TC-CreateQueue-14
     ${resp}=  Encrypted Provider Login  ${MUSERNAME11}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-*** comment ***
+*** Comments ***
 
 #Create Queue with TimeInterval and Appointment
 JD-TC-Create Queue with timeinterval-13

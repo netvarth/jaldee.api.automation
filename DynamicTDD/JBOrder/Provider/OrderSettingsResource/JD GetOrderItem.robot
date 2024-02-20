@@ -156,7 +156,7 @@ JD-TC-Get_Item_By_Id-3
     # Verify Response  ${resp}  promotionalPriceType=${promotionalPriceType[0]}   promotionalPrcnt=0.0   showPromotionalPrice=${bool[1]}   itemCode=${itemCode1}   promotionLabelType=${promotionLabelType[3]}   promotionLabel=${promoLabel1}   
     # Verify Response  ${resp}  displayName=${displayName1}  shortDesc=${shortDesc1}   price=${price2float}   taxable=${bool[1]}   status=${status[0]}    itemName=${itemName1}  itemNameInLocal=${itemNameInLocal1}  isShowOnLandingpage=${bool[1]}   isStockAvailable=${bool[1]}   
     
-*** comment ***
+*** Comments ***
 JD-TC-Get_Item_By_Id-4
 
     [Documentation]  Provider Create item using Promotional_Price_Type as FIXED

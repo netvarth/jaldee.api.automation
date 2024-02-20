@@ -1477,7 +1477,7 @@ JD-TC-GetVideoCallMinutes-12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-*** comment ***
+*** Comments ***
 
 
 

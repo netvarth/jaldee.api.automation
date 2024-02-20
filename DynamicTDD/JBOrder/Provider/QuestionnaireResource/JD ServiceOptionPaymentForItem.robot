@@ -656,7 +656,7 @@ JD-TC-PaymentForItem-2
     Set Suite Variable  ${CartAmount1}   ${resp.json()['cartAmount']}
     Should Be Equal As Strings      ${CartAmount1}   ${ActualAmount}
 
-*** comment ***
+*** Comments ***
 
 JD-TC-PaymentForItem-3
     [Documentation]  payment with gst

@@ -365,7 +365,7 @@ JD-TC-GetCategoryByCategoryType-15
     Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[4]}
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
-# *** comment ***
+# *** Comments ***
 
 JD-TC-GetCategoryByCategoryType-7
 

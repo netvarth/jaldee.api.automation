@@ -985,7 +985,7 @@ JD-TC-ApplyJaldeeCouponToChannel-4
 
 
 
-*** comment ***
+*** Comments ***
     ${resp}=  Apply Jaldee Coupon At Selfpay  ${wid1}  ${cupn_code2023}  ${account_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

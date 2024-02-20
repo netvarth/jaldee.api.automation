@@ -1193,7 +1193,7 @@ JD-TC-PaymentLevelAnalyticsforOrder-4
 
 
 
-# *** comment ***
+# *** Comments ***
 JD-TC-PaymentLevelAnalyticsforOrder-6
 
     [Documentation]   take order(home delivery) for a provider by 10 consumers and do the prepayment and then bill payment with tax

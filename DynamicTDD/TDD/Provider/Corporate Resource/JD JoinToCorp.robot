@@ -21,7 +21,7 @@ JD-TC-JoinToCorp-1
     ${domresp}=  Get BusinessDomainsConf
     Should Be Equal As Strings  ${domresp.status_code}  200
 
-*** Comment ***
+*** Comments ***
 
     ${dlen}=  Get Length  ${domresp.json()}
     FOR  ${pos}  IN RANGE  ${dlen}  

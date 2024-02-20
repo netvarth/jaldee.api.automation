@@ -511,7 +511,7 @@ JD-TC-VerifyOtpforConsumerAcceptancePhone-1
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[6]}
-# *** comment ***
+# *** Comments ***
 JD-TC-VerifyOtpforConsumerAcceptancePhone-2
                                   
     [Documentation]              Verify Otp for Consumer Acceptance Phone  without otp generation
@@ -643,7 +643,7 @@ JD-TC-VerifyOtpforConsumerAcceptancePhone-2
     Should Be Equal As Strings     ${resp.json()['loanApplicationKycList'][0]['permanentCity']}    ${permanentCity}
     Should Be Equal As Strings     ${resp.json()['loanApplicationKycList'][0]['currentAddress1']}    ${currentAddress1}
     Should Be Equal As Strings     ${resp.json()['loanApplicationKycList'][0]['currentPin']}    ${pin}
-# *** comment ***
+# *** Comments ***
 # <----------------------------- KYC Details ------------------------------------------>
 # <----------------------------- Loan Details ------------------------------------------>
 

@@ -1493,7 +1493,7 @@ JD-TC-Create Enquiry For User-13
     # Should Be Equal As Strings    ${resp.status_code}    200
     # Should Be Equal As Strings  ${resp.json()[0]['status']['name']}    ${lead_status_name}
 
-# *** COMMENT ***
+# *** Comments ***
 
 JD-TC-Create Enquiry For User-14
     [Documentation]   Create Enquiry with empty title

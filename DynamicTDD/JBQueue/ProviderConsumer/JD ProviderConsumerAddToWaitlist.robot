@@ -1152,7 +1152,7 @@ JD-TC-Add To WaitlistByConsumer-17
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${cid} 
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}    
 
-*** comment ***
+*** Comments ***
 JD-TC-Add To WaitlistByConsumer-UH1
 	[Documentation]  Add To Waitlist By Consumer for the Same Services Two Times
     clear waitlist   ${PUSERPH0}

@@ -85,7 +85,7 @@ JD-TC-GetstatusListfilter-1
     Should Be Equal As Strings  ${resp.json()[0]['categoryType']}  ${categoryType[0]}
     Should Be Equal As Strings  ${resp.json()[0]['name']}     ${New_status[0]}
 
-# *** comment ***
+# *** Comments ***
 
 JD-TC-GetstatusListfilter-2
 

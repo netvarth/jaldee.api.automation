@@ -554,7 +554,7 @@ JD-TC-AddToWaitlistBlock-5
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['firstName']}  ${fname}
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['lastName']}   ${lname}
 
-# *** comment ***
+# *** Comments ***
 JD-TC-AddToWaitlistBlock-6
     [Documentation]   Block two waitlist for multple users with same service.
 

@@ -795,7 +795,7 @@ JD-TC-GetFullCommunicationOfUser-14
     Should Be Equal As Strings  ${resp.json()[0]['consumerId']}                             ${partid1}
     Should Be Equal As Strings  ${resp.json()[0]['message'][0]['attachmentList'][0]['caption']}           ${caption}
 
-*** comment ***
+*** Comments ***
 JD-TC-GetFullCommunicationOfUser-15
 
     [Documentation]   Provider send a message(enquiry) to a partner with one attachment

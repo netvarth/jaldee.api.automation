@@ -34,7 +34,7 @@ JD-TC-ChangeLeadAssignee-1
     Set Suite Variable   ${p_id}        ${resp.json()['id']}
 
 
-*** comment ***
+*** Comments ***
     [Documentation]  commented this suite bcoz this api is not using  from ui, we r getting an error as 
     ...   "Assigned Status Not Found" while calling change assignee url.
 
@@ -210,7 +210,7 @@ JD-TC-ChangeLeadAssignee-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()[1]['assignee']['id']}          ${u_id1}
-*** comment ***
+*** Comments ***
 
 JD-TC-ChangeLeadAssignee-3
 
@@ -333,7 +333,7 @@ JD-TC-ChangeLeadAssignee-UH4
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings  "${resp.json()}"   "${INVALID_ASSIGNEE_ID}"
 
-*** comment ***
+*** Comments ***
 JD-TC-ChangeLeadAssignee-
 
     [Documentation]  Change lead assignee after closed the lead.

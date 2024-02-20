@@ -566,7 +566,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH4
     #     Set Test Variable  ${st}  ${et}
     # END
 
-# *** comment ***
+# *** Comments ***
 JD-TC-GetScheduleSlotsTodayByLocationandService-UH5
     [Documentation]  Get slots today when provider has a holiday
 
@@ -664,7 +664,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  []
 
-# *** comment ***
+# *** Comments ***
 
 JD-TC-GetScheduleSlotsTodayByLocationandService-UH8
     [Documentation]  Get slots today with location id of a different provider

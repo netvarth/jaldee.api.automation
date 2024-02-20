@@ -305,7 +305,7 @@ JD-TC-ProviderChangeQnrReleaseStatusForWL-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Check Answers   ${resp}  ${data}
 
-# *** Comment ***
+# *** Comments ***
 
 JD-TC-ProviderChangeQnrReleaseStatusForWL-2
     [Documentation]  Take a walkin checkin and provider submit questionnaire 

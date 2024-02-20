@@ -1736,7 +1736,7 @@ JD-TC-providerConsumerAppointment-13
     Should Be Equal As Strings  ${resp.json()['appmtDate']}                                     ${FUT_DAY}
     Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${p1_l1} 
-# *** comment ***
+# *** Comments ***
 JD-TC-providerConsumerAppointment-14
     [Documentation]  Consumer takes an appointment for service with prepayment, and then takes same appt again for same service
 
@@ -2749,7 +2749,7 @@ JD-TC-providerConsumerAppointment-17
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-# *** comment ***
+# *** Comments ***
 JD-TC-providerConsumerAppointment-UH2
 	[Documentation]  ProviderConsumer takes an appointment for the Same Services Two Times
 

@@ -36,7 +36,7 @@ JD-TC-UpdateLead-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${accountId}=    get_acc_id       ${PUSERNAME83}
 
-*** comment ***  Currently Not Avaliable
+*** Comments ***  Currently Not Avaliable
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}

@@ -185,6 +185,6 @@ JD-TC-GetDonationPaymentViaLink-1
         # log  ${resp.status_code}
 
 
-*** comment ***
+*** Comments ***
 JD-TC-GetDonationPaymentViaLink-2
     [Documentation]  giving the invalid account id for making payment via link.

@@ -537,7 +537,7 @@ JD-TC-Updatedentalchart-4
     Log   ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()['teeth'][0]['chiefComplaint']}    ${bool[0]}
-# *** comment ***
+# *** Comments ***
 JD-TC-Updatedentalchart-5
     [Documentation]    create a dental chart with mrid And update the tooth ecclusal to empty.
 

@@ -691,7 +691,7 @@ JD-TC-Check Notification-7
     # Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}  ${cid3}
     # Should Be Equal As Strings  ${resp.json()[0]['receiver']['userName']}  ${consumername}
 
-*** Comment ***
+*** Comments ***
 JD-TC-Check Notification-8
     [Documentation]  check alerts when bill created
     ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
@@ -720,7 +720,7 @@ JD-TC-Check Notification-8
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-*** Comment ***
+*** Comments ***
     ${resp}=  ConsumerLogin  ${CUSERNAME2}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     sleep  2s
@@ -734,7 +734,7 @@ JD-TC-Check Notification-8
     
     
         
-*** Comment ***
+*** Comments ***
 JD-TC-Check Notification-6
 	[Documentation]   Check Notification send to next and next to next person after start a waitlist
 	${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}

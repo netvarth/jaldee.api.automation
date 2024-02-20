@@ -438,7 +438,7 @@ JD-TC-Update_User_Language-UH4
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-*** comment ***
+*** Comments ***
 JD-TC-Update_User_Language-UH4
 
     [Documentation]  Update User Language with empty user id

@@ -656,7 +656,7 @@ JD-TC-WaitlistForUser-UH12
       Should Be Equal As Strings  ${resp.status_code}  422
       Should Be Equal As Strings  "${resp.json()}"  "${HOLIDAY_NON_WORKING_DAY}"
 
-*** Comment ***
+*** Comments ***
 
 
 

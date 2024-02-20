@@ -2547,7 +2547,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-20
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['amount']}   ${count}
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY3}
 
-# *** Comment ***
+# *** Comments ***
 
 JD-TC-AccountLevelAnalyticsforWaitlist-21
     [Documentation]   check TOTAL_ON_TOKEN, TOTAL_FOR_TOKEN, WEB_TOKENS, TOKENS_FOR_LICENSE_BILLING and BRAND_NEW_TOKENS
@@ -2641,7 +2641,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-21
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['amount']}   ${def_amt}
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY1}
 
-# *** Comment ***
+# *** Comments ***
 
 JD-TC-AccountLevelAnalyticsforWaitlist-22
     [Documentation]   Make bill payment and check BILL_PAYMENT_COUNT and BILL_PAYMENT_TOTAL metrics
@@ -3246,7 +3246,7 @@ JD-TC-AccountLevelAnalyticsforWaitlist-26
     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['value']}   ${checkedin_token_len}
     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['amount']}   ${def_amt}
     # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY1}
-*** comment ***
+*** Comments ***
 
 JD-TC-AccountLevelAnalyticsforWaitlist-27
     [Documentation]   take a future checkin and check account level analytics for CHECKED_IN_TOKEN and ONLINE_TOKEN metrics for future date.

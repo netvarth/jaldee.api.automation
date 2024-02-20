@@ -74,7 +74,7 @@ JD-TC-GetLoanApplicationCountwithFilter-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-*** comment ***
+*** Comments ***
 
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}

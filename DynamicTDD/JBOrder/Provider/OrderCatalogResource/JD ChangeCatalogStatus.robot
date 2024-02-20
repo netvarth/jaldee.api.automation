@@ -580,7 +580,7 @@ JD-TC-Change_Catalog_Status-4
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-*** comment ***
+*** Comments ***
 JD-TC-Change_Catalog_Status-5
     [Documentation]    Change order status as COMPLETED and try to change catalog status as INACTIVE
     ${resp}=  Encrypted Provider Login  ${PUSERNAME112}  ${PASSWORD}

@@ -1691,7 +1691,7 @@ JD-TC-ProceedLoanApplication-UH5
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}   ${NO_PERMISSION}
     
-*** comment ***
+*** Comments ***
 JD-TC-ProceedLoanApplication-4
                                   
     [Documentation]              Reject status  and proceed Loan Application

@@ -599,7 +599,7 @@ JD-TC-LoanApplication-1
     Should Be Equal As Strings     ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['spInternalStatus']}    ${LoanApplicationSpInternalStatus[10]}
     
-*** comment ***
+*** Comments ***
 JD-TC-LoanApplication-2
                                   
     [Documentation]               Create Loan Application  auto approval.
@@ -798,7 +798,7 @@ JD-TC-LoanApplication-2
     ...  currentAddress1=velloor    currentCity=malappuram    currentPin=679581    currentState=Kerala
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
-# *** comment ***
+# *** Comments ***
 # <----------------------------- KYC Details ------------------------------------------>
 # <----------------------------- Loan Details ------------------------------------------>
 

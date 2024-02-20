@@ -170,7 +170,7 @@ JD-TC-ConsMassCommunicationForAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-# *** comment ***
+# *** Comments ***
     ${resp}=  Get Appointment Messages
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200

@@ -4712,7 +4712,7 @@ JD-TC-Take Appointment-UH14
     Should Be Equal As Strings  "${resp.json()}"      "${WAITLIST_CUSTOMER_ALREADY_IN}"
   
   
-*** comment ***
+*** Comments ***
 
 JD-TC-Take Appointment-22
     [Documentation]  International Consumer takes appointment for a provider

@@ -957,7 +957,7 @@ JD-TC-AppointmentAdvancePaymentdetails-UH6
     Should Be Equal As Strings  ${resp.json()['proCouponList']['${cupn_code1}']['value']}               0.0
     Should Be Equal As Strings  ${resp.json()['proCouponList']['${cupn_code1}']['systemNote']}          ${SystemNote1}
 
-*** comment ***   
+*** Comments ***   
    
 JD-TC-AppointmentAdvancePaymentdetails-UH7
     [Documentation]  Consumer apply a coupon at Checkin time.but coupon rule contain  maxConsumerUseLimitPerProvider is one

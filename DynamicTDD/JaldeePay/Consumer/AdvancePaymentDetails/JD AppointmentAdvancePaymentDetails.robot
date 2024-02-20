@@ -612,7 +612,7 @@ JD-TC-AppointmentAdvancePaymentdetails-4
     Should Be Equal As Strings  ${resp.json()['proCouponList']['${cupn_code}']['value']}               ${pc_amount}
     Should Be Equal As Strings  ${resp.json()['proCouponList']['${cupn_code}']['systemNote']}          ${SystemNote}
     
-*** COMMENT ****
+*** Comments ****
 JD-TC-AppointmentAdvancePaymentdetails-5
 
     [Documentation]  Get appointment payment details with prepayment and  both jaldee coupon and provider coupon 
@@ -1218,7 +1218,7 @@ JD-TC-AppointmentAdvancePaymentdetails-9
     # Should Be Equal As Strings  ${resp.json()['proCouponList']['${cupn_code}']['value']}               ${pc_amount}
     # Should Be Equal As Strings  ${resp.json()['proCouponList']['${cupn_code}']['systemNote']}          ${SystemNote}
 
-*** comment ***   
+*** Comments ***   
    
 JD-TC-AppointmentAdvancePaymentdetails-UH7
     [Documentation]  Consumer apply a coupon at Checkin time.but coupon rule contain  maxConsumerUseLimitPerProvider is one

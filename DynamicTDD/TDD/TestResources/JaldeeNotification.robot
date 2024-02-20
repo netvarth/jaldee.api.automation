@@ -171,7 +171,7 @@ Billable
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
 #     Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${ConsMobilenum}${\n}
-# *** comment ***
+# *** Comments ***
 # # JD-TC-Consumer Signup With Email-2
 
 
@@ -215,7 +215,7 @@ Billable
 
 #     Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${MobilenumHi}${\n}
 
-# # *** comment ***
+# # *** Comments ***
 
 # JD-TC-Provider_Signup-1
 
@@ -485,7 +485,7 @@ Billable
  
     
 
-# *** comment ***
+# *** Comments ***
 # JD-TC-CreateUser-1
 # #   create user ok
 
@@ -580,7 +580,7 @@ Billable
 #     ${resp}=  Get User By Id  ${u_id}
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings  ${resp.status_code}  200
-# *** comment ***
+# *** Comments ***
 #     Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
 #     Verify Response  ${resp}  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[2]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  pincode=${pin}   deptId=0  subdomain=${sub_domain_id}
 #     Should Be Equal As Strings  ${resp.json()['whatsAppNum']['number']}           ${whpnum} 
@@ -744,7 +744,7 @@ Billable
 
     
 
-# *** comment ***
+# *** Comments ***
 
 # JD-TC-Provider_Signup -3
 #     [Documentation]    Create a provider with all valid attributes(email notification)
@@ -933,7 +933,7 @@ Billable
 
 
 
-# *** comment ***
+# *** Comments ***
 # JD-TC-UpdateBusinessProfile-1
 #     [Documentation]  Update  business profile for a valid provider without schedule
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
@@ -2020,7 +2020,7 @@ Billable
 #     Log   ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
-#  *** comment ***
+#  *** Comments ***
 # JD-TC-Update License -1
 #     [Documentation]  Update License Package with valid data - its ok
 
