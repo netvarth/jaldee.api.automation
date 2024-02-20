@@ -75,7 +75,7 @@ JD-TC-CreateVendor-1
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
@@ -168,7 +168,7 @@ JD-TC-CreateVendor-2
     ${PO_Number}    Generate random string    5    123456789
     # ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     # ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    # Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place
     ${contactPersonName}=   FakerLibrary.lastname
@@ -233,7 +233,7 @@ JD-TC-CreateVendor-UH1
     ${PO_Number}    Generate random string    5    123456789
     # ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     # ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    # Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place
     
@@ -301,7 +301,7 @@ JD-TC-CreateVendor-UH2
     ${PO_Number}    Generate random string    5    123456789
     # ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     # ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    # Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${address}=  FakerLibrary.city
     
     ${FIELD_CANT_BE_EMPTY}=  format String   ${FIELD_CANT_BE_EMPTY}   Bank Account Number
@@ -363,7 +363,7 @@ JD-TC-CreateVendor-UH3
     ${PO_Number}    Generate random string    5    123456789
     # ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     # ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    # Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place
     
@@ -426,7 +426,7 @@ JD-TC-CreateVendor-UH4
     ${PO_Number}    Generate random string    5    123456789
     # ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     # ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    # Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place
     ${contactPersonName}=   FakerLibrary.lastname
@@ -489,7 +489,7 @@ JD-TC-CreateVendor-UH5
     ${PO_Number}    Generate random string    5    123456789
     # ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     # ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    # Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place
     ${contactPersonName}=   FakerLibrary.lastname
@@ -553,7 +553,7 @@ JD-TC-CreateVendor-UH6
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=   Create List
-    # Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    # Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place
     ${contactPersonName}=   FakerLibrary.lastname
@@ -609,7 +609,7 @@ JD-TC-CreateVendor-UH7
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${address}=  FakerLibrary.city
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place

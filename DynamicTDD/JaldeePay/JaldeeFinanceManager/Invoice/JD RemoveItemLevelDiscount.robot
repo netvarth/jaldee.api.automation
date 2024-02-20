@@ -269,7 +269,7 @@ JD-TC-Remove Item Level Discount-1
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
@@ -583,7 +583,7 @@ JD-TC-Remove Item Level Discount-2
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
      ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
@@ -824,7 +824,7 @@ JD-TC-Remove Item Level Discount-3
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
      ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    Set Test Variable  ${email}  ${vender_name}.${test_mail}
 
     ${resp}=  Share invoice as pdf   ${invoice_uid1}   ${boolean[1]}    ${email}   ${html}
     Log  ${resp.content}
@@ -1191,7 +1191,7 @@ JD-TC-Remove Item Level Discount-5
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Test Variable  ${address}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
@@ -1490,7 +1490,7 @@ JD-TC-Remove Item Level Discount-6
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Test Variable  ${address}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
@@ -1993,7 +1993,7 @@ JD-TC-Remove Item Level Discount-3
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
      ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 

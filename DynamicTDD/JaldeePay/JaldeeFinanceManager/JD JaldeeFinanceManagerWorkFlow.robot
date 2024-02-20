@@ -11,8 +11,11 @@ Library           /ebs/TDD/db.py
 Library           /ebs/TDD/excelfuncs.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
+Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/hl_musers.py
 
 *** Variables ***
 
@@ -25,21 +28,20 @@ ${xlsx}      /ebs/TDD/qnr.xlsx
 
 ${order}    0
 ${fileSize}  0.00458
+${service_duration}     30
 
-@{status}    New     Pending    Assigned     Approved    Rejected
-@{New_status}    Proceed     Unassign    Block     Delete    Remove
+@{status1}    New     Pending    Assigned     Approved    Rejected
+@{New_status}         status1  Proceed     Unassign    Block     Delete    Remove
+${DisplayName1}   item1_DisplayName
 
 *** Test Cases ***
+JD-TC-FinanceWorkFlow-1
 
+    [Documentation]  Basic work flow-
 
-JD-TC-GetPayLinkDetails-1
-
-    [Documentation]  Create a invoice with valid details.
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD}
-    Log  ${resp.content}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME52}  ${PASSWORD}
+    Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-
 
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
@@ -48,14 +50,27 @@ JD-TC-GetPayLinkDetails-1
     Set Suite Variable    ${userName}    ${decrypted_data['userName']}
     Set Suite Variable    ${pdrfname}    ${decrypted_data['firstName']}
     Set Suite Variable    ${pdrlname}    ${decrypted_data['lastName']}
-
-*** Comments ***
-
+    
     ${resp}=  Get Business Profile
-    Log  ${resp.content}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
+    Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
+    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    
+    sleep  2s
+    ${resp}=  Get Departments
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+     
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -72,18 +87,36 @@ JD-TC-GetPayLinkDetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${dep_name1}=  FakerLibrary.bs
+        ${dep_code1}=   Random Int  min=100   max=999
+        ${dep_desc1}=   FakerLibrary.word  
+        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Suite Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
+
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+# --------------- Create Catagory ------------------------------
+
     ${name}=   FakerLibrary.word
-    Set Suite Variable   ${name}
     ${resp}=  Create Category   ${name}  ${categoryType[0]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id}   ${resp.json()}
-    
-    ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${category_id1}   ${resp.json()}
 
     ${name1}=   FakerLibrary.word
     Set Suite Variable   ${name1}
@@ -92,13 +125,9 @@ JD-TC-GetPayLinkDetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id2}   ${resp.json()}
 
-    ${resp}=  Get Category By Id   ${category_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+# -------------------------------------------------------------
+
+# ----------------- Create Vender--------------------------------------------
 
     ${vender_name}=   FakerLibrary.firstname
     ${contactPersonName}=   FakerLibrary.lastname
@@ -166,63 +195,69 @@ JD-TC-GetPayLinkDetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
-    # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id}
 
-    ${resp1}=  AddCustomer  ${CUSERNAME3}
-    Log  ${resp1.json()}
-    Should Be Equal As Strings  ${resp1.status_code}  200
-    Set Suite Variable   ${pcid18}   ${resp1.json()}
-
-    ${providerConsumerIdList}=  Create List  ${pcid18}
-    Set Suite Variable  ${providerConsumerIdList}   
+# -------------------------------------------------------------
 
 
-    ${referenceNo}=   Random Int  min=5  max=200
-    ${referenceNo}=  Convert To String  ${referenceNo}
+# ----------------- Create Service--------------------------------------------
 
-    ${description}=   FakerLibrary.word
-    # Set Suite Variable  ${address}
-    ${invoiceLabel}=   FakerLibrary.word
-    ${invoiceDate}=   db.get_date
-    ${amount}=   Random Int  min=500  max=2000
-    ${amount}=     roundval    ${amount}   1
-    ${invoiceId}=   FakerLibrary.word
-
-    ${item}=   FakerLibrary.word
-    ${quantity}=   Random Int  min=5  max=10
-    ${rate}=   Random Int  min=50  max=1000
-
-
-    ${itemList}=  Create Dictionary  item=${item}   quantity=${quantity}  rate=${rate}    amount=${amount}  price=${rate}
-    # ${itemList}=    Create List    ${itemList}
-
-    ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${status_id1}   ${resp.json()}
-
-    
-    ${resp}=  Create Invoice   ${category_id2}    ${invoiceDate}   ${invoiceLabel}   ${address}   ${vendor_uid1}   ${invoiceId}    ${providerConsumerIdList}    ${itemList}  invoiceStatus=${status_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${invoice_id}   ${resp.json()['idList'][0]}
-    Set Suite Variable   ${invoice_uid}   ${resp.json()['uidList'][0]}    
-
-    ${resp1}=  Get Invoice By Id  ${invoice_uid}
+    ${resp1}=  AddCustomer  ${CUSERNAME39}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    Should Be Equal As Strings  ${resp1.json()['accountId']}  ${account_id1}
-    Should Be Equal As Strings  ${resp1.json()['invoiceCategoryId']}  ${category_id2}
-    Should Be Equal As Strings  ${resp1.json()['categoryName']}  ${name1}
-    Should Be Equal As Strings  ${resp1.json()['invoiceDate']}  ${invoiceDate}
-    Should Be Equal As Strings  ${resp1.json()['invoiceLabel']}  ${invoiceLabel}
-    Should Be Equal As Strings  ${resp1.json()['billedTo']}  ${address}
+    # Set Suite Variable  ${pcid18}   ${resp1.json()}
 
+    ${resp}=    Send Otp For Login    ${CUSERNAME39}    ${account_id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME39}   ${OtpPurpose['Authentication']}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${PO_Number}    Generate random string    5    123456789
-    ${vendor_phn}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phn}.${test_mail}
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME39}    ${account_id1}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
+    Set Suite Variable    ${pcid18}   ${resp.json()['id']}
 
-    ${resp}=  Generate Link For Invoice  ${invoice_uid}   ${vendor_phn}    ${email}    ${bool[1]}    ${bool[0]}
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME52}  ${PASSWORD}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    clear_service   ${HLMUSERNAME52}
+
+    ${providerConsumerIdList}=  Create List  ${pcid18}
+    Set Suite Variable  ${providerConsumerIdList} 
+
+    ${SERVICE1}=    FakerLibrary.word
+    Set Suite Variable  ${SERVICE1}
+    ${desc}=   FakerLibrary.sentence
+    ${servicecharge}=   Random Int  min=100  max=500
+    ${servicecharge}=  Convert To Number  ${servicecharge}  1
+
+    ${resp}=  Create Service  ${SERVICE1}  ${desc}   ${service_duration}   ${status[0]}    ${btype}    ${bool[1]}    ${notifytype[2]}   ${EMPTY}  ${servicecharge}  ${bool[0]}  ${bool[0]}    department=${dep_id}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${sid1}  ${resp.json()} 
+
+    ${resp}=   Get Service
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings      ${resp.json()[0]['id']}     ${sid1}
+    Should Be Equal As Strings      ${resp.json()[0]['name']}       ${SERVICE1}
+    Should Be Equal As Strings      ${resp.json()[0]['description']}       ${desc}
+    Should Be Equal As Strings      ${resp.json()[0]['serviceDuration']}       ${service_duration}
+    Should Be Equal As Strings      ${resp.json()[0]['bType']}       ${btype}
+    Should Be Equal As Strings      ${resp.json()[0]['totalAmount']}       ${servicecharge}
+    Should Be Equal As Strings      ${resp.json()[0]['status']}       ${status[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['taxable']}       ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['department']}       ${dep_id}
+

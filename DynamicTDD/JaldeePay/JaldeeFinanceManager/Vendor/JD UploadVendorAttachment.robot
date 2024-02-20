@@ -93,7 +93,7 @@ JD-TC-UploadAttachment-1
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
     Set Suite Variable  ${vendor_phno}
-    Set Suite Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    Set Suite Variable  ${email}  ${vender_name}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
 
