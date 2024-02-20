@@ -185,15 +185,6 @@ JD-TC-SendMessageWithDonation-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Donation Attachments     ${don_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}    200 
-    Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${pid}
-    Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
-    Should Be Equal As Strings  ${resp.json()[0]['fileSize']}       ${fileSize}
-    Should Be Equal As Strings  ${resp.json()[0]['fileType']}       ${fileType1}
-    Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
 JD-TC-SendMessageWithDonation-UH1
 

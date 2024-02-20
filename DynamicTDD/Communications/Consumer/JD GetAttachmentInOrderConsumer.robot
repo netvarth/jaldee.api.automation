@@ -25,25 +25,24 @@ ${fileSize}     0.00458
 JD-TC-GetAttachmentInOrder-1
     [Documentation]    Get Attachment In Order 
 
-    clear_queue    ${PUSERNAME196}
-    clear_service  ${PUSERNAME196}
-    clear_customer   ${PUSERNAME196}
-    clear_Item   ${PUSERNAME196}
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME196}  ${PASSWORD}
+    clear_queue    ${PUSERNAME186}
+    clear_service  ${PUSERNAME186}
+    clear_customer   ${PUSERNAME186}
+    clear_Item   ${PUSERNAME186}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME186}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
-    Set Test Variable  ${pid}  ${decrypted_data['id']}
-    # Set Test Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
     
-    ${accId}=  get_acc_id  ${PUSERNAME196}
+    ${accId}=  get_acc_id  ${PUSERNAME186}
     Set Suite Variable  ${accId}
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME196}.${test_mail}
+    Set Test Variable  ${email_id}  ${firstname}${PUSERNAME186}.${test_mail}
 
     ${resp}=  Update Email   ${pid}   ${firstname}   ${lastname}   ${email_id}
     Log  ${resp.json()}
@@ -283,10 +282,10 @@ JD-TC-GetAttachmentInOrder-1
     ${attachments}=   Create List  ${attachments}
     Set Suite Variable   ${attachments}
 
-    ${uuid}=    Create List  ${orderid1}
-    Set Suite Variable  ${uuid}
+    ${message}=  Fakerlibrary.Sentence
+    Set Suite variable    ${message}
 
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachments}
+    ${resp}=    Send Message With Order By Consumer  ${pid}  ${orderid1}  ${message}  ${messageType[0]}  attachments=${attachments}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 

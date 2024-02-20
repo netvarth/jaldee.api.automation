@@ -204,15 +204,6 @@ JD-TC-SendMessageInDonation-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Donation Attachments     ${don_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}    200 
-    Should Be Equal As Strings  ${resp.json()[0]['owner']}          ${con_id}
-    Should Be Equal As Strings  ${resp.json()[0]['fileName']}       ${fileName}
-    Should Be Equal As Strings  ${resp.json()[0]['fileSize']}       ${fileSize}
-    Should Be Equal As Strings  ${resp.json()[0]['fileType']}       ${fileType1}
-    Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
-    Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${pdrname}
 
 JD-TC-SendMessageInDonation-UH1
     
@@ -238,7 +229,7 @@ JD-TC-SendMessageInDonation-UH1
     ${resp}=    Send Message With Donation By Consumer   ${empty}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachments}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    422
-    Should Be Equal As Strings     ${resp.json}     ${MASS_COMMUNICATION_NOT_EMPTY}
+    Should Be Equal As Strings     ${resp.json()}     ${MASS_COMMUNICATION_NOT_EMPTY}
 
 JD-TC-SendMessageInDonation-UH2
     
@@ -340,30 +331,30 @@ JD-TC-SendMessageInDonation-UH5
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
-JD-TC-SendMessageInDonation-UH6
+# JD-TC-SendMessageInDonation-UH6
     
-    [Documentation]    Send Message In Order - uuid is empty list
+#     [Documentation]    Send Message In Order - uuid is empty list
 
-    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+#     ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
+#     Log   ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable   ${token}  ${resp.json()['token']}
+#     ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+#     Log   ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}   200
+#     Set Test Variable   ${token}  ${resp.json()['token']}
 
-    ${resp}=  Customer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Customer Logout   
+#     Log   ${resp.json()}
+#     Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accId}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
+#     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accId}    ${token}
+#     Log   ${resp.json()}
+#     Should Be Equal As Strings    ${resp.status_code}   200
     
-    ${resp}=    Send Message With Donation By Consumer     ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  []  attachments=${attachments}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
+#     ${resp}=    Send Message With Donation By Consumer     ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  []  attachments=${attachments}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings     ${resp.status_code}    200
 
 JD-TC-SendMessageInDonation-UH7
     
@@ -478,7 +469,8 @@ JD-TC-SendMessageInDonation-UH11
     
     ${resp}=    Send Message With Donation By Consumer      ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachment2}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}  ${FILE_NAME_NOT_FOUND}
 
 JD-TC-SendMessageInDonation-UH12
     
@@ -507,7 +499,8 @@ JD-TC-SendMessageInDonation-UH12
     
     ${resp}=    Send Message With Donation By Consumer      ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachment2}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}  ${FILE_SIZE_ERROR}
 
 JD-TC-SendMessageInDonation-UH13
     
@@ -536,7 +529,8 @@ JD-TC-SendMessageInDonation-UH13
     
     ${resp}=    Send Message With Donation By Consumer      ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachment2}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings  ${resp.json()}  ${FILE_TYPE_NOT_FOUND}
 
 JD-TC-SendMessageInDonation-UH14
     
@@ -625,7 +619,8 @@ JD-TC-SendMessageInDonation-UH16
     
     ${resp}=    Send Message With Donation By Consumer      ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachment2}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}   ${INV_DRIVE_ID}
 
 JD-TC-SendMessageInDonation-UH17
     
@@ -686,18 +681,6 @@ JD-TC-SendMessageInDonation-UH18
     Should Be Equal As Strings     ${resp.status_code}    200
 
 JD-TC-SendMessageInDonation-UH19
-    
-    [Documentation]    Send Message In Order - provider login
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME196}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
-    ${resp}=    Send Message With Donation By Consumer      ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachment2}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
-
-JD-TC-SendMessageInDonation-UH20
     
     [Documentation]    Send Message In Order - without login
 

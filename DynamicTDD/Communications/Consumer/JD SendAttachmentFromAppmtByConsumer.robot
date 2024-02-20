@@ -66,8 +66,8 @@ JD-TC-SendAttachmentFromAppmtByConsumer-1
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
-    clear_service   ${PUSERNAME_B}
-    clear_location  ${PUSERNAME_B} 
+    clear_service   ${PUSERNAME305}
+    clear_location  ${PUSERNAME305} 
 
     ${resp}=   Get Service
     Log   ${resp.json()}

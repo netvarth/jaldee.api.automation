@@ -232,7 +232,11 @@ JD-TC-GetAttachmentFromWLByConsumer-UH2
 
 JD-TC-GetAttachmentFromWLByConsumer-UH3
 
-    [Documentation]  Get Attachment Waitelist - with provider login   
+    [Documentation]  Get Attachment Waitelist - with provider login 
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200  
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME306}  ${PASSWORD}
     Log  ${resp.content}

@@ -402,6 +402,10 @@ JD-TC-SendAttachmentFromWLByConsumer-12
 JD-TC-SendAttachmentFromWLByConsumer-13
 
 	[Documentation]  ProviderConsumer  upload file to temporary location - with provider login
+    
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME309}  ${PASSWORD}
     Log  ${resp.content}

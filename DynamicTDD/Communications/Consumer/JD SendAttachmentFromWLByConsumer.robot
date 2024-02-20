@@ -697,6 +697,10 @@ JD-TC-SendAttachmentWL-UH9
 
     [Documentation]  Send Attachment Waitlist - with Provider login
 
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME306}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

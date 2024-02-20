@@ -25,6 +25,7 @@ ${order}    0
 JD-TC-SendMessagebyChat-1
 
     [Documentation]   Send Message by chat
+
     ${resp}=   Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -125,3 +126,386 @@ JD-TC-SendMessagebyChat-1
     ${resp}=  Customer Logout   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+
+JD-TC-SendMessagebyChat-UH1
+
+    [Documentation]   Send Message by chat -account id is invalid
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accountId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${inv}=  FakerLibrary.Random Int
+
+    ${resp}=       Send Message By Chat from Consumer   ${inv}  ${ownerId}  ${msg}  ${messageType[0]}  ${file_details} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+
+JD-TC-SendMessagebyChat-UH2
+
+    [Documentation]   Send Message by chat - owner id is empty
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accountId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=       Send Message By Chat from Consumer   ${accountId}  ${empty}  ${msg}  ${messageType[0]}  ${file_details} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+
+JD-TC-SendMessagebyChat-UH3
+
+    [Documentation]   Send Message by chat - owner id is invalid
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accountId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${inv}=  FakerLibrary.Random Int
+
+    ${resp}=       Send Message By Chat from Consumer   ${accountId}  ${inv}  ${msg}  ${messageType[0]}  ${file_details} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}      ${PROVIDER_NOT_EXIST}
+
+
+JD-TC-SendMessagebyChat-UH4
+
+    [Documentation]   Send Message by chat - message is empty
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accountId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=       Send Message By Chat from Consumer   ${accountId}  ${ownerId}  ${empty}  ${messageType[0]}  ${file_details} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+
+JD-TC-SendMessagebyChat-UH5
+
+    [Documentation]   Send Message by chat - message type is enquiry
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accountId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=       Send Message By Chat from Consumer   ${accountId}  ${ownerId}  ${msg}  ${messageType[1]}  ${file_details} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+
+JD-TC-SendMessagebyChat-UH6
+
+    [Documentation]   Send Message by chat - file action is remove
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accountId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${file_details2}=    Create Dictionary   action=${FileAction[2]}  ownerName=${consumerFirstName}  fileName=${pdffile}  fileSize=${fileSize}  driveId=${driveId}  fileType=${fileType}  order=${order}
+    Set Suite Variable      ${file_details2}
+
+    ${resp}=       Send Message By Chat from Consumer   ${accountId}  ${ownerId}  ${msg}  ${messageType[0]}  ${file_details2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+
+JD-TC-SendMessagebyChat-UH7
+
+    [Documentation]   Send Message by chat - owner name is empty
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accountId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${file_details2}=    Create Dictionary   action=${FileAction[0]}  ownerName=${empty}  fileName=${pdffile}  fileSize=${fileSize}  driveId=${driveId}  fileType=${fileType}  order=${order}
+    Set Suite Variable      ${file_details2}
+
+    ${resp}=       Send Message By Chat from Consumer   ${accountId}  ${ownerId}  ${msg}  ${messageType[0]}  ${file_details2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+
+JD-TC-SendMessagebyChat-UH8
+
+    [Documentation]   Send Message by chat - file name is empty
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accountId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${file_details2}=    Create Dictionary   action=${FileAction[0]}  ownerName=${consumerFirstName}  fileName=${empty}  fileSize=${fileSize}  driveId=${driveId}  fileType=${fileType}  order=${order}
+    Set Suite Variable      ${file_details2}
+
+    ${resp}=       Send Message By Chat from Consumer   ${accountId}  ${ownerId}  ${msg}  ${messageType[0]}  ${file_details2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}      ${FILE_NAME_NOT_FOUND}
+
+
+JD-TC-SendMessagebyChat-UH9
+
+    [Documentation]   Send Message by chat - file size is empty
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accountId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${file_details2}=    Create Dictionary   action=${FileAction[0]}  ownerName=${consumerFirstName}  fileName=${pdffile}  fileSize=${empty}  driveId=${driveId}  fileType=${fileType}  order=${order}
+    Set Suite Variable      ${file_details2}
+
+    ${resp}=       Send Message By Chat from Consumer   ${accountId}  ${ownerId}  ${msg}  ${messageType[0]}  ${file_details2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}      ${FILE_SIZE_ERROR}
+
+
+JD-TC-SendMessagebyChat-UH10
+
+    [Documentation]   Send Message by chat - drive id is empty
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accountId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${file_details2}=    Create Dictionary   action=${FileAction[0]}  ownerName=${consumerFirstName}  fileName=${pdffile}  fileSize=${fileSize}  driveId=${empty}  fileType=${fileType}  order=${order}
+    Set Suite Variable      ${file_details2}
+
+    ${resp}=       Send Message By Chat from Consumer   ${accountId}  ${ownerId}  ${msg}  ${messageType[0]}  ${file_details2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+
+JD-TC-SendMessagebyChat-UH11
+
+    [Documentation]   Send Message by chat - drive id is invalid
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accountId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${inv}=     FakerLibrary.Random Int
+
+    ${file_details2}=    Create Dictionary   action=${FileAction[0]}  ownerName=${consumerFirstName}  fileName=${pdffile}  fileSize=${fileSize}  driveId=${inv}  fileType=${fileType}  order=${order}
+    Set Suite Variable      ${file_details2}
+
+    ${resp}=       Send Message By Chat from Consumer   ${accountId}  ${ownerId}  ${msg}  ${messageType[0]}  ${file_details2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}   ${INV_DRIVE_ID}
+
+
+JD-TC-SendMessagebyChat-UH12
+
+    [Documentation]   Send Message by chat - file type is empty
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accountId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${file_details2}=    Create Dictionary   action=${FileAction[0]}  ownerName=${consumerFirstName}  fileName=${pdffile}  fileSize=${fileSize}  driveId=${driveId}  fileType=${empty}  order=${order}
+    Set Suite Variable      ${file_details2}
+
+    ${resp}=       Send Message By Chat from Consumer   ${accountId}  ${ownerId}  ${msg}  ${messageType[0]}  ${file_details2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}      ${FILE_TYPE_NOT_FOUND}
+
+
+JD-TC-SendMessagebyChat-UH13
+
+    [Documentation]   Send Message by chat - order is empty
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accountId}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${file_details2}=    Create Dictionary   action=${FileAction[0]}  ownerName=${consumerFirstName}  fileName=${pdffile}  fileSize=${fileSize}  driveId=${driveId}  fileType=${fileType}  order=${empty}
+    Set Suite Variable      ${file_details2}
+
+    ${resp}=       Send Message By Chat from Consumer   ${accountId}  ${ownerId}  ${msg}  ${messageType[0]}  ${file_details2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+
+JD-TC-SendMessagebyChat-UH14
+
+    [Documentation]   Send Message by chat - without login  
+
+    ${resp}=       Send Message By Chat from Consumer   ${accountId}  ${ownerId}  ${msg}  ${messageType[0]}  ${file_details} 
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    419
+    Should Be Equal As Strings     ${resp.json()}      ${SESSION_EXPIRED}

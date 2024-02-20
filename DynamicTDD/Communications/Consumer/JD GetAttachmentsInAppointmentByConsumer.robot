@@ -321,6 +321,10 @@ JD-TC-GetAttachmentAppmt-UH3
 
     [Documentation]  Get Attachment Appmt - with provider login   
 
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${resp}=  Encrypted Provider Login  ${PUSERNAME305}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
