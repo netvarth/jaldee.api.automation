@@ -1304,5 +1304,53 @@ JD-TC-Update PaymentsOut With Expense--UH6
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${PAYMENT_GATEWAY_CANNOT_BE_EMPTY}
 
+JD-TC-Update PaymentsOut With Expense--UH7
+
+    [Documentation]  Create a PaymentOut where CatagoryName is empty.
+
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME320}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
+     ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+
+
+    ${resp}=   Update PaymentsOut With Expense   ${payable_uid1}    ${category_id2}   ${EMPTY}    ${amount}   ${finance_payment_modes[0]}  ${dueDate}     
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${Please_enter_an_amount}
+
+JD-TC-Update PaymentsOut With Expense--UH8
+
+    [Documentation]  Create a PaymentOut where CatagoryId is empty.
+
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME320}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${payableLabel}=   FakerLibrary.word
+    ${dueDate}=   db.get_date_by_timezone  ${tz}
+     ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+
+    ${referenceNo}=   Random Int  min=5  max=200
+    ${referenceNo}=  Convert To String  ${referenceNo}
+
+
+
+    ${resp}=   Update PaymentsOut With Expense   ${payable_uid1}    ${category_id1}   ${name1}    ${amount}   ${finance_payment_modes[0]}  ${dueDate}     
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_CATEGORY_ID}
+
 
 
