@@ -3356,13 +3356,13 @@ Send Attachment From Appointment By Consumer
 
 
 Send Message By Chat from Consumer
-    [Arguments]  ${userid}  ${message}  ${messageType}  @{attachments} 
+    [Arguments]  ${accid}  ${userid}  ${message}  ${messageType}  @{attachments} 
 
     ${messagedict}=  Create Dictionary  msg=${message}  messageType=${messageType}
     ${data}=  Create Dictionary  provider=${userid}  message=${messagedict}  attachments=${attachments}
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/message/communications   data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  url=/consumer/message/communications?account=${accId}   data=${data}  expected_status=any
     RETURN  ${resp}
 
 
@@ -3421,15 +3421,15 @@ Send Message With Donation By Consumer
     RETURN  ${resp}
 
 Send Message With Order By Consumer
-   
-    [Arguments]  ${uid}  ${message}  ${emailflag}  ${smsflag}  ${telegramflag}  ${whatsAppflag}  ${uuid}  &{kwargs}  
 
-    ${medium}=  Create Dictionary  email=${emailflag}  sms=${smsflag}  telegram=${telegramflag}  whatsApp=${whatsAppflag}
-    ${data}=  Create Dictionary  medium=${medium}  communicationMessage=${message}  uuid=${uuid}
+    [Arguments]  ${provider}  ${uuid}  ${message}  ${messagetype}  &{kwargs}  
+
+    ${message}=  Create Dictionary  msg=${message}  messageType=${messagetype}
+    ${data}=  Create Dictionary  provider=${provider}  message=${message}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END
     ${data}=    json.dumps    ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/orders/communicate/message/${uid}   data=${data}  expected_status=any
-    RETURN  ${resp}
+    ${resp}=  POST On Session  ynw  /consumer/orders/communicate/message/${uuid}   data=${data}  expected_status=any
+    RETURN  ${resp} 

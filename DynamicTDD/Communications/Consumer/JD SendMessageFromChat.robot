@@ -104,7 +104,7 @@ JD-TC-SendMessagebyChat-1
     ${file_details}=    Create Dictionary   action=${FileAction[0]}  ownerName=${consumerFirstName}  fileName=${pdffile}  fileSize=${fileSize}  driveId=${driveId}  fileType=${fileType}  order=${order}
     Set Suite Variable      ${file_details}
     
-    ${resp}=       Send Message By Chat from Consumer    ${PCid}  ${msg}  ${messageType[0]}  ${file_details} 
+    ${resp}=       Send Message By Chat from Consumer   ${accountId}  ${ownerId}  ${msg}  ${messageType[0]}  ${file_details} 
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
         
@@ -112,15 +112,13 @@ JD-TC-SendMessagebyChat-1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()[0]['owner']['id']}                    ${PCid}
-    Should Be Equal As Strings  ${resp.json()[0]['owner']['name']}                  ${consumerFirstName}
-    Should Be Equal As Strings  ${resp.json()[0]['msg']}                            ${username} ${\n}${msg}
-    Should Be Equal As Strings  ${resp.json()[0]['service']}                        ${SPACE}Customer${SPACE}${SPACE}on ${current_date}
-    Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}                 ${cid}
-    Should Be Equal As Strings  ${resp.json()[0]['receiver']['name']}               ${username}
+    Should Be Equal As Strings  ${resp.json()[0]['owner']['name']}                  ${consumerFirstName} ${consumerLastName}
+    Should Be Equal As Strings  ${resp.json()[0]['msg']}                            ${msg}
+    Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}                 ${ownerId}
+    Should Be Equal As Strings  ${resp.json()[0]['receiver']['name']}               ${ownerName}
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}                      ${accountId}
     Should Be Equal As Strings  ${resp.json()[0]['accountName']}                    ${businessName}
     Should Be Equal As Strings  ${resp.json()[0]['attachmentList'][0]['fileName']}  ${pdffile}
-    Should Be Equal As Strings  ${resp.json()[0]['attachmentList'][0]['caption']}   ${caption}
     Should Be Equal As Strings  ${resp.json()[0]['attachmentList'][0]['fileType']}  ${fileType}
     Should Be Equal As Strings  ${resp.json()[0]['attachmentList'][0]['action']}    ${FileAction[0]}
 

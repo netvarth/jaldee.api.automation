@@ -35,8 +35,7 @@ JD-TC-SendMessageInOrder-1
 
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
-    Set Test Variable  ${pid}  ${decrypted_data['id']}
-    # Set Test Variable  ${pid}  ${resp.json()['id']}
+    Set Suite Variable  ${pid}  ${decrypted_data['id']}
     
     ${accId}=  get_acc_id  ${PUSERNAME196}
     Set Suite Variable  ${accId}
@@ -283,17 +282,17 @@ JD-TC-SendMessageInOrder-1
     ${attachments}=   Create List  ${attachments}
     Set Suite Variable   ${attachments}
 
-    ${uuid}=    Create List  ${orderid1}
-    Set Suite Variable  ${uuid}
+    ${message}=  Fakerlibrary.Sentence
+    Set Suite variable    ${message}
 
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachments}
+    ${resp}=    Send Message With Order By Consumer  ${pid}  ${orderid1}  ${message}  ${messageType[0]}  attachments=${attachments}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
 
 
 JD-TC-SendMessageInOrder-UH1
-    
-    [Documentation]    Send Message In Order - order id id invalid
+
+	[Documentation]  Send Message In Order - where provider id is empty
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
     Log   ${resp.content}
@@ -312,15 +311,14 @@ JD-TC-SendMessageInOrder-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${inv}=  FakerLibrary.Random Int
-    
-    ${resp}=    Send Message With Order By Consumer  ${inv}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachments}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
+    ${resp}=    Send Message With Order By Consumer  ${empty}  ${orderid1}  ${message}  ${messageType[0]}  attachments=${attachments}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
 
 JD-TC-SendMessageInOrder-UH2
-    
-    [Documentation]    Send Message In Order - caption is empty
+
+	[Documentation]  Send Message In Order - where provider id is invalid
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
     Log   ${resp.content}
@@ -338,14 +336,17 @@ JD-TC-SendMessageInOrder-UH2
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${empty}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachments}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${inv}=     FakerLibrary.Random Int
+
+    ${resp}=    Send Message With Order By Consumer  ${inv}  ${orderid1}  ${message}  ${messageType[0]}  attachments=${attachments}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
 
 JD-TC-SendMessageInOrder-UH3
-    
-    [Documentation]    Send Message In Order - email flag
+
+	[Documentation]  Send Message In Order - waitilist id is invalid
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
     Log   ${resp.content}
@@ -363,14 +364,18 @@ JD-TC-SendMessageInOrder-UH3
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[0]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachments}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${inv}=     FakerLibrary.Random Int
+
+    ${resp}=    Send Message With Order By Consumer  ${pid}  ${inv}  ${message}  ${messageType[0]}  attachments=${attachments}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   404
+    Should Be Equal As Strings    ${resp.json()}        ${INVALID_ORDER_UID}
+
 
 JD-TC-SendMessageInOrder-UH4
-    
-    [Documentation]    Send Message In Order - sms flag is false
+
+	[Documentation]  Send Message In Order - message is empty
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
     Log   ${resp.content}
@@ -388,14 +393,15 @@ JD-TC-SendMessageInOrder-UH4
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[0]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachments}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${resp}=    Send Message With Order By Consumer  ${pid}  ${orderid1}  ${empty}  ${messageType[0]}  attachments=${attachments}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
 
 JD-TC-SendMessageInOrder-UH5
-    
-    [Documentation]    Send Message In Order - telegram flag is false
+
+	[Documentation]  Send Message In Order - where message type is enquiry
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
     Log   ${resp.content}
@@ -413,90 +419,15 @@ JD-TC-SendMessageInOrder-UH5
     ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accId}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[0]}  ${boolean[1]}  ${uuid}  attachments=${attachments}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${resp}=    Send Message With Order By Consumer  ${pid}  ${orderid1}  ${message}  ${messageType[1]}  attachments=${attachments}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
 
 JD-TC-SendMessageInOrder-UH6
-    
-    [Documentation]    Send Message In Order - whats app flag is false
 
-    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-  
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Customer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-   
-    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accId}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[0]}  ${uuid}  attachments=${attachments}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
-
-JD-TC-SendMessageInOrder-UH7
-    
-    [Documentation]    Send Message In Order - uuid is empty list
-
-    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-  
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Customer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-   
-    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accId}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  []  attachments=${attachments}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
-
-JD-TC-SendMessageInOrder-UH8
-    
-    [Documentation]    Send Message In Order - with no attachment
-
-    ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-  
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Customer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-   
-    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${accId}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid} 
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
-
-
-JD-TC-SendMessageInOrder-UH9
-    
-    [Documentation]    Send Message In Order - owner id is empty
+	[Documentation]  Send Message In Order - where owner is empty
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
     Log   ${resp.content}
@@ -517,15 +448,14 @@ JD-TC-SendMessageInOrder-UH9
 
     ${attachments}=  Create Dictionary  owner=${empty}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${fullName}
     ${attachment2}=   Create List  ${attachments}
-    Set Suite Variable   ${attachment2}
-    
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachment2}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
 
-JD-TC-SendMessageInOrder-UH10
-    
-    [Documentation]    Send Message In Order - owner id is invalid
+    ${resp}=    Send Message With Order By Consumer  ${pid}  ${orderid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-SendMessageInOrder-UH7
+
+	[Documentation]  Send Message In Order - owner is invalid
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
     Log   ${resp.content}
@@ -544,19 +474,18 @@ JD-TC-SendMessageInOrder-UH10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${inv}=  FakerLibrary.Random Int
+    ${inv}=     FakerLibrary.Random Int
 
     ${attachments}=  Create Dictionary  owner=${inv}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${fullName}
     ${attachment2}=   Create List  ${attachments}
-    Set Suite Variable   ${attachment2}
-    
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachment2}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
 
-JD-TC-SendMessageInOrder-UH11
-    
-    [Documentation]    Send Message In Order - file name is empty
+    ${resp}=    Send Message With Order By Consumer  ${pid}  ${orderid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-SendMessageInOrder-UH8
+
+	[Documentation]  Send Message In Order - file name is empty
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
     Log   ${resp.content}
@@ -577,15 +506,15 @@ JD-TC-SendMessageInOrder-UH11
 
     ${attachments}=  Create Dictionary  owner=${con_id}  fileName=${empty}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${fullName}
     ${attachment2}=   Create List  ${attachments}
-    Set Suite Variable   ${attachment2}
-    
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachment2}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
 
-JD-TC-SendMessageInOrder-UH12
-    
-    [Documentation]    Send Message In Order - file size is empty
+    ${resp}=    Send Message With Order By Consumer  ${pid}  ${orderid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${FILE_NAME_NOT_FOUND}
+
+JD-TC-SendMessageInOrder-UH9
+
+	[Documentation]  Send Message In Order - where file size is empty
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
     Log   ${resp.content}
@@ -606,15 +535,15 @@ JD-TC-SendMessageInOrder-UH12
 
     ${attachments}=  Create Dictionary  owner=${con_id}  fileName=${fileName}  fileSize=${empty}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${fullName}
     ${attachment2}=   Create List  ${attachments}
-    Set Suite Variable   ${attachment2}
-    
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachment2}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
 
-JD-TC-SendMessageInOrder-UH13
-    
-    [Documentation]    Send Message In Order - file type
+    ${resp}=    Send Message With Order By Consumer  ${pid}  ${orderid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${FILE_SIZE_ERROR}
+
+JD-TC-SendMessageInOrder-UH10
+
+	[Documentation]  Send Message In Order - where file type is empty
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
     Log   ${resp.content}
@@ -635,15 +564,15 @@ JD-TC-SendMessageInOrder-UH13
 
     ${attachments}=  Create Dictionary  owner=${con_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${empty}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${fullName}
     ${attachment2}=   Create List  ${attachments}
-    Set Suite Variable   ${attachment2}
-    
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachment2}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
 
-JD-TC-SendMessageInOrder-UH14
-    
-    [Documentation]    Send Message In Order - order is empty
+    ${resp}=    Send Message With Order By Consumer  ${pid}  ${orderid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${FILE_TYPE_NOT_FOUND}
+
+JD-TC-SendMessageInOrder-UH11
+
+	[Documentation]  Send Message In Order - order id empty
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
     Log   ${resp.content}
@@ -664,15 +593,14 @@ JD-TC-SendMessageInOrder-UH14
 
     ${attachments}=  Create Dictionary  owner=${con_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${empty}  driveId=${driveId}  action=${file_action[0]}  ownerName=${fullName}
     ${attachment2}=   Create List  ${attachments}
-    Set Suite Variable   ${attachment2}
-    
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachment2}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
 
-JD-TC-SendMessageInOrder-UH15
-    
-    [Documentation]    Send Message In Order - drive id is empty
+    ${resp}=    Send Message With Order By Consumer  ${pid}  ${orderid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-SendMessageInOrder-UH12
+
+	[Documentation]  Send Message In Order -drive id is empty
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
     Log   ${resp.content}
@@ -693,15 +621,15 @@ JD-TC-SendMessageInOrder-UH15
 
     ${attachments}=  Create Dictionary  owner=${con_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${empty}  action=${file_action[0]}  ownerName=${fullName}
     ${attachment2}=   Create List  ${attachments}
-    Set Suite Variable   ${attachment2}
-    
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachment2}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
 
-JD-TC-SendMessageInOrder-UH16
-    
-    [Documentation]    Send Message In Order - drive id is invalid
+    ${resp}=    Send Message With Order By Consumer  ${pid}  ${orderid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${S3_SERVICE_UPLOAD_FAILED}
+
+JD-TC-SendMessageInOrder-UH13
+
+	[Documentation]  Send Message In Order - drive id id invalid
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
     Log   ${resp.content}
@@ -720,19 +648,19 @@ JD-TC-SendMessageInOrder-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${inv}=  FakerLibrary.Random Int
+    ${inv}=     FakerLibrary.Random Int
 
     ${attachments}=  Create Dictionary  owner=${con_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${inv}  action=${file_action[0]}  ownerName=${fullName}
     ${attachment2}=   Create List  ${attachments}
-    Set Suite Variable   ${attachment2}
-    
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachment2}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
 
-JD-TC-SendMessageInOrder-UH17
-    
-    [Documentation]    Send Message In Order - file action is remove
+    ${resp}=    Send Message With Order By Consumer  ${pid}  ${orderid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}        ${INV_DRIVE_ID}
+
+JD-TC-SendMessageInOrder-UH14
+
+	[Documentation]  Send Message In Order - file action is remove
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
     Log   ${resp.content}
@@ -751,17 +679,16 @@ JD-TC-SendMessageInOrder-UH17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${attachments}=  Create Dictionary  owner=${con_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[2]}  ownerName=${fullName}
+    ${attachments}=  Create Dictionary  owner=${con_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${fullName}
     ${attachment2}=   Create List  ${attachments}
-    Set Suite Variable   ${attachment2}
-    
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachment2}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
 
-JD-TC-SendMessageInOrder-UH18
-    
-    [Documentation]    Send Message In Order - owner name is empty
+    ${resp}=    Send Message With Order By Consumer  ${pid}  ${orderid1}  ${message}  ${messageType[2]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-SendMessageInOrder-UH15
+
+	[Documentation]  Send Message In Order - attachment is empty list
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${accId}
     Log   ${resp.content}
@@ -780,31 +707,17 @@ JD-TC-SendMessageInOrder-UH18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${attachments}=  Create Dictionary  owner=${con_id}  fileName=${fileName}  fileSize=${fileSize}  fileType=${fileType1}  order=${order}  driveId=${driveId}  action=${file_action[0]}  ownerName=${empty}
-    ${attachment2}=   Create List  ${attachments}
-    Set Suite Variable   ${attachment2}
-    
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachment2}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
+    ${attachment2}=   Create List
 
-JD-TC-SendMessageInOrder-UH19
-    
-    [Documentation]    Send Message In Order - provider login
+    ${resp}=    Send Message With Order By Consumer  ${pid}  ${orderid1}  ${message}  ${messageType[0]}  attachments=${attachment2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME196}  ${PASSWORD}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-   
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachment2}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
+JD-TC-SendMessageInOrder-UH16
 
-JD-TC-SendMessageInOrder-UH20
-    
-    [Documentation]    Send Message In Order - without login
+	[Documentation]  Send Message In Order - without login 
 
-    ${resp}=    Send Message With Order By Consumer  ${orderid1}  ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${uuid}  attachments=${attachment2}
-    Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    419
-    Should Be Equal As Strings     ${resp.json()}   ${SESSION_EXPIRED}
+    ${resp}=    Send Message With Order By Consumer  ${pid}  ${orderid1}  ${message}  ${messageType[0]}  attachments=${attachments}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
