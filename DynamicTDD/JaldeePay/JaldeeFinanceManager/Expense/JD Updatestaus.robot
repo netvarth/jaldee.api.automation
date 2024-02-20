@@ -28,16 +28,6 @@ ${fileSize}  0.00458
 @{status}    New     Pending    Assigned     Approved    Rejected
 @{New_status}    Proceed     Unassign    Block     Delete    Remove
 
-*** Keywords ***
-
-Update Expense Status
-
-    [Arguments]    ${uid}  ${expenseStatus}  
-     
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/expense/${uid}/${expenseStatus}     expected_status=any    headers=${headers}
-    RETURN  ${resp}
-
 *** Test Cases ***
 
 

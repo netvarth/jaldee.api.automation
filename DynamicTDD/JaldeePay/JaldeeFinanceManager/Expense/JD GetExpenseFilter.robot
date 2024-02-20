@@ -25,13 +25,6 @@ ${xlsx}      /ebs/TDD/qnr.xlsx
 ${order}    0
 ${fileSize}  0.00458
 
-*** Keywords ***
-
-Get Expense Without Filter 
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/jp/finance/expense        expected_status=any
-    RETURN  ${resp}
-
 *** Test Cases ***
 
 
@@ -108,7 +101,7 @@ JD-TC-GetExpenseWithFilter-1
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 

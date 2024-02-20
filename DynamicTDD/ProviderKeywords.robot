@@ -10909,11 +10909,24 @@ Get Expense With Filter
     ${resp}=  GET On Session  ynw  /provider/jp/finance/expense    params=${param}     expected_status=any
     RETURN  ${resp}
 
+Update Expense Status
+
+    [Arguments]    ${uid}  ${expenseStatus}  
+     
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/expense/${uid}/${expenseStatus}     expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
 Get Expense Count With Filter
 
     [Arguments]   &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/jp/finance/expense/count    params=${param}     expected_status=any
+    RETURN  ${resp}
+
+Get Expense Without Filter 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/jp/finance/expense        expected_status=any
     RETURN  ${resp}
 
 Upload Finance Expense Attachment
@@ -13041,3 +13054,6 @@ Get LastManualIdOfcustomer
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/customers/patientId  expected_status=any
     RETURN  ${resp}
+
+
+

@@ -102,7 +102,7 @@ JD-TC-UploadAttachment-1
     ${PO_Number}    Generate random string    5    123456789
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    Set Test Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
