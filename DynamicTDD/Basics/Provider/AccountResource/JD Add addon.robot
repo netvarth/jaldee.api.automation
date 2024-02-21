@@ -310,6 +310,7 @@ JD-TC-Addaddon -UH7
 	should be equal as strings  ${resp.json()[0]['name']}  ${addon_name}	   	  
 	Should Be Equal As Strings  ${resp.status_code}  200
 
+
 # --------------------------  Multi User - 50 Count ---------------------
        ${resp}=   Get Addons Metadata For Superadmin
 	Log  ${resp.content}
@@ -429,6 +430,7 @@ JD-TC-Addaddon -UH7
        ${resp}=   Get License UsageInfo 
        Log  ${resp.json()}
        Should Be Equal As Strings  ${resp.status_code}  200
+
 
        ${resp}=   Get addons auditlog
        Log   ${resp.json()}
