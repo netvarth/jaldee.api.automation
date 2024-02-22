@@ -332,3 +332,11 @@ Get Prescription By ProviderConsumer
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /spconsumer/medicalrecord/prescription   expected_status=any   
     RETURN  ${resp}
+
+
+SPConsumer Deactivation
+    
+    Check And Create YNW Session
+    ${headers2}=     Create Dictionary    Content-Type=application/json  
+    ${resp}=    DELETE On Session    ynw    /spconsumer/login/deActivate      expected_status=any
+    RETURN  ${resp}

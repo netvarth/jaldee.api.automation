@@ -6,6 +6,7 @@ Force Tags        Reminder
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/musers.py
@@ -47,6 +48,14 @@ JD-TC-CreateReminder-1
     ELSE
         Set Suite Variable  ${pcid18}  ${resp.json()[0]['id']}
     END
+
+    ${resp}=  Create Sample Location  
+    Set Suite Variable    ${lid}    ${resp}  
+
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
@@ -133,7 +142,7 @@ JD-TC-CreateReminder-3
 
 JD-TC-CreateReminder-4
 
-    [Documentation]    Provider create a reminder without mentioning the end date.
+    [Documentation]    Provider create a reminder without mentioning the start date.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
@@ -148,8 +157,8 @@ JD-TC-CreateReminder-4
 
     ${resp}=  Create Reminder    ${prov_id1}  ${pcid18}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${EMPTY}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${rem_id}  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"   "${Invalid_Date_reminders}"
 
 JD-TC-CreateReminder-5
 
@@ -584,7 +593,7 @@ JD-TC-CreateReminder-UH12
 
 JD-TC-CreateReminder-UH13
 
-    [Documentation]    Provider create a reminder with start date as the past date.
+    [Documentation]    Provider create a reminder with start date as the past date and end date in future date.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
@@ -605,7 +614,7 @@ JD-TC-CreateReminder-UH13
 
 JD-TC-CreateReminder-UH14
 
-    [Documentation]    Provider create a reminder with start date as the past date.
+    [Documentation]    Provider create a reminder with start date as the today date and end date as past date.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
@@ -626,7 +635,7 @@ JD-TC-CreateReminder-UH14
 
 JD-TC-CreateReminder-UH15
 
-    [Documentation]    Provider create a reminder with start date as the past date.
+    [Documentation]    Provider create a reminder with start date as the future date.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
@@ -645,10 +654,169 @@ JD-TC-CreateReminder-UH15
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"   "${INVALID_START_END_DATE}"
 
-*** Comments ***
+
 JD-TC-CreateReminder-22
 
     [Documentation]    create a reminder after deactivate the provider consumer account.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${firstName}=  FakerLibrary.name
+    Set Suite Variable    ${firstName}
+    ${lastName}=  FakerLibrary.last_name
+    Set Suite Variable    ${lastName}
+    ${primaryMobileNo}    Generate random string    10    123456789
+    ${primaryMobileNo}    Convert To Integer  ${primaryMobileNo}
+    Set Suite Variable    ${primaryMobileNo}
+    ${email}=    FakerLibrary.Email
+    Set Suite Variable    ${email}
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${primaryMobileNo}     ${accountId1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId1}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid1}    ${resp.json()['providerConsumer']}
+
+    ${resp}=    SPConsumer Deactivation
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  add_timezone_time  ${tz}  3  15  
+    ${msg}=  FakerLibrary.word
+
+    ${resp}=  Create Reminder    ${prov_id1}  ${cid1}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  "${resp.json()}"   "${CUSTOMER_IS_INACTIVE}"
+
+JD-TC-CreateReminder-24
+
+    [Documentation]    create a reminder after updating consumer's phone number.
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${alt_Number}    Generate random string    5    0123456789
+    ${alt_Number}    Convert To Integer  ${alt_Number}
+    ${PO_Number}=  Get Random Valid Phone Number
+    Log  ${PO_Number}
+    ${country_code}=  Set Variable  ${PO_Number.country_code}
+    ${CUSERNAME_0}=  Set Variable  ${PO_Number.national_number}
+    ${firstname}=  FakerLibrary.name
+    ${lastname}=  FakerLibrary.last_name
+    ${dob}=  FakerLibrary.Date
+    ${gender}=  Random Element    ${Genderlist}
+    ${address}=  FakerLibrary.Address
+    ${alternativeNo}=  Evaluate  ${CUSERNAME_0}+${alt_Number}
+    Set Test Variable  ${email}  ${C_Email}${CUSERNAME_0}.${test_mail}
+    ${alt_Number2}    Generate random string    10   7412369852
+
+
+   ${resp}=    Send Otp For Login    ${CUSERNAME_0}    ${accountId1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME_0}   12
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${tokens}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email}    ${CUSERNAME_0}     ${accountId1}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME_0}    ${accountId1}  ${tokens} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid2}    ${resp.json()['providerConsumer']}
+
+
+    ${resp}=  Update ProviderConsumer   ${cid2}  firstName=${firstname}  lastName=${lastname}    dob=${dob}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Send Verify Login Consumer   ${alt_Number2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Verify Login Consumer   ${alt_Number2}  5
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+   ${resp}=    Send Otp For Login    ${alt_Number2}    ${accountId1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${alt_Number2}   12
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${tokenfornew}  ${resp.json()['token']}
+
+
+    ${resp}=  Consumer Logout
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    ProviderConsumer Login with token   ${alt_Number2}    ${accountId1}  ${tokenfornew}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid3}    ${resp.json()['providerConsumer']}
+
+
+    ${resp}=   Get ProviderConsumer   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['phoneNo']}  ${alt_Number2}
+
+    ${resp}=  Consumer Logout
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10      
+    ${list}=  Create List  1  2  3  4  5  6  7
+    # ${sTime1}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz}  
+    ${eTime1}=  add_timezone_time  ${tz}  3  15  
+    ${msg}=  FakerLibrary.word
+    ${resp}=  Create Reminder    ${prov_id1}  ${cid3}  ${msg}  ${bool[1]}  ${bool[1]}  ${bool[1]}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+*** Comments ***
 
 
 JD-TC-CreateReminder-23
@@ -656,9 +824,11 @@ JD-TC-CreateReminder-23
     [Documentation]    create a reminder after delete the consumer.
 
 
-JD-TC-CreateReminder-24
 
-    [Documentation]    create a reminder after updating consumer's phone number.
+
+
+
+
 
 
  

@@ -18,13 +18,7 @@ Variables         /ebs/TDD/varfiles/consumermail.py
 ${self}         0
 ${SERVICE1}               SERVICE1001
 
-*** Keywords ***
-Consumer Deactivation
-    
-    Check And Create YNW Session
-    ${headers2}=     Create Dictionary    Content-Type=application/json  
-    ${resp}=    DELETE On Session    ynw    /spconsumer/login/deActivate      expected_status=any
-    RETURN  ${resp}
+
     
 *** Test Cases ***
 
@@ -71,7 +65,7 @@ JD-TC-providerConsumerDeactivation-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}\
 
-    ${resp}=    Consumer Deactivation
+    ${resp}=    SPConsumer Deactivation
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -85,7 +79,7 @@ JD-TC-providerConsumerDeactivation-1
     Should Be Equal As Strings    ${resp.json()}   ${NOT_REGISTERED_CUSTOMER}
 
 
-JD-TC-Consumer Deactivation -2
+JD-TC-SPConsumer Deactivation -2
     [Documentation]   Consumer takes appointment for a valid Provider
 
     ${multilocdoms}=  get_mutilocation_domains
@@ -354,7 +348,7 @@ JD-TC-Consumer Deactivation -2
     # Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot1}
     # Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${lid}
 
-    ${resp}=    Consumer Deactivation
+    ${resp}=    SPConsumer Deactivation
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -408,7 +402,7 @@ JD-TC-Consumer Deactivation -2
     # Should Be Equal As Strings  ${resp.json()['appmtTime']}                                     ${slot1}
     # Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${lid}
 
-JD-TC-Consumer Deactivation -3
+JD-TC-SPConsumer Deactivation -3
     [Documentation]   ReSignup the consumer and try to get above appoiment details.
 
     ${email}=    FakerLibrary.Email
@@ -462,7 +456,7 @@ JD-TC-Consumer Deactivation -3
     Should Be Equal As Strings  ${resp.json()['location']['id']}                                ${lid}
 
 
-JD-TC-Consumer Deactivation -4
+JD-TC-SPConsumer Deactivation -4
     [Documentation]   provider create a ProviderConsumer then deactivate , try to get that ProviderConsumer from provider side.
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD} 
@@ -502,7 +496,7 @@ JD-TC-Consumer Deactivation -4
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}\
 
-    ${resp}=    Consumer Deactivation
+    ${resp}=    SPConsumer Deactivation
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -518,7 +512,7 @@ JD-TC-Consumer Deactivation -4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-JD-TC-Consumer Deactivation -5
+JD-TC-SPConsumer Deactivation -5
     [Documentation]   try to Deactivate that ProviderConsumer from provider side.then try to take a waitlist.
 
     ${resp}=   Encrypted Provider Login  ${PUSERNAME6}  ${PASSWORD} 

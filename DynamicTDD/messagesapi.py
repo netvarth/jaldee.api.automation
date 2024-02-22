@@ -1913,6 +1913,7 @@ ENTER_VALID_OTP = "Please enter a valid OTP."
 REM_END_DATE_REQUIRED = "Reminder Schedule end date is mandatory "
 INVALID_REMINDER_ID = "Invalid reminder id"
 OTP_REQUIRED = "OTP required"
+Invalid_Date_reminders= "Invalid Date"
 
 # Appt Service Request
 
