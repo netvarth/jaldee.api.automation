@@ -12511,6 +12511,31 @@ createInvoice for booking
     ${resp}=    PUT On Session    ynw    /provider/${booking}/${uid}/createInvoice     expected_status=any    headers=${headers}
     RETURN  ${resp}    
 
+
+Update cash payment- finance invoice level
+
+    [Arguments]    ${uuid}     ${acceptPaymentBy}    ${amount}     ${paymentNote}   ${paymentRefId}   &{kwargs}
+    ${data}=  Create Dictionary  uuid=${uuid}     acceptPaymentBy=${acceptPaymentBy}     amount=${amount}     paymentNote=${paymentNote}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/jp/finance/pay/acceptPayment/update/${paymentRefId}    data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+Update cash payment- booking level
+
+    [Arguments]    ${uuid}     ${acceptPaymentBy}    ${amount}     ${paymentNote}     ${paymentRefId}  &{kwargs}
+    ${data}=  Create Dictionary  uuid=${uuid}     acceptPaymentBy=${acceptPaymentBy}     amount=${amount}     paymentNote=${paymentNote}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=     PUT On Session    ynw    /provider/payment/acceptPayment/update/${paymentRefId}    data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
 # ................ LOS Lead ....................
 
 

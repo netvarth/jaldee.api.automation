@@ -112,11 +112,11 @@ JD-TC-GetCategoryByCategoryType-3
     ${resp}=  Get Category By CategoryType   ${categoryType[2]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[7]['id']}            ${category_id1}
-    Should Be Equal As Strings  ${resp.json()[7]['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()[7]['categoryType']}  ${categoryType[2]}
-    Should Be Equal As Strings  ${resp.json()[7]['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()[7]['status']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()[8]['id']}            ${category_id1}
+    Should Be Equal As Strings  ${resp.json()[8]['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()[8]['categoryType']}  ${categoryType[2]}
+    Should Be Equal As Strings  ${resp.json()[8]['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()[8]['status']}        ${toggle[0]}
 
 
 JD-TC-GetCategoryByCategoryType-4

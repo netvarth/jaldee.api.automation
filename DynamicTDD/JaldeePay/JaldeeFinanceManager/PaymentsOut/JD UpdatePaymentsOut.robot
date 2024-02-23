@@ -1227,7 +1227,7 @@ JD-TC-Update PaymentOut-UH5
     ${resp}=  Update PaymentsOut   ${payable_uid1}    ${amount}  ${SPACE}  ${dueDate}   ${payableLabel}    ${description}    ${referenceNo}    ${vendor_uid1}    ${status_id0}    ${Payment_Statuses[0]}    ${finance_payment_modes[4]}     merchantId=${merchantId}    merchantKey=${merchantKey}    paymentGateway=${paymentGateway[1]}    orderId=${orderId}    gatewayTxnId=${gatewayTxnId}    upiId=${upiId}      bankaccountNo=${bankaccountNo}   ifscCode=${ifsc}    bankName=${bankName}    branchName=${branchName}    pancardNo=${pancardNo}    gstNumber=${gstNumber}    bankCheckNo=${bankCheckNo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTSOUT_CATEGORY}
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_PAYMENTOUT_CATEGORY}
 
 JD-TC-Update PaymentOut-UH6
 

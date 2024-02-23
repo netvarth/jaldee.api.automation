@@ -102,7 +102,7 @@ JD-TC-EnableDisableFinanceManager-3
 
     [Documentation]  enable jaldee finance  which is disabled.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME89}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME90}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
