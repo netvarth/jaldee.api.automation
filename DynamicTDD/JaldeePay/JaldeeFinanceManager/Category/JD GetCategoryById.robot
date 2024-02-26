@@ -79,7 +79,7 @@ JD-TC-GetCategoryById-2
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${name}=   FakerLibrary.word
+    ${name}=   FakerLibrary.first_name 
     ${resp}=  Create Category   ${name}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -102,7 +102,7 @@ JD-TC-GetCategoryById-3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${name}=   FakerLibrary.word
+    ${name}=   FakerLibrary.last_name
     ${resp}=  Create Category   ${name}  ${categoryType[2]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -125,7 +125,7 @@ JD-TC-GetCategoryById-4
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${name}=   FakerLibrary.word
+    ${name}=   FakerLibrary.name
     ${resp}=  Create Category   ${name}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
