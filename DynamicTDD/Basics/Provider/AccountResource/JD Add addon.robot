@@ -214,7 +214,7 @@ JD-TC-Addaddon -UH5
        Should Be Equal As Strings  ${resp.json()[0]['licenseTransactionType']}  New
        Should Be Equal As Strings  ${resp.json()[0]['renewedDays']}  0
        Should Be Equal As Strings  ${resp.json()[0]['type']}  Production
-       Should Be Equal As Strings  ${resp.json()[0]['status']}  Active
+       Should Be Equal As Strings  ${resp.json()[0]['status']}  Not_Used
        Should Be Equal As Strings  ${resp.json()[0]['name']}  ${addon_list[1][0]['addon_name']}
 
 JD-TC-Addaddon -UH6
@@ -441,7 +441,7 @@ JD-TC-Addaddon -UH7
        Should Be Equal As Strings  ${resp.json()[1]['licenseTransactionType']}  New
        Should Be Equal As Strings  ${resp.json()[1]['renewedDays']}  0
        Should Be Equal As Strings  ${resp.json()[1]['type']}  Production
-       Should Be Equal As Strings  ${resp.json()[1]['status']}  Active
+       Should Be Equal As Strings  ${resp.json()[1]['status']}  Used_Up
        Should Be Equal As Strings  ${resp.json()[1]['name']}  ${addon_name}
 
        Should Be Equal As Strings  ${resp.json()[0]['licPkgOrAddonId']}  ${addon_id1}   
@@ -500,7 +500,7 @@ JD-TC-Addaddon -UH7
        Should Be Equal As Strings  ${resp.json()[1]['licenseTransactionType']}  New
        Should Be Equal As Strings  ${resp.json()[1]['renewedDays']}  0
        Should Be Equal As Strings  ${resp.json()[1]['type']}  Production
-       Should Be Equal As Strings  ${resp.json()[1]['status']}  Active
+       Should Be Equal As Strings  ${resp.json()[1]['status']}  Used_Up
        Should Be Equal As Strings  ${resp.json()[1]['name']}  ${addon_name}
 
        Should Be Equal As Strings  ${resp.json()[0]['licPkgOrAddonId']}  ${addon_id1}   
@@ -579,6 +579,145 @@ JD-TC-Addaddon -UH
        Should Be Equal As Strings  ${resp.json()[0]['type']}  Production
        Should Be Equal As Strings  ${resp.json()[0]['status']}  Used_Up
        Should Be Equal As Strings  ${resp.json()[0]['name']}  ${addon_name1}
+
+JD-TC-Addaddon -UH
+       [Documentation]   Try to create extra one user without adding addon .
+
+       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       Log  ${resp.content}
+       Should Be Equal As Strings    ${resp.status_code}   200
+
+       ${pin}=  get_pincode
+       ${user_dis_name}=  FakerLibrary.last_name
+
+       FOR   ${a}  IN RANGE   2
+
+              ${PO_Number}    Generate random string    7    0123456789
+              ${p_num}    Convert To Integer  ${PO_Number}
+              ${PUSERNAME}=  Evaluate  ${PUSERNAME}+${p_num}
+              Set Test Variable  ${PUSERNAME${a}}  ${PUSERNAME}
+
+              ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${EMPTY}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME${a}}  ${dep_id}  ${sub_domain_id}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}  
+              Log   ${resp.json()}
+              Should Be Equal As Strings  ${resp.status_code}  200
+              Set Suite Variable  ${u_id${a}}  ${resp.json()}
+
+              ${resp}=  Get User By Id      ${u_id${a}}
+              Log   ${resp.json()}
+              Should Be Equal As Strings      ${resp.status_code}  200
+
+       END
+
+       
+       ${resp}=   Get User Count
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
+       ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+
+       ${resp}=   Month Matrix Cache Task
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
+       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       Log  ${resp.content}
+       Should Be Equal As Strings    ${resp.status_code}   200
+
+       ${resp}=   Get License UsageInfo 
+       Log  ${resp.json()}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=   Get addons auditlog
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
+JD-TC-Addaddon -UH
+       [Documentation]   Try to create extra one user without adding addon ,then add a addon and try to create user  .
+
+       ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       
+       # ${resp}=  GET Account License details     ${p_id1}
+       # Log  ${resp.content}
+       # Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=  Get Addon Transactions details     ${p_id1}
+       Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=  Get Account Addon details  ${p_id1}  
+       Log  ${resp.content} 
+       Should be equal as strings  ${resp.status_code}       200
+
+# --------------------------  Multi User - 25 Count ---------------------
+      
+
+       ${resp}=  Add Addons details  ${p_id1}   ${addon_id}
+	Log   ${resp.content}
+	Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=  Get Addon Transactions details     ${p_id1}
+       Log  ${resp.content}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+	${resp}=  Get Account Addon details  ${p_id1}  
+	Log  ${resp.content} 
+	should be equal as strings  ${resp.json()[0]['licPkgOrAddonId']}  ${addon_id} 
+	should be equal as strings  ${resp.json()[0]['name']}  ${addon_name}	   	  
+	Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       Log  ${resp.content}
+       Should Be Equal As Strings    ${resp.status_code}   200
+
+       ${pin}=  get_pincode
+       ${user_dis_name}=  FakerLibrary.last_name
+
+       FOR   ${a}  IN RANGE   2
+
+              ${PO_Number}    Generate random string    7    0123456789
+              ${p_num}    Convert To Integer  ${PO_Number}
+              ${PUSERNAME}=  Evaluate  ${PUSERNAME}+${p_num}
+              Set Test Variable  ${PUSERNAME${a}}  ${PUSERNAME}
+
+              ${resp}=  Create User  ${firstname}  ${lastname}  ${dob}  ${Genderlist[0]}  ${EMPTY}   ${userType[0]}  ${pin}  ${countryCodes[1]}  ${PUSERNAME${a}}  ${dep_id}  ${sub_domain_id}  ${bool[1]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}  
+              Log   ${resp.json()}
+              Should Be Equal As Strings  ${resp.status_code}  200
+              Set Suite Variable  ${u_id${a}}  ${resp.json()}
+
+              ${resp}=  Get User By Id      ${u_id${a}}
+              Log   ${resp.json()}
+              Should Be Equal As Strings      ${resp.status_code}  200
+
+       END
+
+       
+       ${resp}=   Get User Count
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
+       ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+
+       ${resp}=   Month Matrix Cache Task
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
+
+       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       Log  ${resp.content}
+       Should Be Equal As Strings    ${resp.status_code}   200
+
+       ${resp}=   Get License UsageInfo 
+       Log  ${resp.json()}
+       Should Be Equal As Strings  ${resp.status_code}  200
+
+       ${resp}=   Get addons auditlog
+       Log   ${resp.json()}
+       Should Be Equal As Strings   ${resp.status_code}   200
 
 JD-TC-Addaddon -UH
        [Documentation]   Adding 2 Queues/Schedules/Services Addon.

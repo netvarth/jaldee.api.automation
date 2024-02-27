@@ -26,6 +26,10 @@ ${gif}      /ebs/TDD/sample.gif
 ${xlsx}      /ebs/TDD/qnr.xlsx
 ${self}         0
 
+${SERVICE6}     SAMPLE1
+${SERVICE7}     SAMPLE2
+${SERVICE8}     SAMPLE3
+
 ${order}    0
 ${fileSize}  0.00458
 ${service_duration}     30
@@ -3538,49 +3542,61 @@ JD-TC-CreateInvoice-UH4
 JD-TC-ApplyDiscountForOrder-21
     [Documentation]   Create order by user for Home Delivery then provider consumer doing invoice payment.
 
-    ${PUSERPH0}=  Evaluate  ${PUSERNAME}+33883442
-    Set Suite Variable   ${PUSERPH0}
-    
+    ${PO_Number}    Generate random string    8    9784564123
+    ${PO_Number}    Convert To Integer  ${PO_Number}
+    ${PUSERPH2}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    Append To File  ${EXECDIR}/TDD/numbers.txt  ${PUSERPH2}${\n}
+    Set Suite Variable   ${PUSERPH2}
+    ${resp}=   Run Keywords  clear_queue  ${PUSERPH2}   AND  clear_service  ${PUSERPH2}  AND  clear_Item    ${PUSERPH2}  AND   clear_Coupon   ${PUSERPH2}   AND  clear_Discount  ${PUSERPH2}  AND  clear_appt_schedule   ${PUSERPH2}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
     Log  ${licname}
+    Set Test Variable   ${licid}
+    
     ${domresp}=  Get BusinessDomainsConf
-    Log   ${domresp.json()}
+    Log   ${domresp.content}
     Should Be Equal As Strings  ${domresp.status_code}  200
     ${dlen}=  Get Length  ${domresp.json()}
-    FOR  ${pos}  IN RANGE  ${dlen}  
-        Set Suite Variable  ${d1}  ${domresp.json()[${pos}]['domain']}
-        ${sd1}  ${check}=  Get Billable Subdomain  ${d1}  ${domresp}  ${pos}  
-        Set Suite Variable   ${sd1}
-        Exit For Loop IF     '${check}' == '${bool[1]}'
-    END
-    Log  ${d1}
-    Log  ${sd1}
+    ${d1}=  Random Int   min=0  max=${dlen-1}
+    Set Test Variable  ${dom}  ${domresp.json()[${d1}]['domain']}
+    ${sdlen}=  Get Length  ${domresp.json()[${d1}]['subDomains']}
+    ${sdom}=  Random Int   min=0  max=${sdlen-1}
+    Set Test Variable  ${sub_dom}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
+
+    # ${domresp}=  Get BusinessDomainsConf
+    # Log   ${domresp.content}
+    # Should Be Equal As Strings  ${domresp.status_code}  200
+    # ${dlen}=  Get Length  ${domresp.json()}
+    # ${d1}=  Random Int   min=0  max=${dlen-1}
+    # Set Test Variable  ${d1}  ${domresp.json()[${d1}]['domain']}
+    # ${sdlen}=  Get Length  ${domresp.json()[${d1}]['subDomains']}
+    # ${sdom}=  Random Int   min=0  max=${sdlen-1}
+    # Set Test Variable  ${sd1}  ${domresp.json()[${d1}]['subDomains'][${sdom}]['subDomain']}
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${address}=  FakerLibrary.address
     ${dob}=  FakerLibrary.Date
     ${gender}=    Random Element    ${Genderlist}
-    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${d1}  ${sd1}  ${PUSERPH0}  ${licid}
+    ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERPH2}  ${licid}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Account Activation  ${PUSERPH0}  0
+    ${resp}=  Account Activation  ${PUSERPH2}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  "${resp.json()}"    "true"
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
 
-    ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
+    ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  0
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Encrypted Provider Login  ${PUSERPH0}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${pid}=  get_acc_id  ${PUSERPH0}
+    ${pid}=  get_acc_id  ${PUSERPH2}
     ${cid}=  get_id  ${CUSERNAME32}
 
      ${resp}=  Toggle Department Enable
@@ -3789,7 +3805,7 @@ JD-TC-ApplyDiscountForOrder-21
     ${orderNote}=  FakerLibrary.Sentence   nb_words=5
     Set Suite Variable  ${orderNote}
 
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERPH0}  ${PASSWORD}
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${PUSERPH2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

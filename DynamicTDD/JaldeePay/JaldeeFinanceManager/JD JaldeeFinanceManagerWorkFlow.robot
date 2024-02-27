@@ -132,6 +132,57 @@ JD-TC-FinanceWorkFlow-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id3}   ${resp.json()}
 
+    ${name3}=   FakerLibrary.word
+    Set Suite Variable   ${name3}
+    ${resp}=  Create Category   ${name3}  ${categoryType[2]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${category_id4}   ${resp.json()}
+
+    ${name1}=   FakerLibrary.word
+    ${resp}=  Update Category   ${category_id3}  ${name1}  ${categoryType[1]} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Category By Id   ${category_id3}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['name']}          ${name1}
+    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
+    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
+    ${resp}=  db.getType   ${pdffile} 
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${pdffile} 
+    Set Suite Variable    ${fileType}
+    ${caption}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption}
+
+    ${resp}=  db.getType   ${jpgfile}
+    Log  ${resp}
+    ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+    Set Suite Variable    ${fileType1}
+    ${caption1}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption1}
+    
+    ${Attachments}=    Create Dictionary   action=${LoanAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${Attachments}
+
+    ${resp}=  Upload Finance Attachment   ${category_id3}    ${categoryType[1]}    ${Attachments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Category By Id   ${category_id3}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['name']}          ${name1}
+    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
+    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
+
 # -------------------------------------------------------------
 
 # ----------------- Create Vender--------------------------------------------
@@ -379,7 +430,7 @@ JD-TC-FinanceWorkFlow-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Expense With Filter    categoryName-eq=${name2}    
+    ${resp}=  Get Expense With Filter    categoryName-eq=${name1}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['expenseCategoryId']}  ${category_id3}
@@ -391,3 +442,93 @@ JD-TC-FinanceWorkFlow-1
     Should Be Equal As Strings  ${resp.json()[0]['itemList'][0]['quantity']}  ${quantity}
     Should Be Equal As Strings  ${resp.json()[0]['departmentList'][0]['deptId']}  ${deptId}
     Should Be Equal As Strings  ${resp.json()[0]['uploadedDocuments'][0]['fileName']}  ${pdffile}
+
+# ------------------------- Create PaymentIn ----------------------------------
+
+    ${payableLabel}=   FakerLibrary.word
+    ${receivedDate}=   db.get_date_by_timezone  ${tz}
+    ${time_now}=    db.get_time_by_timezone  ${tz}
+
+    ${amount}=   Random Int  min=500  max=2000
+    ${amount}=     roundval    ${amount}   1
+ 
+    ${paymentMode}=    Create Dictionary   paymentMode=${finance_payment_modes[0]}
+
+    ${Attachments1}=    Create Dictionary   action=${FileAction[0]}  owner=${account_id1}    ownerType=${ownerType[1]}    ownerName=${userName}   fileName=${pdffile}  fileSize=${fileSize}  caption=${caption}  fileType=${fileType}  order=${order}
+    Log  ${Attachments1}
+    ${uploadedDocuments1}=    Create List    ${Attachments1}
+
+    ${resp}=  Create PaymentsIn   ${amount}  ${category_id4}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}    ${paymentMode}    uploadedDocuments=${uploadedDocuments1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+     Set Test Variable   ${payable_uid1}   ${resp.json()['uid']}
+    Set Suite Variable   ${payable_id1}   ${resp.json()['id']}
+
+    ${resp}=  Get PaymentsIn By Id   ${payable_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id4}
+    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name3}
+    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount}
+    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${pdffile}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType}                                         
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+
+    ${amount1}=   Random Int  min=500  max=2000
+    ${amount1}=     roundval    ${amount1}   1
+
+    ${resp}=  Update PaymentsIn   ${payable_uid1}    ${amount1}  ${category_id4}  ${receivedDate}   ${payableLabel}     ${vendor_uid1}        ${paymentMode}    uploadedDocuments=${uploadedDocuments}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  Get PaymentsIn By Id   ${payable_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['paymentsInCategoryId']}  ${category_id4}
+    Should Be Equal As Strings  ${resp.json()['categoryName']}  ${name3}
+    Should Be Equal As Strings  ${resp.json()['paymentsInLabel']}  ${payableLabel}
+    Should Be Equal As Strings  ${resp.json()['amount']}  ${amount1}
+    Should Be Equal As Strings  ${resp.json()['vendorUid']}  ${vendor_uid1}
+    Should Be Equal As Strings  ${resp.json()['paymentsInUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['receivedDate']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileName']}  ${pdffile}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileSize']}  ${fileSize}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['caption']}  ${caption}
+    Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['fileType']}  ${fileType}
+    # Should Be Equal As Strings  ${resp.json()['uploadedDocuments'][0]['driveId']}  ${driveId}
+    Should Be Equal As Strings  ${resp.json()['paymentInfo']['paymentMode']}  ${finance_payment_modes[0]}
+
+    ${resp}=  Upload Finance PaymentsIn Attachment   ${payable_uid1}     ${Attachments}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get PaymentsIn By Id   ${payable_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get PaymentsIn With Filter    payInOutUuid-eq=${payable_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${len}=  Get Length  ${resp.json()}  
+
+    ${resp}=  Get PaymentsIn Count With Filter    payInOutUuid-eq=${payable_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   ${len}
+
+    ${resp}=  Get PaymentsIn Log List UId   ${payable_uid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['account']}  ${account_id1}
+    Should Be Equal As Strings  ${resp.json()['paymentsInOutUid']}  ${payable_uid1}
+    Should Be Equal As Strings  ${resp.json()['isPaymentsIn']}  ${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['date']}  ${receivedDate}
+    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['time']}  ${time_now}
+    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['userType']}  ${userType[0]}
+    Should Be Equal As Strings  ${resp.json()['payInOutStateList'][0]['localUserId']}  ${pid}
