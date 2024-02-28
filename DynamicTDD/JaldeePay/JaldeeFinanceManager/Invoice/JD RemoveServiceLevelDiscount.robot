@@ -789,7 +789,7 @@ JD-TC-Remove Service Level Discount-5
     # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     # Set Suite Variable  ${CUR_DAY}
   
-    ${SERVICE1}=    FakerLibrary.word
+    ${SERVICE1}=    FakerLibrary.name
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
@@ -1014,7 +1014,7 @@ JD-TC-Remove Service Level Discount-6
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}  location=${lid}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
