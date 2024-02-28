@@ -221,11 +221,11 @@ JD-TC-Delete addon -2
 JD-TC-Delete addon -3
        [Documentation]   Provider adding 2 Multi User addon,then delete active addon.
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
-       ${p_id1}=  get_acc_id  ${HLMUSERNAME6}
+       ${p_id1}=  get_acc_id  ${HLMUSERNAME8}
        Set Suite Variable   ${p_id1}
 
     
@@ -352,7 +352,7 @@ JD-TC-Delete addon -3
 JD-TC-Delete addon -UH1
        [Documentation]   Try to delete using addon.
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -461,7 +461,7 @@ JD-TC-Delete addon -UH2
 	Should Be Equal As Strings  ${resp.status_code}  200
 	Set Suite Variable    ${addon_id}      ${resp.json()[0]['accountLicId']}
 
-       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD} 
+       ${resp}=   Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD} 
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}   200
 
