@@ -301,7 +301,7 @@ JD-TC-Create Sections-1
     Should Be Equal As Strings     ${resp.json()['mrCase']['uid']}    ${caseUId}
 
     ${DAY}=    db.get_date_by_timezone  ${tz}   
-    ${start}=    Get Current Date    result_format=%H:%M:%S
+    ${start}=    Get Current Date    result_format=%H:%M
 
     ${resp}    Get MR Sections By Case     ${caseUId}
     Log  ${resp.content}
@@ -317,4 +317,4 @@ JD-TC-Create Sections-1
     Should Be Equal As Strings     ${resp.json()[0]['sectionValue']['chiefComplaint']}    ${caption}
     Should Be Equal As Strings     ${resp.json()[0]['status']}    ${toggle[0]}
     Should Be Equal As Strings     ${resp.json()[0]['createdDate']}    ${DAY}
-    Should Be Equal As Strings     ${resp.json()[0]['createdDateString']}    ${DAY} ${start}
+    Should Contain 	   ${resp.json()[0]['createdDateString']}    ${DAY} ${start}

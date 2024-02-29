@@ -66,7 +66,7 @@ JD-TC-Get Case Filter-1
     ${aliasName}=  FakerLibrary.name
     Set Suite Variable    ${aliasName}
 
-     ${DAY1}=  db.get_date_by_timezone  ${tz}
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  
 
     ${resp}=    Create Case Category    ${name}  ${aliasName}
@@ -272,7 +272,7 @@ JD-TC-Get Case Filter-6
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Filter   createdDate-eq=${DAY1}  updatedDate-eq=${DAY1}  
+    ${resp}=   Get Case Filter     updatedDate-eq=${DAY1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 

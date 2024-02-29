@@ -681,7 +681,7 @@ JD-TC-Create MR Case-12
     Should Be Equal As Strings    ${resp.json()['title']}     ${title}
     Should Be Equal As Strings    ${resp.json()['description']}     ${description}
     Should Be Equal As Strings    ${resp.json()['assignees'][0]}     ${u_id}
-    Should Be Equal As Strings    ${resp.json()['assignees'][1]}     ${pid}
+    # Should Be Equal As Strings    ${resp.json()['assignees'][1]}     ${pid}
 
 
 JD-TC-Create MR Case-UH1

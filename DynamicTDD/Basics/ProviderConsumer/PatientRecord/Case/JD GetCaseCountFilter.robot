@@ -272,7 +272,7 @@ JD-TC-Get Case Count Filter-6
     Log   ${resp.json()}
     Should Be Equal As Strings              ${resp.status_code}   200
 
-    ${resp}=   Get Case Count Filter  createdDate-eq=${DAY1}  updatedDate-eq=${DAY1} 
+    ${resp}=   Get Case Count Filter    uid-eq=${caseUId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}     ${caseUId} 
