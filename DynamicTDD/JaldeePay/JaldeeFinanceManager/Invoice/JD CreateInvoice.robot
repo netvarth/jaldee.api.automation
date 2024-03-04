@@ -2515,7 +2515,7 @@ JD-TC-CreateInvoice-15
     ${resp}=  Create Finance Status   ${New_status[0]}  ${categoryType[3]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${status_id1}   ${resp.json()}
+    Set Suite Variable   ${status_id1}   ${resp.json()}
 
     ${SERVICE1}=    FakerLibrary.word
     Set Suite Variable  ${SERVICE1}
@@ -3692,6 +3692,7 @@ JD-TC-ApplyDiscountForOrder-21
     ${endDate2}=  db.add_timezone_date  ${tz}  25     
 
     ${noOfOccurance}=  Random Int  min=0   max=0
+    ${minQuantity}=  Random Int  min=0   max=2
 
     ${sTime3}=  db.add_timezone_time     ${tz}  0  30
     Set Suite Variable   ${sTime3}
@@ -3702,17 +3703,49 @@ JD-TC-ApplyDiscountForOrder-21
     ${Title}=  FakerLibrary.Sentence   nb_words=2 
     ${Text}=  FakerLibrary.Sentence   nb_words=4
 
+    ${maxQuantity3}=  Random Int  min=${minQuantity}   max=50
+    ${minQuantity3}=  Random Int  min=${minQuantity}   max=50
+
+    ${StatusList1}=  Create List  ${orderStatuses[0]}  ${orderStatuses[1]}   ${orderStatuses[2]}   ${orderStatuses[3]}  ${orderStatuses[9]}   ${orderStatuses[8]}    ${orderStatuses[11]}   ${orderStatuses[12]}
+    Set Suite Variable  ${StatusList1} 
+
+    ${deliveryCharge}=  Random Int  min=50   max=100
+    Set Suite Variable    ${deliveryCharge}
+    ${deliveryCharge3}=  Convert To Number  ${deliveryCharge}  1
+    Set Suite Variable    ${deliveryCharge3}
+
+    ${terminator}=  Create Dictionary  endDate=${endDate}  noOfOccurance=${noOfOccurance}
+    ${terminator1}=  Create Dictionary  endDate=${endDate}  noOfOccurance=${noOfOccurance}
+
     ${timeSlots1}=  Create Dictionary  sTime=${sTime3}   eTime=${eTime3}
     ${timeSlots}=  Create List  ${timeSlots1}
     ${catalogSchedule}=  Create Dictionary  recurringType=${recurringtype[1]}  repeatIntervals=${list}  startDate=${startDate}   terminator=${terminator}   timeSlots=${timeSlots}
     Set Suite Variable  ${catalogSchedule}
     ${pickupSchedule}=  Create Dictionary  recurringType=${recurringtype[1]}  repeatIntervals=${list}  startDate=${startDate1}   terminator=${terminator1}   timeSlots=${timeSlots}
 
+
+
+    ${pickUp}=  Create Dictionary  orderPickUp=${boolean[1]}   pickUpSchedule=${pickupSchedule}   pickUpOtpVerification=${boolean[1]}   pickUpScheduledAllowed=${boolean[1]}   pickUpAsapAllowed=${boolean[1]}
+
+    ${homeDelivery}=  Create Dictionary  homeDelivery=${boolean[1]}   deliverySchedule=${pickupSchedule}   deliveryOtpVerification=${boolean[1]}   deliveryRadius=5   scheduledHomeDeliveryAllowed=${boolean[1]}   asapHomeDeliveryAllowed=${boolean[1]}   deliveryCharge=${deliveryCharge}
+
+    ${preInfo}=  Create Dictionary  preInfoEnabled=${boolean[1]}   preInfoTitle=${Title}   preInfoText=${Text}   
+ 
+    ${postInfo}=  Create Dictionary  postInfoEnabled=${boolean[1]}   postInfoTitle=${Title}   postInfoText=${Text}   
+
+    ${orderStatuses}=  Create List  ${orderStatuses[0]}  ${orderStatuses[1]}  ${orderStatuses[2]}  ${orderStatuses[3]}  ${orderStatuses[11]}   ${orderStatuses[12]}
+    
+
+    
     
     ${item1_Id}=  Create Dictionary  itemId=${itemId1}
     ${catalogItem1}=  Create Dictionary  item=${item1_Id}    minQuantity=${minQuantity3}   maxQuantity=${maxQuantity3}  
     ${catalogItem1}=  Create List   ${catalogItem1} 
     Set Suite Variable  ${catalogItem1}
+
+    Set Test Variable  ${orderType}       ${OrderTypes[0]}
+    Set Test Variable  ${catalogStatus}   ${catalogStatus[0]}
+    Set Test Variable  ${paymentType}     ${AdvancedPaymentType[0]}
 
     ${advanceAmount}=  Random Int  min=10   max=50
     
@@ -3720,7 +3753,15 @@ JD-TC-ApplyDiscountForOrder-21
     ${catalogName2}=   FakerLibrary.word  
     ${catalogName3}=   FakerLibrary.lastname  
 
-    ${resp}=  Create Catalog For ShoppingCart   ${catalogName1}  ${catalogDesc}   ${catalogSchedule}   ${orderType}   ${paymentType}   ${StatusList1}   ${catalogItem}   ${minNumberItem}   ${maxNumberItem}    ${cancelationPolicy}   catalogStatus=${catalogStatus}   pickUp=${pickUp}   homeDelivery=${homeDelivery}   showPrice=${boolean[1]}   advanceAmount=${advanceAmount}   showContactInfo=${boolean[1]}   howFar=${far}   howSoon=${soon}   preInfo=${preInfo}   postInfo=${postInfo}    
+    ${catalogName}=   FakerLibrary.name  
+
+    ${catalogDesc}=   FakerLibrary.name 
+
+    Set Test Variable  ${minNumberItem}   1
+
+    Set Test Variable  ${maxNumberItem}   5
+
+    ${resp}=  Create Catalog For ShoppingCart   ${catalogName1}  ${catalogDesc}   ${catalogSchedule}   ${orderType}   ${paymentType}   ${StatusList1}   ${catalogItem1}   ${minNumberItem}   ${maxNumberItem}    ${cancelationPolicy}   catalogStatus=${catalogStatus}   pickUp=${pickUp}   homeDelivery=${homeDelivery}   showPrice=${boolean[1]}   advanceAmount=${advanceAmount}   showContactInfo=${boolean[1]}   howFar=${far}   howSoon=${soon}   preInfo=${preInfo}   postInfo=${postInfo}    
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${CatalogId2}   ${resp.json()}
