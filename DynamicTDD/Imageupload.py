@@ -1314,7 +1314,7 @@ def UploadQuestionnaire(cookie_dict, accId, file):
             mimetype = 'application/vnd.ms-excel'
             print (mimetype)
         data = {
-        'files': (file, open(file, 'rb'), 'application/vnd.ms-excel'), 
+        'files': (file, open(file, 'rb'), mimetype), 
         }
         print (data)
         resp = s.post(url, files=data)
