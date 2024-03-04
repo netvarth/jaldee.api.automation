@@ -8,6 +8,7 @@ Library         json
 Library           FakerLibrary
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/consumermail.py
@@ -78,12 +79,41 @@ JD-TC- Cancel Waitlist-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${p1_q1}  ${resp.json()}
 
-    ${resp}=  ProviderLogout
+    ${resp}=  AddCustomer  ${CUSERNAME3}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    ${resp}=   ProviderLogout
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME3}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME3}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME3}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # clear_Consumermsg  ${CUSERNAME14}
+    
+    
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME3}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
     Set Suite Variable  ${cons_id}  ${resp.json()['id']}
+
+    # ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
+    # Should Be Equal As Strings  ${resp.status_code}  200 
+    # Set Suite Variable  ${cons_id}  ${resp.json()['id']}
 
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${DAY}  ${p1_s1}  ${cnote}  ${bool[0]}  ${self}
@@ -135,8 +165,13 @@ JD-TC- Cancel Waitlist-1
 JD-TC- Cancel Waitlist-UH1  
 	[Documentation]  try to delete  already deleted  waitlist
     ${pid}=  get_acc_id  ${PUSERNAME103}
-    ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+
+   
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME3}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # clear_Consumermsg  ${CUSERNAME14}
+    
 
     ${resp}=  Cancel Waitlist  ${uuid1}  ${pid}
     Log  ${resp.json()}
@@ -171,8 +206,31 @@ JD-TC- Cancel Waitlist-2
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME2}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME2}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME2}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME2}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # clear_Consumermsg  ${CUSERNAME14}
+    
+    
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME2}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    Set Suite Variable  ${cid}  ${resp.json()['id']}
 
     ${resp}=  Cancel Waitlist  ${wid}  ${pid}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -185,9 +243,28 @@ JD-TC- Cancel Waitlist-UH2
 	[Documentation]  try to delete waitlist but uuid and provider id is different
     ${pid}=  get_acc_id  ${PUSERNAME103}
     ${cid}=  get_id  ${CUSERNAME3}
-    ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200 
 
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME103}  ${PASSWORD}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  AddCustomer  ${CUSERNAME3}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   ProviderLogout
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+   
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME3}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # clear_Consumermsg  ${CUSERNAME14} 
+    
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME3}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    # Set Suite Variable  ${cons_id}  ${resp.json()['id']}
     ${cnote}=   FakerLibrary.word
     ${resp}=  Add To Waitlist Consumers  ${pid}  ${p1_q1}  ${DAY}  ${p1_s2}  ${cnote}  ${bool[0]}  ${self}
     Should Be Equal As Strings  ${resp.status_code}  200 
@@ -221,8 +298,32 @@ JD-TC- Cancel Waitlist-UH4
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME3}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME3}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME3}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # clear_Consumermsg  ${CUSERNAME14}
+    
+    
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME3}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    Set Suite Variable  ${cons_id}  ${resp.json()['id']}
 
     ${resp}=  Cancel Waitlist  ${uuid3}  ${pid}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -241,8 +342,30 @@ JD-TC- Cancel Waitlist-UH5
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Consumer Login  ${CUSERNAME3}  ${PASSWORD}
-    Should Be Equal As Strings  ${resp.status_code}  200 
+    ${resp}=    Send Otp For Login    ${CUSERNAME3}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${CUSERNAME3}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${CUSERNAME3}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # clear_Consumermsg  ${CUSERNAME14}
+    
+    
+    ${cookie}  ${resp}=    Imageupload.ProconLogin    ${CUSERNAME3}    ${pid}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    Set Suite Variable  ${cons_id}  ${resp.json()['id']}
     
     ${resp}=  Cancel Waitlist  ${uuid3}  ${pid}
     Should Be Equal As Strings  ${resp.status_code}  422

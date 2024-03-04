@@ -272,6 +272,13 @@ JD-TC-SendAttachmentFromAppmtByConsumer-1
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
 
 
+    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings  ${resp.json()['hasAttachment']}        ${bool[1]}
+
+
+
 JD-TC-SendAttachmentFromAppmtByConsumer-2
 
     [Documentation]  ProviderConsumer  Send Attachment From Appmt By Consumer - Appmt id is invalid 
@@ -342,6 +349,12 @@ JD-TC-SendAttachmentFromAppmtByConsumer-3
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
 
+    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings  ${resp.json()['hasAttachment']}        ${bool[1]}
+
+
 JD-TC-SendAttachmentFromAppmtByConsumer-4
 
     [Documentation]  ProviderConsumer  Send Attachment From Appmt By Consumer - sms flag is false
@@ -380,6 +393,12 @@ JD-TC-SendAttachmentFromAppmtByConsumer-4
     Should Be Equal As Strings  ${resp.json()[0]['fileType']}       ${fileType1}
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
+
+    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings  ${resp.json()['hasAttachment']}        ${bool[1]}
+
 
 JD-TC-SendAttachmentFromAppmtByConsumer-5
 
@@ -420,6 +439,12 @@ JD-TC-SendAttachmentFromAppmtByConsumer-5
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
 
+    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings  ${resp.json()['hasAttachment']}        ${bool[1]}
+
+
 JD-TC-SendAttachmentFromAppmtByConsumer-6
 
     [Documentation]  ProviderConsumer  Send Attachment From Appmt By Consumer - whats app flag is false
@@ -459,6 +484,12 @@ JD-TC-SendAttachmentFromAppmtByConsumer-6
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
 
+    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings  ${resp.json()['hasAttachment']}        ${bool[1]}
+
+
 JD-TC-SendAttachmentFromAppmtByConsumer-7
 
     [Documentation]  ProviderConsumer  Send Attachment From Appmt By Consumer - owner is empty
@@ -497,6 +528,12 @@ JD-TC-SendAttachmentFromAppmtByConsumer-7
     Should Be Equal As Strings  ${resp.json()[0]['fileType']}       ${fileType1}
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
+
+    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings  ${resp.json()['hasAttachment']}        ${bool[1]}
+
 
 JD-TC-SendAttachmentFromAppmtByConsumer-8
 
@@ -627,6 +664,12 @@ JD-TC-SendAttachmentFromAppmtByConsumer-11
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
 
+    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings  ${resp.json()['hasAttachment']}        ${bool[1]}
+
+
 JD-TC-SendAttachmentFromAppmtByConsumer-12
 
     [Documentation]  ProviderConsumer  Send Attachment From Appmt By Consumer - drive id is empty 
@@ -694,6 +737,12 @@ JD-TC-SendAttachmentFromAppmtByConsumer-13
     Should Be Equal As Strings  ${resp.json()[0]['fileType']}       ${fileType1}
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
+
+    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings  ${resp.json()['hasAttachment']}        ${bool[1]}
+
 
 JD-TC-SendAttachmentFromAppmtByConsumer-14
 

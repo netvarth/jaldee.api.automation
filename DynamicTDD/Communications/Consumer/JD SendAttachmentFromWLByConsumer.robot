@@ -189,6 +189,11 @@ JD-TC-SendAttachmentFromWLByConsumer-1
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
 
+    ${resp}=  Get consumer Waitlist By Id   ${wid}  ${acc_id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['hasAttachment']}    ${bool[1]}
+
 
 
 JD-TC-SendAttachmentWL-UH1
@@ -262,6 +267,11 @@ JD-TC-SendAttachmentWL-2
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
 
+    ${resp}=  Get consumer Waitlist By Id   ${wid}  ${acc_id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['hasAttachment']}    ${bool[1]}
+
 JD-TC-SendAttachmentWL-3
 
     [Documentation]  Send Attachment Waitlist - sms flag is false
@@ -300,6 +310,11 @@ JD-TC-SendAttachmentWL-3
     Should Be Equal As Strings  ${resp.json()[0]['fileType']}       ${fileType1}
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
+
+    ${resp}=  Get consumer Waitlist By Id   ${wid}  ${acc_id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['hasAttachment']}    ${bool[1]}
 
 JD-TC-SendAttachmentWL-4
 
@@ -340,6 +355,11 @@ JD-TC-SendAttachmentWL-4
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
 
+    ${resp}=  Get consumer Waitlist By Id   ${wid}  ${acc_id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['hasAttachment']}    ${bool[1]}
+
 JD-TC-SendAttachmentWL-5
 
     [Documentation]  Send Attachment Waitlist - whats app flag is false
@@ -379,6 +399,11 @@ JD-TC-SendAttachmentWL-5
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
 
+    ${resp}=  Get consumer Waitlist By Id   ${wid}  ${acc_id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['hasAttachment']}    ${bool[1]}
+
 JD-TC-SendAttachmentWL-6
 
     [Documentation]  Send Attachment Waitlist - owner is empty
@@ -417,6 +442,11 @@ JD-TC-SendAttachmentWL-6
     Should Be Equal As Strings  ${resp.json()[0]['fileType']}       ${fileType1}
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
+
+    ${resp}=  Get consumer Waitlist By Id   ${wid}  ${acc_id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['hasAttachment']}    ${bool[1]}
 
 JD-TC-SendAttachmentWL-UH2
 
@@ -547,6 +577,11 @@ JD-TC-SendAttachmentWL-7
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
 
+    ${resp}=  Get consumer Waitlist By Id   ${wid}  ${acc_id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['hasAttachment']}    ${bool[1]}
+
 JD-TC-SendAttachmentWL-UH5
 
     [Documentation]  Send Attachment Waitlist - drive id is empty 
@@ -579,6 +614,7 @@ JD-TC-SendAttachmentWL-UH5
     ${resp}=    Get Attachments In Waitlist By Consumer     ${wid}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
 
 JD-TC-SendAttachmentWL-8
 
@@ -618,6 +654,11 @@ JD-TC-SendAttachmentWL-8
     Should Be Equal As Strings  ${resp.json()[0]['fileType']}       ${fileType1}
     Should Be Equal As Strings  ${resp.json()[0]['action']}         ${file_action[0]}
     Should Be Equal As Strings  ${resp.json()[0]['ownerName']}      ${consumerFirstName}
+
+    ${resp}=  Get consumer Waitlist By Id   ${wid}  ${acc_id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['hasAttachment']}    ${bool[1]}
 
 JD-TC-SendAttachmentWL-UH6
 
