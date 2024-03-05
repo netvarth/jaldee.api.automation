@@ -5,6 +5,7 @@ Force Tags        User
 Library           Collections
 Library           String
 Library           json
+Library           random
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
@@ -77,7 +78,30 @@ JD-TC-GetUsers-1
      Should Be Equal As Strings    ${resp.status_code}    200
      Set Suite Variable  ${city}   ${resp.json()[0]['PostOffice'][0]['District']}   
      Set Suite Variable  ${state}  ${resp.json()[0]['PostOffice'][0]['State']}      
-     Set Suite Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}    
+     Set Suite Variable  ${pin}    ${resp.json()[0]['PostOffice'][0]['Pincode']}   
+
+
+
+    ${resp}=  Get BusinessDomainsConf
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${dom_len}=  Get Length  ${resp.json()}
+    ${dom}=  random.randint  ${0}  ${dom_len-1}
+    ${sdom_len}=  Get Length  ${resp.json()[${dom}]['subDomains']}
+    Set Test Variable  ${domain}  ${resp.json()[${dom}]['domain']}
+    Log   ${domain}
+
+    FOR  ${subindex}  IN RANGE  ${sdom_len}
+        ${sdom}=  random.randint  ${0}  ${sdom_len-1}
+        Set Test Variable  ${subdomain}  ${resp.json()[${dom}]['subDomains'][${subindex}]['subDomain']}
+        ${is_corp}=  check_is_corp  ${subdomain}
+        Exit For Loop If  '${is_corp}' == 'False'
+    END
+    Log   ${subdomain}
+     
+    ${lid2}=   Create Sample Location
+    Set Suite Variable    ${lid2} 
+
 
      ${whpnum}=  Evaluate  ${PUSERNAME}+316215
      ${tlgnum}=  Evaluate  ${PUSERNAME}+316315
@@ -87,10 +111,77 @@ JD-TC-GetUsers-1
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id}  ${resp.json()}
 
+
+
      ${resp}=  Get User By Id  ${u_id}
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${sub_domain_id}  ${resp.json()['subdomain']}
+     Set Suite Variable  ${employeeId}  ${resp.json()['employeeId']}
+
+    ${resp}=  SendProviderResetMail  ${PUSERNAME_U1}  
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}  
+    Should Be Equal As Strings  ${resp[0].status_code}   200
+    Should Be Equal As Strings  ${resp[1].status_code}   200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+
+    ${resp}=  Get specializations Sub Domain  ${domain}  ${subdomain}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    ${spec}=  get_specs  ${resp.json()}
+    ${spec_len}=  Get Length  ${spec}
+    ${rand_len}=  Set Variable If  ${spec_len}>3  3   ${spec_len}
+    ${spec}=  Random Elements   elements=@{spec}  length=${spec_len}  unique=True
+    Log  ${spec}
+    Set Suite Variable  ${spec}  
+
+    ${resp}=  Get Spoke Languages
+    Should Be Equal As Strings    ${resp.status_code}   200 
+    ${Languages}=  get_Languagespoken  ${resp.json()}
+    ${Languages}=  Random Elements   elements=@{Languages}  length=5  unique=True
+    Log  ${Languages}
+    Set Suite Variable  ${Languages}  
+
+    ${bs}=  FakerLibrary.bs
+    ${bs_des}=  FakerLibrary.word
+    ${resp}=  User Profile Updation  ${bs}  ${bs_des}  ${spec}  ${Languages}  ${sub_domain_id}  ${u_id} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${me_upid2}  ${resp.json()['profileId']}
+
+
+#     ${resp}=  Get User Profile  ${In_uid2}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}   200
+    # Verify Response  ${resp}  businessName=${bs}  businessDesc=${bs_des}  languagesSpoken=${Languages}  userSubdomain=${sub_domain_id}   profileId=${us_upid1}  specialization=${spec}
+ 
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    ${resp}=  ProviderLogout
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     Log  ${resp.json()}
+     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${userIds}=  Create List  ${u_id}  
+    ${resp}=   Assign Business_loc To User  ${userIds}   ${lid2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
 
      ${PUSERNAME_U2}=  Evaluate  ${PUSERNAME}+336525
      clear_users  ${PUSERNAME_U2}
@@ -124,6 +215,12 @@ JD-TC-GetUsers-1
      Log   ${resp.json()}
      Should Be Equal As Strings  ${resp.status_code}  200
      Set Suite Variable  ${u_id2}  ${resp.json()}
+
+     ${resp}=  Get User By Id  ${u_id2}
+     Log   ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     # Set Suite Variable  ${user2_city}  ${resp.json()['city']}
+
 
      ${resp}=  Get User
      Log   ${resp.json()}
@@ -184,13 +281,96 @@ JD-TC-GetUsers-1
 
      END
 
+
+JD-TC-GetUsers-13
+     [Documentation]  Get users by specialization
     
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     Log  ${resp.json()}
+     Should Be Equal As Strings    ${resp.status_code}    200
+
+     ${resp}=  Get User    specialization-eq=name::${spec[0]}
+     Log   ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200 
+     Should Be Equal As Strings  ${resp.json()[0]['specialization'][0]['name']}                        ${spec[0]}  
+     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}    
+
+JD-TC-GetUsers-14
+     [Documentation]  Get users by businesslocation
+    
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     Log  ${resp.json()}
+     Should Be Equal As Strings    ${resp.status_code}    200
+
+     ${resp}=  Get User    businessLocs-eq=${lid2}
+     Log   ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200 
+     # Should Be Equal As Strings  ${resp.json()[0]['specialization'][0]['name']}                        ${spec[0]}  
+     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}    
+
+JD-TC-GetUsers-15
+     [Documentation]  Get users by Language spoken
+    
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     Log  ${resp.json()}
+     Should Be Equal As Strings    ${resp.status_code}    200
+
+     ${resp}=  Get User   preferredLanguages-eq=${Languages[0]}
+     Log   ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200 
+     # Should Be Equal As Strings  ${resp.json()[0]['specialization'][0]['name']}                        ${spec[0]}  
+     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}    
+
+JD-TC-GetUsers-16
+     [Documentation]  Get users by Language spoken
+    
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     Log  ${resp.json()}
+     Should Be Equal As Strings    ${resp.status_code}    200
+
+     ${resp}=  Get User   preferredLanguages-eq=${Languages[0]}
+     Log   ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200 
+     # Should Be Equal As Strings  ${resp.json()[0]['specialization'][0]['name']}                        ${spec[0]}  
+     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}    
+
+JD-TC-GetUsers-17
+     [Documentation]  Get users by employee id
+    
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     Log  ${resp.json()}
+     Should Be Equal As Strings    ${resp.status_code}    200
+
+     ${resp}=  Get User   employeeId-eq=${employeeId}
+     Log   ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200 
+     Should Be Equal As Strings  ${resp.json()[0]['employeeId']}                        ${employeeId}  
+     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}    
+
+JD-TC-GetUsers-18
+     [Documentation]  Get users by email id
+    
+     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
+     Log  ${resp.json()}
+     Should Be Equal As Strings    ${resp.status_code}    200
+
+     ${resp}=  Get User   email-eq=${P_Email}${PUSERNAME_U1}.${test_mail}
+     Log   ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200 
+     Should Be Equal As Strings  ${resp.json()[0]['email']}                     ${P_Email}${PUSERNAME_U1}.${test_mail} 
+     Verify Response List  ${resp}  0  id=${u_id}  firstName=${firstname}  lastName=${lastname}   mobileNo=${PUSERNAME_U1}  dob=${dob}  gender=${Genderlist[0]}  userType=${userType[0]}  status=ACTIVE  email=${P_Email}${PUSERNAME_U1}.${test_mail}  city=${city}  state=${state}  deptId=${dep_id}  subdomain=${sub_domain_id}  admin=${bool[0]}     
+
+
 JD-TC-GetUsers-2
      [Documentation]  Get users by userType 
     
      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
+
+     ${resp}=  Get User    specialization-eq=name::${spec[0]}
+     Log   ${resp.json()}
+     Should Be Equal As Strings  ${resp.status_code}  200  
 
      ${resp}=  Get User    userType-eq=${userType[2]}
      Log   ${resp.json()}
@@ -244,7 +424,7 @@ JD-TC-GetUsers-5
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['userType']}                        ${userType[0]}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['status']}                          ACTIVE    
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['email']}                           ${P_Email}${PUSERNAME_U1}.${test_mail}  
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                            ${city}   ignore_case=True
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['city']}                           ${city}  ignore_case=True
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['state']}                           ${state}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['deptId']}                          ${dep_id}     
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['subdomain']}                       ${sub_domain_id}
