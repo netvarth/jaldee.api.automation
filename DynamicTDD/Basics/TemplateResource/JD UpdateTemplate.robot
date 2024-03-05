@@ -95,9 +95,9 @@ Remove Template By Uid
 
 *** Test Cases ***
 
-JD-TC-CreateTemplateConfig-1
+JD-TC-UpdateTemplateConfig-1
 
-    [Documentation]  provide login account then try to get Get Templates By Account,Then Create a Template with valid details.
+    [Documentation]  Create a Template with valid details and isDefaultTemp is true then update it's template name.
 
     ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
@@ -135,271 +135,245 @@ JD-TC-CreateTemplateConfig-1
     Should Be Equal As Strings    ${resp.json()['printTemplateType']}   ${printTemplateType[0]}
     Should Be Equal As Strings    ${resp.json()['isDefaultTemp']}   ${bool[1]}
 
-    ${resp}=   Get Templates By Account
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['uid']}   ${temp_uid}
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}   ${p_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['templateName']}   ${templateName}
-    Should Be Equal As Strings    ${resp.json()[0]['templateHeader']}   ${templateHeader}
-    Should Be Equal As Strings    ${resp.json()[0]['templateContent']}   ${templateContent}
-    Should Be Equal As Strings    ${resp.json()[0]['templateFooter']}   ${templateFooter}
-    Should Be Equal As Strings    ${resp.json()[0]['printTemplateType']}   ${printTemplateType[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['isDefaultTemp']}   ${bool[1]}
+    ${templateName1}=    FakerLibrary.name
 
-JD-TC-CreateTemplateConfig-2
 
-    [Documentation]  Try to Create another Template with isDefaultTemp is false.
-
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Update Template Config   ${temp_uid}   ${templateName1}     ${bool[1]}      ${templateHeader}   ${templateContent}   ${templateFooter}   ${printTemplateStatus[0]}  ${printTemplateType[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${templateName}=    FakerLibrary.name
-
-    ${resp}=   Create Template Config   ${templateName}     ${bool[0]}      ${templateHeader}   ${templateContent}   ${templateFooter}   ${printTemplateStatus[0]}  ${printTemplateType[0]}
+    ${resp}=   Get Template By Uid      ${temp_uid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${temp_uid1}  ${resp.json()['uid']}
-
-    ${resp}=   Get Template By Uid      ${temp_uid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}   ${temp_uid1}
+    Should Be Equal As Strings    ${resp.json()['uid']}   ${temp_uid}
     Should Be Equal As Strings    ${resp.json()['accountId']}   ${p_id1}
-    Should Be Equal As Strings    ${resp.json()['templateName']}   ${templateName}
+    Should Be Equal As Strings    ${resp.json()['templateName']}   ${templateName1}
     Should Be Equal As Strings    ${resp.json()['templateHeader']}   ${templateHeader}
     Should Be Equal As Strings    ${resp.json()['templateContent']}   ${templateContent}
     Should Be Equal As Strings    ${resp.json()['templateFooter']}   ${templateFooter}
     Should Be Equal As Strings    ${resp.json()['printTemplateType']}   ${printTemplateType[0]}
-    Should Be Equal As Strings    ${resp.json()['isDefaultTemp']}   ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['isDefaultTemp']}   ${bool[1]}
 
-JD-TC-CreateTemplateConfig-3
 
-    [Documentation]   Create Template with printTemplateType us case.
+JD-TC-UpdateTemplateConfig-2
+
+    [Documentation]  Update that Template with Empty templateHeader.
 
     ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${templateName}=    FakerLibrary.name
+    ${templateName1}=    FakerLibrary.name
 
-    ${resp}=   Create Template Config   ${templateName}     ${bool[0]}      ${templateHeader}   ${templateContent}   ${templateFooter}   ${printTemplateStatus[0]}  ${printTemplateType[1]}
+    ${resp}=   Update Template Config   ${temp_uid}   ${templateName1}     ${bool[1]}      ${EMPTY}   ${templateContent}   ${templateFooter}   ${printTemplateStatus[0]}  ${printTemplateType[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${temp_uid1}  ${resp.json()['uid']}
 
-    ${resp}=   Get Template By Uid      ${temp_uid1}
+    ${resp}=   Get Template By Uid      ${temp_uid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}   ${temp_uid1}
+    Should Be Equal As Strings    ${resp.json()['uid']}   ${temp_uid}
     Should Be Equal As Strings    ${resp.json()['accountId']}   ${p_id1}
-    Should Be Equal As Strings    ${resp.json()['templateName']}   ${templateName}
+    Should Be Equal As Strings    ${resp.json()['templateName']}   ${templateName1}
     Should Be Equal As Strings    ${resp.json()['templateHeader']}   ${templateHeader}
     Should Be Equal As Strings    ${resp.json()['templateContent']}   ${templateContent}
     Should Be Equal As Strings    ${resp.json()['templateFooter']}   ${templateFooter}
-    Should Be Equal As Strings    ${resp.json()['printTemplateType']}   ${printTemplateType[1]}
-    Should Be Equal As Strings    ${resp.json()['isDefaultTemp']}   ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['printTemplateType']}   ${printTemplateType[0]}
+    Should Be Equal As Strings    ${resp.json()['isDefaultTemp']}   ${bool[1]}
 
-JD-TC-CreateTemplateConfig-4
+JD-TC-UpdateTemplateConfig-3
 
-    [Documentation]   Create Template with printTemplateType as Finance.
+    [Documentation]  Update that Template with invalid templateHeader.
 
     ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${templateName}=    FakerLibrary.name
+    ${templateHeader}=    FakerLibrary.Random Number
+    ${templateName1}=    FakerLibrary.name
 
-    ${resp}=   Create Template Config   ${templateName}     ${bool[0]}      ${templateHeader}   ${templateContent}   ${templateFooter}   ${printTemplateStatus[0]}  ${printTemplateType[2]}
+
+    ${resp}=   Update Template Config   ${temp_uid}   ${templateName1}     ${bool[1]}      ${templateHeader}   ${templateContent}   ${templateFooter}   ${printTemplateStatus[0]}  ${printTemplateType[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${temp_uid1}  ${resp.json()['uid']}
 
-    ${resp}=   Get Template By Uid      ${temp_uid1}
+    ${resp}=   Get Template By Uid      ${temp_uid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}   ${temp_uid1}
+    Should Be Equal As Strings    ${resp.json()['uid']}   ${temp_uid}
     Should Be Equal As Strings    ${resp.json()['accountId']}   ${p_id1}
-    Should Be Equal As Strings    ${resp.json()['templateName']}   ${templateName}
+    Should Be Equal As Strings    ${resp.json()['templateName']}   ${templateName1}
     Should Be Equal As Strings    ${resp.json()['templateHeader']}   ${templateHeader}
     Should Be Equal As Strings    ${resp.json()['templateContent']}   ${templateContent}
     Should Be Equal As Strings    ${resp.json()['templateFooter']}   ${templateFooter}
-    Should Be Equal As Strings    ${resp.json()['printTemplateType']}   ${printTemplateType[2]}
-    Should Be Equal As Strings    ${resp.json()['isDefaultTemp']}   ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['printTemplateType']}   ${printTemplateType[0]}
+    Should Be Equal As Strings    ${resp.json()['isDefaultTemp']}   ${bool[1]}
 
-JD-TC-CreateTemplateConfig-5
+JD-TC-UpdateTemplateConfig-4
 
-    [Documentation]   Create Template with printTemplateStatus as inactive.
+    [Documentation]  Update that Template with Empty templateContent.
 
     ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${templateName}=    FakerLibrary.name
+    ${templateName1}=    FakerLibrary.name
 
-    ${resp}=   Create Template Config   ${templateName}     ${bool[0]}      ${templateHeader}   ${templateContent}   ${templateFooter}   ${printTemplateStatus[1]}  ${printTemplateType[0]}
+    ${resp}=   Update Template Config   ${temp_uid}   ${templateName1}     ${bool[1]}      ${templateHeader}   ${EMPTY}   ${templateFooter}   ${printTemplateStatus[0]}  ${printTemplateType[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${temp_uid1}  ${resp.json()['uid']}
 
-    ${resp}=   Get Template By Uid      ${temp_uid1}
+    ${resp}=   Get Template By Uid      ${temp_uid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}   ${temp_uid1}
+    Should Be Equal As Strings    ${resp.json()['uid']}   ${temp_uid}
     Should Be Equal As Strings    ${resp.json()['accountId']}   ${p_id1}
-    Should Be Equal As Strings    ${resp.json()['templateName']}   ${templateName}
+    Should Be Equal As Strings    ${resp.json()['templateName']}   ${templateName1}
+    Should Be Equal As Strings    ${resp.json()['templateHeader']}   ${templateHeader}
+    Should Be Equal As Strings    ${resp.json()['templateContent']}   ${templateContent}
+    Should Be Equal As Strings    ${resp.json()['templateFooter']}   ${templateFooter}
+    Should Be Equal As Strings    ${resp.json()['printTemplateType']}   ${printTemplateType[0]}
+    Should Be Equal As Strings    ${resp.json()['isDefaultTemp']}   ${bool[1]}
+
+JD-TC-UpdateTemplateConfig-5
+
+    [Documentation]  Update that Template with Empty templateFooter.
+
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${templateName1}=    FakerLibrary.name
+
+    ${resp}=   Update Template Config   ${temp_uid}   ${templateName1}     ${bool[1]}      ${templateHeader}   ${templateContent}   ${EMPTY}   ${printTemplateStatus[0]}  ${printTemplateType[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Get Template By Uid      ${temp_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}   ${temp_uid}
+    Should Be Equal As Strings    ${resp.json()['accountId']}   ${p_id1}
+    Should Be Equal As Strings    ${resp.json()['templateName']}   ${templateName1}
+    Should Be Equal As Strings    ${resp.json()['templateHeader']}   ${templateHeader}
+    Should Be Equal As Strings    ${resp.json()['templateContent']}   ${templateContent}
+    Should Be Equal As Strings    ${resp.json()['templateFooter']}   ${templateFooter}
+    Should Be Equal As Strings    ${resp.json()['printTemplateType']}   ${printTemplateType[0]}
+    Should Be Equal As Strings    ${resp.json()['isDefaultTemp']}   ${bool[1]}
+
+
+JD-TC-UpdateTemplateConfig-6
+
+    [Documentation]  Update that Template with inactive printTemplateStatus.
+
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${templateName1}=    FakerLibrary.name
+
+    ${resp}=   Update Template Config   ${temp_uid}   ${templateName1}     ${bool[1]}      ${templateHeader}   ${templateContent}   ${templateFooter}   ${printTemplateStatus[1]}  ${printTemplateType[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Get Template By Uid      ${temp_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}   ${temp_uid}
+    Should Be Equal As Strings    ${resp.json()['accountId']}   ${p_id1}
+    Should Be Equal As Strings    ${resp.json()['templateName']}   ${templateName1}
     Should Be Equal As Strings    ${resp.json()['templateHeader']}   ${templateHeader}
     Should Be Equal As Strings    ${resp.json()['templateContent']}   ${templateContent}
     Should Be Equal As Strings    ${resp.json()['templateFooter']}   ${templateFooter}
     Should Be Equal As Strings    ${resp.json()['printTemplateType']}   ${printTemplateType[0]}
     Should Be Equal As Strings    ${resp.json()['printTemplateStatus']}   ${printTemplateStatus[1]}
+    Should Be Equal As Strings    ${resp.json()['isDefaultTemp']}   ${bool[1]}
+
+JD-TC-UpdateTemplateConfig-7
+
+    [Documentation]  Update that Template with case printTemplateType.
+
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${templateName1}=    FakerLibrary.name
+    Set Suite Variable  ${templateName1}
+
+    ${resp}=   Update Template Config   ${temp_uid}   ${templateName1}     ${bool[1]}      ${templateHeader}   ${templateContent}   ${templateFooter}   ${printTemplateStatus[1]}  ${printTemplateType[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=   Get Template By Uid      ${temp_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}   ${temp_uid}
+    Should Be Equal As Strings    ${resp.json()['accountId']}   ${p_id1}
+    Should Be Equal As Strings    ${resp.json()['templateName']}   ${templateName1}
+    Should Be Equal As Strings    ${resp.json()['templateHeader']}   ${templateHeader}
+    Should Be Equal As Strings    ${resp.json()['templateContent']}   ${templateContent}
+    Should Be Equal As Strings    ${resp.json()['templateFooter']}   ${templateFooter}
+    Should Be Equal As Strings    ${resp.json()['printTemplateType']}   ${printTemplateType[1]}
+    Should Be Equal As Strings    ${resp.json()['printTemplateStatus']}   ${printTemplateStatus[1]}
+    Should Be Equal As Strings    ${resp.json()['isDefaultTemp']}   ${bool[1]}
+
+JD-TC-UpdateTemplateConfig-8
+
+    [Documentation]  create a new template with isDefaultTemp is false then Update first Template with isDefaultTemp is false,again upadate new template isDefaultTemp as true.
+
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${templateName3}=    FakerLibrary.name
+
+    ${resp}=   Create Template Config   ${templateName3}     ${bool[0]}      ${templateHeader}   ${templateContent}   ${templateFooter}   ${printTemplateStatus[0]}  ${printTemplateType[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${temp_uid2}  ${resp.json()['uid']}
+
+    ${resp}=   Get Template By Uid      ${temp_uid2}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}   ${temp_uid2}
+    Should Be Equal As Strings    ${resp.json()['accountId']}   ${p_id1}
+    Should Be Equal As Strings    ${resp.json()['templateName']}   ${templateName3}
+    Should Be Equal As Strings    ${resp.json()['templateHeader']}   ${templateHeader}
+    Should Be Equal As Strings    ${resp.json()['templateContent']}   ${templateContent}
+    Should Be Equal As Strings    ${resp.json()['templateFooter']}   ${templateFooter}
+    Should Be Equal As Strings    ${resp.json()['printTemplateType']}   ${printTemplateType[0]}
     Should Be Equal As Strings    ${resp.json()['isDefaultTemp']}   ${bool[0]}
 
-JD-TC-CreateTemplateConfig-UH1
-
-    [Documentation]  Try to Create another Template with isDefaultTemp is true.
-
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${templateName}=    FakerLibrary.name
-
-    ${resp}=   Create Template Config   ${templateName}     ${bool[1]}      ${templateHeader}   ${templateContent}   ${templateFooter}   ${printTemplateStatus[0]}  ${printTemplateType[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${ALREADY_HAVE_DEFAULT_TEMP}
-
-JD-TC-CreateTemplateConfig-UH2
-
-    [Documentation]  Try to Create another Template with EMPTY templateName.
-
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${templateName}=    FakerLibrary.name
-
-    ${resp}=   Create Template Config   ${EMPTY}     ${bool[0]}      ${templateHeader}   ${templateContent}   ${templateFooter}   ${printTemplateStatus[0]}  ${printTemplateType[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${TEMPLATE_NAME_REQUIRED}
-
-
-JD-TC-CreateTemplateConfig-UH3
-
-    [Documentation]  Try to Create another Template with EMPTY templateHeader.
-
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${templateName}=    FakerLibrary.name
-
-    ${resp}=   Create Template Config   ${templateName}     ${bool[0]}      ${EMPTY}   ${templateContent}   ${templateFooter}   ${printTemplateStatus[0]}  ${printTemplateType[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${TEMP_HEADER_REQUIRED}
-
-JD-TC-CreateTemplateConfig-UH4
-
-    [Documentation]  Try to Create another Template with EMPTY templateContent.
-
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${templateName}=    FakerLibrary.name
-
-    ${resp}=   Create Template Config   ${templateName}     ${bool[0]}      ${templateHeader}   ${EMPTY}   ${templateFooter}   ${printTemplateStatus[0]}  ${printTemplateType[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${TEMP_CONTENT_REQUIRED}
-
-JD-TC-CreateTemplateConfig-UH5
-
-    [Documentation]  Try to Create another Template with EMPTY templateFooter.
-
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${templateName}=    FakerLibrary.name
-
-    ${resp}=   Create Template Config   ${templateName}     ${bool[0]}      ${templateHeader}   ${templateContent}   ${EMPTY}   ${printTemplateStatus[0]}  ${printTemplateType[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${TEMP_FOOTER_REQUIRED}
-
-JD-TC-CreateTemplateConfig-UH6
-
-    [Documentation]  Try to Create another Template with EMPTY printTemplateStatus.
-
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${templateName}=    FakerLibrary.name
-
-    ${resp}=   Create Template Config   ${templateName}     ${bool[0]}      ${templateHeader}   ${templateContent}   ${templateFooter}   ${EMPTY}  ${printTemplateType[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${TEMP_HEADER_REQUIRED}
-
-JD-TC-CreateTemplateConfig-UH7
-
-    [Documentation]  Try to Create another Template with EMPTY printTemplateType.
-
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${templateName}=    FakerLibrary.name
-
-    ${resp}=   Create Template Config   ${templateName}     ${bool[0]}      ${templateHeader}   ${templateContent}   ${templateFooter}   ${printTemplateStatus[0]}  ${EMPTY}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${TEMP_HEADER_REQUIRED}
-
-
-*** Comments ***
-
-    ${resp}=   Update Template Config   ${temp_uid}   ${templateName}     ${bool[1]}      ${templateHeader}   ${templateContent}   ${templateFooter}   ${printTemplateStatus}  ${printTemplateType}
+    ${resp}=   Update Template Config   ${temp_uid}   ${templateName1}     ${bool[0]}      ${templateHeader}   ${templateContent}   ${templateFooter}   ${printTemplateStatus[1]}  ${printTemplateType[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Get Template By Uid      ${temp_uid}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}   ${temp_uid}
+    Should Be Equal As Strings    ${resp.json()['accountId']}   ${p_id1}
+    Should Be Equal As Strings    ${resp.json()['templateName']}   ${templateName1}
+    Should Be Equal As Strings    ${resp.json()['templateHeader']}   ${templateHeader}
+    Should Be Equal As Strings    ${resp.json()['templateContent']}   ${templateContent}
+    Should Be Equal As Strings    ${resp.json()['templateFooter']}   ${templateFooter}
+    Should Be Equal As Strings    ${resp.json()['printTemplateType']}   ${printTemplateType[0]}
+    # Should Be Equal As Strings    ${resp.json()['printTemplateStatus']}   ${printTemplateStatus[1]}
+    Should Be Equal As Strings    ${resp.json()['isDefaultTemp']}   ${bool[0]}
 
-    ${resp}=   Get Templates By Account
+    ${resp}=   Update Template Config   ${temp_uid2}   ${templateName3}     ${bool[1]}      ${templateHeader}   ${templateContent}   ${templateFooter}   ${printTemplateStatus[1]}  ${printTemplateType[0]}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=   Get default domain templates
+    ${resp}=   Get Template By Uid      ${temp_uid2}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=   Get Account default template for the Type specified      ${printTemplateType}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=   Remove Template By Uid   ${temp_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-
-    ${resp}=   Get default domain templates
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=   Get Template By Uid      ${temp_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=   Get Templates By Account
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    
-
+    Should Be Equal As Strings    ${resp.json()['uid']}   ${temp_uid2}
+    Should Be Equal As Strings    ${resp.json()['accountId']}   ${p_id1}
+    Should Be Equal As Strings    ${resp.json()['templateName']}   ${templateName3}
+    Should Be Equal As Strings    ${resp.json()['templateHeader']}   ${templateHeader}
+    Should Be Equal As Strings    ${resp.json()['templateContent']}   ${templateContent}
+    Should Be Equal As Strings    ${resp.json()['templateFooter']}   ${templateFooter}
+    Should Be Equal As Strings    ${resp.json()['printTemplateType']}   ${printTemplateType[0]}
+    # Should Be Equal As Strings    ${resp.json()['printTemplateStatus']}   ${printTemplateStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['isDefaultTemp']}   ${bool[1]}
