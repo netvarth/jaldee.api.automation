@@ -2240,6 +2240,7 @@ TEMP_CONTENT_REQUIRED=  "Template content required"
 TEMP_FOOTER_REQUIRED=  "Template footer required" 
 
 LOGIN_NO_QUESTION_FOR_ID= "No Question for question id"
+INV_CONSENT_FORM_ID= "Invalid ConsentForm id"
 
 #DataMigration
 FIELD_missing_PATIENT="Required Fields are Missing. Header Should Contains ID, Name, Mobile, Gender, Age, Email, Address"

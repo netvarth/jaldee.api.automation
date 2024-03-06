@@ -117,7 +117,7 @@ JD-TC-GetConsentFormSettingsByAccount-UH2
 
     [Documentation]  Get Consent Form Settings by account - with provider login
 
-     ${resp}=  Encrypted Provider Login  ${PUSERNAME262}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME262}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

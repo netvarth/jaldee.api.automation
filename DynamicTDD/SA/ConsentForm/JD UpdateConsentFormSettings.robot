@@ -92,3 +92,4 @@ JD-TC-UpdateConsentFormSettings-1
     Should Be Equal As Strings  ${resp.json()[0]['name']}           ${qnr_name2}
     Should Be Equal As Strings  ${resp.json()[0]['description']}    ${qnr_des2}
     Should Be Equal As Strings  ${resp.json()[0]['qnrIds']}         ${qnr_ids}
+

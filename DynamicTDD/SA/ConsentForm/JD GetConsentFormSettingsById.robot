@@ -17,11 +17,13 @@ Library           /ebs/TDD/excelfuncs.py
 
 
 *** Variables ***
+
 ${xlFile}    ${EXECDIR}/TDD/ConsentForm.xlsx
 
 *** Test Cases ***
 
-JD-TC-GetConsentFormSettings-1
+JD-TC-GetConsentFormSettingsById-1
+
     [Documentation]  Get Consent Form Settings by Id
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME263}  ${PASSWORD}
@@ -97,3 +99,54 @@ JD-TC-GetConsentFormSettings-1
     Should Be Equal As Strings  ${resp.json()['name']}           ${qnr_name2}
     Should Be Equal As Strings  ${resp.json()['description']}    ${qnr_des2}
     Should Be Equal As Strings  ${resp.json()['qnrIds']}         ${qnr_ids}
+
+JD-TC-GetConsentFormSettingsById-UH1
+
+    [Documentation]  Get Consent Form Settings by Id -  where account id is invalid  
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${inv}=     Random Int  min=1000000   max=9999999
+
+    ${resp}=    Get Consent Form Settings By Id  ${inv}  ${cfid2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
+JD-TC-GetConsentFormSettingsById-UH2
+
+    [Documentation]  Get Consent Form Settings by Id -  where Consent form settings id is invalid  
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${inv}=     FakerLibrary.Random Number
+
+    ${resp}=    Get Consent Form Settings By Id  ${account_id}  ${inv} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}       ${INV_CONSENT_FORM_ID}
+
+JD-TC-GetConsentFormSettingsById-UH3
+
+    [Documentation]  Get Consent Form Settings by Id -  without login
+
+    ${resp}=    Get Consent Form Settings By Id  ${account_id}  ${cfid2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  ${resp.json()}       ${SA_SESSION_EXPIRED}
+
+JD-TC-GetConsentFormSettingsById-UH4
+
+    [Documentation]  Get Consent Form Settings by Id -  with provider login
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME263}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Consent Form Settings By Id  ${account_id}  ${cfid2} 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  ${resp.json()}       ${SA_SESSION_EXPIRED}
