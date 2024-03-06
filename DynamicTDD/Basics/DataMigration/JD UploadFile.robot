@@ -211,6 +211,7 @@ JD-TC-DataMigrationUploadfile-UH7
     ${resp}=  Imageupload.DataMigrationUpload   ${cookie}   ${fake}   ${migrationType[1]}   ${xlFile}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}       ${Invalid_account_id}
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}

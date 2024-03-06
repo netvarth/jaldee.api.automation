@@ -27,17 +27,17 @@ ${xlFile_invalid}    ${EXECDIR}/TDD/ConsentForm.xlsx
 *** Keywords ***
 
 
-Get Data By Uid
-    [Arguments]     ${account}  ${uid}
+Get List
+    [Arguments]     ${account}  
     Check And Create YNW SuperAdmin Session
-    ${resp}=  GET On Session  synw  /spdataimport/account/${account}/${uid}   expected_status=any
+    ${resp}=  GET On Session  synw  /spdataimport/account/${account}/list   expected_status=any
     RETURN  ${resp}
 
 *** Test Cases ***
 
-JD-TC-GetByUid-1
+JD-TC-Get List-1
 
-    [Documentation]  Get appointment file data by uid 
+    [Documentation]  get list,where upload file is appointment
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
     Set Suite Variable   ${sheet1}
@@ -49,7 +49,7 @@ JD-TC-GetByUid-1
     Set Suite Variable   ${colnames}
 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -87,7 +87,7 @@ JD-TC-GetByUid-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Data By Uid   ${account_id}   ${DMUID}
+    ${resp}=  Get List   ${account_id}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uid']}                  ${DMUID}
@@ -98,9 +98,9 @@ JD-TC-GetByUid-1
     Should Be Equal As Strings  ${resp.json()['migrationStatus']}       Ready
 
 
-JD-TC-GetByUid-2
+JD-TC-Get List-2
 
-    [Documentation]  Get patient file data by uid 
+    [Documentation]  get list,where upload file is patient
 
     ${wb}=  readWorkbook  ${xlFile_patients}
     ${sheet1}  GetCurrentSheet   ${wb}
@@ -124,19 +124,19 @@ JD-TC-GetByUid-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Data By Uid   ${account_id}   ${DMUID}
+    ${resp}=  Get List   ${account_id}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['uid']}                  ${DMUID}
-    Should Be Equal As Strings  ${resp.json()['account']}              ${account_id}
-    Should Be Equal As Strings  ${resp.json()['createdDate']}          ${DAY}
-    Should Be Equal As Strings  ${resp.json()['migrationTo']}          ${migrationType[0]}
-    Should Be Equal As Strings  ${resp.json()['totalCount']}           ${cnt}
-    Should Be Equal As Strings  ${resp.json()['migrationStatus']}       Ready
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}                  ${DMUID}
+    Should Be Equal As Strings  ${resp.json()[0]['account']}              ${account_id}
+    Should Be Equal As Strings  ${resp.json()[0]['createdDate']}          ${DAY}
+    Should Be Equal As Strings  ${resp.json()[0]['migrationTo']}          ${migrationType[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['totalCount']}           ${cnt}
+    Should Be Equal As Strings  ${resp.json()[0]['migrationStatus']}       Ready
 
-JD-TC-GetByUid-3
+JD-TC-Get List-3
 
-    [Documentation]  Get note file data by uid 
+    [Documentation]  get list,where upload file is note
 
 
     ${wb}=  readWorkbook  ${xlFile_notes}
@@ -161,71 +161,39 @@ JD-TC-GetByUid-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Data By Uid   ${account_id}   ${DMUID}
+    ${resp}=  Get List   ${account_id}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['uid']}                  ${DMUID}
-    Should Be Equal As Strings  ${resp.json()['account']}              ${account_id}
-    Should Be Equal As Strings  ${resp.json()['createdDate']}          ${DAY}
-    Should Be Equal As Strings  ${resp.json()['migrationTo']}          ${migrationType[2]}
-    Should Be Equal As Strings  ${resp.json()['totalCount']}           ${cnt}
-    Should Be Equal As Strings  ${resp.json()['migrationStatus']}       Ready
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}                  ${DMUID}
+    Should Be Equal As Strings  ${resp.json()[0]['account']}              ${account_id}
+    Should Be Equal As Strings  ${resp.json()[0]['createdDate']}          ${DAY}
+    Should Be Equal As Strings  ${resp.json()[0]['migrationTo']}          ${migrationType[2]}
+    Should Be Equal As Strings  ${resp.json()[0]['totalCount']}           ${cnt}
+    Should Be Equal As Strings  ${resp.json()[0]['migrationStatus']}       Ready
 
 
-JD-TC-GetByUid-UH1
 
-    [Documentation]  Get data by invalid uid
+JD-TC-Get List-UH1
 
-    ${fake}=  FakerLibrary.Random Number
-    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Data By Uid   ${account_id}   ${fake}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-JD-TC-GetByUid-UH2
-
-    [Documentation]  Get data by  uid without login
+    [Documentation]  Get list without login
 
 
-    ${resp}=  Get Data By Uid   ${account_id}   ${DMUID}
+    ${resp}=  Get List   ${account_id}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}       ${SA_SESSION_EXPIRED}
 
 
-JD-TC-GetByUid-UH3
 
-    [Documentation]  Get data by invalid uid
+JD-TC-Get List-UH2
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${account_id1}  ${resp.json()['id']}
-
-    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Data By Uid   ${account_id1}   ${DMUID}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-JD-TC-GetByUid-UH3
-
-    [Documentation]  Get data by invalid uid
+    [Documentation]  Get list using provider login
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Data By Uid   ${account_id1}   ${DMUID}
+    ${resp}=  Get List   ${account_id}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
    Should Be Equal As Strings  ${resp.json()}       ${SA_SESSION_EXPIRED}
