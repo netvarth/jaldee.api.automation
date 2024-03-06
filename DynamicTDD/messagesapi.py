@@ -218,7 +218,8 @@ SERVER_ERROR= "Server Error. Please try again later."
 MAINTENANCE_MODE= "Maintenance Break! The site is currently down for maintenance.We will be back soon."
 
 SESSION_EXPIRED= "Session expired."
-#SESSION_EXPIRED= "Session Expired"
+#SESSION_EXPIRED.= "Session Expired"
+SA_SESSION_EXPIRED= "Session expired"
 
 ACCOUNT_NOT_ACTIVATED= "Please complete the details of profile name,location and working hours to continue."
 ACCOUNT_NOT_EXIST= "The account doesn't exist."
@@ -2237,3 +2238,5 @@ ALREADY_HAVE_DEFAULT_TEMP=  "You already have a default template"
 TEMP_HEADER_REQUIRED=  "Template header required"   	
 TEMP_CONTENT_REQUIRED=  "Template content required" 
 TEMP_FOOTER_REQUIRED=  "Template footer required" 
+
+LOGIN_NO_QUESTION_FOR_ID= "No Question for question id"

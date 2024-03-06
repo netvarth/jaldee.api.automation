@@ -2054,3 +2054,58 @@ Month Matrix Cache Task
     Check And Create YNW SuperAdmin Session
     ${resp}=   POST On Session  synw   userAgent/monthMatrixCacheTask   expected_status=any
     RETURN  ${resp}
+
+
+# .............. Consent Form ..................
+
+Enable Disable Consent Form 
+
+    [Arguments]       ${accountId}   ${status}
+
+    Check And Create YNW SuperAdmin Session
+    ${resp}=    PUT On Session    synw    account/settings/${accountId}/consentform/${status}   expected_status=any
+    RETURN  ${resp}
+
+Create Consent Form Settings
+
+    [Arguments]       ${accountId}   ${name}    ${description}    ${qnrid}
+
+    ${data}=   Create Dictionary    name=${name}  description=${description}  qnrIds=${qnrid}
+    ${data}=   json.dumps   ${data}
+    Check And Create YNW SuperAdmin Session
+    ${resp}=    POST On Session    synw    consentform/${accountId}/settings  data=${data}   expected_status=any
+    RETURN  ${resp}
+
+Update Consent Form Settings
+
+    [Arguments]       ${accountId}  ${cfid}   ${name}    ${description}    ${qnrid}
+
+    ${data}=   Create Dictionary    id=${cfid}  name=${name}  description=${description}  qnrIds=${qnrid}
+    ${data}=   json.dumps   ${data}
+    Check And Create YNW SuperAdmin Session
+    ${resp}=    PATCH On Session    synw    consentform/${accountId}/settings  data=${data}   expected_status=any
+    RETURN  ${resp}
+
+Get Consent Form Settings
+
+    [Arguments]       ${accountId}
+
+    Check And Create YNW SuperAdmin Session
+    ${resp}=    GET On Session    synw    consentform/${accountId}   expected_status=any
+    RETURN  ${resp}
+
+Get Consent Form Settings By Id
+
+    [Arguments]       ${accountId}  ${settingId}
+
+    Check And Create YNW SuperAdmin Session
+    ${resp}=    GET On Session    synw    consentform/${accountId}/settings/${settingId}   expected_status=any
+    RETURN  ${resp}
+
+Update Consent Form Settings Status
+
+    [Arguments]       ${accountId}  ${settingId}  ${status}
+
+    Check And Create YNW SuperAdmin Session
+    ${resp}=    PATCH On Session    synw    consentform/${accountId}/settings/${settingId}/status/${status}  expected_status=any
+    RETURN  ${resp}
