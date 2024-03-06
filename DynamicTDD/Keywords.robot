@@ -252,7 +252,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{paymentGateway}                   PAYTM  PAYUMONEY  RAZORPAY
 @{leadchannel}                      DIRECT  WHATSAPP  TELEGRAM  IVR  BRANDEDAPP
 @{styleconfig}                      DashboardStyleConfig   UsersStyleConfig   FinanceStyleConfig
-
+@{migrationType}                    Patients   Appointments  Notes
 
 *** Keywords ***
 Login

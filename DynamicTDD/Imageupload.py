@@ -3301,3 +3301,33 @@ def ProconLogin(phno,accId,token,countrycode=91):
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
+
+
+def DataMigrationUpload(cookie_dict, account, migrationType, *files):
+  
+    url = SA_BASE_URL + '/spdataimport/account/' + str(account) +'/upload/' + str(migrationType)
+    files_data = []
+    s = requests.Session()
+    s.cookies.update(cookie_dict)      
+    try:
+        headers = {
+            'Content-Type': "multipart/form-data",
+        }
+        
+        print (files)
+        if files:
+            for i in range (len(files)):
+                print (files[i])
+                file= str(files[i])
+                mimetype, encoding = mimetypes.guess_type(file)
+                formfile= tuple((file, open(file, 'rb'), mimetype))
+                files_data.append(tuple(('files', formfile)))
+                
+        print (files_data)
+        resp = s.post(url, files=files_data)
+        log_request(resp)
+        log_response(resp)
+        return resp
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.traceback.tb_lineno)
