@@ -30,80 +30,17 @@ ${templateHeader}     <d _ngcontent-ibc-c299=\"\" =\"shareview\" style=\"font-fa
 ${templateContent}    <d _ngcontent-ibc-c299=\"\" =\"shareview\" style=\"font-family: 'Figtree', sans-serif!important; padding: 10px;\"><div _ngcontent-ibc-c299=\"\" style=\"height: 35mm; margin-top: 30px;\"><div _ngcontent-ibc-c299=\"\" style=\"float: left; margin-right: 20px;\">
 ${templateFooter}     <d _ngcontent-ibc-c299=\"\" =\"shareview\" style=\"font-family: 'Figtree', sans-serif!important; padding: 10px;\"><div _ngcontent-ibc-c299=\"\" style=\"height: 35mm; margin-top: 30px;\"><div _ngcontent-ibc-c299=\"\" style=\"float: left; margin-right: 20px;\">
 
-@{printTemplateStatus}      active   inactive
-@{printTemplateType}        Prescription    Case    Finance
-
-*** Keywords ***
-Create Template Config
-
-    [Arguments]    ${templateName}  ${isDefaultTemp}  ${templateHeader}    ${templateContent}     ${templateFooter}  ${printTemplateStatus}  ${printTemplateType}
-
-    ${data}=  Create Dictionary     templateName=${templateName}  isDefaultTemp=${isDefaultTemp}  templateHeader=${templateHeader}     templateContent=${templateContent}      templateFooter=${templateFooter}  printTemplateStatus=${printTemplateStatus}  printTemplateType=${printTemplateType}  
-    ${data}=  json.dumps  ${data}
-    # ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
-    Check And Create YNW Session
-    ${resp}=    POST On Session    ynw     /provider/print/template  data=${data}   expected_status=any 
-    RETURN  ${resp}
-
-Update Template Config
-
-    [Arguments]     ${uid}    ${templateName}  ${isDefaultTemp}  ${templateHeader}    ${templateContent}     ${templateFooter}  ${printTemplateStatus}  ${printTemplateType}
-
-    ${data}=  Create Dictionary   templateName=${templateName}  isDefaultTemp=${isDefaultTemp}  templateHeader=${templateHeader}     templateContent=${templateContent}      templateFooter=${templateFooter}  printTemplateStatus=${printTemplateStatus}  printTemplateType=${printTemplateType}  
-    ${data}=  json.dumps  ${data}
-    # ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw     /provider/print/template/${uid}  data=${data}   expected_status=any 
-    RETURN  ${resp}
-
-Get Template By Uid
-
-    [Arguments]    ${uid}
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /provider/print/template/${uid}   expected_status=any
-    RETURN  ${resp}
-
-Get Templates By Account
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /provider/print/template   expected_status=any
-    RETURN  ${resp}
-
-Get default domain templates
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /provider/print/template/defaultDomainTemplates   expected_status=any
-    RETURN  ${resp}
-
-Get Account default template for the Type specified 
-
-    [Arguments]    ${templateType}
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /provider/print/template/accountDefault/${templateType}   expected_status=any
-    RETURN  ${resp}
-
-Remove Template By Uid
-
-    [Arguments]    ${uid}
-
-    Check And Create YNW Session
-    ${resp}=  DELETE On Session  ynw   /provider/print/template/${uid}   expected_status=any
-    RETURN  ${resp}
-
-
 *** Test Cases ***
 
 JD-TC-UpdateTemplateConfig-1
 
     [Documentation]  Create a Template with valid details and isDefaultTemp is true then update it's template name.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id1}=  get_acc_id  ${HLMUSERNAME9}
+    ${p_id1}=  get_acc_id  ${HLMUSERNAME5}
     Set Suite Variable   ${p_id1}
 
     ${resp}=   Get Templates By Account
@@ -159,7 +96,7 @@ JD-TC-UpdateTemplateConfig-2
 
     [Documentation]  Update that Template with Empty templateHeader.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -185,7 +122,7 @@ JD-TC-UpdateTemplateConfig-3
 
     [Documentation]  Update that Template with invalid templateHeader.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -213,7 +150,7 @@ JD-TC-UpdateTemplateConfig-4
 
     [Documentation]  Update that Template with Empty templateContent.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -239,7 +176,7 @@ JD-TC-UpdateTemplateConfig-5
 
     [Documentation]  Update that Template with Empty templateFooter.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -266,7 +203,7 @@ JD-TC-UpdateTemplateConfig-6
 
     [Documentation]  Update that Template with inactive printTemplateStatus.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -293,7 +230,7 @@ JD-TC-UpdateTemplateConfig-7
 
     [Documentation]  Update that Template with case printTemplateType.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -321,7 +258,7 @@ JD-TC-UpdateTemplateConfig-8
 
     [Documentation]  create a new template with isDefaultTemp is false then Update first Template with isDefaultTemp is false,again upadate new template isDefaultTemp as true.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

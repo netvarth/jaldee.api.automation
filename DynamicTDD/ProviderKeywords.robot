@@ -13081,4 +13081,60 @@ Get LastManualIdOfcustomer
     RETURN  ${resp}
 
 
+Create Template Config
 
+    [Arguments]    ${templateName}  ${isDefaultTemp}  ${templateHeader}    ${templateContent}     ${templateFooter}  ${printTemplateStatus}  ${printTemplateType}
+
+    ${data}=  Create Dictionary     templateName=${templateName}  isDefaultTemp=${isDefaultTemp}  templateHeader=${templateHeader}     templateContent=${templateContent}      templateFooter=${templateFooter}  printTemplateStatus=${printTemplateStatus}  printTemplateType=${printTemplateType}  
+    ${data}=  json.dumps  ${data}
+    # ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw     /provider/print/template  data=${data}   expected_status=any 
+    RETURN  ${resp}
+
+Update Template Config
+
+    [Arguments]     ${uid}    ${templateName}  ${isDefaultTemp}  ${templateHeader}    ${templateContent}     ${templateFooter}  ${printTemplateStatus}  ${printTemplateType}
+
+    ${data}=  Create Dictionary   templateName=${templateName}  isDefaultTemp=${isDefaultTemp}  templateHeader=${templateHeader}     templateContent=${templateContent}      templateFooter=${templateFooter}  printTemplateStatus=${printTemplateStatus}  printTemplateType=${printTemplateType}  
+    ${data}=  json.dumps  ${data}
+    # ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw     /provider/print/template/${uid}  data=${data}   expected_status=any 
+    RETURN  ${resp}
+
+Get Template By Uid
+
+    [Arguments]    ${uid}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /provider/print/template/${uid}   expected_status=any
+    RETURN  ${resp}
+
+Get Templates By Account
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /provider/print/template   expected_status=any
+    RETURN  ${resp}
+
+Get default domain templates
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /provider/print/template/defaultDomainTemplates   expected_status=any
+    RETURN  ${resp}
+
+Get Account default template for the Type specified 
+
+    [Arguments]    ${templateType}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /provider/print/template/accountDefault/${templateType}   expected_status=any
+    RETURN  ${resp}
+
+Remove Template By Uid
+
+    [Arguments]    ${uid}
+
+    Check And Create YNW Session
+    ${resp}=  DELETE On Session  ynw   /provider/print/template/${uid}   expected_status=any
+    RETURN  ${resp}

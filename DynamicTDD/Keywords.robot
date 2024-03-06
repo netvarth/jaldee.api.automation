@@ -253,6 +253,8 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{leadchannel}                      DIRECT  WHATSAPP  TELEGRAM  IVR  BRANDEDAPP
 @{styleconfig}                      DashboardStyleConfig   UsersStyleConfig   FinanceStyleConfig
 @{migrationType}                    Patients   Appointments  Notes
+@{printTemplateStatus}              active   inactive
+@{printTemplateType}                Prescription    Case    Finance
 
 *** Keywords ***
 Login

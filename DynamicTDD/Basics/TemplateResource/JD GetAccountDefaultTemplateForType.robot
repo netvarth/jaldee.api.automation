@@ -30,80 +30,17 @@ ${templateHeader}     <d _ngcontent-ibc-c299=\"\" =\"shareview\" style=\"font-fa
 ${templateContent}    <d _ngcontent-ibc-c299=\"\" =\"shareview\" style=\"font-family: 'Figtree', sans-serif!important; padding: 10px;\"><div _ngcontent-ibc-c299=\"\" style=\"height: 35mm; margin-top: 30px;\"><div _ngcontent-ibc-c299=\"\" style=\"float: left; margin-right: 20px;\">
 ${templateFooter}     <d _ngcontent-ibc-c299=\"\" =\"shareview\" style=\"font-family: 'Figtree', sans-serif!important; padding: 10px;\"><div _ngcontent-ibc-c299=\"\" style=\"height: 35mm; margin-top: 30px;\"><div _ngcontent-ibc-c299=\"\" style=\"float: left; margin-right: 20px;\">
 
-@{printTemplateStatus}      active   inactive
-@{printTemplateType}        Prescription    Case    Finance
-
-*** Keywords ***
-Create Template Config
-
-    [Arguments]    ${templateName}  ${isDefaultTemp}  ${templateHeader}    ${templateContent}     ${templateFooter}  ${printTemplateStatus}  ${printTemplateType}
-
-    ${data}=  Create Dictionary     templateName=${templateName}  isDefaultTemp=${isDefaultTemp}  templateHeader=${templateHeader}     templateContent=${templateContent}      templateFooter=${templateFooter}  printTemplateStatus=${printTemplateStatus}  printTemplateType=${printTemplateType}  
-    ${data}=  json.dumps  ${data}
-    # ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
-    Check And Create YNW Session
-    ${resp}=    POST On Session    ynw     /provider/print/template  data=${data}   expected_status=any 
-    RETURN  ${resp}
-
-Update Template Config
-
-    [Arguments]     ${uid}    ${templateName}  ${isDefaultTemp}  ${templateHeader}    ${templateContent}     ${templateFooter}  ${printTemplateStatus}  ${printTemplateType}
-
-    ${data}=  Create Dictionary   templateName=${templateName}  isDefaultTemp=${isDefaultTemp}  templateHeader=${templateHeader}     templateContent=${templateContent}      templateFooter=${templateFooter}  printTemplateStatus=${printTemplateStatus}  printTemplateType=${printTemplateType}  
-    ${data}=  json.dumps  ${data}
-    # ${headers2}=     Create Dictionary    Content-Type=application/json    Authorization=browser
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw     /provider/print/template/${uid}  data=${data}   expected_status=any 
-    RETURN  ${resp}
-
-Get Template By Uid
-
-    [Arguments]    ${uid}
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /provider/print/template/${uid}   expected_status=any
-    RETURN  ${resp}
-
-Get Templates By Account
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /provider/print/template   expected_status=any
-    RETURN  ${resp}
-
-Get default domain templates
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /provider/print/template/defaultDomainTemplates   expected_status=any
-    RETURN  ${resp}
-
-Get Account default template for the Type specified 
-
-    [Arguments]    ${templateType}
-
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /provider/print/template/accountDefault/${templateType}   expected_status=any
-    RETURN  ${resp}
-
-Remove Template By Uid
-
-    [Arguments]    ${uid}
-
-    Check And Create YNW Session
-    ${resp}=  DELETE On Session  ynw   /provider/print/template/${uid}   expected_status=any
-    RETURN  ${resp}
-
-
 *** Test Cases ***
 
 JD-TC-JD GetAccountDefaultTemplateForType-1
 
     [Documentation]  Create a Template with valid details and isDefaultTemp is true then try to get default template for the type.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${p_id1}=  get_acc_id  ${HLMUSERNAME9}
+    ${p_id1}=  get_acc_id  ${HLMUSERNAME1}
     Set Suite Variable   ${p_id1}
 
     ${resp}=   Get Templates By Account
@@ -164,7 +101,7 @@ JD-TC-JD GetAccountDefaultTemplateForType-2
 
     [Documentation]  Create a Template with valid details and isDefaultTemp is true then try to get default template for the type.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -204,7 +141,7 @@ JD-TC-JD GetAccountDefaultTemplateForType-3
 
     [Documentation]  Update first Template with isDefaultTemp is false,again upadate new template isDefaultTemp as true.
 
-    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD} 
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
