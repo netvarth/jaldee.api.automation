@@ -24,18 +24,6 @@ ${xlFile_notes}    ${EXECDIR}/TDD/Data_Migration_Notes.xlsx
 ${xlFile_invalid}    ${EXECDIR}/TDD/ConsentForm.xlsx
 
 
-*** Keyword ***
-
-
-Validate And Upload File
-
-    [Arguments]       ${accountId}   ${migrationType}   ${files}
-
-    ${data}=   Create Dictionary    files=${files}  
-    ${data}=   json.dumps   ${data}
-    Check And Create YNW SuperAdmin Session
-    ${resp}=    POST On Session    synw    /mgmt/spdataimport/account/${account}/upload/${migrationType}    data=${data}   expected_status=any
-    RETURN  ${resp}
 
 *** Test Cases ***
 
@@ -43,7 +31,7 @@ JD-TC-DataMigrationUploadfile-1
 
     [Documentation]  Upload appointment file
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME260}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME301}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
