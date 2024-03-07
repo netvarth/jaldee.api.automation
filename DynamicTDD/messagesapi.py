@@ -2247,3 +2247,4 @@ FIELD_missing_PATIENT="Required Fields are Missing. Header Should Contains ID, N
 FIELD_missing_APPOINTMENT="Required Fields are Missing. Header Should Contains PatientID, AppointmentDate, Notes"
 FIELD_missing_NOTE="Required Fields are Missing. Header Should Contains PatientID, Title, Description"
 Invalid_account_id="Invalid account id"
+CHANGE_PATIENTID_FORMAT="Please Change PatientId Format to: MANUAL"

@@ -2109,3 +2109,31 @@ Update Consent Form Settings Status
     Check And Create YNW SuperAdmin Session
     ${resp}=    PATCH On Session    synw    consentform/${accountId}/settings/${settingId}/status/${status}  expected_status=any
     RETURN  ${resp}
+
+
+#------------------Data Migration-----------------
+
+Get List
+    [Arguments]     ${account}  
+    Check And Create YNW SuperAdmin Session
+    ${resp}=  GET On Session  synw  /spdataimport/account/${account}/list   expected_status=any
+    RETURN  ${resp}
+
+
+Get Data By Uid
+    [Arguments]     ${account}  ${uid}
+    Check And Create YNW SuperAdmin Session
+    ${resp}=  GET On Session  synw  /spdataimport/account/${account}/${uid}   expected_status=any
+    RETURN  ${resp}
+
+Generate OTP for patient migration
+   [Arguments]    ${account}  ${customerseries}  ${uid}
+   Check And Create YNW SuperAdmin Session
+   ${resp}=  POST On Session   synw   /spdataimport/account/${account}/${customerseries}/Patients/migrate/${uid}/generateotp    expected_status=any
+   RETURN  ${resp}
+
+Verify OTP For Patients Migration
+   [Arguments]    ${account}  ${customerIdFormat}  ${uid}  ${otp}
+   Check And Create YNW SuperAdmin Session
+   ${resp}=  POST On Session   synw   /spdataimport/account/${account}/${customerIdFormat}/Patients/migrate/${uid}/verifyotp/${otp}    expected_status=any
+   RETURN  ${resp}

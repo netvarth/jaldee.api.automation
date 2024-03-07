@@ -24,14 +24,6 @@ ${xlFile_notes}    ${EXECDIR}/TDD/Data_Migration_Notes.xlsx
 ${xlFile_invalid}    ${EXECDIR}/TDD/ConsentForm.xlsx
 
 
-*** Keywords ***
-
-
-Get Data By Uid
-    [Arguments]     ${account}  ${uid}
-    Check And Create YNW SuperAdmin Session
-    ${resp}=  GET On Session  synw  /spdataimport/account/${account}/${uid}   expected_status=any
-    RETURN  ${resp}
 
 *** Test Cases ***
 
