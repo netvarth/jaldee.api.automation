@@ -14,6 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
+Variables         /ebs/TDD/varfiles/properties.py
 Library           /ebs/TDD/excelfuncs.py
 
 
@@ -83,7 +84,7 @@ JD-TC-Verify OTP for patient migration-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Verify OTP For Patients Migration    ${PUSERNAME303}  ${OtpPurpose['SPDataImport']}     ${account_id}   ${customerseries[0]}  ${DMUID}  
+    ${resp}=  Verify OTP For Patients Migration    ${spdataimport}   ${OtpPurpose['SPDataImport']}     ${account_id}   ${customerseries[0]}  ${DMUID}  
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
