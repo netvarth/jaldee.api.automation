@@ -214,7 +214,9 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 ...                         enablePartner  createBranch  updateBranch  viewKycReport  
 &{OtpPurpose}   ProviderSignUp=0  ConsumerSignUp=1  ProviderResetPassword=2  ConsumerResetPassword=3  ProviderVerifyEmail=4    
 ...             ConsumerVerifyEmail=5  VersionChange=6  AdminResetPassword=7  ManagerResetPassword=8  AssistantResetPassword=9  
-...             AccountContactUpdate=10  SignIn=11  Authentication=12  ConsumerVerifyPhone=13  ProviderVerifyPhone=14  ConsumerAcceptance=15  PartnerResetPassword=16  CoApplicantVerifyPhone=17  CoApplicantVerifyEmail=18  MultiFactorAuthentication=19 
+...             AccountContactUpdate=10  SignIn=11  Authentication=12  ConsumerVerifyPhone=13  ProviderVerifyPhone=14  ConsumerAcceptance=15  
+...             PartnerResetPassword=16  CoApplicantVerifyPhone=17  CoApplicantVerifyEmail=18  MultiFactorAuthentication=19  EquifaxScoreGenerate=20
+...             CibilScoreGenerate=21  SPDataImport=22  CONSENT_FORM=23
 
 @{LoanApplicationStatus}            Active      Completed       Cancelled       Rejected
 @{custdeets}                        firstName  lastName  phoneNo  countryCode  gender  dob

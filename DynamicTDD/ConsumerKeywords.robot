@@ -3433,3 +3433,10 @@ Send Message With Order By Consumer
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /consumer/orders/communicate/message/${uuid}   data=${data}  expected_status=any
     RETURN  ${resp} 
+
+
+Get locations by user id
+    [Arguments]      ${userid}  
+    Check And Create YNW Session
+    ${resp}=    GET On Session  ynw   /consumer/user/${userid}/location    expected_status=any
+    RETURN  ${resp}
