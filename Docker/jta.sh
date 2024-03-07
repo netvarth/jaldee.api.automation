@@ -473,6 +473,7 @@ setEnvVariables ()
         echo -e "NUM_PSERIES=$pseries\nNUM_CSERIES=$cseries\nNUM_BSERIES=$bseries\nPUSER_COUNT=$pusercount\nCUSER_COUNT=$cusercount\nBRANCH_COUNT=$bcount\nP_EMAIL=$defaultPemail\nC_EMAIL=$defaultCemail\nB_EMAIL=$defaultBemail\nB_SPEMAIL=$defaultBSPemail\nCONTAINER_ID=$id\nENV_KEY=$key\nSUITE="$suite"\nSIGN_UP=$dynSignUp\nTIMEFLAG="$timeFlag"\nFULL_RUN=$full\nMAIN=$mainres" > env.list
         selectVarFile env.list
     fi
+    echo $importproperty > $inputPath/$VAR_DIR/properties.py
 }
 
 
@@ -675,6 +676,7 @@ variablelogs()
     echo -e "\ntimeFlag=$timeFlag\ndynSignUp=$dynSignUp">> docker-variables$l.log
     echo -e "\ninputPath=$1\noutputPath=$2\ndockerPath=$defaultDockerPath">> docker-variables$l.log
     echo -e "\nBASE_DIR=$BASE_DIR\n">> docker-variables$l.log
+    echo -e "\nproperty file=$inputPath/$VAR_DIR/properties.py" >>docker-variables$l.log
 }
 
 
@@ -697,6 +699,7 @@ fi
 # check if --APre and --noAPre parameters are used together.
 checkInputArgs $@
 checkSysType
+importproperty="$(grep "spdataimport.notification.sms" /ebs/apache-tomcat-8.0.36/conf/ynwsuperadmin.properties)"
 
 # set default values passed as parameters from command line with this script
 while [ "$1" != "" ]; do 
@@ -1009,13 +1012,7 @@ else
     if [[ "$(< /proc/sys/kernel/osrelease)" == *[Mm]icrosoft* ]]; then 
         echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - WSL" >> $LogFileName
         echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] Ubuntu on Windows- Windows Subsystem for Linux"
-        # winInputPath=$(wslpath -w "$inputPath")
-        # winOutputPath=$(wslpath -w "$outputPath")
-        # winDockerPath=$(wslpath -w "$defaultDockerPath")
-        # winConfPath=$(wslpath -w "$CONF_DIR")
         echo -e "SYSTEM_ENV=Microsoft WSL" >> env.list
-        # time docker run --rm --network="host" -v "${winConfPath}:/ebs/ynwconf/:ro" -v "${winInputPath}:/ebs/TDD"  -v "${winInputPath}\\$VAR_DIR:/ebs/TDD/varfiles" -v "$winOutputPath:/ebs/TDD_Output" -v "${winDockerPath}\\config:/ebs/conf:ro" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd
-        # time docker run --rm --network="host" -v "${winInputPath}:/ebs/TDD"  -v "${winInputPath}\\$VAR_DIR:/ebs/TDD/varfiles" -v "$winOutputPath:/ebs/TDD_Output" --mount "source=${winConfPath},destination=/ebs/ynwconf/,readonly" --mount "source=${winDockerPath}\\config,destination=/ebs/conf,readonly" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd
         time docker run --rm --network="host" -v "${CONF_DIR}:/ebs/ynwconf/:ro" -v "${inputPath}:/ebs/TDD"  -v "${inputPath}/$VAR_DIR:/ebs/TDD/varfiles" -v "$outputPath:/ebs/TDD_Output" -v "${defaultDockerPath}/config:/ebs/conf:ro" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd
         # setDateTimeSync 1
         # echo -n > "$inputPath/$TIME_FILE"
