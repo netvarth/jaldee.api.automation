@@ -3659,6 +3659,7 @@ JD-TC-Take Appointment in Different Timezone-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+    
     ${resp}=  Get Appointment Schedules Consumer  ${IN_uid1}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
