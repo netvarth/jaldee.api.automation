@@ -148,7 +148,7 @@ JD-TC-CreateUser-1
     FOR  ${pos}  IN RANGE  ${dlen}  
         IF  '${iscorp_subdomains[${pos}]['subdomains']}' == '${sub_domains}'
             Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[${pos}]['subdomainId']}
-            Set Suite Variable  ${userSubDomain}  ${iscorp_subdomains[${pos}]['userSubDomain']}
+            Set Suite Variable  ${userSubDomain}  ${iscorp_subdomains[${pos}]['userSubDomainId']}
             Exit For Loop
         ELSE
             Continue For Loop
@@ -1884,7 +1884,7 @@ JD-TC-CreateUser-UH16
     FOR  ${pos}  IN RANGE  ${dlen}  
         IF  '${iscorp_subdomains[${pos}]['subdomains']}' == '${subdomain}'
             Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[${pos}]['subdomainId']}
-            Set Suite Variable  ${userSubDomain}  ${iscorp_subdomains[${pos}]['userSubDomain']}
+            Set Suite Variable  ${userSubDomain}  ${iscorp_subdomains[${pos}]['userSubDomainId']}
             Exit For Loop
         ELSE
             Continue For Loop
@@ -1984,7 +1984,7 @@ JD-TC-CreateUser-16
     FOR  ${pos}  IN RANGE  ${dlen}  
         IF  '${iscorp_subdomains[${pos}]['subdomains']}' == '${subdomain}'
             Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[${pos}]['subdomainId']}
-            Set Suite Variable  ${userSubDomain}  ${iscorp_subdomains[${pos}]['userSubDomain']}
+            Set Suite Variable  ${userSubDomain}  ${iscorp_subdomains[${pos}]['userSubDomainId']}
             Exit For Loop
         ELSE
             Continue For Loop
