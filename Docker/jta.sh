@@ -473,7 +473,7 @@ setEnvVariables ()
         echo -e "NUM_PSERIES=$pseries\nNUM_CSERIES=$cseries\nNUM_BSERIES=$bseries\nPUSER_COUNT=$pusercount\nCUSER_COUNT=$cusercount\nBRANCH_COUNT=$bcount\nP_EMAIL=$defaultPemail\nC_EMAIL=$defaultCemail\nB_EMAIL=$defaultBemail\nB_SPEMAIL=$defaultBSPemail\nCONTAINER_ID=$id\nENV_KEY=$key\nSUITE="$suite"\nSIGN_UP=$dynSignUp\nTIMEFLAG="$timeFlag"\nFULL_RUN=$full\nMAIN=$mainres" > env.list
         selectVarFile env.list
     fi
-    echo $importproperty > $inputPath/$VAR_DIR/properties.py
+    grep "spdataimport.notification.sms" /ebs/apache-tomcat-8.0.36/conf/ynwsuperadmin.properties > $inputPath/$VAR_DIR/properties.py
 }
 
 
@@ -699,7 +699,7 @@ fi
 # check if --APre and --noAPre parameters are used together.
 checkInputArgs $@
 checkSysType
-importproperty="$(grep "spdataimport.notification.sms" /ebs/apache-tomcat-8.0.36/conf/ynwsuperadmin.properties)"
+
 
 # set default values passed as parameters from command line with this script
 while [ "$1" != "" ]; do 
