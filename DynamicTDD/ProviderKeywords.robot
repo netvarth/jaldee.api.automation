@@ -13138,3 +13138,83 @@ Remove Template By Uid
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw   /provider/print/template/${uid}   expected_status=any
     RETURN  ${resp}
+
+
+# .............. CONSENT FORM ....................
+
+Enable Disable Provider Consent Form 
+
+    [Arguments]       ${status}
+
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/account/settings/consentform/${status}   expected_status=any
+    RETURN  ${resp}
+
+Create Provider Consent Form Settings 
+
+    [Arguments]       ${name}    ${description}    ${qnrid}
+
+    ${data}=   Create Dictionary    name=${name}  description=${description}  qnrIds=${qnrid}
+    ${data}=   json.dumps   ${data}
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/consentform/settings  data=${data}   expected_status=any
+    RETURN  ${resp}
+
+Update Provider Consent Form Settings
+
+    [Arguments]       ${cfid}   ${name}    ${description}    ${qnrid}
+
+    ${data}=   Create Dictionary    id=${cfid}  name=${name}  description=${description}  qnrIds=${qnrid}
+    ${data}=   json.dumps   ${data}
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/consentform/settings  data=${data}   expected_status=any
+    RETURN  ${resp}
+
+Get Provider Consent Form Settings
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw    /provider/consentform/   expected_status=any
+    RETURN  ${resp}
+
+Get Provider Consent Form Settings By Id
+
+    [Arguments]       ${settingId}
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw    /provider/consentform//settings/${settingId}   expected_status=any
+    RETURN  ${resp}
+
+Update Provider Consent Form Settings Status
+
+    [Arguments]       ${settingId}  ${status}
+
+    Check And Create YNW Session
+    ${resp}=    PATCH On Session    ynw    /provider/consentform/settings/${settingId}/status/${status}  expected_status=any
+    RETURN  ${resp}
+
+Share Consent Form     
+
+    [Arguments]     ${email}  ${sms}  ${push_notf}  ${whatsapp}   ${consetFormSettingId}   ${isSignatureRequired}   ${isOtpRequired}   ${providerConsumerId}
+    
+    ${input}=  Create Dictionary  email=${email}  sms=${sms}  pushNotification=${push_notf}  whatsapp=${whatsapp}
+    ${data}=  Create Dictionary  medium=${input}  consetFormSettingId=${consetFormSettingId}  isSignatureRequired=${isSignatureRequired}  isOtpRequired=${isOtpRequired}  providerConsumerId=${providerConsumerId}
+    ${data}=   json.dumps   ${data}
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/consentform/share  data=${data}   expected_status=any
+    RETURN  ${resp}
+
+Get Consent Form By Uid  
+
+    [Arguments]     ${uuid}
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw    /provider/consentform/${uuid}   expected_status=any
+    RETURN  ${resp}
+
+Get Consent Form By Provider Consumer Id
+
+    [Arguments]     ${id}
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw    /provider/consentform/providerconsumer/${id}   expected_status=any
+    RETURN  ${resp}
