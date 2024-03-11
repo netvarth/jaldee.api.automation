@@ -2249,3 +2249,4 @@ FIELD_missing_NOTE="Required Fields are Missing. Header Should Contains PatientI
 Invalid_account_id="Invalid account id"
 CHANGE_PATIENTID_FORMAT="Please Change PatientId Format to: MANUAL"
 INVALID_DATAIMPORT_ID="Invalid DataImport ID"
+INVALID_INPUT_FORMAT="Invalid input format"
