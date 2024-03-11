@@ -16,17 +16,6 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
 
-*** Keywords ***
-Create Item Category
-
-    [Arguments]  ${categoryName}  
-    ${data}=  Create Dictionary  categoryName=${categoryName}  
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/spitem/category  data=${data}  expected_status=any
-    RETURN  ${resp}  
-
-
 *** Test Cases ***
 
 JD-TC-CreateItemCategory-1
@@ -45,20 +34,6 @@ JD-TC-CreateItemCategory-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemCategory-2
-
-    [Documentation]  Provider Create another Item Category with same name.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${categoryName}=    FakerLibrary.name
-
-    ${resp}=  Create Item Category   ${categoryName}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-CreateItemCategory-
 
     [Documentation]  Provider Create another Item Category contain 250 words.
 
@@ -86,7 +61,22 @@ JD-TC-CreateItemCategory-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-CreateItemCategory-4
+JD-TC-CreateItemCategory-UH1
+
+    [Documentation]  Provider Create another Item Category with same name.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${categoryName}=    FakerLibrary.name
+
+    ${resp}=  Create Item Category   ${categoryName}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${NAME_ALREADY_EXIST}
+
+JD-TC-CreateItemCategory-UH2
 
     [Documentation]  Provider Create a Item Category without Login.
 
@@ -94,9 +84,10 @@ JD-TC-CreateItemCategory-4
 
     ${resp}=  Create Item Category   ${categoryName}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
 
-JD-TC-CreateItemCategory-5
+JD-TC-CreateItemCategory-UH3
 
     [Documentation]  Provider Create a Item Category with Consumer Login.
 
@@ -108,4 +99,5 @@ JD-TC-CreateItemCategory-5
 
     ${resp}=  Create Item Category   ${categoryName}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    401
+    Should Be Equal As Strings    ${resp.json()}    ${NoAccess} 

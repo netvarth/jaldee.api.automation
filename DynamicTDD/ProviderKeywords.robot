@@ -13218,3 +13218,43 @@ Get Consent Form By Provider Consumer Id
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/consentform/providerconsumer/${id}   expected_status=any
     RETURN  ${resp}
+
+# Inventory
+Create Item Category
+
+    [Arguments]  ${categoryName}  
+    ${data}=  Create Dictionary  categoryName=${categoryName}  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/spitem/category  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item Category
+    [Arguments]  ${id}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/category/${id}  expected_status=any
+    RETURN  ${resp}
+
+Update Item Category
+
+    [Arguments]   ${categoryName}   ${categoryCode}
+    ${data}=  Create Dictionary  categoryName=${categoryName}   categoryCode=${categoryCode}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/category  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item Category By Filter
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/category   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Update Item Category Status
+
+    [Arguments]   ${categoryCode}   ${status}
+    # ${data}=  Create Dictionary  categoryName=${categoryName}   categoryCode=${categoryCode}
+    # ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/category/${categoryCode}/status/${status}   expected_status=any
+    RETURN  ${resp}  
