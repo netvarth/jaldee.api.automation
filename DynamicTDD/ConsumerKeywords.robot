@@ -3435,7 +3435,7 @@ Send Message With Order By Consumer
     RETURN  ${resp} 
 
 
-Get locations by user id
+Consumer Get user locations by user id
     [Arguments]      ${userid}  
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw   /consumer/user/${userid}/location    expected_status=any
