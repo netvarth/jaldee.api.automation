@@ -2133,7 +2133,9 @@ Generate OTP for patient migration
    RETURN  ${resp}
 
 Verify OTP For Patients Migration
-   [Arguments]    ${account}  ${customerIdFormat}  ${uid}  ${otp}
+   [Arguments]     ${properyphone_no}  ${purpose}     ${account}  ${customerIdFormat}  ${uid}  
+
    Check And Create YNW SuperAdmin Session
+   ${otp}=   verify accnt  ${properyphone_no}  ${purpose}
    ${resp}=  POST On Session   synw   /spdataimport/account/${account}/${customerIdFormat}/Patients/migrate/${uid}/verifyotp/${otp}    expected_status=any
    RETURN  ${resp}
