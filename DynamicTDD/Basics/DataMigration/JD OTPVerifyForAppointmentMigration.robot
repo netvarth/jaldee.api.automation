@@ -30,11 +30,11 @@ ${xlFile_invalid}    ${EXECDIR}/TDD/ConsentForm.xlsx
 
 *** Test Cases ***
 
-JD-TC-Verify OTP for patient migration-1
+JD-TC-Verify OTP For Appointment Migration-1
 
-    [Documentation]  Verify OTP for patient migration
+    [Documentation]  Verify OTP For Appointment Migration
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME304}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -66,118 +66,139 @@ JD-TC-Verify OTP for patient migration-1
     ${resp}=  Imageupload.DataMigrationUpload   ${cookie}   ${account_id}   ${migrationType[0]}   ${xlFile_patients}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable          ${MUID}  ${resp.json()['${account_id}']}
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Generate OTP for patient migration   ${account_id}   ${customerseries[0]}   ${MUID}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Verify OTP For Patients Migration     ${spdataimport}   ${OtpPurpose['SPDataImport']}     ${account_id}   ${customerseries[0]}  ${MUID}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep  02s
+    ${resp}=  Imageupload.DataMigrationUpload   ${cookie}   ${account_id}   ${migrationType[1]}   ${xlFile}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable          ${DMUID}  ${resp.json()['${account_id}']}
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Generate OTP for patient migration   ${account_id}   ${customerseries[0]}   ${DMUID}   
+    ${resp}=  Generate OTP For Appointment Migration   ${account_id}      ${DMUID}    ${tz}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Verify OTP For Patients Migration    ${spdataimport}   ${OtpPurpose['SPDataImport']}     ${account_id}   ${customerseries[0]}  ${DMUID}  
+    ${resp}=  Verify OTP For Appointment Migration    ${spdataimport}   ${OtpPurpose['SPDataImport']}     ${account_id}    ${DMUID}   ${tz}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-Verify OTP for patient migration-UH1
 
-    [Documentation]  Verify OTP for patient migration with empty phone number
+JD-TC-Verify OTP For Appointment Migration-UH1
+
+    [Documentation]  Verify OTP For Appointment Migration with empty phone number
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  Verify OTP For Patients Migration    ${empty}   ${OtpPurpose['SPDataImport']}     ${account_id}   ${customerseries[0]}  ${DMUID}  
+    ${resp}=   Verify OTP For Appointment Migration   ${empty}   ${OtpPurpose['SPDataImport']}     ${account_id}    ${DMUID}   ${tz}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${ENTER_VALID_OTP} 
 
 
-JD-TC-Verify OTP for patient migration-UH2
+JD-TC-Verify OTP For Appointment Migration-UH2
 
-    [Documentation]  Verify OTP for patient migration where purpose is given as wrong
+    [Documentation]  Verify OTP For Appointment Migration where purpose is given as wrong
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  Verify OTP For Patients Migration    ${spdataimport}   ${OtpPurpose['ProviderSignUp']}     ${account_id}   ${customerseries[0]}  ${DMUID}  
+    ${resp}=  Verify OTP For Appointment Migration     ${spdataimport}   ${OtpPurpose['ProviderSignUp']}     ${account_id}   ${DMUID}   ${tz}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${ENTER_VALID_OTP}  
 
-JD-TC-Verify OTP for patient migration-UH3
+JD-TC-Verify OTP For Appointment Migration-UH3
 
-    [Documentation]  Verify OTP for patient migration where account id is wrong
+    [Documentation]  Verify OTP For Appointment Migration where account id is wrong
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${fake}=    Random Int  min=1000000   max=9999999
 
-    ${resp}=  Verify OTP For Patients Migration    ${spdataimport}   ${OtpPurpose['SPDataImport']}     ${fake}   ${customerseries[0]}  ${DMUID}  
+    ${resp}=  Verify OTP For Appointment Migration     ${spdataimport}   ${OtpPurpose['SPDataImport']}     ${fake}    ${DMUID}   ${tz}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${Invalid_account_id}  
 
-JD-TC-Verify OTP for patient migration-UH4
 
-    [Documentation]  Verify OTP for patient migration where patient id format is manual
+JD-TC-Verify OTP For Appointment Migration-UH4
 
-    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-
-    ${resp}=  Verify OTP For Patients Migration    ${spdataimport}   ${OtpPurpose['SPDataImport']}     ${account_id}   ${customerseries[1]}  ${DMUID}  
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}       ${CHANGE_PATIENTID_FORMAT} 
-
-JD-TC-Verify OTP for patient migration-UH5
-
-    [Documentation]  Verify OTP for patient migration where uid is wrong
+    [Documentation]  Verify OTP For Appointment Migration where uid is wrong
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${fake}=    Random Int  min=1000000   max=9999999
 
-    ${resp}=  Verify OTP For Patients Migration    ${spdataimport}   ${OtpPurpose['SPDataImport']}     ${account_id}   ${customerseries[0]}  ${fake}  
+    ${resp}=  Verify OTP For Appointment Migration     ${spdataimport}   ${OtpPurpose['SPDataImport']}     ${account_id}     ${fake}   ${tz}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${INVALID_DATAIMPORT_ID}  
 
 
-JD-TC-Verify OTP for patient migration-UH6
+JD-TC-Verify OTP For Appointment Migration-UH5
 
-    [Documentation]  Verify OTP for patient migration without login
+    [Documentation]  Verify OTP For Appointment Migration without login
 
     ${fake}=    Random Int  min=1000000   max=9999999
 
-    ${resp}=  Verify OTP For Patients Migration    ${spdataimport}   ${OtpPurpose['SPDataImport']}     ${account_id}   ${customerseries[0]}  ${fake}  
+    ${resp}=  Verify OTP For Appointment Migration     ${spdataimport}   ${OtpPurpose['SPDataImport']}     ${account_id}    ${fake}   ${tz}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}       ${SA_SESSION_EXPIRED}
 
 
-JD-TC-Verify OTP for patient migration-UH7
+JD-TC-Verify OTP For Appointment Migration-UH6
 
-    [Documentation]  Verify OTP for patient migration using provider login
+    [Documentation]  Verify OTP For Appointment Migration using provider login
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME304}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${fake}=    Random Int  min=1000000   max=9999999
 
-    ${resp}=  Verify OTP For Patients Migration    ${spdataimport}   ${OtpPurpose['SPDataImport']}     ${account_id}   ${customerseries[0]}  ${fake}  
+    ${resp}=  Verify OTP For Appointment Migration     ${spdataimport}   ${OtpPurpose['SPDataImport']}     ${account_id}     ${fake}   ${tz}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}       ${SA_SESSION_EXPIRED}
+
+
+JD-TC-Verify OTP For Appointment Migration-UH7
+
+    [Documentation]  Verify OTP For Appointment Migration using patient data migration id
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${fake}=    Random Int  min=1000000   max=9999999
+
+    ${resp}=  Verify OTP For Appointment Migration     ${spdataimport}   ${OtpPurpose['SPDataImport']}     ${account_id}     ${MUID}   ${tz}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}       ${INVALID_DATAIMPORT_ID}  
 
 
 

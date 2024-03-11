@@ -73,7 +73,7 @@ JD-TC-DataMigrationUploadfile-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-DataMigrationUploadfile-2
+JD-TC-DataMigrationUploadfile-3
 
     [Documentation]  Upload note file
 

@@ -14,6 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
+Variables         /ebs/TDD/varfiles/properties.py
 Library           /ebs/TDD/excelfuncs.py
 
 
@@ -41,7 +42,7 @@ JD-TC-GetByUid-1
     Set Suite Variable   ${colnames}
 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME306}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -70,14 +71,33 @@ JD-TC-GetByUid-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+
+    ${resp}=  Imageupload.DataMigrationUpload   ${cookie}   ${account_id}   ${migrationType[0]}   ${xlFile_patients}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable          ${MUID}  ${resp.json()['${account_id}']}
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Generate OTP for patient migration   ${account_id}   ${customerseries[0]}   ${MUID}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
+    sleep  02s
+
+    ${resp}=  Verify OTP For Patients Migration    ${spdataimport}   ${OtpPurpose['SPDataImport']}     ${account_id}   ${customerseries[0]}  ${MUID}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep  02s
     ${resp}=  Imageupload.DataMigrationUpload   ${cookie}   ${account_id}   ${migrationType[1]}   ${xlFile}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable          ${DMUID}  ${resp.json()['${account_id}']}
 
-    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Data By Uid   ${account_id}   ${DMUID}
     Log  ${resp.content}
@@ -192,7 +212,7 @@ JD-TC-GetByUid-UH3
 
     [Documentation]  Get data by invalid uid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -204,16 +224,17 @@ JD-TC-GetByUid-UH3
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    ${fake}=    Random Int  min=1000000   max=9999999
 
-    ${resp}=  Get Data By Uid   ${account_id1}   ${DMUID}
+    ${resp}=  Get Data By Uid   ${account_id1}   ${fake}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
 
-JD-TC-GetByUid-UH3
+JD-TC-GetByUid-UH4
 
-    [Documentation]  Get data by invalid uid
+    [Documentation]  Get data busing provider login
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME2}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

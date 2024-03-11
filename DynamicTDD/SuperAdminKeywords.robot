@@ -2133,9 +2133,39 @@ Generate OTP for patient migration
    RETURN  ${resp}
 
 Verify OTP For Patients Migration
-   [Arguments]     ${properyphone_no}  ${purpose}     ${account}  ${customerIdFormat}  ${uid}  
+   [Arguments]     ${propertyphone_no}  ${purpose}     ${account}  ${customerIdFormat}  ${uid}  
 
    Check And Create YNW SuperAdmin Session
-   ${otp}=   verify accnt  ${properyphone_no}  ${purpose}
+   ${otp}=   verify accnt  ${propertyphone_no}  ${purpose}
    ${resp}=  POST On Session   synw   /spdataimport/account/${account}/${customerIdFormat}/Patients/migrate/${uid}/verifyotp/${otp}    expected_status=any
    RETURN  ${resp}
+
+Generate OTP For Appointment Migration
+   [Arguments]    ${account}    ${uid}   ${tz}
+   Check And Create YNW SuperAdmin Session
+   ${resp}=  POST On Session   synw    /spdataimport/account/${account}/Appointments/migrate/${uid}/generateotp    expected_status=any    data="${tz}"
+   RETURN  ${resp}
+
+
+Verify OTP For Appointment Migration
+   [Arguments]     ${propertyphone_no}  ${purpose}     ${account}   ${uid}  ${tz}
+
+   Check And Create YNW SuperAdmin Session
+   ${otp}=   verify accnt  ${propertyphone_no}  ${purpose}
+   ${resp}=  POST On Session   synw   /spdataimport/account/${account}/Appointments/migrate/${uid}/verifyotp/${otp}    expected_status=any   data="${tz}"
+   RETURN  ${resp}
+
+Generate OTP For Notes Migration
+   [Arguments]    ${account}    ${uid}
+   Check And Create YNW SuperAdmin Session
+   ${resp}=  POST On Session   synw   /spdataimport/account/${account}/Notes/migrate/${uid}/generateotp    expected_status=any
+   RETURN  ${resp}
+
+Verify OTP For Notes Migration
+   [Arguments]     ${propertyphone_no}  ${purpose}     ${account}    ${uid}  
+
+   Check And Create YNW SuperAdmin Session
+   ${otp}=   verify accnt  ${propertyphone_no}  ${purpose}
+   ${resp}=  POST On Session   synw   /spdataimport/account/${account}/Notes/migrate/${uid}/verifyotp/${otp}    expected_status=any
+   RETURN  ${resp}
+

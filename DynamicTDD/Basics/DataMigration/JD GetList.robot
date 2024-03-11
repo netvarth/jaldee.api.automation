@@ -14,6 +14,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
+Variables         /ebs/TDD/varfiles/properties.py
 Library           /ebs/TDD/excelfuncs.py
 
 
@@ -41,7 +42,7 @@ JD-TC-Get List-1
     Set Suite Variable   ${colnames}
 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME302}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME305}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -70,24 +71,40 @@ JD-TC-Get List-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Imageupload.DataMigrationUpload   ${cookie}   ${account_id}   ${migrationType[1]}   ${xlFile}
+   ${resp}=  Imageupload.DataMigrationUpload   ${cookie}   ${account_id}   ${migrationType[0]}   ${xlFile_patients}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable          ${DMUID}  ${resp.json()['${account_id}']}
+    Set Suite Variable          ${MUID}  ${resp.json()['${account_id}']}
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Generate OTP for patient migration   ${account_id}   ${customerseries[0]}   ${MUID}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Verify OTP For Patients Migration    ${spdataimport}   ${OtpPurpose['SPDataImport']}     ${account_id}   ${customerseries[0]}  ${MUID}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    sleep  02s
+
+    ${resp}=  Imageupload.DataMigrationUpload   ${cookie}   ${account_id}   ${migrationType[1]}   ${xlFile}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable          ${DMUID}  ${resp.json()['${account_id}']}
+
+
     ${resp}=  Get List   ${account_id}   
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['uid']}                  ${DMUID}
-    Should Be Equal As Strings  ${resp.json()['account']}              ${account_id}
-    Should Be Equal As Strings  ${resp.json()['createdDate']}          ${DAY}
-    Should Be Equal As Strings  ${resp.json()['migrationTo']}          ${migrationType[1]}
-    Should Be Equal As Strings  ${resp.json()['totalCount']}           ${cnt}
-    Should Be Equal As Strings  ${resp.json()['migrationStatus']}       Ready
+    Should Be Equal As Strings  ${resp.json()[0]['uid']}                  ${DMUID}
+    Should Be Equal As Strings  ${resp.json()[0]['account']}              ${account_id}
+    Should Be Equal As Strings  ${resp.json()[0]['createdDate']}          ${DAY}
+    Should Be Equal As Strings  ${resp.json()[0]['migrationTo']}          ${migrationType[1]}
+    Should Be Equal As Strings  ${resp.json()[0]['totalCount']}           ${cnt}
+    Should Be Equal As Strings  ${resp.json()[0]['migrationStatus']}       Ready
 
 
 JD-TC-Get List-2
