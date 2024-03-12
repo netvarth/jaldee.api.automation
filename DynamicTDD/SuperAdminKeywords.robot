@@ -2182,3 +2182,45 @@ Verify OTP For Revert Migration
    ${otp}=   verify accnt  ${propertyphone_no}  ${purpose}
    ${resp}=  DELETE On Session   synw   /spdataimport/account/${account}/revert/${uid}/verifyotp/${otp}    expected_status=any
    RETURN  ${resp}
+
+
+# Inventory
+Create Store Type
+
+    [Arguments]      ${name}    ${storeNature}    
+
+    ${data}=   Create Dictionary    name=${name}  storeNature=${storeNature}  
+    ${data}=   json.dumps   ${data}
+    Check And Create YNW SuperAdmin Session
+    ${resp}=    POST On Session    synw    /account/store/type   data=${data}   expected_status=any
+    RETURN  ${resp}
+
+
+Get Store Type By EncId
+    [Arguments]  ${storeTypeEncId}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /account/store/type/id/${storeTypeEncId}  expected_status=any
+    RETURN  ${resp}
+
+Update Store Type
+
+    [Arguments]     ${uid}   ${typeName}   ${typeCode}
+    ${data}=  Create Dictionary  typeName=${typeName}   typeCode=${typeCode}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /account/store/type/${uid}  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Store Type Filter
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /account/store/type   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Store Type Filter Count
+
+    [Arguments]   &{param}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /account/store/type/count   params=${param}   expected_status=any
+    RETURN  ${resp}  

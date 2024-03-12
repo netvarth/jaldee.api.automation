@@ -13299,6 +13299,43 @@ Update Item Category Status
     ${resp}=  PATCH On Session  ynw  /provider/spitem/category/${categoryCode}/status/${status}   expected_status=any
     RETURN  ${resp}  
 
+Create Item Type
+
+    [Arguments]  ${typeName}  
+    ${data}=  Create Dictionary  typeName=${typeName}  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/spitem/type  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item Type
+    [Arguments]  ${id}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/type/${id}  expected_status=any
+    RETURN  ${resp}
+
+Update Item Type
+
+    [Arguments]   ${typeName}   ${typeCode}
+    ${data}=  Create Dictionary  typeName=${typeName}   typeCode=${typeCode}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/type  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item Type By Filter
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/type   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Update Item Type Status
+
+    [Arguments]   ${typeCode}   ${status}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/type/${typeCode}/status/${status}   expected_status=any
+    RETURN  ${resp}  
+
 # Data Migration
 
 Get Appointment By Uid
