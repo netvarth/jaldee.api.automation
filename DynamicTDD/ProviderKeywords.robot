@@ -13219,6 +13219,46 @@ Get Consent Form By Provider Consumer Id
     ${resp}=    GET On Session    ynw    /provider/consentform/providerconsumer/${id}   expected_status=any
     RETURN  ${resp}
 
+
+Get Verify Status of consent form by uid
+
+    [Arguments]     ${uid}
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw    /provider/consentform/verifyStatus/${uid}   expected_status=any
+    RETURN  ${resp}
+
+Comsent Form Sent Otp 
+
+    [Arguments]     ${uuid}
+
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/consentform/sendOtp/${uuid}   expected_status=any
+    RETURN  ${resp}
+
+Comsent Form Verify Otp
+
+    [Arguments]    ${purpose}  ${uid}  ${phone}
+   
+    ${otp}=   verify accnt  ${phone}  ${purpose}
+    ${loan}=  Create Dictionary   uid=${uid}
+    ${data}=  json.dumps  ${loan}
+
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  ynw  url=/provider/consentform/verifyOtp/${otp}/${uid}  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Consent Form Verify Sign  
+
+    [Arguments]     ${uuid}  ${owner}  ${fileName}  ${fileSize}  ${caption}  ${fileType}  ${action}  ${order}  ${driveId}
+
+    ${dict}=  Create Dictionary   owner=${owner}   fileName=${fileName}   fileSize=${fileSize}   caption=${caption}   fileType=${fileType}   action=${action}   order=${order}   driveId=${driveId}
+    ${data}=  Create List  ${dict}
+    ${data}=   json.dumps   ${data}
+    Check And Create YNW Session
+    ${resp}=    PATCH On Session    ynw    /provider/consentform/verifysign/${uuid}  data=${data}   expected_status=any
+    RETURN  ${resp}
+
 # Inventory
 Create Item Category
 
