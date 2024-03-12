@@ -13298,3 +13298,22 @@ Update Item Category Status
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  /provider/spitem/category/${categoryCode}/status/${status}   expected_status=any
     RETURN  ${resp}  
+
+# Data Migration
+
+Get Appointment By Uid
+    [Arguments]  ${uid}
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/appointment/archive/${uid}  expected_status=any
+    RETURN  ${resp}
+
+Get Appointment List
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/appointment/archive  expected_status=any
+    RETURN  ${resp}
+
+Get Appointment Count
+    Check And Create YNW Session  
+    ${resp}=  GET On Session  ynw  /provider/appointment/archive/count  expected_status=any
+    RETURN  ${resp}
+

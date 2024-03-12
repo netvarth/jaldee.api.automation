@@ -2169,3 +2169,16 @@ Verify OTP For Notes Migration
    ${resp}=  POST On Session   synw   /spdataimport/account/${account}/Notes/migrate/${uid}/verifyotp/${otp}    expected_status=any
    RETURN  ${resp}
 
+Generate OTP For Revert
+   [Arguments]    ${account}   ${uid}
+   Check And Create YNW SuperAdmin Session
+   ${resp}=  DELETE On Session   synw   /spdataimport/account/${account}/revert/${uid}/generateotp    expected_status=any
+   RETURN  ${resp}
+
+Verify OTP For Revert Migration
+   [Arguments]     ${propertyphone_no}  ${purpose}  ${account}   ${uid}  
+
+   Check And Create YNW SuperAdmin Session
+   ${otp}=   verify accnt  ${propertyphone_no}  ${purpose}
+   ${resp}=  DELETE On Session   synw   /spdataimport/account/${account}/revert/${uid}/verifyotp/${otp}    expected_status=any
+   RETURN  ${resp}
