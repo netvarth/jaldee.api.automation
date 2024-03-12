@@ -25,18 +25,11 @@ ${xlFile_notes}    ${EXECDIR}/TDD/Data_Migration_Notes.xlsx
 ${xlFile_invalid}    ${EXECDIR}/TDD/ConsentForm.xlsx
 ${j}                0
 
-*** Keywords ***
-
-Reverse List Using Python
-    [Arguments]    ${list}
-    ${reversed_list}=    Evaluate    list(reversed(${list}))
-    RETURN    ${reversed_list}
-
 *** Test Cases ***
 
-JD-TC-Get Appointment List-1
+JD-TC-Get Appointment Count-1
 
-    [Documentation]  Get Appointment List
+    [Documentation]  Get Appointment Count
 
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
@@ -44,21 +37,15 @@ JD-TC-Get Appointment List-1
     ${colnames}=  getColumnHeaders  ${sheet1}
     Log List  ${colnames}
     ${Patient}   getColumnValuesByName  ${sheet1}  ${colnames[0]}
-
-    ${pp}=   Reverse List Using Python   ${Patient}
-
-    # ${reversed_list}=    Set Variable    ${Patient}[::-1]
-    # Log    ${reversed_list}
+    ${cnt}=    Get length    ${Patient}
 
     Set Suite Variable   ${colnames}
     ${AppointmentDate}   getColumnValuesByName  ${sheet1}  ${colnames[1]}
     Log   ${AppointmentDate}
-    ${date}=   Reverse List Using Python   ${AppointmentDate}
-    # ${AppointmentDate}=    Convert Date    ${AppointmentDate}    result_format=%Y-%m-%d
+
     ${Notes}   getColumnValuesByName  ${sheet1}  ${colnames[2]}
     Log   ${Notes}
 
-    ${Note}=   Reverse List Using Python   ${Notes}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME313}  ${PASSWORD}
     Log  ${resp.content}
@@ -131,51 +118,35 @@ JD-TC-Get Appointment List-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp1}=  Get Appointment List    
+    ${resp1}=  Get Appointment Count 
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
-    ${len}  Get Length  ${resp1.json()}
-
-    FOR   ${i}  IN RANGE   ${len-1}   0   -1
-
-
-        Set Test Variable  ${Apptid${i}}    ${resp1.json()[${i}]['uid']}
-        ${resp}=  Get Appointment By Uid    ${Apptid${i}} 
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-        Should Be Equal As Strings  ${resp.json()['account']}            ${account_id}
-        Should Be Equal As Strings  ${resp.json()['migrationPatientId']}           ${Patient[${j}]}
-        # Should Be Equal As Strings  ${resp.json()['migrationPatientId']}           ${pp[${i}]}
-       ${AppointmentDate[${j}]}=    Convert Date    ${AppointmentDate[${j}]}    result_format=%Y-%m-%d
-        Should Be Equal As Strings  ${resp.json()['appointmentDate']}          ${AppointmentDate[${j}]}   
-        Should Be Equal As Strings  ${resp.json()['notes']}                  ${Notes[${j}]}
-        ${j}=  Evaluate  ${j}+1
-    END
+    Should Be Equal As Strings  ${resp1.json()}       ${cnt}  
 
 
 
 
-JD-TC-Get Appointment List-UH1
+JD-TC-Get Appointment Count-UH1
 
-    [Documentation]  get appointment list without login
+    [Documentation]  Get Appointment Count without login
 
-    ${resp1}=  Get Appointment List    
+    ${resp1}=  Get Appointment Count   
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}   419
     Should Be Equal As Strings  ${resp1.json()}       ${SESSION_EXPIRED}  
 
-JD-TC-Get Appointment List-UH3
+JD-TC-Get Appointment Count-UH3
 
-    [Documentation]  get appointment  list with invalid provider
+    [Documentation]  Get Appointment Count with invalid provider
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME7}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp1}=  Get Appointment List    
+    ${resp1}=  Get Appointment Count    
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}   200
-    Should Be Equal As Strings  ${resp1.content}       ${empty}  
+    Should Be Equal As Strings  ${resp1.content}       0 
 
 
 
