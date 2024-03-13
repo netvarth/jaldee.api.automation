@@ -73,7 +73,8 @@ JD-TC-CreateStoreType-4
 
     ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${STORE_TYPE_NAME_ALREADY_EXISTS} 
 
 JD-TC-CreateStoreType-
 
@@ -97,7 +98,7 @@ JD-TC-CreateStoreType-UH1
     ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
-    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 
 
 JD-TC-CreateStoreType-UH2
 

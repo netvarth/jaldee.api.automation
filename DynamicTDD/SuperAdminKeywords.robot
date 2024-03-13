@@ -2199,22 +2199,22 @@ Create Store Type
 Get Store Type By EncId
     [Arguments]  ${storeTypeEncId}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /account/store/type/id/${storeTypeEncId}  expected_status=any
+    ${resp}=    GET On Session    synw   /account/store/type/id/${storeTypeEncId}  expected_status=any
     RETURN  ${resp}
 
 Update Store Type
 
-    [Arguments]     ${uid}   ${typeName}   ${typeCode}
-    ${data}=  Create Dictionary  typeName=${typeName}   typeCode=${typeCode}
+    [Arguments]     ${uid}   ${name}   ${storeNature}
+    ${data}=  Create Dictionary  name=${name}   storeNature=${storeNature}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /account/store/type/${uid}  data=${data}  expected_status=any
+    ${resp}=  PUT On Session  synw  /account/store/type/${uid}  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Store Type Filter
     [Arguments]   &{param}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /account/store/type   params=${param}   expected_status=any
+    ${resp}=    GET On Session    synw   /account/store/type   params=${param}   expected_status=any
     RETURN  ${resp}
 
 Get Store Type Filter Count
@@ -2222,5 +2222,5 @@ Get Store Type Filter Count
     [Arguments]   &{param}
 
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /account/store/type/count   params=${param}   expected_status=any
+    ${resp}=  GET On Session  synw  /account/store/type/count   params=${param}   expected_status=any
     RETURN  ${resp}  
