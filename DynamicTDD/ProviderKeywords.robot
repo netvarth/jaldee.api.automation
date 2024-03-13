@@ -13372,7 +13372,7 @@ Get Appointment Count
     ${resp}=  GET On Session  ynw  /provider/appointment/archive/count  expected_status=any
     RETURN  ${resp}
 
-#-----------------Vendor---------------------------------------
+#-----------------Vendor--------------------------------------------
 
 CreateVendorCategory
 
