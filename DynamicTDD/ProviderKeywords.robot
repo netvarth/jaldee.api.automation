@@ -13372,3 +13372,126 @@ Get Appointment Count
     ${resp}=  GET On Session  ynw  /provider/appointment/archive/count  expected_status=any
     RETURN  ${resp}
 
+#-----------------Vendor---------------------------------------
+
+CreateVendorCategory
+
+    [Arguments]    ${name}    
+    ${data}=  Create Dictionary  name=${name}   
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/vendor/category    data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+Update  Vendor Category
+
+    [Arguments]    ${name}  ${encId}   
+    ${data}=  Create Dictionary  name=${name}   
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw   /provider/vendor/category/${encId}    data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+Update VendorCategoryStatus
+
+    [Arguments]      ${name}  ${encId}   ${status}
+    ${data}=  Create Dictionary  name=${name}  
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/vendor/category/${encId}/${status}    data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+Set category as default
+    [Arguments]     ${encId}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/vendor/category/default/${encId}   data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+
+Get by encId
+
+    [Arguments]   ${encId}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/vendor/category/${encId}     expected_status=any
+    RETURN  ${resp}
+
+Get VendorCategory With Filter
+
+    [Arguments]   &{param}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/vendor/category    params=${param}     expected_status=any
+    RETURN  ${resp}
+
+
+Get VendorCategory With CountFilter
+
+    [Arguments]   &{param}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/vendor/category/count    params=${param}     expected_status=any
+    RETURN  ${resp}
+
+Get default vendorcategory
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/vendor/category/default     expected_status=any
+    RETURN  ${resp}
+
+CreateVendorStatus
+
+    [Arguments]    ${name}    
+    ${data}=  Create Dictionary  name=${name}   
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/vendor/status    data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+Update VendorStatus 
+
+    [Arguments]    ${name}  ${encId}   
+    ${data}=  Create Dictionary  name=${name}   
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw   /provider/vendor/status/${encId}    data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+Update Statusofvendor
+
+    [Arguments]      ${name}  ${encId}   ${status}
+    ${data}=  Create Dictionary  name=${name}  
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw   /provider/vendor/status/${encId}/${status}    data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+Set status as default
+    [Arguments]     ${encId}   
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw   /provider/vendor/status/${encId}   data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+
+Get by encIdof vendorstatus
+
+    [Arguments]   ${encId}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/vendor/status/${encId}     expected_status=any
+    RETURN  ${resp}
+
+Get Vendorstatus With Filter
+
+    [Arguments]   &{param}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/vendor/status    params=${param}     expected_status=any
+    RETURN  ${resp}
+
+
+Get VendorStatus With CountFilter
+
+    [Arguments]   &{param}  
+    Check And Create YNW Session
+    # ${resp}=  GET On Session  ynw  /provider/vendor/status/count    params=${param}     expected_status=any
+    RETURN  ${resp}
+
+Get default vendorstatus
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw /provider/vendor/status/default     expected_status=any
+    RETURN  ${resp}
