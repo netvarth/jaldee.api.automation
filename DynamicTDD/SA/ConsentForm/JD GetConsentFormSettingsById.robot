@@ -122,7 +122,7 @@ JD-TC-GetConsentFormSettingsById-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${inv}=     FakerLibrary.Random Number
+    ${inv}=     Random Int  min=1000000   max=9999999
 
     ${resp}=    Get Consent Form Settings By Id  ${account_id}  ${inv} 
     Log  ${resp.content}

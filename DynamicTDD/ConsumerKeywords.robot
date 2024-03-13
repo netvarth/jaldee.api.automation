@@ -3440,3 +3440,54 @@ Consumer Get user locations by user id
     Check And Create YNW Session
     ${resp}=    GET On Session  ynw   /consumer/user/${userid}/location    expected_status=any
     RETURN  ${resp}
+
+
+# ....... CONSENT FORM .................
+
+Consumer Get Consent Form By Uid
+
+    [Arguments]      ${uuid}  
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session  ynw   /consumer/consentform/${uuid}    expected_status=any
+    RETURN  ${resp}
+
+Consumer Get Verify Status of consent form by uid
+
+    [Arguments]      ${uuid}  
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session  ynw   /consumer/consentform/verifyStatus/${uuid}    expected_status=any
+    RETURN  ${resp}
+
+
+Consumer Comsent Form Sent Otp 
+
+    [Arguments]     ${uuid}
+
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /consumer/consentform/sendOtp/${uuid}   expected_status=any
+    RETURN  ${resp}
+
+Consumer Comsent Form Verify Otp
+
+    [Arguments]    ${purpose}  ${uid}  ${phone}
+   
+    ${otp}=   verify accnt  ${phone}  ${purpose}
+    ${loan}=  Create Dictionary   uid=${uid}
+    ${data}=  json.dumps  ${loan}
+
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  ynw  url=/consumer/consentform/verifyOtp/${otp}/${uid}  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Consumer Consent Form Verify Sign  
+
+    [Arguments]     ${uuid}  ${owner}  ${fileName}  ${fileSize}  ${caption}  ${fileType}  ${action}  ${order}  ${driveId}
+
+    ${dict}=  Create Dictionary   owner=${owner}   fileName=${fileName}   fileSize=${fileSize}   caption=${caption}   fileType=${fileType}   action=${action}   order=${order}   driveId=${driveId}
+    ${data}=  Create List  ${dict}
+    ${data}=   json.dumps   ${data}
+    Check And Create YNW Session
+    ${resp}=    PATCH On Session    ynw    /consumer/consentform/verifysign/${uuid}  data=${data}   expected_status=any
+    RETURN  ${resp}

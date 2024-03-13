@@ -113,7 +113,7 @@ JD-TC-GetConsentFormSettingsByAccount-UH2
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}       ${SA_SESSION_EXPIRED}
     
-JD-TC-GetConsentFormSettingsByAccount-UH2
+JD-TC-GetConsentFormSettingsByAccount-UH3
 
     [Documentation]  Get Consent Form Settings by account - with provider login
 
@@ -126,7 +126,7 @@ JD-TC-GetConsentFormSettingsByAccount-UH2
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}       ${SA_SESSION_EXPIRED}
 
-JD-TC-GetConsentFormSettingsByAccount-UH3
+JD-TC-GetConsentFormSettingsByAccount-UH4
 
     [Documentation]  Get Consent Form Settings by account - where the account didnt created COnsent form settings
 

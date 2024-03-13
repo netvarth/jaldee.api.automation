@@ -308,6 +308,9 @@ JD-TC-GetQuestionnaireList-1
     Log List  ${QnrChannel}
     Log List  ${QnrTransactionType}
     Set Suite Variable   ${colnames}
+
+*** Comments ***
+
     ${servicenames}   getColumnValuesByName  ${sheet1}  ${colnames[6]}
     Log   ${servicenames}
     Remove Values From List  ${servicenames}   ${NONE}
