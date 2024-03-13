@@ -13336,6 +13336,24 @@ Update Item Type Status
     ${resp}=  PATCH On Session  ynw  /provider/spitem/type/${typeCode}/status/${status}   expected_status=any
     RETURN  ${resp}  
 
+Provide Get Store Type ByEncId
+    [Arguments]   ${storeTypeId}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/store/type/id/${storeTypeId}      expected_status=any
+    RETURN  ${resp}
+
+Get Store Type By Filter
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/store/type   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Store Type By Filter Count
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/store/type/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
 # Data Migration
 
 Get Appointment By Uid
