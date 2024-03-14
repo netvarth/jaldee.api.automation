@@ -264,7 +264,8 @@ JD-TC-AppointmentCommunication-1
     Should Be Equal As Strings  ${resp.json()[1]['receiver']['id']}     ${jdconID} 
     Should Be Equal As Strings  ${resp.json()[0]['service']}            ${SERVICE1} on ${date}
     Should Be Equal As Strings  ${resp.json()[0]['timeZone']}           ${tz}
-    Should Not Contain   ${resp.json()[0]}   attachements
+    Should Be Equal As Strings  ${resp.json()[0]['attachements']}       []
+    # Should Not Contain   ${resp.json()[0]}   attachements
 
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200 

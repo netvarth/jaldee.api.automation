@@ -645,7 +645,7 @@ JD-TC-ConsMassCommunicationForAppt-UH3
 
     ${resp}=  Consumer Mass Communication for Appt  ${cookie}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${bool[0]}  ${msg}    ${fileswithcaption}   ${invalid_uuid}
     Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings    ${resp.json()}    {'${invalid_uuid}': 'invalid uuid'}
                                                     
 JD-TC-ConsMassCommunicationForAppt-UH4

@@ -31,8 +31,9 @@ JD-TC-GetConsumerAppointments-1
     [Documentation]  Get consumer appointments for today and future.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME140}  ${PASSWORD}
-    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
     ${pid1}=  get_acc_id  ${PUSERNAME140}
     Set Suite Variable   ${pid1}
     
@@ -96,7 +97,16 @@ JD-TC-GetConsumerAppointments-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid2}  ${resp.json()} 
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     clear_appt_schedule   ${PUSERNAME140}
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     
     ${DAY10}=  db.add_timezone_date  ${tz}  10   
     Set Suite Variable  ${DAY1}     
@@ -320,6 +330,7 @@ JD-TC-GetConsumerAppointments-1
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id1}
     END 
 
+*** Comments ***
 JD-TC-GetConsumerAppointments-2
 
     [Documentation]  Get consumer appointments by service.

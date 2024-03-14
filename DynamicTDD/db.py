@@ -687,16 +687,14 @@ def reset_metric_usage(aid) :
     # cur = dbconn.cursor()
     try :
         with dbconn.cursor() as cur:
-            cur.execute("SELECT metric_usage FROM account_matrix_usage_tbl WHERE id='%s'" % aid)
-            jsonVal = cur.fetchone()
-        
-            data= json.loads(jsonVal[0])
-            ntm=data['nonTransientMetrics']
-            for i in range(len(ntm)):
-                if ntm[i]['metricId']==queue_service_metric_id:
-                    ntm[i]['usage']=0
-            data=json.dumps(data)
-            cur.execute("update account_matrix_usage_tbl set metric_usage='%s' where id='%s';" % (data,aid))
+            cur.execute("select JSON_EXTRACT(`metric_usage` , '$.nonTransientMetrics[0].usage') FROM account_matrix_usage_tbl WHERE id='%s'" % aid)
+            usageval = cur.fetchone()
+            print("current used value: ", usageval)
+            print("Resetting usage value to 0")
+            cur.execute("update account_matrix_usage_tbl set metric_usage=JSON_SET(`metric_usage`, '$.nonTransientMetrics[0].usage', 0) where id='%s';" % (aid))
+            cur.execute("select JSON_EXTRACT(`metric_usage` , '$.nonTransientMetrics[0].usage') FROM account_matrix_usage_tbl WHERE id='%s'" % aid)
+            usageval = cur.fetchone()
+            print("used value after update: ", usageval)
             dbconn.commit()
             # dbconn.close()
     except Exception as e:
