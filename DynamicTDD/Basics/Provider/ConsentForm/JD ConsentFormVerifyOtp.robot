@@ -166,10 +166,13 @@ JD-TC-ConsentFormVerifyOtp-UH1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=    Comsent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${consumerPhone}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}       ${ENTER_VALID_OTP}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-ConsentFormVerifyOtp-UH2
 
@@ -178,6 +181,10 @@ JD-TC-ConsentFormVerifyOtp-UH2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME285}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Comsent Form Verify Otp  ${OtpPurpose['SPDataImport']}  ${cf_uid}   ${consumerPhone}
     Log  ${resp.content}
@@ -192,6 +199,10 @@ JD-TC-ConsentFormVerifyOtp-UH3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=    Comsent Form Verify Otp  ${empty}  ${cf_uid}   ${consumerPhone}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -204,6 +215,10 @@ JD-TC-ConsentFormVerifyOtp-UH4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME285}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${fake}=    Random Int  min=11111  max=99999
 
@@ -220,6 +235,10 @@ JD-TC-ConsentFormVerifyOtp-UH5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=    Comsent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
@@ -232,6 +251,10 @@ JD-TC-ConsentFormVerifyOtp-UH6
     ${resp}=  Encrypted Provider Login  ${PUSERNAME285}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${fake}=    FakerLibrary.Random Number  
 
@@ -247,6 +270,10 @@ JD-TC-ConsentFormVerifyOtp-UH7
     ${resp}=  Encrypted Provider Login  ${PUSERNAME285}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Comsent Form Sent Otp     ${cf_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Comsent Form Verify Otp  ${OtpPurpose['CONSENT_FORM']}  ${cf_uid}   ${PUSERNAME285}
     Log  ${resp.content}

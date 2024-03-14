@@ -206,7 +206,7 @@ JD-TC-UpdateConsentFormSettingsStatus-UH7
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}       ${INV_CONSENT_FORM_ID}
 
-JD-TC-UpdateConsentFormSettingsStatus-UH5
+JD-TC-UpdateConsentFormSettingsStatus-UH8
 
     [Documentation]  Update Consent Form Settings Status - with Consumer login  
 

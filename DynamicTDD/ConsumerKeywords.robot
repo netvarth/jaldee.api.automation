@@ -3491,3 +3491,27 @@ Consumer Consent Form Verify Sign
     Check And Create YNW Session
     ${resp}=    PATCH On Session    ynw    /consumer/consentform/verifysign/${uuid}  data=${data}   expected_status=any
     RETURN  ${resp}
+
+Consent Form Submit Qnr
+
+    [Arguments]     ${uuid}
+    
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /consumer/consentform/questionnaire/submit/${uuid}     expected_status=any
+    RETURN  ${resp}
+
+Consent Form Resubmit Qnr
+
+    [Arguments]     ${uuid}
+    
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /consumer/consentform/questionnaire/resubmit/${uuid}     expected_status=any
+    RETURN  ${resp}
+
+Consent Form Get released questionnaire by uuid
+
+    [Arguments]     ${uuid}
+    
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw    /consumer/consentform/questionnaire/${uuid}     expected_status=any
+    RETURN  ${resp}

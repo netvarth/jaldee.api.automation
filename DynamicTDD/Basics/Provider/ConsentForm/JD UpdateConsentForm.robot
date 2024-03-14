@@ -324,7 +324,7 @@ JD-TC-UpdateConsentFormSettings-12
     ${resp}=    Update Provider Consent Form Settings  ${cfid}  ${qnr_name2}  ${qnr_des2}  ${qnr_ids}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  401
-    Should Be Equal As Strings  ${resp.json()}       ${NO_PERMISSION}
+    Should Be Equal As Strings  ${resp.json()}       ${NoAccess}
 
 
 JD-TC-UpdateConsentFormSettings-13

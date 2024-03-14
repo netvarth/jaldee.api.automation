@@ -11,7 +11,6 @@ Library           /ebs/TDD/Imageupload.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
-Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Library           /ebs/TDD/excelfuncs.py
@@ -21,21 +20,20 @@ Library           /ebs/TDD/excelfuncs.py
 
 ${xlFile}    ${EXECDIR}/TDD/ConsentForm.xlsx
 
-${xlFile}    ${EXECDIR}/TDD/ConsentForm.xlsx
-${self}    0
-${jpgfile}      /ebs/TDD/uploadimage.jpg
-${order}        0
-${fileSize}     0.00458
+${jpg}     /ebs/TDD/small.jpg
 
 *** Test Cases ***
 
-JD-TC-GetConsentFormByUid-1
+JD-TC-ConsentFormSubmitQnr-1
 
-    [Documentation]  Consumer Get Consent Form By Uid
+    [Documentation]  Consent Form Submit Qnr
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME293}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME275}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -76,7 +74,7 @@ JD-TC-GetConsentFormByUid-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME293}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME275}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -118,8 +116,6 @@ JD-TC-GetConsentFormByUid-1
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
     Set Suite Variable  ${consumerId}  ${resp.json()[0]['id']}
-    ${fullName}   Set Variable    ${consumerFirstName} ${consumerLastName}
-    Set Suite Variable  ${fullName}
 
     ${qnr_name}=    FakerLibrary.name
     Set Suite Variable  ${qnr_name}
@@ -145,126 +141,57 @@ JD-TC-GetConsentFormByUid-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cf_uid}   ${resp.json()}
 
-    ${resp}=    Send Otp For Login    ${consumerPhone}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-  
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Customer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-   
-    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${account_id}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
-    Set Suite Variable    ${PCid}   ${resp.json()['id']}
-
-    ${resp}=    Consumer Get Consent Form By Uid  ${cf_uid}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-JD-TC-GetConsentFormByUid-UH1
-
-    [Documentation]  Consumer Get Consent Form By Uid - where consent form uid is invalid
-
-    ${resp}=    Send Otp For Login    ${consumerPhone}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-  
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Customer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-   
-    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${account_id}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${fake}=    Random Int  min=11111  max=99999
-
-    ${resp}=    Consumer Get Consent Form By Uid  ${fake}
+    ${resp}=    Get Consent Form By Uid  ${cf_uid}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}      ${INV_CONSENT_FORM_ID}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['name']}        ${qnr_name}
+    Should Be Equal As Strings  ${resp.json()['uid']}         ${cf_uid}
+    Should Be Equal As Strings  ${resp.json()['status']}      ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['settingId']}   ${cfid}
 
-JD-TC-GetConsentFormByUid-UH2
+    ${respo}=    Provider Consent Form Get released questionnaire by uuid  ${cf_uid}
+    Log  ${respo.content}
+    Should Be Equal As Strings  ${respo.status_code}  200
+    Set Suite Variable     ${Quid}  ${respo.json()[0]['id']}
 
-    [Documentation]  Consumer Get Consent Form By Uid - with sa login
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME275}   ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings   ${resp.status_code}    200
 
-    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    ${caption}     FakerLibrary.firstName
+    ${file_size}    Get File Size    ${jpg}
+    ${labelName}    FakerLibrary.firstName
+    ${resp}=    db.getMimetype   ${jpg}
+    ${mimetype}    Get From Dictionary    ${resp}    ${jpg}
+    ${keyName}    FakerLibrary.firstName  
+    ${file_name}    Evaluate    __import__('os').path.basename('${jpg}')
+
+    ${resp}=    Imageupload.UploadQNRfiletoTempLocation    ${cookie}  ${user_id}  ${Quid}  ${caption}  ${mimetype}  ${file_name}  ${file_name}  ${file_size}  ${labelName}
+    Log  ${resp.content}
+    Should Be Equal As Strings   ${resp.status_code}    200
+    Set Suite Variable    ${driveid}     ${resp.json()['urls'][0]['driveId']}
+
+
+
+
+    ${fudata}=  db.fileUploadDT   ${respo.json()[0]}  ${FileAction[0]}  ${cf_uid}  ${jpg} 
+    Log  ${fudata}
+
+    ${len}=  Get Length  ${fudata['fileupload'][0]['files']}
+    FOR  ${i}  IN RANGE  0    ${len}
+        Set To Dictionary    ${fudata['fileupload'][0]['files'][${i}]}    driveid    ${driveid}
+    END
+
+    Log  ${fudata}
+
+    ${data}=  db.QuestionnaireAnswers   ${respo.json()[0]}   ${Quid}   &{fudata}
+    Log  ${data}
+    Set Suite Variable   ${data}
+
+    ${resp}=  Consumer Validate Questionnaire    ${accountId}    ${data}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Consumer Get Consent Form By Uid  ${cf_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings  ${resp.json()}      ${SESSION_EXPIRED}
-
-JD-TC-GetConsentFormByUid-UH3
-
-    [Documentation]  Consumer Get Consent Form By Uid - without login
-
-    ${resp}=    Consumer Get Consent Form By Uid  ${cf_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings  ${resp.json()}      ${SESSION_EXPIRED}
-
-JD-TC-GetConsentFormByUid-UH4
-
-    [Documentation]  Consumer Get Consent Form By Uid - with provider login
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME293}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Consumer Get Consent Form By Uid  ${cf_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}     []
-
-JD-TC-GetConsentFormByUid-UH5
-
-    [Documentation]  Consumer Get Consent Form By Uid - where consent form settings is disabled
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME293}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Enable Disable Provider Consent Form  ${toggle[1]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get Account Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableConsentForm']}     ${bool[0]}
-
-    ${resp}=    Send Otp For Login    ${consumerPhone}    ${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-  
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Test Variable   ${token}  ${resp.json()['token']}
-
-    ${resp}=  Customer Logout   
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-   
-    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${account_id}    ${token}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Consumer Get Consent Form By Uid  ${cf_uid}
+    ${resp}=    Provider Consent Form Submit Qnr  ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

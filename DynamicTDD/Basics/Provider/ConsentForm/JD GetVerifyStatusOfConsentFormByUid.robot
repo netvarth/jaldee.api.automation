@@ -317,15 +317,15 @@ JD-TC-GetVerifyStatusOfConsentFormByUid-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}       ${bool[1]}
 
-JD-TC-GetVerifyStatusOfConsentFormByUid-UH4
+JD-TC-GetVerifyStatusOfConsentFormByUid-UH5
 
-    [Documentation]  Get Verify Status of consent form by uid - where is sign req and is otp req is false
+    [Documentation]  Get Verify Status of consent form by uid - where is sign req is false
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME287}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Share Consent Form  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${cfid2}  ${boolean[0]}  ${boolean[0]}  ${consumerId2}
+    ${resp}=    Share Consent Form  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${cfid2}  ${boolean[1]}  ${boolean[0]}  ${consumerId2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cf_uid3}   ${resp.json()}
@@ -335,7 +335,7 @@ JD-TC-GetVerifyStatusOfConsentFormByUid-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}       ${bool[1]}
 
-JD-TC-GetVerifyStatusOfConsentFormByUid-UH4
+JD-TC-GetVerifyStatusOfConsentFormByUid-UH6
 
     [Documentation]  Get Verify Status of consent form by uid - without login
 
@@ -344,7 +344,7 @@ JD-TC-GetVerifyStatusOfConsentFormByUid-UH4
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  ${resp.json()}       ${SESSION_EXPIRED}
 
-JD-TC-GetVerifyStatusOfConsentFormByUid-UH5
+JD-TC-GetVerifyStatusOfConsentFormByUid-UH7
 
     [Documentation]  Get Verify Status of consent form by uid - uid is invalid
 

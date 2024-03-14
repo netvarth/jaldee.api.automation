@@ -175,3 +175,132 @@ JD-TC-ConsentFormVerifySign-1
     ${resp}=    Consent Form Verify Sign  ${cf_uid}  ${consumerId}  ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}  ${file_action[0]}  ${order}  ${driveId}
     Log  ${resp.content}
     Should Be Equal As Strings     ${resp.status_code}    200
+
+
+JD-TC-ConsentFormVerifySign-UH1
+
+    [Documentation]  Consent Form Verify Sign - where uid is invalid
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME280}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${fake}=    Random Int  min=9999    max=99999
+
+    ${resp}=    Consent Form Verify Sign  ${fake}  ${consumerId}  ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}  ${file_action[0]}  ${order}  ${driveId}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+
+JD-TC-ConsentFormVerifySign-UH3
+
+    [Documentation]  Consent Form Verify Sign - consumer id is empty
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME280}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Consent Form Verify Sign  ${cf_uid}  ${empty}  ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}  ${file_action[0]}  ${order}  ${driveId}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+
+JD-TC-ConsentFormVerifySign-UH4
+
+    [Documentation]  Consent Form Verify Sign - consumer id is invalid
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME280}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${fake}=    Random Int  min=9999    max=99999
+
+    ${resp}=    Consent Form Verify Sign  ${cf_uid}  ${fake}  ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}  ${file_action[0]}  ${order}  ${driveId}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+
+JD-TC-ConsentFormVerifySign-UH5
+
+    [Documentation]  Consent Form Verify Sign - file name is empty
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME280}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Consent Form Verify Sign  ${cf_uid}  ${consumerId}  ${empty}    ${fileSize}    ${caption1}    ${fileType1}  ${file_action[0]}  ${order}  ${driveId}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}         ${FILE_NAME_NOT_FOUND}
+
+JD-TC-ConsentFormVerifySign-UH6
+
+    [Documentation]  Consent Form Verify Sign - file size is empty
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME280}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Consent Form Verify Sign  ${cf_uid}  ${consumerId}  ${jpgfile}    ${empty}    ${caption1}    ${fileType1}  ${file_action[0]}  ${order}  ${driveId}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}         ${FILE_SIZE_ERROR}
+
+JD-TC-ConsentFormVerifySign-UH7
+
+    [Documentation]  Consent Form Verify Sign - file action is remove
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME280}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Consent Form Verify Sign  ${cf_uid}  ${consumerId}  ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}  ${file_action[1]}  ${order}  ${driveId}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+JD-TC-ConsentFormVerifySign-UH8
+
+    [Documentation]  Consent Form Verify Sign - driveid is empty
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME280}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Consent Form Verify Sign  ${cf_uid}  ${consumerId}  ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}  ${file_action[0]}  ${order}  ${empty}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}         ${S3_UPLOAD_FAILED}
+
+JD-TC-ConsentFormVerifySign-UH9
+
+    [Documentation]  Consent Form Verify Sign - drive id is invalid
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME280}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${fake}=    Random Int  min=9999    max=99999
+
+    ${resp}=    Consent Form Verify Sign  ${cf_uid}  ${consumerId}  ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}  ${file_action[0]}  ${order}  ${fake}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}         ${INV_DRIVE_ID}
+
+JD-TC-ConsentFormVerifySign-UH10
+
+    [Documentation]  Consent Form Verify Sign - without login
+
+    ${resp}=    Consent Form Verify Sign  ${cf_uid}  ${consumerId}  ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}  ${file_action[0]}  ${order}  ${driveId}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    419
+    Should Be Equal As Strings     ${resp.json()}         ${SESSION_EXPIRED}
+
+JD-TC-ConsentFormVerifySign-UH11
+
+    [Documentation]  Consent Form Verify Sign - with another provider login
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME299}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Consent Form Verify Sign  ${cf_uid}  ${consumerId}  ${jpgfile}    ${fileSize}    ${caption1}    ${fileType1}  ${file_action[0]}  ${order}  ${driveId}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    401
+    Should Be Equal As Strings     ${resp.json()}         ${NO_PERMISSION}

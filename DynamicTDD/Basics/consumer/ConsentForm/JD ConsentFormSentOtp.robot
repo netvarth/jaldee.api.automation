@@ -31,9 +31,9 @@ ${fileSize}     0.00458
 
 JD-TC-GetConsentFormByUid-1
 
-    [Documentation]  Consumer Get Consent Form By Uid
+    [Documentation]  Get Consent Form By Uid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME293}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME294}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -76,7 +76,7 @@ JD-TC-GetConsentFormByUid-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME293}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME294}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -168,9 +168,19 @@ JD-TC-GetConsentFormByUid-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-GetConsentFormByUid-UH1
+    ${resp}=    Consumer Get Verify Status of consent form by uid  ${cf_uid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings  ${resp.json()}       ${bool[0]}
 
-    [Documentation]  Consumer Get Consent Form By Uid - where consent form uid is invalid
+    ${resp}=    Consumer Comsent Form Sent Otp   ${cf_uid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+JD-TC-ConsentFormSendOtp-UH1
+
+    [Documentation]  Consent Form Send Otp - twice
 
     ${resp}=    Send Otp For Login    ${consumerPhone}    ${account_id}
     Log   ${resp.content}
@@ -189,70 +199,120 @@ JD-TC-GetConsentFormByUid-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${fake}=    Random Int  min=11111  max=99999
+    ${resp}=    Consumer Comsent Form Sent Otp     ${cf_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Consumer Get Consent Form By Uid  ${fake}
+
+JD-TC-ConsentFormSendOtp-UH2
+
+    [Documentation]  Consent Form Send Otp - uid is invalid
+
+    ${resp}=    Send Otp For Login    ${consumerPhone}    ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+  
+    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable   ${token}  ${resp.json()['token']}
+
+    ${resp}=  Customer Logout   
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${account_id}    ${token}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${fake}=    Random Int  min=1000000   max=9999999
+
+    ${resp}=    Consumer Comsent Form Sent Otp     ${fake}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}      ${INV_CONSENT_FORM_ID}
+    Should Be Equal As Strings  ${resp.json()}       ${INVALID_UNIQUE_ID}
 
-JD-TC-GetConsentFormByUid-UH2
+JD-TC-ConsentFormSendOtp-UH3
 
-    [Documentation]  Consumer Get Consent Form By Uid - with sa login
+    [Documentation]  Consent Form Send Otp - without login
+
+    ${resp}=    Consumer Comsent Form Sent Otp     ${cf_uid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings  ${resp.json()}       ${SESSION_EXPIRED}
+
+JD-TC-ConsentFormSendOtp-Uh4
+
+    [Documentation]  Consent Form Send Otp - SA Login
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Consumer Get Consent Form By Uid  ${cf_uid}
+    ${resp}=    Consumer Comsent Form Sent Otp     ${cf_uid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings  ${resp.json()}      ${SESSION_EXPIRED}
+    Should Be Equal As Strings  ${resp.json()}       ${SESSION_EXPIRED}
 
-JD-TC-GetConsentFormByUid-UH3
+JD-TC-ConsentFormSendOtp-UH5
 
-    [Documentation]  Consumer Get Consent Form By Uid - without login
+    [Documentation]  Consent Form Send Otp - where provider dont have consent form
 
-    ${resp}=    Consumer Get Consent Form By Uid  ${cf_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings  ${resp.json()}      ${SESSION_EXPIRED}
-
-JD-TC-GetConsentFormByUid-UH4
-
-    [Documentation]  Consumer Get Consent Form By Uid - with provider login
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME293}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME284}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Consumer Get Consent Form By Uid  ${cf_uid}
+    ${resp}=    Consumer Comsent Form Sent Otp     ${cf_uid}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()}     []
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  ${resp.json()}       ${NO_PERMISSION}
 
-JD-TC-GetConsentFormByUid-UH5
+JD-TC-GetConsentFormByUid-UH6
 
-    [Documentation]  Consumer Get Consent Form By Uid - where consent form settings is disabled
+    [Documentation]  Get Consent Form By Uid - another consumer login
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME293}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME27}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Enable Disable Provider Consent Form  ${toggle[1]}
+    ${resp}=    Consumer Comsent Form Sent Otp     ${cf_uid}
     Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+
+JD-TC-GetConsentFormByUid-UH7
+
+    [Documentation]  Get Consent Form By Uid - another Provider consumer login
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME294}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${PH_Number2}    Random Number 	       digits=5 
+    ${PH_Number2}=    Evaluate    f'{${PH_Number2}:0>7d}'
+    Log  ${PH_Number2}
+    Set Suite Variable    ${consumerPhone2}  555${PH_Number2}
+    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone2}${\n}
+    ${consumerFirstName2}=   FakerLibrary.first_name
+    Set Suite Variable  ${consumerFirstName2}
+    ${consumerLastName2}=    FakerLibrary.last_name  
+    ${dob2}=    FakerLibrary.Date
+    ${permanentAddress11}=  FakerLibrary.address
+    ${gender2}=  Random Element    ${Genderlist}
+    Set Test Variable  ${consumerEmail2}  ${C_Email}${consumerPhone2}${consumerFirstName2}.${test_mail}
+
+    ${resp}=  AddCustomer  ${consumerPhone2}  firstName=${consumerFirstName2}   lastName=${consumerLastName2}  address=${permanentAddress11}   gender=${gender2}  dob=${dob2}  email=${consumerEmail2}   
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Account Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableConsentForm']}     ${bool[0]}
+    ${resp}=  GetCustomer  phoneNo-eq=${consumerPhone2}
+    Log   ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${resp}=    Send Otp For Login    ${consumerPhone}    ${account_id}
+    ${resp}=    Send Otp For Login    ${consumerPhone2}    ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
   
-    ${resp}=    Verify Otp For Login   ${consumerPhone}   12  
+    ${resp}=    Verify Otp For Login   ${consumerPhone2}   12  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable   ${token}  ${resp.json()['token']}
@@ -261,10 +321,10 @@ JD-TC-GetConsentFormByUid-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
    
-    ${resp}=    ProviderConsumer Login with token    ${consumerPhone}    ${account_id}    ${token}
+    ${resp}=    ProviderConsumer Login with token    ${consumerPhone2}    ${account_id}    ${token}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Consumer Get Consent Form By Uid  ${cf_uid}
+    ${resp}=    Consumer Comsent Form Sent Otp     ${cf_uid}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422

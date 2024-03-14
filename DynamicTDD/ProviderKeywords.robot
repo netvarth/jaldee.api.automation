@@ -13259,6 +13259,30 @@ Consent Form Verify Sign
     ${resp}=    PATCH On Session    ynw    /provider/consentform/verifysign/${uuid}  data=${data}   expected_status=any
     RETURN  ${resp}
 
+Provider Consent Form Submit Qnr
+
+    [Arguments]     ${uuid}
+    
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/consentform/questionnaire/submit/${uuid}     expected_status=any
+    RETURN  ${resp}
+
+Provider Consent Form Resubmit Qnr
+
+    [Arguments]     ${uuid}
+    
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/consentform/questionnaire/resubmit/${uuid}     expected_status=any
+    RETURN  ${resp}
+
+Provider Consent Form Get released questionnaire by uuid
+
+    [Arguments]     ${uuid}
+    
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw    /provider/consentform/questionnaire/${uuid}     expected_status=any
+    RETURN  ${resp}
+
 # Inventory
 Create Item Category
 
