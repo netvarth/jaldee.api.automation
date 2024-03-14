@@ -175,7 +175,7 @@ JD-TC-UpdateConsentFormSettingsStatus-UH4
     ${resp}=    Update Provider Consent Form Settings Status  ${cfid}  ${toggle[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings  ${resp.json()}       ${SA_SESSION_EXPIRED}
+    Should Be Equal As Strings  ${resp.json()}       ${SESSION_EXPIRED}
 
 JD-TC-UpdateConsentFormSettingsStatus-UH5
 
@@ -188,7 +188,7 @@ JD-TC-UpdateConsentFormSettingsStatus-UH5
     ${resp}=    Update Provider Consent Form Settings Status  ${cfid}  ${toggle[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings  ${resp.json()}       ${SA_SESSION_EXPIRED}
+    Should Be Equal As Strings  ${resp.json()}       ${SESSION_EXPIRED}
 
 
 JD-TC-UpdateConsentFormSettingsStatus-UH7
@@ -216,5 +216,5 @@ JD-TC-UpdateConsentFormSettingsStatus-UH8
 
     ${resp}=    Update Provider Consent Form Settings Status  ${cfid}  ${toggle[1]}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings  ${resp.json()}       ${SA_SESSION_EXPIRED}
+    Should Be Equal As Strings  ${resp.status_code}  401
+    Should Be Equal As Strings  ${resp.json()}       ${NoAccess}

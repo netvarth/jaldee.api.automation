@@ -3494,18 +3494,18 @@ Consumer Consent Form Verify Sign
 
 Consent Form Submit Qnr
 
-    [Arguments]     ${uuid}
+    [Arguments]     ${account}  ${uuid}  ${data}
     
     Check And Create YNW Session
-    ${resp}=    POST On Session    ynw    /consumer/consentform/questionnaire/submit/${uuid}     expected_status=any
+    ${resp}=    POST On Session    ynw    url=/consumer/consentform/questionnaire/submit/${uuid}?account=${account}   data=${data}     expected_status=any
     RETURN  ${resp}
 
 Consent Form Resubmit Qnr
 
-    [Arguments]     ${uuid}
+    [Arguments]     ${account}  ${uuid}  ${data}
     
     Check And Create YNW Session
-    ${resp}=    POST On Session    ynw    /consumer/consentform/questionnaire/resubmit/${uuid}     expected_status=any
+    ${resp}=    POST On Session    ynw    url=/consumer/consentform/questionnaire/resubmit/${uuid}?account=${account}   data=${data}     expected_status=any
     RETURN  ${resp}
 
 Consent Form Get released questionnaire by uuid

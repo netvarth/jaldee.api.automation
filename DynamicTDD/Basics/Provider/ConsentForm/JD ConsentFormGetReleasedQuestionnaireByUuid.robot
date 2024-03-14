@@ -24,11 +24,11 @@ ${jpg}     /ebs/TDD/small.jpg
 
 *** Test Cases ***
 
-JD-TC-ConsentFormSubmitQnr-1
+JD-TC-GetReleasedQuestionnaireByUuid-1
 
-    [Documentation]  Consent Form Submit Qnr
+    [Documentation]  Get released questionnaire by uuid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME304}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME303}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
@@ -74,7 +74,7 @@ JD-TC-ConsentFormSubmitQnr-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200  
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME304}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME303}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -154,7 +154,21 @@ JD-TC-ConsentFormSubmitQnr-1
     Should Be Equal As Strings  ${respo.status_code}  200
     Set Suite Variable     ${Quid}  ${respo.json()[0]['id']}
 
-    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME304}   ${PASSWORD}
+
+JD-TC-GetReleasedQuestionnaireByUuid-2
+
+    [Documentation]  Get released questionnaire by uuid - after submitting Qnr
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME303}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${respo}=    Provider Consent Form Get released questionnaire by uuid  ${cf_uid}
+    Log  ${respo.content}
+    Should Be Equal As Strings  ${respo.status_code}  200
+    Set Suite Variable     ${Quid}  ${respo.json()[0]['id']}
+
+    ${cookie}  ${resp}=  Imageupload.spLogin  ${PUSERNAME303}   ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings   ${resp.status_code}    200
 
@@ -189,57 +203,61 @@ JD-TC-ConsentFormSubmitQnr-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Consent Form By Uid  ${cf_uid}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Not Be Equal As Strings  ${resp.json()['questionnaires']}   ${EMPTY}
+    ${respo}=    Provider Consent Form Get released questionnaire by uuid  ${cf_uid}
+    Log  ${respo.content}
+    Should Be Equal As Strings  ${respo.status_code}  200
 
-JD-TC-ConsentFormSubmitQnr-2
 
-    [Documentation]  Consent Form Submit Qnr - twice
+JD-TC-GetReleasedQuestionnaireByUuid-3
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME304}  ${PASSWORD}
+    [Documentation]  Get released questionnaire by uuid - after resubmitting Qnr
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME303}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Provider Consent Form Submit Qnr   ${account_id}    ${cf_uid}    ${data}
+    ${resp}=   Provider Consent Form Resubmit Qnr  ${account_id}    ${cf_uid}    ${data}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-ConsentFormSubmitQnr-UH1
+    ${respo}=    Provider Consent Form Get released questionnaire by uuid  ${cf_uid}
+    Log  ${respo.content}
+    Should Be Equal As Strings  ${respo.status_code}  200
 
-    [Documentation]  Consent Form Submit Qnr - where account id is invlid
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME304}  ${PASSWORD}
+JD-TC-GetReleasedQuestionnaireByUuid-UH1
+
+    [Documentation]  Get released questionnaire by uuid - without login
+
+    ${respo}=    Provider Consent Form Get released questionnaire by uuid  ${cf_uid}
+    Log  ${respo.content}
+    Should Be Equal As Strings  ${respo.status_code}  419
+    Should Be Equal As Strings  ${respo.json()}  ${SESSION_EXPIRED}
+
+JD-TC-GetReleasedQuestionnaireByUuid-UH2
+
+    [Documentation]  Get released questionnaire by uuid - where uid is invalid
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME303}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${fake}=    Random Int  min=9999    max=99999
-
-    ${resp}=    Provider Consent Form Submit Qnr   ${fake}    ${cf_uid}    ${data}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-
-JD-TC-ConsentFormSubmitQnr-UH2
-
-    [Documentation]  Consent Form Submit Qnr - uid is invalid
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME304}  ${PASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${fake}=    Random Int  min=9999    max=99999
-
-    ${resp}=    Provider Consent Form Submit Qnr   ${account_id}    ${fake}    ${data}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    
+    ${respo}=    Provider Consent Form Get released questionnaire by uuid  ${fake}
+    Log  ${respo.content}
+    Should Be Equal As Strings  ${respo.status_code}  422
     Should Be Equal As Strings  ${resp.json()}      ${INV_CONSENT_FORM_ID}
 
-JD-TC-ConsentFormSubmitQnr-UH3
+JD-TC-GetReleasedQuestionnaireByUuid-UH3
 
-    [Documentation]  Consent Form Submit Qnr - without login
+    [Documentation]  Get released questionnaire by uuid - with another provider login
 
-    ${resp}=    Provider Consent Form Submit Qnr   ${account_id}    ${cf_uid}    ${data}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME304}  ${PASSWORD}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings  ${resp.json()}  ${SESSION_EXPIRED}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${respo}=    Provider Consent Form Get released questionnaire by uuid  ${cf_uid}
+    Log  ${respo.content}
+    Should Be Equal As Strings  ${respo.status_code}  401
+    Should Be Equal As Strings  ${respo.json()}  ${NO_PERMISSION_To}

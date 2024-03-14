@@ -13189,7 +13189,7 @@ Update Provider Consent Form Settings Status
     [Arguments]       ${settingId}  ${status}
 
     Check And Create YNW Session
-    ${resp}=    PATCH On Session    ynw    /provider/consentform/settings/${settingId}/status/${status}  expected_status=any
+    ${resp}=    PUT On Session    ynw    /provider/consentform/settings/${settingId}/status/${status}  expected_status=any
     RETURN  ${resp}
 
 Share Consent Form     
@@ -13261,18 +13261,18 @@ Consent Form Verify Sign
 
 Provider Consent Form Submit Qnr
 
-    [Arguments]     ${uuid}
+    [Arguments]     ${account}  ${uuid}  ${data}
     
     Check And Create YNW Session
-    ${resp}=    POST On Session    ynw    /provider/consentform/questionnaire/submit/${uuid}     expected_status=any
+    ${resp}=    POST On Session    ynw    url=/provider/consentform/questionnaire/submit/${uuid}?account=${account}    data=${data}     expected_status=any
     RETURN  ${resp}
 
 Provider Consent Form Resubmit Qnr
 
-    [Arguments]     ${uuid}
+    [Arguments]     ${account}  ${uuid}  ${data}
     
     Check And Create YNW Session
-    ${resp}=    POST On Session    ynw    /provider/consentform/questionnaire/resubmit/${uuid}     expected_status=any
+    ${resp}=    POST On Session    ynw    url=/provider/consentform/questionnaire/resubmit/${uuid}?account=${account}    data=${data}     expected_status=any
     RETURN  ${resp}
 
 Provider Consent Form Get released questionnaire by uuid
