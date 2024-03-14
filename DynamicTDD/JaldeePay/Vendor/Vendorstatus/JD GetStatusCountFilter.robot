@@ -18,11 +18,11 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 *** Test Cases ***
 
 
-JD-TC-Get Category List Filter-1
+JD-TC-Get StatusCount Filter-1
 
-    [Documentation]  Get VendorCategory With Filter with name.
+    [Documentation] Get VendorStatus With CountFilter with name.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME95}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -54,151 +54,142 @@ JD-TC-Get Category List Filter-1
 
     ${name}=   FakerLibrary.word
     Set Suite Variable    ${name} 
-    ${resp}=  CreateVendorCategory  ${name}  
+    ${resp}=  CreateVendorStatus  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${encId}   ${resp.json()}
 
 
-    ${resp}=   Get VendorCategory With Filter   name-eq=${name}    
+    ${resp}=   Get VendorStatus With CountFilter   name-eq=${name}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
 
 
 
-JD-TC-Get Category List Filter-2
 
-    [Documentation]  Get VendorCategory With Filter with createdDate
+JD-TC-Get StatusCount Filter-2
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME95}  ${PASSWORD}
+    [Documentation] Get VendorStatus With CountFilter with createdDate
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   Get VendorCategory With Filter   createdDate-eq=${CUR_DAY}    
+    ${resp}=   Get VendorStatus With CountFilter   createdDate-eq=${CUR_DAY}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-JD-TC-Get Category List Filter-3
 
-    [Documentation]  Get VendorCategory With Filter with status
+JD-TC-Get StatusCount Filter-3
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME95}  ${PASSWORD}
+    [Documentation] Get VendorStatus With CountFilter with status
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   Get VendorCategory With Filter   status-eq=${toggle[0]}    
+    ${resp}=   Get VendorStatus With CountFilter   isEnabled-eq=${toggle[0]}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-JD-TC-Get Category List Filter-4
 
-    [Documentation]  Get VendorCategory With Filter with encId
+JD-TC-Get StatusCount Filter-4
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME95}  ${PASSWORD}
+    [Documentation] Get VendorStatus With CountFilter with encId
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   Get VendorCategory With Filter   encId-eq=${encId}    
+    ${resp}=   Get VendorStatus With CountFilter   encId-eq=${encId}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+    # Should Be Equal As Strings  ${resp.json()['name']}          ${name}
 
-JD-TC-Get Category List Filter-5
 
-    [Documentation]  Get VendorCategory With Filter with all fileds
+JD-TC-Get StatusCount Filter-5
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME95}  ${PASSWORD}
+    [Documentation] Get VendorStatus With CountFilter with all fileds
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   Get VendorCategory With Filter   encId-eq=${encId}   status-eq=${toggle[0]}  createdDate-eq=${CUR_DAY}  name-eq=${name}
+    ${resp}=   Get VendorStatus With CountFilter   encId-eq=${encId}   isEnabled-eq=${toggle[0]}  createdDate-eq=${CUR_DAY}  name-eq=${name}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
-JD-TC-Get Category List Filter-6
 
-    [Documentation]  Get VendorCategory With Filter with status
+JD-TC-Get StatusCount Filter-6
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME95}  ${PASSWORD}
+    [Documentation] Get VendorStatus With CountFilter with status
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   Get VendorCategory With Filter   status-eq=${toggle[1]}    
+    ${resp}=  Get VendorStatus With CountFilter   isEnabled-eq=${toggle[1]}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
 
 
-JD-TC-Get Category List Filter-UH1
+JD-TC-Get StatusCount Filter-UH1
 
-    [Documentation]   Get VendorCategory With Filter without login
+    [Documentation]  Get VendorStatus With CountFilter without login
 
-    ${resp}=   Get VendorCategory With Filter   encId-eq=${encId}    
+    ${resp}=   Get VendorStatus With CountFilter   encId-eq=${encId}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Get Category List Filter-UH2
+JD-TC-Get StatusCount Filter-UH2
 
-    [Documentation]   Get VendorCategory With Filter Using Consumer Login
+    [Documentation]  Get VendorStatus With CountFilter Using Consumer Login
 
     ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get VendorCategory With Filter   encId-eq=${encId}    
+    ${resp}=   Get VendorStatus With CountFilter   encId-eq=${encId}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
 
 
-JD-TC-Get Category List Filter-UH3
+JD-TC-Get StatusCount Filter-UH3
 
-    [Documentation] Get VendorCategory With Filter where encId as wrong.
+    [Documentation]Get VendorStatus With CountFilter where encId as wrong.
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME95}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
      ${fake}=    Random Int  min=1000000   max=9999999   
-    ${resp}=   Get VendorCategory With Filter   encId-eq=${fake}    
+    ${resp}=   Get VendorStatus With CountFilter   encId-eq=${fake}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-Get Category List Filter-UH4
+JD-TC-Get StatusCount Filter-UH4
 
-    [Documentation]  Get VendorCategory With Filter where created date is wrong.
+    [Documentation] Get VendorStatus With CountFilter where created date is wrong.
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME95}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
      ${fake}=    Random Int  min=1000000   max=9999999   
-    ${resp}=   Get VendorCategory With Filter   createdDate-eq=${DAY2}   
+    ${resp}=   Get VendorStatus With CountFilter   createdDate-eq=${DAY2}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-Get Category List Filter-UH5
+JD-TC-Get StatusCount Filter-UH5
 
-    [Documentation]  Get VendorCategory With Filter where name  is wrong.
+    [Documentation] Get VendorStatus With CountFilter where name  is wrong.
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME95}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
     ${name}=   FakerLibrary.word
-    ${resp}=   Get VendorCategory With Filter   name-eq=${name}
+    ${resp}=  Get VendorStatus With CountFilter   name-eq=${name}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

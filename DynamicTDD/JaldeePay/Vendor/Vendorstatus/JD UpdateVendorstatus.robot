@@ -15,15 +15,14 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 
-
 *** Test Cases ***
 
 
-JD-TC-CreateVendorStatus-1
+JD-TC-UpdateVendorstatus-1
 
-    [Documentation]  Create Vendor statusfor an SP.
+    [Documentation]  Create Vendor status for an SP.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -46,7 +45,6 @@ JD-TC-CreateVendorStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${encId}   ${resp.json()}
 
-
     ${resp}=  Get by encIdof vendorstatus   ${encId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -55,64 +53,66 @@ JD-TC-CreateVendorStatus-1
     Should Be Equal As Strings  ${resp.json()['isEnabled']}        ${toggle[0]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}        ${bool[0]}
     Should Be Equal As Strings  ${resp.json()['encId']}        ${bool[0]}
+    ${vender_name}=   FakerLibrary.firstname
 
-JD-TC-CreateVendorStatus-UH1
+    ${resp}=  Update StatusVendor   ${name}   ${encId} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-    [Documentation]   CreateVendorStatus without login
+
+
+JD-TC-UpdateVendorstatus-UH1
+
+    [Documentation]   Update Status Vendor without login
 
     ${name}=   FakerLibrary.word
-    ${resp}=  CreateVendorStatus  ${name}  
+    ${resp}=  Update StatusVendor   ${name}   ${encId} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-CreateVendorStatus-UH2
+JD-TC-UpdateVendorstatus-UH2
 
-    [Documentation]   CreateVendorStatus Using Consumer Login
+    [Documentation]   Update Status Vendor Using Consumer Login
 
     ${resp}=  ConsumerLogin  ${CUSERNAME1}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${name}=   FakerLibrary.word
-    ${resp}=  CreateVendorStatus  ${name}  
+     ${resp}=  Update StatusVendor   ${name}   ${encId} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
 
 
-JD-TC-CreateVendorStatus-UH3
+JD-TC-UpdateVendorstatus-UH3
 
-    [Documentation]  CreateVendorStatus with name as empty.
+    [Documentation]  Update Status Vendor with name as empty.
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME102}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
     
     ${FIELD_CANT_BE_EMPTY}=  format String   ${FIELD_CANT_BE_EMPTY}   Name
     
-     ${resp}=  CreateVendorStatus  ${EMPTY}  
+    ${resp}=  Update StatusVendor   ${EMPTY}   ${encId} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${FIELD_CANT_BE_EMPTY}
 
-JD-TC-CreateVendorStatus-UH4
+JD-TC-UpdateVendorstatus-UH4
 
-    [Documentation]  CreateVendorStatus multiple times.
+    [Documentation]  Update Status Vendor with another providers category id.
 
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME1}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
     
     ${name}=   FakerLibrary.word
-    ${resp}=  CreateVendorStatus  ${name}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    ${resp}=  CreateVendorStatus  ${name}  
+
+     ${resp}=  Update StatusVendor   ${name}   ${encId} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${CATEGORY_EXIST_WITH_NAME}
-
-
 
