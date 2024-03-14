@@ -216,7 +216,7 @@ JD-TC-Update Tax Percentage-UH9
        Should Be Equal As Strings    ${resp.status_code}   422 
        Should Be Equal As Strings  "${resp.json()}"    "${GST_NUM_EXISTS}"    
 
-*** comment***
+*** Comments ***
 JD-TC-Update Tax Percentage -3 Verification
        ${resp}=   Encrypted Provider Login  ${PUSERNAME26}  ${PASSWORD} 
        Should Be Equal As Strings    ${resp.status_code}   200
