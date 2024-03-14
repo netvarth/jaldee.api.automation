@@ -2255,3 +2255,6 @@ INVALID_APPT_DATAIMPORTARCHIVE_UID="Invalid AppointmentDataImportArchive Uid."
 # Inventory
 NAME_ALREADY_EXIST="Name already exist"
 STORE_TYPE_NAME_ALREADY_EXISTS="Store type with given name already exists"
+PLEASE_ENTER_NAME="Please enter name"
+INVALID_STORE_TYPE_ID="Invalid Store Type Enc Id"
+INVALID_LOCATION_ID="Invalid Location Id"
