@@ -1758,7 +1758,7 @@ JD-TC-UserLevelAnalyticsForWaitlist-8
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['amount']}   ${tot_bill_paid_amt}
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['dateFor']}   ${DAY1}
 
-***Comment***
+*** Comments ***
        
 JD-TC-UserLevelAnalyticsForWaitlist-4
     [Documentation]   take online checkins for prepayment services and check analytics 

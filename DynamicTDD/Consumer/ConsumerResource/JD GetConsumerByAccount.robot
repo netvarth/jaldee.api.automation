@@ -22,7 +22,7 @@ JD-TC-GetConsumerByAccount-1
     ${resp}=   Consumer Login  ${CUSERNAME5}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-***comment***
+*** Comments ***
     ${resp}=  Get Consumer By Id  ${CUSERNAME5}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

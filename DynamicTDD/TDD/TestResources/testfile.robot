@@ -122,7 +122,7 @@ TC-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-***COMMENT***
+*** Comments ***
 
     ${fields}=   Get subDomain level Fields  ${domain}  ${subdomain}
     Log  ${fields.content}

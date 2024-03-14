@@ -2350,7 +2350,7 @@ JD-TC-Payment By Consumer-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  waitlistStatus=${wl_status[0]}    paymentStatus=${paymentStatus[2]}
 
-***comment***
+*** Comments ***
 
 JD-TC-Payment By Consumer-UH13
 

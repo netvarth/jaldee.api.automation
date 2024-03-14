@@ -1132,7 +1132,7 @@ JD-TC-CreateVacation-UH13
 
    
 
-***comment***
+*** Comments ***
 JD-TC-CreateVacation-UH15
     [Documentation]    Create vacation, then try to Add consumer to Future Day appointment
     

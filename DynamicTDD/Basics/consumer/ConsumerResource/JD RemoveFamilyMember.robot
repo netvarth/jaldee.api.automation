@@ -287,7 +287,7 @@ JD-TC-RemoveFamilyMember-UH5
 
 
 
-***comment***
+*** Comments ***
 JD-TC-RemoveFamilyMember-UH6
       [Documentation]  Delete a family member after waitlisted in a queue and check that family member in consumer side
       ${resp}=   Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD} 
@@ -343,7 +343,7 @@ JD-TC-RemoveFamilyMember-UH6
       Should Be Equal As Strings  ${resp.json()}    []
 
 
-***comment***   
+*** Comments ***   
 JD-TC-RemoveFamilyMember-3
       [Documentation]    Delete a familymember by provider switched to a consumer
 

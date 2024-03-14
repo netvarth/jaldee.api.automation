@@ -2529,7 +2529,7 @@ JD-TC-UpdateOrderItems-UH9
     Should Be Equal As Strings    ${resp.status_code}    419
     Should Be Equal As Strings  "${resp.json()}"    "${SESSION_EXPIRED}"
  
-***comment***
+*** Comments ***
 
 JD-TC-UpdateDeliveryCharge-12
     [Documentation]  same consumer place an oder for both pick up and home delivery when Advanced_payment_type is Full_Amount

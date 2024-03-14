@@ -23,7 +23,7 @@ JD-TC-Communication Between Provider And Consumer-1
     Log  ${multilocdoms}
     Set Suite Variable  ${dom}  ${multilocdoms[0]['domain']}
     Set Suite Variable  ${sub_dom}  ${multilocdoms[0]['subdomains'][0]}
-***comment***
+*** Comments ***
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${cookie}  ${resp}=   Imageupload.spLogin  5580861546  Netvarth1

@@ -3646,7 +3646,7 @@ JD-TC-UpdateVacation-18
 
 
 
-***comment***
+*** Comments ***
 JD-TC-UpdateVacation-13
     [Documentation]    Take a appointment and then create vacation on after that appointment time
 
@@ -3826,7 +3826,7 @@ JD-TC-UpdateVacation-13
 
 
 
-***Comment***
+*** Comments ***
 
 JD-TC-UpdateVacation-UH2
     [Documentation]  Given date is Empty in the Update Vacation

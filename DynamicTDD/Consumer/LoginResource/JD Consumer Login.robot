@@ -277,7 +277,7 @@ JD-TC-Consumer Login-4
     # ${resp}=  Consumer Logout
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-***Comment***
+*** Comments ***
 
 JD-TC-Consumer Login-2
     [Documentation]    Login using provider's mob no and  password

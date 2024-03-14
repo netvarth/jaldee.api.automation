@@ -5068,7 +5068,7 @@ JD-TC-Take Appointment-30
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot1}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
 
-# ***COMMENT***
+# *** Comments ***
 
 JD-TC-Take Appointment-31
     [Documentation]  Provider takes appointment for consumer for a future date when future appointment is disabled

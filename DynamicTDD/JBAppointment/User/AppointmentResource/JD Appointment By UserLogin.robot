@@ -1362,7 +1362,7 @@ JD-TC-AppointmentByUserLogin-10
     Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY3}
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot2}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
-***Comment***
+*** Comments ***
 JD-TC-AppointmentByUserLogin-11
     [Documentation]  User takes 2 different appointments for same consumer for different services.
     

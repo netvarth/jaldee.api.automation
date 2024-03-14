@@ -4307,7 +4307,7 @@ JD-TC-UpdateDeliveryCharge-18
 
 
 
-***comment***
+*** Comments ***
 JD-TC-Get_Cart_Details-13
     [Documentation]    Get order details and Order items when advance_payment_type is FULLAMOUNT.(JDN Enabled and Jaldee coupon applied by consumer)
     clear_queue    ${PUSERNAME59}
@@ -4630,7 +4630,7 @@ JD-TC-Get_Cart_Details-13
 
 
 
-***comment****
+*** Comments ****
 # JD-TC-UpdateDeliveryCharge-2
 #     [Documentation]    Update Delivery Charge By provider for home delivery
 

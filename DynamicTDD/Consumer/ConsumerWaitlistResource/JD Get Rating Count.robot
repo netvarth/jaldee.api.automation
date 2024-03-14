@@ -247,7 +247,7 @@ JD-TC-Get Waitist Rating-6
     Should Be Equal As Strings  ${resp.json()[0]['uuid']}  ${uuid5} 
 
 
-***Comment***
+*** Comments ***
 
 JD-TC-Get Waitist Rating-4
     [Documentation]  Get waitlist Rating Filter Using Input account=${pid} createdDate-eq=${DAY1}

@@ -61,7 +61,7 @@ Testing timezones
 
 
 
-***COMMENT***
+*** Comments ***
 
     # Asia
     ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=BG  coords_only=False        #Bangladesh -    Europe/Sofia
@@ -101,7 +101,7 @@ Testing timezones
     ${status}  ${value}  Run Keyword And Ignore Error  FakerLibrary.Local Latlng  country_code=UZ  coords_only=False        #Uzbekistan -  	Asia/Qatar
 
 
-***COMMENT***
+*** Comments ***
     # random.choices(test_list, k=4)
     ${splitCC}=  Split String    ${CC1}  separator=${SPACE}  max_split=1
     ${CC1}=  Set Variable  ${splitCC}[0]

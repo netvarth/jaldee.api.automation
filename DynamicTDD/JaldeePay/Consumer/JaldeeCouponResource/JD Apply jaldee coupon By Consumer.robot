@@ -1963,7 +1963,7 @@ JD-TC-Verify ApplyJaldeeCouponByConsumer-UH5
     
 
 
-***Comment***
+*** Comments ***
 JD-TC-Verify ApplyJaldeeCouponByConsumer-4
 
     [Documentation]  Consumer apply a coupon at Checkin time when that coupon has discount type as PERCENTAGE

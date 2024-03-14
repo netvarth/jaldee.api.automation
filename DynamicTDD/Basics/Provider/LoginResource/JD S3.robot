@@ -789,7 +789,7 @@ JD-TC-VerifyJDJD S3-12
     Should Contain   ${gal}  http://ynwtest.youneverwait.com/${uniqueid}/gallery/
     Verify Response List  ${resp}  0  caption=firstImage  prefix=gallery  type=.jpg
 
-***Comment*** 
+*** Comments *** 
 JD-TC-YNW S3-7
     Comment   s3 json after creating services
     ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}

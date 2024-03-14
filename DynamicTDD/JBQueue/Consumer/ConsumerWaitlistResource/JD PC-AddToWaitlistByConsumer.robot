@@ -874,7 +874,7 @@ JD-TC-Add To WaitlistByConsumer-7
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_l1}
 
 
-# ***COMMENT***
+# *** Comments ***
 
 JD-TC-Add To WaitlistByConsumer-8
     [Documentation]  Add Consumer to Future waitlist of two queues for same service
@@ -5090,7 +5090,7 @@ JD-TC-Add To WaitlistByConsumer-UH20
 
 
 
-***comment***
+*** Comments ***
 JD-TC-Add To WaitlistByConsumer-18
     [Documentation]  provider login as consumer and waitlist
 

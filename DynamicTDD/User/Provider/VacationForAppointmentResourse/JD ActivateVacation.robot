@@ -1576,7 +1576,7 @@ JD-TC-ActivateVacation-6
 
 
 
-***comment***
+*** Comments ***
 JD-TC-ActivateVacation-UH7
     [Documentation]   Take waitlist and then create a  holiday for the 3 days and try to check waitliststatus and delete holiday
     

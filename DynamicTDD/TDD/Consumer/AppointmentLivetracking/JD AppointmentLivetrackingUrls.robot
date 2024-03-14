@@ -122,7 +122,7 @@ JD-TC-Consumer Appointment Livetrack-1
     
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid1}  ${apptid[0]}
-***Comment***
+*** Comments ***
     Comment    SaveMyLocation
     ${latti}  ${longi}  ${place}=  get_lat_long_city
     ${resp}=   Enable apptment SaveMyLocation by consumer   ${pid}    ${apptid1}  ${Empty}  ${travelMode[0]}   ${startTimeMode[0]}   ${latti}  ${longi}  ${bool[1]}

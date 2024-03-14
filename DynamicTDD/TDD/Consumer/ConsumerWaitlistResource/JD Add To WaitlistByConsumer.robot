@@ -297,7 +297,7 @@ JD-TC-Add To WaitlistByConsumer-1
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
 
 
-# ***COMMENT***
+# *** Comments ***
 
 JD-TC-Add To WaitlistByConsumer-2
 	[Documentation]  Provider removes consumer waitlisted for a service and consumer joins the waitlist of the same service and another service of same queue
@@ -636,7 +636,7 @@ JD-TC-Add To WaitlistByConsumer-7
     Should Be Equal As Strings  ${resp.json()['waitlistingFor'][0]['id']}  ${pcons_id1}
     Should Be Equal As Strings  ${resp.json()['queue']['id']}  ${p1_q1}
 
-# ***COMMENT***
+# *** Comments ***
 
 JD-TC-Add To WaitlistByConsumer-8
     [Documentation]  Add Consumer to Future waitlist of two queues for same service
@@ -3760,7 +3760,7 @@ JD-TC-Add To WaitlistByConsumer-UH20
 
 
 
-***comment***
+*** Comments ***
 JD-TC-Add To WaitlistByConsumer-18
     [Documentation]  provider login as consumer and waitlist
 

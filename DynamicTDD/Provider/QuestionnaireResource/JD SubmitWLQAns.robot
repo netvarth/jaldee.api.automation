@@ -1166,7 +1166,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-4
     Check Answers   ${resp}  ${data}
 
 
-# ***comment***   
+# *** Comments ***   
 
 JD-TC-SubmitQuestionnaireForWaitlist-5
     [Documentation]  Submit questionnaire for waitlist with audio and video upload too.
@@ -1526,7 +1526,7 @@ JD-TC-SubmitQuestionnaireForWaitlist-5
 
 
 
-***comment***    
+*** Comments ***    
 
 JD-TC-SubmitQuestionnaireForWaitlist-UH4
     [Documentation]  Submit questionnaire for waitlist removing some answer

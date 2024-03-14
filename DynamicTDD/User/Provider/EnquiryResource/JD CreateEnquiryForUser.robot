@@ -194,7 +194,7 @@ JD-TC-Create Enquiry For User-1
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-# ***COMMENT***
+# *** Comments ***
 
 JD-TC-Create Enquiry For User-2
     [Documentation]   Create Enquiry with title and description. 

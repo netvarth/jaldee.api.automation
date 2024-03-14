@@ -65,7 +65,7 @@ JD-TC-Approx Waiting Time-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
 
-***comment***
+*** Comments ***
 
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}

@@ -67,7 +67,7 @@ JD-TC-EnableDisableBatch-1
     Should Be Equal As Strings    ${resp.status_code}   200
     
 
-***comment***
+*** Comments ***
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
     ${list}=  Create List  1  2  3  4  5  6  7

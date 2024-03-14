@@ -30,7 +30,7 @@ JD-TC-SuperadminGetAccount-1
 	Should Be Equal As Integers  ${count}  1
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
     
-# ***Comment***
+# *** Comments ***
 
 JD-TC-SuperadminGetAccount-2
 	[Documentation]  Get Account Data  when  id-eq=${id}  businessName-eq=${busName}
@@ -122,7 +122,7 @@ JD-TC-SuperadminGetAccount-4
         Should Be Equal As Strings  ${resp.json()[0]['account']['id']}  ${id}
         Should Be Equal As Strings  ${resp.json()[0]['account']['serviceSector']['id']}  ${domain_id}
         
-# ***Comment***   
+# *** Comments ***   
 
 JD-TC-SuperadminGetAccount-5
         [Documentation]  Get Account Data when id-eq=${id}  serviceSubSector-eq=${subdomain_id}

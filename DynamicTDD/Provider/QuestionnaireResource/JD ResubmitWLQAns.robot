@@ -1754,7 +1754,7 @@ JD-TC-ResubmitQuestionnaireForWaitlist-6
 
 
 
-***comment***
+*** Comments ***
    # JD-TC-SubmitQuestionnaireForWaitlist-11
 #     [Documentation]  Submit questionnaire for wailtlist consumer side
     

@@ -366,7 +366,7 @@ JD-TC-UserLevelAnalyticsForAppointment-1
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['amount']}   ${def_amt}
     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['metricValues'][0]['metricId']}  ${appointmentAnalyticsMetrics['WEB_APPMTS']}
 
-# ***Comment***
+# *** Comments ***
 JD-TC-UserLevelAnalyticsForAppointment-2
     [Documentation]   take appointments for teleservice for a user and check user level analytics
 

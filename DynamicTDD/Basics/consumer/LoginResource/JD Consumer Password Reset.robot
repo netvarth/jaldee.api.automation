@@ -368,7 +368,7 @@ JD-TC-ResetPassword-7
     Should Be Equal As Strings  ${resp.status_code}  200
 
     
-***comment***
+*** Comments ***
 
 JD-TC-ResetPassword-4
     [Documentation]   Reset password of Provider using email

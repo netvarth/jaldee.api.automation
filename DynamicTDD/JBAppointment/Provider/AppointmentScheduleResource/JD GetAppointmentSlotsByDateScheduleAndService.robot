@@ -5901,7 +5901,7 @@ JD-TC-GetAppointmentServicesByLocation-8
 
 
 
-***comment***
+*** Comments ***
 
 JD-TC-Take Appointment-2
     [Documentation]  Provider takes appointment for a valid consumer when appointment and today appointment is enabled

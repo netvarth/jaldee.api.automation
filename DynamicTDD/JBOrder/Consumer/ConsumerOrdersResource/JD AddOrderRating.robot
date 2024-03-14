@@ -275,7 +275,7 @@ JD-TC-AddOrderRating-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['avgRating']}  ${rating1} 
 
-# ***Comment***
+# *** Comments ***
 
 JD-TC-AddOrderRating-2
 

@@ -166,7 +166,7 @@ JD-TC-Appointment Schedule AvailableNow By ProviderId-1
     Verify Response        ${resp}    locationId=${lid}    availableNow=${bool[1]}
     Should Be Equal As Strings  ${resp.json()['timeRange']['sTime']}        ${sTime1}
     Should Be Equal As Strings  ${resp.json()['timeRange']['eTime']}        ${eTime1}
-***comment****
+*** Comments ****
 JD-TC-Appointment Schedule AvailableNow By ProviderId-2
     [Documentation]    AvailableNow is False, when Appointment Schedule is Future timeslot
     

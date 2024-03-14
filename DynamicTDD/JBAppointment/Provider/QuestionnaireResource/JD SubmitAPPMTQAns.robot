@@ -962,7 +962,7 @@ JD-TC-SubmitQuestionnaireForAppointment-UH2
 
 
 
-***comment***
+*** Comments ***
 JD-TC-SubmitQuestionnaireForAppointment-UH2
     [Documentation]  Submit questionnaire without validating data
 

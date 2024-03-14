@@ -670,7 +670,7 @@ JD-SA-TC-Accept Payments-6
 	
 	
 
-***comment***
+*** Comments ***
 JD-SA-TC-Accept Payments-7
     
     [Documentation]  Superadmin Acceptpayment on Statement  invalied mesg passed payment 

@@ -25,7 +25,7 @@ JD-TC-Get Waitlist Consumer-1
     # clear waitlist   ${PUSERNAME4}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME4}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-***comment****
+*** Comments ****
     ${pid}=  get_acc_id  ${PUSERNAME4}
     Set Suite Variable  ${pid}
     Should Be Equal As Strings    ${resp.status_code}   200

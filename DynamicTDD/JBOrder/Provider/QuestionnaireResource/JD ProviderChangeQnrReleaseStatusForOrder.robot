@@ -189,7 +189,7 @@ JD-TC-ProviderChangeQnrReleaseStatus-1
     Set Test Variable  ${sTime}  ${resp.json()['catalogSchedule']['timeSlots'][0]['sTime']}
     Set Test Variable  ${eTime}  ${resp.json()['catalogSchedule']['timeSlots'][0]['eTime']}
 
-# ***Comment***
+# *** Comments ***
 
     ${resp}=  Provider Logout
     Log  ${resp.content}

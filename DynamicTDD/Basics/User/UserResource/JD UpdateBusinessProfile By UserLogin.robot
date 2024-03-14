@@ -132,7 +132,7 @@ JD-TC-UpdateBusinessProfileByUserLogin-2
     Should Be Equal As Strings    ${resp.status_code}   200
     Verify Response  ${resp}  businessName=${bs}  businessDesc=${bs_des}  languagesSpoken=${emp_list}  userSubdomain=${userSubDomain}   profileId=${u_p_id}  specialization=${emp_list}
 
-***Comment***
+*** Comments ***
 JD-TC-UpdateBusinessProfileByUserLogin-2
     [Documentation]  Update a user profile with all details
      ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}

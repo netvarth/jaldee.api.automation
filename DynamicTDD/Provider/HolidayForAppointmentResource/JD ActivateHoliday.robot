@@ -1483,7 +1483,7 @@ JD-TC-ActivateHoliday-6
 
 
 
-***comment***
+*** Comments ***
 
 JD-TC-ActivateHoliday-7
     [Documentation]  Take Appointment and then create a holiday for 3 days here activate holiday status is false check appointmentstatus (tokens)

@@ -1695,7 +1695,7 @@ JD-TC-ActivateHoliday-UH6
 
 
 
-***comment***
+*** Comments ***
    JD-TC-ActivateHoliday-11
     [Documentation]   Take waitlist and then create a  holiday for the 3 days and try to check waitliststatus
 

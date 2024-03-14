@@ -230,7 +230,7 @@ JD-TC-AppointmentCommunication-1
     Should Be Equal As Strings    ${resp.status_code}    200 
 
 # *** Test Cases ***
-# ***Comment***
+# *** Comments ***
 
 JD-TC-AppointmentCommunication-2
     [Documentation]  Send appointment comunication message to consumer with attachment
@@ -449,7 +449,7 @@ JD-TC-AppointmentCommunication-2
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-# ***Comment***
+# *** Comments ***
 
 JD-TC-AppointmentCommunication-3
     [Documentation]  Send appointment comunication message to consumer with multiple files using file types jpeg, png and pdf
