@@ -20,7 +20,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-UpdateCategoryStatus-1
 
-    [Documentation]  Create Category as Vendor update this category status as disable.
+    [Documentation]  Create Category .update this category status as disable.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -54,7 +54,7 @@ JD-TC-UpdateCategoryStatus-1
 
 JD-TC-UpdateCategoryStatus-2
 
-    [Documentation]  Create Category as Expense then update this category status as disable..
+    [Documentation]  update this category status as disable..
 
       ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.json()}         
