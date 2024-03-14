@@ -33,11 +33,17 @@ Create Store
     ${resp}=  POST On Session  ynw  /provider/store   data=${data}  expected_status=any
     RETURN  ${resp} 
 
+Get Store ByEncId
+    [Arguments]   ${Encid}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/store/${Encid}      expected_status=any
+    RETURN  ${resp}
+
 *** Test Cases ***
 
-JD-TC-CreateStore-1
+JD-TC-GetStoreByEncid-1
 
-    [Documentation]  Service Provider Create a store with valid details(store type is PHARMACY).
+    [Documentation]  Service Provider Create a store with valid details(store type is PHARMACY)then try to get by encid.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
@@ -77,6 +83,8 @@ JD-TC-CreateStore-1
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${accountId}=  get_acc_id  ${HLMUSERNAME1}
+    Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
@@ -107,10 +115,27 @@ JD-TC-CreateStore-1
     ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${store_id}  ${resp.json()}
 
-JD-TC-CreateStore-2
+    ${resp}=    Get Store ByEncId   ${store_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['accountId']}  ${accountId}
+    Should Be Equal As Strings  ${resp.json()['locationId']}  ${locId1}
+    Should Be Equal As Strings  ${resp.json()['name']}  ${Name}
+    Should Be Equal As Strings  ${resp.json()['storeTypeEncId']}  ${St_Id}
+    Should Be Equal As Strings  ${resp.json()['onlineOrder']}  ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['walkinOrder']}  ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['partnerOrder']}  ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['encId']}  ${store_id}
+    Should Be Equal As Strings  ${resp.json()['storeNature']}  ${storeNature[0]}
+    Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['number']}  ${PhoneNumber}
+    Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['countryCode']}  ${countryCodes[0]}
+    Should Be Equal As Strings  ${resp.json()['emails'][0]}  ${email_id}
 
-    [Documentation]  Service Provider Create a store with valid details(store type is LAB).
+JD-TC-GetStoreByEncid-2
+
+    [Documentation]  Service Provider Create a store with valid details(store type is LAB)then try to get by encid.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
@@ -124,10 +149,27 @@ JD-TC-CreateStore-2
     ${resp}=  Create Store   ${Name}  ${St_Id1}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${store_id1}  ${resp.json()}
 
-JD-TC-CreateStore-3
+    ${resp}=    Get Store ByEncId   ${store_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['accountId']}  ${accountId}
+    Should Be Equal As Strings  ${resp.json()['locationId']}  ${locId1}
+    Should Be Equal As Strings  ${resp.json()['name']}  ${Name}
+    Should Be Equal As Strings  ${resp.json()['storeTypeEncId']}  ${St_Id1}
+    Should Be Equal As Strings  ${resp.json()['onlineOrder']}  ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['walkinOrder']}  ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['partnerOrder']}  ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['encId']}  ${store_id1}
+    Should Be Equal As Strings  ${resp.json()['storeNature']}  ${storeNature[1]}
+    Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['number']}  ${PhoneNumber}
+    Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['countryCode']}  ${countryCodes[0]}
+    Should Be Equal As Strings  ${resp.json()['emails'][0]}  ${email_id}
 
-    [Documentation]  Service Provider Create a store with valid details(store type is RADIOLOGY).
+JD-TC-GetStoreByEncid-3
+
+    [Documentation]  Service Provider Create a store with valid details(store type is RADIOLOGY)then try to get by encid.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
@@ -146,103 +188,34 @@ JD-TC-CreateStore-3
     ${resp}=  Create Store   ${Name}  ${St_Id2}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${store_id2}  ${resp.json()}
 
-JD-TC-CreateStore-4
+    ${resp}=    Get Store ByEncId   ${store_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['accountId']}  ${accountId}
+    Should Be Equal As Strings  ${resp.json()['locationId']}  ${locId1}
+    Should Be Equal As Strings  ${resp.json()['name']}  ${Name}
+    Should Be Equal As Strings  ${resp.json()['storeTypeEncId']}  ${St_Id2}
+    Should Be Equal As Strings  ${resp.json()['onlineOrder']}  ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['walkinOrder']}  ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['partnerOrder']}  ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['encId']}  ${store_id2}
+    Should Be Equal As Strings  ${resp.json()['storeNature']}  ${storeNature[2]}
+    Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['number']}  ${PhoneNumber}
+    Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['countryCode']}  ${countryCodes[0]}
+    Should Be Equal As Strings  ${resp.json()['emails'][0]}  ${email_id}
 
-    [Documentation]  Service Provider Create another store with Same valid(store type is RADIOLOGY).
+JD-TC-GetStoreByEncid-4
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Create Store   ${Name}  ${St_Id2}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-CreateStore-5
-
-    [Documentation]  Service Provider Create another store with EMPTY Name(store type is RADIOLOGY).
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Create Store   ${EMPTY}  ${St_Id2}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${PLEASE_ENTER_NAME}
-
-JD-TC-CreateStore-6
-
-    [Documentation]  Service Provider Create another store with EMPTY storeTypeEncId.
+    [Documentation]   try to get by invalid encid.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Store   ${Name}  ${EMPTY}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${INVALID_STORE_TYPE_ID}
+    ${resp}=    Get Store ByEncId   ${invalidNum}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${INVALID_STORE_ID}
 
-JD-TC-CreateStore-7
-
-    [Documentation]  Service Provider Create another store with EMPTY Location(store type is RADIOLOGY).
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Create Store   ${Name}  ${St_Id2}    ${EMPTY}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${INVALID_LOCATION_ID}
-
-JD-TC-CreateStore-8
-
-    [Documentation]  Service Provider Create another store with EMPTY EMAIL(store type is RADIOLOGY).
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${email}=  Create List  ${invalidEma}
-
-    ${resp}=  Create Store   ${Name}  ${St_Id2}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${INVALID_EMAIL}
-
-JD-TC-CreateStore-9
-
-    [Documentation]  Service Provider Create another store with invalid PhoneNumber(store type is RADIOLOGY).
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Create Store   ${Name}  ${St_Id2}    ${locId1}  ${email}     ${invalidNum}  ${countryCodes[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${INVALID_PHONE_NUM}
-
-JD-TC-CreateStore-10
-
-    [Documentation]  Service Provider Create with already exist name and different encid(store type is LAB).
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Create Store   ${Name}  ${St_Id1}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-CreateStore-UH1
-
-    [Documentation]  Create Store without Login.
-
-    ${resp}=  Create Store   ${Name}  ${St_Id1}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    419
-    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
