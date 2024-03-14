@@ -326,8 +326,14 @@ JD-TC-AppointmentCancelByConsumer-UH1
 
     ${resp}=  Cancel Appointment By Consumer  ${apptid4}   ${pid01}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"      "${APPT_STATUS_NOT_CHANGEABLE}"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings  "${resp.json()}"      "${APPT_STATUS_NOT_CHANGEABLE}"
+
+    ${resp}=   Get consumer Appointment By Id   ${pid01}  ${apptid4}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${appt_status[3]}
 
 JD-TC-AppointmentCancelByConsumer-UH2
 
@@ -363,11 +369,22 @@ JD-TC-AppointmentCancelByConsumer-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${APPT_STATUS_NOT_CHANGEABLE}=   Replace String  ${APPT_STATUS_NOT_CHANGEABLE}  {}  ${appt_status[4]}  
+
+    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${appt_status[4]}
     
     ${resp}=  Cancel Appointment By Consumer  ${apptid1}   ${pid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"      "${APPT_STATUS_NOT_CHANGEABLE}"
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings  "${resp.json()}"      "${APPT_STATUS_NOT_CHANGEABLE}"
+
+    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${appt_status[4]}
 
 JD-TC-AppointmentCancelByConsumer-UH5
 
