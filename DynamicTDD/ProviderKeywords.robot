@@ -13444,7 +13444,7 @@ CreateVendorStatus
     ${resp}=    POST On Session    ynw    /provider/vendor/status    data=${data}  expected_status=any    headers=${headers}
     RETURN  ${resp}
 
-Update VendorStatus 
+Update StatusVendor 
 
     [Arguments]    ${name}  ${encId}   
     ${data}=  Create Dictionary  name=${name}   
