@@ -93,7 +93,7 @@ JD-TC-CreateVendor-1
 
     [Documentation]  Create Vendor for an SP.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -110,33 +110,17 @@ JD-TC-CreateVendor-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    
-    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
-        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id1}   ${resp.json()}
 
-    ${resp}=  Get Category By Id   ${category_id1}
+    ${resp}=  Get by encId  ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
@@ -200,36 +184,21 @@ JD-TC-CreateVendor-2
 
     [Documentation]  Create Vendor for an SP without contactPersonName.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
-        ${resp1}=    Enable Disable Jaldee Finance  ${toggle[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
 
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
-    
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id1}   ${resp.json()}
 
-    ${resp}=  Get Category By Id   ${category_id1}
+    ${resp}=  Get by encId  ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
@@ -264,32 +233,17 @@ JD-TC-CreateVendor-UH1
 
     [Documentation]  Create Vendor for an SP without address.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
-        ${resp1}=    Enable Disable Jaldee Finance  ${toggle[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id1}   ${resp.json()}
 
-    ${resp}=  Get Category By Id   ${category_id1}
+    ${resp}=  Get by encId  ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
@@ -327,7 +281,7 @@ JD-TC-CreateVendor-UH2
 
     [Documentation]  Create Vendor for an SP without bank account number.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -336,32 +290,17 @@ JD-TC-CreateVendor-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id1}  ${resp.json()['id']}
 
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
-        ${resp1}=    Enable Disable Jaldee Finance  ${toggle[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
 
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
-    
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id1}   ${resp.json()}
 
-    ${resp}=  Get Category By Id   ${category_id1}
+    ${resp}=  Get by encId  ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
@@ -392,38 +331,22 @@ JD-TC-CreateVendor-UH3
 
     [Documentation]  Create Vendor for an SP without VendorType.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     
 
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
-        ${resp1}=    Enable Disable Jaldee Finance  ${toggle[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
-    
-    ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+        ${name}=   FakerLibrary.word
+    ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id1}   ${resp.json()}
 
-    ${resp}=  Get Category By Id   ${category_id1}
+    ${resp}=  Get by encId  ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
@@ -458,32 +381,17 @@ JD-TC-CreateVendor-UH4
 
     [Documentation]  Create Vendor for an SP without vendorId.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
-        ${resp1}=    Enable Disable Jaldee Finance  ${toggle[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
-    
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id1}   ${resp.json()}
 
-    ${resp}=  Get Category By Id   ${category_id1}
+    ${resp}=  Get by encId  ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
@@ -521,36 +429,21 @@ JD-TC-CreateVendor-UH5
 
     [Documentation]  Create Vendor for an SP without vendorName.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
-        ${resp1}=    Enable Disable Jaldee Finance  ${toggle[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id1}   ${resp.json()}
 
-    ${resp}=  Get Category By Id   ${category_id1}
+    ${resp}=  Get by encId  ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
@@ -586,32 +479,17 @@ JD-TC-CreateVendor-UH6
 
     [Documentation]  Create Vendor for an SP without mobileNumber.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    
-    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
-        ${resp1}=    Enable Disable Jaldee Finance  ${toggle[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
-    
     ${name}=   FakerLibrary.word
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id1}   ${resp.json()}
 
-    ${resp}=  Get Category By Id   ${category_id1}
+    ${resp}=  Get by encId  ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
@@ -648,7 +526,7 @@ JD-TC-CreateVendor-UH7
 
     [Documentation]   create Vendor for an SP using another category
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -660,16 +538,15 @@ JD-TC-CreateVendor-UH7
 
     ${name}=   FakerLibrary.word
     Set Test Variable   ${name}   
-    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
+    ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id2}   ${resp.json()}
 
-    ${resp}=  Get Category By Id   ${category_id2}
+    ${resp}=  Get by encId  ${category_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[1]}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 

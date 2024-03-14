@@ -66,7 +66,7 @@ JD-TC-UpdateCategoryStatus-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Category By Id   ${encId}
+    ${resp}=  Get by encId  ${encId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
@@ -88,7 +88,7 @@ JD-TC-UpdateCategoryStatus-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Category By Id   ${encId}
+    ${resp}=  Get by encId  ${encId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${EMPTY}

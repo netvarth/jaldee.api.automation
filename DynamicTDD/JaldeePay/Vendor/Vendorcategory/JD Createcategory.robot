@@ -46,7 +46,7 @@ JD-TC-CreateVendorCategory-1
     Set Suite Variable   ${encId}   ${resp.json()}
 
 
-    ${resp}=  Get Category By Id   ${encId}
+    ${resp}=  Get by encId   ${encId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}

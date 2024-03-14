@@ -46,7 +46,7 @@ JD-TC-Get Category by encId-1
     Set Suite Variable   ${encId}   ${resp.json()}
 
 
-    ${resp}=  Get Category By Id   ${encId}
+    ${resp}=  Get by encId  ${encId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
@@ -70,7 +70,7 @@ JD-TC-Get Category by encId-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Category By Id   ${encId}
+    ${resp}=  Get by encId  ${encId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${vender_name}
@@ -91,7 +91,7 @@ JD-TC-Get Category by encId-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Category By Id   ${encId}
+    ${resp}=  Get by encId  ${encId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${vender_name}
@@ -110,7 +110,7 @@ JD-TC-Get Category by encId-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Category By Id   ${encId}
+    ${resp}=  Get by encId  ${encId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
@@ -122,7 +122,7 @@ JD-TC-Get Category by encId-UH1
 
     [Documentation]   Get Category by encId without login
 
-    ${resp}=  Get Category By Id   ${encId}
+    ${resp}=  Get by encId  ${encId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -135,7 +135,7 @@ JD-TC-Get Category by encId-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Category By Id   ${encId}
+    ${resp}=  Get by encId  ${encId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
@@ -149,7 +149,7 @@ JD-TC-Get Category by encId-UH3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
      ${fake}=    Random Int  min=1000000   max=9999999   
-    ${resp}=  Get Category By Id   ${fake}
+    ${resp}=  Get by encId  ${fake}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
 
