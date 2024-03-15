@@ -1243,6 +1243,7 @@ INVALID_FORMAT= "Invalid SC Partner ID Format"
 INVALID_SC_PARTNER_ID= "Invalid Sales Channel Partner ID Format." 
 DSCNT_DURATION_SHOULD_BE_LESS_THAN_SC_COMMISSION_DURATION= "Discount Duration Should Be Less Than Sales Channel Commission Duration."
 CONSUMERPARALLEL_SERVING_NOT_BE_GREATER= "The consumer's parallel service should not be greater than the total resource"
+USER_HOLIDAY = "{} is not available for the chosen time."
 
 #CustomView
 CUSTOM_VIEW_NOT_EXIT="custom view is not exist"

@@ -4226,6 +4226,7 @@ JD-TC-CreateInvoice-24
 
     ${resp}=   Get Category With Filter  categoryType-eq=${categoryType[3]}  
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 
 

@@ -5696,9 +5696,6 @@ JD-TC-Reschedule Appointment-UH2
     Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"
 
 
-
-
-
 JD-TC-Reschedule Appointment-UH4
     [Documentation]  Provider takes appointment for a consumer and reschedules it to a date before schedule start date.
 
@@ -5836,7 +5833,7 @@ JD-TC-Reschedule Appointment-UH4
     ${resp}=  Reschedule Consumer Appointment   ${apptid1}  ${slot2}  ${DAY3}  ${sch_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${APPT_PAST_DATE}"
+    Should Be Equal As Strings  "${resp.json()}"  "${APPOINTMET_SLOT_NOT_AVAILABLE}"
 
 
 JD-TC-Reschedule Appointment-UH5
@@ -6570,10 +6567,11 @@ JD-TC-Reschedule Appointment-UH9
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}  200
 
+    ${USER_HOLIDAY}=  Format String  ${USER_HOLIDAY}    Provider
     ${resp}=  Reschedule Consumer Appointment   ${apptid1}  ${slot2}  ${holiday_date}  ${sch_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${APPOINTMET_SLOT_NOT_AVAILABLE}"
+    Should Be Equal As Strings  "${resp.json()}"  "${USER_HOLIDAY}"
 
 
 JD-TC-Reschedule Appointment-UH10
@@ -6734,10 +6732,12 @@ JD-TC-Reschedule Appointment-UH10
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][3]['time']}
 
+    ${USER_HOLIDAY}=  Format String  ${USER_HOLIDAY}    Provider
+
     ${resp}=  Reschedule Consumer Appointment   ${apptid1}  ${slot2}  ${holiday_date}  ${sch_id}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"  "${APPOINTMET_SLOT_NOT_AVAILABLE}"
+    Should Be Equal As Strings  "${resp.json()}"  "${USER_HOLIDAY}"
 
 
 JD-TC-Reschedule Appointment-UH11
