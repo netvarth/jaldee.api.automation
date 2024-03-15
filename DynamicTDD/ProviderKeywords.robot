@@ -13378,6 +13378,46 @@ Get Store Type By Filter Count
     ${resp}=    GET On Session    ynw   /provider/store/type/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
+Create Store
+
+    [Arguments]  ${name}   ${storeTypeEncId}  ${locationId}  ${emails}  ${number}  ${countryCode}  &{kwargs}
+    ${phoneNumber}=  Create Dictionary  number=${number}    countryCode=${countryCode} 
+    ${phoneNumbers}=  Create List  ${phoneNumber}
+    ${data}=  Create Dictionary  name=${name}   storeTypeEncId=${storeTypeEncId}    locationId=${locationId}    emails=${emails}    phoneNumbers=${phoneNumbers} 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END   
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/store   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get store list
+
+    [Arguments]     &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/store   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Store ByEncId
+    [Arguments]   ${Encid}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/store/${Encid}      expected_status=any
+    RETURN  ${resp}
+
+Update store status
+    [Arguments]     ${store_id}  ${status}
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw   /provider/store/${store_id}/${status}      expected_status=any
+    RETURN  ${resp}
+
+Get store Count
+
+    [Arguments]     &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/store/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
 # Data Migration
 
 Get Appointment By Uid
