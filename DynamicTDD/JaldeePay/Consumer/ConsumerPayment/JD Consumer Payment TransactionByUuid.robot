@@ -295,7 +295,7 @@ JD-TC-Consumer-Payment-TransactionBy UUId-1
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${cwid}  netTotal=${Tot}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  
@@ -329,7 +329,7 @@ JD-TC-Consumer-Payment-TransactionBy UUId-1
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}   billPaymentStatus=${paymentStatus[2]}
@@ -399,7 +399,7 @@ JD-TC-Consumer-Payment-TransactionBy UUId-2
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${wid1}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${wid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${wid1}   billStatus=${billStatus[0]}    billPaymentStatus=${paymentStatus[2]}  totalAmountPaid=${totalamt}  amountDue=0.0
@@ -477,7 +477,7 @@ JD-TC-Consumer-Payment-TransactionBy UUId-3
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${wid2}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${wid2}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     

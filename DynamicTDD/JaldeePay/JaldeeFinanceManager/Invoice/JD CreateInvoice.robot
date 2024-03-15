@@ -1508,7 +1508,7 @@ JD-TC-CreateInvoice-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get provider Waitlist By Id  ${cwid}
+    ${resp1}=  Get consumer Waitlist Bill Details   ${cwid}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
 
@@ -1605,7 +1605,7 @@ JD-TC-CreateInvoice-12
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get provider Waitlist By Id  ${cwid1}
+    ${resp1}=  Get consumer Waitlist Bill Details   ${cwid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
 
@@ -2055,7 +2055,7 @@ JD-TC-CreateInvoice-13
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get provider Waitlist By Id  ${cwid3}
+    ${resp1}=  Get consumer Waitlist Bill Details   ${cwid3}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     ${resp}=   Get Service By Id  ${p1_sid11}
@@ -2165,7 +2165,7 @@ JD-TC-CreateInvoice-14
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get provider Waitlist By Id  ${cwid4}
+    ${resp1}=  Get consumer Waitlist Bill Details   ${cwid4}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     sleep   02s
@@ -3420,11 +3420,9 @@ JD-TC-CreateInvoice-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${p1_qid}  ${resp.json()}
 
-
     ${resp}=   Get Category With Filter  categoryType-eq=${categoryType[3]}  
     Log  ${resp.json()}
-
-
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  ProviderLogout
     Log  ${resp.json()}
@@ -3475,7 +3473,6 @@ JD-TC-CreateInvoice-UH4
     ${resp}=  Add To Waitlist Consumers  ${pid1}  ${p1_qid}  ${DAY}  ${p1_sid1}  ${msg}  ${bool[0]}  ${self}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-    
     ${wid}=  Get Dictionary Values  ${resp.json()}
     Set Test Variable  ${cwid}  ${wid[0]} 
     
@@ -3513,7 +3510,7 @@ JD-TC-CreateInvoice-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get provider Waitlist By Id  ${cwid}
+    ${resp1}=  Get consumer Waitlist Bill Details   ${cwid}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
 

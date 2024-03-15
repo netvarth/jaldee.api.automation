@@ -620,7 +620,7 @@ JD-TC-Apply Service To Finance-2
     Should Be Equal As Strings  ${resp.json()['netTotal']}  ${Total}
     Should Be Equal As Strings  ${resp.json()['netRate']}  ${Total}
 
-    ${resp1}=  Get provider Appt By Id  ${apptid1}
+    ${resp1}=  Get consumer Appt Bill Details   ${apptid1}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
 
@@ -1330,7 +1330,7 @@ JD-TC-Apply Services to finance-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get provider Waitlist By Id  ${cwid}
+    ${resp1}=  Get consumer Waitlist Bill Details   ${cwid}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
 

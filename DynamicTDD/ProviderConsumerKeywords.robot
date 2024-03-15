@@ -251,20 +251,20 @@ PC Get Lead Count By Filter LOS
     RETURN  ${resp}
 
 
-Get provider Waitlist By Id
+Get consumer Waitlist Bill Details 
     [Arguments]  ${uuid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/waitlist/${uuid}/billdetails   expected_status=any   
     RETURN  ${resp}
 
 
-Get provider Appt By Id
+Get consumer Appt Bill Details 
     [Arguments]  ${uuid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/appointment/${uuid}/billdetails   expected_status=any   
     RETURN  ${resp}
 
-Get provider Order By Id
+Get consumer Order Bill Details 
     [Arguments]  ${uuid}  
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/orders/${uuid}/billdetails   expected_status=any   

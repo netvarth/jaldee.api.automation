@@ -313,7 +313,7 @@ JD-TC-Payment By Consumer-1
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${cwid}  netTotal=${Tot1}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  
@@ -917,7 +917,7 @@ JD-TC-Payment By Consumer-4
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${cwid}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  
@@ -1084,7 +1084,7 @@ JD-TC-Payment By Consumer-5
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${cwid}  netTotal=${Tot1}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  
@@ -1320,7 +1320,7 @@ JD-TC-Payment By Consumer-6
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${cwid}  netTotal=${Total1}  billStatus=${billStatus[0]}    netRate=${totalamt}  billPaymentStatus=${paymentStatus[2]}  totalAmountPaid=${totalamt}  amountDue=0.0  taxableTotal=${Total1}  totalTaxAmount=${tax}
@@ -2221,7 +2221,7 @@ JD-TC-Payment By Consumer-UH12
     # ${resp}=  Get Bill By consumer  ${cwid}  ${pid}
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${cwid}   amountDue=0.0  
@@ -2519,7 +2519,7 @@ JD-TC-Payment By Consumer-13
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${wid1}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${wid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${wid1}   netTotal=${Tot1}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  
@@ -2925,7 +2925,7 @@ JD-TC-Payment By Consumer-1
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

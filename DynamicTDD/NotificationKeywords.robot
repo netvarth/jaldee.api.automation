@@ -54,6 +54,7 @@ Consumer Login Notification
 #     ${usp}=    Create Dictionary   firstName=${firstname}  lastName=${lastname}  email=${yemail}  primaryMobileNo=${ph}  countryCode=${countryCode}
 #     ${data}=  Create Dictionary  userProfile=${usp}  sector=${sector}  subSector=${sub_sector}  licPkgId=${licPkgId}
 #     RETURN  ${data}
+
 Account Set Credential Notification
     [Arguments]  ${email}  ${password}  ${purpose}  ${countryCode}
     ${auth}=     Create Dictionary   password=${password}  countryCode=${countryCode}

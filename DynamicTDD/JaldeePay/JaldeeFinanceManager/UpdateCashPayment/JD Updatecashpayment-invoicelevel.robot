@@ -671,7 +671,7 @@ JD-TC-Update cash payment- finance invoice level-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp1}=  Get provider Waitlist By Id  ${cwid3}
+    ${resp1}=  Get consumer Waitlist Bill Details   ${cwid3}
     Log  ${resp1.content}
     Should Be Equal As Strings  ${resp1.status_code}  200
     ${resp}=   Get Service By Id  ${p1_sid11}

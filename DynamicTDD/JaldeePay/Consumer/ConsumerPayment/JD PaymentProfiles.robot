@@ -348,7 +348,7 @@ JD-TC-paymentprofiles-1
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -577,7 +577,7 @@ JD-TC-paymentprofiles-1.1
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -755,7 +755,7 @@ JD-TC-paymentprofiles-1.2
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -948,7 +948,7 @@ JD-TC-paymentprofiles-1.3
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1191,7 +1191,7 @@ JD-TC-paymentprofiles-2.1
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Appt By Id  ${apptid1}  
+    ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1432,7 +1432,7 @@ JD-TC-paymentprofiles-2.2
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Appt By Id  ${apptid1}  
+    ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1673,7 +1673,7 @@ JD-TC-paymentprofiles-2.3
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Appt By Id  ${apptid1}  
+    ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1943,7 +1943,7 @@ JD-TC-paymentprofiles-3.1
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Order By Id  ${orderid1}  
+    ${resp}=  Get consumer Order Bill Details   ${orderid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2215,7 +2215,7 @@ JD-TC-paymentprofiles-3.2
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Order By Id  ${orderid1}  
+    ${resp}=  Get consumer Order Bill Details   ${orderid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2551,7 +2551,7 @@ JD-TC-paymentprofiles-P2
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3076,7 +3076,7 @@ JD-TC-paymentprofiles-P3.1
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3301,7 +3301,7 @@ JD-TC-paymentprofiles-P3.2
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Appt By Id  ${apptid1}  
+    ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3591,7 +3591,7 @@ JD-TC-paymentprofiles-P3.3
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Order By Id  ${orderid1}  
+    ${resp}=  Get consumer Order Bill Details   ${orderid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3749,7 +3749,7 @@ JD-TC-paymentprofiles-5
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4214,7 +4214,7 @@ JD-TC-paymentprofiles-9
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

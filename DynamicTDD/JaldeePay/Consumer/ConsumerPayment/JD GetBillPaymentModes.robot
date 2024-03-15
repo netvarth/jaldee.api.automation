@@ -146,7 +146,7 @@ JD-TC-JD-TC-GetServicePaymentModes
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${bill_id}  ${resp.json()['billId']}
@@ -468,7 +468,7 @@ JD-TC-GetBillPaymentModes-1
     # Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${bill_id}  ${resp.json()['billId']}
@@ -646,7 +646,7 @@ JD-TC-GetBillPaymentModes-2
     # Log   ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Set Suite Variable  ${bill_id}  ${resp.json()['billId']}

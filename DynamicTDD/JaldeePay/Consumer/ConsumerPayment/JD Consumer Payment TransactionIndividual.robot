@@ -346,7 +346,7 @@ JD-TC-Consumer-Payment-Transaction-Individual-1
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${cwid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${cwid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -447,7 +447,7 @@ JD-TC-Consumer-Payment-Transaction-Individual-2
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${wid1}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${wid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -539,7 +539,7 @@ JD-TC-Consumer-Payment-Transaction-Individual-3
     # Log   ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get provider Waitlist By Id  ${wid2}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${wid2}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

@@ -334,7 +334,7 @@ JD-TC-Get Bill By Id-1
     # ${resp}=  Get Bill By consumer  ${wid}  ${pid0} 
     # Log  ${resp.json()}
     # Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get provider Waitlist By Id  ${wid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${wid}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  uuid=${wid}  netTotal=${nettotal}  billStatus=${billStatus[0]}  billViewStatus=${billViewStatus[1]}  netRate=${toataldue}  billPaymentStatus=NotPaid  totalAmountPaid=0.0  amountDue=${toataldue}  taxableTotal=${reducecoupen}  totalTaxAmount=${taxtotal}  taxPercentage=${gstpercentage[2]}
@@ -368,7 +368,7 @@ JD-TC-Get Bill By Id-UH1
     ${resp}=   Consumer Login  ${CUSERNAME9}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}   200
     # ${resp}=  Get Bill By consumer  ${wid}  ${pid0} 
-    ${resp}=  Get provider Waitlist By Id  ${wid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${wid}  
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${YOU_CANNOT_VIEW_THE_BILL}"
 
@@ -377,14 +377,14 @@ JD-TC-Get Bill By Id-UH2
     ${resp}=   Encrypted Provider Login  ${PUSERNAME101}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}   200 
     # ${resp}=  Get Bill By consumer  ${wid}  ${pid0}
-    ${resp}=  Get provider Waitlist By Id  ${wid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${wid}  
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"   
 
 JD-TC-Get Bill By Id-UH3  
     [Documentation]   get bill without login      
     # ${resp}=  Get Bill By consumer  ${wid}  ${pid0}  
-    ${resp}=  Get provider Waitlist By Id  ${wid}  
+    ${resp}=  Get consumer Waitlist Bill Details   ${wid}  
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}" 
 
