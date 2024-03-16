@@ -13432,6 +13432,30 @@ Get store Count
     ${resp}=    GET On Session    ynw   /provider/store/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
+Create Item Manufacture
+
+    [Arguments]  ${manufactureName}  
+    ${data}=  Create Dictionary  manufacturerName=${manufactureName}  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/spitem/manufacture  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item Manufacture By Id
+    [Arguments]  ${id}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/manufacture/${id}  expected_status=any
+    RETURN  ${resp}
+
+Update Item Manufacture
+
+    [Arguments]  ${manufactureName}    ${manufactureCode}
+    ${data}=  Create Dictionary  manufacturerName=${manufactureName}    manufacturerCode=${manufactureCode}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/manufacture  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
 # Data Migration
 
 Get Appointment By Uid
