@@ -21,35 +21,6 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 ${invalidNum}        1245
 ${invalidEma}        asd122
 
-*** Keywords ***
-Create Store
-
-    [Arguments]  ${name}   ${storeTypeEncId}  ${locationId}  ${emails}  ${number}  ${countryCode}  
-    ${phoneNumber}=  Create Dictionary  number=${number}    countryCode=${countryCode} 
-    ${phoneNumbers}=  Create List  ${phoneNumber}
-    ${data}=  Create Dictionary  name=${name}   storeTypeEncId=${storeTypeEncId}    locationId=${locationId}    emails=${emails}    phoneNumbers=${phoneNumbers}    
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/store   data=${data}  expected_status=any
-    RETURN  ${resp} 
-
-Get Store ByEncId
-    [Arguments]   ${Encid}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/store/${Encid}      expected_status=any
-    RETURN  ${resp}
-
-Update Store
-
-    [Arguments]     ${store_id}   ${name}   ${storeTypeEncId}  ${locationId}  ${emails}  ${number}  ${countryCode}  
-    ${phoneNumber}=  Create Dictionary  number=${number}    countryCode=${countryCode} 
-    ${phoneNumbers}=  Create List  ${phoneNumber}
-    ${data}=  Create Dictionary  name=${name}   storeTypeEncId=${storeTypeEncId}    locationId=${locationId}    emails=${emails}    phoneNumbers=${phoneNumbers}    
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/store/${store_id}    data=${data}  expected_status=any
-    RETURN  ${resp} 
-
 *** Test Cases ***
 
 JD-TC-UpdateStore-1
@@ -90,6 +61,7 @@ JD-TC-UpdateStore-1
     Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+    Set Suite Variable      ${typeid}   ${resp.json()['id']}
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
@@ -118,12 +90,30 @@ JD-TC-UpdateStore-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
+    ${resp}=   Get Location ById  ${locId1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${pincode}     ${resp.json()['pinCode']}
+    Set Suite Variable   ${city}     ${resp.json()['place']}
+
+    ${resp}=    Get LocationsByPincode  ${pincode}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${district}     ${resp.json()[0]['PostOffice'][0]['District']}
+    Set Suite Variable   ${State}     ${resp.json()[0]['PostOffice'][0]['State']}
+    Set Suite Variable   ${country}     ${resp.json()[0]['PostOffice'][0]['Country']}
+
     ${Name}=    FakerLibrary.last name
+    Set Suite Variable  ${Name}
+    ${storeCode1}=   FakerLibrary.Random Number
+    Set Suite Variable  ${storeCode1}
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
+    Set Suite Variable  ${PhoneNumber}
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
+    Set Suite Variable  ${email_id}
 
-    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}  storeCode=${storeCode1}   city=${city}  district=${district}  State=${State}  country=${country}  pincode=${pincode}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
@@ -131,22 +121,62 @@ JD-TC-UpdateStore-1
     ${resp}=    Get Store ByEncId   ${store_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['accountId']}  ${accountId}
-    Should Be Equal As Strings  ${resp.json()['locationId']}  ${locId1}
-    Should Be Equal As Strings  ${resp.json()['name']}  ${Name}
-    Should Be Equal As Strings  ${resp.json()['storeTypeEncId']}  ${St_Id}
-    Should Be Equal As Strings  ${resp.json()['onlineOrder']}  ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()['walkinOrder']}  ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()['partnerOrder']}  ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()['encId']}  ${store_id}
-    Should Be Equal As Strings  ${resp.json()['storeNature']}  ${storeNature[0]}
-    Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['number']}  ${PhoneNumber}
-    Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['countryCode']}  ${countryCodes[0]}
-    Should Be Equal As Strings  ${resp.json()['emails'][0]}  ${email_id}
+    Should Be Equal As Strings  ${resp.json()['accountId']}         ${accountId}
+    Should Be Equal As Strings  ${resp.json()['locationId']}        ${locId1}
+    Should Be Equal As Strings  ${resp.json()['name']}              ${Name}
+    Should Be Equal As Strings  ${resp.json()['city']}              ${city}
+    Should Be Equal As Strings  ${resp.json()['district']}          ${district}
+    # Should Be Equal As Strings  ${resp.json()['State']}             ${State}
+    Should Be Equal As Strings  ${resp.json()['country']}           ${country}
+    Should Be Equal As Strings  ${resp.json()['storeTypeEncId']}    ${St_Id}
+    Should Be Equal As Strings  ${resp.json()['onlineOrder']}       ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['walkinOrder']}       ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['partnerOrder']}      ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['encId']}             ${store_id}
+    Should Be Equal As Strings  ${resp.json()['storeNature']}       ${storeNature[0]}
+    Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['number']}         ${PhoneNumber}
+    Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['countryCode']}    ${countryCodes[0]}
+    Should Be Equal As Strings  ${resp.json()['emails'][0]}         ${email_id}
+
+    ${Name2}=    FakerLibrary.last name
+    Set Suite Variable  ${Name2}
+    ${PhoneNumber2}=  Evaluate  ${PUSERNAME}+100187748
+    Set Suite Variable  ${PhoneNumber2}
+    Set Test Variable  ${email_id2}  ${Name2}${PhoneNumber2}.${test_mail}
+    ${email2}=  Create List  ${email_id2}
+    Set Suite Variable  ${email_id2}
+    ${storeCode2}=   FakerLibrary.Random Number
+    Set Suite Variable  ${storeCode2}   
+
+    ${resp}=  Create Store   ${Name2}  ${St_Id2}    ${locId1}  ${email2}     ${PhoneNumber2}  ${countryCodes[0]}  storeCode=${storeCode2}  city=${city}  district=${district}  State=${State}  country=${country}  pincode=${pincode}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${store_id2}  ${resp.json()}
+
+    ${resp}=    Get Store ByEncId   ${store_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['accountId']}         ${accountId}
+    Should Be Equal As Strings  ${resp.json()['locationId']}        ${locId1}
+    Should Be Equal As Strings  ${resp.json()['name']}              ${Name2}
+    Should Be Equal As Strings  ${resp.json()['city']}              ${city}
+    Should Be Equal As Strings  ${resp.json()['district']}          ${district}
+    # Should Be Equal As Strings  ${resp.json()['State']}             ${State}
+    Should Be Equal As Strings  ${resp.json()['country']}           ${country}
+    Should Be Equal As Strings  ${resp.json()['storeTypeEncId']}    ${St_Id2}
+    Should Be Equal As Strings  ${resp.json()['onlineOrder']}       ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['walkinOrder']}       ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['partnerOrder']}      ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['encId']}             ${store_id2}
+    Should Be Equal As Strings  ${resp.json()['storeNature']}       ${storeNature[2]}
+    Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['number']}         ${PhoneNumber2}
+    Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['countryCode']}    ${countryCodes[0]}
+    Should Be Equal As Strings  ${resp.json()['emails'][0]}         ${email_id2}
+    Should Be Equal As Strings  ${resp.json()['status']}            ${LoanApplicationStatus[0]}
 
     ${Name1}=    FakerLibrary.last name
 
-    ${resp}=  Update Store      ${store_id}    ${Name1}  ${St_Id}    ${locId1}   ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Update Store      ${store_id}    ${Name1}  ${St_Id}    ${locId1}   ${email}     ${PhoneNumber}  ${countryCodes[0]}  storeCode=${storeCode2}  city=${city}  district=${district}  State=${State}  country=${country}  pincode=${pincode}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -165,3 +195,15 @@ JD-TC-UpdateStore-1
     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['number']}  ${PhoneNumber}
     Should Be Equal As Strings  ${resp.json()['phoneNumbers'][0]['countryCode']}  ${countryCodes[0]}
     Should Be Equal As Strings  ${resp.json()['emails'][0]}  ${email_id}
+
+JD-TC-UpdateStore-2
+
+    [Documentation]   Update store - 
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update Store      ${store_id}    ${Name}  ${St_Id}    ${locId1}   ${email}     ${PhoneNumber}  ${countryCodes[0]}  storeCode=${storeCode2}  city=${city}  district=${district}  State=${State}  country=${country}  pincode=${pincode}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
