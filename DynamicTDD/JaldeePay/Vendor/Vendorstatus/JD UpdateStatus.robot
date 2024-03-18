@@ -41,13 +41,14 @@ JD-TC-Updatestatus-1
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
     
     ${name}=   FakerLibrary.word
+    Set Suite Variable   ${name}   
     ${resp}=  CreateVendorStatus  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${encId}   ${resp.json()}
 
 
-    ${resp}=  Update Statusofvendor    ${name}   ${encId}  ${toggle[0]}
+    ${resp}=  Update Statusofvendor    ${name}   ${encId}  ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -55,15 +56,14 @@ JD-TC-Updatestatus-1
 
 JD-TC-Updatestatus-2
 
-    [Documentation]  update  status as disable..
+    [Documentation]  update  status as enable..
 
       ${resp}=  Encrypted Provider Login    ${PUSERNAME103}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${name}=   FakerLibrary.word
 
-    ${resp}=  Update Statusofvendor    ${name}   ${encId}  ${toggle[1]}
+    ${resp}=  Update Statusofvendor    ${name}   ${encId}  ${toggle[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -95,7 +95,7 @@ JD-TC-Updatestatus-3
     ${resp}=  Get Category By Id   ${encId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[1]}
 
@@ -154,21 +154,16 @@ JD-TC-Updatestatus-UH3
     Set Test Variable  ${account_id1}  ${resp.json()['id']}
     
     ${name}=   FakerLibrary.word
-    ${resp}=  CreateVendorCategory  ${name}  
+    ${resp}=  CreateVendorStatus   ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${encId}   ${resp.json()}
 
     ${resp}=  Update Statusofvendor    ${name}   ${encId}  ${toggle[0]}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${CATEGORY_ALREADY_ENABLED}=  format String   ${CATEGORY_ALREADY_ENABLED}   ${name}
-
-    ${resp}=  Update Statusofvendor    ${name}   ${encId}  ${toggle[0]}
-    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${CATEGORY_ALREADY_ENABLED}
+    Should Be Equal As Strings   ${resp.json()}   "${ALREADY_ENABLED}"
+
 
 JD-TC-Updatestatus-UH4
 
@@ -184,7 +179,7 @@ JD-TC-Updatestatus-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${account_id1}  ${resp.json()['id']}
     ${name}=   FakerLibrary.word
-    ${resp}=  CreateVendorCategory  ${name}  
+    ${resp}=  CreateVendorStatus   ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${encId}   ${resp.json()}
@@ -193,10 +188,8 @@ JD-TC-Updatestatus-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${CATEGORY_ALREADY_ENABLED}=  format String   ${CATEGORY_ALREADY_ENABLED}   ${name}
-
     ${resp}=  Update Statusofvendor    ${name}   ${encId}  ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${CATEGORY_ALREADY_DISABLED}
+    Should Be Equal As Strings   ${resp.json()}   "${ALREADY_DISABLED}"
    

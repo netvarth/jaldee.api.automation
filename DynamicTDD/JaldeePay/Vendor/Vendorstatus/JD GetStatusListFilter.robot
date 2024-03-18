@@ -20,7 +20,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-Get StatuList Filter-1
 
-    [Documentation] Get Vendorstatus With Filter with name.
+    [Documentation]  Get Vendorstatus With Filter with name.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME106}  ${PASSWORD}
     Log  ${resp.content}
@@ -65,14 +65,14 @@ JD-TC-Get StatuList Filter-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name}
     Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['isEnabled']}        ${toggle[0]}
 
 
 
 
 JD-TC-Get StatuList Filter-2
 
-    [Documentation] Get Vendorstatus With Filter with createdDate
+    [Documentation]  Get Vendorstatus With Filter with createdDate
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME106}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -83,11 +83,11 @@ JD-TC-Get StatuList Filter-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['isEnabled']}       ${toggle[0]}
 
 JD-TC-Get StatuList Filter-3
 
-    [Documentation] Get Vendorstatus With Filter with status
+    [Documentation]  Get Vendorstatus With Filter with status
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME106}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -98,11 +98,11 @@ JD-TC-Get StatuList Filter-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['isEnabled']}       ${toggle[0]}
 
 JD-TC-Get StatuList Filter-4
 
-    [Documentation] Get Vendorstatus With Filter with encId
+    [Documentation]  Get Vendorstatus With Filter with encId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME106}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -113,11 +113,11 @@ JD-TC-Get StatuList Filter-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['isEnabled']}        ${toggle[0]}
 
 JD-TC-Get StatuList Filter-5
 
-    [Documentation] Get Vendorstatus With Filter with all fileds
+    [Documentation]  Get Vendorstatus With Filter with all fileds
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME106}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -128,11 +128,11 @@ JD-TC-Get StatuList Filter-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['isEnabled']}       ${toggle[0]}
 
 JD-TC-Get StatuList Filter-6
 
-    [Documentation] Get Vendorstatus With Filter with status
+    [Documentation]  Get Vendorstatus With Filter with status
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME106}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -168,7 +168,7 @@ JD-TC-Get StatuList Filter-UH2
 
 JD-TC-Get StatuList Filter-UH3
 
-    [Documentation]Get Vendorstatus With Filter where encId as wrong.
+    [Documentation]  Get Vendorstatus With Filter where encId as wrong.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME106}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -180,7 +180,7 @@ JD-TC-Get StatuList Filter-UH3
 
 JD-TC-Get StatuList Filter-UH4
 
-    [Documentation] Get Vendorstatus With Filter where created date is wrong.
+    [Documentation]   Get Vendorstatus With Filter where created date is wrong.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME106}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -192,7 +192,7 @@ JD-TC-Get StatuList Filter-UH4
 
 JD-TC-Get StatuList Filter-UH5
 
-    [Documentation] Get Vendorstatus With Filter where name  is wrong.
+    [Documentation]   Get Vendorstatus With Filter where name  is wrong.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME106}  ${PASSWORD}
     Log  ${resp.json()}         

@@ -82,7 +82,7 @@ JD-TC-UpdateCategoryStatus-3
       ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
-    ${name}=   FakerLibrary.word
+
 
     ${resp}=  Update VendorCategoryStatus    ${EMPTY}   ${encId}  ${toggle[1]}
     Log  ${resp.json()}
@@ -91,7 +91,7 @@ JD-TC-UpdateCategoryStatus-3
     ${resp}=  Get by encId  ${encId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${EMPTY}
+    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[1]}
 

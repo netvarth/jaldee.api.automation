@@ -40,6 +40,7 @@ JD-TC-Get status by encId-1
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
     ${name}=   FakerLibrary.word
+    Set Suite Variable   ${name}   
     ${resp}=  CreateVendorStatus  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -76,7 +77,7 @@ JD-TC-Get status by encId-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${vender_name}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['isEnabled']}        ${toggle[0]}
 
 JD-TC-Get status by encId-3
 
@@ -88,7 +89,7 @@ JD-TC-Get status by encId-3
 
     ${vender_name}=   FakerLibrary.firstname
 
-    ${resp}=  Update Statusofvendor    ${vender_name}   ${encId}  ${toggle[0]}
+    ${resp}=  Update Statusofvendor    ${vender_name}   ${encId}  ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -97,7 +98,7 @@ JD-TC-Get status by encId-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['isEnabled']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['isEnabled']}        ${toggle[1]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}        ${bool[0]}
 
 
@@ -159,6 +160,8 @@ JD-TC-Get status by encId-UH3
     ${resp}=  Get by encIdof vendorstatus   ${fake}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_STATUS}
+    
 
 
 

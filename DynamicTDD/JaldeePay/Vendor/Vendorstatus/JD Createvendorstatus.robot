@@ -54,7 +54,7 @@ JD-TC-CreateVendorStatus-1
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['isEnabled']}        ${toggle[0]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}        ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()['encId']}        ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['encId']}        ${encId}
 
 JD-TC-CreateVendorStatus-UH1
 
@@ -89,12 +89,11 @@ JD-TC-CreateVendorStatus-UH3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
     
-    ${FIELD_CANT_BE_EMPTY}=  format String   ${FIELD_CANT_BE_EMPTY}   Name
     
      ${resp}=  CreateVendorStatus  ${EMPTY}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${FIELD_CANT_BE_EMPTY}
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_NAME}
 
 JD-TC-CreateVendorStatus-UH4
 
@@ -112,7 +111,7 @@ JD-TC-CreateVendorStatus-UH4
     ${resp}=  CreateVendorStatus  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${CATEGORY_EXIST_WITH_NAME}
+    Should Be Equal As Strings   ${resp.json()}   ${CATEGORY_EXIST}
 
 
 

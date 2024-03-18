@@ -20,7 +20,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-Get StatusCount Filter-1
 
-    [Documentation] Get VendorStatus With CountFilter with name.
+    [Documentation]  Get VendorStatus With CountFilter with name.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.content}
@@ -70,7 +70,7 @@ JD-TC-Get StatusCount Filter-1
 
 JD-TC-Get StatusCount Filter-2
 
-    [Documentation] Get VendorStatus With CountFilter with createdDate
+    [Documentation]   Get VendorStatus With CountFilter with createdDate
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -83,7 +83,7 @@ JD-TC-Get StatusCount Filter-2
 
 JD-TC-Get StatusCount Filter-3
 
-    [Documentation] Get VendorStatus With CountFilter with status
+    [Documentation]   Get VendorStatus With CountFilter with status
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -96,7 +96,7 @@ JD-TC-Get StatusCount Filter-3
 
 JD-TC-Get StatusCount Filter-4
 
-    [Documentation] Get VendorStatus With CountFilter with encId
+    [Documentation]   Get VendorStatus With CountFilter with encId
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -110,7 +110,7 @@ JD-TC-Get StatusCount Filter-4
 
 JD-TC-Get StatusCount Filter-5
 
-    [Documentation] Get VendorStatus With CountFilter with all fileds
+    [Documentation]   Get VendorStatus With CountFilter with all fileds
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -123,7 +123,7 @@ JD-TC-Get StatusCount Filter-5
 
 JD-TC-Get StatusCount Filter-6
 
-    [Documentation] Get VendorStatus With CountFilter with status
+    [Documentation]   Get VendorStatus With CountFilter with status
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -159,7 +159,7 @@ JD-TC-Get StatusCount Filter-UH2
 
 JD-TC-Get StatusCount Filter-UH3
 
-    [Documentation]Get VendorStatus With CountFilter where encId as wrong.
+    [Documentation]   Get VendorStatus With CountFilter where encId as wrong.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -171,7 +171,7 @@ JD-TC-Get StatusCount Filter-UH3
 
 JD-TC-Get StatusCount Filter-UH4
 
-    [Documentation] Get VendorStatus With CountFilter where created date is wrong.
+    [Documentation]    Get VendorStatus With CountFilter where created date is wrong.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -183,7 +183,7 @@ JD-TC-Get StatusCount Filter-UH4
 
 JD-TC-Get StatusCount Filter-UH5
 
-    [Documentation] Get VendorStatus With CountFilter where name  is wrong.
+    [Documentation]   Get VendorStatus With CountFilter where name  is wrong.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}         

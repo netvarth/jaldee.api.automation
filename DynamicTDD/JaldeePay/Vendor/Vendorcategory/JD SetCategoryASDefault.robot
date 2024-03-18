@@ -52,7 +52,7 @@ JD-TC-Set category as default-1
 
 
 
-JD-TC-Set category as default-2
+JD-TC-Set category as default-UH1
 
     [Documentation]  update this category status as disable then set category as default..
 
@@ -68,11 +68,13 @@ JD-TC-Set category as default-2
 
     ${resp}=  Set category as default    ${encId} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${ALREADY_DEFAULT}
+    
 
 
 
-JD-TC-Set category as default-UH1
+JD-TC-Set category as default-UH2
 
     [Documentation]  Set category as default where id is wrong.
 
@@ -85,9 +87,10 @@ JD-TC-Set category as default-UH1
     ${resp}=  Set category as default    ${name} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_CATEGORY}
 
 
-JD-TC-Set category as default-UH1
+JD-TC-Set category as default-UH3
 
     [Documentation]   Set category as default without login
 
@@ -97,7 +100,7 @@ JD-TC-Set category as default-UH1
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Set category as default-UH2
+JD-TC-Set category as default-UH4
 
     [Documentation]  Set category as default Using Consumer Login
 
@@ -110,7 +113,7 @@ JD-TC-Set category as default-UH2
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
 
-JD-TC-Set category as default-UH3
+JD-TC-Set category as default-UH5
 
     [Documentation]  Set category as default using another provider login.
 
@@ -121,4 +124,5 @@ JD-TC-Set category as default-UH3
     ${resp}=  Set category as default    ${encId} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_CATEGORY}
 

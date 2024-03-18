@@ -2265,4 +2265,5 @@ STORE_ALREADY_IN_STATUS = "Store is already in {} status"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"
-INVALID_CATEGORY=" Invalid Category"
+INVALID_CATEGORY="Invalid Category"
+ALREADY_DEFAULT="Already set as default"

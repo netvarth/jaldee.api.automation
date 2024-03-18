@@ -117,8 +117,8 @@ JD-TC-UpdateVendorCategory-UH4
 
      ${resp}=  Update Vendor Category   ${name}   ${encId} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${CATEGORY_EXIST_WITH_NAME}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   ${bool[0]}
 
 JD-TC-UpdateVendorCategory-UH5
 

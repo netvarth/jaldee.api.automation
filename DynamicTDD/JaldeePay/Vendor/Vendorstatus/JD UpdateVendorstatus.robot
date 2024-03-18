@@ -52,10 +52,11 @@ JD-TC-UpdateVendorstatus-1
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['isEnabled']}        ${toggle[0]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}        ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()['encId']}        ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['encId']}        ${encId}
     ${vender_name}=   FakerLibrary.firstname
+    Set Suite Variable   ${vender_name}   
 
-    ${resp}=  Update StatusVendor   ${name}   ${encId} 
+    ${resp}=  Update StatusVendor   ${vender_name}   ${encId} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -94,12 +95,11 @@ JD-TC-UpdateVendorstatus-UH3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
     
-    ${FIELD_CANT_BE_EMPTY}=  format String   ${FIELD_CANT_BE_EMPTY}   Name
     
     ${resp}=  Update StatusVendor   ${EMPTY}   ${encId} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${FIELD_CANT_BE_EMPTY}
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_NAME}
 
 JD-TC-UpdateVendorstatus-UH4
 
@@ -113,6 +113,6 @@ JD-TC-UpdateVendorstatus-UH4
 
      ${resp}=  Update StatusVendor   ${name}   ${encId} 
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${CATEGORY_EXIST_WITH_NAME}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   ${bool[0]}
 

@@ -13567,7 +13567,7 @@ Update Statusofvendor
 Set status as default
     [Arguments]     ${encId}   
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw   /provider/vendor/status/${encId}   data=${data}  expected_status=any    headers=${headers}
+    ${resp}=    PUT On Session    ynw   /provider/vendor/status/${encId}     expected_status=any    headers=${headers}
     RETURN  ${resp}
 
 
@@ -13590,12 +13590,13 @@ Get VendorStatus With CountFilter
 
     [Arguments]   &{param}  
     Check And Create YNW Session
-    # ${resp}=  GET On Session  ynw  /provider/vendor/status/count    params=${param}     expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/vendor/status/count    params=${param}     expected_status=any
     RETURN  ${resp}
 
 Get default vendorstatus
+
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw /provider/vendor/status/default     expected_status=any
+    ${resp}=  GET On Session  ynw  url=/provider/vendor/status/default     expected_status=any
     RETURN  ${resp}
 
 

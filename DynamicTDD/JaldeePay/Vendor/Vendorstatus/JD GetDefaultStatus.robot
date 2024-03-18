@@ -20,7 +20,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-Get default vendorstatus-1
 
-    [Documentation] Get default vendorstatus.
+    [Documentation]  Get default vendorstatus.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
     Log  ${resp.content}
@@ -73,7 +73,7 @@ JD-TC-Get default vendorstatus-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}= Get default vendorstatus   
+    ${resp}=  Get default vendorstatus   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()['name']}          ${name}
@@ -96,7 +96,7 @@ JD-TC-Get default vendorstatus-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}= Get default vendorstatus 
+    ${resp}=  Get default vendorstatus 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()['name']}          ${name}
@@ -133,7 +133,7 @@ JD-TC-Get default vendorstatus-UH1
 
     [Documentation]   Get default vendorstatus without login
 
-    ${resp}= Get default vendorstatus  
+    ${resp}=  Get default vendorstatus  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -146,7 +146,7 @@ JD-TC-Get default vendorstatus-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}= Get default vendorstatus  
+    ${resp}=  Get default vendorstatus  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
