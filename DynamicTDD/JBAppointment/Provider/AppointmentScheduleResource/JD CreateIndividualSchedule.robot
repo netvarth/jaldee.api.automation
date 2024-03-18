@@ -337,6 +337,8 @@ JD-TC-CreateAppointmentSchedule-5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME134}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    clear_appt_schedule   ${PUSERNAME134}
+
     ${schedule_name1}=  FakerLibrary.bs
 
     ${time}=   Create List    ${sTime1}
@@ -350,7 +352,7 @@ JD-TC-CreateAppointmentSchedule-5
     Set Test Variable  ${sch_id}  ${resp.json()}
 
 JD-TC-CreateAppointmentSchedule-6
-    [Documentation]    Provider create individual schedule for Future date.
+    [Documentation]    Provider create individual schedule for past date.
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -359,7 +361,7 @@ JD-TC-CreateAppointmentSchedule-6
     ${schedule_name1}=  FakerLibrary.bs
 
     ${DAY2}=  db.subtract_timezone_date  ${tz}  10   
-    Set Suite Variable  ${DAY2}
+    # Set Suite Variable  ${DAY2}
 
     ${time}=   Create List    ${sTime1}
     ${iA}=   Create Dictionary  availableDate=${DAY2}       availabilityTime=${time}
@@ -368,15 +370,16 @@ JD-TC-CreateAppointmentSchedule-6
 
     ${resp}=  Create Individual Schedule  ${schedule_name1}  ${parallel}    ${parallel}  ${p1_lid}    ${bool[1]}  ${s_id2}      individualApptSchedule=${iA}    scheduleType=individual
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${APPT_START_DATE_PAST}
 
 JD-TC-CreateAppointmentSchedule-7
-    [Documentation]    Provider create individual schedule with scheduleType is recurringtype.
+    [Documentation]    Provider create individual schedule with scheduleType is recurring.
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     clear_appt_schedule   ${PUSERNAME132}
+    clear_service   ${PUSERNAME132}
 
     ${schedule_name1}=  FakerLibrary.bs
 
@@ -386,5 +389,191 @@ JD-TC-CreateAppointmentSchedule-7
     ${s_id3}=  Create Sample Service  ${SERVICE6}
 
     ${resp}=  Create Individual Schedule  ${schedule_name1}  ${parallel}    ${parallel}  ${p1_lid}    ${bool[1]}  ${s_id3}      individualApptSchedule=${iA}    scheduleType=recurring
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${NECESSARY_FIELD_MISSING}
+
+JD-TC-CreateAppointmentSchedule-8
+    [Documentation]     create individual schedule with EMPTY parallel.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    clear_appt_schedule   ${PUSERNAME132}
+    clear_service   ${PUSERNAME132}
+
+    ${schedule_name1}=  FakerLibrary.bs
+
+    ${time}=   Create List    ${sTime1}
+    ${iA}=   Create Dictionary  availableDate=${DAY1}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${s_id3}=  Create Sample Service  ${SERVICE6}
+
+    ${resp}=  Create Individual Schedule  ${schedule_name1}  ${EMPTY}    ${parallel}  ${p1_lid}    ${bool[1]}  ${s_id3}      individualApptSchedule=${iA}    scheduleType=individual
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${NECESSARY_FIELD_MISSING}
+
+JD-TC-CreateAppointmentSchedule-9
+    [Documentation]     create individual schedule with EMPTY Consumerparallel.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    clear_appt_schedule   ${PUSERNAME132}
+    clear_service   ${PUSERNAME132}
+
+    ${schedule_name1}=  FakerLibrary.bs
+
+    ${time}=   Create List    ${sTime1}
+    ${iA}=   Create Dictionary  availableDate=${DAY1}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${s_id3}=  Create Sample Service  ${SERVICE6}
+
+    ${resp}=  Create Individual Schedule  ${schedule_name1}  ${parallel}    ${EMPTY}  ${p1_lid}    ${bool[1]}  ${s_id3}      individualApptSchedule=${iA}    scheduleType=individual
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-CreateAppointmentSchedule-10
+    [Documentation]     create individual schedule with EMPTY Location.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    clear_appt_schedule   ${PUSERNAME132}
+    clear_service   ${PUSERNAME132}
+
+    ${schedule_name1}=  FakerLibrary.bs
+
+    ${time}=   Create List    ${sTime1}
+    ${iA}=   Create Dictionary  availableDate=${DAY1}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${s_id3}=  Create Sample Service  ${SERVICE6}
+
+    ${resp}=  Create Individual Schedule  ${schedule_name1}  ${parallel}    ${parallel}  ${EMPTY}    ${bool[1]}  ${s_id3}      individualApptSchedule=${iA}    scheduleType=individual
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.json()}  ${NECESSARY_FIELD_MISSING}
+
+JD-TC-CreateAppointmentSchedule-11
+    [Documentation]     create individual schedule with EMPTY service.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    clear_appt_schedule   ${PUSERNAME132}
+    clear_service   ${PUSERNAME132}
+
+    ${schedule_name1}=  FakerLibrary.bs
+
+    ${time}=   Create List    ${sTime1}
+    ${iA}=   Create Dictionary  availableDate=${DAY1}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${s_id3}=  Create Sample Service  ${SERVICE6}
+
+    ${resp}=  Create Individual Schedule  ${schedule_name1}  ${parallel}    ${parallel}  ${p1_lid}    ${bool[1]}  ${EMPTY}      individualApptSchedule=${iA}    scheduleType=individual
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-CreateAppointmentSchedule-12
+    [Documentation]     create individual schedule with EMPTY scheduleType.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    clear_appt_schedule   ${PUSERNAME132}
+    clear_service   ${PUSERNAME132}
+
+    ${schedule_name1}=  FakerLibrary.bs
+
+    ${time}=   Create List    ${sTime1}
+    ${iA}=   Create Dictionary  availableDate=${DAY1}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${s_id3}=  Create Sample Service  ${SERVICE6}
+
+    ${resp}=  Create Individual Schedule  ${schedule_name1}  ${parallel}    ${parallel}  ${p1_lid}    ${bool[1]}  ${s_id3}      individualApptSchedule=${iA}    scheduleType=${EMPTY}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-CreateAppointmentSchedule-13
+    [Documentation]     create individual schedule with EMPTY availabilityTime.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    clear_appt_schedule   ${PUSERNAME132}
+    clear_service   ${PUSERNAME132}
+
+    ${schedule_name1}=  FakerLibrary.bs
+
+    ${time}=   Create List    ${EMPTY}
+    ${iA}=   Create Dictionary  availableDate=${DAY1}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${s_id3}=  Create Sample Service  ${SERVICE6}
+
+    ${resp}=  Create Individual Schedule  ${schedule_name1}  ${parallel}    ${parallel}  ${p1_lid}    ${bool[1]}  ${s_id3}      individualApptSchedule=${iA}    scheduleType=individual
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-CreateAppointmentSchedule-14
+    [Documentation]     create individual schedule with EMPTY availableDate.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    clear_appt_schedule   ${PUSERNAME132}
+    clear_service   ${PUSERNAME132}
+
+    ${schedule_name1}=  FakerLibrary.bs
+
+    ${time}=   Create List    ${sTime1}
+    ${iA}=   Create Dictionary  availableDate=${EMPTY}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${s_id3}=  Create Sample Service  ${SERVICE6}
+
+    ${resp}=  Create Individual Schedule  ${schedule_name1}  ${parallel}    ${parallel}  ${p1_lid}    ${bool[1]}  ${s_id3}      individualApptSchedule=${iA}    scheduleType=individual
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-CreateAppointmentSchedule-15
+    [Documentation]     create individual schedule for multiple time.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    clear_appt_schedule   ${PUSERNAME132}
+    clear_service   ${PUSERNAME132}
+
+    ${schedule_name1}=  FakerLibrary.bs
+    ${sTime2}=  add_timezone_time  ${tz}  0  16  
+    ${sTime3}=  add_timezone_time  ${tz}  0  17  
+
+    ${time}=   Create List    ${sTime1}     ${sTime2}   ${sTime3}
+    ${iA}=   Create Dictionary  availableDate=${DAY1}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${s_id3}=  Create Sample Service  ${SERVICE6}
+
+    ${resp}=  Create Individual Schedule  ${schedule_name1}  ${parallel}    ${parallel}  ${p1_lid}    ${bool[1]}  ${s_id3}      individualApptSchedule=${iA}    scheduleType=individual
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-CreateAppointmentSchedule-16
+    [Documentation]     create individual schedule with another providers location details
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    clear_appt_schedule   ${PUSERNAME132}
+    clear_service   ${PUSERNAME132}
+
+    ${schedule_name1}=  FakerLibrary.bs
+ 
+    ${time}=   Create List    ${sTime1}     
+    ${iA}=   Create Dictionary  availableDate=${DAY1}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${s_id3}=  Create Sample Service  ${SERVICE6}
+
+    ${resp}=  Create Individual Schedule  ${schedule_name1}  ${parallel}    ${parallel}  ${p2_lid1}    ${bool[1]}  ${s_id3}      individualApptSchedule=${iA}    scheduleType=individual
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${sch_id}  ${resp.json()}
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
