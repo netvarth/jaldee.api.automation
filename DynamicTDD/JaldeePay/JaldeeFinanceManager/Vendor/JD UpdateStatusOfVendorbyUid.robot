@@ -138,10 +138,10 @@ JD-TC-UpdateVendorStatus-1
     ${resp}=  Create Vendor  ${category_id1}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${vendor_uid1}   ${resp.json()['uid']}
+    Set Suite Variable   ${vendor_uid1}   ${resp.json()['encId']}
     Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
 
-    ${resp}=  Get Vendor By Id   ${vendor_uid1}
+    ${resp}=  Get vendor by encId   ${vendor_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${vendorStatus}   ${resp.json()['vendorStatus']}
@@ -165,7 +165,7 @@ JD-TC-UpdateVendorStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=  Get Vendor By Id   ${vendor_uid1}
+    ${resp}=  Get vendor by encId   ${vendor_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['vendorStatus']}  ${status_id1}
@@ -270,10 +270,10 @@ JD-TC-UpdateVendorStatus-UH1
     ${resp}=  Create Vendor  ${category_id1}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${vendor_uid1}   ${resp.json()['uid']}
+    Set Suite Variable   ${vendor_uid1}   ${resp.json()['encId']}
     Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
 
-    ${resp}=  Get Vendor By Id   ${vendor_uid1}
+    ${resp}=  Get vendor by encId   ${vendor_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${vendorStatus}   ${resp.json()['vendorStatus']}
@@ -430,10 +430,10 @@ JD-TC-UpdateVendorStatus-UH4
     ${resp}=  Create Vendor  ${category_id1}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}   vendorStatus=${status_id1}   vendorStatusName=${New_status[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${vendor_uid1}   ${resp.json()['uid']}
+    Set Test Variable   ${vendor_uid1}   ${resp.json()['encId']}
     Set Test Variable   ${vendor_id1}   ${resp.json()['id']}
 
-    ${resp}=  Get Vendor By Id   ${vendor_uid1}
+    ${resp}=  Get vendor by encId   ${vendor_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${vendorStatus}   ${resp.json()['vendorStatus']}

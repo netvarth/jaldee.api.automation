@@ -143,10 +143,10 @@ JD-TC-GetVendorListWithFilter-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    Set Suite Variable   ${vendor_uid1}   ${resp.json()['uid']}
+    Set Suite Variable   ${vendor_uid1}   ${resp.json()['encId']}
     Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
 
-    ${resp}=  Get Vendor By Id   ${vendor_uid1}
+    ${resp}=  Get vendor by encId   ${vendor_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${userId}   ${resp.json()['userId']}

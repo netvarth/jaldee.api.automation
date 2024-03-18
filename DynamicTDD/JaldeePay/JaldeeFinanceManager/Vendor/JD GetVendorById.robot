@@ -125,10 +125,10 @@ JD-TC-GetVendorById-1
     ${resp}=  Create Vendor  ${category_id1}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${vendor_uid1}   ${resp.json()['uid']}
+    Set Suite Variable   ${vendor_uid1}   ${resp.json()['encId']}
     Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
 
-    ${resp}=  Get Vendor By Id   ${vendor_uid1}
+    ${resp}=  Get vendor by encId   ${vendor_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
@@ -237,10 +237,10 @@ JD-TC-GetVendorById-2
     ${resp}=  Create Vendor  ${category_id2}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${vendor_uid2}   ${resp.json()['uid']}
+    Set Suite Variable   ${vendor_uid2}   ${resp.json()['encId']}
     Set Suite Variable   ${vendor_id2}   ${resp.json()['id']}
 
-    ${resp}=  Get Vendor By Id   ${vendor_uid2}
+    ${resp}=  Get vendor by encId   ${vendor_uid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id2}
@@ -274,7 +274,7 @@ JD-TC-GetVendorById-UH1
 
     [Documentation]  Get Vendor without login.
 
-    ${resp}=  Get Vendor By Id   ${vendor_uid2}
+    ${resp}=  Get vendor by encId   ${vendor_uid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -308,7 +308,7 @@ JD-TC-GetVendorById-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-    ${resp}=  Get Vendor By Id   ${vendor_uid2}
+    ${resp}=  Get vendor by encId   ${vendor_uid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${INVALID_VENDOR}"
@@ -321,7 +321,7 @@ JD-TC-GetVendorById-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Vendor By Id   ${vendor_uid2}
+    ${resp}=  Get vendor by encId   ${vendor_uid2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}

@@ -166,10 +166,10 @@ JD-TC-UpdateVendor-1
     ${resp}=                      Create Vendor          ${category_id1}                ${vendorId}             ${vender_name}          ${contactPersonName}    ${address}                  ${state}            ${pin}                ${vendor_phno}                                  ${email}                                       bankInfo=${bankInfo}    
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable            ${vendor_uid1}         ${resp.json()['uid']}
+    Set Suite Variable            ${vendor_uid1}         ${resp.json()['encId']}
     Set Suite Variable            ${vendor_id1}          ${resp.json()['id']}
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
@@ -188,7 +188,7 @@ JD-TC-UpdateVendor-1
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
@@ -217,7 +217,7 @@ JD-TC-UpdateVendor-2
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
@@ -260,7 +260,7 @@ JD-TC-UpdateVendor-3
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
@@ -291,7 +291,7 @@ JD-TC-UpdateVendor-4
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name1}
@@ -322,7 +322,7 @@ JD-TC-UpdateVendor-5
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName1}
@@ -352,7 +352,7 @@ JD-TC-UpdateVendor-6
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
@@ -385,7 +385,7 @@ JD-TC-UpdateVendor-7
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
@@ -418,7 +418,7 @@ JD-TC-UpdateVendor-8
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
@@ -458,7 +458,7 @@ JD-TC-UpdateVendor-9
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
@@ -497,7 +497,7 @@ JD-TC-UpdateVendor-10
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
@@ -542,7 +542,7 @@ JD-TC-UpdateVendor-11
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
@@ -601,7 +601,7 @@ JD-TC-UpdateVendor-12
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
@@ -661,7 +661,7 @@ JD-TC-UpdateVendor-13
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
@@ -722,7 +722,7 @@ JD-TC-UpdateVendor-14
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
@@ -784,7 +784,7 @@ JD-TC-UpdateVendor-15
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
@@ -847,7 +847,7 @@ JD-TC-UpdateVendor-16
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
@@ -913,7 +913,7 @@ JD-TC-UpdateVendor-17
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
@@ -979,7 +979,7 @@ JD-TC-UpdateVendor-18
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
@@ -1064,7 +1064,7 @@ JD-TC-UpdateVendor-19
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                 200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     
@@ -1072,7 +1072,7 @@ JD-TC-UpdateVendor-19
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
@@ -1168,7 +1168,7 @@ JD-TC-UpdateVendor-20
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      Get Vendor By Id                                    ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
