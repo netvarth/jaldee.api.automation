@@ -149,7 +149,6 @@ JD-TC-AppointmentCommunication-1
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=  Get Appointment EncodedID   ${apptid1}
@@ -221,15 +220,19 @@ JD-TC-AppointmentCommunication-1
     Should Be Equal As Strings  ${resp.json()[0]['receiver']['id']}     ${jdconID}
     Should Be Equal As Strings  ${resp.json()[0]['service']}            ${SERVICE1} on ${date}
     Should Be Equal As Strings  ${resp.json()[0]['timeZone']}           ${tz}
+    Should Be Equal As Strings  ${resp.json()[0]['attachements']}       []
+    Should Be Equal As Strings  ${resp.json()[0]['attachmentList']}       []
 
     Should Be Equal As Strings  ${resp.json()[1]['owner']['id']}        0
     Should Be Equal As Strings  ${resp.json()[1]['waitlistId']}         ${apptid1}
     Should Be Equal As Strings  ${resp.json()[1]['msg']}                ${msg}
     Should Be Equal As Strings  ${resp.json()[1]['receiver']['id']}     ${jdconID}
     Should Be Equal As Strings  ${resp.json()[1]['receiver']['id']}     ${jdconID}
-    Should Be Equal As Strings  ${resp.json()[0]['service']}            ${SERVICE1} on ${date}
-    Should Be Equal As Strings  ${resp.json()[0]['timeZone']}           ${tz}
-    Should Not Contain   ${resp.json()[1]}   attachements
+    # Should Be Equal As Strings  ${resp.json()[1]['service']}            ${SERVICE1} on ${date}
+    Should Be Equal As Strings  ${resp.json()[1]['timeZone']}           ${tz}
+    # Should Not Contain   ${resp.json()[1]}   attachements
+    Should Be Equal As Strings  ${resp.json()[1]['attachements']}       []
+    Should Be Equal As Strings  ${resp.json()[1]['attachmentList']}       []
     
 
     ${resp}=  Consumer Login  ${CUSERNAME26}   ${PASSWORD}
@@ -1017,8 +1020,6 @@ JD-TC-AppointmentCommunication-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
-    
-    
 
     ${lid}=  Create Sample Location
 

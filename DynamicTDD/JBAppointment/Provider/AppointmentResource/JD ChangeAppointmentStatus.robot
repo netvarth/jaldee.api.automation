@@ -159,15 +159,18 @@ JD-TC-ChangeAppointmentStatus-1
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${apptTime}=  db.get_tz_time_secs  ${tz} 
-    ${apptTakenTime}=  db.remove_secs   ${apptTime}
+    # ${apptTime}=  db.get_tz_time_secs  ${tz} 
+    # ${apptTakenTime}=  db.remove_secs   ${apptTime}
+    ${apptTakenTime}=  db.get_time_by_timezone  ${tz}
     Set Suite Variable   ${apptTakenTime}
+    ${nextMin}=  db.add_timezone_time   ${tz}    0    1
+    ${apptTknTm}=    Create List   ${apptTakenTime}   ${nextMin}   
+    Set Suite Variable   ${apptTknTm} 
 
     ${cnote}=   FakerLibrary.name
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
     Set Suite Variable   ${apptid1}
 
@@ -175,9 +178,6 @@ JD-TC-ChangeAppointmentStatus-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Verify Response   ${resp}     uid=${apptid1}   appmtDate=${DAY1}   appmtTime=${slot1}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['id']}                                ${cid}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}          ${fname}
-    # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}           ${lname}
     Should Be Equal As Strings  ${resp.json()['service']['id']}                                 ${s_id}
     Should Be Equal As Strings  ${resp.json()['schedule']['id']}                                ${sch_id}
     Should Be Equal As Strings  ${resp.json()['apptStatus']}                                    ${apptStatus[0]}
@@ -224,8 +224,9 @@ JD-TC-ChangeAppointmentStatus-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}   ${apptTakenTime}  
+    # Should Be Equal As Strings  ${resp.json()[0]['time']}   ${apptTakenTime}  
     Should Be Equal As Strings  ${resp.json()[0]['date']}   ${DAY1}  
+    List Should Contain Value  ${apptTknTm}  ${resp.json()[0]['time']}
 
     ${resp}=  Appointment Action   ${apptStatus[2]}   ${apptid1}
     Log   ${resp.json()}
@@ -235,8 +236,9 @@ JD-TC-ChangeAppointmentStatus-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[2]}
-    Should Be Equal As Strings  ${resp.json()[1]['time']}   ${apptTakenTime}  
+    # Should Be Equal As Strings  ${resp.json()[1]['time']}   ${apptTakenTime}  
     Should Be Equal As Strings  ${resp.json()[1]['date']}   ${DAY1}  
+    List Should Contain Value  ${apptTknTm}  ${resp.json()[1]['time']}
 
 JD-TC-ChangeAppointmentStatus-3
     [Documentation]  change status to Started from Arrived
@@ -250,8 +252,9 @@ JD-TC-ChangeAppointmentStatus-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[2]} 
-    Should Be Equal As Strings  ${resp.json()[1]['time']}   ${apptTakenTime}  
+    # Should Be Equal As Strings  ${resp.json()[1]['time']}   ${apptTakenTime}  
     Should Be Equal As Strings  ${resp.json()[1]['date']}   ${DAY1}  
+    List Should Contain Value  ${apptTknTm}  ${resp.json()[1]['time']}
 
     ${resp}=  Appointment Action   ${apptStatus[3]}   ${apptid1}
     Log   ${resp.json()}
@@ -261,8 +264,9 @@ JD-TC-ChangeAppointmentStatus-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[2]['appointmentStatus']}   ${apptStatus[3]}
-    Should Be Equal As Strings  ${resp.json()[2]['time']}   ${apptTakenTime}  
+    # Should Be Equal As Strings  ${resp.json()[2]['time']}   ${apptTakenTime}  
     Should Be Equal As Strings  ${resp.json()[2]['date']}   ${DAY1}  
+    List Should Contain Value  ${apptTknTm}  ${resp.json()[2]['time']}
 
 JD-TC-ChangeAppointmentStatus-4
     [Documentation]  change status to Completed from Started
@@ -276,8 +280,9 @@ JD-TC-ChangeAppointmentStatus-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[2]['appointmentStatus']}   ${apptStatus[3]} 
-    Should Be Equal As Strings  ${resp.json()[2]['time']}   ${apptTakenTime}  
-    Should Be Equal As Strings  ${resp.json()[2]['date']}   ${DAY1}  
+    # Should Be Equal As Strings  ${resp.json()[2]['time']}   ${apptTakenTime}  
+    Should Be Equal As Strings  ${resp.json()[2]['date']}   ${DAY1} 
+    List Should Contain Value  ${apptTknTm}  ${resp.json()[2]['time']} 
 
     ${resp}=  Appointment Action   ${apptStatus[6]}   ${apptid1}
     Log   ${resp.json()}
@@ -287,8 +292,9 @@ JD-TC-ChangeAppointmentStatus-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[3]['appointmentStatus']}   ${apptStatus[6]}
-    Should Be Equal As Strings  ${resp.json()[3]['time']}   ${apptTakenTime}  
-    Should Be Equal As Strings  ${resp.json()[3]['date']}   ${DAY1}  
+    # Should Be Equal As Strings  ${resp.json()[3]['time']}   ${apptTakenTime}  
+    Should Be Equal As Strings  ${resp.json()[3]['date']}   ${DAY1} 
+    List Should Contain Value  ${apptTknTm}  ${resp.json()[3]['time']} 
 
 JD-TC-ChangeAppointmentStatus-5
     [Documentation]  change status to Completed from Arrived
@@ -519,7 +525,6 @@ JD-TC-ChangeAppointmentStatus-6
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
@@ -660,7 +665,6 @@ JD-TC-ChangeAppointmentStatus-UH1
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
@@ -800,7 +804,6 @@ JD-TC-ChangeAppointmentStatus-7
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
@@ -1067,7 +1070,6 @@ JD-TC-ChangeAppointmentStatus-UH2
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
@@ -1165,7 +1167,6 @@ JD-TC-ChangeAppointmentStatus-9
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
     
-
     ${resp}=   Get Service
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1361,7 +1362,6 @@ JD-TC-ChangeAppointmentStatus-UH3
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=  Get Appointment EncodedID   ${apptid1}
@@ -1503,7 +1503,6 @@ JD-TC-ChangeAppointmentStatus-UH4
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=  Get Appointment EncodedID   ${apptid1}
@@ -1648,7 +1647,6 @@ JD-TC-ChangeAppointmentStatus-UH5
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=  Get Appointment EncodedID   ${apptid1}
@@ -1788,7 +1786,6 @@ JD-TC-ChangeAppointmentStatus-10
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=  Get Appointment EncodedID   ${apptid1}
@@ -1932,7 +1929,6 @@ JD-TC-ChangeAppointmentStatus-11
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
@@ -2091,7 +2087,6 @@ JD-TC-ChangeAppointmentStatus-UH6
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
@@ -2251,7 +2246,6 @@ JD-TC-ChangeAppointmentStatus-UH7
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=  Get Appointment EncodedID   ${apptid1}
