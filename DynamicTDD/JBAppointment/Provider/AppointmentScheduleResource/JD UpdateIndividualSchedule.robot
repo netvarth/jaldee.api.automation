@@ -40,8 +40,9 @@ Create Individual Schedule
     RETURN  ${resp}
 
 Update Individual Schedule
-    [Arguments]  ${name}   ${parallel}   ${consumerParallelServing}    ${loc}    ${batch}  @{vargs}   &{kwargs}
+    [Arguments]     ${Id}  ${name}   ${parallel}   ${consumerParallelServing}    ${loc}    ${batch}  @{vargs}   &{kwargs}
     ${data}=  Individual Schedule  ${name}   ${parallel}    ${consumerParallelServing}   ${loc}    ${batch}  @{vargs}     &{kwargs}
+    Set To Dictionary  ${data}  id=${Id}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
     END 
@@ -68,8 +69,8 @@ ${start}  110
 
 *** Test Cases ***
 
-JD-TC-CreateAppointmentSchedule-1
-    [Documentation]    Create an Individual appointment schedule
+JD-TC-UpdateAppointmentSchedule-1
+    [Documentation]    Update an Individual appointment schedule name
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -106,24 +107,27 @@ JD-TC-CreateAppointmentSchedule-1
     Set Suite Variable   ${eTime1}
     
     ${s_id}=  Create Sample Service  ${SERVICE1}
+    Set Suite Variable  ${s_id}
+
     ${s_id1}=  Create Sample Service  ${SERVICE2}
+    Set Suite Variable  ${s_id1}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
-    ${bool1}=  Random Element  ${bool}
+  
 
     ${time}=   Create List    ${sTime1}
     ${iA}=   Create Dictionary  availableDate=${DAY1}       availabilityTime=${time}
     ${iA}=   Create List    ${iA}
-    ${resp}=  Create Individual Schedule  ${schedule_name}  ${parallel}    ${parallel}  ${p1_lid}    ${bool1}  ${s_id}      individualApptSchedule=${iA}    scheduleType=individual
+    ${resp}=  Create Individual Schedule  ${schedule_name}  ${parallel}    ${parallel}  ${p1_lid}    ${bool[1]}  ${s_id}      individualApptSchedule=${iA}    scheduleType=individual
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${sch_id}  ${resp.json()}
+    Set Suite Variable  ${sch_id}  ${resp.json()}
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name}      parallelServing=${parallel}  batchEnable=${bool1}
+    Verify Response  ${resp}  name=${schedule_name}      parallelServing=${parallel}  batchEnable=${bool[1]}
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_lid}
     # Should Be Equal As Strings  ${resp.json()['apptSchedule']['recurringType']}  ${recurringtype[1]}
     # Should Be Equal As Strings  ${resp.json()['apptSchedule']['repeatIntervals']}  ${list}
@@ -139,17 +143,229 @@ JD-TC-CreateAppointmentSchedule-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${schedule_name1}=  FakerLibrary.bs
-    ${resp}=  Update Individual Schedule  ${schedule_name1}  ${parallel}    ${parallel}  ${p1_lid}    ${bool1}  ${s_id}      individualApptSchedule=${iA}    scheduleType=individual
+    ${resp}=  Update Individual Schedule    ${sch_id}   ${schedule_name1}  ${parallel}    ${parallel}  ${p1_lid}    ${bool[1]}  ${s_id}      individualApptSchedule=${iA}    scheduleType=individual
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  name=${schedule_name1}      parallelServing=${parallel}  batchEnable=${bool1}
+    Verify Response  ${resp}  name=${schedule_name1}      parallelServing=${parallel}  batchEnable=${bool[1]}
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_lid}
     Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
     Should Be Equal As Strings  ${resp.json()['services'][0]['name']}  ${SERVICE1}
     Should Be Equal As Strings  ${resp.json()['individualApptSchedule'][0]['availableDate']}  ${DAY1}
     # Should Be Equal As Strings  ${resp.json()['individualApptSchedule'][0]['availabilityTime'][0]}  ${sTime1}
     
+
+JD-TC-UpdateAppointmentSchedule-2
+    [Documentation]    Update an Individual appointment schedule parallel.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${parallel}=  FakerLibrary.Random Int  min=5  max=18
+    ${schedule_name1}=  FakerLibrary.bs
+    ${time}=   Create List    ${sTime1}
+    ${iA}=   Create Dictionary  availableDate=${DAY1}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${resp}=  Update Individual Schedule    ${sch_id}   ${schedule_name1}  ${parallel}    ${parallel}  ${p1_lid}    ${bool[1]}  ${s_id}      individualApptSchedule=${iA}    scheduleType=individual
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${schedule_name1}      parallelServing=${parallel}  batchEnable=${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_lid}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['name']}  ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['individualApptSchedule'][0]['availableDate']}  ${DAY1}
+
+JD-TC-UpdateAppointmentSchedule-3
+    [Documentation]    Update an Individual appointment schedule  with EMPTY consumerparallel.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${parallel}=  FakerLibrary.Random Int  min=5  max=18
+    ${schedule_name1}=  FakerLibrary.bs
+    ${time}=   Create List    ${sTime1}
+    ${iA}=   Create Dictionary  availableDate=${DAY1}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${resp}=  Update Individual Schedule    ${sch_id}   ${schedule_name1}  ${parallel}    ${EMPTY}  ${p1_lid}    ${bool[1]}  ${s_id}      individualApptSchedule=${iA}    scheduleType=individual
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${schedule_name1}      parallelServing=${parallel}  batchEnable=${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_lid}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['name']}  ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['individualApptSchedule'][0]['availableDate']}  ${DAY1}
+
+JD-TC-UpdateAppointmentSchedule-4
+    [Documentation]    Update an Individual appointment schedule  with EMPTY Location.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${parallel}=  FakerLibrary.Random Int  min=5  max=18
+    ${schedule_name1}=  FakerLibrary.bs
+    ${time}=   Create List    ${sTime1}
+    ${iA}=   Create Dictionary  availableDate=${DAY1}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${resp}=  Update Individual Schedule    ${sch_id}   ${schedule_name1}  ${parallel}    ${parallel}  ${EMPTY}    ${bool[1]}  ${s_id}      individualApptSchedule=${iA}    scheduleType=individual
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${schedule_name1}      parallelServing=${parallel}  batchEnable=${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_lid}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['name']}  ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['individualApptSchedule'][0]['availableDate']}  ${DAY1}
+
+JD-TC-UpdateAppointmentSchedule-5
+    [Documentation]    Update an Individual appointment schedule Service.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${parallel}=  FakerLibrary.Random Int  min=5  max=18
+    ${schedule_name1}=  FakerLibrary.bs
+    ${time}=   Create List    ${sTime1}
+    ${iA}=   Create Dictionary  availableDate=${DAY1}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${resp}=  Update Individual Schedule    ${sch_id}   ${schedule_name1}  ${parallel}    ${parallel}  ${p1_lid}    ${bool[1]}  ${s_id1}      individualApptSchedule=${iA}    scheduleType=individual
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${schedule_name1}      parallelServing=${parallel}  batchEnable=${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_lid}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id1}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['name']}  ${SERVICE2}
+    Should Be Equal As Strings  ${resp.json()['individualApptSchedule'][0]['availableDate']}  ${DAY1}
+
+JD-TC-UpdateAppointmentSchedule-6
+    [Documentation]    Update an Individual appointment schedule availableDate.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${parallel}=  FakerLibrary.Random Int  min=5  max=18
+    ${schedule_name1}=  FakerLibrary.bs
+    ${time}=   Create List    ${sTime1}
+    ${iA}=   Create Dictionary  availableDate=${DAY2}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${resp}=  Update Individual Schedule    ${sch_id}   ${schedule_name1}  ${parallel}    ${parallel}  ${p1_lid}    ${bool[1]}  ${s_id1}      individualApptSchedule=${iA}    scheduleType=individual
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${schedule_name1}      parallelServing=${parallel}  batchEnable=${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_lid}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id1}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['name']}  ${SERVICE2}
+    Should Be Equal As Strings  ${resp.json()['individualApptSchedule'][0]['availableDate']}  ${DAY2}
+
+JD-TC-UpdateAppointmentSchedule-7
+    [Documentation]    Update an Individual appointment schedule With EMPTY availabilityTime.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${parallel}=  FakerLibrary.Random Int  min=5  max=18
+    ${schedule_name1}=  FakerLibrary.bs
+    ${time}=   Create List    ${EMPTY}
+    ${iA}=   Create Dictionary  availableDate=${DAY2}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${resp}=  Update Individual Schedule    ${sch_id}   ${schedule_name1}  ${parallel}    ${parallel}  ${p1_lid}    ${bool[1]}  ${s_id1}      individualApptSchedule=${iA}    scheduleType=individual
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${schedule_name1}      parallelServing=${parallel}  batchEnable=${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_lid}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id1}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['name']}  ${SERVICE2}
+    Should Be Equal As Strings  ${resp.json()['individualApptSchedule'][0]['availableDate']}  ${DAY2}
+
+
+JD-TC-UpdateAppointmentSchedule-8
+    [Documentation]    Update an Individual appointment schedule With Past availabilityTime.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${parallel}=  FakerLibrary.Random Int  min=5  max=18
+    ${schedule_name1}=  FakerLibrary.bs
+    ${sTime1}=  subtract_timezone_time  ${tz}  2  15  
+    ${time}=   Create List    ${sTime1}
+    ${iA}=   Create Dictionary  availableDate=${DAY1}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${resp}=  Update Individual Schedule    ${sch_id}   ${schedule_name1}  ${parallel}    ${parallel}  ${p1_lid}    ${bool[1]}  ${s_id1}      individualApptSchedule=${iA}    scheduleType=individual
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${schedule_name1}      parallelServing=${parallel}  batchEnable=${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_lid}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id1}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['name']}  ${SERVICE2}
+    Should Be Equal As Strings  ${resp.json()['individualApptSchedule'][0]['availableDate']}  ${DAY1}
+
+JD-TC-UpdateAppointmentSchedule-9
+    [Documentation]    Update an Individual appointment schedule With Past availableDate.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${parallel}=  FakerLibrary.Random Int  min=5  max=18
+    ${schedule_name1}=  FakerLibrary.bs
+    ${DAY2}=   subtract_timezone_date  ${tz}  10        
+ 
+    ${time}=   Create List    ${sTime1}
+    ${iA}=   Create Dictionary  availableDate=${DAY2}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${resp}=  Update Individual Schedule    ${sch_id}   ${schedule_name1}  ${parallel}    ${parallel}  ${p1_lid}    ${bool[1]}  ${s_id1}      individualApptSchedule=${iA}    scheduleType=individual
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${schedule_name1}      parallelServing=${parallel}  batchEnable=${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_lid}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id1}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['name']}  ${SERVICE2}
+    Should Be Equal As Strings  ${resp.json()['individualApptSchedule'][0]['availableDate']}  ${DAY1}
+
+JD-TC-UpdateAppointmentSchedule-10
+    [Documentation]    Update an Individual appointment schedule With EMPTY availableDate.
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${parallel}=  FakerLibrary.Random Int  min=5  max=18
+    ${schedule_name1}=  FakerLibrary.bs       
+ 
+    ${time}=   Create List    ${sTime1}
+    ${iA}=   Create Dictionary  availableDate=${EMPTY}       availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${resp}=  Update Individual Schedule    ${sch_id}   ${schedule_name1}  ${parallel}    ${parallel}  ${p1_lid}    ${bool[1]}  ${s_id1}      individualApptSchedule=${iA}    scheduleType=individual
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  name=${schedule_name1}      parallelServing=${parallel}  batchEnable=${bool[1]}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}  ${p1_lid}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['id']}  ${s_id1}
+    Should Be Equal As Strings  ${resp.json()['services'][0]['name']}  ${SERVICE2}
+    Should Be Equal As Strings  ${resp.json()['individualApptSchedule'][0]['availableDate']}  ${DAY1}
