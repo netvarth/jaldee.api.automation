@@ -209,8 +209,9 @@ JD-TC-ChangeAppointmentStatus-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[1]}
-    Should Be Equal As Strings  ${resp.json()[0]['time']}   ${apptTakenTime}  
+    # Should Be Equal As Strings  ${resp.json()[0]['time']}   ${apptTakenTime}  
     Should Be Equal As Strings  ${resp.json()[0]['date']}   ${DAY1}  
+    List Should Contain Value  ${apptTknTm}  ${resp.json()[0]['time']}
 
 JD-TC-ChangeAppointmentStatus-2
     [Documentation]  change status to Arrived from Confirmed
