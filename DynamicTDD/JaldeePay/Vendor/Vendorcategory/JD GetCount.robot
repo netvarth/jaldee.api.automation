@@ -118,17 +118,6 @@ JD-TC-Get Count Filter-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-Get Count Filter-6
-
-    [Documentation]  Get VendorCategory With CountFilter with status
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME96}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=   Get VendorCategory With CountFilter   status-eq=${toggle[1]}    
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
 
 
 JD-TC-Get Count Filter-UH1
@@ -165,6 +154,7 @@ JD-TC-Get Count Filter-UH3
     ${resp}=   Get VendorCategory With CountFilter   encId-eq=${fake}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   0
 
 JD-TC-Get Count Filter-UH4
 
@@ -177,6 +167,7 @@ JD-TC-Get Count Filter-UH4
     ${resp}=   Get VendorCategory With CountFilter   createdDate-eq=${DAY2}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   0
 
 JD-TC-Get Count Filter-UH5
 
@@ -189,6 +180,20 @@ JD-TC-Get Count Filter-UH5
     ${resp}=   Get VendorCategory With CountFilter   name-eq=${name}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   0
+
+JD-TC-Get Count Filter-UH6
+
+    [Documentation]  Get VendorCategory With CountFilter with status
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME96}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=   Get VendorCategory With CountFilter   status-eq=${toggle[1]}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   0
 
 
 

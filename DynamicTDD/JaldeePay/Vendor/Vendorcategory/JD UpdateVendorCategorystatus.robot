@@ -41,12 +41,13 @@ JD-TC-UpdateCategoryStatus-1
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
     
     ${name}=   FakerLibrary.word
+    Set Suite Variable   ${name}   
     ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${encId}   ${resp.json()}
 
-    ${resp}=  Update VendorCategoryStatus    ${name}   ${encId}  ${toggle[0]}
+    ${resp}=  Update VendorCategoryStatus    ${name}   ${encId}  ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -54,15 +55,14 @@ JD-TC-UpdateCategoryStatus-1
 
 JD-TC-UpdateCategoryStatus-2
 
-    [Documentation]  update this category status as disable..
+    [Documentation]  update this category status as enable..
 
       ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${name}=   FakerLibrary.word
 
-    ${resp}=  Update VendorCategoryStatus    ${name}   ${encId}  ${toggle[1]}
+    ${resp}=  Update VendorCategoryStatus    ${name}   ${encId}  ${toggle[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -71,13 +71,13 @@ JD-TC-UpdateCategoryStatus-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[1]}
+    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
 
 
 JD-TC-UpdateCategoryStatus-3
 
-    [Documentation]  update category status without name.
+    [Documentation]  update category status without name.(diable)
 
       ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -98,6 +98,40 @@ JD-TC-UpdateCategoryStatus-3
 
 JD-TC-UpdateCategoryStatus-UH1
 
+    [Documentation]  try to diable already disabled category
+
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    ${name}=   FakerLibrary.word
+
+    ${resp}=  Update VendorCategoryStatus    ${EMPTY}   ${encId}  ${toggle[1]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.content}   "${ALREADY_DISABLED}"
+
+
+JD-TC-UpdateCategoryStatus-UH2
+
+    [Documentation]  try to enable already enabled category
+
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    ${name}=   FakerLibrary.word
+
+    ${resp}=  Update VendorCategoryStatus    ${EMPTY}   ${encId}  ${toggle[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Update VendorCategoryStatus    ${EMPTY}   ${encId}  ${toggle[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.content}   "${ALREADY_ENABLED}"
+
+
+JD-TC-UpdateCategoryStatus-UH3
+
     [Documentation]  update category status where id is wrong.
 
       ${resp}=  Encrypted Provider Login    ${PUSERNAME97}  ${PASSWORD}
@@ -111,7 +145,7 @@ JD-TC-UpdateCategoryStatus-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
 
 
-JD-TC-UpdateCategoryStatus-UH1
+JD-TC-UpdateCategoryStatus-UH4
 
     [Documentation]   Update Category status without login
 
@@ -121,7 +155,7 @@ JD-TC-UpdateCategoryStatus-UH1
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-UpdateCategoryStatus-UH2
+JD-TC-UpdateCategoryStatus-UH5
 
     [Documentation]   Update Category status Using Consumer Login
 
@@ -135,64 +169,5 @@ JD-TC-UpdateCategoryStatus-UH2
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
 
-JD-TC-UpdateCategoryStatus-UH3
 
-    [Documentation]  Update category status with the same status again(Enable).
-
-      ${resp}=  Encrypted Provider Login    ${PUSERNAME89}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id1}  ${resp.json()['id']}
-    
-    ${name}=   FakerLibrary.word
-    ${resp}=  CreateVendorCategory  ${name}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${encId}   ${resp.json()}
-
-    ${resp}=  Update VendorCategoryStatus    ${name}   ${encId}  ${toggle[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${CATEGORY_ALREADY_ENABLED}=  format String   ${CATEGORY_ALREADY_ENABLED}   ${name}
-
-    ${resp}=  Update VendorCategoryStatus    ${name}   ${encId}  ${toggle[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${CATEGORY_ALREADY_ENABLED}
-
-JD-TC-UpdateCategoryStatus-UH4
-
-    [Documentation]  Update category status with the same status again(Disable).
-
-      ${resp}=  Encrypted Provider Login    ${PUSERNAME88}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${account_id1}  ${resp.json()['id']}
-    ${name}=   FakerLibrary.word
-    ${resp}=  CreateVendorCategory  ${name}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${encId}   ${resp.json()}
-
-    ${resp}=  Update VendorCategoryStatus    ${name}   ${encId}  ${toggle[1]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${CATEGORY_ALREADY_ENABLED}=  format String   ${CATEGORY_ALREADY_ENABLED}   ${name}
-
-    ${resp}=  Update VendorCategoryStatus    ${name}   ${encId}  ${toggle[1]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${CATEGORY_ALREADY_DISABLED}
    

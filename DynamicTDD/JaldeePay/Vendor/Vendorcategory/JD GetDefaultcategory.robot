@@ -20,7 +20,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 JD-TC-Get default vendorcategory-1
 
-    [Documentation] Get default vendorcategory.
+    [Documentation]  Get default vendorcategory.
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME98}  ${PASSWORD}
     Log  ${resp.content}
@@ -69,7 +69,7 @@ JD-TC-Get default vendorcategory-2
 
     ${vender_name}=   FakerLibrary.firstname
 
-    ${resp}=  Update  Vendor Category   ${vender_name}   ${encId} 
+    ${resp}=  Update Vendor Category   ${vender_name}   ${encId} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

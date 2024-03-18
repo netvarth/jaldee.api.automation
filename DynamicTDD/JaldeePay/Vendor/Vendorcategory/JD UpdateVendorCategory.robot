@@ -54,12 +54,13 @@ JD-TC-UpdateVendorCategory-1
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
     ${vender_name}=   FakerLibrary.firstname
+    Set Suite Variable   ${vender_name}   
 
-    ${resp}=  Update  Vendor Category   ${name}   ${encId} 
+    ${resp}=  Update Vendor Category   ${vender_name}   ${encId} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Update VendorCategoryStatus    ${name}   ${encId}  ${toggle[1]}
+    ${resp}=  Update VendorCategoryStatus    ${vender_name}   ${encId}  ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -69,7 +70,7 @@ JD-TC-UpdateVendorCategory-UH1
     [Documentation]   update Category without login
 
     ${name}=   FakerLibrary.word
-    ${resp}=  Update  Vendor Category   ${name}   ${encId} 
+    ${resp}=  Update Vendor Category   ${name}   ${encId} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -83,7 +84,7 @@ JD-TC-UpdateVendorCategory-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${name}=   FakerLibrary.word
-     ${resp}=  Update  Vendor Category   ${name}   ${encId} 
+     ${resp}=  Update Vendor Category   ${name}   ${encId} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
@@ -99,10 +100,10 @@ JD-TC-UpdateVendorCategory-UH3
     
     ${FIELD_CANT_BE_EMPTY}=  format String   ${FIELD_CANT_BE_EMPTY}   Name
     
-    ${resp}=  Update  Vendor Category   ${EMPTY}   ${encId} 
+    ${resp}=  Update Vendor Category   ${EMPTY}   ${encId} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${FIELD_CANT_BE_EMPTY}
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_NAME}
 
 JD-TC-UpdateVendorCategory-UH4
 
@@ -114,8 +115,23 @@ JD-TC-UpdateVendorCategory-UH4
     
     ${name}=   FakerLibrary.word
 
-     ${resp}=  Update  Vendor Category   ${name}   ${encId} 
+     ${resp}=  Update Vendor Category   ${name}   ${encId} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${CATEGORY_EXIST_WITH_NAME}
+
+JD-TC-UpdateVendorCategory-UH5
+
+    [Documentation]  update Category with same name.
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME92}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    
+    ${FIELD_CANT_BE_EMPTY}=  format String   ${FIELD_CANT_BE_EMPTY}   Name
+    
+    ${resp}=  Update Vendor Category   ${vender_name}   ${encId} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings   ${resp.json()}   ${CATEGORY_EXIST}
 

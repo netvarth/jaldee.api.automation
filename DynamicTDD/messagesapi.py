@@ -2261,3 +2261,8 @@ INVALID_STORE_TYPE_ID="Invalid Store Type Enc Id"
 INVALID_LOCATION_ID="Invalid Location Id"
 INVALID_STORE_ID="Invalid Store Id"
 STORE_ALREADY_IN_STATUS = "Store is already in {} status"
+
+# Vendor
+INVALID_NAME="Invalid Name"
+CATEGORY_EXIST="Category exists with given name"
+INVALID_CATEGORY=" Invalid Category"

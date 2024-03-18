@@ -65,8 +65,9 @@ JD-TC-Get Category by encId-2
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${vender_name}=   FakerLibrary.firstname
+    Set Suite Variable   ${vender_name}   
 
-    ${resp}=  Update  Vendor Category   ${vender_name}   ${encId} 
+    ${resp}=  Update Vendor Category   ${vender_name}   ${encId} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -85,7 +86,6 @@ JD-TC-Get Category by encId-3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${vender_name}=   FakerLibrary.firstname
 
     ${resp}=  Update VendorCategoryStatus    ${vender_name}   ${encId}  ${toggle[1]}
     Log  ${resp.json()}

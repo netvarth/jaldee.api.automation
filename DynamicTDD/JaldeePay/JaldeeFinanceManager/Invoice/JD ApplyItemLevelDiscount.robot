@@ -314,10 +314,10 @@ JD-TC-Apply Item Level Discount-1
     ${resp}=  Create Vendor  ${category_id}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${vendor_uid1}   ${resp.json()['uid']}
+    Set Suite Variable   ${vendor_uid1}   ${resp.json()['encId']}
     Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
 
-    ${resp}=  Get Vendor By Id   ${vendor_uid1}
+    ${resp}=  Get vendor by encId   ${vendor_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
@@ -811,10 +811,10 @@ JD-TC-Apply Item Level Discount-UH2
     ${resp}=  Create Vendor  ${category_id}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${vendor_uid1}   ${resp.json()['uid']}
+    Set Test Variable   ${vendor_uid1}   ${resp.json()['encId']}
     Set Test Variable   ${vendor_id1}   ${resp.json()['id']}
 
-    ${resp}=  Get Vendor By Id   ${vendor_uid1}
+    ${resp}=  Get vendor by encId   ${vendor_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}

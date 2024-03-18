@@ -10724,44 +10724,44 @@ Get Category By CategoryType
     RETURN  ${resp}
 
 
-Create Vendor
+# Create Vendor
 
-    [Arguments]    ${vendorCategory}  ${vendorId}  ${vendorName}   ${contactPersonName}    ${address}    ${state}    ${pincode}    ${mobileNo}   ${email}    &{kwargs}
+#     [Arguments]    ${vendorCategory}  ${vendorId}  ${vendorName}   ${contactPersonName}    ${address}    ${state}    ${pincode}    ${mobileNo}   ${email}    &{kwargs}
     
-    ${contact}=  Create Dictionary   address=${address}   state=${state}  pincode=${pincode}    phoneNumbers=${mobileNo}  emails=${email}
+#     ${contact}=  Create Dictionary   address=${address}   state=${state}  pincode=${pincode}    phoneNumbers=${mobileNo}  emails=${email}
 
-    ${data}=  Create Dictionary  vendorCategory=${vendorCategory}   vendorId=${vendorId}  vendorName=${vendorName}   contactPersonName=${contactPersonName}  contactInfo=${contact}    
-    # ...    email=${email}  address=${address}  bankAccountNumber=${bank_accno}    
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}   
-    Check And Create YNW Session
-    ${resp}=    POST On Session    ynw    /provider/jp/finance/vendor    data=${data}  expected_status=any    headers=${headers}
-    RETURN  ${resp}
-
-
-Update Vendor
-
-    [Arguments]    ${vendor_uid}    ${vendorCategory}       ${vendorId}  ${vendorName}   ${contactPersonName}    ${address}    ${state}    ${pincode}    ${mobileNo}   ${email}  &{kwargs}
-    ${contact}=  Create Dictionary   address=${address}   state=${state}  pincode=${pincode}    phoneNumbers=${mobileNo}  emails=${email}
-
-    ${data}=  Create Dictionary  vendorCategory=${vendorCategory}   vendorId=${vendorId}  vendorName=${vendorName}   contactPersonName=${contactPersonName}  contactInfo=${contact}      
-    FOR  ${key}  ${value}  IN  &{kwargs}
-        Set To Dictionary  ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}  
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/vendor/${vendor_uid}     data=${data}  expected_status=any    headers=${headers}
-    RETURN  ${resp}
+#     ${data}=  Create Dictionary  vendorCategory=${vendorCategory}   vendorId=${vendorId}  vendorName=${vendorName}   contactPersonName=${contactPersonName}  contactInfo=${contact}    
+#     # ...    email=${email}  address=${address}  bankAccountNumber=${bank_accno}    
+#     FOR  ${key}  ${value}  IN  &{kwargs}
+#         Set To Dictionary  ${data}   ${key}=${value}
+#     END
+#     ${data}=    json.dumps    ${data}   
+#     Check And Create YNW Session
+#     ${resp}=    POST On Session    ynw    /provider/jp/finance/vendor    data=${data}  expected_status=any    headers=${headers}
+#     RETURN  ${resp}
 
 
-Get Vendor By Id
+# Update Vendor
 
-    [Arguments]   ${vendor_id}  
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/jp/finance/vendor/${vendor_id}     expected_status=any
-    RETURN  ${resp}
+#     [Arguments]    ${vendor_uid}    ${vendorCategory}       ${vendorId}  ${vendorName}   ${contactPersonName}    ${address}    ${state}    ${pincode}    ${mobileNo}   ${email}  &{kwargs}
+#     ${contact}=  Create Dictionary   address=${address}   state=${state}  pincode=${pincode}    phoneNumbers=${mobileNo}  emails=${email}
+
+#     ${data}=  Create Dictionary  vendorCategory=${vendorCategory}   vendorId=${vendorId}  vendorName=${vendorName}   contactPersonName=${contactPersonName}  contactInfo=${contact}      
+#     FOR  ${key}  ${value}  IN  &{kwargs}
+#         Set To Dictionary  ${data}   ${key}=${value}
+#     END
+#     ${data}=    json.dumps    ${data}  
+#     Check And Create YNW Session
+#     ${resp}=    PUT On Session    ynw    /provider/jp/finance/vendor/${vendor_uid}     data=${data}  expected_status=any    headers=${headers}
+#     RETURN  ${resp}
+
+
+# Get Vendor By Id
+
+#     [Arguments]   ${vendor_id}  
+#     Check And Create YNW Session
+#     ${resp}=  GET On Session  ynw  /provider/jp/finance/vendor/${vendor_id}     expected_status=any
+#     RETURN  ${resp}
 
 Upload Finance Attachment
     [Arguments]    ${categoryId}      ${categoryType}      @{vargs}
@@ -10833,25 +10833,25 @@ Set default status
    ${resp}=  PUT On Session  ynw  /provider/jp/finance/status/${Status_id}/${Category_type}/default   expected_status=any
    RETURN  ${resp}
 
-Get Vendor List with Count filter
-    [Arguments]   &{param}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw    /provider/jp/finance/vendor/count    params=${param}    expected_status=any    headers=${headers}
-    RETURN  ${resp}
+# Get Vendor List with Count filter
+#     [Arguments]   &{param}
+#     Check And Create YNW Session
+#     ${resp}=    GET On Session    ynw    /provider/jp/finance/vendor/count    params=${param}    expected_status=any    headers=${headers}
+#     RETURN  ${resp}
 
-Get Vendor List with filter
-    [Arguments]   &{param}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw    /provider/jp/finance/vendor    params=${param}    expected_status=any    headers=${headers}
-    RETURN  ${resp}
+# Get Vendor List with filter
+#     [Arguments]   &{param}
+#     Check And Create YNW Session
+#     ${resp}=    GET On Session    ynw    /provider/jp/finance/vendor    params=${param}    expected_status=any    headers=${headers}
+#     RETURN  ${resp}
 
-Update Vendor Status
+# Update Vendor Status
 
-    [Arguments]    ${vendorUId}  ${vendorStatus}  
+#     [Arguments]    ${vendorUId}  ${vendorStatus}  
      
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/vendor/${vendorUId}/${vendorStatus}     expected_status=any    headers=${headers}
-    RETURN  ${resp}
+#     Check And Create YNW Session
+#     ${resp}=    PUT On Session    ynw    /provider/jp/finance/vendor/${vendorUId}/${vendorStatus}     expected_status=any    headers=${headers}
+#     RETURN  ${resp}
 
 Upload Finance Vendor Attachment
     [Arguments]    ${vendorUid}      @{vargs}
@@ -13485,7 +13485,7 @@ CreateVendorCategory
     ${resp}=    POST On Session    ynw    /provider/vendor/category    data=${data}  expected_status=any    headers=${headers}
     RETURN  ${resp}
 
-Update  Vendor Category
+Update Vendor Category
 
     [Arguments]    ${name}  ${encId}   
     ${data}=  Create Dictionary  name=${name}   
@@ -13506,7 +13506,7 @@ Update VendorCategoryStatus
 Set category as default
     [Arguments]     ${encId}   
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/vendor/category/default/${encId}   data=${data}  expected_status=any    headers=${headers}
+    ${resp}=    PUT On Session    ynw    /provider/vendor/category/default/${encId}     expected_status=any    headers=${headers}
     RETURN  ${resp}
 
 
@@ -13596,4 +13596,72 @@ Get VendorStatus With CountFilter
 Get default vendorstatus
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw /provider/vendor/status/default     expected_status=any
+    RETURN  ${resp}
+
+
+Create Vendor
+
+    [Arguments]    ${vendorCategory}  ${vendorId}  ${vendorName}   ${contactPersonName}    ${address}    ${state}    ${pincode}    ${mobileNo}   ${email}    &{kwargs}
+    
+    ${contact}=  Create Dictionary   address=${address}   state=${state}  pincode=${pincode}    phoneNumbers=${mobileNo}  emails=${email}
+
+    ${data}=  Create Dictionary  vendorCategory=${vendorCategory}   vendorId=${vendorId}  vendorName=${vendorName}   contactPersonName=${contactPersonName}  contactInfo=${contact}    
+    # ...    email=${email}  address=${address}  bankAccountNumber=${bank_accno}    
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=    POST On Session    ynw    /provider/vendor    data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+
+Update Vendor
+
+    [Arguments]    ${encId}    ${vendorCategory}       ${vendorId}  ${vendorName}   ${contactPersonName}    ${address}    ${state}    ${pincode}    ${mobileNo}   ${email}   &{kwargs}
+    ${contact}=  Create Dictionary   address=${address}   state=${state}  pincode=${pincode}    phoneNumbers=${mobileNo}  emails=${email}
+
+    ${data}=  Create Dictionary  vendorCategory=${vendorCategory}   vendorId=${vendorId}  vendorName=${vendorName}   contactPersonName=${contactPersonName}  contactInfo=${contact}      
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}  
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw     /provider/vendor/${encId}     data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+
+Update Vendor Status
+
+    [Arguments]    ${encId}  ${vendorStatus}  
+     
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/vendor/${encId}/${vendorStatus}     expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+Update vendor user defined status
+
+    [Arguments]    ${encId}  ${stEncId}  
+     
+    Check And Create YNW Session
+    ${resp}=    PUT On Session    ynw    /provider/vendor/${encId}/${stEncId}     expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+Get vendor by encId
+
+    [Arguments]   ${encId}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /provider/vendor/${encId}     expected_status=any
+    RETURN  ${resp}
+
+Get Vendor List with Count filter
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw    /provider/vendor/count    params=${param}    expected_status=any    headers=${headers}
+    RETURN  ${resp}
+
+Get Vendor List with filter
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw    /provider/vendor    params=${param}    expected_status=any    headers=${headers}
     RETURN  ${resp}

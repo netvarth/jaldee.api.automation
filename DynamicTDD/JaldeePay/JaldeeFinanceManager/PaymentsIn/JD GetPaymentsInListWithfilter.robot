@@ -160,7 +160,7 @@ JD-TC-GetPayableWithFilter-1
     ${resp}=  Create Vendor  ${category_id1}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${vendor_uid1}   ${resp.json()['uid']}
+    Set Suite Variable   ${vendor_uid1}   ${resp.json()['encId']}
     Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
 
     ${referenceNo}=   Random Int  min=5  max=200

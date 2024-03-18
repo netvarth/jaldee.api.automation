@@ -55,7 +55,7 @@ JD-TC-CreateVendorCategory-1
 
     ${vender_name}=   FakerLibrary.firstname
 
-    ${resp}=  Update  Vendor Category   ${vender_name}   ${encId} 
+    ${resp}=  Update Vendor Category   ${vender_name}   ${encId} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -96,13 +96,12 @@ JD-TC-CreateVendorCategory-UH3
     ${resp}=  Encrypted Provider Login    ${PUSERNAME91}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
-    
-    ${FIELD_CANT_BE_EMPTY}=  format String   ${FIELD_CANT_BE_EMPTY}   Name
+
     
     ${resp}=  CreateVendorCategory  ${EMPTY}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${FIELD_CANT_BE_EMPTY}
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_NAME}
 
 JD-TC-CreateVendorCategory-UH4
 
@@ -120,5 +119,5 @@ JD-TC-CreateVendorCategory-UH4
     ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${CATEGORY_EXIST_WITH_NAME}
+    Should Be Equal As Strings   ${resp.json()}   ${CATEGORY_EXIST}
 

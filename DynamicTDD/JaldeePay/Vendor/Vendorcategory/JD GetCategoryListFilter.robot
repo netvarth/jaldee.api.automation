@@ -81,9 +81,9 @@ JD-TC-Get Category List Filter-2
     ${resp}=   Get VendorCategory With Filter   createdDate-eq=${CUR_DAY}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
 JD-TC-Get Category List Filter-3
 
@@ -96,9 +96,9 @@ JD-TC-Get Category List Filter-3
     ${resp}=   Get VendorCategory With Filter   status-eq=${toggle[0]}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
 JD-TC-Get Category List Filter-4
 
@@ -111,9 +111,9 @@ JD-TC-Get Category List Filter-4
     ${resp}=   Get VendorCategory With Filter   encId-eq=${encId}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
 JD-TC-Get Category List Filter-5
 
@@ -126,21 +126,11 @@ JD-TC-Get Category List Filter-5
     ${resp}=   Get VendorCategory With Filter   encId-eq=${encId}   status-eq=${toggle[0]}  createdDate-eq=${CUR_DAY}  name-eq=${name}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['status']}        ${toggle[0]}
 
-JD-TC-Get Category List Filter-6
 
-    [Documentation]  Get VendorCategory With Filter with status
-
-    ${resp}=  Encrypted Provider Login    ${PUSERNAME95}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=   Get VendorCategory With Filter   status-eq=${toggle[1]}    
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
 
 
 JD-TC-Get Category List Filter-UH1
@@ -168,7 +158,7 @@ JD-TC-Get Category List Filter-UH2
 
 JD-TC-Get Category List Filter-UH3
 
-    [Documentation] Get VendorCategory With Filter where encId as wrong.
+    [Documentation]  Get VendorCategory With Filter where encId as wrong.
 
     ${resp}=  Encrypted Provider Login    ${PUSERNAME95}  ${PASSWORD}
     Log  ${resp.json()}         
@@ -177,6 +167,7 @@ JD-TC-Get Category List Filter-UH3
     ${resp}=   Get VendorCategory With Filter   encId-eq=${fake}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   []
 
 JD-TC-Get Category List Filter-UH4
 
@@ -189,6 +180,7 @@ JD-TC-Get Category List Filter-UH4
     ${resp}=   Get VendorCategory With Filter   createdDate-eq=${DAY2}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   []
 
 JD-TC-Get Category List Filter-UH5
 
@@ -201,7 +193,20 @@ JD-TC-Get Category List Filter-UH5
     ${resp}=   Get VendorCategory With Filter   name-eq=${name}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   []
 
+JD-TC-Get Category List Filter-UH6
+
+    [Documentation]  Get VendorCategory With Filter with status
+
+    ${resp}=  Encrypted Provider Login    ${PUSERNAME95}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=   Get VendorCategory With Filter   status-eq=${toggle[1]}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   []
 
 
 
