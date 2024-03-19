@@ -13720,3 +13720,10 @@ Get Vendor List with filter
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/vendor    params=${param}    expected_status=any    headers=${headers}
     RETURN  ${resp}
+
+
+Populate Url For Vendor
+    [Arguments]    ${accid} 
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw    /provider/vendor/populate/${accid}    expected_status=any    headers=${headers}
+    RETURN  ${resp}
