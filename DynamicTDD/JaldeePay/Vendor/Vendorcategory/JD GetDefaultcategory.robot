@@ -43,7 +43,7 @@ JD-TC-Get default vendorcategory-1
     ${resp}=  Populate Url For Vendor   ${account_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
+
     ${name}=   FakerLibrary.word
     Set Suite Variable  ${name} 
     ${resp}=  CreateVendorCategory  ${name}  
@@ -73,6 +73,7 @@ JD-TC-Get default vendorcategory-2
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${vender_name}=   FakerLibrary.firstname
+    Set Suite Variable   ${vender_name}   
 
     ${resp}=  Update Vendor Category   ${vender_name}   ${encId} 
     Log  ${resp.json()}
@@ -95,7 +96,7 @@ JD-TC-Get default vendorcategory-3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${vender_name}=   FakerLibrary.firstname
+
 
     ${resp}=  Update VendorCategoryStatus    ${vender_name}   ${encId}  ${toggle[1]}
     Log  ${resp.json()}
@@ -126,7 +127,7 @@ JD-TC-Get default vendorcategory-4
     ${resp}=  Get default vendorcategory
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()['name']}          ${vender_name}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
     Should Be Equal As Strings  ${resp.json()['encId']}        ${encId}

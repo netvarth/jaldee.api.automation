@@ -90,7 +90,7 @@ JD-TC-Updatestatus-3
       ${resp}=  Encrypted Provider Login    ${PUSERNAME103}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
-    ${name}=   FakerLibrary.word
+
 
     ${resp}=  Update Statusofvendor    ${EMPTY}   ${encId}  ${toggle[1]}
     Log  ${resp.json()}

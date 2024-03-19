@@ -122,10 +122,10 @@ JD-TC-Get status by encId-4
     ${resp}=  Get by encIdof vendorstatus   ${encId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()['name']}          ${vender_name}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['isEnabled']}        ${toggle[0]}
-    Should Be Equal As Strings  ${resp.json()['isDefault']}        ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['isEnabled']}        ${toggle[1]}
+    Should Be Equal As Strings  ${resp.json()['isDefault']}        ${bool[1]}
 
 
 JD-TC-Get status by encId-UH1

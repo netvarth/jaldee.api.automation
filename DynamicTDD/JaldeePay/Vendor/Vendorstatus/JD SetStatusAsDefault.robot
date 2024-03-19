@@ -40,6 +40,9 @@ JD-TC-Set Status as default-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
     
+      ${resp}=  Populate Url For Vendor   ${account_id1}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
     ${name}=   FakerLibrary.word
     ${resp}=  CreateVendorStatus  ${name}  
     Log  ${resp.json()}
@@ -61,23 +64,7 @@ JD-TC-Set Status as default-1
 
 
 
-JD-TC-Set Status as default-2
-
-    [Documentation]  update  status as disable then Set Status as default-..
-
-      ${resp}=  Encrypted Provider Login    ${PUSERNAME104}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${name}=   FakerLibrary.word
-
-    ${resp}=  Update Statusofvendor    ${name}   ${encId}  ${toggle[1]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Set status as default    ${encId} 
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
+  
 
 
 
@@ -130,4 +117,24 @@ JD-TC-Set Status as default-UH4
     ${resp}=   Set status as default    ${encId} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
+
+
+JD-TC-Set Status as default-UH5
+
+    [Documentation]  update  status as disable then Set Status as default-..
+
+      ${resp}=  Encrypted Provider Login    ${PUSERNAME104}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${name}=   FakerLibrary.word
+
+    ${resp}=  Update Statusofvendor    ${name}   ${encId}  ${toggle[1]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Set status as default    ${encId} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}   422
+    Should Be Equal As Strings   ${resp.json()}   ${ALREADY_DEFAULT}
 
