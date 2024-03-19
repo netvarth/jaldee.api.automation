@@ -243,9 +243,11 @@ JD-TC-ServiceOptionPaymentForAppointment-1
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF   '${qns.json()['status']}' == '${status[1]}'  
+        ${resp1}=  Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Log  ${resp1.json()}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -467,9 +469,11 @@ JD-TC-ServiceOptionPaymentForAppointment-2
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF   '${qns.json()['status']}' == '${status[1]}'  
+        ${resp1}=  Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Log  ${resp1.json()}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -603,7 +607,6 @@ JD-TC-ServiceOptionPaymentForAppointment-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
         ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
         Log  ${resp1.content}
@@ -614,7 +617,6 @@ JD-TC-ServiceOptionPaymentForAppointment-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
-    Set Test Variable  ${accountId1}  ${resp.json()['accountId']} 
 
     ${GST_num}  ${pan_num}=   Generate_gst_number   ${Container_id}
     ${resp}=  Update Tax Percentage  ${gstpercentage[2]}  ${GST_num}
@@ -789,9 +791,11 @@ JD-TC-ServiceOptionPaymentForAppointment-3
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id11}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF   '${qns.json()['status']}' == '${status[1]}'  
+        ${resp1}=  Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Log  ${resp1.json()}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -949,7 +953,6 @@ JD-TC-ServiceOptionPaymentForAppointment-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
         ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
         Log  ${resp1.content}
@@ -960,7 +963,6 @@ JD-TC-ServiceOptionPaymentForAppointment-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
-    Set Test Variable  ${accountId1}  ${resp.json()['accountId']}
 
     ${domains}=  Jaldee Coupon Target Domains   ${domain}    
     ${sub_domains}=  Jaldee Coupon Target SubDomains   ${domain}_${subDomain}  
@@ -1014,11 +1016,11 @@ JD-TC-ServiceOptionPaymentForAppointment-4
     ${resp}=   Get Account Payment Settings 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${resp1}=   Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200# ${resp}=   Get Account Payment Settings 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp1}=  Enable Disable Online Payment   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -1157,9 +1159,11 @@ JD-TC-ServiceOptionPaymentForAppointment-4
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id12}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF   '${qns.json()['status']}' == '${status[1]}'  
+        ${resp1}=  Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Log  ${resp1.json()}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}
@@ -1189,7 +1193,9 @@ JD-TC-ServiceOptionPaymentForAppointment-4
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j1}=  Random Int  max=${num_slots-1}
@@ -1202,7 +1208,6 @@ JD-TC-ServiceOptionPaymentForAppointment-4
     ${resp}=   Take Appointment For Provider   ${account_id}  ${s_id12}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid1}
@@ -1321,7 +1326,6 @@ JD-TC-ServiceOptionPaymentForAppointment-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
         ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
         Log  ${resp1.content}
@@ -1332,7 +1336,6 @@ JD-TC-ServiceOptionPaymentForAppointment-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
-    Set Test Variable  ${accountId1}  ${resp.json()['accountId']}
 
     ${resp}=   Get Active License
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -1518,9 +1521,11 @@ JD-TC-ServiceOptionPaymentForAppointment-5
     Should Be Equal As Strings  ${qns.status_code}  200
     Should Be Equal As Strings  ${qns.json()['transactionId']}  ${s_id13}
 
-    ${resp1}=  Run Keyword If   '${qns.json()['status']}' == '${status[1]}'  Provider Change Questionnaire Status  ${id}  ${status[0]}  
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF   '${qns.json()['status']}' == '${status[1]}'  
+        ${resp1}=  Provider Change Questionnaire Status  ${id}  ${status[0]}  
+        Log  ${resp1.json()}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${qns}   Get Provider Questionnaire By Id   ${id}  
     Log  ${qns.content}

@@ -74,6 +74,8 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-1
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
+    clear_appt_schedule   ${ProviderPH}
+
     ${resp}=   Get Service
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

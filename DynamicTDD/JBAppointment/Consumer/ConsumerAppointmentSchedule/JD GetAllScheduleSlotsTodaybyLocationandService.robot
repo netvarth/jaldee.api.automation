@@ -75,6 +75,8 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-1
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
 
+    clear_appt_schedule   ${ProviderPH}
+
     # ${highest_package}=  get_highest_license_pkg
     # Log  ${highest_package}
     # Set Suite variable  ${lic2}  ${highest_package[0]}

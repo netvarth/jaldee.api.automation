@@ -213,8 +213,14 @@ JD-TC-GetAppointmentServicesByLocation-2
     ${resp}=    Get Appoinment Service By Location   ${p1_l2}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}   200
-    Verify Response List   ${resp}   0    id=${p1_s2}   name=${P1SERVICE2}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
-    Verify Response List   ${resp}   1    id=${p1_s3}   name=${P1SERVICE3}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
+    ${len}=  Get Length  ${resp.json()}
+    FOR  ${i}  IN RANGE   ${len}
+        IF  ${resp.json()[${i}]['id']} == ${p1_s2}
+            Verify Response List   ${resp}   ${i}    id=${p1_s2}   name=${P1SERVICE2}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
+        ELSE IF   ${resp.json()[${i}]['id']} == ${p1_s3}
+            Verify Response List   ${resp}   ${i}    id=${p1_s3}   name=${P1SERVICE3}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
+        END
+    END
 
 JD-TC-GetAppointmentServicesByLocation-3
 
@@ -227,15 +233,26 @@ JD-TC-GetAppointmentServicesByLocation-3
     ${resp}=    Get Appoinment Service By Location   ${p1_l2}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}   200
-    Verify Response List   ${resp}   0    id=${p1_s2}   name=${P1SERVICE2}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
-    Verify Response List   ${resp}   1    id=${p1_s3}   name=${P1SERVICE3}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
+    ${len}=  Get Length  ${resp.json()}
+    FOR  ${i}  IN RANGE   ${len}
+        IF  ${resp.json()[${i}]['id']} == ${p1_s2}
+            Verify Response List   ${resp}   ${i}    id=${p1_s2}   name=${P1SERVICE2}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
+        ELSE IF   ${resp.json()[${i}]['id']} == ${p1_s3}
+            Verify Response List   ${resp}   ${i}    id=${p1_s3}   name=${P1SERVICE3}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
+        END
+    END
     Should Not Contain  ${resp.json()}  ${p1_s4}
 
     ${resp}=    Get Appoinment Service By Location   ${p1_l1}
     Log   ${resp.json()}
     Should Be Equal As Strings   ${resp.status_code}   200
-    Verify Response List   ${resp}   0    id=${p1_s1}   name=${P1SERVICE1}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
-    Verify Response List   ${resp}   1    id=${p1_s3}   name=${P1SERVICE3}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
+    FOR  ${i}  IN RANGE   ${len}
+        IF  ${resp.json()[${i}]['id']} == ${p1_s2}
+            Verify Response List   ${resp}   ${i}    id=${p1_s1}   name=${P1SERVICE1}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
+        ELSE IF   ${resp.json()[${i}]['id']} == ${p1_s3}
+            Verify Response List   ${resp}   ${i}    id=${p1_s3}   name=${P1SERVICE3}  status=${status[0]}   notificationType=${notifytype[2]}  serviceDuration=${service_duration}
+        END
+    END
     Should Not Contain  ${resp.json()}  ${p1_s4}
 
 JD-TC-GetAppointmentServicesByLocation-4

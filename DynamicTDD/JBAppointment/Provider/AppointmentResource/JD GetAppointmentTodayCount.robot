@@ -420,6 +420,21 @@ JD-TC-GetAppointmentTodayCount-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
 
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+    
     ${lid}=  Create Sample Location
 
     ${resp}=   Get Location ById  ${lid}
@@ -437,6 +452,10 @@ JD-TC-GetAppointmentTodayCount-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
+
+    ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     clear_appt_schedule   ${billable_providers[3]}
 
@@ -531,7 +550,6 @@ JD-TC-GetAppointmentTodayCount-3
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
@@ -578,7 +596,11 @@ JD-TC-GetAppointmentTodayCount-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${apptid1}  ${pid} 
+    # ${resp}=  Get Bill By consumer  ${apptid1}  ${pid} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3290,6 +3312,10 @@ JD-TC-GetAppointmentTodayCount-17
     ${servicecharge}=   Random Int  min=100  max=200
     ${s_id}=  Create Sample Service with Prepayment   ${SERVICE1}  ${min_pre}  ${servicecharge}
 
+    ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     clear_appt_schedule   ${billable_providers[3]}
     clear_customer   ${billable_providers[3]}
 
@@ -3366,7 +3392,6 @@ JD-TC-GetAppointmentTodayCount-17
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname1}
     ${min_pre}=  Get From Dictionary  ${resp.json()}  _prepaymentAmount
     # ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
@@ -3433,7 +3458,6 @@ JD-TC-GetAppointmentTodayCount-17
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname}
     ${min_pre}=  Get From Dictionary  ${resp.json()}  _prepaymentAmount
 
@@ -3480,7 +3504,11 @@ JD-TC-GetAppointmentTodayCount-17
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${apptid2}  ${pid} 
+    # ${resp}=  Get Bill By consumer  ${apptid2}  ${pid} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get consumer Appt Bill Details   ${apptid2}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3591,6 +3619,10 @@ JD-TC-GetAppointmentTodayCount-18
     ${servicecharge}=   Random Int  min=100  max=200
     ${s_id}=  Create Sample Service with Prepayment   ${SERVICE1}  ${min_pre}  ${servicecharge}
 
+    ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     clear_appt_schedule   ${billable_providers[3]}
 
     ${resp}=  Get Appointment Schedules
@@ -3671,7 +3703,6 @@ JD-TC-GetAppointmentTodayCount-18
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname1}
     ${min_pre}=  Get From Dictionary  ${resp.json()}  _prepaymentAmount
     # ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
@@ -3738,7 +3769,6 @@ JD-TC-GetAppointmentTodayCount-18
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname}
     ${min_pre}=  Get From Dictionary  ${resp.json()}  _prepaymentAmount
 
@@ -3785,7 +3815,11 @@ JD-TC-GetAppointmentTodayCount-18
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${apptid2}  ${pid} 
+    # ${resp}=  Get Bill By consumer  ${apptid2}  ${pid} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get consumer Appt Bill Details   ${apptid2}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -3928,6 +3962,15 @@ JD-TC-GetAppointmentTodayCount-19
     ${lid}=  Create Sample Location
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
+
+    ${resp}=  Auto Invoice Generation For Service   ${s_id1}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Auto Invoice Generation For Service   ${s_id2}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     clear_appt_schedule   ${billable_providers[3]}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -3975,7 +4018,6 @@ JD-TC-GetAppointmentTodayCount-19
     ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname1}
     # ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     # Set Test Variable  ${apptid1}  ${apptid[0]}
@@ -4133,6 +4175,10 @@ JD-TC-GetAppointmentTodayCount-20
     ${servicecharge}=   Random Int  min=100  max=200
     ${s_id}=  Create Sample Service with Prepayment   ${SERVICE1}  ${min_pre}  ${servicecharge}
 
+    ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     clear_appt_schedule   ${billable_providers[3]}
 
     ${resp}=  Get Appointment Schedules
@@ -4213,7 +4259,6 @@ JD-TC-GetAppointmentTodayCount-20
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname1}
     ${min_pre}=  Get From Dictionary  ${resp.json()}  _prepaymentAmount
     # ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
@@ -4280,7 +4325,6 @@ JD-TC-GetAppointmentTodayCount-20
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname}
     ${min_pre}=  Get From Dictionary  ${resp.json()}  _prepaymentAmount
 
@@ -4327,7 +4371,11 @@ JD-TC-GetAppointmentTodayCount-20
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${apptid2}  ${pid} 
+    # ${resp}=  Get Bill By consumer  ${apptid2}  ${pid} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get consumer Appt Bill Details   ${apptid2}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4453,7 +4501,6 @@ JD-TC-GetAppointmentTodayCount-21
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${i}=  Evaluate   ${len}/2
     ${resp}=  Encrypted Provider Login  ${multilocPro[3]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -4492,10 +4539,7 @@ JD-TC-GetAppointmentTodayCount-21
     clear_appt_schedule   ${multilocPro[3]}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10     
-    # ${DAY3}=  db.add_timezone_date  ${tz}  15  
-    # ${DAY4}=  db.add_timezone_date  ${tz}  25    
     ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime1}=  db.get_time_by_timezone   ${tz}
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -4544,15 +4588,39 @@ JD-TC-GetAppointmentTodayCount-21
     Verify Response  ${resp}  scheduleName=${schedule_name2}  scheduleId=${sch_id2}
     Set Test Variable   ${slot2}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME7}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
+    # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME7}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid1}   ${resp.json()[0]['id']}
 
-    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME7}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp1}=  AddCustomer  ${CUSERNAME7}  firstName=${fname1}  lastName=${lname1}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${cid1}   ${resp1.json()}
+    ELSE
+        Set Test Variable  ${cid1}  ${resp.json()[0]['id']}
+    END
+
+    # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable  ${cid2}   ${resp.json()[0]['id']}
+
+    ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME15}  
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${resp1}=  AddCustomer  ${CUSERNAME15}  firstName=${fname2}  lastName=${lname2}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${cid2}   ${resp1.json()}
+    ELSE
+        Set Test Variable  ${cid2}  ${resp.json()[0]['id']}
+    END
 
     # ${resp}=  AddCustomer  ${CUSERNAME7}  firstName=${fname1}   lastName=${lname1}
     # Log   ${resp.json()}
