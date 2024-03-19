@@ -13510,6 +13510,48 @@ Update Item Tax Status
     ${resp}=    PATCH On Session    ynw   /provider/spitem/tax/${taxCode}/status/${status}   expected_status=any
     RETURN  ${resp}
 
+Create Item Unit
+
+    [Arguments]  ${unitName}  ${convertionQty}  
+    ${data}=  Create Dictionary   unitName=${unitName}   convertionQty=${convertionQty}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/spitem/unit  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item Unit by id
+
+    [Arguments]     ${id}
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/unit/${id}   expected_status=any
+    RETURN  ${resp}
+
+Update Item Unit
+
+    [Arguments]     ${unitName}  ${unitCode}  ${convertionQty} 
+    ${data}=  Create Dictionary   unitName=${unitName}  unitCode=${unitCode}   convertionQty=${convertionQty}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/unit  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item Unit Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/unit   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Update Item Unit Status
+
+    [Arguments]   ${unitCode}   ${status}
+    Check And Create YNW Session
+    ${resp}=    PATCH On Session    ynw   /provider/spitem/unit/${unitCode}/status/${status}   expected_status=any
+    RETURN  ${resp}
+
+
+
 # Data Migration
 
 Get Appointment By Uid
