@@ -39,6 +39,11 @@ JD-TC-Get Category by encId-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
+
+    ${resp}=  Populate Url For Vendor   ${account_id1}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${name}=   FakerLibrary.word
     ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}

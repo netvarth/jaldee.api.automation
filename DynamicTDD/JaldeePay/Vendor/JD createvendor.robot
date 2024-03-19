@@ -24,7 +24,7 @@ JD-TC-CreateVendor-1
 
     [Documentation]  Create Vendor for an SP.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -40,6 +40,10 @@ JD-TC-CreateVendor-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
+
+    ${resp}=  Populate Url For Vendor   ${account_id1}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     
     ${name}=   FakerLibrary.word
@@ -115,7 +119,7 @@ JD-TC-CreateVendor-2
 
     [Documentation]  Create Vendor for an SP without contactPersonName.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -164,7 +168,7 @@ JD-TC-CreateVendor-UH1
 
     [Documentation]  Create Vendor for an SP without address.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -212,7 +216,7 @@ JD-TC-CreateVendor-UH2
 
     [Documentation]  Create Vendor for an SP without bank account number.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -262,7 +266,7 @@ JD-TC-CreateVendor-UH3
 
     [Documentation]  Create Vendor for an SP without VendorType.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -312,7 +316,7 @@ JD-TC-CreateVendor-UH4
 
     [Documentation]  Create Vendor for an SP without vendorId.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -360,7 +364,7 @@ JD-TC-CreateVendor-UH5
 
     [Documentation]  Create Vendor for an SP without vendorName.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -410,7 +414,7 @@ JD-TC-CreateVendor-UH6
 
     [Documentation]  Create Vendor for an SP without mobileNumber.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -457,7 +461,7 @@ JD-TC-CreateVendor-UH7
 
     [Documentation]   create Vendor for an SP using another category
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME108}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME200}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

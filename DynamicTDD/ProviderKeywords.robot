@@ -13663,7 +13663,7 @@ Update Statusofvendor
 Set status as default
     [Arguments]     ${encId}   
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw   /provider/vendor/status/${encId}     expected_status=any    headers=${headers}
+    ${resp}=    PUT On Session    ynw   /provider/vendor/status//default/${encId}     expected_status=any    headers=${headers}
     RETURN  ${resp}
 
 

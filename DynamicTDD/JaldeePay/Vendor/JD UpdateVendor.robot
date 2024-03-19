@@ -32,7 +32,7 @@ JD-TC-UpdateVendor-1
 
     [Documentation]    Create Vendor for an SP and verify the details then update the Vendor vendorId.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -49,6 +49,10 @@ JD-TC-UpdateVendor-1
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}     200
     Set Suite Variable            ${account_id1}          ${resp.json()['id']}
+
+    ${resp}=  Populate Url For Vendor   ${account_id1}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${name}=                      FakerLibrary.word
     Set Suite Variable            ${name}
@@ -192,7 +196,7 @@ JD-TC-UpdateVendor-2
 
     [Documentation]    Create Vendor for an SP and verify the details then update the Vendor vendorId is EMPTY.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -221,7 +225,7 @@ JD-TC-UpdateVendor-3
 
     [Documentation]    Try to Update vendor vendorCategory.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -264,7 +268,7 @@ JD-TC-UpdateVendor-4
 
     [Documentation]    Try to Update vendor vendorName.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -295,7 +299,7 @@ JD-TC-UpdateVendor-5
 
     [Documentation]    Try to Update vendor contactPersonName.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -326,7 +330,7 @@ JD-TC-UpdateVendor-6
 
     [Documentation]    Try to Update vendor address.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -359,7 +363,7 @@ JD-TC-UpdateVendor-7
 
     [Documentation]    Try to Update vendor state.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -392,7 +396,7 @@ JD-TC-UpdateVendor-8
 
     [Documentation]    Try to Update vendor pincode.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -425,7 +429,7 @@ JD-TC-UpdateVendor-9
 
     [Documentation]    Try to Update vendor phoneNumbers.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -467,7 +471,7 @@ JD-TC-UpdateVendor-10
 
     [Documentation]    Try to Update vendor email.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -509,7 +513,7 @@ JD-TC-UpdateVendor-11
 
     [Documentation]    Try to Update vendor bankaccountNo.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -564,7 +568,7 @@ JD-TC-UpdateVendor-12
 
     [Documentation]    Try to Update vendor ifscCode.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -623,7 +627,7 @@ JD-TC-UpdateVendor-13
 
     [Documentation]    Try to Update vendor bankName.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -683,7 +687,7 @@ JD-TC-UpdateVendor-14
 
     [Documentation]    Try to Update vendor upiId.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -744,7 +748,7 @@ JD-TC-UpdateVendor-15
 
     [Documentation]    Try to Update vendor branchName.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -806,7 +810,7 @@ JD-TC-UpdateVendor-16
 
     [Documentation]    Try to Update vendor pancardNo.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -869,7 +873,7 @@ JD-TC-UpdateVendor-17
 
     [Documentation]    Try to Update vendor gstNumber.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -935,7 +939,7 @@ JD-TC-UpdateVendor-18
 
     [Documentation]    Try to Update vendor preferredPaymentMode.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1001,7 +1005,7 @@ JD-TC-UpdateVendor-18
 
 #     [Documentation]    Try to Update vendor uploadedDocuments.
 
-#     ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}                ${PASSWORD}
+#     ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}                ${PASSWORD}
 #     Log                           ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1103,7 +1107,7 @@ JD-TC-UpdateVendor-18
 
 #     [Documentation]    Try to Update vendor uploadedDocuments(remove).
 
-#     ${resp}=                      Encrypted Provider Login         ${PUSERNAME75}    ${PASSWORD}
+#     ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
 #     Log                           ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 

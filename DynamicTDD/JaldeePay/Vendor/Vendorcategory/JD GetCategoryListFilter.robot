@@ -40,6 +40,11 @@ JD-TC-Get Category List Filter-1
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
 
+    ${resp}=  Populate Url For Vendor   ${account_id1}   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+
     ${loc_id1}=   Create Sample Location
     ${resp}=   Get Location ById  ${loc_id1}
     Log  ${resp.content}
