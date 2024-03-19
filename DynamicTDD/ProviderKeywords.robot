@@ -13741,7 +13741,7 @@ Update vendor user defined status
     [Arguments]    ${encId}  ${stEncId}  
      
     Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/vendor/${encId}/${stEncId}     expected_status=any    headers=${headers}
+    ${resp}=    PUT On Session    ynw    /provider/vendor/${encId}/udstatus/${stEncId}     expected_status=any    headers=${headers}
     RETURN  ${resp}
 
 Get vendor by encId
