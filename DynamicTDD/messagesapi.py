@@ -2262,6 +2262,11 @@ INVALID_LOCATION_ID="Invalid Location Id"
 INVALID_STORE_ID="Invalid Store Id"
 STORE_ALREADY_IN_STATUS = "Store is already in {} status"
 COUNTRYCODE_EMPTY= "Country code can not be empty"
+INVALID_TAX_PERCENTAGE= "Invalid Tax Percentage"
+INVALID_CGST_PERCENTAGE= "Invalid CGST Percentage"
+INVALID_SGST_PERCENTAGE= "Invalid SGST Percentage"
+INVALID_IGST_PERCENTAGE= "Invalid IGST Percentage"
+INVALID_TAX_CODE= "Invalid Tax code"
 
 # Vendor
 INVALID_NAME="Invalid Name"
