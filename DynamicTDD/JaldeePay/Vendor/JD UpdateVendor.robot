@@ -66,25 +66,10 @@ JD-TC-UpdateVendor-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings    ${resp.json()['name']}            ${name}
-    Should Be Equal As Strings    ${resp.json()['categoryType']}    ${categoryType[0]}
     Should Be Equal As Strings    ${resp.json()['accountId']}       ${account_id1}
     Should Be Equal As Strings    ${resp.json()['status']}          ${toggle[0]}
 
-    ${name1}=                     FakerLibrary.word
-    ${resp}=  CreateVendorCategory  ${name1}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable            ${category_id2}        ${resp.json()}
 
-
-    ${resp}=  Get by encId  ${category_id1}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings    ${resp.json()['name']}            ${name1}
-    Should Be Equal As Strings    ${resp.json()['categoryType']}    ${categoryType[1]}
-    Should Be Equal As Strings    ${resp.json()['accountId']}       ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['status']}          ${toggle[0]}
 
     ${vender_name}=          FakerLibrary.firstname
     Set Suite Variable       ${vender_name}
@@ -157,7 +142,8 @@ JD-TC-UpdateVendor-1
     ${resp}=                      Create Vendor          ${category_id1}                ${vendorId}             ${vender_name}          ${contactPersonName}    ${address}                  ${state}            ${pin}                ${vendor_phno}                                  ${email}                                       bankInfo=${bankInfo}    
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable            ${vendor_uid1}         ${resp.json()['uid']}
+    Set Suite Variable            ${vendor_uid1}         ${resp.json()['encId']}
+    Set Suite Variable            ${vendor_uid11}         ${resp.json()['uid']}
     Set Suite Variable            ${vendor_id1}          ${resp.json()['id']}
 
     ${resp}=                      Get vendor by encId                                 ${vendor_uid1}
@@ -171,7 +157,8 @@ JD-TC-UpdateVendor-1
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid1}
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id1}
 
     ${venId}=    FakerLibrary.name
 
@@ -179,7 +166,7 @@ JD-TC-UpdateVendor-1
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=                      GGet vendor by encId                                 ${vendor_uid1}
+    ${resp}=                      Get vendor by encId                                 ${vendor_uid1}
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
@@ -190,7 +177,9 @@ JD-TC-UpdateVendor-1
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid1}
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                     ${category_id1}
+    Should Be Equal As Strings    ${resp.json()['encId']}                              ${vendor_uid1}
 
 JD-TC-UpdateVendor-2
 
@@ -206,7 +195,8 @@ JD-TC-UpdateVendor-2
 
     ${resp}=                      Update Vendor          ${vendor_uid1}    ${category_id1}    ${EMPTY}    ${vender_name}    ${contactPersonName}    ${address}    ${state}    ${pin}    ${vendor_phno}    ${email}    bankInfo=${bankInfo}    
     Log                           ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}     200
+
 
     ${resp}=                      Get vendor by encId                                  ${vendor_uid1}
     Log                           ${resp.json()}
@@ -219,7 +209,9 @@ JD-TC-UpdateVendor-2
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid1}
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id1}
+    Should Be Equal As Strings    ${resp.json()['encId']}                              ${vendor_uid1}
 
 JD-TC-UpdateVendor-3
 
@@ -243,7 +235,6 @@ JD-TC-UpdateVendor-3
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}               200
     Should Be Equal As Strings    ${resp.json()['name']}            ${name2}
-    Should Be Equal As Strings    ${resp.json()['categoryType']}    ${categoryType[2]}
     Should Be Equal As Strings    ${resp.json()['accountId']}       ${account_id1}
     Should Be Equal As Strings    ${resp.json()['status']}          ${toggle[0]}          
 
@@ -256,13 +247,14 @@ JD-TC-UpdateVendor-3
     Should Be Equal As Strings    ${resp.status_code}                                 200
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
     Should Be Equal As Strings    ${resp.json()['accountId']}                         ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['vendorCategory']}                    ${category_id3}
     # Should Be Equal As Strings  ${resp.json()['vendorTypeName']}  ${name}
     Should Be Equal As Strings    ${resp.json()['vendorId']}                          ${vendorId}
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid1}
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id3}
+    Should Be Equal As Strings    ${resp.json()['encId']}                              ${vendor_uid1}
 
 JD-TC-UpdateVendor-4
 
@@ -288,13 +280,12 @@ JD-TC-UpdateVendor-4
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name1}
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
     Should Be Equal As Strings    ${resp.json()['accountId']}                         ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['vendorCategory']}                    ${category_id1}
-    # Should Be Equal As Strings  ${resp.json()['vendorTypeName']}  ${name}
     Should Be Equal As Strings    ${resp.json()['vendorId']}                          ${vendorId}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
     Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid1}
-
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id1}
+    Should Be Equal As Strings    ${resp.json()['encId']}                              ${vendor_uid1}
 JD-TC-UpdateVendor-5
 
     [Documentation]    Try to Update vendor contactPersonName.
@@ -320,11 +311,13 @@ JD-TC-UpdateVendor-5
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
     Should Be Equal As Strings    ${resp.json()['accountId']}                         ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['vendorCategory']}                    ${category_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorTypeName']}  ${name}
     Should Be Equal As Strings    ${resp.json()['vendorId']}                          ${vendorId}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid1}
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id1}
+    Should Be Equal As Strings    ${resp.json()['encId']}                              ${vendor_uid1}
+
 
 JD-TC-UpdateVendor-6
 
@@ -350,14 +343,15 @@ JD-TC-UpdateVendor-6
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
     Should Be Equal As Strings    ${resp.json()['accountId']}                         ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['vendorCategory']}                    ${category_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorTypeName']}  ${name}
     Should Be Equal As Strings    ${resp.json()['vendorId']}                          ${vendorId}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['address']}            ${address1}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['state']}              ${state}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['pincode']}            ${pin}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid1}
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id1}
+    Should Be Equal As Strings    ${resp.json()['encId']}                              ${vendor_uid1}
 
 JD-TC-UpdateVendor-7
 
@@ -383,14 +377,15 @@ JD-TC-UpdateVendor-7
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
     Should Be Equal As Strings    ${resp.json()['accountId']}                         ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['vendorCategory']}                    ${category_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorTypeName']}  ${name}
     Should Be Equal As Strings    ${resp.json()['vendorId']}                          ${vendorId}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['address']}            ${address}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['state']}              ${state1}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['pincode']}            ${pin}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid1}
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id1}
+    Should Be Equal As Strings    ${resp.json()['encId']}                              ${vendor_uid1}
 
 JD-TC-UpdateVendor-8
 
@@ -416,14 +411,15 @@ JD-TC-UpdateVendor-8
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
     Should Be Equal As Strings    ${resp.json()['accountId']}                         ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['vendorCategory']}                    ${category_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorTypeName']}  ${name}
     Should Be Equal As Strings    ${resp.json()['vendorId']}                          ${vendorId}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['address']}            ${address}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['state']}              ${state}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['pincode']}            ${pin1}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid1}
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                         ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id1}
+    Should Be Equal As Strings    ${resp.json()['encId']}                              ${vendor_uid1}
 
 JD-TC-UpdateVendor-9
 
@@ -456,7 +452,6 @@ JD-TC-UpdateVendor-9
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
     Should Be Equal As Strings    ${resp.json()['accountId']}                         ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['vendorCategory']}                    ${category_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorTypeName']}  ${name}
     Should Be Equal As Strings    ${resp.json()['vendorId']}                          ${vendorId}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
@@ -465,49 +460,12 @@ JD-TC-UpdateVendor-9
     Should Be Equal As Strings    ${resp.json()['contactInfo']['address']}    ${address}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['state']}      ${state}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['pincode']}    ${pin}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                 ${vendor_uid1}
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                 ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id1}
+    Should Be Equal As Strings    ${resp.json()['encId']}                              ${vendor_uid1}
 
-JD-TC-UpdateVendor-10
 
-    [Documentation]    Try to Update vendor email.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
-    Log                           ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${preferredPaymentMode}=    Create List          ${jaldeePaymentmode[0]}
-    # ${bankInfo}=                Create Dictionary    bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}    branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
-    # ${bankInfo}=                Create List          ${bankInfo}
-    ${pin1}=    FakerLibrary.city
-
-    # ${vendor_ph2}=          Evaluate                  ${PUSERNAME}+1235246
-    ${emails}=            Create List    ${email1}    ${pin1}
-    Set Suite Variable    ${emails}
-
-    ${resp}=                      Update Vendor          ${vendor_uid1}    ${category_id1}    ${vendorId}    ${vender_name}    ${contactPersonName}    ${address}    ${state}    ${pin}    ${vendor_phno1}    ${emails}    bankInfo=${bankInfo}    
-    Log                           ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=                      Get vendor by encId                                    ${vendor_uid1}
-    Log                           ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}                                 200
-    Should Be Equal As Strings    ${resp.json()['contactPersonName']}                 ${contactPersonName}
-    Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
-    Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
-    Should Be Equal As Strings    ${resp.json()['accountId']}                         ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['vendorCategory']}                    ${category_id1}
-    # Should Be Equal As Strings  ${resp.json()['vendorTypeName']}  ${name}
-    Should Be Equal As Strings    ${resp.json()['vendorId']}                          ${vendorId}
-    Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
-    Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][1]['number']}    ${vendor_ph2}
-
-    Should Be Equal As Strings    ${resp.json()['contactInfo']['emails'][0]}    ${emails[0]}
-    Should Be Equal As Strings    ${resp.json()['contactInfo']['emails'][1]}    ${emails[1]}
-
-    Should Be Equal As Strings    ${resp.json()['contactInfo']['address']}    ${address}
-    Should Be Equal As Strings    ${resp.json()['contactInfo']['state']}      ${state}
-    Should Be Equal As Strings    ${resp.json()['contactInfo']['pincode']}    ${pin}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                 ${vendor_uid1}
 
 JD-TC-UpdateVendor-11
 
@@ -540,7 +498,6 @@ JD-TC-UpdateVendor-11
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
     Should Be Equal As Strings    ${resp.json()['accountId']}                         ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['vendorCategory']}                    ${category_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorTypeName']}  ${name}
     Should Be Equal As Strings    ${resp.json()['vendorId']}                          ${vendorId}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
@@ -550,7 +507,9 @@ JD-TC-UpdateVendor-11
     Should Be Equal As Strings    ${resp.json()['contactInfo']['address']}      ${address}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['state']}        ${state}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['pincode']}      ${pin}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                   ${vendor_uid1}
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                   ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id1}
+    Should Be Equal As Strings    ${resp.json()['encId']}                              ${vendor_uid1}
 
     Should Be Equal As Strings    ${resp.json()['bankInfo'][0]['bankaccountNo']}    ${bank_accno1}
     Should Be Equal As Strings    ${resp.json()['bankInfo'][0]['ifscCode']}         ${bankIfsc}
@@ -599,7 +558,6 @@ JD-TC-UpdateVendor-12
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
     Should Be Equal As Strings    ${resp.json()['accountId']}                         ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['vendorCategory']}                    ${category_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorTypeName']}  ${name}
     Should Be Equal As Strings    ${resp.json()['vendorId']}                          ${vendorId}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
@@ -609,7 +567,9 @@ JD-TC-UpdateVendor-12
     Should Be Equal As Strings    ${resp.json()['contactInfo']['address']}      ${address}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['state']}        ${state}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['pincode']}      ${pin}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                   ${vendor_uid1}
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                   ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id1}
+    Should Be Equal As Strings    ${resp.json()['encId']}                              ${vendor_uid1}
 
     Should Be Equal As Strings    ${resp.json()['bankInfo'][0]['bankaccountNo']}    ${bank_accno1}
     Should Be Equal As Strings    ${resp.json()['bankInfo'][0]['ifscCode']}         ${bankIfsc1}
@@ -659,7 +619,6 @@ JD-TC-UpdateVendor-13
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
     Should Be Equal As Strings    ${resp.json()['accountId']}                         ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['vendorCategory']}                    ${category_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorTypeName']}  ${name}
     Should Be Equal As Strings    ${resp.json()['vendorId']}                          ${vendorId}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
@@ -669,7 +628,9 @@ JD-TC-UpdateVendor-13
     Should Be Equal As Strings    ${resp.json()['contactInfo']['address']}      ${address}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['state']}        ${state}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['pincode']}      ${pin}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                   ${vendor_uid1}
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                   ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id1}
+    Should Be Equal As Strings    ${resp.json()['encId']}                              ${vendor_uid1}
 
     Should Be Equal As Strings    ${resp.json()['bankInfo'][0]['bankaccountNo']}    ${bank_accno1}
     Should Be Equal As Strings    ${resp.json()['bankInfo'][0]['ifscCode']}         ${bankIfsc1}
@@ -720,7 +681,6 @@ JD-TC-UpdateVendor-14
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
     Should Be Equal As Strings    ${resp.json()['accountId']}                         ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['vendorCategory']}                    ${category_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorTypeName']}  ${name}
     Should Be Equal As Strings    ${resp.json()['vendorId']}                          ${vendorId}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
@@ -730,7 +690,9 @@ JD-TC-UpdateVendor-14
     Should Be Equal As Strings    ${resp.json()['contactInfo']['address']}      ${address}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['state']}        ${state}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['pincode']}      ${pin}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                   ${vendor_uid1}
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                   ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id1}
+    Should Be Equal As Strings    ${resp.json()['encId']}                              ${vendor_uid1}
 
     Should Be Equal As Strings    ${resp.json()['bankInfo'][0]['bankaccountNo']}    ${bank_accno1}
     Should Be Equal As Strings    ${resp.json()['bankInfo'][0]['ifscCode']}         ${bankIfsc1}
@@ -782,7 +744,6 @@ JD-TC-UpdateVendor-15
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
     Should Be Equal As Strings    ${resp.json()['accountId']}                         ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['vendorCategory']}                    ${category_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorTypeName']}  ${name}
     Should Be Equal As Strings    ${resp.json()['vendorId']}                          ${vendorId}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
@@ -792,7 +753,9 @@ JD-TC-UpdateVendor-15
     Should Be Equal As Strings    ${resp.json()['contactInfo']['address']}      ${address}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['state']}        ${state}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['pincode']}      ${pin}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                   ${vendor_uid1}
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                   ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id1}
+    Should Be Equal As Strings    ${resp.json()['encId']}                              ${vendor_uid1}
 
     Should Be Equal As Strings    ${resp.json()['bankInfo'][0]['bankaccountNo']}    ${bank_accno1}
     Should Be Equal As Strings    ${resp.json()['bankInfo'][0]['ifscCode']}         ${bankIfsc1}
@@ -845,7 +808,6 @@ JD-TC-UpdateVendor-16
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
     Should Be Equal As Strings    ${resp.json()['accountId']}                         ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['vendorCategory']}                    ${category_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorTypeName']}  ${name}
     Should Be Equal As Strings    ${resp.json()['vendorId']}                          ${vendorId}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
@@ -855,7 +817,9 @@ JD-TC-UpdateVendor-16
     Should Be Equal As Strings    ${resp.json()['contactInfo']['address']}      ${address}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['state']}        ${state}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['pincode']}      ${pin}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                   ${vendor_uid1}
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                   ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id1}
+    Should Be Equal As Strings    ${resp.json()['encId']}                              ${vendor_uid1}
 
     Should Be Equal As Strings    ${resp.json()['bankInfo'][0]['bankaccountNo']}    ${bank_accno1}
     Should Be Equal As Strings    ${resp.json()['bankInfo'][0]['ifscCode']}         ${bankIfsc1}
@@ -911,7 +875,6 @@ JD-TC-UpdateVendor-17
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
     Should Be Equal As Strings    ${resp.json()['accountId']}                         ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['vendorCategory']}                    ${category_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorTypeName']}  ${name}
     Should Be Equal As Strings    ${resp.json()['vendorId']}                          ${vendorId}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
@@ -921,7 +884,9 @@ JD-TC-UpdateVendor-17
     Should Be Equal As Strings    ${resp.json()['contactInfo']['address']}      ${address}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['state']}        ${state}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['pincode']}      ${pin}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                   ${vendor_uid1}
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                   ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id1}
+    Should Be Equal As Strings    ${resp.json()['encId']}                              ${vendor_uid1}
 
     Should Be Equal As Strings    ${resp.json()['bankInfo'][0]['bankaccountNo']}    ${bank_accno1}
     Should Be Equal As Strings    ${resp.json()['bankInfo'][0]['ifscCode']}         ${bankIfsc1}
@@ -977,7 +942,6 @@ JD-TC-UpdateVendor-18
     Should Be Equal As Strings    ${resp.json()['vendorName']}                        ${vender_name}
     Should Be Equal As Strings    ${resp.json()['id']}                                ${vendor_id1}
     Should Be Equal As Strings    ${resp.json()['accountId']}                         ${account_id1}
-    Should Be Equal As Strings    ${resp.json()['vendorCategory']}                    ${category_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorTypeName']}  ${name}
     Should Be Equal As Strings    ${resp.json()['vendorId']}                          ${vendorId}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['phoneNumbers'][0]['number']}    ${vendor_ph}
@@ -987,7 +951,9 @@ JD-TC-UpdateVendor-18
     Should Be Equal As Strings    ${resp.json()['contactInfo']['address']}      ${address}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['state']}        ${state}
     Should Be Equal As Strings    ${resp.json()['contactInfo']['pincode']}      ${pin}
-    Should Be Equal As Strings    ${resp.json()['vendorUid']}                   ${vendor_uid1}
+    Should Be Equal As Strings    ${resp.json()['vendorUid']}                   ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id1}
+    Should Be Equal As Strings    ${resp.json()['encId']}                              ${vendor_uid1}
 
     Should Be Equal As Strings    ${resp.json()['bankInfo'][0]['bankaccountNo']}    ${bank_accno1}
     Should Be Equal As Strings    ${resp.json()['bankInfo'][0]['ifscCode']}         ${bankIfsc1}
@@ -1241,7 +1207,7 @@ JD-TC-UpdateVendor-UH1
     # Log                           ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}                 419
 
-    ${resp}=                      Update Vendor          ${vendor_uid1}        ${category_id1}    ${vendorId}    ${vender_name}    ${contactPersonName}    
+    ${resp}=                       Update Vendor          ${vendor_uid1}    ${category_id1}    ${vendorId}    ${vender_name}    ${contactPersonName}    ${address}    ${state}    ${pin}    ${vendor_phno1}    ${emails}    bankInfo=${bankInfo}    
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    419
     Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
@@ -1318,4 +1284,27 @@ JD-TC-UpdateVendor-UH2
     Log                           ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}         ${INVALID_VENDOR}    
+
+
+JD-TC-UpdateVendor-UH3
+
+    [Documentation]    Try to Update with invalid vendor email.
+
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME201}    ${PASSWORD}
+    Log                           ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${preferredPaymentMode}=    Create List          ${jaldeePaymentmode[0]}
+    # ${bankInfo}=                Create Dictionary    bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}    branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
+    # ${bankInfo}=                Create List          ${bankInfo}
+    ${pin1}=    FakerLibrary.city
+
+    # ${vendor_ph2}=          Evaluate                  ${PUSERNAME}+1235246
+    ${emails}=            Create List    ${email1}    ${pin1}
+    Set Suite Variable    ${emails}
+
+    ${resp}=                      Update Vendor          ${vendor_uid1}    ${category_id1}    ${vendorId}    ${vender_name}    ${contactPersonName}    ${address}    ${state}    ${pin}    ${vendor_phno1}    ${emails}    bankInfo=${bankInfo}    
+    Log                           ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings     ${resp.json()}      ${EMAIL_INVALID}
 

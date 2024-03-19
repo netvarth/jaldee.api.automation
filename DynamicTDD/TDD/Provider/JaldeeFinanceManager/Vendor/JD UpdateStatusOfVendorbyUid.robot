@@ -16,13 +16,13 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 *** Keywords ***
 
-Update Vendor Status
+# Update Vendor Status
 
-    [Arguments]    ${vendorUId}  ${vendorStatus}  
+#     [Arguments]    ${vendorUId}  ${vendorStatus}  
      
-    Check And Create YNW Session
-    ${resp}=    PUT On Session    ynw    /provider/jp/finance/vendor/${vendorUId}/${vendorStatus}     expected_status=any    headers=${headers}
-    RETURN  ${resp}
+#     Check And Create YNW Session
+#     ${resp}=    PUT On Session    ynw    /provider/jp/finance/vendor/${vendorUId}/${vendorStatus}     expected_status=any    headers=${headers}
+#     RETURN  ${resp}
 
 
 *** Test Cases ***

@@ -182,7 +182,6 @@ JD-TC-CreateVendor-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
@@ -290,18 +289,10 @@ JD-TC-CreateVendor-UH3
     ${owner_name}=   FakerLibrary.lastname
     ${vendorId}=   FakerLibrary.word
     ${PO_Number}    Generate random string    5    123456789
-    # ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    # ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
-    # Set Test Variable  ${email}  ${vender_name}.${test_mail}
+
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place
     
-    ${FIELD_CANT_BE_EMPTY}=  format String   ${FIELD_CANT_BE_EMPTY}   Vendor Category Id
-
-    # ${resp}=  Create Vendor  ${EMPTY}    ${vendorId}   ${vender_name}   ${owner_name}   ${vendor_phno}   ${email}  ${address}  ${bank_accno}  
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  422
-    # Should Be Equal As Strings   ${resp.json()}   ${FIELD_CANT_BE_EMPTY}
 
     ${preferredPaymentMode}=    Create List    ${jaldeePaymentmode[0]}
     ${bankInfo}=    Create Dictionary     bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}     branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
@@ -309,7 +300,7 @@ JD-TC-CreateVendor-UH3
     ${resp}=  Create Vendor  ${EMPTY}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${FIELD_CANT_BE_EMPTY}
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_VENDOR_CATEGORY}
 # *** Comments ***
 
 JD-TC-CreateVendor-UH4
@@ -330,7 +321,6 @@ JD-TC-CreateVendor-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
@@ -345,12 +335,7 @@ JD-TC-CreateVendor-UH4
     ${branch}=   db.get_place
     ${contactPersonName}=   FakerLibrary.lastname
     
-    ${FIELD_CANT_BE_EMPTY}=  format String   ${FIELD_CANT_BE_EMPTY}   	Vendor Id
 
-    # ${resp}=  Create Vendor  ${category_id1}    ${EMPTY}   ${vender_name}   ${owner_name}   ${vendor_phno}   ${email}  ${address}  ${bank_accno}  
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  422
-    # Should Be Equal As Strings   ${resp.json()}   ${FIELD_CANT_BE_EMPTY}
 
     ${preferredPaymentMode}=    Create List    ${jaldeePaymentmode[0]}
     ${bankInfo}=    Create Dictionary     bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}     branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
@@ -358,7 +343,7 @@ JD-TC-CreateVendor-UH4
     ${resp}=  Create Vendor  ${category_id1}  ${EMPTY}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${FIELD_CANT_BE_EMPTY}
+    Should Be Equal As Strings   ${resp.json()}   ${Vendor_Id_can_not_be_empty}
 
 JD-TC-CreateVendor-UH5
 
@@ -392,13 +377,7 @@ JD-TC-CreateVendor-UH5
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
     ${branch}=   db.get_place
     ${contactPersonName}=   FakerLibrary.lastname
-    
-    ${FIELD_CANT_BE_EMPTY}=  format String   ${FIELD_CANT_BE_EMPTY}	Vendor Name
 
-    # ${resp}=  Create Vendor  ${category_id1}    ${vendorId}   ${EMPTY}   ${owner_name}   ${vendor_phno}   ${email}  ${address}  ${bank_accno}  
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  422
-    # Should Be Equal As Strings   ${resp.json()}   ${FIELD_CANT_BE_EMPTY}
 
     ${preferredPaymentMode}=    Create List    ${jaldeePaymentmode[0]}
     ${bankInfo}=    Create Dictionary     bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}     branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
@@ -406,7 +385,7 @@ JD-TC-CreateVendor-UH5
     ${resp}=  Create Vendor  ${category_id1}  ${vendorId}  ${EMPTY}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${FIELD_CANT_BE_EMPTY}
+    Should Be Equal As Strings   ${resp.json()}   ${Vendor_Name_can_not_be_empty}
 
 
 
@@ -428,7 +407,6 @@ JD-TC-CreateVendor-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
@@ -454,7 +432,7 @@ JD-TC-CreateVendor-UH6
     ${resp}=  Create Vendor  ${category_id1}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   ${PHONE_NO_CANNOT_BE_EMPTY}
+    Should Be Equal As Strings   ${resp.json()}   ${Phone_Number_can_not_be_empty}
 
 JD-TC-CreateVendor-UH7
 
@@ -471,19 +449,43 @@ JD-TC-CreateVendor-UH7
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
 
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+
+    # ${name}=   FakerLibrary.word
+    # Set Test Variable   ${name}   
+    # ${resp}=  CreateVendorCategory  ${name}  
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Set Test Variable   ${category_id2}   ${resp.json()}
+
+    # ${resp}=  Get by encId  ${category_id2}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+    # Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
+    # Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+
     ${name}=   FakerLibrary.word
     Set Test Variable   ${name}   
-    ${resp}=  CreateVendorCategory  ${name}  
+    ${resp}=  Create Category   ${name}  ${categoryType[1]} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${category_id2}   ${resp.json()}
-
-    ${resp}=  Get by encId  ${category_id2}
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
     ${vender_name}=   FakerLibrary.firstname
     ${contactPersonName}=   FakerLibrary.lastname
@@ -540,7 +542,7 @@ JD-TC-CreateVendor-UH7
     ${resp}=  Create Vendor  ${category_id2}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${INVALID_VENDOR_CATEGORY_ID}
+    Should Be Equal As Strings  ${resp.json()}   ${INVALID_VENDOR_CATEGORY}
 
 
 
