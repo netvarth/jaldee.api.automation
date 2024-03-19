@@ -13479,7 +13479,36 @@ Create Item Tax
     ${resp}=  POST On Session  ynw  /provider/spitem/tax  data=${data}  expected_status=any
     RETURN  ${resp} 
 
+Get Item Tax by id
 
+    [Arguments]     ${id}
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/tax/${id}   expected_status=any
+    RETURN  ${resp}
+
+Update Item Tax
+
+    [Arguments]     ${taxName}  ${taxCode}  ${taxTypeEnum}  ${taxPercentage}  ${cgst}  ${sgst}  ${igst}  
+    ${data}=  Create Dictionary   taxName=${taxName}  taxCode=${taxCode}   taxTypeEnum=${taxTypeEnum}   taxPercentage=${taxPercentage}   cgst=${cgst}   sgst=${sgst}   igst=${igst}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/tax  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item Tax Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/tax   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Update Item Tax Status
+
+    [Arguments]   ${taxCode}   ${status}
+    Check And Create YNW Session
+    ${resp}=    PATCH On Session    ynw   /provider/spitem/tax/${taxCode}/status/${status}   expected_status=any
+    RETURN  ${resp}
 
 # Data Migration
 
