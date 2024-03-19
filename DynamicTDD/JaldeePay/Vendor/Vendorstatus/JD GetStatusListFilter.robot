@@ -81,9 +81,9 @@ JD-TC-Get StatuList Filter-2
     ${resp}=   Get Vendorstatus With Filter   createdDate-eq=${CUR_DAY}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['isEnabled']}       ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['isEnabled']}       ${toggle[0]}
 
 JD-TC-Get StatuList Filter-3
 
@@ -96,9 +96,9 @@ JD-TC-Get StatuList Filter-3
     ${resp}=   Get Vendorstatus With Filter   isEnabled-eq=${toggle[0]}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['isEnabled']}       ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['isEnabled']}       ${toggle[0]}
 
 JD-TC-Get StatuList Filter-4
 
@@ -111,9 +111,9 @@ JD-TC-Get StatuList Filter-4
     ${resp}=   Get Vendorstatus With Filter   encId-eq=${encId}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['isEnabled']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['isEnabled']}        ${toggle[0]}
 
 JD-TC-Get StatuList Filter-5
 
@@ -126,9 +126,9 @@ JD-TC-Get StatuList Filter-5
     ${resp}=   Get Vendorstatus With Filter   encId-eq=${encId}   isEnabled-eq=${toggle[0]}  createdDate-eq=${CUR_DAY}  name-eq=${name}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['isEnabled']}       ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()[0]['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()[0]['isEnabled']}       ${toggle[0]}
 
 JD-TC-Get StatuList Filter-6
 
@@ -177,6 +177,7 @@ JD-TC-Get StatuList Filter-UH3
     ${resp}=   Get Vendorstatus With Filter   encId-eq=${fake}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   []
 
 JD-TC-Get StatuList Filter-UH4
 
@@ -189,6 +190,7 @@ JD-TC-Get StatuList Filter-UH4
     ${resp}=   Get Vendorstatus With Filter   createdDate-eq=${DAY2}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   []
 
 JD-TC-Get StatuList Filter-UH5
 
@@ -201,6 +203,7 @@ JD-TC-Get StatuList Filter-UH5
     ${resp}=  Get Vendorstatus With Filter   name-eq=${name}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings   ${resp.json()}   []
 
 
 

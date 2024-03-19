@@ -46,6 +46,15 @@ JD-TC-Set Status as default-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${encId}   ${resp.json()}
 
+    ${resp}=  Get by encIdof vendorstatus   ${encId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['name']}          ${name}
+    Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
+    Should Be Equal As Strings  ${resp.json()['isEnabled']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['isDefault']}        ${bool[0]}
+
+
     ${resp}=  Set status as default    ${encId} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -87,7 +96,7 @@ JD-TC-Set Status as default-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
 
 
-JD-TC-Set Status as default-UH1
+JD-TC-Set Status as default-UH2
 
     [Documentation]   Set Status as default- without login
 
@@ -97,7 +106,7 @@ JD-TC-Set Status as default-UH1
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Set Status as default-UH2
+JD-TC-Set Status as default-UH3
 
     [Documentation]  Set Status as default- Using Consumer Login
 
@@ -110,7 +119,7 @@ JD-TC-Set Status as default-UH2
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
 
-JD-TC-Set Status as default-UH3
+JD-TC-Set Status as default-UH4
 
     [Documentation]  Set Status as default- using another provider login.
 

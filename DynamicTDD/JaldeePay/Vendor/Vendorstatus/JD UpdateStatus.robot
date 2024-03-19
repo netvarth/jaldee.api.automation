@@ -74,7 +74,7 @@ JD-TC-Updatestatus-2
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['isEnabled']}        ${toggle[0]}
     Should Be Equal As Strings  ${resp.json()['isDefault']}        ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()['encId']}        ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['encId']}        ${encId}
 
 
 
@@ -92,12 +92,12 @@ JD-TC-Updatestatus-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Category By Id   ${encId}
+    ${resp}=  Get by encIdof vendorstatus   ${encId}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[1]}
+    Should Be Equal As Strings  ${resp.json()['isEnabled']}        ${toggle[1]}
 
 
 JD-TC-Updatestatus-UH1
@@ -115,7 +115,7 @@ JD-TC-Updatestatus-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
 
 
-JD-TC-Updatestatus-UH1
+JD-TC-Updatestatus-UH2
 
     [Documentation]   Update  status without login
 
@@ -125,7 +125,7 @@ JD-TC-Updatestatus-UH1
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Updatestatus-UH2
+JD-TC-Updatestatus-UH3
 
     [Documentation]   Update status Using Consumer Login
 
@@ -139,7 +139,7 @@ JD-TC-Updatestatus-UH2
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings   ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
 
-JD-TC-Updatestatus-UH3
+JD-TC-Updatestatus-UH4
 
     [Documentation]  Update Status of vendor with the same status again(Enable).
 
@@ -162,10 +162,10 @@ JD-TC-Updatestatus-UH3
     ${resp}=  Update Statusofvendor    ${name}   ${encId}  ${toggle[0]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   "${ALREADY_ENABLED}"
+    Should Be Equal As Strings   ${resp.json()}   ${ALREADY_ENABLED}
 
 
-JD-TC-Updatestatus-UH4
+JD-TC-Updatestatus-UH5
 
     [Documentation]  Update  status with the same status again(Disable).
 
@@ -191,5 +191,5 @@ JD-TC-Updatestatus-UH4
     ${resp}=  Update Statusofvendor    ${name}   ${encId}  ${toggle[1]}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings   ${resp.json()}   "${ALREADY_DISABLED}"
+    Should Be Equal As Strings   ${resp.json()}   ${ALREADY_DISABLED}
    
