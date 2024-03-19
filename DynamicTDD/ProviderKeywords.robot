@@ -13290,13 +13290,13 @@ Create Item Category
     ${data}=  Create Dictionary  categoryName=${categoryName}  
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/spitem/category  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/spitem/settings/category  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item Category
     [Arguments]  ${id}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/category/${id}  expected_status=any
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/category/${id}  expected_status=any
     RETURN  ${resp}
 
 Update Item Category
@@ -13305,13 +13305,13 @@ Update Item Category
     ${data}=  Create Dictionary  categoryName=${categoryName}   categoryCode=${categoryCode}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  PATCH On Session  ynw  /provider/spitem/category  data=${data}  expected_status=any
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/category  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item Category By Filter
     [Arguments]   &{param}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/category   params=${param}   expected_status=any
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/category   params=${param}   expected_status=any
     RETURN  ${resp}
 
 Update Item Category Status
@@ -13320,7 +13320,7 @@ Update Item Category Status
     # ${data}=  Create Dictionary  categoryName=${categoryName}   categoryCode=${categoryCode}
     # ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  PATCH On Session  ynw  /provider/spitem/category/${categoryCode}/status/${status}   expected_status=any
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/category/${categoryCode}/status/${status}   expected_status=any
     RETURN  ${resp}  
 
 Create Item Type
@@ -13329,13 +13329,13 @@ Create Item Type
     ${data}=  Create Dictionary  typeName=${typeName}  
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/spitem/type  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/spitem/settings/type  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item Type
     [Arguments]  ${id}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/type/${id}  expected_status=any
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/type/${id}  expected_status=any
     RETURN  ${resp}
 
 Update Item Type
@@ -13344,20 +13344,20 @@ Update Item Type
     ${data}=  Create Dictionary  typeName=${typeName}   typeCode=${typeCode}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  PATCH On Session  ynw  /provider/spitem/type  data=${data}  expected_status=any
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/type  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item Type By Filter
     [Arguments]   &{param}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/type   params=${param}   expected_status=any
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/type   params=${param}   expected_status=any
     RETURN  ${resp}
 
 Update Item Type Status
 
     [Arguments]   ${typeCode}   ${status}
     Check And Create YNW Session
-    ${resp}=  PATCH On Session  ynw  /provider/spitem/type/${typeCode}/status/${status}   expected_status=any
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/type/${typeCode}/status/${status}   expected_status=any
     RETURN  ${resp}  
 
 Provide Get Store Type ByEncId
@@ -13438,13 +13438,13 @@ Create Item Manufacture
     ${data}=  Create Dictionary  manufacturerName=${manufactureName}  
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/spitem/manufacture  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/spitem/settings/manufacture  data=${data}  expected_status=any
     RETURN  ${resp} 
 
 Get Item Manufacture By Id
     [Arguments]  ${id}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/manufacture/${id}  expected_status=any
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/manufacture/${id}  expected_status=any
     RETURN  ${resp}
 
 Update Item Manufacture
@@ -13453,21 +13453,21 @@ Update Item Manufacture
     ${data}=  Create Dictionary  manufacturerName=${manufactureName}    manufacturerCode=${manufactureCode}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  PATCH On Session  ynw  /provider/spitem/manufacture  data=${data}  expected_status=any
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/manufacture  data=${data}  expected_status=any
     RETURN  ${resp} 
 
 Get Item Manufacture Filter
 
     [Arguments]    &{param}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/manufacture   params=${param}   expected_status=any
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/manufacture   params=${param}   expected_status=any
     RETURN  ${resp}
 
 Update Item Manufacture Status
 
     [Arguments]   ${manufactureCode}   ${status}
     Check And Create YNW Session
-    ${resp}=    PATCH On Session    ynw   /provider/spitem/manufacture/${manufactureCode}/status/${status}   expected_status=any
+    ${resp}=    PATCH On Session    ynw   /provider/spitem/settings/manufacture/${manufactureCode}/status/${status}   expected_status=any
     RETURN  ${resp}
 
 Create Item Tax
@@ -13476,7 +13476,7 @@ Create Item Tax
     ${data}=  Create Dictionary   taxName=${taxName}   taxTypeEnum=${taxTypeEnum}   taxPercentage=${taxPercentage}   cgst=${cgst}   sgst=${sgst}   igst=${igst}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/spitem/tax  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/spitem/settings/tax  data=${data}  expected_status=any
     RETURN  ${resp} 
 
 Get Item Tax by id
@@ -13484,7 +13484,7 @@ Get Item Tax by id
     [Arguments]     ${id}
 
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/tax/${id}   expected_status=any
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/tax/${id}   expected_status=any
     RETURN  ${resp}
 
 Update Item Tax
@@ -13493,21 +13493,21 @@ Update Item Tax
     ${data}=  Create Dictionary   taxName=${taxName}  taxCode=${taxCode}   taxTypeEnum=${taxTypeEnum}   taxPercentage=${taxPercentage}   cgst=${cgst}   sgst=${sgst}   igst=${igst}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  PATCH On Session  ynw  /provider/spitem/tax  data=${data}  expected_status=any
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/tax  data=${data}  expected_status=any
     RETURN  ${resp} 
 
 Get Item Tax Filter
 
     [Arguments]    &{param}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/tax   params=${param}   expected_status=any
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/tax   params=${param}   expected_status=any
     RETURN  ${resp}
 
 Update Item Tax Status
 
     [Arguments]   ${taxCode}   ${status}
     Check And Create YNW Session
-    ${resp}=    PATCH On Session    ynw   /provider/spitem/tax/${taxCode}/status/${status}   expected_status=any
+    ${resp}=    PATCH On Session    ynw   /provider/spitem/settings/tax/${taxCode}/status/${status}   expected_status=any
     RETURN  ${resp}
 
 Create Item Unit
@@ -13516,7 +13516,7 @@ Create Item Unit
     ${data}=  Create Dictionary   unitName=${unitName}   convertionQty=${convertionQty}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/spitem/unit  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/spitem/settings/unit  data=${data}  expected_status=any
     RETURN  ${resp} 
 
 Get Item Unit by id
@@ -13524,7 +13524,7 @@ Get Item Unit by id
     [Arguments]     ${id}
 
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/unit/${id}   expected_status=any
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/unit/${id}   expected_status=any
     RETURN  ${resp}
 
 Update Item Unit
@@ -13533,21 +13533,21 @@ Update Item Unit
     ${data}=  Create Dictionary   unitName=${unitName}  unitCode=${unitCode}   convertionQty=${convertionQty}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  PATCH On Session  ynw  /provider/spitem/unit  data=${data}  expected_status=any
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/unit  data=${data}  expected_status=any
     RETURN  ${resp} 
 
 Get Item Unit Filter
 
     [Arguments]    &{param}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/unit   params=${param}   expected_status=any
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/unit   params=${param}   expected_status=any
     RETURN  ${resp}
 
 Update Item Unit Status
 
     [Arguments]   ${unitCode}   ${status}
     Check And Create YNW Session
-    ${resp}=    PATCH On Session    ynw   /provider/spitem/unit/${unitCode}/status/${status}   expected_status=any
+    ${resp}=    PATCH On Session    ynw   /provider/spitem/settings/unit/${unitCode}/status/${status}   expected_status=any
     RETURN  ${resp}
 
 
