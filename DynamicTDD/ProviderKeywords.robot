@@ -13438,13 +13438,13 @@ Create Item Manufacture
     ${data}=  Create Dictionary  manufacturerName=${manufactureName}  
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/spitem/settings/manufacture  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/spitem/settings/manufacturer  data=${data}  expected_status=any
     RETURN  ${resp} 
 
 Get Item Manufacture By Id
     [Arguments]  ${id}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/settings/manufacture/${id}  expected_status=any
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/manufacturer/${id}  expected_status=any
     RETURN  ${resp}
 
 Update Item Manufacture
@@ -13453,21 +13453,21 @@ Update Item Manufacture
     ${data}=  Create Dictionary  manufacturerName=${manufactureName}    manufacturerCode=${manufactureCode}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/manufacture  data=${data}  expected_status=any
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/manufacturer  data=${data}  expected_status=any
     RETURN  ${resp} 
 
 Get Item Manufacture Filter
 
     [Arguments]    &{param}
     Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/spitem/settings/manufacture   params=${param}   expected_status=any
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/manufacturer   params=${param}   expected_status=any
     RETURN  ${resp}
 
 Update Item Manufacture Status
 
     [Arguments]   ${manufactureCode}   ${status}
     Check And Create YNW Session
-    ${resp}=    PATCH On Session    ynw   /provider/spitem/settings/manufacture/${manufactureCode}/status/${status}   expected_status=any
+    ${resp}=    PATCH On Session    ynw   /provider/spitem/settings/manufacturer/${manufactureCode}/status/${status}   expected_status=any
     RETURN  ${resp}
 
 Create Item Tax
