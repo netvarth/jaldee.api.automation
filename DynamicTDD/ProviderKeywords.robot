@@ -13456,6 +13456,31 @@ Update Item Manufacture
     ${resp}=  PATCH On Session  ynw  /provider/spitem/manufacture  data=${data}  expected_status=any
     RETURN  ${resp} 
 
+Get Item Manufacture Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/manufacture   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Update Item Manufacture Status
+
+    [Arguments]   ${manufactureCode}   ${status}
+    Check And Create YNW Session
+    ${resp}=    PATCH On Session    ynw   /provider/spitem/manufacture/${manufactureCode}/status/${status}   expected_status=any
+    RETURN  ${resp}
+
+Create Item Tax
+
+    [Arguments]  ${taxName}  ${taxTypeEnum}  ${taxPercentage}  ${cgst}  ${sgst}  ${igst}  
+    ${data}=  Create Dictionary   taxName=${taxName}   taxTypeEnum=${taxTypeEnum}   taxPercentage=${taxPercentage}   cgst=${cgst}   sgst=${sgst}   igst=${igst}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/spitem/tax  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+
+
 # Data Migration
 
 Get Appointment By Uid
