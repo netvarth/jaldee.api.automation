@@ -1916,12 +1916,15 @@ JD-TC-Take Appointment-14
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     clear_appt_schedule   ${PUSERNAME${a}}
+    
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10      
     # ${DAY3}=  db.add_timezone_date  ${tz}  15  
@@ -1947,15 +1950,18 @@ JD-TC-Take Appointment-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name1}  apptState=${Qstate[0]}
 
+    ${DAY3}=  db.get_date_by_timezone  ${tz1}
+    ${DAY4}=  db.add_timezone_date  ${tz1}  10 
+    ${sTime2}=  db.get_time_by_timezone  ${tz1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime2}=  add_two   ${sTime1}  ${delta}
+    ${eTime2}=  add_two   ${sTime2}  ${delta}
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     ${schedule_name2}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}    ${parallel}  ${lid1}  ${duration}  ${bool1}  ${s_id1}
+    ${resp}=  Create Appointment Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${lid1}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id2}  ${resp.json()}
@@ -1971,7 +1977,7 @@ JD-TC-Take Appointment-14
     Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY1}  ${s_id1}
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY3}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  scheduleName=${schedule_name2}  scheduleId=${sch_id2}
@@ -1994,7 +2000,6 @@ JD-TC-Take Appointment-14
     ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -2002,10 +2007,9 @@ JD-TC-Take Appointment-14
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id1}  ${sch_id2}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer   ${cid}  ${s_id1}  ${sch_id2}  ${DAY3}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
@@ -2051,7 +2055,7 @@ JD-TC-Take Appointment-14
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}   ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['apptTime']}   ${slot2}
-    Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['appmtDate']}   ${DAY3}
     Should Be Equal As Strings  ${resp.json()['appmtTime']}   ${slot2}
     Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid1}
 
