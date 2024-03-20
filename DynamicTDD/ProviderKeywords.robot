@@ -13323,6 +13323,16 @@ Update Item Category Status
     ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/category/${categoryCode}/status/${status}   expected_status=any
     RETURN  ${resp}  
 
+Get Item Category Count By Filter
+
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/category/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+
+# ......... ITEM TYPE .............
+
 Create Item Type
 
     [Arguments]  ${typeName}  
@@ -13359,6 +13369,15 @@ Update Item Type Status
     Check And Create YNW Session
     ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/type/${typeCode}/status/${status}   expected_status=any
     RETURN  ${resp}  
+
+Get Item Type Count By Filter
+
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/type/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+# ............ Store .............
 
 Provide Get Store Type ByEncId
     [Arguments]   ${storeTypeId}
@@ -13472,6 +13491,13 @@ Update Item Manufacture Status
     ${resp}=    PATCH On Session    ynw   /provider/spitem/settings/manufacturer/${manufactureCode}/status/${status}   expected_status=any
     RETURN  ${resp}
 
+Get Item Manufacture Count Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/manufacturer/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
 #........ Item Tax .........
 
 Create Item Tax
@@ -13512,6 +13538,13 @@ Update Item Tax Status
     [Arguments]   ${taxCode}   ${status}
     Check And Create YNW Session
     ${resp}=    PATCH On Session    ynw   /provider/spitem/settings/tax/${taxCode}/status/${status}   expected_status=any
+    RETURN  ${resp}
+
+Get Item Tax Count Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/tax/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
 #........ Item Unit .........
@@ -13556,6 +13589,13 @@ Update Item Unit Status
     ${resp}=    PATCH On Session    ynw   /provider/spitem/settings/unit/${unitCode}/status/${status}   expected_status=any
     RETURN  ${resp}
 
+Get Item Unit Count Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/unit/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
 #........ Item Composition .........
 
 Create Item Composition
@@ -13596,6 +13636,13 @@ Update Item Composition Status
     [Arguments]   ${compositionCode}   ${status}
     Check And Create YNW Session
     ${resp}=    PATCH On Session    ynw   /provider/spitem/settings/composition/${compositionCode}/status/${status}   expected_status=any
+    RETURN  ${resp}
+
+Get Item Composition Count Filter 
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/composition/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
 #........ Item hsn .........
@@ -13641,9 +13688,12 @@ Update Item hns Status
     ${resp}=    PATCH On Session    ynw   /provider/spitem/settings/hsn/${hsnid}/status/${status}   expected_status=any
     RETURN  ${resp}
 
+Get Item hns Count Filter
 
-
-
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/hsn/count   params=${param}   expected_status=any
+    RETURN  ${resp}
 
 
 
