@@ -3791,6 +3791,10 @@ JD-TC-Take Appointment-18
     ${servicecharge}=   Random Int  min=100  max=200
     ${s_id}=  Create Sample Service with Prepayment   ${SERVICE1}  ${min_pre}  ${servicecharge}
 
+    ${resp}=  Auto Invoice Generation For Service   ${s_id}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     clear_appt_schedule   ${billable_providers[3]}
 
     ${resp}=  Get Appointment Schedules
@@ -3852,7 +3856,6 @@ JD-TC-Take Appointment-18
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname1}
     ${min_pre}=  Get From Dictionary  ${resp.json()}  _prepaymentAmount
     ${min_pre}=  Convert To Number  ${min_pre}  1
@@ -3928,7 +3931,6 @@ JD-TC-Take Appointment-18
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid2}
@@ -3962,8 +3964,12 @@ JD-TC-Take Appointment-18
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${apptid2}  ${pid} 
-    Log  ${resp.content}
+    # ${resp}=  Get Bill By consumer  ${apptid2}  ${pid} 
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Payment Details  paymentRefId-eq=${payref}
