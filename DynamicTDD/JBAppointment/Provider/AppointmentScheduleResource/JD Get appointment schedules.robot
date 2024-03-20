@@ -197,7 +197,7 @@ JD-TC-Get Appointment schedules-4
     FOR  ${pos}  IN RANGE  ${dlen}  
         IF  '${iscorp_subdomains[${pos}]['subdomains']}' == '${subdomain}'
             Set Suite Variable  ${sub_domain_id}   ${iscorp_subdomains[${pos}]['subdomainId']}
-            Set Suite Variable  ${userSubDomain}  ${iscorp_subdomains[${pos}]['userSubDomain']}
+            Set Suite Variable  ${userSubDomainId}  ${iscorp_subdomains[${pos}]['userSubDomain']}
             Exit For Loop
         ELSE
             Continue For Loop
