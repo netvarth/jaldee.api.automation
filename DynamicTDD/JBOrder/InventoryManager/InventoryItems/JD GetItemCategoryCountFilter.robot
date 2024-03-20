@@ -18,30 +18,30 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 
 *** Test Cases ***
 
-JD-TC-GetItemTypeCountByFilter-1
+JD-TC-GetItemCategoryCountByFilter-1
 
-    [Documentation]   Create a Item Type Count by Filter
+    [Documentation]   Get Item Category Count By Filter
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${TypeName}=    FakerLibrary.name
-    Set Suite Variable  ${TypeName}
+    ${categoryName}=    FakerLibrary.name
+    Set Suite Variable  ${categoryName}
 
-    ${resp}=  Create Item Type   ${TypeName}
+    ${resp}=  Create Item Category   ${categoryName}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable    ${Ty_Id}    ${resp.json()}
+    Set Suite Variable    ${Ca_Id}    ${resp.json()}
 
-    ${resp}=  Get Item Type   ${Ty_Id}
+    ${resp}=  Get Item Category   ${Ca_Id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['typeCode']}    ${Ty_Id}
-    Should Be Equal As Strings    ${resp.json()['typeName']}    ${TypeName}
+    Should Be Equal As Strings    ${resp.json()['categoryCode']}    ${Ca_Id}
+    Should Be Equal As Strings    ${resp.json()['categoryName']}    ${categoryName}
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
 
-    ${resp}=  Get Item Type Count By Filter
+    ${resp}=  Get Item Category Count By Filter   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}        1

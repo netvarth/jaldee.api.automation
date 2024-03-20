@@ -13323,6 +13323,16 @@ Update Item Category Status
     ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/category/${categoryCode}/status/${status}   expected_status=any
     RETURN  ${resp}  
 
+Get Item Category Count By Filter
+
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/category/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+
+# ......... ITEM TYPE .............
+
 Create Item Type
 
     [Arguments]  ${typeName}  
