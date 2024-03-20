@@ -20,7 +20,7 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 
 JD-TC-UpdateItemUnit-1
 
-    [Documentation]  Update Item Unit
+    [Documentation]  Update Item Unit - updated unit name
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
@@ -55,3 +55,118 @@ JD-TC-UpdateItemUnit-1
     Should Be Equal As Strings    ${resp.json()['unitCode']}    ${iu_id}
     Should Be Equal As Strings    ${resp.json()['unitName']}    ${unitName2}
     Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}
+
+JD-TC-UpdateItemUnit-2
+
+    [Documentation]  Update Item Unit - update convertion qty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${qty}=   Random Int  min=99  max=999
+
+    ${resp}=    Update Item Unit  ${unitName}  ${iu_id}  ${qty}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Unit by id  ${iu_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['unitCode']}    ${iu_id}
+    Should Be Equal As Strings    ${resp.json()['unitName']}    ${unitName}
+    Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}
+
+JD-TC-UpdateItemUnit-3
+
+    [Documentation]  Update Item Unit - name as empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update Item Unit  ${empty}  ${iu_id}  ${convertionQty}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Unit by id  ${iu_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['unitCode']}    ${iu_id}
+    Should Be Equal As Strings    ${resp.json()['unitName']}    ${empty}
+    Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}
+
+JD-TC-UpdateItemUnit-4
+
+    [Documentation]  Update Item Unit - convertionQty as empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update Item Unit  ${unitName}  ${iu_id}  ${convertionQty}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Unit by id  ${iu_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['unitCode']}    ${iu_id}
+    Should Be Equal As Strings    ${resp.json()['unitName']}    ${unitName}
+    Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}
+
+JD-TC-UpdateItemUnit-UH1
+
+    [Documentation]  Update Item Unit - item unit id is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Unit code
+
+    ${resp}=    Update Item Unit  ${unitName}  ${empty}  ${convertionQty}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${INVALID_FIELD}
+
+JD-TC-UpdateItemUnit-UH2
+
+    [Documentation]  Update Item Unit - item unit id is invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${rdm}=   Random Int  min=99  max=999
+
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Unit code
+
+    ${resp}=    Update Item Unit  ${unitName}  ${rdm}  ${convertionQty}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${INVALID_FIELD}
+
+JD-TC-UpdateItemUnit-UH3
+
+    [Documentation]  Update Item Unit - without login
+
+    ${resp}=    Update Item Unit  ${unitName}  ${iu_id}  ${convertionQty}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
+
+JD-TC-UpdateItemUnit-UH4
+ 
+    [Documentation]  Update Item Unit - update using another provider login
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Unit code
+
+    ${resp}=    Update Item Unit  ${unitName}  ${iu_id}  ${convertionQty}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${INVALID_FIELD}

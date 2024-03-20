@@ -53,3 +53,64 @@ JD-TC-UpdateItemUnitStatus-1
     Should Be Equal As Strings    ${resp.json()['unitCode']}    ${iu_id}
     Should Be Equal As Strings    ${resp.json()['unitName']}    ${unitName}
     Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[1]}
+
+
+JD-TC-UpdateItemUnitStatus-2
+
+    [Documentation]  Update Item Unit Status as already disabled.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update Item Unit Status   ${iu_id}    ${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Item Unit by id   ${iu_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['typeCode']}    ${iu_id}
+    Should Be Equal As Strings    ${resp.json()['typeName']}    ${TypeName}
+    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[1]}
+
+JD-TC-UpdateItemUnitStatus-3
+
+    [Documentation]  try to Enable ,Disabled Status.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update Item Unit Status   ${iu_id}    ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Item Unit by id   ${iu_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['typeCode']}    ${iu_id}
+    Should Be Equal As Strings    ${resp.json()['typeName']}    ${TypeName}
+    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
+
+JD-TC-UpdateItemUnitStatus-UH1
+
+    [Documentation]  Get Item Unit without Login.
+
+    ${resp}=  Update Item Unit Status   ${iu_id}    ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
+
+JD-TC-UpdateItemUnitStatus-UH2
+
+    [Documentation]  Get Item Unit with Consumer Login.
+
+    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Update Item Unit Status   ${iu_id}    ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    401
+    Should Be Equal As Strings    ${resp.json()}    ${NoAccess} 
