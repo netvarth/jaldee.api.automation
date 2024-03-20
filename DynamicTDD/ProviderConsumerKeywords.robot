@@ -86,6 +86,19 @@ Get ProviderConsumer
     ${resp}=    GET On Session    ynw    /spconsumer/     expected_status=any
     RETURN  ${resp}
 
+
+Add FamilyMember For ProviderConsumer1
+      [Arguments]   ${firstname}   ${lastname}  ${dob}  ${gender}  ${primarynum}  &{kwargs}
+      Check And Create YNW Session
+
+      ${userProfile}=  Create Dictionary    firstName=${firstname}   lastName=${lastname}   dob=${dob}   gender=${gender}   primaryMobileNo=${primarynum}   
+      ${data}=   Create Dictionary    userProfile=${userProfile}
+      FOR    ${key}    ${value}    IN    &{kwargs}
+            Set To Dictionary 	${data} 	${key}=${value}
+      END
+      ${resp}=  POST On Session  ynw   /consumer/familyMember   json=${data}    expected_status=any
+      RETURN  ${resp}
+
 Add FamilyMember For ProviderConsumer
     [Arguments]                   ${firstname}   ${lastname}   ${dob}   ${gender}   ${email}   ${city}   ${state}   ${address}   ${primarynum}   ${alternativenum}   ${countrycode}   ${countryCodet}   ${numbert}   ${countryCodew}   ${numberw}
     Check And Create YNW Session
