@@ -41,7 +41,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-1
       # Set Test Variable  ${pid}  ${resp.json()['id']}
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
-      ${ph2}=  Evaluate  ${PUSERNAME23}+76003
+      ${ph2}=  Evaluate  ${PUSERNAME0}+76003
       Set Suite Variable  ${ph2}
       Set Suite Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
@@ -111,14 +111,14 @@ JD-TC-AddFamilyMemberOfProvidercustomer-2
 
 JD-TC-AddFamilyMemberOfProvidercustomer-3
       [Documentation]    Adding a family member with  same phone number 
-      ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+200000
+      ${Familymember_ph}=  Evaluate  ${PUSERNAME18}+200000
       ${resp}=  Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       clear_customer   ${PUSERNAME18}
 
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
-      ${ph2}=  Evaluate  ${PUSERNAME23}+76004
+      ${ph2}=  Evaluate  ${PUSERNAME18}+76004
       Set Test Variable  ${email}  ${firstname}${ph2}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
       ${gender}=  Random Element    ${Genderlist}
@@ -131,7 +131,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-3
       ${lastname}=  FakerLibrary.last_name
       ${dob}=  FakerLibrary.Date
       ${gender}=  Random Element    ${Genderlist}
-      ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+300002
+      ${Familymember_ph}=  Evaluate  ${PUSERNAME18}+300002
       Set Test Variable   ${Familymember_ph}
       ${resp}=  AddFamilyMemberByProviderWithPhoneNo  ${pcid1}  ${firstname}  ${lastname}  ${dob}  ${gender}  ${Familymember_ph}  
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -140,7 +140,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-3
       ${lastname1}=  FakerLibrary.last_name
       ${dob1}=  FakerLibrary.Date
       ${gender1}=  Random Element    ${Genderlist}
-      # ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+300003
+      # ${Familymember_ph}=  Evaluate  ${PUSERNAME18}+300003
 
       ${resp}=  AddFamilyMemberByProviderWithPhoneNo  ${pcid1}  ${firstname1}  ${lastname1}  ${dob1}  ${gender1}  ${Familymember_ph}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -166,7 +166,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-3
      
 JD-TC-AddFamilyMemberOfProvidercustomer-4
       [Documentation]   One familymember added by two providers
-      ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+200001
+      ${Familymember_ph}=  Evaluate  ${PUSERNAME18}+200001
       ${resp}=  Encrypted Provider Login  ${PUSERNAME18}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${firstname}=  FakerLibrary.first_name
@@ -177,7 +177,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-4
       Set Test Variable  ${dob}
       ${gender}=  Random Element    ${Genderlist}
       Set Test Variable  ${gender}
-      Set Test Variable  ${email}  ${firstname}${PUSERNAME0}${C_Email}.${test_mail}
+      Set Test Variable  ${email}  ${firstname}${PUSERNAME18}${C_Email}.${test_mail}
       ${resp}=  AddFamilyMemberByProviderWithPhoneNo  ${pcid1}  ${firstname}  ${lastname}  ${dob}  ${gender}  ${Familymember_ph}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  ProviderLogout
@@ -254,7 +254,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-6
       Set Test Variable  ${firstname}
       ${lastname}=  FakerLibrary.last_name
       Set Test Variable  ${lastname}
-      ${ph3}=  Evaluate  ${PUSERNAME23}+76005
+      ${ph3}=  Evaluate  ${PUSERNAME0}+76005
       Set Test Variable  ${email3}  ${firstname}${ph3}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
       Set Test Variable  ${dob}
@@ -286,7 +286,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-6
       Set Test Variable  ${mem_id2}  ${resp.json()}
       Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph3}${\n}
       ${address}=  FakerLibrary.Address
-      ${alternativeNo}=  Evaluate  ${PUSERNAME23}+73006
+      ${alternativeNo}=  Evaluate  ${PUSERNAME0}+73006
       ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${ph3}    ${alternativeNo}  ${dob}  ${gender}  ${EMPTY}
       Log   ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
@@ -320,6 +320,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-6
       # Should Be Equal As Strings  ${resp.json()[1]['gender']}  ${gender1}
 
       ${resp}=  ProviderLogout
+      Should Be Equal As Strings  ${resp.status_code}  200
 
 
 JD-TC-AddFamilyMemberOfProvidercustomer-7
@@ -336,7 +337,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-7
       Set Test Variable  ${firstname}
       ${lastname}=  FakerLibrary.last_name
       Set Test Variable  ${lastname}
-      ${ph4}=  Evaluate  ${PUSERNAME23}+76007
+      ${ph4}=  Evaluate  ${PUSERNAME0}+76007
       Set Test Variable  ${email4}  ${firstname}${ph4}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
       Set Test Variable  ${dob}
@@ -395,7 +396,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-7
       Log  ${resp.json()}
       Set Test Variable  ${mem_id4}  ${resp.json()}
       ${address}=  FakerLibrary.Address
-      ${alternativeNo}=  Evaluate  ${PUSERNAME23}+76008
+      ${alternativeNo}=  Evaluate  ${PUSERNAME0}+76008
       ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${ph4}   ${alternativeNo}  ${dob}  ${Genderlist[0]}   ${EMPTY}
       Should Be Equal As Strings    ${resp.status_code}    200
       ${resp}=  Consumer Activation  ${ph4}  1
@@ -434,6 +435,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-7
 
       # Should Not Contain   ${resp}  3  user=${mem_id3}
       ${resp}=  ProviderLogout
+      Should Be Equal As Strings  ${resp.status_code}  200
 
 
 JD-TC-AddFamilyMemberOfProvidercustomer-8
@@ -450,7 +452,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-8
       Set Test Variable  ${firstname}
       ${lastname}=  FakerLibrary.last_name
       Set Test Variable  ${lastname}
-      ${ph4}=  Evaluate  ${PUSERNAME23}+77001
+      ${ph4}=  Evaluate  ${PUSERNAME0}+77001
       Set Test Variable  ${email4}  ${firstname}${ph4}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
       Set Test Variable  ${dob}
@@ -697,9 +699,9 @@ JD-TC-AddFamilyMemberOfProvidercustomer-10
       ${resp}=  Get Waitlist By Id  ${wid} 
       Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[1]}
-      ${resp}=  ListFamilyMemberByProvider  ${cid}
-      Should Be Equal As Strings  ${resp.status_code}  200
+      ${resp}=  ListFamilyMemberByProvider  ${c_id1}
       Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response List  ${resp}  0  id=${mem_id0}
       Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstname0}
       Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lastname0}
@@ -732,7 +734,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-UH2
       Should Be Equal As Strings  ${resp.status_code}  200
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
-      ${ph5}=  Evaluate  ${PUSERNAME23}+76009
+      ${ph5}=  Evaluate  ${PUSERNAME0}+76009
       Set Test Variable  ${email5}  ${firstname}${ph5}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
       ${gender}=  Random Element    ${Genderlist}
@@ -855,8 +857,9 @@ JD-TC-AddFamilyMemberOfProvidercustomer-UH4
       clear_customer   ${PUSERNAME1}
 
       ${resp}=   ProviderKeywords.Get Queues
-      Should Be Equal As Strings  ${resp.status_code}  200
       Log   ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      
       ${resp} =  Create Sample Queue
       Set Test Variable  ${s_id}  ${resp['service_id']}
       Set Test Variable  ${qid}   ${resp['queue_id']}
@@ -876,8 +879,8 @@ JD-TC-AddFamilyMemberOfProvidercustomer-UH4
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${c_id1}  ${resp.json()}
       ${resp}=  ListFamilyMemberByProvider  ${c_id1}
-      Should Be Equal As Strings  ${resp.status_code}  200
       Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
       Should Be Equal As Strings   ${resp.json()}   []
       ${DAY}=  db.get_date_by_timezone  ${tz}
       ${desc}=   FakerLibrary.word
@@ -925,9 +928,9 @@ JD-TC-AddFamilyMemberOfProvidercustomer-11
       ${resp}=  Get Waitlist By Id  ${wid} 
       Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[1]}
-      ${resp}=  ListFamilyMemberByProvider  ${cid}
-      Should Be Equal As Strings  ${resp.status_code}  200
+      ${resp}=  ListFamilyMemberByProvider  ${c_id1}
       Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response List  ${resp}  0  id=${fid}
       Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstname}
       Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lastname}
@@ -977,9 +980,9 @@ JD-TC-AddFamilyMemberOfProvidercustomer-12
       ${resp}=  Get Waitlist By Id  ${wid} 
       Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response  ${resp}  date=${DAY}  waitlistStatus=${wl_status[1]}
-      ${resp}=  ListFamilyMemberByProvider  ${cid}
-      Should Be Equal As Strings  ${resp.status_code}  200
+      ${resp}=  ListFamilyMemberByProvider  ${c_id1}
       Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
       Verify Response List  ${resp}  0  id=${fid}
       Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstname}
       Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lastname}
@@ -1006,7 +1009,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-13
       Set Test Variable  ${firstname}
       ${lastname}=  FakerLibrary.last_name
       Set Test Variable  ${lastname}
-      ${ph3}=  Evaluate  ${PUSERNAME23}+77605
+      ${ph3}=  Evaluate  ${PUSERNAME0}+77605
       Set Test Variable  ${email3}  ${firstname}${ph3}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
       Set Test Variable  ${dob}
@@ -1096,7 +1099,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-14
       Set Test Variable  ${firstname}
       ${lastname}=  FakerLibrary.last_name
       Set Test Variable  ${lastname}
-      ${ph3}=  Evaluate  ${PUSERNAME23}+76605
+      ${ph3}=  Evaluate  ${PUSERNAME0}+76605
       Set Test Variable  ${email3}  ${firstname}${ph3}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
       Set Test Variable  ${dob}
@@ -1128,7 +1131,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-14
       Set Test Variable  ${mem_id2}  ${resp.json()}
       Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph3}${\n}
       ${address}=  FakerLibrary.Address
-      ${alternativeNo}=  Evaluate  ${PUSERNAME23}+73006
+      ${alternativeNo}=  Evaluate  ${PUSERNAME0}+73006
       ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${ph3}    ${alternativeNo}  ${dob}  ${gender}  ${EMPTY}
       Log   ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
@@ -1182,7 +1185,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-15
       Set Test Variable  ${firstname}
       ${lastname}=  FakerLibrary.last_name
       Set Test Variable  ${lastname}
-      ${ph3}=  Evaluate  ${PUSERNAME23}+77606
+      ${ph3}=  Evaluate  ${PUSERNAME0}+77606
       Set Test Variable  ${email3}  ${firstname}${ph3}${C_Email}.${test_mail}
       ${dob}=  FakerLibrary.Date
       Set Test Variable  ${dob}
@@ -1327,3 +1330,47 @@ JD-TC-AddFamilyMemberOfProvidercustomer-15
       Log   ${resp.json()}
       # Should Be Equal As Strings   ${resp.json()}   []
       Should Not Be Empty    ${resp.json()}
+
+
+JD-TC-AddFamilyMemberOfProvidercustomer-16
+      [Documentation]    Add a familymember with title
+      ${resp}=  Encrypted Provider Login  ${PUSERNAME0}  ${PASSWORD}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      clear_customer   ${PUSERNAME0}
+
+      ${decrypted_data}=  db.decrypt_data  ${resp.content}
+      Log  ${decrypted_data}
+      Set Test Variable  ${pid}  ${decrypted_data['id']}
+
+      # Set Test Variable  ${pid}  ${resp.json()['id']}
+      ${firstname}=  FakerLibrary.first_name
+      ${lastname}=  FakerLibrary.last_name
+      ${ph2}=  Evaluate  ${PUSERNAME0}+76003
+      ${dob}=  FakerLibrary.Date
+      ${gender}=  Random Element    ${Genderlist}
+      ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${CUSERNAME18}  ${EMPTY}
+      Log  ${resp.json()}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Suite Variable  ${pcid}  ${resp.json()}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
+      ${firstname1}=  FakerLibrary.first_name
+      Set Suite Variable  ${firstname1}
+      ${lastname1}=  FakerLibrary.last_name
+      Set Suite Variable  ${lastname1}
+      ${dob1}=  FakerLibrary.Date
+      Set Suite Variable  ${dob1}
+      ${gender1}=  Random Element    ${Genderlist}
+      Set Suite Variable  ${gender1}
+      ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+300000
+
+      ${resp}=  AddFamilyMemberByProviderWithPhoneNo  ${pcid}  ${firstname1}  ${lastname1}  ${dob1}  ${gender1}  ${Familymember_ph}
+      Log  ${resp.json()}
+      Set Suite Variable  ${mem_id0}  ${resp.json()}
+      ${resp}=  ListFamilyMemberByProvider  ${pcid}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Log  ${resp.json()}
+      Verify Response List  ${resp}  0  id=${mem_id0}   
+      Should Be Equal As Strings  ${resp.json()[0]['firstName']}  ${firstname1}
+      Should Be Equal As Strings  ${resp.json()[0]['lastName']}  ${lastname1}
+      Should Be Equal As Strings  ${resp.json()[0]['dob']}  ${dob1}
+      Should Be Equal As Strings  ${resp.json()[0]['gender']}  ${gender1}

@@ -4275,6 +4275,76 @@ JD-TC-AddCustomer-29
      Should Be Equal As Strings    ${resp.status_code}    200
 
 
+JD-TC-AddCustomer-30
+     [Documentation]  Add a customer with title.
+
+     ${resp}=  Encrypted Provider Login  ${PUSERNAME230}  ${PASSWORD}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Get Business Profile
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=  Get Accountsettings  
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+     ${resp}=   Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
+          ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+          Should Be Equal As Strings  ${resp1.status_code}  200
+     ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[1]}'
+          ${resp1}=   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
+          Should Be Equal As Strings  ${resp1.status_code}  200
+     END
+     
+     ${resp}=  Get jaldeeIntegration Settings
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
+     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+
+     ${firstname}=  FakerLibrary.first_name
+     ${lastname}=  FakerLibrary.last_name
+     ${cust_no}    FakerLibrary.Numerify   text=%######
+     ${cust_no}=  Evaluate  ${CUSERNAME}+${cust_no}
+     ${dob}=  FakerLibrary.Date
+     ${address}=  FakerLibrary.address
+     ${gender}=  Random Element    ${Genderlist}
+     ${title}=  Random Element    ${customertitle}
+     
+     ${resp}=  AddCustomer  ${cust_no}   countryCode=${countryCodes[0]}  firstName=${firstname}   lastName=${lastname}  address=${address}   gender=${gender}  dob=${dob}  title=${title}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Set Test Variable  ${cid1}  ${resp.json()}
+     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${cust_no}${\n}
+
+     ${resp}=  GetCustomer ById  ${cid1}
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['firstName']}  ${firstname}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['lastName']}  ${lastname}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['address']}  ${address}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['gender']}  ${gender}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['dob']}  ${dob}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phoneNo']}  ${cust_no}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['status']}  ${status[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['countryCode']}  ${countryCodes[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['jaldeeConsumerDetails']['SignedUp']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['isSignUpCustomer']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['phone_verified']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['email_verified']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['favourite']}  ${bool[0]}
+     Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['title']}  ${title}
+
+     ${resp}=  ProviderLogout
+     Should Be Equal As Strings  ${resp.status_code}  200
+
+
+
+
 
 
 

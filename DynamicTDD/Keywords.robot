@@ -259,6 +259,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{printTemplateType}                Prescription    Case    Finance
 @{storeNature}                      PHARMACY   LAB    RADIOLOGY
 @{taxtypeenum}                      GST  CESS  VAT
+@{customertitle}                    Mr  Ms  Mrs  Master
 
 *** Keywords ***
 Login
