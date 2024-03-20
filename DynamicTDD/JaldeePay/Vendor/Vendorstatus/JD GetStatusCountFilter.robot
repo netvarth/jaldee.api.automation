@@ -94,7 +94,7 @@ JD-TC-Get StatusCount Filter-3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   Get VendorStatus With CountFilter   isEnabled-eq=${toggle[0]}    
+    ${resp}=   Get VendorStatus With CountFilter   status-eq=${toggle[0]}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings   ${resp.json()}   1
@@ -123,7 +123,7 @@ JD-TC-Get StatusCount Filter-5
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   Get VendorStatus With CountFilter   encId-eq=${encId}   isEnabled-eq=${toggle[0]}  createdDate-eq=${CUR_DAY}  name-eq=${name}
+    ${resp}=   Get VendorStatus With CountFilter   encId-eq=${encId}   status-eq=${toggle[0]}  createdDate-eq=${CUR_DAY}  name-eq=${name}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings   ${resp.json()}   1
@@ -137,7 +137,7 @@ JD-TC-Get StatusCount Filter-6
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Get VendorStatus With CountFilter   isEnabled-eq=${toggle[1]}    
+    ${resp}=  Get VendorStatus With CountFilter   status-eq=${toggle[1]}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings   ${resp.json()}   0

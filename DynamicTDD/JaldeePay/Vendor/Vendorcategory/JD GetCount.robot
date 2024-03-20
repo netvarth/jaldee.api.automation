@@ -95,11 +95,16 @@ JD-TC-Get Count Filter-3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
+
+    ${resp}=   Get VendorCategory With Filter   status-eq=${toggle[0]}    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=  Get VendorCategory With CountFilter   status-eq=${toggle[0]}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  ${resp.json()}          ${name}
-    Should Be Equal As Strings   ${resp.json()}   1
+    Should Be Equal As Strings   ${resp.json()}   2
 
 JD-TC-Get Count Filter-4
 

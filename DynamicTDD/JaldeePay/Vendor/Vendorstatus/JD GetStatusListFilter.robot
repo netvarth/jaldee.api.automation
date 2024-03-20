@@ -97,7 +97,7 @@ JD-TC-Get StatuList Filter-3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   Get Vendorstatus With Filter   isEnabled-eq=${toggle[0]}    
+    ${resp}=   Get Vendorstatus With Filter   status-eq=${toggle[0]}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name}
@@ -127,7 +127,7 @@ JD-TC-Get StatuList Filter-5
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   Get Vendorstatus With Filter   encId-eq=${encId}   isEnabled-eq=${toggle[0]}  createdDate-eq=${CUR_DAY}  name-eq=${name}
+    ${resp}=   Get Vendorstatus With Filter   encId-eq=${encId}   status-eq=${toggle[0]}  createdDate-eq=${CUR_DAY}  name-eq=${name}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name}
@@ -142,7 +142,7 @@ JD-TC-Get StatuList Filter-6
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=  Get Vendorstatus With Filter   isEnabled-eq=${toggle[1]}    
+    ${resp}=  Get Vendorstatus With Filter   status-eq=${toggle[1]}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  422
 
