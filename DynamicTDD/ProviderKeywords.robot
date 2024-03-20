@@ -13432,6 +13432,8 @@ Get store Count
     ${resp}=    GET On Session    ynw   /provider/store/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
+#........ Item Manufacture .........
+
 Create Item Manufacture
 
     [Arguments]  ${manufactureName}  
@@ -13469,6 +13471,8 @@ Update Item Manufacture Status
     Check And Create YNW Session
     ${resp}=    PATCH On Session    ynw   /provider/spitem/settings/manufacturer/${manufactureCode}/status/${status}   expected_status=any
     RETURN  ${resp}
+
+#........ Item Tax .........
 
 Create Item Tax
 
@@ -13510,6 +13514,8 @@ Update Item Tax Status
     ${resp}=    PATCH On Session    ynw   /provider/spitem/settings/tax/${taxCode}/status/${status}   expected_status=any
     RETURN  ${resp}
 
+#........ Item Unit .........
+
 Create Item Unit
 
     [Arguments]  ${unitName}  ${convertionQty}  
@@ -13549,6 +13555,95 @@ Update Item Unit Status
     Check And Create YNW Session
     ${resp}=    PATCH On Session    ynw   /provider/spitem/settings/unit/${unitCode}/status/${status}   expected_status=any
     RETURN  ${resp}
+
+#........ Item Composition .........
+
+Create Item Composition
+
+    [Arguments]  ${compositionName} 
+    ${data}=  Create Dictionary   compositionName=${compositionName} 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/spitem/settings/composition  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item Composition by id
+
+    [Arguments]     ${id}
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/composition/${id}   expected_status=any
+    RETURN  ${resp}
+
+Update Item Composition
+
+    [Arguments]     ${compositionName}  ${compositionCode}
+    ${data}=  Create Dictionary   compositionName=${compositionName}  compositionCode=${compositionCode} 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/composition  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item Composition Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/composition   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Update Item Composition Status
+
+    [Arguments]   ${compositionCode}   ${status}
+    Check And Create YNW Session
+    ${resp}=    PATCH On Session    ynw   /provider/spitem/settings/composition/${compositionCode}/status/${status}   expected_status=any
+    RETURN  ${resp}
+
+#........ Item hsn .........
+
+
+Create Item hns
+
+    [Arguments]  ${hsnCode} 
+    ${data}=  Create Dictionary   hsnCode=${hsnCode} 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/spitem/settings/hsn  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item hns by id
+
+    [Arguments]     ${id}
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/hsn/${id}   expected_status=any
+    RETURN  ${resp}
+
+Update Item hns
+
+    [Arguments]     ${id}  ${hsnCode}
+    ${data}=  Create Dictionary   id=${id}  hsnCode=${hsnCode} 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/settings/hsn  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item hns Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/settings/hsn   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Update Item hns Status
+
+    [Arguments]   ${hsnid}   ${status}
+    Check And Create YNW Session
+    ${resp}=    PATCH On Session    ynw   /provider/spitem/settings/hsn/${hsnid}/status/${status}   expected_status=any
+    RETURN  ${resp}
+
+
+
+
 
 
 
