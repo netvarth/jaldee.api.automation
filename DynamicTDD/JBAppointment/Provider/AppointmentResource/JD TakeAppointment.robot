@@ -6209,26 +6209,26 @@ JD-TC-Take Appointment-37
 
     FOR  ${i}  IN RANGE   ${len}
 
-        Run Keyword IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
-        ...    Run Keywords
-        ...    Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${encId1}       
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[7]}    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
-        
-        ...   ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid2}' 
-        ...    Run Keywords
-        ...    Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${encId2}       
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[0]}    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot2}
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+        IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
 
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${encId1}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[7]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+        
+        ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid2}' 
+
+            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${encId2}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[0]}    
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY1}
+            Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot2}
+            Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
+            Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
+        END
     END
  
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
@@ -6246,37 +6246,6 @@ JD-TC-Take Appointment-37
     ${resp}=  Provider Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 JD-TC-Take Appointment-38
@@ -6416,7 +6385,6 @@ JD-TC-Take Appointment-38
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
@@ -6447,7 +6415,7 @@ JD-TC-Take Appointment-38
     Should Be Equal As Strings  ${resp.status_code}  200
     ${encId1}=  Set Variable   ${resp.json()}
 
-    ${resp}=  Get Appointments Today
+    ${resp}=  Get Appointments Today   paymentStatus-eq=${paymentStatus[0]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY1}  appmtTime=${slot1}  apptBy=CONSUMER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[2]}  apptStatus=${apptStatus[0]}
@@ -6526,7 +6494,7 @@ JD-TC-Take Appointment-38
     Should Be Equal As Strings  ${resp.status_code}  200
     ${encId2}=  Set Variable   ${resp.json()}
 
-    ${resp}=  Get Appointments Today
+    ${resp}=  Get Appointments Today   paymentStatus-eq=${paymentStatus[0]}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -6794,7 +6762,7 @@ JD-TC-Take Appointment-39
 #     ${DAY2}=  db.add_timezone_date  ${tz}  10        
 #     ${list}=  Create List  1  2  3  4  5  6  7
 #   # ${sTime1}=  db.get_time_by_timezone   ${tz}
-    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    # ${sTime1}=  db.get_time_by_timezone  ${tz}
 #     ${delta}=  FakerLibrary.Random Int  min=10  max=60
 #     ${eTime1}=  add_two   ${sTime1}  ${delta}
 #     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -7081,7 +7049,7 @@ JD-TC-Take Appointment-UH2
 #     ${DAY2}=  db.add_timezone_date  ${tz}  10       
 #     ${list}=  Create List  1  2  3  4  5  6  7
 #   # ${sTime1}=  db.get_time_by_timezone   ${tz}
-    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    # ${sTime1}=  db.get_time_by_timezone  ${tz}
 #     ${delta}=  FakerLibrary.Random Int  min=10  max=60
 #     ${eTime1}=  add_two   ${sTime1}  ${delta}
 #     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -8848,12 +8816,7 @@ JD-TC-Take Appointment-UH24
     ${resp}=    Get Locations
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${lid1}=  Create Sample Location
-    ${resp}=   Get Location ById  ${lid1}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
@@ -8898,7 +8861,6 @@ JD-TC-Take Appointment-UH24
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -8928,6 +8890,11 @@ JD-TC-Take Appointment-UH24
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # sleep   05s
+
+    ${resp}=  Get Appointment Schedule ById  ${sch_id1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name}  apptState=${Qstate[1]}
 
     ${resp}=  Get Appointment Status   ${apptid1}
     Log   ${resp.json()}
