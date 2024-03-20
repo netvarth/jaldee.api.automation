@@ -2753,7 +2753,7 @@ JD-TC-ChangeAppointmentStatus-UH10
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[1]}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[5]}
 
 JD-TC-ChangeAppointmentStatus-UH11
     [Documentation]  Change status to prepaymentpending from confirmed.

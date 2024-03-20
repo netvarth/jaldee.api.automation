@@ -56,7 +56,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-1
     # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get License UsageInfo 
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Business Profile
@@ -107,7 +107,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-1
     ${bool1}=  Random Element  ${bool}
 
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${l_id}  ${duration}  ${bool1}   ${s_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
 
@@ -167,7 +167,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-2
     ${bool1}=  Random Element  ${bool}
 
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${l_id}  ${duration}  ${bool1}   ${s_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
 
@@ -231,7 +231,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-3
     ${bool1}=  Random Element  ${bool}
 
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${l_id1}  ${duration}  ${bool1}   ${s_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
 
@@ -301,7 +301,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-4
     ${bool1}=  Random Element  ${bool}
 
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${l_id1}  ${duration}  ${bool1}   ${s_id1}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id3}  ${resp.json()}
 
@@ -370,7 +370,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-5
     ${bool1}=  Random Element  ${bool}
 
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${l_id2}  ${duration}  ${bool1}   ${s_id2}    ${s_id3}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id4}  ${resp.json()}
 
@@ -418,16 +418,16 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH1
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id4}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id4}     apptState=${Qstate[0]}
 
     ${resp}=  Disable Appointment Schedule  ${sch_id4}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id4}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id4}     apptState=${Qstate[1]}
 
@@ -556,7 +556,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH4
     ${bool1}=  Random Element  ${bool}
 
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${l_id3}  ${duration}  ${bool1}   ${s_id4}    
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id5}  ${resp.json()}
 
@@ -631,7 +631,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH5
     
 
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${l_id3}  ${duration}  ${bool1}   ${s_id4}   
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id6}  ${resp.json()}
 
@@ -784,7 +784,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-6
     ${bool1}=  Random Element  ${bool}
 
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${consumer_parallel}  ${l_id4}  ${duration}  ${bool1}   ${s_id5}    
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id6}  ${resp.json()}
 
@@ -820,7 +820,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-6
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${parallel}
+        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumer_parallel}
         Set Test Variable  ${st}  ${et}
     END
 
@@ -841,7 +841,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-7
     ${srv_duration}=   Random Int   min=10   max=20
     ${leadTime}=   Random Int   min=1   max=5
     ${resp}=  Create Service  ${SERVICE6}  ${desc}   ${srv_duration}   ${status[0]}  ${btype}   ${bool[1]}  ${notifytype[2]}   ${min_pre}  ${servicecharge}  ${bool[1]}  ${bool[0]}  leadTime=${leadTime}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id6}  ${resp.json()}
 
@@ -858,7 +858,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-7
     ${bool1}=  Random Element  ${bool}
 
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${consumer_parallel}  ${l_id5}  ${duration}  ${bool1}   ${s_id6}    
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id7}  ${resp.json()}
 
@@ -940,7 +940,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-8
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Labels
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${label_id}   ${resp.json()[0]['id']}  
 
@@ -974,7 +974,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-8
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service By Id  ${s_id7}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
     Should Be Equal As Strings  ${resp.json()['label']['jaldee_homeo']}  ${boolean[1]}
     Should Be Equal As Strings  ${resp.json()['channelRestricted']}      ${bool[1]}
@@ -993,7 +993,7 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-8
     ${bool1}=  Random Element  ${bool}
 
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${consumer_parallel}  ${l_id6}  ${duration}  ${bool1}   ${s_id7}    
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id7}  ${resp.json()}
 

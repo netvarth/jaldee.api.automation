@@ -10853,23 +10853,23 @@ Set default status
 #     ${resp}=    PUT On Session    ynw    /provider/jp/finance/vendor/${vendorUId}/${vendorStatus}     expected_status=any    headers=${headers}
 #     RETURN  ${resp}
 
-Upload Finance Vendor Attachment
-    [Arguments]    ${vendorUid}      @{vargs}
+# Upload Finance Vendor Attachment
+#     [Arguments]    ${vendorUid}      @{vargs}
 
-    ${len}=  Get Length  ${vargs}
-    ${attachments}=  Create List  
+#     ${len}=  Get Length  ${vargs}
+#     ${attachments}=  Create List  
 
-    FOR    ${index}    IN RANGE    ${len}   
-        Exit For Loop If  ${len}==0
-        Append To List  ${attachments}  ${vargs[${index}]}
-    END
+#     FOR    ${index}    IN RANGE    ${len}   
+#         Exit For Loop If  ${len}==0
+#         Append To List  ${attachments}  ${vargs[${index}]}
+#     END
     
-    ${data}=  Create Dictionary      attachments=${attachments}
+#     ${data}=  Create Dictionary      attachments=${attachments}
 
-   ${data}=  json.dumps  ${data}
-   Check And Create YNW Session
-   ${resp}=  PUT On Session  ynw  /provider/jp/finance/vendor/${vendorUid}/attachments  data=${data}  expected_status=any
-   RETURN  ${resp}
+#    ${data}=  json.dumps  ${data}
+#    Check And Create YNW Session
+#    ${resp}=  PUT On Session  ynw  /provider/jp/finance/vendor/${vendorUid}/attachments  data=${data}  expected_status=any
+#    RETURN  ${resp}
 
 Create Expense
 
@@ -13904,3 +13904,21 @@ Populate Url For Vendor
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /provider/vendor/populate/${accid}    expected_status=any    headers=${headers}
     RETURN  ${resp}
+
+Upload Vendor Attachment
+    [Arguments]    ${encId}      @{vargs}
+
+    ${len}=  Get Length  ${vargs}
+    ${attachments}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${attachments}  ${vargs[${index}]}
+    END
+    
+    ${data}=  Create Dictionary      attachments=${attachments}
+
+   ${data}=  json.dumps  ${data}
+   Check And Create YNW Session
+   ${resp}=  PUT On Session  ynw  /provider/vendor/${encId}/attachments  data=${data}  expected_status=any
+   RETURN  ${resp}

@@ -64,6 +64,22 @@ JD-TC-DynamicPricingInSchedule-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -106,6 +122,10 @@ JD-TC-DynamicPricingInSchedule-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Auto Invoice Generation For Service   ${ser_id1}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=5
@@ -113,7 +133,7 @@ JD-TC-DynamicPricingInSchedule-1
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  2  15  
 
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
@@ -125,7 +145,7 @@ JD-TC-DynamicPricingInSchedule-1
     ${sTime2}=  add_timezone_time  ${tz}  3  15  
     ${eTime2}=  add_timezone_time  ${tz}  5  15  
 
-    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
+    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
@@ -220,8 +240,11 @@ JD-TC-DynamicPricingInSchedule-1
     ${balamount}=  Evaluate  ${Tot1}-${min_pre1}
     ${balamount1}=  Convert To Number  ${balamount}  1
 
-    ${resp}=  Get Bill By consumer  ${apptid1}  ${account_id1}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By consumer  ${apptid1}  ${account_id1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uuid']}                                  ${apptid1}
     Should Be Equal As Strings  ${resp.json()['billStatus']}                            ${billStatus[0]}  
@@ -286,8 +309,11 @@ JD-TC-DynamicPricingInSchedule-1
     ${balamount}=  Evaluate  ${nettotal}-${min_pre1}
     ${balamount1}=  Convert To Number  ${balamount}  1
 
-    ${resp}=  Get Bill By consumer  ${apptid2}  ${account_id1}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By consumer  ${apptid2}  ${account_id1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get consumer Appt Bill Details   ${apptid2}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uuid']}                                  ${apptid2}
     Should Be Equal As Strings  ${resp.json()['billStatus']}                            ${billStatus[0]}  
@@ -348,6 +374,22 @@ JD-TC-DynamicPricingInSchedule-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -388,6 +430,10 @@ JD-TC-DynamicPricingInSchedule-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Auto Invoice Generation For Service   ${ser_id1}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=5
@@ -395,7 +441,7 @@ JD-TC-DynamicPricingInSchedule-2
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  2  15  
 
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
@@ -407,7 +453,7 @@ JD-TC-DynamicPricingInSchedule-2
     ${sTime2}=  add_timezone_time  ${tz}  3  15  
     ${eTime2}=  add_timezone_time  ${tz}  5  15  
 
-    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
+    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
@@ -506,8 +552,11 @@ JD-TC-DynamicPricingInSchedule-2
 
     sleep   2s
 
-    ${resp}=  Get Bill By consumer  ${apptid1}  ${account_id1}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By consumer  ${apptid1}  ${account_id1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uuid']}                                  ${apptid1}
     Should Be Equal As Strings  ${resp.json()['billStatus']}                            ${billStatus[0]}  
@@ -574,8 +623,11 @@ JD-TC-DynamicPricingInSchedule-2
 
     sleep   2s
 
-    ${resp}=  Get Bill By consumer  ${apptid2}  ${account_id1}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By consumer  ${apptid2}  ${account_id1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get consumer Appt Bill Details   ${apptid2}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uuid']}                                  ${apptid2}
     Should Be Equal As Strings  ${resp.json()['billStatus']}                            ${billStatus[0]}  
@@ -636,6 +688,21 @@ JD-TC-DynamicPricingInSchedule-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
     ${resp}=  Get Business Profile
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -676,6 +743,10 @@ JD-TC-DynamicPricingInSchedule-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Auto Invoice Generation For Service   ${ser_id1}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=5
@@ -683,7 +754,7 @@ JD-TC-DynamicPricingInSchedule-3
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${eTime1}=  add_timezone_time  ${tz}  2  15  
 
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
@@ -695,7 +766,7 @@ JD-TC-DynamicPricingInSchedule-3
     ${sTime2}=  add_timezone_time  ${tz}  3  15  
     ${eTime2}=  add_timezone_time  ${tz}  5  15  
 
-    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
+    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${locId1}  ${duration}  ${bool1}  ${ser_id1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
@@ -793,8 +864,11 @@ JD-TC-DynamicPricingInSchedule-3
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep  2s
-    ${resp}=  Get Bill By consumer  ${apptid1}  ${account_id1}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By consumer  ${apptid1}  ${account_id1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uuid']}                                  ${apptid1}
     Should Be Equal As Strings  ${resp.json()['billStatus']}                            ${billStatus[0]}  
@@ -812,8 +886,11 @@ JD-TC-DynamicPricingInSchedule-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${apptid1}  ${account_id1}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By consumer  ${apptid1}  ${account_id1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uuid']}                                  ${apptid1}
     Should Be Equal As Strings  ${resp.json()['billStatus']}                            ${billStatus[0]}  
@@ -879,8 +956,11 @@ JD-TC-DynamicPricingInSchedule-3
     Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep   2s
-    ${resp}=  Get Bill By consumer  ${apptid2}  ${account_id1}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By consumer  ${apptid2}  ${account_id1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get consumer Appt Bill Details   ${apptid2}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uuid']}                                  ${apptid2}
     Should Be Equal As Strings  ${resp.json()['billStatus']}                            ${billStatus[0]}  
@@ -900,8 +980,11 @@ JD-TC-DynamicPricingInSchedule-3
 
     sleep   2s
 
-    ${resp}=  Get Bill By consumer  ${apptid2}  ${account_id1}
-    Log   ${resp.json()}
+    # ${resp}=  Get Bill By consumer  ${apptid2}  ${account_id1}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get consumer Appt Bill Details   ${apptid2}  
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['uuid']}                                  ${apptid2}
     Should Be Equal As Strings  ${resp.json()['billStatus']}                            ${billStatus[0]}  
@@ -922,12 +1005,10 @@ JD-TC-DynamicPricingInSchedule-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  apptStatus=${apptStatus[1]}    paymentStatus=${paymentStatus[2]}
     
-
     ${resp}=  Get Appointment By Id  ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  apptStatus=${apptStatus[1]}    paymentStatus=${paymentStatus[2]}
-    
 
     sleep   01s
 

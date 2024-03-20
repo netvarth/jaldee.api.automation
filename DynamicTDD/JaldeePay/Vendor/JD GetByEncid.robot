@@ -32,7 +32,7 @@ JD-TC-GetEncById-1
 
     [Documentation]    Create Vendor then get vendor by id.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME204}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME207}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -165,7 +165,7 @@ JD-TC-GetEncById-2
 
     [Documentation]    update vendor then get vendor by encid.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME204}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME207}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -197,7 +197,7 @@ JD-TC-GetEncById-3
 
     [Documentation]    Try to Update vendor vendorCategory and then get encbyid.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME204}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME207}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -240,7 +240,7 @@ JD-TC-GetEncById-4
 
     [Documentation]    Try to Update vendor vendorName and then get encbyid.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME204}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME207}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -270,7 +270,7 @@ JD-TC-GetEncById-5
 
     [Documentation]    Try to Update vendor contactPersonName and then get encbyid.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME204}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME207}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -303,7 +303,7 @@ JD-TC-GetEncById-6
 
     [Documentation]    Try to Update vendor addressand then get encbyid.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME204}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME207}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -337,7 +337,7 @@ JD-TC-GetEncById-7
 
     [Documentation]    Try to Update vendor state and then get encbyid.
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME204}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME207}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -371,7 +371,7 @@ JD-TC-GetEncById-8
 
     [Documentation]    Try to Update vendor pincode  and then get encbyid..
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME204}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME207}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -405,7 +405,7 @@ JD-TC-GetEncById-9
 
     [Documentation]    Try to Update vendor phoneNumbers and then get encbyid..
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME204}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME207}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -451,7 +451,7 @@ JD-TC-GetEncById-11
 
     [Documentation]    Try to Update vendor bankaccountNo  and then get encbyid..
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME204}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME207}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -507,7 +507,7 @@ JD-TC-GetEncById-12
 
     [Documentation]    Try to Update vendor ifscCode  and then get encbyid..
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME204}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME207}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -567,7 +567,7 @@ JD-TC-GetEncById-13
 
     [Documentation]    Try to Update vendor bankName  and then get encbyid..
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME204}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME207}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -628,7 +628,7 @@ JD-TC-GetEncById-14
 
     [Documentation]    Try to Update vendor upiId  and then get encbyid..
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME204}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME207}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -690,7 +690,7 @@ JD-TC-GetEncById-15
 
     [Documentation]    Try to Update vendor branchName and then get encbyid..
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME204}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME207}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -753,7 +753,7 @@ JD-TC-GetEncById-16
 
     [Documentation]    Try to Update vendor pancardNo and then get encbyid..
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME204}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME207}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -817,7 +817,7 @@ JD-TC-GetEncById-17
 
     [Documentation]    Try to Update vendor gstNumber  and then get encbyid..
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME204}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME207}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -884,7 +884,7 @@ JD-TC-GetEncById-18
 
     [Documentation]    Try to Update vendor preferredPaymentMode  and then get encbyid..
 
-    ${resp}=                      Encrypted Provider Login         ${PUSERNAME204}    ${PASSWORD}
+    ${resp}=                      Encrypted Provider Login         ${PUSERNAME207}    ${PASSWORD}
     Log                           ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

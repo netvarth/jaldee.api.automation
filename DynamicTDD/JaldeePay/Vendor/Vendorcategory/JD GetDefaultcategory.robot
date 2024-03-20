@@ -129,9 +129,9 @@ JD-TC-Get default vendorcategory-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['name']}          ${vender_name}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
-    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
+    Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[1]}
     Should Be Equal As Strings  ${resp.json()['encId']}        ${encId}
-    Should Be Equal As Strings  ${resp.json()['isDefault']}        ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['isDefault']}        ${bool[1]}
 
 
 

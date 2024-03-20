@@ -330,7 +330,7 @@ JD-TC-GetConsumerAppointments-1
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['schedule']['id']}                         ${sch_id1}
     END 
 
-*** Comments ***
+# *** Comments ***
 JD-TC-GetConsumerAppointments-2
 
     [Documentation]  Get consumer appointments by service.
