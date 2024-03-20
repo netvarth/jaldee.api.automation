@@ -14,23 +14,17 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
-*** Keywords ***
 
-# Get Vendor List with Count filter
-#     [Arguments]   &{param}
-#     Check And Create YNW Session
-#     ${resp}=    GET On Session    ynw    /provider/jp/finance/vendor/count    params=${param}    expected_status=any    headers=${headers}
-#     RETURN  ${resp}
 
 
 *** Test Cases ***
 
 
-JD-TC-GetVendorListWithFilter-1
+JD-TC-Get Vendor List with Count filter-1
 
-    [Documentation]  Create a Vendor for an SP and get without filter parameter.
+    [Documentation]  Create Vendor for an SP and get without filter parameter.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -39,57 +33,43 @@ JD-TC-GetVendorListWithFilter-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id1}  ${resp.json()['id']}
 
-    ${resp}=  Get jp finance settings
+    ${resp}=  Populate Url For Vendor   ${account_id1}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
-    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
-        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-    END
-
-    ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
-    
+     
     ${name}=   FakerLibrary.word
-    Set Suite Variable   ${name}
-    ${resp}=  Create Category   ${name}  ${categoryType[0]} 
+    Set Suite Variable   ${name}   
+    ${resp}=  CreateVendorCategory  ${name}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${category_id1}   ${resp.json()}
 
-    ${resp}=  Get Category By Id   ${category_id1}
+    ${resp}=  Get by encId  ${category_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${id}   ${resp.json()['id']}
     Should Be Equal As Strings  ${resp.json()['name']}          ${name}
-    Should Be Equal As Strings  ${resp.json()['categoryType']}  ${categoryType[0]}
     Should Be Equal As Strings  ${resp.json()['accountId']}     ${account_id1}
     Should Be Equal As Strings  ${resp.json()['status']}        ${toggle[0]}
 
     ${vender_name}=   FakerLibrary.firstname
-    Set Suite Variable  ${vender_name}
+    Set Suite Variable    ${vender_name}
     ${contactPersonName}=   FakerLibrary.lastname
-    Set Suite Variable  ${contactPersonName}
-    ${owner_name}=   FakerLibrary.lastname
-    Set Suite Variable  ${owner_name}
+    Set Suite Variable    ${contactPersonName}
     ${vendorId}=   FakerLibrary.word
-    Set Suite Variable  ${vendorId}
+    Set Suite Variable    ${vendorId}
     ${PO_Number}    Generate random string    5    123456789
-    Set Suite Variable  ${PO_Number}
     ${vendor_phno}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Set Suite Variable  ${vendor_phno}
-    Set Suite Variable  ${email}  ${vender_name}${vendor_phno}.${test_mail}
+    ${vendor_phno}=  Create Dictionary  countryCode=${countryCodes[0]}   number=${vendor_phno}
+    Set Test Variable  ${email}  ${vender_name}.${test_mail}
     ${address}=  FakerLibrary.city
     Set Suite Variable  ${address}
     ${bank_accno}=   db.Generate_random_value  size=11   chars=${digits} 
+    Set Suite Variable  ${bank_accno}
     ${branch}=   db.get_place
     ${ifsc_code}=   db.Generate_ifsc_code
-    # ${gst_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
-
+    ${gst_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
     ${pin}  ${city}  ${district}  ${state}=  get_pin_loc
 
     ${state}=    Evaluate     "${state}".title()
@@ -110,6 +90,7 @@ JD-TC-GetVendorListWithFilter-1
 
     ${bankName}     FakerLibrary.name
     Set Suite Variable    ${bankName}
+
     ${upiId}     FakerLibrary.name
     Set Suite Variable  ${upiId}
 
@@ -127,18 +108,20 @@ JD-TC-GetVendorListWithFilter-1
 
     ${preferredPaymentMode}=    Create List    ${jaldeePaymentmode[0]}
     ${bankInfo}=    Create Dictionary     bankaccountNo=${bank_accno}    ifscCode=${bankIfsc}    bankName=${bankName}    upiId=${upiId}     branchName=${branchName}    pancardNo=${pan}    gstNumber=${gstin}    preferredPaymentMode=${preferredPaymentMode}    lastPaymentModeUsed=${jaldeePaymentmode[0]}
-    ${bankInfo}=    Create List         ${bankInfo} 
-    
+    ${bankInfo}=    Create List         ${bankInfo}   
+    Set Suite Variable  ${bankInfo}            
     ${resp}=  Create Vendor  ${category_id1}  ${vendorId}  ${vender_name}   ${contactPersonName}    ${address}    ${state}    ${pin}   ${vendor_phno}   ${email}     bankInfo=${bankInfo}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable            ${vendor_uid1}         ${resp.json()['encId']}
+    Set Suite Variable            ${vendor_uid11}         ${resp.json()['uid']}
+    Set Suite Variable            ${vendor_id1}          ${resp.json()['id']}
 
-    Set Suite Variable   ${vendor_uid1}   ${resp.json()['uid']}
-    Set Suite Variable   ${vendor_id1}   ${resp.json()['id']}
 
-    ${resp}=  Get Vendor By Id   ${vendor_uid1}
+    ${resp}=   Get vendor by encId    ${vendor_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable    ${vendorStatus}   ${resp.json()['vendorStatusName']}
     Should Be Equal As Strings  ${resp.json()['id']}  ${vendor_id1}
     Should Be Equal As Strings  ${resp.json()['accountId']}  ${account_id1}
     # Should Be Equal As Strings  ${resp.json()['vendorType']}  ${category_id1}
@@ -146,31 +129,31 @@ JD-TC-GetVendorListWithFilter-1
     Should Be Equal As Strings  ${resp.json()['vendorId']}  ${vendorId}
     Should Be Equal As Strings  ${resp.json()['vendorName']}  ${vender_name}
     Should Be Equal As Strings  ${resp.json()['contactPersonName']}  ${contactPersonName}
-    Should Be Equal As Strings  ${resp.json()['vendorUid']}  ${vendor_uid1}
+    Should Be Equal As Strings  ${resp.json()['vendorUid']}  ${vendor_uid11}
+    Should Be Equal As Strings    ${resp.json()['categoryEncId']}                         ${category_id1}
 
     ${resp}=  Get Vendor List with Count filter
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
+JD-TC-Get Vendor List with Count filter-2
 
-JD-TC-GetVendorListWithFilter-2
+    [Documentation]  Create Vendor for an SP and get with filter -encid.
 
-    [Documentation]  Create a Vendor for an SP and get count with filter-vendorUid.
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Vendor List with Count filter    vendorUid-eq=${vendor_uid1}
+    ${resp}=  Get Vendor List with Count filter    encId-eq=${vendor_uid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
 
-JD-TC-GetVendorListWithFilter-3
+JD-TC-Get Vendor List with Count filter-3
 
     [Documentation]  Create Vendor for an SP and get with filter -vendorName.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -178,41 +161,38 @@ JD-TC-GetVendorListWithFilter-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
-    
 
-JD-TC-GetVendorListWithFilter-4
+JD-TC-Get Vendor List with Count filter-4
 
     [Documentation]  Create Vendor for an SP and get with filter -vendorCategory.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Vendor List with Count filter    vendorCategory-eq=${category_id1}
+    ${resp}=  Get Vendor List with Count filter    vendorCategory-eq=${id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
-    
 
-JD-TC-GetVendorListWithFilter-5
+JD-TC-Get Vendor List with Count filter-5
 
-    [Documentation]  Create Vendor for an SP and get with filter -vendorCategoryName.
+    [Documentation]  Create Vendor for an SP and get with filter -bankinfo.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Vendor List with Count filter    vendorCategoryName-eq=${name}
+    ${resp}=  Get Vendor List with Count filter    bankInfo-eq=bankaccountNo::${bank_accno}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
-    
 
-JD-TC-GetVendorListWithFilter-6
+JD-TC-Get Vendor List with Count filter-6
 
     [Documentation]  Create Vendor for an SP and get with filter -vendorId.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -220,13 +200,12 @@ JD-TC-GetVendorListWithFilter-6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
-    
 
-JD-TC-GetVendorListWithFilter-7
+JD-TC-Get Vendor List with Count filter-7
 
     [Documentation]  Create Vendor for an SP and get with filter -contactPersonName.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -234,27 +213,24 @@ JD-TC-GetVendorListWithFilter-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
-    
 
-JD-TC-GetVendorListWithFilter-8
+JD-TC-Get Vendor List with Count filter-8
 
-    [Documentation]  Create Vendor for an SP and get with filter -status.
+    [Documentation]  Create Vendor for an SP and get with filter -contactinfo.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Vendor List with Count filter    status-eq=${vender_name}
+    ${resp}=  Get Vendor List with Count filter    contactInfo-eq=address::${address}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
-    
-
-JD-TC-GetVendorListWithFilter-9
+JD-TC-Get Vendor List with Count filter-9
 
     [Documentation]  Create Vendor for an SP and get with filter -userId.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -262,13 +238,11 @@ JD-TC-GetVendorListWithFilter-9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  1
-    
-
-JD-TC-GetVendorListWithFilter-10
+JD-TC-Get Vendor List with Count filter-10
 
     [Documentation]  Try to get filter with EMPTY -userId.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME79}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME205}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -276,3 +250,4 @@ JD-TC-GetVendorListWithFilter-10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()}  0
+
