@@ -3515,3 +3515,21 @@ Consent Form Get released questionnaire by uuid
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw    /consumer/consentform/questionnaire/${uuid}     expected_status=any
     RETURN  ${resp}
+
+Get consumer Waitlist Bill Details 
+    [Arguments]  ${uuid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/waitlist/${uuid}/billdetails   expected_status=any   
+    RETURN  ${resp}
+
+Get consumer Appt Bill Details 
+    [Arguments]  ${uuid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/appointment/${uuid}/billdetails   expected_status=any   
+    RETURN  ${resp}
+
+Get consumer Order Bill Details 
+    [Arguments]  ${uuid}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/orders/${uuid}/billdetails   expected_status=any   
+    RETURN  ${resp}
