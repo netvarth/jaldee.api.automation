@@ -2834,7 +2834,6 @@ JD-TC-Take Appointment-18
     ${resp}=  Take Appointment For Consumer   ${cid2}  ${s_id1}  ${sch_id2}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
