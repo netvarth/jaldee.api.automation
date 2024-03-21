@@ -36,6 +36,10 @@ JD-TC-GetConsumerAppointments-1
     Log  ${decrypted_data}
     ${pid1}=  get_acc_id  ${PUSERNAME140}
     Set Suite Variable   ${pid1}
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -55,6 +59,10 @@ JD-TC-GetConsumerAppointments-1
 
     clear_service   ${PUSERNAME140}
     clear_location  ${PUSERNAME140}
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -98,6 +106,14 @@ JD-TC-GetConsumerAppointments-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid2}  ${resp.json()} 
 
+    ${resp}=  Get Appointment Schedules
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Queues
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -123,6 +139,12 @@ JD-TC-GetConsumerAppointments-1
     Set Suite Variable  ${s_id3}
     ${s_id4}=  Create Sample Service  ${SERVICE4}
     Set Suite Variable  ${s_id4}
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    reset_queue_metric  ${pid1}
 
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -161,6 +183,10 @@ JD-TC-GetConsumerAppointments-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id2}   name=${schedule_name1}  apptState=${Qstate[0]}
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200

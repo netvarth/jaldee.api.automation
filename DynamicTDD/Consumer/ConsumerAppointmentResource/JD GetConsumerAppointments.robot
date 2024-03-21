@@ -33,6 +33,10 @@ JD-TC-GetConsumerAppointments-1
     Should Be Equal As Strings    ${resp.status_code}    200
     ${pid1}=  get_acc_id  ${PUSERNAME140}
     Set Suite Variable   ${pid1}
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -72,6 +76,10 @@ JD-TC-GetConsumerAppointments-1
     Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${lid1}=  Create Sample Location 
     Set Suite Variable  ${lid1}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -94,8 +102,21 @@ JD-TC-GetConsumerAppointments-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${lid2}  ${resp.json()} 
+
+    ${resp}=  Get Appointment Schedules
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Queues
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     clear_appt_schedule   ${PUSERNAME140}
-    
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${DAY10}=  db.add_timezone_date  ${tz}  10   
     Set Suite Variable  ${DAY1}     
     # ${sTime1}=  db.get_time_by_timezone   ${tz}
@@ -111,6 +132,12 @@ JD-TC-GetConsumerAppointments-1
     Set Suite Variable  ${s_id3}
     ${s_id4}=  Create Sample Service  ${SERVICE4}
     Set Suite Variable  ${s_id4}
+
+    reset_user_metric  ${pid1}
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -149,6 +176,10 @@ JD-TC-GetConsumerAppointments-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id2}   name=${schedule_name1}  apptState=${Qstate[0]}
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  ProviderLogout
     Should Be Equal As Strings  ${resp.status_code}  200

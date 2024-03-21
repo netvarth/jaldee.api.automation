@@ -120,7 +120,7 @@ JD-TC-SubmitQuestionnaireForDonation-1
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
     Set Suite Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
-    reset_metric_usage  ${account_id}
+    reset_queue_metric  ${account_id}
 
     ${resp}=   Get Service
     Log  ${resp.content}

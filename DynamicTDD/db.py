@@ -518,7 +518,7 @@ def clear_queue (usrid):
             delete_ML_table(aid)
             delete_entry('queue_tbl','account',aid,cur)
             delete_entry('holidays_tbl','account',aid,cur)
-            reset_metric_usage(aid)
+            reset_queue_metric(aid)
             dbconn.commit()
     except Exception as e:
         print ("Exception:", e)
@@ -670,7 +670,7 @@ def clear_service (usrid):
             # delete_entry('appmnt_archive_tbl','account',aid,cur)
             
             delete_entry('service_tbl','account',aid,cur)
-            reset_metric_usage(aid)
+            reset_queue_metric(aid)
             dbconn.commit()
     except Exception as e:
         print ("Exception:", e)
@@ -681,7 +681,7 @@ def clear_service (usrid):
             dbconn.close()
 
 
-def reset_metric_usage(aid) :
+def reset_queue_metric(aid) :
     print("In function: ", inspect.stack()[0].function)
     dbconn = connect_db(db_host, db_user, db_passwd, db)
     # cur = dbconn.cursor()
@@ -2720,7 +2720,7 @@ def twodigitfloat(x):
 #             delete_entry('appt_rating_tbl','account',aid,cur)
 #             delete_entry('appt_tbl','account',aid,cur)
 #             # clear_service(usrid)
-#             # reset_metric_usage(aid)
+#             # reset_queue_metric(aid)
 #             dbconn.commit()
 #             # dbconn.close()
 #     except Exception as e:
@@ -2763,7 +2763,7 @@ def clear_appt_schedule(usrid):
             delete_entry('appt_schedule_tbl','account',aid,cur)
             delete_entry('appt_state_tbl','account',aid,cur)
             delete_entry('holidays_tbl','account',aid,cur)
-            reset_metric_usage(aid)
+            reset_queue_metric(aid)
             dbconn.commit()
                     # dbconn.close()
     except Exception as e:
@@ -2807,7 +2807,7 @@ def clear_appt_schedule_user(user_num, branch_num):
             delete_entry_2Fields('appt_schedule_tbl','account',aid,'provider',uid,cur)
             delete_entry('appt_state_tbl','account',aid,cur)
             delete_entry_2Fields('holidays_tbl','account',aid,'provider',uid,cur)
-            reset_metric_usage(aid)
+            reset_queue_metric(aid)
             dbconn.commit()
                     # dbconn.close()
     except Exception as e:

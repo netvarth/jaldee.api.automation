@@ -2311,7 +2311,7 @@ JD-TC-Reschedule Waitlist-UH1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    reset_metric_usage  ${pid}
+    reset_queue_metric  ${pid}
     clear_location   ${PUSERNAME82}
     clear_service    ${PUSERNAME82}
     clear_customer   ${PUSERNAME82}

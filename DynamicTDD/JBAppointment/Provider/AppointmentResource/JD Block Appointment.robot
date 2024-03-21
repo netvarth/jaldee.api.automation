@@ -743,7 +743,7 @@ JD-TC-Block Appointment-6
     ${SERVICE2}=    FakerLibrary.Word
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
-    reset_metric_usage  ${pid}
+    reset_queue_metric  ${pid}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -917,7 +917,7 @@ JD-TC-Block Appointment-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-    reset_metric_usage  ${pid}
+    reset_queue_metric  ${pid}
 
     ${resp}=  Create Sample Schedule  ${lid1}   ${s_id}
     Log  ${resp.json()}
@@ -1904,7 +1904,7 @@ JD-TC-Block Appointment-UH4
     ${SERVICE2}=    FakerLibrary.Word
     ${s_id1}=  Create Sample Service  ${SERVICE2}
 
-    reset_metric_usage  ${pid}
+    reset_queue_metric  ${pid}
 
     ${resp}=   Get License UsageInfo 
     Log  ${resp.json()}
