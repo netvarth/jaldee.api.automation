@@ -31,6 +31,7 @@ JD-TC-GetItemHsnCountFilter-1
     Set Suite Variable  ${userName}     ${decrypted_data['userName']}
 
     ${hsnCode}=     Random Int  min=1  max=9999
+    Set Suite Variable      ${hsnCode}
 
     ${resp}=    Create Item hns  ${hsnCode} 
     Log   ${resp.content}
@@ -46,6 +47,7 @@ JD-TC-GetItemHsnCountFilter-1
     Should Be Equal As Strings    ${resp.json()['status']}            ${toggle[0]}
 
     ${hsnCode2}=     Random Int  min=1  max=9999
+    Set Suite Variable      ${hsnCode2}
 
     ${resp}=    Create Item hns  ${hsnCode2} 
     Log   ${resp.content}
@@ -64,3 +66,53 @@ JD-TC-GetItemHsnCountFilter-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}        2
+
+
+JD-TC-GetItemHsnFilter-2
+
+    [Documentation]  Get Item hns Count Filter - hsnCode
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item hns Count Filter    hsnCode-eq=${hsnCode2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}         200
+    Should Be Equal As Strings    ${resp.json()}              1
+
+JD-TC-GetItemHsnFilter-4
+
+    [Documentation]  Get Item hns Count Filter - status
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item hns Count Filter    status-eq=${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}         200
+    Should Be Equal As Strings    ${resp.json()}              2
+
+JD-TC-GetItemHsnFilter-UH1
+
+    [Documentation]  Get Item hns Count Filter - without login
+
+    ${resp}=    Get Item hns Count Filter 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}        419
+    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
+
+
+JD-TC-GetItemHsnFilter-5
+
+    [Documentation]  Get Item hns Count Filter - with another provider login
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item hns Count Filter 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}         200
+    Should Be Equal As Strings    ${resp.json()}    []

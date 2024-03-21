@@ -45,3 +45,87 @@ JD-TC-GetItemCategoryCountByFilter-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}        1
+
+
+JD-TC-GetItemCategoryCountByFilter-2
+
+    [Documentation]   Create a Item Category then try to get count of that item Category with filter(categoryName).
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${categoryName1}=    FakerLibrary.name
+    Set Suite Variable  ${categoryName1}
+
+    ${resp}=  Create Item Category   ${categoryName1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${Ca_Id1}    ${resp.json()}
+
+    ${resp}=  Get Item Category   ${Ca_Id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['categoryCode']}    ${Ca_Id1}
+    Should Be Equal As Strings    ${resp.json()['categoryName']}    ${categoryName1}
+    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
+
+    ${resp}=  Get Item Category Count By Filter   categoryName-eq=${categoryName1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        1
+
+
+JD-TC-GetItemCategoryCountByFilter-3
+
+    [Documentation]   Create a Item Category then try to get count of that item Category with filter(status).
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Item Category Count By Filter   status-eq=${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        2
+
+
+JD-TC-GetItemCategoryCountByFilter-4
+
+    [Documentation]   Update a Item Category Status then try to get count of that item Category with filter(status).
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update Item Category Status   ${Ca_Id1}    ${toggle[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Item Category Count By Filter   status-eq=${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        1
+
+
+JD-TC-GetItemCategoryCountByFilter-UH1
+
+    [Documentation]  Get Item Category Count By Filter without Login.
+
+    ${resp}=  Get Item Category Count By Filter   categoryName-eq=${categoryName1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
+
+JD-TC-GetItemCategoryCountByFilter-UH2
+
+    [Documentation]  Get Item Category Count By Filter with Consumer Login.
+
+    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Item Category Count By Filter   categoryName-eq=${categoryName1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    401
+    Should Be Equal As Strings    ${resp.json()}    ${NoAccess} 

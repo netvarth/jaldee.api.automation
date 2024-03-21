@@ -64,3 +64,65 @@ JD-TC-GetitemUitCountFilter-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}        2
+
+
+JD-TC-GetitemUitCountFilter-2
+
+    [Documentation]  Get Item Unit Count Filter - unitCode    
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Unit Count Filter    unitCode-eq=${iu_id2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        1
+
+JD-TC-GetitemUitCountFilter-3
+
+    [Documentation]  Get Item Unit Count Filter - unitName
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Unit Count Filter    unitName-eq=${unitName}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        1
+
+JD-TC-GetitemUitCountFilter-4
+
+    [Documentation]  Get Item Unit Count Filter - status
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Unit Count Filter    status-eq=${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        2
+
+JD-TC-GetitemUitCountFilter-UH1
+
+    [Documentation]  Get Item Unit Count Filter - withou login
+
+    ${resp}=    Get Item Unit Count Filter
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
+
+JD-TC-GetitemUitCountFilter-UH2
+
+    [Documentation]  Get Item Unit Count Filter - with another provider login
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Unit Count Filter
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}         0

@@ -60,3 +60,68 @@ JD-TC-GetItemManufactureCountByFilter-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}        2
+
+
+JD-TC-GetItemManufactureCountByFilter-2
+
+    [Documentation]   Get Item Manufacture Count Filter - with manufactureCode
+ 
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Manufacture Count Filter  manufacturerCode-eq=${mf_id2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        1
+
+
+JD-TC-GetItemManufactureCountByFilter-3
+
+    [Documentation]   Get Item Manufacture Count Filter - with manufactureName
+ 
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Manufacture Count Filter  manufacturerName-eq=${manufactureName}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        1
+
+JD-TC-GetItemManufactureCountByFilter-4
+
+    [Documentation]   Get Item Manufacture Count Filter - with status enable
+ 
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Manufacture Count Filter  status-eq=${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        2
+
+JD-TC-GetItemManufactureCountByFilter-5
+
+    [Documentation]   Get Item Manufacture Count Filter - with status Disable
+ 
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Manufacture Count Filter  status-eq=${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}         0
+
+JD-TC-GetItemManufactureCountByFilter-6
+
+    [Documentation]   Get Item Manufacture Count Filter - without login
+
+    ${resp}=    Get Item Manufacture Count Filter  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
+
+    

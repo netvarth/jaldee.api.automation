@@ -75,7 +75,7 @@ JD-TC-GetItemManufactureByFilter-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Item Manufacture Filter  manufactureCode-eq=${mf_id2}
+    ${resp}=    Get Item Manufacture Filter  manufacturerCode-eq=${mf_id2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()[0]['id']}    ${imf_id2}
@@ -91,7 +91,7 @@ JD-TC-GetItemManufactureByFilter-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Item Manufacture Filter  manufactureName-eq=${manufactureName}
+    ${resp}=    Get Item Manufacture Filter  manufacturerName-eq=${manufactureName}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()[0]['id']}    ${imf_id}

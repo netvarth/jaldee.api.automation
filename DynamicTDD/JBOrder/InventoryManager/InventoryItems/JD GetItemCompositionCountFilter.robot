@@ -74,3 +74,78 @@ JD-TC-GetItemCompositionCountFilter-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}        2
+
+
+
+
+
+
+
+
+
+
+
+
+
+JD-TC-GetItemCompositionCountFilter-2
+
+    [Documentation]  Get Item Composition Count Filter - compositionCode
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Composition Count Filter    compositionCode-eq=${compositionCode}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        1
+
+JD-TC-GetItemCompositionCountFilter-3
+
+    [Documentation]  Get Item Composition Count Filter - compositionName
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Composition Count Filter    compositionName-eq=${compositionName2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}         1
+
+JD-TC-GetItemCompositionCountFilter-4
+
+    [Documentation]  Get Item Composition Count Filter - status
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Composition Count Filter    status-eq=${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}         2
+
+
+JD-TC-GetItemCompositionCountFilter-5
+
+    [Documentation]  Get Item Composition Count Filter - without login
+
+    ${resp}=    Get Item Composition Count Filter    compositionCode-eq=${compositionCode}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}        419
+    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED}
+
+
+JD-TC-GetItemCompositionCountFilter-6
+
+    [Documentation]  Get Item Composition Count Filter - with another provider login
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Composition Count Filter 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}         200
+    Should Be Equal As Strings    ${resp.json()}    0

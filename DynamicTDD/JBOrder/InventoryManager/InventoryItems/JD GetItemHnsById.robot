@@ -44,3 +44,41 @@ JD-TC-GetItemHsn-1
     Should Be Equal As Strings    ${resp.json()['createdBy']}         ${acc_id} 
     Should Be Equal As Strings    ${resp.json()['createdByName']}     ${userName}
     Should Be Equal As Strings    ${resp.json()['status']}            ${toggle[0]}
+
+
+JD-TC-GetItemHsn-UH1
+
+    [Documentation]  Get Item Hsn - where hsn code is invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${fake}=    Random Int  min=-999  max=9999
+
+    ${resp}=    Get Item hns by id   ${fake}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}     200
+    Should Be Empty     ${resp.content}
+
+JD-TC-GetItemHsn-UH2
+
+    [Documentation]  Get Item Hsn - without login
+
+    ${resp}=    Get Item hns by id   ${hns_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}        ${SESSION_EXPIRED}
+
+JD-TC-GetItemHsn-UH3
+
+    [Documentation]  Get Item Hsn - with another provider login
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+     
+    ${resp}=    Get Item hns by id   ${hns_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   401
+    Should Be Equal As Strings    ${resp.json()}        ${NO_PERMISSION}

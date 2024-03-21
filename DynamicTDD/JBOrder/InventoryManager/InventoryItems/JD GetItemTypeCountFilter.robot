@@ -45,3 +45,84 @@ JD-TC-GetItemTypeCountByFilter-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}        1
+
+
+JD-TC-GetItemTypeCountByFilter-2
+
+    [Documentation]   Create a Item Type then try to get that item Type with filter(TypeName).
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${TypeName1}=    FakerLibrary.name
+    Set Suite Variable  ${TypeName1}
+
+    ${resp}=  Create Item Type   ${TypeName1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${Ty_Id1}    ${resp.json()}
+
+    ${resp}=  Get Item Type   ${Ty_Id1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['typeCode']}    ${Ty_Id1}
+    Should Be Equal As Strings    ${resp.json()['typeName']}    ${TypeName1}
+    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
+
+    ${resp}=  Get Item Type Count By Filter   typeName-eq=${TypeName1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        1
+
+JD-TC-GetItemTypeCountByFilter-3
+
+    [Documentation]   Create a Item Type then try to get that item Type with filter(status).
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Item Type Count By Filter   status-eq=${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        1
+
+JD-TC-GetItemTypeCountByFilter-4
+
+    [Documentation]   Update a Item Type Status then try to get that item Type with filter(status).
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update Item Type Status   ${Ty_Id1}    ${toggle[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Item Type Count By Filter   status-eq=${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        2
+
+JD-TC-GetItemTypeCountByFilter-UH1
+
+    [Documentation]  Get Item Type Count By Filter without Login.
+
+    ${resp}=  Get Item Type Count By Filter   typeName-eq=${TypeName1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
+
+JD-TC-GetItemTypeCountByFilter-UH2
+
+    [Documentation]  Get Item Type Count By Filter with Consumer Login.
+
+    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Item Type Count By Filter   typeName-eq=${TypeName1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    401
+    Should Be Equal As Strings    ${resp.json()}    ${NoAccess} 

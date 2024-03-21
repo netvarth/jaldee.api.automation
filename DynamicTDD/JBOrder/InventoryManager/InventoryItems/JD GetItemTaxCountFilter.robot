@@ -50,3 +50,83 @@ JD-TC-CreateItemTaxCountFilter-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}        1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+JD-TC-CreateItemTaxCountFilter-2
+
+    [Documentation]  Get Item tax Count Filter - taxCode filter
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Tax Count Filter   taxCode-eq=${itemtax_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        1
+
+JD-TC-CreateItemTaxCountFilter-3
+
+    [Documentation]  Get Item tax Count Filter - taxName filter
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Tax Count Filter   taxName-eq=${taxName}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        1
+
+JD-TC-CreateItemTaxCountFilter-4
+
+    [Documentation]  Get Item tax Count Filter - status
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Tax Count Filter   status-eq=${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        0
+    
+
+JD-TC-CreateItemTaxCountFilter-UH1
+
+    [Documentation]  Get Item tax Count Filter - without login
+
+    ${resp}=    Get Item Tax Count Filter
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
+
+JD-TC-CreateItemTaxCountFilter-UH2
+
+    [Documentation]  Get Item tax Count Filter - with another provider login
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Tax Count Filter
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}        1
+    

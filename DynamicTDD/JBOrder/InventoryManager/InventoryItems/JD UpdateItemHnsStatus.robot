@@ -31,6 +31,7 @@ JD-TC-UpdateItemHsnStatus-1
     Set Suite Variable  ${userName}     ${decrypted_data['userName']}
 
     ${hsnCode}=     Random Int  min=1  max=9999
+    Set Suite Variable  ${hsnCode}
 
     ${resp}=    Create Item hns  ${hsnCode} 
     Log   ${resp.content}
@@ -56,3 +57,78 @@ JD-TC-UpdateItemHsnStatus-1
     Should Be Equal As Strings    ${resp.json()['createdBy']}         ${acc_id} 
     Should Be Equal As Strings    ${resp.json()['createdByName']}     ${userName}
     Should Be Equal As Strings    ${resp.json()['status']}            ${toggle[1]}
+
+
+JD-TC-UpdateItemHsnStatus-2
+
+    [Documentation]  Update Item hns Status as already disabled.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update Item hns Status   ${hns_id}    ${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+
+JD-TC-UpdateItemHsnStatus-3
+
+    [Documentation]  try to Enable ,Disabled Status.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update Item hns Status   ${hns_id}    ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Item hns by id   ${hns_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['hsnCode']}           ${hsnCode}
+    Should Be Equal As Strings    ${resp.json()['createdBy']}         ${acc_id} 
+    Should Be Equal As Strings    ${resp.json()['createdByName']}     ${userName}
+    Should Be Equal As Strings    ${resp.json()['status']}            ${toggle[0]}
+
+JD-TC-UpdateItemHsnStatus-4
+
+    [Documentation]  try to Enable ,enableled Status.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Item hns by id   ${hns_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['hsnCode']}           ${hsnCode}
+    Should Be Equal As Strings    ${resp.json()['createdBy']}         ${acc_id} 
+    Should Be Equal As Strings    ${resp.json()['createdByName']}     ${userName}
+    Should Be Equal As Strings    ${resp.json()['status']}            ${toggle[0]}
+
+    ${resp}=  Update Item hns Status   ${hns_id}    ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+
+JD-TC-UpdateItemHsnStatus-UH1
+
+    [Documentation]  Get Item Unit without Login.
+
+    ${resp}=  Update Item hns Status   ${hns_id}    ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
+
+JD-TC-UpdateItemHsnStatus-UH2
+
+    [Documentation]  Get Item Unit with Consumer Login.
+
+    ${resp}=  Consumer Login  ${CUSERNAME19}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Update Item hns Status   ${hns_id}    ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    401
+    Should Be Equal As Strings    ${resp.json()}    ${NoAccess} 

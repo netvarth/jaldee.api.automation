@@ -25,8 +25,13 @@ JD-TC-CreateItemHsn-1
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${acc_id}       ${decrypted_data['id']}
+    Set Suite Variable  ${userName}     ${decrypted_data['userName']}
 
     ${hsnCode}=     Random Int  min=1  max=9999
+    Set Suite Variable  ${hsnCode}
 
     ${resp}=    Create Item hns  ${hsnCode} 
     Log   ${resp.content}
@@ -40,3 +45,26 @@ JD-TC-CreateItemHsn-1
     Should Be Equal As Strings    ${resp.json()['createdBy']}         ${acc_id} 
     Should Be Equal As Strings    ${resp.json()['createdByName']}     ${userName}
     Should Be Equal As Strings    ${resp.json()['status']}            ${toggle[0]}
+
+
+JD-TC-CreateItemHsn-Uh1
+
+    [Documentation]  Create Item Hsn - where hsn code is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Create Item hns  ${EMPTY} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateItemHsn-UH2
+
+    [Documentation]  Create Item Hsn - without login
+
+    ${resp}=    Create Item hns  ${hsnCode} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
+
