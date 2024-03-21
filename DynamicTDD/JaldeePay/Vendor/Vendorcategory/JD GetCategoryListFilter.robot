@@ -83,7 +83,7 @@ JD-TC-Get Category List Filter-2
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   Get VendorCategory With Filter   createdDate-eq=${CUR_DAY}    
+    ${resp}=   Get VendorCategory With Filter   createdDate-ge=${CUR_DAY}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name}
@@ -128,7 +128,7 @@ JD-TC-Get Category List Filter-5
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=   Get VendorCategory With Filter   encId-eq=${encId}   status-eq=${toggle[0]}  createdDate-eq=${CUR_DAY}  name-eq=${name}
+    ${resp}=   Get VendorCategory With Filter   encId-eq=${encId}   status-eq=${toggle[0]}  createdDate-ge=${CUR_DAY}  name-eq=${name}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()[0]['name']}          ${name}
@@ -182,7 +182,7 @@ JD-TC-Get Category List Filter-UH4
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
      ${fake}=    Random Int  min=1000000   max=9999999   
-    ${resp}=   Get VendorCategory With Filter   createdDate-eq=${DAY2}   
+    ${resp}=   Get VendorCategory With Filter   createdDate-ge=${DAY2}   
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings   ${resp.json()}   []
