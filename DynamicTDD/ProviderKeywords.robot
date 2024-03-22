@@ -13749,6 +13749,34 @@ Get Item group Count Filter
     ${resp}=    GET On Session    ynw   /provider/spitem/group/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
+# ........ CREATE ITEM .............
+
+Create Item Inventory
+
+    [Arguments]   ${displayName}  &{kwargs}
+    Check And Create YNW Session
+  
+    ${data}=   Create Dictionary    displayName=${displayName} 
+      
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        IF  "${key}" == "itemCode"
+            ${jaldeeRxCode}=  Create Dictionary 	itemCode=${value}
+        # ELSE IF  ${key} == whatsAppCC
+        #     Set To Dictionary 	${whatsApp} 	countryCode=${value}
+        # ELSE IF  ${key} == telegramNum
+        #     Set To Dictionary 	${telegram} 	countryCode=${value}
+        # ELSE IF  ${key} == telegramCC
+        #     Set To Dictionary 	${telegram} 	countryCode=${value}
+        # ELSE
+        #     Set To Dictionary 	${data} 	${key}=${value}
+        END
+        IF  ${jaldeeRxCode} != &{EMPTY}
+            Set To Dictionary 	${data} 	jaldeeRxCode=${jaldeeRxCode}
+        END
+
+    END   
+
+    RETURN  ${data}
 
 # Data Migration
 
