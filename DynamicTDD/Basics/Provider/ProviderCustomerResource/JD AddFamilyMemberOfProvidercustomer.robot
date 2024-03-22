@@ -12,18 +12,18 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
-*** Keywords ***
-Add FamilyMember For ProviderConsumer1
-      [Arguments]  ${firstname}   ${lastname}   ${dob}   ${gender}    ${primarynum}        &{kwargs}
-      Check And Create YNW Session
+# *** Keywords ***
+# Add FamilyMember For ProviderConsumer1
+#       [Arguments]  ${firstname}   ${lastname}   ${dob}   ${gender}    ${primarynum}        &{kwargs}
+#       Check And Create YNW Session
 
-      ${userProfile}=  Create Dictionary    firstName=${firstname}   lastName=${lastname}   dob=${dob}   gender=${gender}   primaryMobileNo=${primarynum}   
-      ${data}=   Create Dictionary    userProfile=${userProfile}
-      FOR    ${key}    ${value}    IN    &{kwargs}
-            Set To Dictionary 	${data} 	${key}=${value}
-      END
-      ${resp}=  POST On Session  ynw   /consumer/familyMember   json=${data}    expected_status=any
-      RETURN  ${resp}
+#       ${userProfile}=  Create Dictionary    firstName=${firstname}   lastName=${lastname}   dob=${dob}   gender=${gender}   primaryMobileNo=${primarynum}   
+#       ${data}=   Create Dictionary    userProfile=${userProfile}
+#       FOR    ${key}    ${value}    IN    &{kwargs}
+#             Set To Dictionary 	${data} 	${key}=${value}
+#       END
+#       ${resp}=  POST On Session  ynw   /consumer/familyMember   json=${data}    expected_status=any
+#       RETURN  ${resp}
 
 
 *** Test Cases ***
@@ -1155,7 +1155,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-14
       Should Be Equal As Strings  ${resp.status_code}  200
       Should Be Equal As Strings   ${resp.json()}   []
 
-      ${resp}=  Add FamilyMember For ProviderConsumer1     ${firstname1}  ${lastname1}  ${dob1}  ${gender1}  ${Familymember_ph}
+      ${resp}=  Add FamilyMember For ProviderConsumer     ${firstname1}  ${lastname1}  ${dob1}  ${gender1}  ${Familymember_ph}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${mem_id4}  ${resp.json()}
@@ -1165,7 +1165,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-14
       ${gender2}=  Random Element    ${Genderlist}
       ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+300005
 
-      ${resp}=  Add FamilyMember For ProviderConsumer1     ${firstname2}  ${lastname2}  ${dob2}  ${gender2}   ${Familymember_ph}
+      ${resp}=  Add FamilyMember For ProviderConsumer     ${firstname2}  ${lastname2}  ${dob2}  ${gender2}   ${Familymember_ph}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${mem_id5}  ${resp.json()}
 

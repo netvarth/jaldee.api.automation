@@ -96,13 +96,13 @@ Add FamilyMember For ProviderConsumer
       ${whatsApp}=  Create Dictionary
       ${telegram}=  Create Dictionary
       FOR    ${key}    ${value}    IN    &{kwargs}
-            IF  ${key} == whatsAppNum
+            IF  "${key}" == "whatsAppNum"
                 Set To Dictionary 	${whatsApp} 	number=${value}
-            ELSE IF  ${key} == whatsAppCC
+            ELSE IF  "${key}" == "whatsAppCC"
                 Set To Dictionary 	${whatsApp} 	countryCode=${value}
-            ELSE IF  ${key} == telegramNum
+            ELSE IF  "${key}" == "telegramNum"
                 Set To Dictionary 	${telegram} 	countryCode=${value}
-            ELSE IF  ${key} == telegramCC
+            ELSE IF  "${key}" == "telegramCC"
                 Set To Dictionary 	${telegram} 	countryCode=${value}
             ELSE
                 Set To Dictionary 	${data} 	${key}=${value}

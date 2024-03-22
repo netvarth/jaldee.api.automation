@@ -239,7 +239,7 @@ JD-TC-GetAppointmentSlotsByScheduleandDate-UH3
     ${resp}=  Get Appointment Slots By Schedule and Date    0000   ${DAY1}   ${accId} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}   ${SHEDULE_NOT_FOUND}
+    Should Be Equal As Strings  ${resp.json()}   ${APPT_SCHEDULE_NOT_FOUND}
 
 
 JD-TC-GetAppointmentSlotsByScheduleandDate-UH4
