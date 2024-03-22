@@ -100,6 +100,7 @@ Jaldee-TC-Upgrade License Package-1
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Get Active License
+    Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['accountLicense']['licPkgOrAddonId']}   8
     Should Be Equal As Strings  ${resp.json()['accountLicense']['name']}  Platinum_30Day_Trial
     Should Be Equal As Strings  ${resp.json()['addons']}  []

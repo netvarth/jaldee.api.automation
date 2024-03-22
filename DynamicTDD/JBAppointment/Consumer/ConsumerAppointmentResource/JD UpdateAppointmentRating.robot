@@ -29,6 +29,10 @@ JD-TC-UpdateAppointmentRating-1
 	
     ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Active License
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
     clear_queue    ${PUSERNAME102}
     clear_service  ${PUSERNAME102}
     clear_rating    ${PUSERNAME102}

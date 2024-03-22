@@ -3328,12 +3328,28 @@ JD-TC-Take Appointment-UH9
     ${p1_s2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${p1_s2}
 
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${p1_l1}=  Create Sample Location
     Set Suite Variable   ${p1_l1}
     ${resp}=   Get Location ById  ${p1_l1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${resp}=  Get Appointment Schedules
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Queues
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -3412,7 +3428,9 @@ JD-TC-Take Appointment-UH11
     ${p1_s2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${p1_s2}
 
-    
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${p1_l1}=  Create Sample Location
     Set Suite Variable   ${p1_l1}
@@ -3421,12 +3439,37 @@ JD-TC-Take Appointment-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
+    ${resp}=  Get Appointment Schedules
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Queues
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${p1_l2}=  Create Sample Location
     Set Suite Variable   ${p1_l2}
     ${resp}=   Get Location ById  ${p1_l2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+    ${resp}=  Get Appointment Schedules
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Queues
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     clear_appt_schedule   ${PUSERNAME77}
 
     ${resp}=  Disable Location  ${p1_l2}   

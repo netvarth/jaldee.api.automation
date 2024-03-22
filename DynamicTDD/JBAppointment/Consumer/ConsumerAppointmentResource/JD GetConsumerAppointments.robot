@@ -967,6 +967,21 @@ JD-TC-GetConsumerAppointments-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
 
+    ${resp}=  Get jp finance settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1004,6 +1019,10 @@ JD-TC-GetConsumerAppointments-9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${ser_id1}  ${resp.json()}
+
+    ${resp}=  Auto Invoice Generation For Service   ${s_id12}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     clear_appt_schedule   ${PUSERNAME_D}
 
@@ -1088,7 +1107,6 @@ JD-TC-GetConsumerAppointments-9
     ${resp}=   Take Appointment For Provider   ${prov_id}  ${ser_id1}  ${schedule_id1}  ${DAY6}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid6}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${prov_id}  ${apptid6}
@@ -1125,7 +1143,10 @@ JD-TC-GetConsumerAppointments-9
     # Should Be Equal As Strings  ${resp.status_code}  200
 
     sleep  01s
-    ${resp}=  Get Bill By consumer  ${apptid6}  ${prov_id} 
+    # ${resp}=  Get Bill By consumer  ${apptid6}  ${prov_id} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
