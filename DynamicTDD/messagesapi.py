@@ -2269,6 +2269,10 @@ INVALID_IGST_PERCENTAGE= "Invalid IGST Percentage"
 INVALID_TAX_CODE= "Invalid Tax code"
 CONVERSION_QTY_INVALID = "Enter a valid conversion quantity"
 INVENTORY_CATALOG_NAME_REQUIRED="Inventory catalog name required."
+Invalid_inventory_catalog_encoded_id="Invalid inventory catalog encoded id"
+Store_encodedid_cannot_be_updated="Store encoded id can not be updated"
+SAME_NAME_EXIST="Inventory catalog with this name already exists in this selected store"
+Inventory_catalog_Inactive_status="Inventory catalog is already in Inactive status" 
 
 # Vendor
 INVALID_NAME="Invalid Name"

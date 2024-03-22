@@ -168,7 +168,22 @@ JD-TC-Create Inventory Catalog-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+JD-TC-Create Inventory Catalog-6
 
+    [Documentation]  create  inventory catalog with same  name with different store id.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Name}=    FakerLibrary.first name
+    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 
@@ -255,5 +270,20 @@ JD-TC-Create Inventory Catalog-UH6
     ${resp}=  Create Inventory Catalog   ${Text}  ${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+
+JD-TC-Create Inventory Catalog-UH7
+
+    [Documentation]  create  inventory catalog with same name .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Create Inventory Catalog   ${invalidstring}  ${store_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${SAME_NAME_EXIST}
+    
+
 
 

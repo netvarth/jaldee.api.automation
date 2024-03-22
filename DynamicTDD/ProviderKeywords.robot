@@ -14009,19 +14009,19 @@ Update Inventory Catalog
 Update Inventory Catalog status
     [Arguments]    ${encId}  ${status}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/inventory/catalog/${encId}/${status}  data=${data}  expected_status=any
+    ${resp}=  PUT On Session  ynw  /provider/inventory/catalog/${encId}/${status}   expected_status=any
     RETURN  ${resp} 
 
 Get Inventory Catalog By EncId
     [Arguments]    ${encId}  
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/inventory/catalog/${encId}  data=${data}  expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/inventory/catalog/${encId}    expected_status=any
     RETURN  ${resp} 
 
 Get Inventory Catalog By account id
     [Arguments]    ${accid}  
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/inventory/catalog/${accid}  data=${data}  expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/inventory/catalog/${accid}    expected_status=any
     RETURN  ${resp} 
 
 Get Inventory catalog Filter
