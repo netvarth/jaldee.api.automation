@@ -3783,13 +3783,13 @@ JD-TC-GetAppointmentToday-19
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
 
-    ${resp}=  Auto Invoice Generation For Service   ${s_id1}    ${toggle[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Auto Invoice Generation For Service   ${s_id1}    ${toggle[0]}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Auto Invoice Generation For Service   ${s_id2}    ${toggle[0]}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    # ${resp}=  Auto Invoice Generation For Service   ${s_id2}    ${toggle[0]}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
 
     clear_appt_schedule   ${billable_providers[2]}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -3867,8 +3867,17 @@ JD-TC-GetAppointmentToday-19
     Should Be Equal As Strings  ${resp.json()['uuid']}       ${apptid1} 
     ${amount}=  Set Variable  ${resp.json()['amountDue']}  
 
-    ${resp}=  Accept Payment  ${apptid1}  cash  ${amount}
-    Log   ${resp.json()}
+    ${resp}=   Get Appointment level Bill Details      ${apptid1} 
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    # ${resp}=  Accept Payment  ${apptid1}  cash  ${amount}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${note}=    FakerLibrary.text
+    ${resp}=  Make Payment By Cash   ${apptid1}  ${payment_modes[0]}  ${amount}  ${note}
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Settl Bill  ${apptid1}
@@ -3877,6 +3886,10 @@ JD-TC-GetAppointmentToday-19
 
     ${resp}=  Get Payment By UUId  ${apptid1}
     Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Appointment level Bill Details      ${apptid1} 
+    Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment By Id   ${apptid1}
@@ -4237,11 +4250,12 @@ JD-TC-GetAppointmentToday-20
     ${resp}=  Get Appointment Status   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()[0]['appointmentStatus']}   ${apptStatus[4]}
+    Should Be Equal As Strings  ${resp.json()[1]['appointmentStatus']}   ${apptStatus[4]}
 
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}   ${apptStatus[4]}
     # Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY1}   appmtTime=${slot2}  appointmentEncId=${encId2}  
     # ...  apptStatus=${apptStatus[4]}  paymentStatus=${paymentStatus[3]}
 
@@ -6035,8 +6049,11 @@ JD-TC-GetAppointmentToday-29
     ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id1}   ${pid}  
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
     Verify Response  ${resp}  id=${sch_id1}
+
+    ${resp}=  Get Next Available Appointment Slots By ScheduleId  ${sch_id1}   ${pid}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
