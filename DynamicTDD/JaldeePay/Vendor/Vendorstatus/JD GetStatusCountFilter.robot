@@ -83,7 +83,7 @@ JD-TC-Get StatusCount Filter-2
     ${resp}=   Get VendorStatus With CountFilter   createdDate-ge=${CUR_DAY}    
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings   ${resp.json()}   1
+    Should Be Equal As Strings   ${resp.json()}   2
 
 
 JD-TC-Get StatusCount Filter-3

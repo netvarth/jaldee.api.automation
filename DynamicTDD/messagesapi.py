@@ -2268,6 +2268,7 @@ INVALID_SGST_PERCENTAGE= "Invalid SGST Percentage"
 INVALID_IGST_PERCENTAGE= "Invalid IGST Percentage"
 INVALID_TAX_CODE= "Invalid Tax code"
 CONVERSION_QTY_INVALID = "Enter a valid conversion quantity"
+INVENTORY_CATALOG_NAME_REQUIRED="Inventory catalog name required."
 
 # Vendor
 INVALID_NAME="Invalid Name"
