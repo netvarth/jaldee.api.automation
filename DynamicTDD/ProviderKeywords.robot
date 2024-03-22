@@ -13709,7 +13709,7 @@ Create Item group Provider
     ${resp}=  POST On Session  ynw  /provider/spitem/group  data=${data}  expected_status=any
     RETURN  ${resp} 
 
-Get Item group by id
+Get Item group by id Provider
 
     [Arguments]     ${id}
 
@@ -13717,7 +13717,7 @@ Get Item group by id
     ${resp}=    GET On Session    ynw   /provider/spitem/group/${id}  expected_status=any
     RETURN  ${resp}
 
-Update Item group
+Update Item group Provider
 
     [Arguments]     ${id}  ${groupName}  ${groupCode}  ${groupDesc}
 
