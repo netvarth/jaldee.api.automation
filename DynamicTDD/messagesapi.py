@@ -2272,7 +2272,8 @@ INVENTORY_CATALOG_NAME_REQUIRED="Inventory catalog name required."
 Invalid_inventory_catalog_encoded_id="Invalid inventory catalog encoded id"
 Store_encodedid_cannot_be_updated="Store encoded id can not be updated"
 SAME_NAME_EXIST="Inventory catalog with this name already exists in this selected store"
-Inventory_catalog_Inactive_status="Inventory catalog is already in Inactive status" 
+Inventory_catalog_Inactive_status="Inventory catalog is already in Inactive status"
+Inventory_catalog_active_status="Inventory catalog is already in Active status" 
 
 # Vendor
 INVALID_NAME="Invalid Name"

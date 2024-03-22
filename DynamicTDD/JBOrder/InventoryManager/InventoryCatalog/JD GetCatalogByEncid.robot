@@ -27,7 +27,7 @@ ${invalidstring}     _ad$.sa_
 
 *** Test Cases ***
 
-JD-TC-Create Inventory Catalog-1
+JD-TC-Get Inventory Catalog By EncId-1
 
     [Documentation]  create inventory catalog with valid details.
 
@@ -66,10 +66,10 @@ JD-TC-Create Inventory Catalog-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME53}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME50}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -107,12 +107,19 @@ JD-TC-Create Inventory Catalog-1
     ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${encid}  ${resp.json()}
 
-JD-TC-Create Inventory Catalog-2
+    ${resp}=  Get Inventory Catalog By EncId   ${encid}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+
+JD-TC-Get Inventory Catalog By EncId-2
 
     [Documentation]  create multiple inventory catalog with same store id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -121,11 +128,11 @@ JD-TC-Create Inventory Catalog-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Create Inventory Catalog-3
+JD-TC-Get Inventory Catalog By EncId-3
 
     [Documentation]  create inventory catalog using store nature as lab.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -144,11 +151,11 @@ JD-TC-Create Inventory Catalog-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Create Inventory Catalog-4
+JD-TC-Get Inventory Catalog By EncId-4
 
     [Documentation]  create  inventory catalog where name as number.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -156,11 +163,11 @@ JD-TC-Create Inventory Catalog-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Create Inventory Catalog-5
+JD-TC-Get Inventory Catalog By EncId-5
 
     [Documentation]  create  inventory catalog where name as invalid string.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -168,11 +175,11 @@ JD-TC-Create Inventory Catalog-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Create Inventory Catalog-6
+JD-TC-Get Inventory Catalog By EncId-6
 
     [Documentation]  create  inventory catalog with same  name with different store id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -185,96 +192,13 @@ JD-TC-Create Inventory Catalog-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Get Inventory Catalog By EncId-7
-
-    [Documentation]  create  inventory catalog from main account then create catalog with same name from user login(without admin privilege)
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${Name}=    FakerLibrary.last name
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${encid}  ${resp.json()}
 
 
-    ${resp}=  View Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
-
-    ${dep_name1}=  FakerLibrary.bs
-    ${dep_code1}=   Random Int  min=100   max=999
-    ${dep_desc1}=   FakerLibrary.word   
-        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${dep_id}  ${resp1.json()}
-
-
-
-     
-    FOR  ${p}  IN RANGE  5
-        ${ran int}=    Generate Random String    length=4    chars=[NUMBERS]
-        ${ran int}=    Convert To Integer    ${ran int}
-        ${ran int}=    Convert To Integer    ${ran int}
-        ${ran int}=    Convert To String  ${ran int}
-        ${Status}=   Run Keyword And Return Status   Should Match Regexp	${ran int}	\\d{4}
-        Exit For Loop IF  ${Status}  
-    END
-    ${ran int}=    Convert To Integer    ${ran int}
-    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+${ran int}
-    Set Test Variable  ${PUSERNAME_U1}
-    clear_users  ${PUSERNAME_U1}
-    ${firstname1}=  FakerLibrary.name
-    Set Test Variable  ${firstname1}
-    ${lastname1}=  FakerLibrary.last_name
-    Set Test Variable  ${lastname1}
-    ${dob1}=  FakerLibrary.Date
-    Set Test Variable  ${dob1}
-    ${pin1}=  get_pincode
-    Set Test Variable  ${pin1}
-
-    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${u_id1}  ${resp.json()}
-
-
-    ${resp}=  Get User By Id  ${u_id1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${SAME_NAME_EXIST}
-
-
-
-JD-TC-Create Inventory Catalog-UH1
+JD-TC-Get Inventory Catalog By EncId-UH1
 
     [Documentation]  create  inventory catalog with empty name
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -285,11 +209,11 @@ JD-TC-Create Inventory Catalog-UH1
     Should Be Equal As Strings   ${resp.json()}   ${INVENTORY_CATALOG_NAME_REQUIRED}
     
 
-JD-TC-Create Inventory Catalog-UH2
+JD-TC-Get Inventory Catalog By EncId-UH2
 
     [Documentation]  create  inventory catalog with invalid store id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -300,7 +224,7 @@ JD-TC-Create Inventory Catalog-UH2
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_STORE_ID}
 
 
-JD-TC-Create Inventory Catalog-UH3
+JD-TC-Get Inventory Catalog By EncId-UH3
 
     [Documentation]  create  inventory catalog without login.
 
@@ -311,7 +235,7 @@ JD-TC-Create Inventory Catalog-UH3
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 
-JD-TC-Create Inventory Catalog-UH4
+JD-TC-Get Inventory Catalog By EncId-UH4
 
     [Documentation]  create  inventory catalog using sa login.
 
@@ -326,11 +250,11 @@ JD-TC-Create Inventory Catalog-UH4
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 
-JD-TC-Create Inventory Catalog-UH5
+JD-TC-Get Inventory Catalog By EncId-UH5
 
     [Documentation]  create  inventory catalog where name length is <1.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -341,11 +265,11 @@ JD-TC-Create Inventory Catalog-UH5
     Should Be Equal As Strings   ${resp.json()}   ${INVENTORY_CATALOG_NAME_REQUIRED}
 
 
-JD-TC-Create Inventory Catalog-UH6
+JD-TC-Get Inventory Catalog By EncId-UH6
 
     [Documentation]  create  inventory catalog where name(word length is 255).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -354,11 +278,11 @@ JD-TC-Create Inventory Catalog-UH6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
 
-JD-TC-Create Inventory Catalog-UH7
+JD-TC-Get Inventory Catalog By EncId-UH7
 
     [Documentation]  create  inventory catalog with same name .
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
