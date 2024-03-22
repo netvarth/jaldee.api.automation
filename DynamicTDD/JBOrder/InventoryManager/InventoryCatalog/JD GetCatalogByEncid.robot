@@ -29,7 +29,7 @@ ${invalidstring}     _ad$.sa_
 
 JD-TC-Get Inventory Catalog By EncId-1
 
-    [Documentation]  create inventory catalog with valid details.
+    [Documentation]  create inventory catalog then Get Inventory Catalog By EncId.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
@@ -117,51 +117,114 @@ JD-TC-Get Inventory Catalog By EncId-1
 
 JD-TC-Get Inventory Catalog By EncId-2
 
-    [Documentation]  create multiple inventory catalog with same store id.
+    [Documentation]  update inventory catalog then Get Inventory Catalog By EncId.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Name}=    FakerLibrary.first name
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    ${Name1}=    FakerLibrary.lastname
+    Set Suite Variable  ${Name1}  
+    ${resp}=  Update Inventory Catalog   ${Name1}  ${store_id}   ${encid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Inventory Catalog By EncId   ${encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-Get Inventory Catalog By EncId-3
 
-    [Documentation]  create inventory catalog using store nature as lab.
+    [Documentation]  Update Inventory Catalog status as inactive then get inventory catalog by encid
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update Inventory Catalog status   ${encid}  ${InventoryCatalogStatus[1]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200   
+
+    ${resp}=  Get Inventory Catalog By EncId   ${encid}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Get Inventory Catalog By EncId-5
+
+    [Documentation]  create  inventory catalog from main account then get inventory catalog using encid
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${Name}=    FakerLibrary.last name
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
-    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
-    ${email}=  Create List  ${email_id}
-
-    ${resp}=  Create Store   ${Name}  ${St_Id1}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${store_id1}  ${resp.json()}
+    Set Test Variable  ${encid}  ${resp.json()}
 
-    ${Name}=    FakerLibrary.first name
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id1}   
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${dep_name1}=  FakerLibrary.bs
+        ${dep_code1}=   Random Int  min=100   max=999
+        ${dep_desc1}=   FakerLibrary.word  
+        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
+
+
+     
+    FOR  ${p}  IN RANGE  5
+        ${ran int}=    Generate Random String    length=4    chars=[NUMBERS]
+        ${ran int}=    Convert To Integer    ${ran int}
+        ${ran int}=    Convert To Integer    ${ran int}
+        ${ran int}=    Convert To String  ${ran int}
+        ${Status}=   Run Keyword And Return Status   Should Match Regexp	${ran int}	\\d{4}
+        Exit For Loop IF  ${Status}  
+    END
+    ${ran int}=    Convert To Integer    ${ran int}
+    ${PUSERNAME_U1}=  Evaluate  ${PUSERNAME}+${ran int}
+    Set Test Variable  ${PUSERNAME_U1}
+    clear_users  ${PUSERNAME_U1}
+    ${firstname1}=  FakerLibrary.name
+    Set Test Variable  ${firstname1}
+    ${lastname1}=  FakerLibrary.last_name
+    Set Test Variable  ${lastname1}
+    ${dob1}=  FakerLibrary.Date
+    Set Test Variable  ${dob1}
+    ${pin1}=  get_pincode
+    Set Test Variable  ${pin1}
+
+    ${resp}=  Create User  ${firstname1}  ${lastname1}  ${dob1}  ${Genderlist[0]}  ${P_Email}${PUSERNAME_U1}.${test_mail}   ${userType[0]}  ${pin1}  ${countryCodes[0]}  ${PUSERNAME_U1}  ${dep_id}  ${EMPTY}  ${bool[0]}  ${NULL}  ${NULL}  ${NULL}  ${NULL}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${u_id1}  ${resp.json()}
+
+
+    ${resp}=  Get User By Id  ${u_id1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
+    Should Be Equal As Strings  ${resp[0].status_code}  200
+    Should Be Equal As Strings  ${resp[1].status_code}  200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-Get Inventory Catalog By EncId-4
-
-    [Documentation]  create  inventory catalog where name as number.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Create Inventory Catalog   ${invalidNum}  ${store_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${encid}  ${resp.json()}
 
 JD-TC-Get Inventory Catalog By EncId-5
 
