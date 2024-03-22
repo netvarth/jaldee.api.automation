@@ -1383,21 +1383,21 @@ JD-TC-AddFamilyMemberOfProvidercustomer-17
       [Documentation]    Add a customer's family member with title.
       ${resp}=  Encrypted Provider Login  ${PUSERNAME177}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-       
+            
       ${firstname}=  FakerLibrary.first_name
-     ${lastname}=  FakerLibrary.last_name
-     ${cust_no}    FakerLibrary.Numerify   text=%######
-     ${cust_no}=  Evaluate  ${CUSERNAME}+${cust_no}
-     ${dob}=  FakerLibrary.Date
-     ${address}=  FakerLibrary.address
-     ${gender}=  Random Element    ${Genderlist}
-     ${title}=  Random Element    ${customertitle}
-     
-     ${resp}=  AddCustomer  ${cust_no}   countryCode=${countryCodes[0]}  firstName=${firstname}   lastName=${lastname}  address=${address}   gender=${gender}  dob=${dob}  title=${title}
-     Log  ${resp.content}
-     Should Be Equal As Strings  ${resp.status_code}  200
-     Set Test Variable  ${cid1}  ${resp.json()}
-     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${cust_no}${\n}
+      ${lastname}=  FakerLibrary.last_name
+      ${cust_no}    FakerLibrary.Numerify   text=%######
+      ${cust_no}=  Evaluate  ${CUSERNAME}+${cust_no}
+      ${dob}=  FakerLibrary.Date
+      ${address}=  FakerLibrary.address
+      ${gender}=  Random Element    ${Genderlist}
+      ${title}=  Random Element    ${customertitle}
+      
+      ${resp}=  AddCustomer  ${cust_no}   countryCode=${countryCodes[0]}  firstName=${firstname}   lastName=${lastname}  address=${address}   gender=${gender}  dob=${dob}  title=${title}
+      Log  ${resp.content}
+      Should Be Equal As Strings  ${resp.status_code}  200
+      Set Test Variable  ${cid1}  ${resp.json()}
+      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${cust_no}${\n}
 
       # ${resp}=  Get Consumer By Id  ${CUSERNAME4}
       # Log   ${resp.json()}

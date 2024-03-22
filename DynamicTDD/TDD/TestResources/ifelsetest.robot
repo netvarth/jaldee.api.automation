@@ -28,9 +28,47 @@ ${longi1}    ${68.031759}
 
 *** Test Cases ***  
 
+Check empty Dictionary
+
+    ${whatsApp}=  Create Dictionary
+    ${telegram}=  Create Dictionary
+    IF  ${whatsApp} == &{EMPTY}
+        Log    whatsApp is empty
+    ELSE 
+        Log  whatsapp is not empty
+    END
+
+    IF  ${telegram} == &{EMPTY}
+        Log    Telegram is empty
+    ELSE 
+        Log  Telegram is not empty
+    END
+
+    ${primnum}                    FakerLibrary.Numerify   text=%%%%%%%%%%
+    ${altno}                      FakerLibrary.Numerify   text=%%%%%%%%%%
+    # ${numt}                       FakerLibrary.Numerify   text=%%%%%%%%%%
+    # ${numw}                       FakerLibrary.Numerify   text=%%%%%%%%%%
+
+    ${whatsApp}=               Create Dictionary    countryCode=+91   number=${primnum}
+    ${telegram}=               Create Dictionary    countryCode=+91   number=${altno}
+
+    IF  ${whatsApp} != &{EMPTY}
+        Log  whatsapp is not empty
+    ELSE 
+        Log    whatsApp is empty
+    END
+
+    IF  ${telegram} != &{EMPTY}
+        Log  Telegram is not empty
+    ELSE 
+        Log    Telegram is empty
+    END
+
+
+
+*** Comments ***
 Testing py fn
 
-    
     Log  ${TEST NAME}
     Log  ${SUITE NAME}
     db.get_Host_name_IP
@@ -41,7 +79,6 @@ Testing py fn
     ${rand_ph}=  FakerLibrary.Phone Number
     
 
-*** Comments ***
 Testing named arguments
 
     ${auth} =    Create List    Mark    SuperSecret

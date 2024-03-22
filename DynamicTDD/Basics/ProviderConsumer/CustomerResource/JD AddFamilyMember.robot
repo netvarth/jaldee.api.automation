@@ -110,7 +110,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Add FamilyMember For ProviderConsumer    ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${cc}  ${cc}  ${numt}  ${cc}  ${numw}
+    ${resp}=  Add FamilyMember For ProviderConsumer  ${fname}  ${lname}  ${dob}  ${gender}  ${primnum}  email=${email}  city=${city}  state=${state}   address=${address}  alternativePhoneNo=${altno}  countryCode=${cc}  telegramCC=${cc}  telegramNum=${numt}  whatsAppCC=${cc}  whatsAppNum=${numw}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -132,7 +132,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Add FamilyMember For ProviderConsumer    ${fname}  ${lname}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${cc}  ${cc}  ${numt}  ${cc}  ${numw}
+    ${resp}=    Add FamilyMember For ProviderConsumer    ${fname}  ${lname}  ${dob}  ${gender}  ${primnum}  email=${email}  city=${city}  state=${state}   address=${address}  alternativePhoneNo=${altno}  countryCode=${cc}  telegramCC=${cc}  telegramNum=${numt}  whatsAppCC=${cc}  whatsAppNum=${numw}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${FAMILY_MEMBEBR_NAME_SAME}
@@ -154,7 +154,8 @@ JD-TC-AddFamilyMembersForProviderConsumer-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Add FamilyMember For ProviderConsumer    ${empty}  ${empty}  ${empty}  ${empty}  ${empty}  ${empty}  ${empty}   ${empty}  ${empty}  ${empty}  ${empty}  ${empty}  ${empty}  ${empty}  ${empty}
+    
+    ${resp}=    Add FamilyMember For ProviderConsumer    ${empty}  ${empty}  ${empty}  ${empty}  ${empty} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}        ${FAMILY_MEMBEBR_NAME_SAME}
@@ -177,7 +178,7 @@ JD-TC-AddFamilyMembersForProviderConsumer-UH3
     Should Be Equal As Strings    ${resp.status_code}    200
     ${lname1}                      FakerLibrary.last_name
 
-    ${resp}=    Add FamilyMember For ProviderConsumer    ${empty}  ${lname1}  ${dob}  ${gender}  ${email}  ${city}  ${state}   ${address}  ${primnum}  ${altno}  ${cc}  ${cc}  ${numt}  ${cc}  ${numw}
+    ${resp}=    Add FamilyMember For ProviderConsumer    ${empty}  ${lname1}  ${dob}  ${gender}  ${primnum}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -87,27 +87,46 @@ Get ProviderConsumer
     RETURN  ${resp}
 
 
-Add FamilyMember For ProviderConsumer1
+Add FamilyMember For ProviderConsumer
       [Arguments]   ${firstname}   ${lastname}  ${dob}  ${gender}  ${primarynum}  &{kwargs}
       Check And Create YNW Session
 
       ${userProfile}=  Create Dictionary    firstName=${firstname}   lastName=${lastname}   dob=${dob}   gender=${gender}   primaryMobileNo=${primarynum}   
       ${data}=   Create Dictionary    userProfile=${userProfile}
+      ${whatsApp}=  Create Dictionary
+      ${telegram}=  Create Dictionary
       FOR    ${key}    ${value}    IN    &{kwargs}
-            Set To Dictionary 	${data} 	${key}=${value}
+            IF  ${key} == whatsAppNum
+                Set To Dictionary 	${whatsApp} 	number=${value}
+            ELSE IF  ${key} == whatsAppCC
+                Set To Dictionary 	${whatsApp} 	countryCode=${value}
+            ELSE IF  ${key} == telegramNum
+                Set To Dictionary 	${telegram} 	countryCode=${value}
+            ELSE IF  ${key} == telegramCC
+                Set To Dictionary 	${telegram} 	countryCode=${value}
+            ELSE
+                Set To Dictionary 	${data} 	${key}=${value}
+            END
+            IF  ${whatsApp} != &{EMPTY}
+                Set To Dictionary 	${data} 	whatsAppNum=${whatsApp}
+            END
+            IF  ${telegram} != &{EMPTY}
+                Set To Dictionary 	${data} 	telegramNum=${telegram}
+            END
+
       END
       ${resp}=  POST On Session  ynw   /consumer/familyMember   json=${data}    expected_status=any
       RETURN  ${resp}
 
-Add FamilyMember For ProviderConsumer
-    [Arguments]                   ${firstname}   ${lastname}   ${dob}   ${gender}   ${email}   ${city}   ${state}   ${address}   ${primarynum}   ${alternativenum}   ${countrycode}   ${countryCodet}   ${numbert}   ${countryCodew}   ${numberw}
-    Check And Create YNW Session
-    ${whatsAppNum}=               Create Dictionary    countryCode=${countryCodet}   number=${numbert}
-    ${telegramNum}=               Create Dictionary    countryCode=${countryCodew}   number=${numberw}
-    ${userProfile}=               Create Dictionary    firstName=${firstname}   lastName=${lastname}   dob=${dob}   gender=${gender}   email=${email}   city=${city}  state=${state}   address=${address}  primaryMobileNo=${primarynum}   alternativePhoneNo=${alternativenum}   countryCode=${countrycode}  telegramNum=${telegramNum}   whatsAppNum=${whatsAppNum}
-    ${data}=                      Create Dictionary    userProfile=${userProfile}
-    ${resp}=                      POST On Session  ynw   /spconsumer/familyMember    json=${data}    expected_status=any
-    RETURN                      ${resp}
+# Add FamilyMember For ProviderConsumer
+#     [Arguments]                   ${firstname}   ${lastname}   ${dob}   ${gender}   ${email}   ${city}   ${state}   ${address}   ${primarynum}   ${alternativenum}   ${countrycode}   ${countryCodet}   ${numbert}   ${countryCodew}   ${numberw}
+#     Check And Create YNW Session
+#     ${whatsAppNum}=               Create Dictionary    countryCode=${countryCodet}   number=${numbert}
+#     ${telegramNum}=               Create Dictionary    countryCode=${countryCodew}   number=${numberw}
+#     ${userProfile}=               Create Dictionary    firstName=${firstname}   lastName=${lastname}   dob=${dob}   gender=${gender}   email=${email}   city=${city}  state=${state}   address=${address}  primaryMobileNo=${primarynum}   alternativePhoneNo=${alternativenum}   countryCode=${countrycode}  telegramNum=${telegramNum}   whatsAppNum=${whatsAppNum}
+#     ${data}=                      Create Dictionary    userProfile=${userProfile}
+#     ${resp}=                      POST On Session  ynw   /spconsumer/familyMember    json=${data}    expected_status=any
+#     RETURN                      ${resp}
 
 Get FamilyMember
     Check And Create YNW Session
