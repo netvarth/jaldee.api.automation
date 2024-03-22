@@ -13697,6 +13697,59 @@ Get Item hns Count Filter
 
 
 
+# .......... ITEM GROUP ...........
+
+Create Item group Provider
+
+    [Arguments]     ${groupName}  ${groupCode}  ${groupDesc}
+
+    ${data}=  Create Dictionary  groupName=${groupName}  groupCode=${groupCode}   groupDesc=${groupDesc}
+    ${data}=  json.dumps  ${data} 
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/spitem/group  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item group by id
+
+    [Arguments]     ${id}
+
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/group/${id}  expected_status=any
+    RETURN  ${resp}
+
+Update Item group
+
+    [Arguments]     ${id}  ${groupName}  ${groupCode}  ${groupDesc}
+
+    ${data}=  Create Dictionary  id=${id}  groupName=${groupName}  groupCode=${groupCode}   groupDesc=${groupDesc}
+    ${data}=  json.dumps  ${data} 
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  ynw  /provider/spitem/group  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+
+Get Item group Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/group   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Update Item group Status
+
+    [Arguments]   ${groupid}   ${status}
+    Check And Create YNW Session
+    ${resp}=    PATCH On Session    ynw   /provider/spitem/group/${groupid}/status/${status}   expected_status=any
+    RETURN  ${resp}
+
+Get Item group Count Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/group/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+
 # Data Migration
 
 Get Appointment By Uid
