@@ -302,7 +302,7 @@ JD-TC-UpdateAppointmentSchedule-8
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${parallel}=  FakerLibrary.Random Int  min=5  max=18
+    # ${parallel}=  FakerLibrary.Random Int  min=5  max=18
     ${schedule_name1}=  FakerLibrary.bs
     ${sTime1}=  subtract_timezone_time  ${tz}  2  15  
     ${time}=   Create List    ${sTime1}
@@ -326,7 +326,7 @@ JD-TC-UpdateAppointmentSchedule-9
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${parallel}=  FakerLibrary.Random Int  min=5  max=18
+    # ${parallel}=  FakerLibrary.Random Int  min=5  max=18
     ${schedule_name1}=  FakerLibrary.bs
     ${DAY2}=   subtract_timezone_date  ${tz}  10        
  
@@ -351,7 +351,7 @@ JD-TC-UpdateAppointmentSchedule-10
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${parallel}=  FakerLibrary.Random Int  min=5  max=18
+    # ${parallel}=  FakerLibrary.Random Int  min=5  max=18
     ${schedule_name1}=  FakerLibrary.bs       
  
     ${time}=   Create List    ${sTime1}
