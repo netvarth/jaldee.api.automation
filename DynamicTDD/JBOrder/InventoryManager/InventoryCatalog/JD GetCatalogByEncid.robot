@@ -148,9 +148,9 @@ JD-TC-Get Inventory Catalog By EncId-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Get Inventory Catalog By EncId-5
+JD-TC-Get Inventory Catalog By EncId-4
 
-    [Documentation]  create  inventory catalog from main account then get inventory catalog using encid
+    [Documentation]  create  inventory catalog from main account then get inventory catalog using encid from user login.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
@@ -221,14 +221,12 @@ JD-TC-Get Inventory Catalog By EncId-5
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    ${resp}=  Get Inventory Catalog By EncId   ${encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${encid}  ${resp.json()}
-
 JD-TC-Get Inventory Catalog By EncId-5
 
-    [Documentation]  create  inventory catalog where name as invalid string.
+    [Documentation]  create  inventory catalog where name as invalid string then get inventory catalog by encid.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
@@ -237,122 +235,56 @@ JD-TC-Get Inventory Catalog By EncId-5
     ${resp}=  Create Inventory Catalog   ${invalidstring}  ${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${encid}  ${resp.json()}
 
-JD-TC-Get Inventory Catalog By EncId-6
-
-    [Documentation]  create  inventory catalog with same  name with different store id.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
+    ${resp}=  Get Inventory Catalog By EncId   ${encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Name}=    FakerLibrary.first name
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id1}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 
 JD-TC-Get Inventory Catalog By EncId-UH1
 
-    [Documentation]  create  inventory catalog with empty name
+    [Documentation]    Get Inventory Catalog By EncId with invalid encid id
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${Name}=    FakerLibrary.first name
-    ${resp}=  Create Inventory Catalog   ${EMPTY}  ${store_id}   
+    ${resp}=  Get Inventory Catalog By EncId   ${Name}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${INVENTORY_CATALOG_NAME_REQUIRED}
     
 
+
 JD-TC-Get Inventory Catalog By EncId-UH2
 
-    [Documentation]  create  inventory catalog with invalid store id
+    [Documentation]  Get Inventory Catalog By EncId without login.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${Name}=    FakerLibrary.first name
-    ${resp}=  Create Inventory Catalog   ${Name}  ${Name}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${INVALID_STORE_ID}
-
-
-JD-TC-Get Inventory Catalog By EncId-UH3
-
-    [Documentation]  create  inventory catalog without login.
-
-    ${Name}=    FakerLibrary.first name
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    ${resp}=  Get Inventory Catalog By EncId   ${encid}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 
-JD-TC-Get Inventory Catalog By EncId-UH4
+JD-TC-Get Inventory Catalog By EncId-UH3
 
-    [Documentation]  create  inventory catalog using sa login.
+    [Documentation]  Get Inventory Catalog By EncId using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${Name}=    FakerLibrary.first name
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    ${resp}=  Get Inventory Catalog By EncId   ${encid}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 
-JD-TC-Get Inventory Catalog By EncId-UH5
 
-    [Documentation]  create  inventory catalog where name length is <1.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${Text}=  FakerLibrary.Sentence   nb_words=-1
-    ${resp}=  Create Inventory Catalog   ${Text}  ${store_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${INVENTORY_CATALOG_NAME_REQUIRED}
-
-
-JD-TC-Get Inventory Catalog By EncId-UH6
-
-    [Documentation]  create  inventory catalog where name(word length is 255).
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${Text}=  FakerLibrary.Sentence   nb_words=255
-    ${resp}=  Create Inventory Catalog   ${Text}  ${store_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-
-JD-TC-Get Inventory Catalog By EncId-UH7
-
-    [Documentation]  create  inventory catalog with same name .
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Create Inventory Catalog   ${invalidstring}  ${store_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${SAME_NAME_EXIST}
     
 
 

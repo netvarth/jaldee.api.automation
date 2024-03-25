@@ -160,7 +160,7 @@ JD-TC-Update Inventory Catalog status-UH1
 
     ${Name}=    FakerLibrary.first name
     ${resp}=  Update Inventory Catalog status   ${Name}  ${InventoryCatalogStatus[0]}   
-    Log   ${resp.content}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${Invalid_inventory_catalog_encoded_id}
     
@@ -233,7 +233,7 @@ JD-TC-Update Inventory Catalog status-UH6
 
 
     ${resp}=  Update Inventory Catalog status   ${encid}  ${InventoryCatalogStatus[1]}   
-    Log   ${resp.content}
+    Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${Invalid_inventory_catalog_encoded_id}
 

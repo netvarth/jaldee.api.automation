@@ -31,6 +31,14 @@ JD-TC-Create Inventory Catalog-1
 
     [Documentation]  create inventory catalog with valid details.
 
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Store Type By Filter     
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -107,6 +115,8 @@ JD-TC-Create Inventory Catalog-1
     ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+*** Comments ***
 
 JD-TC-Create Inventory Catalog-2
 
