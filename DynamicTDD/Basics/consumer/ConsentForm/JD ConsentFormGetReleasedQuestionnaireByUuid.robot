@@ -64,7 +64,7 @@ JD-TC-ConsentFormsubmitQnr-1
     Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
     Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
 
-    ${qnr_name}=    FakerLibrary.name
+    ${qnr_name}=    y.name
     ${qnr_des}=     FakerLibrary.sentence
     ${qnr_ids}=     Create List  ${qnr_id}
     Set Suite Variable      ${qnr_ids}

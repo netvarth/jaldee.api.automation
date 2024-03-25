@@ -2275,6 +2275,7 @@ SAME_NAME_EXIST="Inventory catalog with this name already exists in this selecte
 Inventory_catalog_Inactive_status="Inventory catalog is already in Inactive status"
 Inventory_catalog_active_status="Inventory catalog is already in Active status" 
 
+
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"

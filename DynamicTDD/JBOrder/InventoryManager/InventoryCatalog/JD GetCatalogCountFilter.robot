@@ -27,15 +27,15 @@ ${invalidstring}     _ad$.sa_
 
 *** Test Cases ***
 
-JD-TC-Get Inventory Catalog By EncId-1
+JD-TC-Get Inventory catalog Filter Count-1
 
-    [Documentation]  create inventory catalog then Get Inventory Catalog By EncId.
+    [Documentation]  create inventory catalog then Get Inventory catalog Filter Count.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${TypeName}=    FakerLibrary.File Name
+    ${TypeName}=    FakerLibrary.name
     Set Suite Variable  ${TypeName}
 
     ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
@@ -43,7 +43,7 @@ JD-TC-Get Inventory Catalog By EncId-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${St_Id}    ${resp.json()}
 
-    ${TypeName1}=    FakerLibrary.Last Name
+    ${TypeName1}=    FakerLibrary.name
     Set Suite Variable  ${TypeName1}
 
     ${resp}=  Create Store Type   ${TypeName1}    ${storeNature[1]}
@@ -51,7 +51,7 @@ JD-TC-Get Inventory Catalog By EncId-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${St_Id1}    ${resp.json()}
 
-    ${TypeName2}=    FakerLibrary.word
+    ${TypeName2}=    FakerLibrary.name
     Set Suite Variable  ${TypeName2}
 
     ${resp}=  Create Store Type   ${TypeName2}    ${storeNature[2]}
@@ -64,20 +64,20 @@ JD-TC-Get Inventory Catalog By EncId-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${id}    ${resp.json()['id']}
     Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-
+    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME50}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME48}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
-
+    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
     ${resp}=    Get Locations
@@ -95,7 +95,6 @@ JD-TC-Get Inventory Catalog By EncId-1
     END
 
     ${Name}=    FakerLibrary.last name
-    Set Suite Variable    ${Name} 
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
@@ -111,25 +110,17 @@ JD-TC-Get Inventory Catalog By EncId-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${encid}  ${resp.json()}
 
-    ${resp}=  Get Inventory Catalog By EncId   ${encid}  
+    ${resp}=  Get Inventory catalog Filter Count   storeEncId-eq=${St_Id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['catalogName']}    ${Name}
-
-    Should Be Equal As Strings    ${resp.json()['storeId']}    ${id}
-    Should Be Equal As Strings    ${resp.json()['storeEncId']}    ${store_id}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${encid}
-    Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}
-    Should Be Equal As Strings    ${resp.json()['storeName']}    ${Name}
 
 
 
+JD-TC-Get Inventory catalog Filter Count-2
 
-JD-TC-Get Inventory Catalog By EncId-2
+    [Documentation]  update inventory catalog then Get Inventory catalog Filter Count using accountid.
 
-    [Documentation]  update inventory catalog then Get Inventory Catalog By EncId.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -139,26 +130,30 @@ JD-TC-Get Inventory Catalog By EncId-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Inventory Catalog By EncId   ${encid}  
+    ${resp}=  Get Inventory catalog Filter Count    accountId-eq=${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['catalogName']}    ${Name1}
 
-    Should Be Equal As Strings    ${resp.json()['storeId']}    ${id}
-    Should Be Equal As Strings    ${resp.json()['storeEncId']}    ${store_id}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${encid}
-    Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}
-    Should Be Equal As Strings    ${resp.json()['storeName']}    ${Name}
+JD-TC-Get Inventory catalog Filter Count-3
 
+    [Documentation]  Update Inventory Catalog status as inactive then Get Inventory catalog Filter Count using catalogName
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME48}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    
+    ${resp}=  Update Inventory Catalog status   ${encid}  ${InventoryCatalogStatus[1]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200   
 
+    ${resp}=  Get Inventory catalog Filter Count   catalogName-eq=${Name1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Get Inventory Catalog By EncId-3
+JD-TC-Get Inventory catalog Filter Count-4
 
     [Documentation]  create  inventory catalog from main account then get inventory catalog using encid from user login.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -166,35 +161,28 @@ JD-TC-Get Inventory Catalog By EncId-3
     ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Test Variable  ${encid}  ${resp.json()}
+    Set Test Variable  ${encid}  ${resp.json()}
 
-    # # ${resp}=  Get Departments
-    # # Log  ${resp.content}
-    # # Should Be Equal As Strings  ${resp.status_code}  200
-    # # IF   '${resp.content}' == '${emptylist}'
-    #     ${dep_name1}=  FakerLibrary.bs
-    #     ${dep_code1}=   Random Int  min=100   max=999
-    #     ${dep_desc1}=   FakerLibrary.word  
-    #     ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-    #     Log  ${resp1.content}
-    #     Should Be Equal As Strings  ${resp1.status_code}  200
-    #     Set Test Variable  ${dep_id}  ${resp1.json()}
-    # # ELSE
-    # #     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    # # END
-
-    ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    ${resp}=  Get Inventory Catalog By EncId   ${encid}  
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
-    sleep  2s
     ${resp}=  Get Departments
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    IF   '${resp.content}' == '${emptylist}'
+        ${dep_name1}=  FakerLibrary.bs
+        ${dep_code1}=   Random Int  min=100   max=999
+        ${dep_desc1}=   FakerLibrary.word  
+        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
+
+
      
     FOR  ${p}  IN RANGE  5
         ${ran int}=    Generate Random String    length=4    chars=[NUMBERS]
@@ -238,23 +226,15 @@ JD-TC-Get Inventory Catalog By EncId-3
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Inventory Catalog By EncId   ${encid}  
+
+    ${resp}=  Get Inventory catalog Filter Count   location-eq=${Name1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['catalogName']}    ${Name1}
+JD-TC-Get Inventory catalog Filter Count-5
 
-    Should Be Equal As Strings    ${resp.json()['storeId']}    ${id}
-    Should Be Equal As Strings    ${resp.json()['storeEncId']}    ${store_id}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${encid}
-    Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}
-    # Should Be Equal As Strings    ${resp.json()['storeName']}    ${Name}
-    
+    [Documentation]  create  inventory catalog where name as invalid string then Get Inventory catalog Filter Count using encid.
 
-JD-TC-Get Inventory Catalog By EncId-4
-
-    [Documentation]  create  inventory catalog where name as invalid string then get inventory catalog by encid.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -263,77 +243,75 @@ JD-TC-Get Inventory Catalog By EncId-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${encid}  ${resp.json()}
 
-    ${resp}=  Get Inventory Catalog By EncId   ${encid}  
+    ${resp}=  Get Inventory catalog Filter Count   ${encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['catalogName']}    ${invalidstring}
 
-    Should Be Equal As Strings    ${resp.json()['storeId']}    ${id}
-    Should Be Equal As Strings    ${resp.json()['storeEncId']}    ${store_id}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${encid}
-    Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}
-    Should Be Equal As Strings    ${resp.json()['storeName']}    ${Name}
-    
-
-
-
-JD-TC-Get Inventory Catalog By EncId-5
-
-    [Documentation]  Update Inventory Catalog status as inactive then get inventory catalog by encid
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
+    ${resp}=  Get Inventory catalog Filter Count   encId-eq=${encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Get Inventory catalog Filter Count-6
+
+    [Documentation]   update inventory catalog then Update Inventory Catalog status as disable and get with filter.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME51}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Name}=    FakerLibrary.first name
+    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${encid}  ${resp.json()}
 
     ${resp}=  Update Inventory Catalog status   ${encid}  ${InventoryCatalogStatus[1]}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200   
 
-    ${resp}=  Get Inventory Catalog By EncId   ${encid}  
+    ${resp}=  Get Inventory catalog Filter Count   status-eq=${InventoryCatalogStatus[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # Should Be Equal As Strings    ${resp.json()}    ${Inventory_catalog_Inactive_status}
 
 
-JD-TC-Get Inventory Catalog By EncId-UH1
+JD-TC-Get Inventory catalog Filter Count-UH1
 
-    [Documentation]    Get Inventory Catalog By EncId with invalid encid id
+    [Documentation]    Get Inventory catalog Filter Count with invalid encid id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${Name}=    FakerLibrary.first name
-    ${resp}=  Get Inventory Catalog By EncId   ${Name}  
+    ${resp}=  Get Inventory catalog Filter Count   encId-eq=${Name}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${Invalid_inventory_catalog_encoded_id}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings   ${resp.json()}   0
     
 
 
-JD-TC-Get Inventory Catalog By EncId-UH2
+JD-TC-Get Inventory catalog Filter Count-UH2
 
-    [Documentation]  Get Inventory Catalog By EncId without login.
+    [Documentation]  Get Inventory catalog Filter Count without login.
 
-    ${resp}=  Get Inventory Catalog By EncId   ${encid}  
+    ${resp}=  Get Inventory catalog Filter Count   encId-eq=${encid}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 
-JD-TC-Get Inventory Catalog By EncId-UH3
+JD-TC-Get Inventory catalog Filter Count-UH3
 
-    [Documentation]  Get Inventory Catalog By EncId using sa login.
+    [Documentation]  Get Inventory catalog Filter Count using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Inventory Catalog By EncId   ${encid}  
+    ${resp}=  Get Inventory catalog Filter Count   encId-eq=${encid}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
-
-
 
 
 
