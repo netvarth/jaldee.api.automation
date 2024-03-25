@@ -14022,7 +14022,7 @@ Create Inventory Catalog
     ${data}=  Create Dictionary  catalogName=${catalogName}    storeEncId=${storeEncId}   
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/inventory/catalog   data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/inventory/inventorycatalog   data=${data}  expected_status=any
     RETURN  ${resp} 
 
 Update Inventory Catalog
@@ -14031,35 +14031,35 @@ Update Inventory Catalog
     ${data}=  Create Dictionary  catalogName=${catalogName}    storeEncId=${storeEncId}   
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/inventory/catalog/${encId}   data=${data}  expected_status=any
+    ${resp}=  PUT On Session  ynw  /provider/inventory/inventorycatalog/${encId}   data=${data}  expected_status=any
     RETURN  ${resp} 
 
 Update Inventory Catalog status
     [Arguments]    ${encId}  ${status}
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/inventory/catalog/${encId}/${status}   expected_status=any
+    ${resp}=  PUT On Session  ynw  /provider/inventory/inventorycatalog/${encId}/${status}   expected_status=any
     RETURN  ${resp} 
 
 Get Inventory Catalog By EncId
     [Arguments]    ${encId}  
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/inventory/catalog/${encId}    expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/${encId}    expected_status=any
     RETURN  ${resp} 
 
 Get Inventory Catalog By account id
     [Arguments]    ${accid}  
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/inventory/catalog/${accid}    expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/${accid}    expected_status=any
     RETURN  ${resp} 
 
 Get Inventory catalog Filter
     [Arguments]  &{param}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/inventory/catalog/  params=${param}  expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/  params=${param}  expected_status=any
     RETURN  ${resp}
 
 Get Inventory catalog Filter Count
     [Arguments]  &{param}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/inventory/catalog/count  params=${param}  expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/count  params=${param}  expected_status=any
     RETURN  ${resp}
