@@ -13762,46 +13762,69 @@ Create Item Inventory
     ${itemSubCategory}=  Create Dictionary
     ${itemSubType}=  Create Dictionary
     ${jaldeeRxCode}=    Create Dictionary
+    ${hsnCode}=    Create Dictionary
+    ${itemManufacturer}=    Create Dictionary
+
+
       
     FOR    ${key}    ${value}    IN    &{kwargs}
         IF  "${key}" == "itemCode"
             Set To Dictionary   ${jaldeeRxCode} 	itemCode=${value}
+            Set To Dictionary 	${data} 	jaldeeRxCode=${jaldeeRxCode}
         ELSE IF  "${key}" == "categoryCode"
             Set To Dictionary 	${itemCategory} 	categoryCode=${value}
+            Set To Dictionary 	${data} 	itemCategory=${itemCategory}
         ELSE IF  "${key}" == "categoryCode2"
             Set To Dictionary 	${itemSubCategory} 	categoryCode=${value}
-
+            Set To Dictionary 	${data} 	itemSubCategory=${itemSubCategory}
         ELSE IF  "${key}" == "typeCode"
             Set To Dictionary 	${itemType} 	typeCode=${value}
-        ELSE IF  "${key}" == "typeCode2"
-            Set To Dictionary 	${itemSubType}   typeCode=${value} 
-
-        # ELSE IF  ${key} == telegramNum
-        #     Set To Dictionary 	${telegram} 	countryCode=${value}
-        # ELSE IF  ${key} == telegramCC
-        #     Set To Dictionary 	${telegram} 	countryCode=${value}
-        # ELSE
-        #     Set To Dictionary 	${data} 	${key}=${value}
-        END
-        IF  ${jaldeeRxCode} != &{EMPTY}
-            Set To Dictionary 	${data} 	jaldeeRxCode=${jaldeeRxCode}
-        END
-        IF  ${itemCategory} != &{EMPTY}
-            Set To Dictionary 	${data} 	itemCategory=${itemCategory}
-        END
-        IF  ${itemSubCategory} != &{EMPTY}
-            Set To Dictionary 	${data} 	itemSubCategory=${itemSubCategory}
-        END
-        IF  ${itemType} != &{EMPTY}
             Set To Dictionary 	${data} 	itemType=${itemType}
+        ELSE IF  "${key}" == "typeCode2"
+            Set To Dictionary 	${itemSubType}   typeCode=${value}
+            Set To Dictionary 	${data} 	itemSubType=${itemSubType} 
+        ELSE IF  "${key}" == "hsnCode"
+            Set To Dictionary 	${hsnCode} 	hsnCode=${value}
+            Set To Dictionary 	${data} 	hsnCode=${hsnCode}
+        ELSE IF  "${key}" == "manufacturerCode"
+            Set To Dictionary 	${itemManufacturer} 	manufacturerCode=${value}
+            Set To Dictionary 	${data} 	itemManufacturer=${itemManufacturer}
+     
+        ELSE
+            Set To Dictionary 	${data}    ${key}=${value}     
         END
-        IF  ${itemSubType} != &{EMPTY}
-            Set To Dictionary 	${data} 	itemSubType=${itemSubType}
-        END
+        # IF  ${jaldeeRxCode} != &{EMPTY}
+        #     Set To Dictionary 	${data} 	jaldeeRxCode=${jaldeeRxCode}
+        # END
+        # IF  ${itemCategory} != &{EMPTY}
+        #     Set To Dictionary 	${data} 	itemCategory=${itemCategory}
+        # END
+        # IF  ${itemSubCategory} != &{EMPTY}
+        #     Set To Dictionary 	${data} 	itemSubCategory=${itemSubCategory}
+        # END
+        # IF  ${itemType} != &{EMPTY}
+        #     Set To Dictionary 	${data} 	itemType=${itemType}
+        # END
+        # IF  ${itemSubType} != &{EMPTY}
+        #     Set To Dictionary 	${data} 	itemSubType=${itemSubType}
+        # END
+        # IF  ${itemGroups} != &{EMPTY}
+        #     Set To Dictionary 	 ${data} 	itemGroups=${itemGroups}
+        # END
+        # IF  ${itemSubGroups} != &{EMPTY}
+        #     Set To Dictionary 	 ${data} 	itemSubGroups=${itemSubGroups}
+        # END
+        # IF  ${hsnCode} != &{EMPTY}
+        #     Set To Dictionary 	${data} 	hsnCode=${hsnCode}
+        # END
+        # IF  ${itemManufacturer} != &{EMPTY}
+        #     Set To Dictionary 	${data} 	itemManufacturer=${itemManufacturer}
+        # END
 
-    END   
-
-    RETURN  ${data}
+    END 
+    ${data}=  json.dumps  ${data}   
+    ${resp}=  POST On Session  ynw  /provider/spitem  data=${data}   expected_status=any
+    RETURN  ${resp}
 
 # Data Migration
 
@@ -14087,3 +14110,61 @@ Get Inventory catalog Filter Count
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/count  params=${param}  expected_status=any
     RETURN  ${resp}
+
+Create Inventory Catalog Item
+
+    [Arguments]  ${icEncId}   @{vargs}
+    Check And Create YNW Session
+
+    ${len}=  Get Length  ${vargs}
+    ${data}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        ${values}=  Create Dictionary   itemEncId=${vargs[${index}]}
+        Append To List  ${data}  ${values}
+
+    END
+    ${data}=    json.dumps    ${data}  
+    ${resp}=  POST On Session  ynw  /provider/inventory/inventorycatalog/${icEncId}/items   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Update Inventory Catalog Item
+
+    [Arguments]  ${batchApplicable}   ${lotNumber}    ${icEncId}   ${encId}   ${itemId} 
+    ${data}=  Create Dictionary  batchApplicable=${batchApplicable}    lotNumber=${lotNumber}  icEncId=${icEncId}   encId=${encId}   itemId=${itemId}       
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/inventory/inventorycatalog/items/${encId}   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Update Inventory Catalog Item status
+
+    [Arguments]    ${encId}   ${status} 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/inventory/inventorycatalog/items/${encId}/${status}     expected_status=any
+    RETURN  ${resp} 
+
+Get Inventory Catalog item By EncId
+    [Arguments]    ${encId}   
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/items/${encId}    expected_status=any
+    RETURN  ${resp} 
+
+Get Inventory catalog item Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/items/   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get Inventory catalog item filter count
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/items/count   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get inventory catalog item by inventory catalog encoded id
+    [Arguments]    ${icEncId}   
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/items/${icEncId}/list    expected_status=any
+    RETURN  ${resp} 

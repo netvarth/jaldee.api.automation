@@ -116,7 +116,7 @@ JD-TC-Create Inventory Catalog-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-*** Comments ***
+
 
 JD-TC-Create Inventory Catalog-2
 

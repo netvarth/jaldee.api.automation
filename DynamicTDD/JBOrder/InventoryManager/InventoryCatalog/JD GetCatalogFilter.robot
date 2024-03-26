@@ -188,20 +188,7 @@ JD-TC-Get Inventory catalog Filter-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  Get Departments
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # IF   '${resp.content}' == '${emptylist}'
-    #     ${dep_name1}=  FakerLibrary.bs
-    #     ${dep_code1}=   Random Int  min=100   max=999
-    #     ${dep_desc1}=   FakerLibrary.word  
-    #     ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-    #     Log  ${resp1.content}
-    #     Should Be Equal As Strings  ${resp1.status_code}  200
-    #     Set Test Variable  ${dep_id}  ${resp1.json()}
-    # ELSE
-    #     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    # END
+
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.json()}
@@ -264,6 +251,7 @@ JD-TC-Get Inventory catalog Filter-4
     ${resp}=  Get Inventory catalog Filter   location-eq=${Name1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
 JD-TC-Get Inventory catalog Filter-5
 
     [Documentation]  create  inventory catalog where name as invalid string then Get Inventory catalog Filter using encid.
@@ -277,7 +265,7 @@ JD-TC-Get Inventory catalog Filter-5
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${encid}  ${resp.json()}
 
-    ${resp}=  Get Inventory catalog Filter   ${encid}  
+    ${resp}=  Get Inventory Catalog By EncId   ${encid}     
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -289,7 +277,7 @@ JD-TC-Get Inventory catalog Filter-6
 
     [Documentation]   update inventory catalog then Update Inventory Catalog status as disable and get with filter.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME51}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME48}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -306,6 +294,11 @@ JD-TC-Get Inventory catalog Filter-6
     ${resp}=  Get Inventory catalog Filter   status-eq=${InventoryCatalogStatus[1]}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['catalogName']}    ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['storeEncId']}    ${store_id}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${encid}
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}    ${InventoryCatalogStatus[1]}
 
 
 JD-TC-Get Inventory catalog Filter-UH1
