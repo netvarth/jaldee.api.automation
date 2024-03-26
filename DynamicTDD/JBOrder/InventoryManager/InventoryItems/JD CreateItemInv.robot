@@ -28,6 +28,6 @@ JD-TC-UpdateItemGroupStatus-1
 
     ${displayName}=     FakerLibrary.name
 
-    ${resp}=    Create Item Inventory  ${displayName}  itemCode=1111
+    ${resp}=    Create Item Inventory  ${displayName}  itemCode=1111   categoryCode=35345  categoryCode2=78945   typeCode=64563   typeCode2=64563 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

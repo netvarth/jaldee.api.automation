@@ -2224,3 +2224,100 @@ Get Store Type Filter Count
     Check And Create YNW Session
     ${resp}=  GET On Session  synw  /account/store/type/count   params=${param}   expected_status=any
     RETURN  ${resp}  
+
+#........ ITEM CATEGORY .................
+
+Create Item Category SA
+
+    [Arguments]  ${account}  ${categoryName}  
+    ${data}=  Create Dictionary  categoryName=${categoryName}  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  synw  /item/${account}/category  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item Category SA
+
+    [Arguments]  ${account}  ${id}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/category/${id}  expected_status=any
+    RETURN  ${resp}
+
+Update Item Category SA
+
+    [Arguments]   ${account}  ${categoryName}   ${categoryCode}
+    ${data}=  Create Dictionary  categoryName=${categoryName}   categoryCode=${categoryCode}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  synw  /item/${account}/category  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item Category By Filter SA  
+
+    [Arguments]   ${account}  &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/category   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Update Item Category Status SA
+
+    [Arguments]   ${account}  ${categoryCode}   ${status}
+    
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  synw  /item/${account}/category/${categoryCode}/status/${status}   expected_status=any
+    RETURN  ${resp}  
+
+Get Item Category Count By Filter SA
+
+    [Arguments]   ${account}  &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/category/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+# ......... ITEM TYPE .............
+
+Create Item Type SA
+
+    [Arguments]  ${account}  ${typeName}  
+    ${data}=  Create Dictionary  typeName=${typeName}  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  synw  /item/${account}/type  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item Type SA
+
+    [Arguments]  ${account}  ${id}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/type/${id}  expected_status=any
+    RETURN  ${resp}
+
+Update Item Type SA
+
+    [Arguments]   ${account}  ${typeName}   ${typeCode}
+    ${data}=  Create Dictionary  typeName=${typeName}   typeCode=${typeCode}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  synw  /item/${account}/type  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item Type By Filter SA
+
+    [Arguments]   ${account}  &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/type   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Update Item Type Status SA
+
+    [Arguments]   ${account}  ${typeCode}   ${status}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  synw  /item/${account}/type/${typeCode}/status/${status}   expected_status=any
+    RETURN  ${resp}  
+
+Get Item Type Count By Filter SA
+
+    [Arguments]   ${account}  &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/type/count   params=${param}   expected_status=any
+    RETURN  ${resp}

@@ -13756,13 +13756,26 @@ Create Item Inventory
     [Arguments]   ${displayName}  &{kwargs}
     Check And Create YNW Session
   
-    ${data}=   Create Dictionary    displayName=${displayName} 
+    ${data}=   Create Dictionary    displayName=${displayName}
+    ${itemCategory}=  Create Dictionary
+    ${itemType}=  Create Dictionary
+    ${itemSubCategory}=  Create Dictionary
+    ${itemSubType}=  Create Dictionary
+    ${jaldeeRxCode}=    Create Dictionary
       
     FOR    ${key}    ${value}    IN    &{kwargs}
         IF  "${key}" == "itemCode"
-            ${jaldeeRxCode}=  Create Dictionary 	itemCode=${value}
-        # ELSE IF  ${key} == whatsAppCC
-        #     Set To Dictionary 	${whatsApp} 	countryCode=${value}
+            Set To Dictionary   ${jaldeeRxCode} 	itemCode=${value}
+        ELSE IF  "${key}" == "categoryCode"
+            Set To Dictionary 	${itemCategory} 	categoryCode=${value}
+        ELSE IF  "${key}" == "categoryCode2"
+            Set To Dictionary 	${itemSubCategory} 	categoryCode=${value}
+
+        ELSE IF  "${key}" == "typeCode"
+            Set To Dictionary 	${itemType} 	typeCode=${value}
+        ELSE IF  "${key}" == "typeCode2"
+            Set To Dictionary 	${itemSubType}   typeCode=${value} 
+
         # ELSE IF  ${key} == telegramNum
         #     Set To Dictionary 	${telegram} 	countryCode=${value}
         # ELSE IF  ${key} == telegramCC
@@ -13772,6 +13785,18 @@ Create Item Inventory
         END
         IF  ${jaldeeRxCode} != &{EMPTY}
             Set To Dictionary 	${data} 	jaldeeRxCode=${jaldeeRxCode}
+        END
+        IF  ${itemCategory} != &{EMPTY}
+            Set To Dictionary 	${data} 	itemCategory=${itemCategory}
+        END
+        IF  ${itemSubCategory} != &{EMPTY}
+            Set To Dictionary 	${data} 	itemSubCategory=${itemSubCategory}
+        END
+        IF  ${itemType} != &{EMPTY}
+            Set To Dictionary 	${data} 	itemType=${itemType}
+        END
+        IF  ${itemSubType} != &{EMPTY}
+            Set To Dictionary 	${data} 	itemSubType=${itemSubType}
         END
 
     END   
