@@ -14047,9 +14047,8 @@ Get Inventory Catalog By EncId
     RETURN  ${resp} 
 
 Get Inventory Catalog By account id
-    [Arguments]    ${accid}  
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/${accid}    expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/    expected_status=any
     RETURN  ${resp} 
 
 Get Inventory catalog Filter

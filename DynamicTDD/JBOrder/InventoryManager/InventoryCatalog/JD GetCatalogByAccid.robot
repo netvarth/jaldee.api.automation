@@ -109,7 +109,7 @@ JD-TC-Get Inventory Catalog By account id-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${encid}  ${resp.json()}
 
-    ${resp}=  Get Inventory Catalog By account id   ${accountId}  
+    ${resp}=  Get Inventory Catalog By account id  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -129,7 +129,7 @@ JD-TC-Get Inventory Catalog By account id-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Inventory Catalog By account id   ${accountId}  
+    ${resp}=  Get Inventory Catalog By account id  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -144,7 +144,7 @@ JD-TC-Get Inventory Catalog By account id-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200   
 
-    ${resp}=  Get Inventory Catalog By account id   ${accountId}  
+    ${resp}=  Get Inventory Catalog By account id  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -162,22 +162,33 @@ JD-TC-Get Inventory Catalog By account id-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${encid}  ${resp.json()}
 
+    # ${resp}=  Get Departments
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # IF   '${resp.content}' == '${emptylist}'
+    #     ${dep_name1}=  FakerLibrary.bs
+    #     ${dep_code1}=   Random Int  min=100   max=999
+    #     ${dep_desc1}=   FakerLibrary.word  
+    #     ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+    #     Log  ${resp1.content}
+    #     Should Be Equal As Strings  ${resp1.status_code}  200
+    #     Set Test Variable  ${dep_id}  ${resp1.json()}
+    # ELSE
+    #     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    # END
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
+    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
+    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    sleep  2s
     ${resp}=  Get Departments
-    Log  ${resp.content}
+    Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${dep_name1}=  FakerLibrary.bs
-        ${dep_code1}=   Random Int  min=100   max=999
-        ${dep_desc1}=   FakerLibrary.word  
-        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${dep_id}  ${resp1.json()}
-    ELSE
-        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    END
-
-
+    Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
      
     FOR  ${p}  IN RANGE  5
         ${ran int}=    Generate Random String    length=4    chars=[NUMBERS]
@@ -221,7 +232,7 @@ JD-TC-Get Inventory Catalog By account id-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Inventory Catalog By account id   ${accountId}  
+    ${resp}=  Get Inventory Catalog By account id  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 JD-TC-Get Inventory Catalog By account id-5
@@ -237,7 +248,7 @@ JD-TC-Get Inventory Catalog By account id-5
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${encid}  ${resp.json()}
 
-    ${resp}=  Get Inventory Catalog By account id   ${accountId}  
+    ${resp}=  Get Inventory Catalog By account id  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -264,7 +275,7 @@ JD-TC-Get Inventory Catalog By account id-UH2
 
     [Documentation]  Get Inventory Catalog By account id without login.
 
-    ${resp}=  Get Inventory Catalog By account id   ${accountId}  
+    ${resp}=  Get Inventory Catalog By account id  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -278,7 +289,7 @@ JD-TC-Get Inventory Catalog By account id-UH3
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Inventory Catalog By account id   ${accountId}  
+    ${resp}=  Get Inventory Catalog By account id  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
