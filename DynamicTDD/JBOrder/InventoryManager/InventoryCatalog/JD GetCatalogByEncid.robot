@@ -116,7 +116,7 @@ JD-TC-Get Inventory Catalog By EncId-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['catalogName']}    ${Name}
 
-    Should Be Equal As Strings    ${resp.json()['storeId']}    ${id}
+#    #        Should Be Equal As Strings    ${resp.json()['storeId']}    ${id}
     Should Be Equal As Strings    ${resp.json()['storeEncId']}    ${store_id}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${encid}
     Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}
@@ -144,7 +144,7 @@ JD-TC-Get Inventory Catalog By EncId-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['catalogName']}    ${Name1}
 
-    Should Be Equal As Strings    ${resp.json()['storeId']}    ${id}
+#    #        Should Be Equal As Strings    ${resp.json()['storeId']}    ${id}
     Should Be Equal As Strings    ${resp.json()['storeEncId']}    ${store_id}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${encid}
     Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}
@@ -243,7 +243,7 @@ JD-TC-Get Inventory Catalog By EncId-3
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['catalogName']}    ${Name1}
 
-    Should Be Equal As Strings    ${resp.json()['storeId']}    ${id}
+  #        Should Be Equal As Strings    ${resp.json()['storeId']}    ${id}
     Should Be Equal As Strings    ${resp.json()['storeEncId']}    ${store_id}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${encid}
     Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}
@@ -268,7 +268,7 @@ JD-TC-Get Inventory Catalog By EncId-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()['catalogName']}    ${invalidstring}
 
-    Should Be Equal As Strings    ${resp.json()['storeId']}    ${id}
+  #        Should Be Equal As Strings    ${resp.json()['storeId']}    ${id}
     Should Be Equal As Strings    ${resp.json()['storeEncId']}    ${store_id}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${encid}
     Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}

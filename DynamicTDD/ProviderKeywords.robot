@@ -13866,6 +13866,15 @@ Create Item Inventory
     ${resp}=  POST On Session  ynw  /provider/spitem  data=${data}   expected_status=any
     RETURN  ${resp}
 
+
+Get Item Inventory
+
+    [Arguments]   ${id}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/${id}     expected_status=any
+    RETURN  ${resp}
+
+
 # Data Migration
 
 Get Appointment By Uid
@@ -14151,6 +14160,7 @@ Get Inventory catalog Filter Count
     ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/count  params=${param}  expected_status=any
     RETURN  ${resp}
 
+#------------Inventory catalog(Items add )--------------------------
 Create Inventory Catalog Item
 
     [Arguments]  ${icEncId}   @{vargs}
@@ -14171,8 +14181,8 @@ Create Inventory Catalog Item
 
 Update Inventory Catalog Item
 
-    [Arguments]  ${batchApplicable}   ${lotNumber}    ${icEncId}   ${encId}   ${itemId} 
-    ${data}=  Create Dictionary  batchApplicable=${batchApplicable}    lotNumber=${lotNumber}  icEncId=${icEncId}   encId=${encId}   itemId=${itemId}       
+    [Arguments]  ${batchApplicable}   ${lotNumber}    ${icEncId}   ${encId}  ${itemEncId}   
+    ${data}=  Create Dictionary  batchApplicable=${batchApplicable}    lotNumber=${lotNumber}  icEncId=${icEncId}   itemEncId=${itemEncId}   
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/inventory/inventorycatalog/items/${encId}   data=${data}  expected_status=any
@@ -14206,5 +14216,5 @@ Get Inventory catalog item filter count
 Get inventory catalog item by inventory catalog encoded id
     [Arguments]    ${icEncId}   
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/items/${icEncId}/list    expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/${icEncId}/list    expected_status=any
     RETURN  ${resp} 

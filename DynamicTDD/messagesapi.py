@@ -2274,6 +2274,12 @@ Store_encodedid_cannot_be_updated="Store encoded id can not be updated"
 SAME_NAME_EXIST="Inventory catalog with this name already exists in this selected store"
 Inventory_catalog_Inactive_status="Inventory catalog is already in Inactive status"
 Inventory_catalog_active_status="Inventory catalog is already in Active status" 
+Invalid_inventory_catalog_Id="Invalid inventory catalog Id"
+ITEM_NAME_EXIST="Item with name {} already exists in this catalog"
+Item_id_can_not_be_updated="Item id can not be updated"
+Invalid_Item_encId="Invalid Item enc Id"
+Catalog_id_can_not_be_updated="Catalog id can not be updated"
+Invalid_Catalog_id="Invalid Catalog id"
 
 
 # Vendor

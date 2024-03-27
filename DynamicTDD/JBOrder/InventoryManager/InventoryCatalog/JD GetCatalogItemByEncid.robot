@@ -25,11 +25,11 @@ ${invalidstring}     _ad$.sa_
 
 *** Test Cases ***
 
-JD-TC-Create Inventory Catalog Item-1
+JD-TC-GET Inventory Catalog Item ByEncid-1
 
-    [Documentation]  Create Inventory Catalog Item with valid details.
+    [Documentation]  GET Inventory Catalog Item ByEncid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME44}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -72,10 +72,10 @@ JD-TC-Create Inventory Catalog Item-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME44}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME47}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME44}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -118,13 +118,20 @@ JD-TC-Create Inventory Catalog Item-1
     ${resp}=  Get Inventory Catalog By EncId   ${encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${inventoryCatalogId}  ${resp.json()['id']}
+    Set Suite Variable  ${StoreId}  ${resp.json()['storeId']}
 
     ${displayName}=     FakerLibrary.name
-
+    Set Suite Variable  ${displayName}
     ${resp}=    Create Item Inventory  ${displayName}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
+
+    ${resp}=   Get Item Inventory  ${itemEncId1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    Set Suite Variable  ${itemSourceEnum}  ${resp.json()['itemSourceEnum']}
 
     ${categoryName}=    FakerLibrary.name
     Set Suite Variable  ${categoryName}
@@ -138,20 +145,47 @@ JD-TC-Create Inventory Catalog Item-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncIds}  ${resp.json()}
+    ${resp}=   Get Item Inventory  ${itemEncIds}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    Set Suite Variable  ${itemSourceEnum1}  ${resp.json()['itemSourceEnum']}
 
 
     ${resp}=   Create Inventory Catalog Item  ${encid}   ${itemEncId1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${EncId1}  ${resp.json()[0]}
 
+    ${resp}=   Get Inventory Catalog item By EncId  ${EncId1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId} 
+    Should Be Equal As Strings    ${resp.json()['inventoryCatalogId']}    ${inventoryCatalogId}     
+    Should Be Equal As Strings    ${resp.json()['icEncId']}   ${encid}
+    Should Be Equal As Strings    ${resp.json()['batchApplicable']}     ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['lotNumber']}     ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['locationId']}    ${locId1}
+    Should Be Equal As Strings    ${resp.json()['storeId']}    ${StoreId}
+    Should Be Equal As Strings    ${resp.json()['status']}    ${InventoryCatalogStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${EncId1}
+    Should Be Equal As Strings    ${resp.json()['itemEncId']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()['item']['itemName']}    ${displayName}
+    Should Be Equal As Strings    ${resp.json()['item']['itemType']}    ${itemSourceEnum}
+    Should Be Equal As Strings    ${resp.json()['item']['itemEncId']}    ${itemEncId1}
 
-JD-TC-Create Inventory Catalog Item-2
+JD-TC-GET Inventory Catalog Item ByEncid-2
 
-    [Documentation]  Create Inventory Catalog Item from user login.
+    [Documentation]  Create Inventory Catalog Item from main account then get inventory catalog from user login.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME44}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=   Create Inventory Catalog Item  ${encid}    ${itemEncIds}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${EncId2}  ${resp.json()[0]}
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.json()}
@@ -208,109 +242,129 @@ JD-TC-Create Inventory Catalog Item-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=   Get Inventory Catalog item By EncId  ${EncId2}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId} 
+    Should Be Equal As Strings    ${resp.json()['inventoryCatalogId']}    ${inventoryCatalogId}     
+    Should Be Equal As Strings    ${resp.json()['icEncId']}   ${encid}
+    Should Be Equal As Strings    ${resp.json()['batchApplicable']}     ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['lotNumber']}     ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['locationId']}    ${locId1}
+    Should Be Equal As Strings    ${resp.json()['storeId']}    ${StoreId}
+    Should Be Equal As Strings    ${resp.json()['status']}    ${InventoryCatalogStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${EncId2}
+    Should Be Equal As Strings    ${resp.json()['itemEncId']}    ${itemEncIds}
+    Should Be Equal As Strings    ${resp.json()['item']['itemName']}    ${categoryName}
+    Should Be Equal As Strings    ${resp.json()['item']['itemType']}    ${itemSourceEnum1}
+    Should Be Equal As Strings    ${resp.json()['item']['itemEncId']}    ${itemEncIds}
 
-    ${resp}=   Create Inventory Catalog Item  ${encid}    ${itemEncIds}
+
+
+JD-TC-GET Inventory Catalog Item ByEncid-3
+
+    [Documentation]  update inventory catalog items then get catalog items by encid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME44}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-
-JD-TC-Create Inventory Catalog Item-3
-
-    [Documentation]  Create 50 items and add that items to catalog 
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=   Update Inventory Catalog Item    ${boolean[1]}  ${boolean[1]}      ${encid}     ${EncId2}   ${itemEncIds}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    FOR   ${i}  IN RANGE   0   50
+    ${resp}=   Get Inventory Catalog item By EncId  ${EncId2}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId} 
+    Should Be Equal As Strings    ${resp.json()['inventoryCatalogId']}    ${inventoryCatalogId}     
+    Should Be Equal As Strings    ${resp.json()['icEncId']}   ${encid}
+    Should Be Equal As Strings    ${resp.json()['batchApplicable']}     ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()['lotNumber']}     ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()['locationId']}    ${locId1}
+    Should Be Equal As Strings    ${resp.json()['storeId']}    ${StoreId}
+    Should Be Equal As Strings    ${resp.json()['status']}    ${InventoryCatalogStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${EncId2}
+    Should Be Equal As Strings    ${resp.json()['itemEncId']}    ${itemEncIds}
+    Should Be Equal As Strings    ${resp.json()['item']['itemName']}    ${categoryName}
+    Should Be Equal As Strings    ${resp.json()['item']['itemType']}    ${itemSourceEnum1}
+    Should Be Equal As Strings    ${resp.json()['item']['itemEncId']}    ${itemEncIds}
 
+JD-TC-GET Inventory Catalog Item ByEncid-4
 
-        ${displayName}=     FakerLibrary.name
-        ${display}=  Evaluate    '${displayName}' + '${i}'
-        Set Test Variable  ${display}
+    [Documentation]  update inventory catalog items statusthen get catalog items by encid
 
-        ${resp}=    Create Item Inventory  ${display}   
-        Log   ${resp.json()}
-        Should Be Equal As Strings    ${resp.status_code}    200
-        Set Suite Variable  ${itemEncId${i}}  ${resp.json()}
-
-    ${resp}=   Create Inventory Catalog Item  ${encid}    ${itemEncId${i}}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME44}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    END
-
-JD-TC-Create Inventory Catalog Item-UH1
-
-    [Documentation]  adding existing item to the existing catalog.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Update Inventory Catalog Item status    ${EncId2}  ${InventoryCatalogStatus[1]} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${ITEM_NAME_EXIST}=  Format String  ${ITEM_NAME_EXIST}    ${categoryName}
 
-    ${resp}=   Create Inventory Catalog Item  ${encid}    ${itemEncIds}
+    ${resp}=   Get Inventory Catalog item By EncId  ${EncId2}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${ITEM_NAME_EXIST}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId} 
+    Should Be Equal As Strings    ${resp.json()['inventoryCatalogId']}    ${inventoryCatalogId}     
+    Should Be Equal As Strings    ${resp.json()['icEncId']}   ${encid}
+    Should Be Equal As Strings    ${resp.json()['batchApplicable']}     ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()['lotNumber']}     ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()['locationId']}    ${locId1}
+    Should Be Equal As Strings    ${resp.json()['storeId']}    ${StoreId}
+    Should Be Equal As Strings    ${resp.json()['status']}    ${InventoryCatalogStatus[1]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${EncId2}
+    Should Be Equal As Strings    ${resp.json()['itemEncId']}    ${itemEncIds}
+    Should Be Equal As Strings    ${resp.json()['item']['itemName']}    ${categoryName}
+    Should Be Equal As Strings    ${resp.json()['item']['itemType']}    ${itemSourceEnum1}
+    Should Be Equal As Strings    ${resp.json()['item']['itemEncId']}    ${itemEncIds}
 
-JD-TC-Create Inventory Catalog Item-UH2
 
-    [Documentation]  Create Inventory Catalog Item using invalid encid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+JD-TC-GET Inventory Catalog Item ByEncid-UH1
+
+    [Documentation]  get Inventory Catalog Item using invalid encid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME44}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${Name}=    FakerLibrary.first name
 
-    ${resp}=   Create Inventory Catalog Item  ${Name}    ${itemEncId2}
+    ${resp}=   Get Inventory Catalog item By EncId  ${Name}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${Invalid_inventory_catalog_Id}
-
-JD-TC-Create Inventory Catalog Item-UH3
-
-    [Documentation]  Create Inventory Catalog Item using invalid itemencid
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${Name}=    FakerLibrary.first name
-
-    ${resp}=   Create Inventory Catalog Item  ${encid}    ${Name}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${Invalid_Item_encId}
-
-JD-TC-Create Inventory Catalog Item-UH4
-
-    [Documentation]  Create Inventory Catalog Item without login.
+    Should Be Equal As Strings   ${resp.json()}   ${Invalid_Catalog_id}
 
 
-    ${resp}=   Create Inventory Catalog Item  ${encid}    ${itemEncId2}
+JD-TC-GET Inventory Catalog Item ByEncid-UH2
+
+    [Documentation]  get Inventory Catalog Item without login.
+
+
+    ${resp}=   Get Inventory Catalog item By EncId  ${EncId2}   
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Create Inventory Catalog Item-UH5
+JD-TC-GET Inventory Catalog Item ByEncid-UH5
 
-    [Documentation]  Create Inventory Catalog Item from sa login login.
+    [Documentation]  get Inventory Catalog Item from sa login login.
 
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Create Inventory Catalog Item  ${encid}    ${itemEncId2}
+
+    ${resp}=   Get Inventory Catalog item By EncId  ${EncId2}   
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Create Inventory Catalog Item-UH6
+JD-TC-GET Inventory Catalog Item ByEncid-UH6
 
-    [Documentation]  Create Inventory Catalog Item using another provider
+    [Documentation]  get Inventory Catalog Item using another provider
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
@@ -318,7 +372,8 @@ JD-TC-Create Inventory Catalog Item-UH6
 
     ${Name}=    FakerLibrary.first name
 
-    ${resp}=   Create Inventory Catalog Item  ${encid}    ${Name}
+
+    ${resp}=   Get Inventory Catalog item By EncId  ${EncId2}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${Invalid_inventory_catalog_Id}
+    Should Be Equal As Strings   ${resp.json()}   ${Invalid_Catalog_id}

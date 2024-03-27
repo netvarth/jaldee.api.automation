@@ -25,11 +25,11 @@ ${invalidstring}     _ad$.sa_
 
 *** Test Cases ***
 
-JD-TC-Create Inventory Catalog Item-1
+JD-TC-GET Inventory Catalog Item Count Filter-1
 
-    [Documentation]  Create Inventory Catalog Item with valid details.
+    [Documentation]  GET Inventory Catalog Item count filter.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME42}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -72,10 +72,10 @@ JD-TC-Create Inventory Catalog Item-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME42}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME47}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME42}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -118,13 +118,20 @@ JD-TC-Create Inventory Catalog Item-1
     ${resp}=  Get Inventory Catalog By EncId   ${encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${inventoryCatalogId}  ${resp.json()['id']}
+    Set Suite Variable  ${StoreId}  ${resp.json()['storeId']}
 
     ${displayName}=     FakerLibrary.name
-
+    Set Suite Variable  ${displayName}
     ${resp}=    Create Item Inventory  ${displayName}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
+
+    ${resp}=   Get Item Inventory  ${itemEncId1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    Set Suite Variable  ${itemSourceEnum}  ${resp.json()['itemSourceEnum']}
 
     ${categoryName}=    FakerLibrary.name
     Set Suite Variable  ${categoryName}
@@ -138,20 +145,40 @@ JD-TC-Create Inventory Catalog Item-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncIds}  ${resp.json()}
+    ${resp}=   Get Item Inventory  ${itemEncIds}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    Set Suite Variable  ${itemSourceEnum1}  ${resp.json()['itemSourceEnum']}
 
 
     ${resp}=   Create Inventory Catalog Item  ${encid}   ${itemEncId1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${EncId1}  ${resp.json()[0]}
 
-
-JD-TC-Create Inventory Catalog Item-2
-
-    [Documentation]  Create Inventory Catalog Item from user login.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Get Inventory catalog item Filter   accountId-eq=${accountId}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${count}=  Get Length  ${resp.json()}
+
+    ${resp}=  Get Inventory catalog item filter count   accountId-eq=${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}    ${count}
+
+JD-TC-GET Inventory Catalog Item Count Filter-2
+
+    [Documentation]  Create Inventory Catalog Item from main account then get inventory catalog item count from user login.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME42}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=   Create Inventory Catalog Item  ${encid}    ${itemEncIds}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${EncId2}  ${resp.json()[0]}
 
     ${resp}=  View Waitlist Settings
     Log  ${resp.json()}
@@ -208,117 +235,191 @@ JD-TC-Create Inventory Catalog Item-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Inventory catalog item Filter   icEncId-eq=${encid} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    ${count}=  Get Length  ${resp.json()}
 
-    ${resp}=   Create Inventory Catalog Item  ${encid}    ${itemEncIds}
+    ${resp}=  Get Inventory catalog item filter count   icEncId-eq=${encid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}    ${count}
+
+
+JD-TC-GET Inventory Catalog Item Count Filter-3
+
+    [Documentation]  update inventory catalog items then get catalog items count filter
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME42}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Update Inventory Catalog Item    ${boolean[1]}  ${boolean[1]}      ${encid}     ${EncId2}   ${itemEncIds}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Inventory catalog item Filter   batchApplicable-eq=${bool[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    ${count}=  Get Length  ${resp.json()}
+
+    ${resp}=  Get Inventory catalog item filter count   batchApplicable-eq=${bool[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}    ${count}
+JD-TC-GET Inventory Catalog Item Count Filter-4
+
+    [Documentation]  update inventory catalog items status then get catalog items count filter
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME42}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update Inventory Catalog Item status    ${EncId2}  ${InventoryCatalogStatus[1]} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Inventory catalog item Filter   status-eq=${InventoryCatalogStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    ${count}=  Get Length  ${resp.json()}
+
+    ${resp}=  Get Inventory catalog item filter count   status-eq=${InventoryCatalogStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}    ${count}
+
+
+JD-TC-GET Inventory Catalog Item Count Filter-5
+
+    [Documentation]   get catalog items count filter using lotNumber
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME42}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-JD-TC-Create Inventory Catalog Item-3
+    ${resp}=   Get Inventory catalog item Filter   lotNumber-eq=${bool[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    ${count}=  Get Length  ${resp.json()}
 
-    [Documentation]  Create 50 items and add that items to catalog 
+    ${resp}=  Get Inventory catalog item filter count   lotNumber-eq=${bool[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}    ${count}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+JD-TC-GET Inventory Catalog Item Count Filter-6
+
+    [Documentation]   get catalog items count filter using storeId
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME42}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    FOR   ${i}  IN RANGE   0   50
 
+    ${resp}=   Get Inventory catalog item Filter   storeId-eq=${storeId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    ${count}=  Get Length  ${resp.json()}
 
-        ${displayName}=     FakerLibrary.name
-        ${display}=  Evaluate    '${displayName}' + '${i}'
-        Set Test Variable  ${display}
+    ${resp}=  Get Inventory catalog item filter count   storeId-eq=${storeId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}    ${count}
 
-        ${resp}=    Create Item Inventory  ${display}   
-        Log   ${resp.json()}
-        Should Be Equal As Strings    ${resp.status_code}    200
-        Set Suite Variable  ${itemEncId${i}}  ${resp.json()}
+JD-TC-GET Inventory Catalog Item Count Filter-7
 
-    ${resp}=   Create Inventory Catalog Item  ${encid}    ${itemEncId${i}}
+    [Documentation]   get catalog items count filter using location id
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME42}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    END
 
-JD-TC-Create Inventory Catalog Item-UH1
+    ${resp}=   Get Inventory catalog item Filter   locationId-eq=${locId1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    ${count}=  Get Length  ${resp.json()}
 
-    [Documentation]  adding existing item to the existing catalog.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    ${resp}=  Get Inventory catalog item filter count   locationId-eq=${locId1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${ITEM_NAME_EXIST}=  Format String  ${ITEM_NAME_EXIST}    ${categoryName}
+    Should Be Equal As Strings    ${resp.json()}    ${count}
 
-    ${resp}=   Create Inventory Catalog Item  ${encid}    ${itemEncIds}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${ITEM_NAME_EXIST}
+JD-TC-GET Inventory Catalog Item Count Filter-8
 
-JD-TC-Create Inventory Catalog Item-UH2
-
-    [Documentation]  Create Inventory Catalog Item using invalid encid
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    [Documentation]   get catalog items count filter using encid
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME42}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Name}=    FakerLibrary.first name
 
-    ${resp}=   Create Inventory Catalog Item  ${Name}    ${itemEncId2}
+    ${resp}=   Get Inventory catalog item Filter   encId-eq=${EncId2}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${Invalid_inventory_catalog_Id}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    ${count}=  Get Length  ${resp.json()}
 
-JD-TC-Create Inventory Catalog Item-UH3
+    ${resp}=  Get Inventory catalog item filter count   encId-eq=${EncId2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}    ${count}
 
-    [Documentation]  Create Inventory Catalog Item using invalid itemencid
+JD-TC-GET Inventory Catalog Item Count Filter-UH1
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    [Documentation]  get Inventory Catalog item count filter using invalid encid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME42}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Name}=    FakerLibrary.first name
-
-    ${resp}=   Create Inventory Catalog Item  ${encid}    ${Name}
+    ${resp}=   Get Inventory catalog item Filter   encId-eq=${itemEncIds}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${Invalid_Item_encId}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${count}=  Get Length  ${resp.json()}
 
-JD-TC-Create Inventory Catalog Item-UH4
+    ${resp}=  Get Inventory catalog item filter count   encId-eq=${itemEncIds}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}    ${count}
 
-    [Documentation]  Create Inventory Catalog Item without login.
+JD-TC-GET Inventory Catalog Item Count Filter-UH2
 
+    [Documentation]  get Inventory Catalog item count filter without login.
 
-    ${resp}=   Create Inventory Catalog Item  ${encid}    ${itemEncId2}
+    ${resp}=  Get Inventory catalog item filter count   encId-eq=${itemEncIds}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Create Inventory Catalog Item-UH5
+JD-TC-GET Inventory Catalog Item Count Filter-UH3
 
-    [Documentation]  Create Inventory Catalog Item from sa login login.
+    [Documentation]  get Inventory Catalog item count filter from sa login .
 
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Create Inventory Catalog Item  ${encid}    ${itemEncId2}
+    ${resp}=  Get Inventory catalog item filter count   encId-eq=${itemEncIds}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Create Inventory Catalog Item-UH6
+JD-TC-GET Inventory Catalog Item Count Filter-UH4
 
-    [Documentation]  Create Inventory Catalog Item using another provider
+    [Documentation]  get Inventory Catalog item count filter using using invalid details
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Name}=    FakerLibrary.first name
-
-    ${resp}=   Create Inventory Catalog Item  ${encid}    ${Name}
+    ${resp}=   Get Inventory catalog item Filter   encId-eq=${itemEncIds}  locationId-eq=${locId1}   storeId-eq=${locId1}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${Invalid_inventory_catalog_Id}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${count}=  Get Length  ${resp.json()}
+
+    ${resp}=  Get Inventory catalog item filter count   encId-eq=${itemEncIds}  locationId-eq=${locId1}   storeId-eq=${locId1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}    ${count}
