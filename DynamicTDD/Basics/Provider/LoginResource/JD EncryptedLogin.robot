@@ -32,17 +32,6 @@ ${PASSWORD2}          Netvarth56
 ${invalid_provider}   abd@in.in
 @{emptylist}
 
-*** Keywords ***
-
-Encrypted Provider Login
-    [Arguments]    ${usname}  ${passwrd}   ${countryCode}=91
-    ${data}=  Login  ${usname}  ${passwrd}   countryCode=${countryCode}
-    ${encrypted_data}=  db.ecrypt_data  ${data}
-    # ${string}=    Convert To String    ${encrypted_data}
-    ${data}=    json.dumps    ${encrypted_data}
-    ${resp}=    POST On Session    ynw    /provider/login/encrypt    data=${data}  expected_status=any
-    RETURN  ${resp}
-
 
 *** Test Cases ***
 

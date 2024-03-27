@@ -21,49 +21,6 @@ ${digits}       0123456789
 @{multiloc_providers}
 @{multiloc_billable_providers}
 
-*** Keywords ***
-Individual Schedule
-    [Arguments]  ${name}   ${parallel}   ${consumerParallelServing}   ${loc}   ${batch}  @{vargs}   &{kwargs}
-
-    ${location}=  Create Dictionary  id=${loc}
-    ${data}=  Create Dictionary  name=${name}     parallelServing=${parallel}    consumerParallelServing=${consumerParallelServing}  location=${location}    batchEnable=${batch}   
-    ${len}=  Get Length  ${vargs}
-    ${services}=  Create List  
-    FOR    ${index}    IN RANGE  0  ${len}
-        Exit For Loop If  ${len}==0
-    	${service}=  Create Dictionary  id=${vargs[${index}]} 
-        Append To List  ${services}  ${service}
-    END
-    Run Keyword If  ${len}>0  Set To Dictionary  ${data}  services=${services}
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-    END 
-    RETURN  ${data}
-Create Individual Schedule
-    [Arguments]  ${name}   ${parallel}   ${consumerParallelServing}    ${loc}    ${batch}  @{vargs}   &{kwargs}
-    ${data}=  Individual Schedule  ${name}   ${parallel}    ${consumerParallelServing}   ${loc}    ${batch}  @{vargs}     &{kwargs}
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-    END 
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=  POST On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
-    RETURN  ${resp}
-
-Update Individual Schedule
-    [Arguments]     ${Id}  ${name}   ${parallel}   ${consumerParallelServing}    ${loc}    ${batch}  @{vargs}   &{kwargs}
-    ${data}=  Individual Schedule  ${name}   ${parallel}    ${consumerParallelServing}   ${loc}    ${batch}  @{vargs}     &{kwargs}
-    Set To Dictionary  ${data}  id=${Id}
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary 	${data} 	${key}=${value}
-    END 
-    Check And Create YNW Session
-    ${data}=  json.dumps  ${data}
-    ${resp}=  PUT On Session  ynw  /provider/appointment/schedule  data=${data}  expected_status=any
-    RETURN  ${resp}
-
-
-# *** Comments ***
 *** Test Cases ***
 
 JD-TC-Take Individual Schedule Appointment-1

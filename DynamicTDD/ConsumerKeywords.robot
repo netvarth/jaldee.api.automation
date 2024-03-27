@@ -3533,3 +3533,16 @@ Get consumer Order Bill Details
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /consumer/orders/${uuid}/billdetails   expected_status=any   
     RETURN  ${resp}
+
+
+Add FamilyMember As ProviderConsumer
+    [Arguments]   ${fam_id}   ${procon_id}   ${accountId} 
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  url=/consumer/familyMember/providerconsumer/${fam_id}/${procon_id}?account=${accountId}     expected_status=any
+    RETURN  ${resp}
+
+Get ProviderConsumer FamilyMember
+    [Arguments]   ${Jcon_id}   ${accountId} 
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  url=/consumer/familyMember/providerconsumer/${Jcon_id}?account=${accountId}     expected_status=any
+    RETURN  ${resp}
