@@ -13798,10 +13798,10 @@ Get Item group Count Filter
 
 Create Item Inventory
 
-    [Arguments]   ${displayName}  &{kwargs}
+    [Arguments]   ${name}  &{kwargs}
     Check And Create YNW Session
   
-    ${data}=   Create Dictionary    displayName=${displayName}
+    ${data}=   Create Dictionary    name=${name}
     ${itemCategory}=  Create Dictionary
     ${itemType}=  Create Dictionary
     ${itemSubCategory}=  Create Dictionary
