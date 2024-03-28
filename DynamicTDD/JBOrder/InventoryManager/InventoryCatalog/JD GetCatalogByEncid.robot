@@ -42,7 +42,7 @@ JD-TC-Get Inventory Catalog By EncId-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${St_Id}    ${resp.json()}
-
+    sleep  02s
     ${TypeName1}=    FakerLibrary.Last Name
     Set Suite Variable  ${TypeName1}
 
@@ -50,7 +50,7 @@ JD-TC-Get Inventory Catalog By EncId-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${St_Id1}    ${resp.json()}
-
+    sleep  02s
     ${TypeName2}=    FakerLibrary.word
     Set Suite Variable  ${TypeName2}
 
