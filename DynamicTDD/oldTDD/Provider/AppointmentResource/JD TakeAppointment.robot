@@ -6059,7 +6059,9 @@ JD-TC-Take Appointment-37
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
@@ -6127,7 +6129,9 @@ JD-TC-Take Appointment-37
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
@@ -6213,7 +6217,9 @@ JD-TC-Take Appointment-37
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     Should Contain  ${slots}    ${slot1}
 
@@ -6375,7 +6381,9 @@ JD-TC-Take Appointment-38
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
@@ -6447,7 +6455,9 @@ JD-TC-Take Appointment-38
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     FOR   ${i}  IN RANGE   0   ${num_slots}
@@ -6536,7 +6546,9 @@ JD-TC-Take Appointment-38
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     Should Contain  ${slots}    ${slot1}
 
@@ -10125,7 +10137,9 @@ JD-TC-Take Appointment-UH30
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}

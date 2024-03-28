@@ -193,7 +193,9 @@ JD-TC-GetFutureAppointmentCount-1
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${available_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${available_slots-1}
@@ -412,7 +414,9 @@ JD-TC-GetFutureAppointmentCount-2
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
         Log   ${slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     Log   ${slots}
     ${available_slots}=  Get Length  ${slots}
@@ -582,7 +586,9 @@ JD-TC-GetFutureAppointmentCount-3
     @{slots}=   Create List
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${available_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${available_slots-1}
@@ -769,7 +775,9 @@ JD-TC-GetFutureAppointmentCount-4
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${available_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${available_slots-1}
@@ -870,7 +878,9 @@ JD-TC-GetFutureAppointmentCount-4
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${available_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${available_slots-1}
@@ -1161,7 +1171,9 @@ JD-TC-GetFutureAppointmentCount-5
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${available_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${available_slots-1}
@@ -2765,7 +2777,9 @@ JD-TC-GetFutureAppointmentCount-13
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
@@ -4012,7 +4026,9 @@ JD-TC-GetFutureAppointmentCount-19
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}

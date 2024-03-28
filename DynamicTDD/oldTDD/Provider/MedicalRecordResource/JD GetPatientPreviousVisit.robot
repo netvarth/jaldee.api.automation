@@ -1482,7 +1482,9 @@ JD-TC-GetPatientPreviousVisit-16
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
@@ -1749,7 +1751,9 @@ JD-TC-GetPatientPreviousVisit-18
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
@@ -2052,7 +2056,9 @@ JD-TC-GetPatientPreviousVisit-20
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
@@ -2081,7 +2087,9 @@ JD-TC-GetPatientPreviousVisit-20
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
@@ -2275,7 +2283,9 @@ JD-TC-GetPatientPreviousVisit-21
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}

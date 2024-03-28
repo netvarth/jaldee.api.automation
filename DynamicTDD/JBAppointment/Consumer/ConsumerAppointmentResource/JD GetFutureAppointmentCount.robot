@@ -138,10 +138,10 @@ JD-TC-GetFutureAppointmentCount-1
 
     ${pid1}=  get_acc_id  ${PUSERNAME_F}
     Set Suite Variable   ${pid1}
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable   ${DAY1}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10        
-    ${list}=  Create List  1  2  3  4  5  6  7
+    # ${DAY1}=  db.get_date_by_timezone  ${tz}
+    # Set Suite Variable   ${DAY1}
+    # ${DAY2}=  db.add_timezone_date  ${tz}  10        
+    # ${list}=  Create List  1  2  3  4  5  6  7
     # ${sTime1}=  add_timezone_time  ${tz}  0  15  
     # ${delta}=  FakerLibrary.Random Int  min=10  max=60
     # ${eTime1}=  add_two   ${sTime1}  ${delta}
@@ -153,25 +153,26 @@ JD-TC-GetFutureAppointmentCount-1
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
+    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    # ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    # ${eTime1}=  add_two   ${sTime1}  ${delta}
 
-    ${sTime1}=  add_timezone_time  ${tz}  0  30  
-    ${eTime1}=  add_timezone_time  ${tz}  1  00  
+     
     # ${city}=   FakerLibrary.state
     # ${latti}=  get_latitude
     # ${longi}=  get_longitude
     # ${postcode}=  FakerLibrary.postcode
     # ${address}=  get_address
     ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
-    ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
+    ${tz2}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
     Set Suite Variable  ${tz}
     ${parking}    Random Element     ${parkingType} 
     ${24hours}    Random Element    ['True','False']
     ${url}=   FakerLibrary.url
+    ${sTime1}=  add_timezone_time  ${tz}  0  30  
+    ${eTime1}=  add_timezone_time  ${tz}  1  00 
     ${resp}=  Create Location  ${city}  ${longi}  ${latti}  ${url}  ${postcode}  ${address}  ${parking}  ${24hours}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -187,12 +188,19 @@ JD-TC-GetFutureAppointmentCount-1
     ${s_id3}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable   ${s_id3}
 
+    ${DAY1}=  db.get_date_by_timezone  ${tz2}
+    # Set Suite Variable   ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz2}  10        
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime1}=  add_timezone_time  ${tz2}  0  15  
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid1}  ${duration}  ${bool1}  ${s_id3}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid1}  ${duration}  ${bool1}  ${s_id3}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id11}  ${resp.json()}
@@ -202,12 +210,18 @@ JD-TC-GetFutureAppointmentCount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id11}   name=${schedule_name}  apptState=${Qstate[0]}
 
+    ${DAY3}=  db.get_date_by_timezone  ${tz1}
+    ${DAY4}=  db.add_timezone_date  ${tz1}  10        
+    ${list}=  Create List  1  2  3  4  5  6  7
+    ${sTime2}=  add_timezone_time  ${tz1}  0  15  
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime2}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id1}  ${resp.json()}
@@ -217,13 +231,15 @@ JD-TC-GetFutureAppointmentCount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${s_id1}
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY3}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
@@ -243,7 +259,7 @@ JD-TC-GetFutureAppointmentCount-1
     ${apptfor}=   Create List  ${apptfor1}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id1}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id1}  ${sch_id1}  ${DAY3}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
           
@@ -255,7 +271,7 @@ JD-TC-GetFutureAppointmentCount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     ${encId1}=  Set Variable   ${resp.json()}
 
-    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${sTime2}=  add_timezone_time  ${tz1}  1  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}   
 
@@ -264,7 +280,7 @@ JD-TC-GetFutureAppointmentCount-1
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()} 
@@ -319,7 +335,9 @@ JD-TC-GetFutureAppointmentCount-1
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
@@ -363,7 +381,9 @@ JD-TC-GetFutureAppointmentCount-1
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
@@ -407,7 +427,9 @@ JD-TC-GetFutureAppointmentCount-1
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
@@ -440,7 +462,9 @@ JD-TC-GetFutureAppointmentCount-1
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
@@ -636,7 +660,9 @@ JD-TC-GetFutureAppointmentCount-2
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}
@@ -1477,7 +1503,9 @@ JD-TC-GetFutureAppointmentCount-10
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j}=  Random Int  max=${num_slots-1}

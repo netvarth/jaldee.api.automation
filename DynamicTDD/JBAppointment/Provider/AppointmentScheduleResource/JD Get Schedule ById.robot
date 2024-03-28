@@ -20,6 +20,9 @@ JD-TC-Get Schedule By Id-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME100}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Active License
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     clear_service   ${PUSERNAME100}
     clear_location  ${PUSERNAME100}
 
@@ -29,15 +32,25 @@ JD-TC-Get Schedule By Id-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
+    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    reset_queue_metric  ${pid}
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
-
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
@@ -45,6 +58,7 @@ JD-TC-Get Schedule By Id-1
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
+
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200

@@ -27,18 +27,20 @@ JD-TC-UpdateAppointmentRating-1
 
 	[Documentation]    Consumer Update Appointment Rating.
 	
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME202}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
 
     ${resp}=  Get Active License
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_queue    ${PUSERNAME102}
-    clear_service  ${PUSERNAME102}
-    clear_rating    ${PUSERNAME102}
-    clear_customer   ${PUSERNAME102}
+    clear_queue    ${PUSERNAME202}
+    clear_service  ${PUSERNAME202}
+    clear_rating    ${PUSERNAME202}
+    clear_customer   ${PUSERNAME202}
 
-    ${pid}=  get_acc_id  ${PUSERNAME102}
+    ${pid}=  get_acc_id  ${PUSERNAME202}
     Set Suite Variable  ${pid} 
  
     ${resp}=  Get Locations
@@ -49,10 +51,8 @@ JD-TC-UpdateAppointmentRating-1
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    # reset_queue_metric  ${pid1}
     
-    clear_appt_schedule   ${PUSERNAME102}
+    clear_appt_schedule   ${PUSERNAME202}
 
     ${SERVICE1}=   FakerLibrary.name
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -179,7 +179,7 @@ JD-TC-UpdateAppointmentRating-1
     Should Be Equal As Strings  ${resp.json()['rating']['stars']}  ${rating1}
     Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}  ${comment1}
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME202}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${rating1} =  roundval  ${rating1}  2
@@ -207,7 +207,7 @@ JD-TC-UpdateAppointmentRating-1
     Should Be Equal As Strings  ${resp.json()['rating']['feedback'][0]['comments']}  ${comment1}
     Should Be Equal As Strings  ${resp.json()['rating']['feedback'][1]['comments']}  ${comment2}    
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME202}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${rating12} =  roundval  ${rating12}  2
@@ -221,7 +221,7 @@ JD-TC-UpdateAppointmentRating-2
 
 	[Documentation]    Consumer Update Multiple Appointment ratings.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME202}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Location By Id   ${lid} 
@@ -328,7 +328,7 @@ JD-TC-UpdateAppointmentRating-2
     ${avg_round}=     roundval    ${avg_rating}   2
     Set Suite Variable   ${avg_round}   
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME202}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Business Profile
@@ -358,7 +358,7 @@ JD-TC-UpdateAppointmentRating-2
     # ${avg_round11}=     roundval    ${avg_rating}   2
     Set Suite Variable   ${avg_round11}   
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME202}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Business Profile
@@ -429,7 +429,7 @@ JD-TC-UpdateAppointmentRating-3
     ${avg_round1}=     roundval    ${avg_rating}   2
     Set Suite Variable   ${avg_round1}  
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME202}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200 
   
     ${resp}=  Get Business Profile
@@ -457,7 +457,7 @@ JD-TC-UpdateAppointmentRating-3
     ${avg_round12}=     roundval    ${avg_rating}   2
     Set Suite Variable   ${avg_round12}  
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME202}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Business Profile
@@ -553,7 +553,7 @@ JD-TC-UpdateAppointmentRating-6
 
 	[Documentation]    Update Appointment rating by provider login.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME102}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME202}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
 

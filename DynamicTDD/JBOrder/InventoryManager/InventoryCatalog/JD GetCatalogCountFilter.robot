@@ -42,10 +42,10 @@ JD-TC-Get Inventory catalog Filter Count-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${St_Id}    ${resp.json()}
-
+    sleep  02s
     ${TypeName1}=    FakerLibrary.name
     Set Suite Variable  ${TypeName1}
-
+    sleep  02s
     ${resp}=  Create Store Type   ${TypeName1}    ${storeNature[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

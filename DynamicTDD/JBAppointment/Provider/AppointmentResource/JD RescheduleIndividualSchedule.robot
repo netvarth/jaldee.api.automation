@@ -1830,7 +1830,9 @@ JD-TC-Reschedule Appointment-10
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots_indexes}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        # Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        # IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
         IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0
             Append To List   ${slots_indexes}  ${i}
         END
@@ -2007,7 +2009,9 @@ JD-TC-Reschedule Appointment-10
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j2}=  Random Int  max=${num_slots-1}
@@ -2197,7 +2201,9 @@ JD-TC-Reschedule Appointment-11
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots_indexes}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        # Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        # IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
         IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0
             Append To List   ${slots_indexes}  ${i}
         END
@@ -2380,7 +2386,9 @@ JD-TC-Reschedule Appointment-11
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j2}=  Random Int  max=${num_slots-1}
@@ -2545,7 +2553,9 @@ JD-TC-Reschedule Appointment-12
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j1}=  Random Int  max=${num_slots-1}
@@ -2833,7 +2843,9 @@ JD-TC-Reschedule Appointment-13
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j1}=  Random Int  max=${num_slots-1}
@@ -2985,7 +2997,9 @@ JD-TC-Reschedule Appointment-13
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j2}=  Random Int  max=${num_slots-1}
@@ -7475,7 +7489,9 @@ JD-TC-Reschedule Appointment-UH23
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j1}=  Random Int  max=${num_slots-1}
@@ -7716,7 +7732,9 @@ JD-TC-Reschedule Appointment-UH24
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j1}=  Random Int  max=${num_slots-1}
@@ -7958,7 +7976,9 @@ JD-TC-Reschedule Appointment-UH25
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots_indexes}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        # Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        # IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
         IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0
             Append To List   ${slots_indexes}  ${i}
         END
@@ -8233,7 +8253,9 @@ JD-TC-Reschedule Appointment-UH26
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots_indexes}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        # Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        # IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
         IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0
             Append To List   ${slots_indexes}  ${i}
         END
@@ -8714,7 +8736,9 @@ JD-TC-Reschedule Appointment-UH30
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots_indexes}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        # Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        # IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
         IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0
             Append To List   ${slots_indexes}  ${i}
         END
@@ -8889,7 +8913,9 @@ JD-TC-Reschedule Appointment-UH30
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j2}=  Random Int  max=${num_slots-1}
@@ -9021,7 +9047,9 @@ JD-TC-Reschedule Appointment-UH31
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots_indexes}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        # Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        # IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
         IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0
             Append To List   ${slots_indexes}  ${i}
         END
@@ -9205,7 +9233,9 @@ JD-TC-Reschedule Appointment-UH31
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
     @{slots}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
-        Run Keyword If  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
+            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        END
     END
     ${num_slots}=  Get Length  ${slots}
     ${j2}=  Random Int  max=${num_slots-1}

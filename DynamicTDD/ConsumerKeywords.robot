@@ -644,6 +644,12 @@ CommunicationBetweenConsumerAndProvider
     ${resp}=  POST On Session  ynw  /consumer/waitlist/communicate/${uuid}  data=${data}  params=${cons_params}   expected_status=any   headers=${cons_headers} 
     RETURN  ${resp}
 
+
+Get salutations
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /consumer/userTitle  expected_status=any
+    RETURN  ${resp}
+
     
 List Favourite Provider
     [Arguments]   &{kwargs}  #${timeZone}=Asia/Kolkata

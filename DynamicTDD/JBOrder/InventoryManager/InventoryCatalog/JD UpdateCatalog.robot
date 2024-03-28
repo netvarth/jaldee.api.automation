@@ -43,7 +43,7 @@ JD-TC-update Inventory Catalog-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${St_Id}    ${resp.json()}
-
+    sleep  02s
     ${TypeName1}=    FakerLibrary.name
     Set Suite Variable  ${TypeName1}
 
@@ -51,7 +51,7 @@ JD-TC-update Inventory Catalog-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${St_Id1}    ${resp.json()}
-
+    sleep  02s
     ${TypeName2}=    FakerLibrary.name
     Set Suite Variable  ${TypeName2}
 
@@ -59,7 +59,7 @@ JD-TC-update Inventory Catalog-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${St_Id2}    ${resp.json()}
-
+    sleep  02s
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -246,7 +246,7 @@ JD-TC-update Inventory Catalog-7
 
     ${TypeName}=    FakerLibrary.name
     Set Test Variable  ${TypeName}
-
+    sleep  02s
     ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
