@@ -65,3 +65,77 @@ JD-TC-UpdateItemCategoryStatusSA-1
     Should Be Equal As Strings    ${resp.json()['categoryCode']}    ${cat_Id}
     Should Be Equal As Strings    ${resp.json()['categoryName']}    ${categoryName}
     Should Be Equal As Strings    ${resp.json()['status']}          ${Toggle[1]}
+
+JD-TC-UpdateItemCategoryStatusSA-UH1
+
+    [Documentation]  SA JD Update Item Category Status - disable to disable
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Item Category SA    ${account_id}  ${cat_Id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['categoryCode']}    ${cat_Id}
+    Should Be Equal As Strings    ${resp.json()['categoryName']}    ${categoryName}
+    Should Be Equal As Strings    ${resp.json()['status']}          ${Toggle[1]}
+
+    ${resp}=    Update Item Category Status SA   ${account_id}  ${cat_Id}   ${Toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+
+
+JD-TC-UpdateItemCategoryStatusSA-UH2
+
+    [Documentation]  SA JD Update Item Category Status - disable to enable
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Item Category SA    ${account_id}  ${cat_Id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['categoryCode']}    ${cat_Id}
+    Should Be Equal As Strings    ${resp.json()['categoryName']}    ${categoryName}
+    Should Be Equal As Strings    ${resp.json()['status']}          ${Toggle[1]}
+
+    ${resp}=    Update Item Category Status SA   ${account_id}  ${cat_Id}   ${Toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Category SA    ${account_id}  ${cat_Id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['categoryCode']}    ${cat_Id}
+    Should Be Equal As Strings    ${resp.json()['categoryName']}    ${categoryName}
+    Should Be Equal As Strings    ${resp.json()['status']}          ${Toggle[0]}
+
+JD-TC-UpdateItemCategoryStatusSA-UH3
+
+    [Documentation]  SA JD Update Item Category Status - enable to enable
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Item Category SA    ${account_id}  ${cat_Id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['categoryCode']}    ${cat_Id}
+    Should Be Equal As Strings    ${resp.json()['categoryName']}    ${categoryName}
+    Should Be Equal As Strings    ${resp.json()['status']}          ${Toggle[0]}
+
+    ${resp}=    Update Item Category Status SA   ${account_id}  ${cat_Id}   ${Toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+
+
+JD-TC-UpdateItemCategoryStatusSA-UH4
+
+    [Documentation]  SA JD Update Item Category Status - without login
+
+    ${resp}=    Update Item Category Status SA   ${account_id}  ${cat_Id}   ${Toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200

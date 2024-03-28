@@ -2321,3 +2321,156 @@ Get Item Type Count By Filter SA
     Check And Create YNW Session
     ${resp}=    GET On Session    synw   /item/${account}/type/count   params=${param}   expected_status=any
     RETURN  ${resp}
+
+
+# ......... ITEM MANUFACTURE .............
+
+Create Item manufacturer SA
+
+    [Arguments]  ${account}  ${manufactureName}  
+    ${data}=  Create Dictionary  manufacturerName=${manufactureName}  
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  synw  /item/${account}/manufacturer  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item manufacturer SA
+
+    [Arguments]  ${account}  ${id}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/manufacturer/${id}  expected_status=any
+    RETURN  ${resp}
+
+Update Item manufacturer SA
+
+    [Arguments]   ${account}  ${manufacturerName}   ${manufacturerCode}
+    ${data}=  Create Dictionary  manufacturerName=${manufacturerName}   manufacturerCode=${manufacturerCode}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  synw  /item/${account}/manufacturer  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item manufacturer By Filter SA
+
+    [Arguments]   ${account}  &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/manufacturer   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Update Item manufacturer Status SA
+
+    [Arguments]   ${account}  ${manufacturerCode}   ${status}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  synw  /item/${account}/manufacturer/${manufacturerCode}/status/${status}   expected_status=any
+    RETURN  ${resp}  
+
+Get Item manufacturer Count By Filter SA
+
+    [Arguments]   ${account}  &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/manufacturer/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+
+# ......... ITEM TAX .............
+
+Create Item Tax SA
+
+    [Arguments]  ${account}  ${taxName}  ${taxTypeEnum}  ${taxPercentage}   &{kwargs}
+    ${data}=  Create Dictionary  taxName=${taxName}  taxTypeEnum=${taxTypeEnum}  taxPercentage=${taxPercentage}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  synw  /item/${account}/tax  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item Tax SA
+
+    [Arguments]  ${account}  ${id}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/tax/${id}  expected_status=any
+    RETURN  ${resp}
+
+Update Item Tax SA
+
+    [Arguments]   ${account}  ${taxName}  ${taxCode}  ${taxTypeEnum}  ${taxPercentage}   &{kwargs}
+    ${data}=  Create Dictionary  taxName=${taxName}  taxCode=${taxCode}  taxTypeEnum=${taxTypeEnum}  taxPercentage=${taxPercentage}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  synw  /item/${account}/tax  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item Tax By Filter SA
+
+    [Arguments]   ${account}  &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/tax   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Update Item Tax Status SA
+
+    [Arguments]   ${account}  ${taxCode}   ${status}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  synw  /item/${account}/tax/${taxCode}/status/${status}   expected_status=any
+    RETURN  ${resp}  
+
+Get Item Tax Count By Filter SA
+
+    [Arguments]   ${account}  &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/tax/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+
+# ......... ITEM UNIT .............
+
+Create Item Unit SA
+
+    [Arguments]  ${account}  ${unitName}    ${convertionQty}  
+    ${data}=  Create Dictionary  unitName=${unitName}   convertionQty=${convertionQty}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  synw  /item/${account}/unit  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item Unit SA
+
+    [Arguments]  ${account}  ${id}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/unit/${id}  expected_status=any
+    RETURN  ${resp}
+
+Update Item Unit SA
+
+    [Arguments]   ${account}  ${unitName}    ${convertionQty}
+    ${data}=  Create Dictionary  unitName=${unitName}   convertionQty=${convertionQty}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  synw  /item/${account}/unit  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item Unit By Filter SA
+
+    [Arguments]   ${account}  &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/unit   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Update Item Unit Status SA
+
+    [Arguments]   ${account}  ${unitCode}   ${status}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  synw  /item/${account}/unit/${unitCode}/status/${status}   expected_status=any
+    RETURN  ${resp}  
+
+Get Item Unit Count By Filter SA
+
+    [Arguments]   ${account}  &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/unit/count   params=${param}   expected_status=any
+    RETURN  ${resp}
