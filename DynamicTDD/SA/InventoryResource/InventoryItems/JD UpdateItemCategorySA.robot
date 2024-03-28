@@ -67,3 +67,57 @@ JD-TC-UpdateItemCategory-1
     Should Be Equal As Strings    ${resp.json()['categoryCode']}    ${cat_Id}
     Should Be Equal As Strings    ${resp.json()['categoryName']}    ${categoryName2}
     Should Be Equal As Strings    ${resp.json()['status']}          ${Toggle[0]}
+
+
+JD-TC-UpdateItemCategory-UH1
+
+    [Documentation]  SA Update a Item Category - category name is empty
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Update Item Category SA   ${account_id}  ${empty}   ${cat_Id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-UpdateItemCategory-UH2
+
+    [Documentation]  SA Update a Item Category - category id is empty
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Category code
+
+    ${resp}=    Update Item Category SA   ${account_id}  ${categoryName}   ${empty}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}      ${INVALID_FIELD}
+
+JD-TC-UpdateItemCategory-UH3
+
+    [Documentation]  SA Update a Item Category - category id is invalid
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${inv}=     Random Int  min=999     max=9999
+
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Category code
+
+    ${resp}=    Update Item Category SA   ${account_id}  ${categoryName}   ${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}      ${INVALID_FIELD}
+
+JD-TC-UpdateItemCategory-Uh4
+
+    [Documentation]  SA Update a Item Category - without login
+
+    ${resp}=    Update Item Category SA   ${account_id}  ${categoryName}   ${cat_Id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+
