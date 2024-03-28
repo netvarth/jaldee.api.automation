@@ -2447,8 +2447,8 @@ Get Item Unit SA
 
 Update Item Unit SA
 
-    [Arguments]   ${account}  ${unitName}    ${convertionQty}
-    ${data}=  Create Dictionary  unitName=${unitName}   convertionQty=${convertionQty}
+    [Arguments]   ${account}  ${unitName}    ${convertionQty}  ${unitCode}
+    ${data}=  Create Dictionary  unitName=${unitName}   convertionQty=${convertionQty}  unitCode=${unitCode}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PATCH On Session  synw  /item/${account}/unit  data=${data}  expected_status=any
@@ -2473,4 +2473,101 @@ Get Item Unit Count By Filter SA
     [Arguments]   ${account}  &{param}
     Check And Create YNW Session
     ${resp}=    GET On Session    synw   /item/${account}/unit/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+
+# ......... ITEM COMPOSITION .............
+
+Create Item Composition SA
+
+    [Arguments]  ${account}  ${compositionName} 
+    ${data}=  Create Dictionary  compositionName=${compositionName} 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  synw  /item/${account}/composition  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item Composition SA
+
+    [Arguments]  ${account}  ${id}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/composition/${id}  expected_status=any
+    RETURN  ${resp}
+
+Update Item Composition SA
+
+    [Arguments]   ${account}  ${compositionName}  ${compositionCode}
+    ${data}=  Create Dictionary  compositionName=${compositionName}   compositionCode=${compositionCode}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  synw  /item/${account}/composition  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item Composition By Filter SA
+
+    [Arguments]   ${account}  &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/composition   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Update Item Composition Status SA
+
+    [Arguments]   ${account}  ${compositionCode}   ${status}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  synw  /item/${account}/composition/${compositionCode}/status/${status}   expected_status=any
+    RETURN  ${resp}  
+
+Get Item Composition Count By Filter SA
+
+    [Arguments]   ${account}  &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/composition/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+# ......... ITEM HSN .............
+
+Create Item Hsn SA
+
+    [Arguments]  ${account}  ${hsnCode} 
+    ${data}=  Create Dictionary  hsnCode=${hsnCode} 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  synw  /item/${account}/hsn  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item Hsn SA
+
+    [Arguments]  ${account}  ${id}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/hsn/${id}  expected_status=any
+    RETURN  ${resp}
+
+Update Item Hsn SA
+
+    [Arguments]   ${account}  ${id}  ${hsnCode}
+    ${data}=  Create Dictionary  id=${id}   hsnCode=${hsnCode}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  synw  /item/${account}/hsn  data=${data}  expected_status=any
+    RETURN  ${resp}  
+
+Get Item Hsn By Filter SA
+
+    [Arguments]   ${account}  &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/hsn   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Update Item Hsn Status SA
+
+    [Arguments]   ${account}  ${id}   ${status}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  synw  /item/${account}/hsn/${id}/status/${status}   expected_status=any
+    RETURN  ${resp}  
+
+Get Item Hsn Count By Filter SA
+
+    [Arguments]   ${account}  &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/${account}/hsn/count   params=${param}   expected_status=any
     RETURN  ${resp}

@@ -85,3 +85,25 @@ JD-TC-CreateItemType-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
 
+JD-TC-CreateItemType-4
+
+    [Documentation]  SA Create Item Type
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME261}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateItemType-4
+
+    [Documentation]  Provider Login And get item type
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME261}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Item Type   ${type_Id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['typeCode']}    ${type_Id}
+    Should Be Equal As Strings    ${resp.json()['typeName']}    ${TypeName}
+    Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}

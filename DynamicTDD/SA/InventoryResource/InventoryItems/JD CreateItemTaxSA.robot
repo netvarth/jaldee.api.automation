@@ -188,3 +188,19 @@ JD-TC-CreateItemTax-UH9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}         ${NAME_ALREADY_EXIST}
+
+
+JD-TC-CreateItemTax-4
+
+    [Documentation]  Provider Login and get tax
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME269}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Item Tax by id  ${itemtax_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.json()['taxName']}         ${taxName}
+    Should Be Equal As Strings    ${resp.json()['status']}          ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()['taxTypeEnum']}     ${taxtypeenum[0]}
+    Should Be Equal As Strings    ${resp.json()['taxCode']}         ${itemtax_id}

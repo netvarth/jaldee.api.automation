@@ -19,9 +19,9 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 
 *** Test Cases ***
 
-JD-TC-CreateItemManufacture-1
+JD-TC-CreateItemUnitSA-1
 
-    [Documentation]  SA Create a Item Manufacture
+    [Documentation]  SA Create Item Unit
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME269}  ${PASSWORD}
     Log  ${resp.content}
@@ -40,68 +40,82 @@ JD-TC-CreateItemManufacture-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${manufactureName}=     FakerLibrary.name
-    Set Suite Variable      ${manufactureName}
+    ${unitName}=        FakerLibrary.name
+    ${convertionQty}=   Random Int  min=1  max=1000
+    Set Suite Variable  ${unitName}
+    Set Suite Variable  ${convertionQty}
 
-    ${resp}=    Create Item manufacturer SA  ${account_id}  ${manufactureName}
+    ${resp}=    Create Item Unit SA  ${account_id}  ${unitName}  ${convertionQty}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable      ${mft_id}   ${resp.json()}
+    Set Suite Variable      ${unit_id}      ${resp.json()}
 
-    ${resp}=    Get Item manufacturer SA  ${account_id}  ${mft_id}
+    ${resp}=    Get Item Unit SA  ${account_id}  ${unit_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings    ${resp.json()['manufacturerCode']}      ${mft_id}
-    Should Be Equal As Strings    ${resp.json()['manufacturerName']}      ${manufactureName}
-    Should Be Equal As Strings    ${resp.json()['status']}               ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()['unitCode']}    ${unit_id}
+    Should Be Equal As Strings    ${resp.json()['unitName']}    ${unitName}
+    Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}
 
 
-JD-TC-CreateItemManufacture-UH1
+JD-TC-CreateItemUnitSA-2
 
-    [Documentation]  SA Create a Item Manufacture - with same name 
+    [Documentation]  SA Create Item Unit - where unit name as empty
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Create Item manufacturer SA  ${account_id}  ${manufactureName}
+    ${resp}=    Create Item Unit SA  ${account_id}  ${empty}  ${convertionQty}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}     422
-    Should Be Equal As Strings  ${resp.json()}          ${NAME_ALREADY_EXIST}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-CreateItemManufacture-UH2
+JD-TC-CreateItemUnitSA-UH1
 
-    [Documentation]  SA Create a Item Manufacture - name as empty 
+    [Documentation]  SA Create Item Unit - where convertion qty is empty
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Manufacturer name 
-
-    ${resp}=    Create Item manufacturer SA  ${account_id}  ${empty}
+    ${resp}=    Create Item Unit SA  ${account_id}  ${unitName}  ${empty}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}       ${INVALID_FIELD}
+    Should Be Equal As Strings  ${resp.json()}     ${ENTER_VALID_CONVERTION_QTY}
 
-JD-TC-CreateItemManufacture-UH3
+JD-TC-CreateItemUnitSA-UH2
 
-    [Documentation]  SA Create a Item Manufacture - without login 
+    [Documentation]  SA Create Item Unit - convertion qty is alphabet
 
-    ${resp}=    Create Item manufacturer SA  ${account_id}  ${manufactureName}
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-CreateItemManufacture-2
+    ${qty}=     FakerLibrary.name
 
-    [Documentation]  Provider Login and get manufacturer
+    ${resp}=    Create Item Unit SA  ${account_id}  ${unitName}  ${qty}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-CreateItemUnitSA-UH3
+
+    [Documentation]  SA Create Item Unit - without login
+
+    ${resp}=    Create Item Unit SA  ${account_id}  ${unitName}  ${convertionQty}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+
+JD-TC-CreateItemUnitSA-3
+
+    [Documentation]  Provider login and get item unit
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME269}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Item Manufacture By Id   ${mft_id}
+    ${resp}=    Get Item Unit by id  ${unit_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['manufacturerName']}    ${manufactureName}
-    Should Be Equal As Strings    ${resp.json()['manufacturerCode']}    ${mft_id}
+    Should Be Equal As Strings    ${resp.json()['unitCode']}    ${unit_id}
+    Should Be Equal As Strings    ${resp.json()['unitName']}    ${unitName}
+    Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}

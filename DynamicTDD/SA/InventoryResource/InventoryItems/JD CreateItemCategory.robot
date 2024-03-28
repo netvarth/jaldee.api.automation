@@ -46,6 +46,7 @@ JD-TC-CreateItemCategory-1
     ${resp}=  Create Item Category SA   ${account_id}  ${categoryName}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${Ca_id}    ${resp.json()}
 
 JD-TC-CreateItemCategory-2
 
@@ -169,3 +170,19 @@ JD-TC-CreateItemCategory-UH5
     ${resp}=  Create Item Category SA   ${acc}  ${categoryName2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+
+
+JD-TC-CreateItemCategory-6
+
+    [Documentation]  Provider login and checking item category
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME260}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Item Category   ${Ca_Id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['categoryCode']}    ${Ca_Id}
+    Should Be Equal As Strings    ${resp.json()['categoryName']}    ${categoryName}
+    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
