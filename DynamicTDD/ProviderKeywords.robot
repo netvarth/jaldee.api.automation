@@ -1198,7 +1198,6 @@ Enable Disable Virtual Service
 
 
 Update Virtual Calling Mode
-
     [Arguments]  ${virtual_callingmode} 
 
     ${data}=  Create Dictionary   virtualCallingModes=${virtual_callingmode}

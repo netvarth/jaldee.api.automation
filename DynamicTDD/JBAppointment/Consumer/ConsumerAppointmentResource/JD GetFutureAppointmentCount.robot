@@ -189,8 +189,9 @@ JD-TC-GetFutureAppointmentCount-1
     Set Suite Variable   ${s_id3}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz2}
-    # Set Suite Variable   ${DAY1}
-    ${DAY2}=  db.add_timezone_date  ${tz2}  10        
+    Set Suite Variable   ${DAY1}
+    ${DAY2}=  db.add_timezone_date  ${tz2}  10 
+    Set Suite Variable   ${DAY2}       
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz2}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -211,7 +212,9 @@ JD-TC-GetFutureAppointmentCount-1
     Verify Response  ${resp}  id=${sch_id11}   name=${schedule_name}  apptState=${Qstate[0]}
 
     ${DAY3}=  db.get_date_by_timezone  ${tz1}
-    ${DAY4}=  db.add_timezone_date  ${tz1}  10        
+    Set Suite Variable   ${DAY3}   
+    ${DAY4}=  db.add_timezone_date  ${tz1}  10 
+    Set Suite Variable   ${DAY4}          
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime2}=  add_timezone_time  ${tz1}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -262,7 +265,6 @@ JD-TC-GetFutureAppointmentCount-1
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id1}  ${sch_id1}  ${DAY3}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Suite Variable  ${apptid11}  ${apptid[0]}
 
@@ -280,7 +282,7 @@ JD-TC-GetFutureAppointmentCount-1
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY3}  ${DAY4}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()} 
@@ -290,7 +292,7 @@ JD-TC-GetFutureAppointmentCount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id2}   name=${schedule_name}  apptState=${Qstate[0]}
 
-    ${sTime3}=  add_timezone_time  ${tz}  0  15  
+    ${sTime3}=  add_timezone_time  ${tz2}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime3}=  add_two   ${sTime3}  ${delta}   
 
@@ -299,7 +301,7 @@ JD-TC-GetFutureAppointmentCount-1
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime3}  ${eTime3}  ${parallel}    ${parallel}  ${lid1}  ${duration}  ${bool1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime3}  ${eTime3}  ${parallel}  ${parallel}  ${lid1}  ${duration}  ${bool1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id3}  ${resp.json()} 
@@ -346,13 +348,12 @@ JD-TC-GetFutureAppointmentCount-1
     ${apptfor1}=  Create Dictionary  id=${self}   apptTime=${slot1}
     ${apptfor}=   Create List  ${apptfor1}
     
-    ${DAY2}=  db.add_timezone_date  ${tz}  2  
-    Set Suite Variable   ${DAY2}
+    ${DAY5}=  db.add_timezone_date  ${tz1}  2  
+    Set Suite Variable   ${DAY5}
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid1}  ${s_id1}  ${sch_id1}  ${DAY2}  ${cnote}   ${apptfor}
+    ${resp}=   Take Appointment For Provider   ${pid1}  ${s_id1}  ${sch_id1}  ${DAY5}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid1}  ${apptid[0]}
     
@@ -398,7 +399,6 @@ JD-TC-GetFutureAppointmentCount-1
     ${resp}=   Take Appointment For Provider   ${pid1}  ${s_id2}  ${sch_id2}  ${DAY3}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid2}  ${apptid[0]}
 
@@ -444,7 +444,6 @@ JD-TC-GetFutureAppointmentCount-1
     ${resp}=   Take Appointment For Provider   ${pid1}  ${s_id2}  ${sch_id3}  ${DAY4}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid3}  ${apptid[0]}
 
@@ -477,7 +476,6 @@ JD-TC-GetFutureAppointmentCount-1
     ${resp}=   Take Appointment For Provider   ${pid1}  ${s_id2}  ${sch_id3}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid4}  ${apptid[0]}
 
@@ -540,7 +538,7 @@ JD-TC-GetFutureAppointmentCount-1
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id1}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY2}
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY5}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
@@ -613,15 +611,15 @@ JD-TC-GetFutureAppointmentCount-2
     ${resp}=   Get Location ById  ${lid2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    Set Suite Variable  ${tz3}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${SERVICE3}=   FakerLibrary.name
     ${s_id3}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable   ${s_id3}
 
-    ${DAY22}=  db.add_timezone_date  ${tz}  11      
+    ${DAY22}=  db.add_timezone_date  ${tz3}  11      
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  add_timezone_time  ${tz}  3  15  
+    ${sTime1}=  add_timezone_time  ${tz3}  3  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     
@@ -630,7 +628,7 @@ JD-TC-GetFutureAppointmentCount-2
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY22}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid2}  ${duration}  ${bool1}  ${s_id3}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY22}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid2}  ${duration}  ${bool1}  ${s_id3}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id4}  ${resp.json()}
@@ -672,13 +670,12 @@ JD-TC-GetFutureAppointmentCount-2
     ${apptfor}=   Create List  ${apptfor1}
     Set Suite Variable   ${apptfor}
     
-    ${DAY5}=  db.add_timezone_date  ${tz}   5
-    Set Suite Variable   ${DAY5}
+    ${DAY6}=  db.add_timezone_date  ${tz3}   5
+    Set Suite Variable   ${DAY6}
     ${cnote}=   FakerLibrary.name
-    ${resp}=   Take Appointment For Provider   ${pid2}  ${s_id3}  ${sch_id4}  ${DAY5}  ${cnote}   ${apptfor}
+    ${resp}=   Take Appointment For Provider   ${pid2}  ${s_id3}  ${sch_id4}  ${DAY6}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid5}  ${apptid[0]}
     
@@ -714,7 +711,7 @@ JD-TC-GetFutureAppointmentCount-2
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id1}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY2}
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY5}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
@@ -762,7 +759,7 @@ JD-TC-GetFutureAppointmentCount-2
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id2}        
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY5}
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY6}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot4}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
@@ -849,7 +846,7 @@ JD-TC-GetFutureAppointmentCount-4
     Should Be Equal As Strings  ${resp.json()[0]['appointmentMode']}                        ${appointmentMode[2]}
     Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}                             ${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()[0]['appmtFor'][0]['id']}                      ${cons_id1}
-    Should Be Equal As Strings  ${resp.json()[0]['appmtDate']}                              ${DAY2}
+    Should Be Equal As Strings  ${resp.json()[0]['appmtDate']}                              ${DAY5}
     Should Be Equal As Strings  ${resp.json()[0]['appmtTime']}                              ${slot1}
     Should Be Equal As Strings  ${resp.json()[0]['apptBy']}                                 CONSUMER
     Should Be Equal As Strings  ${resp.json()[0]['paymentStatus']}                          ${paymentStatus[0]}
@@ -1468,7 +1465,7 @@ JD-TC-GetFutureAppointmentCount-10
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${loc_id1}  ${duration}  ${bool1}  ${ser_id1}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${loc_id1}  ${duration}  ${bool1}  ${ser_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${schedule_id1}  ${resp.json()}
@@ -1662,7 +1659,7 @@ JD-TC-GetFutureAppointmentCount-11
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id1}      
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
-        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY2}
+        ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtDate']}                              ${DAY5}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['appmtTime']}                              ${slot1}
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['apptBy']}                                 CONSUMER
         ...    AND  Should Be Equal As Strings  ${resp.json()[${i}]['paymentStatus']}                          ${paymentStatus[0]}
@@ -1763,7 +1760,7 @@ JD-TC-GetFutureAppointmentCount-13
     Should Be Equal As Strings  ${resp.json()[0]['appointmentMode']}                        ${appointmentMode[2]}
     Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}                             ${apptStatus[2]}
     Should Be Equal As Strings  ${resp.json()[0]['appmtFor'][0]['id']}                      ${cons_id1}
-    Should Be Equal As Strings  ${resp.json()[0]['appmtDate']}                              ${DAY2}
+    Should Be Equal As Strings  ${resp.json()[0]['appmtDate']}                              ${DAY5}
     Should Be Equal As Strings  ${resp.json()[0]['appmtTime']}                              ${slot1}
     Should Be Equal As Strings  ${resp.json()[0]['apptBy']}                                 CONSUMER
     Should Be Equal As Strings  ${resp.json()[0]['paymentStatus']}                          ${paymentStatus[0]}
@@ -1907,7 +1904,7 @@ JD-TC-GetFutureAppointmentCount-16
     Should Be Equal As Strings  ${resp.json()[0]['appointmentMode']}                        ${appointmentMode[2]}
     Should Be Equal As Strings  ${resp.json()[0]['apptStatus']}                             ${apptStatus[2]}
     Should Be Equal As Strings  ${resp.json()[0]['appmtFor'][0]['id']}                      ${cons_id1}
-    Should Be Equal As Strings  ${resp.json()[0]['appmtDate']}                              ${DAY2}
+    Should Be Equal As Strings  ${resp.json()[0]['appmtDate']}                              ${DAY5}
     Should Be Equal As Strings  ${resp.json()[0]['appmtTime']}                              ${slot1}
     Should Be Equal As Strings  ${resp.json()[0]['apptBy']}                                 CONSUMER
     Should Be Equal As Strings  ${resp.json()[0]['paymentStatus']}                          ${paymentStatus[0]}
