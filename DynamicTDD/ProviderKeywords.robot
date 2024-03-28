@@ -996,6 +996,11 @@ Get consumercount
     ${resp}=  GET On Session  ynw  /provider/customers/count  params=${param}  expected_status=any
     RETURN  ${resp}
 
+Get customer salutations
+    Check And Create YNW Session
+    ${resp}=   GET On Session  ynw  /provider/userTitle  expected_status=any
+    RETURN  ${resp}
+
 Update Account Payment Settings
     [Arguments]   ${onlinePayment}   ${payTm}   ${dcOrCcOrNb}   ${payTmLinkedPhoneNumber}  ${panCardNumber}   ${bankAccountNumber}   ${bankName}   ${ifscCode}   ${nameOnPanCard}   ${accountHolderName}  ${branchCity}   ${businessFilingStatus}   ${accountType}
     ${data}=   Create Dictionary       onlinePayment=${onlinePayment}   payTm=${payTm}   dcOrCcOrNb=${dcOrCcOrNb}   payTmLinkedPhoneNumber=${payTmLinkedPhoneNumber}  panCardNumber=${panCardNumber}   bankAccountNumber=${bankAccountNumber}   bankName=${bankName}   ifscCode=${ifscCode}   nameOnPanCard=${nameOnPanCard}   accountHolderName=${accountHolderName}  branchCity=${branchCity}   businessFilingStatus=${businessFilingStatus}   accountType=${accountType}
