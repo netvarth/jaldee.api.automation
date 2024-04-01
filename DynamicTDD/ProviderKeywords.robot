@@ -14186,7 +14186,7 @@ Get inventory catalog item by inventory catalog encoded id
     ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/${icEncId}/list    expected_status=any
     RETURN  ${resp} 
 #------------Sales order catalog--------------------------
-Create SalesOrder Inventory Catalog
+Create SalesOrder Inventory Catalog-InvMgr False
 
     [Arguments]  ${store_id}   ${name}   ${invMgmt}   
     ${encid}=  Create Dictionary   encId=${store_id}   
@@ -14196,12 +14196,26 @@ Create SalesOrder Inventory Catalog
     ${resp}=  POST On Session  ynw  /provider/so/catalog   data=${data}  expected_status=any
     RETURN  ${resp} 
 
-Update SalesOrder Inventory Catalog
+Create SalesOrder Inventory Catalog-InvMgr True
 
-    [Arguments]  ${store_id}   ${name}   ${invMgmt}  ${catEncId}   
-    ${encid}=  Create Dictionary   encId=${store_id}  
-    ${data}=  Create Dictionary   store=${encid}   name=${name}    invMgmt=${invMgmt}   
+    [Arguments]  ${store_id}   ${name}   ${invMgmt}   ${inventoryCatalog}
+    ${encid}=  Create Dictionary   encId=${store_id}   
+    ${invcatid}=  Create Dictionary   invCatEncIdList=${inventoryCatalog} 
+    ${data}=  Create Dictionary   store=${encid}    name=${name}    invMgmt=${invMgmt}   inventoryCatalog=${invcatid}
     ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/so/catalog   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Update SalesOrder Catalog
+
+    [Arguments]    ${catEncId}   &{kwargs}
+    #Arguments ----name,onlineSelfOrder,walkInOrder,extPartnerOrder,intPartnerOrder,allowNegativeAvial,allowNegativeTrueAvial,allowFutureNegativeAvial,allowtrueFutureNegativeAvial
+    ${data}=  Create Dictionary
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}  
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/so/catalog/${catEncId}   data=${data}  expected_status=any
     RETURN  ${resp} 
@@ -14213,19 +14227,19 @@ Update SalesOrder Status
     ${resp}=  PUT On Session  ynw  /provider/so/catalog/${catEncId}/${status}    expected_status=any
     RETURN  ${resp} 
 
-Get SalesOrder Inventory Catalog By Encid
+Get SalesOrder Catalog By Encid
     [Arguments]  ${catEncId}      
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/so/catalog/${catEncId}    expected_status=any
     RETURN  ${resp} 
 
-Get SalesOrder Inventory Catalog List
+Get SalesOrder Catalog List
     [Arguments]  &{param}    
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/so/catalog/  params=${param}   expected_status=any
     RETURN  ${resp} 
 
-Get SalesOrder Inventory Catalog Count
+Get SalesOrder Catalog Count
     [Arguments]  &{param}    
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/so/catalog/count  params=${param}   expected_status=any

@@ -2280,6 +2280,7 @@ Item_id_can_not_be_updated="Item id can not be updated"
 Invalid_Item_encId="Invalid Item enc Id"
 Catalog_id_can_not_be_updated="Catalog id can not be updated"
 Invalid_Catalog_id="Invalid Catalog id"
+CAP_Invalid_Catalog_id="Invalid Catalog Id"
 
 
 # Vendor
