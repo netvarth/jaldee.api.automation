@@ -2286,6 +2286,8 @@ CAP_ALREADY_ENABLED= "Already Enabled"
 CAP_ALREADY_DISABLED= "Already Disabled"
 INVALID_SP_ITEM_ID= "Invalid SP Item Id"
 CANNOT_UPDATE="Cannot do this operation, because Catalog is in Disabled status"
+PRICE_REQUIRED="Price required"
+INVALID_INVENTORY_CATALOG_ITEM_ID="Invalid Inventory Catalog Item Id"
 
 # Vendor
 INVALID_NAME="Invalid Name"
