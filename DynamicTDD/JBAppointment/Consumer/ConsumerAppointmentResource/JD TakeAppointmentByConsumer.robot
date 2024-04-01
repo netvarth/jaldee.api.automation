@@ -38,28 +38,7 @@ Get Billable Subdomain
     RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
 
 
-# Billable
 
-#     ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
-#     ${len}=   Split to lines  ${resp}
-#     ${length}=  Get Length   ${len}
-     
-#     FOR   ${a}  IN RANGE   ${length-1}    
-#         ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
-#         Should Be Equal As Strings    ${resp.status_code}    200
-#         ${domain}=   Set Variable    ${resp.json()['sector']}
-#         ${subdomain}=    Set Variable      ${resp.json()['subSector']}
-#         ${resp}=  View Waitlist Settings
-#         Log  ${resp.content}
-#         Should Be Equal As Strings    ${resp.status_code}    200
-# 	    Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable  
-#         ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
-#         Log   ${resp2.json()}
-#         Should Be Equal As Strings    ${resp.status_code}    200
-#         Set Suite Variable  ${check}    ${resp2.json()['serviceBillable']} 
-#         Run Keyword If     '${check}' == 'True'   Append To List   ${provider_list}  ${PUSERNAME${a}}
-#     END
-#     RETURN  ${provider_list}
 
 *** Test Cases ***
 
@@ -77,7 +56,6 @@ JD-TC-Take Appointment-1
     ${PUSERNAME_B}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    # ${PUSERNAME_B}=  Evaluate  ${PUSERNAME}+5566014
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_B}    ${highest_package[0]}
     Log  ${resp.content}
@@ -95,11 +73,6 @@ JD-TC-Take Appointment-1
     Set Test Variable  ${pid}  ${decrypted_data['id']}
     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
     Set Suite Variable  ${PUSERNAME_B}
-
-    # ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
-    # Log  ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Test Variable  ${pid}  ${resp.json()['id']}
 
     ${list}=  Create List  1  2  3  4  5  6  7
     ${ph1}=  Evaluate  ${PUSERNAME_B}+15566122
@@ -157,7 +130,7 @@ JD-TC-Take Appointment-1
     Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_B}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Enable Appointment
@@ -188,17 +161,13 @@ JD-TC-Take Appointment-1
     ${resp}=    Get Locations
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
     ${pid}=  get_acc_id  ${PUSERNAME_B}
     Set Suite Variable   ${pid}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
-    # ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    # ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    # ${eTime1}=  add_two   ${sTime1}  ${delta}
-    # ${lid}=  Create Sample Location
-    # Set Suite Variable   ${lid}
     ${lid}=  Create Sample Location
     Set Suite Variable   ${lid}
     
@@ -207,9 +176,6 @@ JD-TC-Take Appointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    ${sTime1}=  add_timezone_time  ${tz}  0  15  
-    ${delta}=  FakerLibrary.Random Int  min=10  max=60
-    ${eTime1}=  add_two   ${sTime1}  ${delta}
     clear_appt_schedule   ${PUSERNAME_B}
     ${SERVICE1}=   FakerLibrary.name
     ${s_id}=  Create Sample Service  ${SERVICE1}
@@ -217,6 +183,10 @@ JD-TC-Take Appointment-1
     ${SERVICE2}=   FakerLibrary.name
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id2}
+    
+    ${sTime1}=  add_timezone_time  ${tz}  0  15  
+    ${delta}=  FakerLibrary.Random Int  min=10  max=60
+    ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -235,7 +205,6 @@ JD-TC-Take Appointment-1
     ${sTime2}=  add_timezone_time  ${tz}  1  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}   
-
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
@@ -999,7 +968,7 @@ JD-TC-Take Appointment-9
     Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_X}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Enable Appointment
@@ -1600,7 +1569,7 @@ JD-TC-Take Appointment-13
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
     ${resp}=   Get consumer Appointment By Id   ${pid01}  ${apptid1}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
     sleep  2s
@@ -1707,7 +1676,7 @@ JD-TC-Take Appointment-14
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Account Payment Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
 
@@ -3363,13 +3332,14 @@ JD-TC-Take Appointment-UH9
     ${resp}=  Encrypted Provider Login  ${PUSERNAME104}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${PUSERNAME104}
-    clear_location  ${PUSERNAME104}
     
     ${pid2}=  get_acc_id  ${Invalid_CUSER}
     ${pid3}=  get_acc_id  ${PUSERNAME104}
     Set Suite Variable   ${pid3}
     ${cid4}=  get_id  ${CUSERNAME4}
+
+    clear_service   ${PUSERNAME104}
+    clear_location  ${PUSERNAME104}
     clear_appt_schedule   ${PUSERNAME104}
 
     ${p1_s1}=  Create Sample Service  ${SERVICE1}
@@ -3382,19 +3352,22 @@ JD-TC-Take Appointment-UH9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    reset_queue_metric  ${pid3}
+
     ${p1_l1}=  Create Sample Location
     Set Suite Variable   ${p1_l1}
+
     ${resp}=   Get Location ById  ${p1_l1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Appointment Schedules
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Queues
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get License UsageInfo 
@@ -3413,7 +3386,6 @@ JD-TC-Take Appointment-UH9
     Set Suite Variable   ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10       
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${Empty}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_l1}  ${duration}  ${bool1}   ${p1_s1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3423,6 +3395,10 @@ JD-TC-Take Appointment-UH9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id1}   name=${schedule_name}  apptState=${Qstate[0]}
+
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id1}  ${DAY1}  ${p1_s1}
     Log  ${resp.content}
@@ -3433,7 +3409,7 @@ JD-TC-Take Appointment-UH9
     ${apptfor1}=   Create List  ${apptfor1}
     Set Suite Variable   ${apptfor1}   
 
-    ${resp}=  ProviderLogout
+    ${resp}=  Provider Logout
     Should Be Equal As Strings  ${resp.status_code}  200
 
 	${resp}=  Consumer Login  ${CUSERNAME4}  ${PASSWORD}
@@ -3446,7 +3422,6 @@ JD-TC-Take Appointment-UH9
     ${cnote}=   FakerLibrary.word
     ${resp}=   Take Appointment For Provider   ${pid2}  ${p1_s1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor1}
     Log  ${resp.content}
-
     Should Be Equal As Strings  "${resp.json()}"   "${ACCOUNT_NOT_EXIST}"    
     Should Be Equal As Strings  ${resp.status_code}  404
 
@@ -3456,7 +3431,6 @@ JD-TC-Take Appointment-UH10
     ${cnote}=   FakerLibrary.word
     ${resp}=   Take Appointment For Provider   ${pid3}  ${p1_s1}  ${sch_id1}  ${DAY1}  ${cnote}   ${apptfor1}
     Log  ${resp.content}
-
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings  "${resp.json()}"  "${SESSION_EXPIRED}"
 
@@ -3490,11 +3464,11 @@ JD-TC-Take Appointment-UH11
     Set Test Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Appointment Schedules
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Queues
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get License UsageInfo 
@@ -3509,11 +3483,11 @@ JD-TC-Take Appointment-UH11
     Set Test Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Get Appointment Schedules
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Queues
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get License UsageInfo 
@@ -3673,7 +3647,7 @@ JD-TC-Take Appointment-UH12
     Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_W}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Enable Appointment
@@ -3855,7 +3829,7 @@ JD-TC-Take Appointment-18
     Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
 
     ${resp}=  Get jp finance settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     
@@ -3866,7 +3840,7 @@ JD-TC-Take Appointment-18
     END
 
     ${resp}=  Get jp finance settings    
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     Set Test Variable  ${accountId1}  ${resp.json()['accountId']}
@@ -3895,7 +3869,7 @@ JD-TC-Take Appointment-18
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Account Payment Settings
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
 
@@ -4043,20 +4017,20 @@ JD-TC-Take Appointment-18
     Should Be Equal As Strings  ${resp.json()['location']['id']}  ${lid}
     
     ${resp}=  Make payment Consumer Mock  ${pid}  ${min_pre}  ${purpose[0]}  ${apptid2}  ${s_id}  ${bool[0]}   ${bool[1]}  ${jdconID}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${payref}   ${resp.json()['paymentRefId']}
 
     ${resp}=  Encrypted Provider Login  ${billable_providers[3]}  ${PASSWORD}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    Get Bill By UUId  ${apptid2}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Consumer Login  ${CUSERNAME15}  ${PASSWORD}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     # ${resp}=  Get Bill By consumer  ${apptid2}  ${pid} 
@@ -4064,7 +4038,7 @@ JD-TC-Take Appointment-18
     # Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Payment Details  paymentRefId-eq=${payref}
@@ -4700,7 +4674,7 @@ JD-TC-Take Appointment-UH14
     Set Test Variable  ${email_id}  ${P_Email}${PUSERNAME_D}.${test_mail}
 
     ${resp}=  Update Email   ${p_id}   ${firstname}   ${lastname}   ${email_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Enable Appointment
