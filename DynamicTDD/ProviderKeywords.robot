@@ -13802,69 +13802,32 @@ Create Item Inventory
     Check And Create YNW Session
   
     ${data}=   Create Dictionary    name=${name}
-    ${itemCategory}=  Create Dictionary
-    ${itemType}=  Create Dictionary
-    ${itemSubCategory}=  Create Dictionary
-    ${itemSubType}=  Create Dictionary
-    ${jaldeeRxCode}=    Create Dictionary
-    ${hsnCode}=    Create Dictionary
-    ${itemManufacturer}=    Create Dictionary
-
-
-      
+    
     FOR    ${key}    ${value}    IN    &{kwargs}
         IF  "${key}" == "itemCode"
-            Set To Dictionary   ${jaldeeRxCode} 	itemCode=${value}
+            ${jaldeeRxCode}=    Create Dictionary  	itemCode=${value}
             Set To Dictionary 	${data} 	jaldeeRxCode=${jaldeeRxCode}
         ELSE IF  "${key}" == "categoryCode"
-            Set To Dictionary 	${itemCategory} 	categoryCode=${value}
+            ${itemCategory}=  Create Dictionary 	categoryCode=${value}
             Set To Dictionary 	${data} 	itemCategory=${itemCategory}
         ELSE IF  "${key}" == "categoryCode2"
-            Set To Dictionary 	${itemSubCategory} 	categoryCode=${value}
+            ${itemSubCategory}=  Create Dictionary 	categoryCode=${value}
             Set To Dictionary 	${data} 	itemSubCategory=${itemSubCategory}
         ELSE IF  "${key}" == "typeCode"
-            Set To Dictionary 	${itemType} 	typeCode=${value}
+            ${itemType}=  Create Dictionary 	typeCode=${value}
             Set To Dictionary 	${data} 	itemType=${itemType}
         ELSE IF  "${key}" == "typeCode2"
-            Set To Dictionary 	${itemSubType}   typeCode=${value}
+            ${itemSubType}=  Create Dictionary   typeCode=${value}
             Set To Dictionary 	${data} 	itemSubType=${itemSubType} 
         ELSE IF  "${key}" == "hsnCode"
-            Set To Dictionary 	${hsnCode} 	hsnCode=${value}
+            ${hsnCode}=    Create Dictionary 	hsnCode=${value}
             Set To Dictionary 	${data} 	hsnCode=${hsnCode}
         ELSE IF  "${key}" == "manufacturerCode"
-            Set To Dictionary 	${itemManufacturer} 	manufacturerCode=${value}
+            ${itemManufacturer}=    Create Dictionary 	manufacturerCode=${value}
             Set To Dictionary 	${data} 	itemManufacturer=${itemManufacturer}
-     
         ELSE
             Set To Dictionary 	${data}    ${key}=${value}     
         END
-        # IF  ${jaldeeRxCode} != &{EMPTY}
-        #     Set To Dictionary 	${data} 	jaldeeRxCode=${jaldeeRxCode}
-        # END
-        # IF  ${itemCategory} != &{EMPTY}
-        #     Set To Dictionary 	${data} 	itemCategory=${itemCategory}
-        # END
-        # IF  ${itemSubCategory} != &{EMPTY}
-        #     Set To Dictionary 	${data} 	itemSubCategory=${itemSubCategory}
-        # END
-        # IF  ${itemType} != &{EMPTY}
-        #     Set To Dictionary 	${data} 	itemType=${itemType}
-        # END
-        # IF  ${itemSubType} != &{EMPTY}
-        #     Set To Dictionary 	${data} 	itemSubType=${itemSubType}
-        # END
-        # IF  ${itemGroups} != &{EMPTY}
-        #     Set To Dictionary 	 ${data} 	itemGroups=${itemGroups}
-        # END
-        # IF  ${itemSubGroups} != &{EMPTY}
-        #     Set To Dictionary 	 ${data} 	itemSubGroups=${itemSubGroups}
-        # END
-        # IF  ${hsnCode} != &{EMPTY}
-        #     Set To Dictionary 	${data} 	hsnCode=${hsnCode}
-        # END
-        # IF  ${itemManufacturer} != &{EMPTY}
-        #     Set To Dictionary 	${data} 	itemManufacturer=${itemManufacturer}
-        # END
 
     END 
     ${data}=  json.dumps  ${data}   

@@ -2571,3 +2571,20 @@ Get Item Hsn Count By Filter SA
     Check And Create YNW Session
     ${resp}=    GET On Session    synw   /item/${account}/hsn/count   params=${param}   expected_status=any
     RETURN  ${resp}
+
+
+# ......  ITEM JRX ..........
+
+Create Item Jrx 
+
+    # description, sku, hsn are not mandatory
+    [Arguments]     ${itemName}  &{kwargs}
+
+    ${data}=  Create Dictionary  itemName=${itemName}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  synw  /item/jrx  data=${data}  expected_status=any
+    RETURN  ${resp}  
