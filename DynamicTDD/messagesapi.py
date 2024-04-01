@@ -2284,6 +2284,8 @@ CAP_Invalid_Catalog_id="Invalid Catalog Id"
 SP_ITEM_ALREADY_EXIST="Given SP Item {} is already added in this Sales Order Catalog"
 CAP_ALREADY_ENABLED= "Already Enabled"
 CAP_ALREADY_DISABLED= "Already Disabled"
+INVALID_SP_ITEM_ID= "Invalid SP Item Id"
+CANNOT_UPDATE="Cannot do this operation, because Catalog is in Disabled status"
 
 # Vendor
 INVALID_NAME="Invalid Name"
