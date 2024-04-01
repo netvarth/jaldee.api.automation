@@ -285,6 +285,25 @@ JD-TC-Update SalesOrder Catalog-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
 
+JD-TC-Update SalesOrder Catalog-UH5
+
+    [Documentation]  update  sales order  catalog where name(word length is 255).
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update SalesOrder Status   ${sacatlogid1}     ${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=  Update SalesOrder Catalog   ${sacatlogid1}    name=${invalidNum} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${CANNOT_UPDATE}
+
+
 
 
 
