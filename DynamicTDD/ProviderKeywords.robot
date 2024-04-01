@@ -14185,3 +14185,12 @@ Get inventory catalog item by inventory catalog encoded id
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/inventory/inventorycatalog/${icEncId}/list    expected_status=any
     RETURN  ${resp} 
+#------------Sales order catalog--------------------------
+Create SalesOrder Inventory Catalog
+
+    [Arguments]  ${store}   ${name}   ${invMgmt}    
+    ${data}=  Create Dictionary   store=${store} name=${name}    invMgmt=${invMgmt}   
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/so/catalog   data=${data}  expected_status=any
+    RETURN  ${resp} 
