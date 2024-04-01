@@ -14194,3 +14194,38 @@ Create SalesOrder Inventory Catalog
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/so/catalog   data=${data}  expected_status=any
     RETURN  ${resp} 
+
+Update SalesOrder Inventory Catalog
+
+    [Arguments]  ${store}   ${name}   ${invMgmt}  ${catEncId}   
+    ${data}=  Create Dictionary   store=${store} name=${name}    invMgmt=${invMgmt}   
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/so/catalog/${catEncId}   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Update SalesOrder Status
+
+    [Arguments]  ${catEncId}   ${status}   
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/so/catalog/${catEncId}/${status}    expected_status=any
+    RETURN  ${resp} 
+
+Get SalesOrder Inventory Catalog By Encid
+    [Arguments]  ${catEncId}      
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/${catEncId}    expected_status=any
+    RETURN  ${resp} 
+
+Get SalesOrder Inventory Catalog List
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/  params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get SalesOrder Inventory Catalog Count
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/count  params=${param}   expected_status=any
+    RETURN  ${resp} 
+
