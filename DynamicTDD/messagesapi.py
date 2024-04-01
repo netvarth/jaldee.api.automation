@@ -2281,7 +2281,9 @@ Invalid_Item_encId="Invalid Item enc Id"
 Catalog_id_can_not_be_updated="Catalog id can not be updated"
 Invalid_Catalog_id="Invalid Catalog id"
 CAP_Invalid_Catalog_id="Invalid Catalog Id"
-
+SP_ITEM_ALREADY_EXIST="Given SP Item {} is already added in this Sales Order Catalog"
+CAP_ALREADY_ENABLED= "Already Enabled"
+CAP_ALREADY_DISABLED= "Already Disabled"
 
 # Vendor
 INVALID_NAME="Invalid Name"
