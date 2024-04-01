@@ -14188,8 +14188,9 @@ Get inventory catalog item by inventory catalog encoded id
 #------------Sales order catalog--------------------------
 Create SalesOrder Inventory Catalog
 
-    [Arguments]  ${store}   ${name}   ${invMgmt}    
-    ${data}=  Create Dictionary   store=${store} name=${name}    invMgmt=${invMgmt}   
+    [Arguments]  ${store_id}   ${name}   ${invMgmt}   
+    ${encid}=  Create Dictionary   encId=${store_id}   
+    ${data}=  Create Dictionary   store=${encid}    name=${name}    invMgmt=${invMgmt}   
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/so/catalog   data=${data}  expected_status=any
@@ -14197,8 +14198,9 @@ Create SalesOrder Inventory Catalog
 
 Update SalesOrder Inventory Catalog
 
-    [Arguments]  ${store}   ${name}   ${invMgmt}  ${catEncId}   
-    ${data}=  Create Dictionary   store=${store} name=${name}    invMgmt=${invMgmt}   
+    [Arguments]  ${store_id}   ${name}   ${invMgmt}  ${catEncId}   
+    ${encid}=  Create Dictionary   encId=${store_id}  
+    ${data}=  Create Dictionary   store=${encid}   name=${name}    invMgmt=${invMgmt}   
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/so/catalog/${catEncId}   data=${data}  expected_status=any

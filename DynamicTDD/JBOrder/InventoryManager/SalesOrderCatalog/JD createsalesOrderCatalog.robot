@@ -25,11 +25,11 @@ ${invalidstring}     _ad$.sa_
 
 *** Test Cases ***
 
-JD-TC-Create Inventory Catalog-1
+JD-TC-Create SalesOrder Inventory Catalog-1
 
-    [Documentation]  create inventory catalog with valid details.
+    [Documentation]  create sales order inventory catalog with valid details.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -72,10 +72,10 @@ JD-TC-Create Inventory Catalog-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME53}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME40}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -109,7 +109,19 @@ JD-TC-Create Inventory Catalog-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
 
+    ${resp}=  Create SalesOrder Inventory Catalog   ${store_id}   ${Name}  ${boolean[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+JD-TC-Create SalesOrder Inventory Catalog-2
+
+    [Documentation]  create multiple sales order inventory catalog with same store id.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Name}=    FakerLibrary.first name
+    ${resp}=  Create Inventory Catalog    ${store_id}  ${Name}  ${boolean[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
