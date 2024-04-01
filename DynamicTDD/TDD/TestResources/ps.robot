@@ -12,7 +12,7 @@ Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 
-*** Variable ***
+*** Variables ***
 # ${sTime}  05:00 AM
 # ${eTime}  11:00 PM
 # ${licpkgid}    1
@@ -25,6 +25,8 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 JD-TC-Provider_Signup-1
     [Documentation]   Provider Signup in Random Domain 
 
+    Create Directory   ${EXECDIR}/TDD/scaledata/
+    
     # ${PO_Number}=  FakerLibrary.Numerify  %#####
     # ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
     ${PH_Number}    Random Number 	digits=5  #fix_len=True
@@ -37,12 +39,13 @@ JD-TC-Provider_Signup-1
         Set Suite Variable  ${ph}
         ${ph1}=  Evaluate  ${ph}+1000000000
         ${ph2}=  Evaluate  ${ph}+2000000000
-        ${licresp}=   Get Licensable Packages
-        Should Be Equal As Strings  ${licresp.status_code}  200
-        # Log   ${licresp.content}
-        ${liclen}=  Get Length  ${licresp.json()}
-        Set Test Variable  ${licpkgid}  ${licresp.json()[0]['pkgId']}
-        Set Test Variable  ${licpkgname}  ${licresp.json()[0]['displayName']}
+        # ${licresp}=   Get Licensable Packages
+        # Should Be Equal As Strings  ${licresp.status_code}  200
+        # # Log   ${licresp.content}
+        # ${liclen}=  Get Length  ${licresp.json()}
+        # Set Test Variable  ${licpkgid}  ${licresp.json()[0]['pkgId']}
+        # Set Test Variable  ${licpkgname}  ${licresp.json()[0]['displayName']}
+        ${licpkgid}  ${licpkgname}=  get_highest_license_pkg
         ${corp_resp}=   get_iscorp_subdomains  1
         ${resp}=  Get BusinessDomainsConf
         # Log   ${resp.content}
@@ -60,8 +63,6 @@ JD-TC-Provider_Signup-1
             Exit For Loop If  '${is_corp}' == 'False'
         END
         Log   ${subdomain}
-        # Set Test Variable  ${domain}  ${resp.json()[0]['domain']}
-        # Set Test Variable  ${subdomain}  ${resp.json()[0]['subDomains'][9]['subDomain']}
         ${fname}=  FakerLibrary.name
         ${lname}=  FakerLibrary.lastname
         ${resp}=  Account SignUp  ${fname}  ${lname}  ${None}  ${domain}  ${subdomain}  ${ph}  ${licpkgid}
@@ -76,7 +77,7 @@ JD-TC-Provider_Signup-1
         sleep  03s
         ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
-        # Append To File  ${EXECDIR}/phnumbers.txt  ${ph}${\n}
+        Append To File  ${EXECDIR}/TDD/scaledata/scalephnumbers.txt  ${ph} - ${PASSWORD}${\n}
         
         ${list}=  Create List  1  2  3  4  5  6  7
         ${ph1}=  Evaluate  ${PUSERPH0}+1000000000
@@ -95,12 +96,9 @@ JD-TC-Provider_Signup-1
         ${24hours}    Random Element    ['True','False']
         ${desc}=   FakerLibrary.sentence
         ${url}=   FakerLibrary.url
-        # ${sTime}=  add_timezone_time  ${tz}  0  15  
-        # ${eTime}=  add_timezone_time  ${tz}  0  45  
         ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
         Set Suite Variable  ${tz}
         ${DAY1}=  db.get_date_by_timezone  ${tz}
-        # ${Time}=  db.get_time_by_timezone  ${tz}
         ${Time}=  db.get_time_by_timezone  ${tz}
         ${sTime}=  db.add_timezone_time  ${tz}  0  15  
         ${eTime}=  db.add_timezone_time  ${tz}  0  45  
@@ -136,7 +134,6 @@ JD-TC-Provider_Signup-1
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${service_name}  ${resp.json()['features']['defaultServices'][0]['service']}
-        #Set Test Variable  ${service_amt}  ${resp.json()['features']['defaultServices'][0]['amount']}
         Set Test Variable  ${service_duration}  ${resp.json()['features']['defaultServices'][0]['duration']}
         Set Test Variable  ${service_status}  ${resp.json()['features']['defaultServices'][0]['status']}    
 
@@ -153,6 +150,142 @@ JD-TC-Provider_Signup-1
         Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}    ${fname}
         Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}     ${lname}
         Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}        ${ph}
+
+        ############For Appointment##############3
+
+        ${resp}=   Get License UsageInfo 
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${resp}=  Get Business Profile
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${bname}  ${resp.json()['businessName']}
+        Set Test Variable  ${pid}  ${resp.json()['id']}
+        Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
+
+        ${resp}=   Get jaldeeIntegration Settings
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
+            ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+        ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[1]}'
+            ${resp1}=   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+        END
+
+        ${resp}=   Get jaldeeIntegration Settings
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
+
+        # ${resp}=  Get Account Payment Settings
+        # Log  ${resp.content}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+    
+        # IF  ${resp.json()['onlinePayment']}==${bool[0]}
+        #     ${resp1}=    Enable Disable Online Payment   ${toggle[0]}
+        #     Log  ${resp1.content}
+        #     Should Be Equal As Strings  ${resp1.status_code}  200
+        # END
+
+        # ${resp}=  Get Account Payment Settings
+        # Log  ${resp.content}
+        # Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${resp}=  Get jp finance settings
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+            ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+        END
+
+        ${resp}=  Get jp finance settings    
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+
+        ${resp}=   Get Appointment Settings
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        IF  ${resp.json()['enableAppt']}==${bool[0]}   
+            ${resp}=   Enable Appointment 
+            Should Be Equal As Strings  ${resp.status_code}  200
+        END
+
+        ${resp}=   Get Appointment Settings
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableAppt']}   ${bool[1]}
+        Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]} 
+
+        ${resp}=   Get Service
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${resp}=    Get Locations
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${lid}=  Create Sample Location  
+        ${resp}=   Get Location ById  ${lid}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+        ${resp}=    Get Locations
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        
+        comment  Services for check-ins
+        
+        ${SERVICE1}=    FakerLibrary.job
+        ${min_pre}=   Random Int   min=10   max=50
+        ${servicecharge}=   Random Int  min=100  max=200
+        ${s_id}=  Create Sample Service with Prepayment   ${SERVICE1}  ${min_pre}  ${servicecharge}
+
+        ${SERVICE1}=    FakerLibrary.job
+        ${s_id1}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=10
+        Set Suite Variable  ${s_id1}
+
+        ${resp}=  Get Appointment Schedules
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+        ${DAY1}=  db.get_date_by_timezone  ${tz}
+        ${DAY2}=  db.add_timezone_date  ${tz}  10        
+        ${DAY3}=  db.add_timezone_date  ${tz}  4  
+        ${list}=  Create List  1  2  3  4  5  6  7
+        ${sTime1}=  db.get_time_by_timezone  ${tz}
+        ${delta}=  FakerLibrary.Random Int  min=10  max=60
+        ${eTime1}=  add_two   ${sTime1}  ${delta}
+        ${schedule_name}=  FakerLibrary.bs
+        ${parallel}=  FakerLibrary.Random Int  min=1  max=1
+        ${maxval}=  Convert To Integer   ${delta/4}
+        ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+        ${bool1}=  Random Element  ${bool}
+        ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Test Variable  ${sch_id}  ${resp.json()}
+
+        ${resp}=  Get Appointment Schedule ById  ${sch_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Verify Response  ${resp}  id=${sch_id}   name=${schedule_name}  apptState=${Qstate[0]}  
+        ...   parallelServing=${parallel}  batchEnable=${bool1}
+
+        ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id}  ${DAY1}  ${s_id}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
+
+        ${resp}=  Provider Logout
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}    200
         
     END
 
