@@ -834,7 +834,11 @@ JD-TC-GetIndividualScheduleFutureAppointment-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${apptid1}  ${pid} 
+    # ${resp}=  Get Bill By consumer  ${apptid1}  ${pid} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -968,7 +972,11 @@ JD-TC-GetIndividualScheduleFutureAppointment-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Bill By consumer  ${apptid1}  ${pid} 
+    # ${resp}=  Get Bill By consumer  ${apptid1}  ${pid} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 

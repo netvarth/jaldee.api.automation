@@ -22,6 +22,7 @@ ${invalidNum}        1245
 ${invalidEma}        asd122
 ${invalidstring}     _ad$.sa_
 @{spItemSource}      RX       Ayur
+@{defaultBatchSelection}      Manual       FIFO
 
 *** Keywords ***
 Create SalesOrder Catalog Item-invMgmt True
@@ -62,11 +63,44 @@ Create SalesOrder Catalog Item-invMgmt False
     ${resp}=  POST On Session  ynw  /provider/so/catalog/${catEncId}/items   data=${data}  expected_status=any
     RETURN  ${resp} 
 
+Get SalesOrder Catalog Item By Encid
+    [Arguments]  ${cat_item_EncId}      
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${cat_item_EncId}    expected_status=any
+    RETURN  ${resp} 
+
+Update SalesOrder Catalog Item
+
+    [Arguments]  ${cat_item_EncId}   ${batchPricing}    ${price}     
+    ${data}=  Create Dictionary   batchPricing=${batchPricing}       price=${price}   
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/so/catalog/item/${cat_item_EncId}   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+# Update SalesOrder Catalog Item
+
+#     [Arguments]  ${cat_item_EncId}   ${batchPricing}    ${defaultBatchSelection}    ${price}     ${invCatItem}    ${TaxInclude}    
+#     ${data}=  Create Dictionary   batchPricing=${batchPricing}    defaultBatchSelection=${defaultBatchSelection}   price=${price}   invCatItem=${invCatItem}  TaxInclude=${TaxInclude}  
+#     ${data}=  json.dumps  ${data}
+#     Check And Create YNW Session
+#     ${resp}=  PUT On Session  ynw  /provider/so/catalog/item/${cat_item_EncId}   data=${data}  expected_status=any
+#     RETURN  ${resp} 
+
+Update Sales Order Catalog Item Status
+
+    [Arguments]  ${cat_item_EncId}   ${status}     
+    # ${data}=  Create Dictionary   batchPricing=${batchPricing}       price=${price}   
+    # ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/so/catalog/item/${cat_item_EncId}/${status}    expected_status=any
+    RETURN  ${resp} 
+
 *** Test Cases ***
 
-JD-TC-Sales Order Catalog Items-1
+JD-TC-Update Sales Order Catalog Item Status-1
 
-    [Documentation]  Test whether the system can successfully create items with all items having invMgmt set to false.
+    [Documentation]  create SO Catalog items with all items having invMgmt set to false (with out Tax)Then Update it's status as Disable.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
@@ -139,6 +173,7 @@ JD-TC-Sales Order Catalog Items-1
     END
 
     ${Name}=    FakerLibrary.last name
+    Set Suite Variable  ${Name}
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
@@ -147,11 +182,6 @@ JD-TC-Sales Order Catalog Items-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
-
-    # ${resp}=  Create SalesOrder Inventory Catalog   ${store_id}   ${Name}  ${boolean[1]}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Suite Variable  ${SO_Cata_Encid}  ${resp.json()}
 
     ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}
     Log   ${resp.content}
@@ -162,12 +192,13 @@ JD-TC-Sales Order Catalog Items-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${Inv_cat_id}  ${resp.json()}
-
+    
     ${resp}=  Get Inventory Catalog By EncId   ${Inv_cat_id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${displayName}=     FakerLibrary.name
+    Set Suite Variable  ${displayName}
 
     ${resp}=    Create Item Inventory  ${displayName}    
     Log   ${resp.json()}
@@ -193,224 +224,122 @@ JD-TC-Sales Order Catalog Items-1
     Set Suite Variable  ${Inv_Cata_Item_Encid}  ${resp.json()[0]}
 
     ${price}=    Random Int  min=2   max=40
-
+    ${price}=   Convert To Number  ${price}  1
     ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId1}     ${price}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-    # ${resp}=  Create SalesOrder Catalog Item-invMgmt True       ${SO_Cata_Encid}    ${boolean[1]}     ${Inv_Cata_Item_Encid}     ${price}    ${bool[1]}      
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Get SalesOrder Catalog Item By Encid     ${SO_itemEncIds}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}
+    Should Be Equal As Strings    ${resp.json()['price']}    ${price}
+    Should Be Equal As Strings    ${resp.json()['taxInclude']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['batchPricing']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowNegativeTrueAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowtrueFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${SO_itemEncIds}
+    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['catalog']['encId']}    ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog']['name']}    ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog']['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['spItem']['encId']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()['spItem']['name']}    ${displayName}
+
+    ${resp}=  Update Sales Order Catalog Item Status   ${SO_itemEncIds}     ${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get SalesOrder Catalog Item By Encid     ${SO_itemEncIds}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[1]}
 
 
-JD-TC-Sales Order Catalog Items-2
+JD-TC-Update Sales Order Catalog Item Status-2
 
-    [Documentation]  Test whether the system can successfully create items with TaxInclude is True all items having invMgmt set to false .
+    [Documentation]  update sales order catalog Item status as enable
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${displayName1}=     FakerLibrary.name
-    Set Suite Variable  ${displayName1}
-    ${resp}=    Create Item Inventory  ${displayName1}    
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${itemEncId2}  ${resp.json()}
-
-    ${price}=    Random Int  min=2   max=40
-
-    ${taxes}=    Random Int  min=2   max=40
-    ${tax}=          Create List    ${taxes}
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId2}     ${price}    TaxInclude=${boolean[1]}    taxes=${tax}
+    ${resp}=  Update Sales Order Catalog Item Status   ${SO_itemEncIds}     ${toggle[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Sales Order Catalog Items-3
+    ${resp}=  Get SalesOrder Catalog Item By Encid     ${SO_itemEncIds}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
 
-    [Documentation]   create multiple items with same details but price is differnt.
+JD-TC-Update Sales Order Catalog Item Status-UH1
+
+    [Documentation]  update sales order catalog Item status as enable thats alreay enabled
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${price}=    Random Int  min=2   max=40
-
-    ${invCatItem}=     Create Dictionary       encId=${itemEncId2}
-    ${catalog_details}=  Create Dictionary        spItem=${invCatItem}    price=${price}    
-
-    # ${items}=    Create List   ${catalog_details}    ${catalog_details}  
-
-    ${price}=    Random Int  min=2   max=40
-    ${SP_ITEM_ALREADY_EXIST}=  Format String  ${SP_ITEM_ALREADY_EXIST}  ${displayName1}
-
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId2}     ${price}     ${catalog_details}    
+    ${resp}=  Update Sales Order Catalog Item Status   ${SO_itemEncIds}     ${toggle[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${SP_ITEM_ALREADY_EXIST}
+    Should Be Equal As Strings   ${resp.json()}   ${CAP_ALREADY_ENABLED}
 
-JD-TC-Sales Order Catalog Items-4
+JD-TC-Update Sales Order Catalog Item Status-UH2
 
-    [Documentation]   create items with SO price is Zero.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${items}=    Create List   ${catalog_details}    ${catalog_details}  
-
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId2}     0.0     
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
-
-JD-TC-Sales Order Catalog Items-5
-
-    [Documentation]   create items with Empty SP Item.
+    [Documentation]   update sales order catalog Item status as disable thats alreay disabled
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${price}=    Random Int  min=2   max=40
+    ${resp}=  Update Sales Order Catalog Item Status   ${SO_itemEncIds}     ${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${invCatItem}=     Create Dictionary       encId=${itemEncId2}
-    ${catalog_details}=  Create Dictionary        spItem=${invCatItem}    price=${price}    
-
-    # ${items}=    Create List   ${catalog_details}    ${catalog_details}  
-
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${EMPTY}     ${price}     ${catalog_details}    
+    ${resp}=  Update Sales Order Catalog Item Status   ${SO_itemEncIds}     ${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${INVALID_SP_ITEM_ID}
+    Should Be Equal As Strings   ${resp.json()}   ${CAP_ALREADY_DISABLED}
 
-JD-TC-Sales Order Catalog Items-6
+JD-TC-Update Sales Order Catalog Item Status-UH3
 
-    [Documentation]   Test whether the system can successfully create items with all items having invMgmt set to true.
+    [Documentation]   update sales order catalog item status without login
+
+    ${resp}=  Update Sales Order Catalog Item Status   ${SO_itemEncIds}     ${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
+
+JD-TC-Update Sales Order Catalog Item Status-UH4
+
+    [Documentation]  update sales order catalog item status using sa login.
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Update Sales Order Catalog Item Status   ${SO_itemEncIds}     ${toggle[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-Update Sales Order Catalog Item Status-UH5
+
+    [Documentation]   update sales order catalog item status where catalog id is wrong
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Name}=    FakerLibrary.first name
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${inv_cat_encid}  ${resp.json()}
-    ${inv_cat_encid}=  Create List  ${inv_cat_encid}
-
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${SO_Cata_Encid1}  ${resp.json()}
-
-    ${price}=    Random Int  min=2   max=40
-
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${SO_Cata_Encid1}    ${boolean[1]}     ${Inv_Cata_Item_Encid}     ${price}    ${boolean[1]}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-JD-TC-Sales Order Catalog Items-7
-
-    [Documentation]   create  sales order catalog Item where invMgmt as false.(inventory manager is true)
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${price}=    Random Int  min=2   max=40
-
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${SO_Cata_Encid1}    ${boolean[0]}     ${Inv_Cata_Item_Encid}     ${price}    ${boolean[1]}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-JD-TC-Sales Order Catalog Items-8
-
-    [Documentation]   create  sales order catalog Item where invCatItem as invalid string.(inventory manager is true)
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${price}=    Random Int  min=2   max=40
-
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${SO_Cata_Encid1}    ${boolean[1]}     ${invalidstring}     ${price}    ${boolean[1]}   
+    ${Name}=    FakerLibrary.last name
+    ${resp}=  Update Sales Order Catalog Item Status   ${Name}     ${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${INVALID_INVENTORY_CATALOG_ITEM_ID}
-
-JD-TC-Sales Order Catalog Items-9
-
-    [Documentation]   create  sales order catalog Item where price as Zero.(inventory manager is true)
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${price}=    Random Int  min=2   max=40
-
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${SO_Cata_Encid1}    ${boolean[1]}     ${Inv_Cata_Item_Encid}    0.0   ${boolean[1]}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
-
-JD-TC-Sales Order Catalog Items-10
-
-    [Documentation]     sales order catalog inventory manager is true but catalog item inventory manager is false with valid details.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Create Store   ${Name}  ${St_Id1}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${store_id1}  ${resp.json()}
-
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id1}   ${Name}  ${boolean[1]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${SO_Cata_Encid1}  ${resp.json()}
-
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id1}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${Inv_cat_id1}  ${resp.json()}
-
-    ${resp}=  Get Inventory Catalog By EncId   ${Inv_cat_id1}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${displayName}=     FakerLibrary.name
-
-    ${resp}=    Create Item Inventory  ${displayName}    
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${itemEncId2}  ${resp.json()}
-
-    ${categoryName}=    FakerLibrary.name
-    Set Suite Variable  ${categoryName}
-
-    ${resp}=  Create Item Category   ${categoryName}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable    ${Ca_item_Id1}    ${resp.json()}
-
-    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id1} 
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${itemEncIds}  ${resp.json()}
-
-    ${resp}=   Create Inventory Catalog Item  ${Inv_cat_id1}   ${itemEncId2}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${Inv_Cata_Item_Encid1}  ${resp.json()[0]}
-
-
-    ${price}=    Random Int  min=2   max=40
-
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${SO_Cata_Encid1}    ${boolean[1]}     ${Inv_Cata_Item_Encid1}    ${price}   ${boolean[1]}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
+    Should Be Equal As Strings   ${resp.json()}   ${CAP_INVALID_CATALOG_ITEM_Id}

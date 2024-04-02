@@ -62,11 +62,17 @@ Create SalesOrder Catalog Item-invMgmt False
     ${resp}=  POST On Session  ynw  /provider/so/catalog/${catEncId}/items   data=${data}  expected_status=any
     RETURN  ${resp} 
 
+Get SalesOrder Catalog Item By Encid
+    [Arguments]  ${cat_item_EncId}      
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${cat_item_EncId}    expected_status=any
+    RETURN  ${resp} 
+
 *** Test Cases ***
 
-JD-TC-Sales Order Catalog Items-1
+JD-TC-Get Sales Order Catalog Items By EncId-1
 
-    [Documentation]  Test whether the system can successfully create items with all items having invMgmt set to false.
+    [Documentation]  Test whether the system can successfully create items with all items having invMgmt set to false (with out Tax).
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
@@ -139,6 +145,7 @@ JD-TC-Sales Order Catalog Items-1
     END
 
     ${Name}=    FakerLibrary.last name
+    Set Suite Variable  ${Name}
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
@@ -147,11 +154,6 @@ JD-TC-Sales Order Catalog Items-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
-
-    # ${resp}=  Create SalesOrder Inventory Catalog   ${store_id}   ${Name}  ${boolean[1]}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Suite Variable  ${SO_Cata_Encid}  ${resp.json()}
 
     ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}
     Log   ${resp.content}
@@ -162,12 +164,13 @@ JD-TC-Sales Order Catalog Items-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${Inv_cat_id}  ${resp.json()}
-
+    
     ${resp}=  Get Inventory Catalog By EncId   ${Inv_cat_id}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${displayName}=     FakerLibrary.name
+    Set Suite Variable  ${displayName}
 
     ${resp}=    Create Item Inventory  ${displayName}    
     Log   ${resp.json()}
@@ -193,19 +196,35 @@ JD-TC-Sales Order Catalog Items-1
     Set Suite Variable  ${Inv_Cata_Item_Encid}  ${resp.json()[0]}
 
     ${price}=    Random Int  min=2   max=40
-
+    ${price}=   Convert To Number  ${price}  1
     ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId1}     ${price}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-    # ${resp}=  Create SalesOrder Catalog Item-invMgmt True       ${SO_Cata_Encid}    ${boolean[1]}     ${Inv_Cata_Item_Encid}     ${price}    ${bool[1]}      
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Get SalesOrder Catalog Item By Encid     ${SO_itemEncIds}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}
+    Should Be Equal As Strings    ${resp.json()['price']}    ${price}
+    Should Be Equal As Strings    ${resp.json()['taxInclude']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['batchPricing']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowNegativeTrueAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowtrueFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${SO_itemEncIds}
+    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['catalog']['encId']}    ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog']['name']}    ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog']['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['spItem']['encId']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()['spItem']['name']}    ${displayName}
 
+JD-TC-Get Sales Order Catalog Items By EncId-2
 
-JD-TC-Sales Order Catalog Items-2
-
-    [Documentation]  Test whether the system can successfully create items with TaxInclude is True all items having invMgmt set to false .
+    [Documentation]   create SO Catalog items with all items having invMgmt set to false (with Tax).
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
@@ -219,198 +238,141 @@ JD-TC-Sales Order Catalog Items-2
     Set Suite Variable  ${itemEncId2}  ${resp.json()}
 
     ${price}=    Random Int  min=2   max=40
+    ${price}=   Convert To Number  ${price}  1
 
     ${taxes}=    Random Int  min=2   max=40
     ${tax}=          Create List    ${taxes}
     ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId2}     ${price}    TaxInclude=${boolean[1]}    taxes=${tax}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_itemEncIds1}  ${resp.json()[0]}
 
-JD-TC-Sales Order Catalog Items-3
+    ${resp}=  Get SalesOrder Catalog Item By Encid     ${SO_itemEncIds1}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}
+    Should Be Equal As Strings    ${resp.json()['price']}    ${price}
+    Should Be Equal As Strings    ${resp.json()['taxInclude']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['batchPricing']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowNegativeTrueAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowtrueFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${SO_itemEncIds1}
+    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['catalog']['encId']}    ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog']['name']}    ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog']['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['spItem']['encId']}    ${itemEncId2}
+    Should Be Equal As Strings    ${resp.json()['spItem']['name']}    ${displayName1}
+    Should Be Equal As Strings    ${resp.json()['taxes'][0]}    ${taxes}
+    Should Be Equal As Strings    ${resp.json()['taxInclude']}    ${bool[1]}
 
-    [Documentation]   create multiple items with same details but price is differnt.
+JD-TC-Get Sales Order Catalog Items By EncId-3
+
+    [Documentation]   create SO Catalog items with all items having invMgmt set to True (with out Tax).
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${price}=    Random Int  min=2   max=40
+    ${inv_cat_encid1}=  Create List  ${Inv_cat_id}
 
-    ${invCatItem}=     Create Dictionary       encId=${itemEncId2}
-    ${catalog_details}=  Create Dictionary        spItem=${invCatItem}    price=${price}    
-
-    # ${items}=    Create List   ${catalog_details}    ${catalog_details}  
-
-    ${price}=    Random Int  min=2   max=40
-    ${SP_ITEM_ALREADY_EXIST}=  Format String  ${SP_ITEM_ALREADY_EXIST}  ${displayName1}
-
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId2}     ${price}     ${catalog_details}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${SP_ITEM_ALREADY_EXIST}
-
-JD-TC-Sales Order Catalog Items-4
-
-    [Documentation]   create items with SO price is Zero.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    # ${items}=    Create List   ${catalog_details}    ${catalog_details}  
-
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId2}     0.0     
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
-
-JD-TC-Sales Order Catalog Items-5
-
-    [Documentation]   create items with Empty SP Item.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${price}=    Random Int  min=2   max=40
-
-    ${invCatItem}=     Create Dictionary       encId=${itemEncId2}
-    ${catalog_details}=  Create Dictionary        spItem=${invCatItem}    price=${price}    
-
-    # ${items}=    Create List   ${catalog_details}    ${catalog_details}  
-
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${EMPTY}     ${price}     ${catalog_details}    
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${INVALID_SP_ITEM_ID}
-
-JD-TC-Sales Order Catalog Items-6
-
-    [Documentation]   Test whether the system can successfully create items with all items having invMgmt set to true.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${Name}=    FakerLibrary.first name
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${inv_cat_encid}  ${resp.json()}
-    ${inv_cat_encid}=  Create List  ${inv_cat_encid}
-
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_Cata_Encid1}  ${resp.json()}
 
-    ${price}=    Random Int  min=2   max=40
-
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${SO_Cata_Encid1}    ${boolean[1]}     ${Inv_Cata_Item_Encid}     ${price}    ${boolean[1]}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-JD-TC-Sales Order Catalog Items-7
-
-    [Documentation]   create  sales order catalog Item where invMgmt as false.(inventory manager is true)
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${price}=    Random Int  min=2   max=40
-
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${SO_Cata_Encid1}    ${boolean[0]}     ${Inv_Cata_Item_Encid}     ${price}    ${boolean[1]}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-JD-TC-Sales Order Catalog Items-8
-
-    [Documentation]   create  sales order catalog Item where invCatItem as invalid string.(inventory manager is true)
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${price}=    Random Int  min=2   max=40
-
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${SO_Cata_Encid1}    ${boolean[1]}     ${invalidstring}     ${price}    ${boolean[1]}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${INVALID_INVENTORY_CATALOG_ITEM_ID}
-
-JD-TC-Sales Order Catalog Items-9
-
-    [Documentation]   create  sales order catalog Item where price as Zero.(inventory manager is true)
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${price}=    Random Int  min=2   max=40
-
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${SO_Cata_Encid1}    ${boolean[1]}     ${Inv_Cata_Item_Encid}    0.0   ${boolean[1]}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
-
-JD-TC-Sales Order Catalog Items-10
-
-    [Documentation]     sales order catalog inventory manager is true but catalog item inventory manager is false with valid details.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Create Store   ${Name}  ${St_Id1}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${store_id1}  ${resp.json()}
-
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id1}   ${Name}  ${boolean[1]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${SO_Cata_Encid1}  ${resp.json()}
-
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id1}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${Inv_cat_id1}  ${resp.json()}
-
-    ${resp}=  Get Inventory Catalog By EncId   ${Inv_cat_id1}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${displayName}=     FakerLibrary.name
-
-    ${resp}=    Create Item Inventory  ${displayName}    
+    ${displayName2}=     FakerLibrary.name
+    Set Suite Variable  ${displayName2}
+    ${resp}=    Create Item Inventory  ${displayName2}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${itemEncId2}  ${resp.json()}
+    Set Suite Variable  ${itemEncId3}  ${resp.json()}
 
-    ${categoryName}=    FakerLibrary.name
-    Set Suite Variable  ${categoryName}
+    ${price}=    Random Int  min=2   max=40
+    ${price}=   Convert To Number  ${price}  1
 
-    ${resp}=  Create Item Category   ${categoryName}
-    Log   ${resp.json()}
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True      ${SO_Cata_Encid1}    ${boolean[1]}     ${Inv_Cata_Item_Encid}     ${price}    ${boolean[1]}   
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable    ${Ca_item_Id1}    ${resp.json()}
+    Set Suite Variable  ${SO_itemEncIds3}  ${resp.json()[0]}
 
-    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id1} 
-    Log   ${resp.json()}
+    ${resp}=  Get SalesOrder Catalog Item By Encid     ${SO_itemEncIds3}      
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${itemEncIds}  ${resp.json()}
+    Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}
+    Should Be Equal As Strings    ${resp.json()['price']}    ${price}
+    Should Be Equal As Strings    ${resp.json()['taxInclude']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['batchPricing']}    ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()['allowNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowNegativeTrueAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowtrueFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${SO_itemEncIds3}
+    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['catalog']['encId']}    ${SO_Cata_Encid1}
+    Should Be Equal As Strings    ${resp.json()['catalog']['name']}    ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog']['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['spItem']['encId']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()['spItem']['name']}    ${displayName}
+    Should Be Equal As Strings    ${resp.json()['invCatItem']['encId']}    ${Inv_Cata_Item_Encid}
 
-    ${resp}=   Create Inventory Catalog Item  ${Inv_cat_id1}   ${itemEncId2}  
+JD-TC-Get Sales Order Catalog Items By EncId-4
+
+    [Documentation]   create SO Catalog items with all items having invMgmt set to True (with Tax).
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Name1}=     FakerLibrary.name
+
+    ${resp}=  Create Inventory Catalog   ${Name1}  ${store_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${Inv_cat_id}  ${resp.json()}
+    
+    ${resp}=  Get Inventory Catalog By EncId   ${Inv_cat_id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Create Inventory Catalog Item  ${Inv_cat_id}   ${itemEncId3}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${Inv_Cata_Item_Encid1}  ${resp.json()[0]}
 
-
     ${price}=    Random Int  min=2   max=40
+    ${price}=   Convert To Number  ${price}  1
+    ${taxes}=    Random Int  min=2   max=40
+    ${tax}=          Create List    ${taxes}
 
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${SO_Cata_Encid1}    ${boolean[1]}     ${Inv_Cata_Item_Encid1}    ${price}   ${boolean[1]}    
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True      ${SO_Cata_Encid1}    ${boolean[1]}     ${Inv_Cata_Item_Encid1}     ${price}    ${boolean[1]}    TaxInclude=${boolean[1]}    taxes=${tax}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_itemEncIds4}  ${resp.json()[0]}
+
+    ${resp}=  Get SalesOrder Catalog Item By Encid     ${SO_itemEncIds4}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}
+    Should Be Equal As Strings    ${resp.json()['price']}    ${price}
+    Should Be Equal As Strings    ${resp.json()['taxInclude']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['batchPricing']}    ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()['allowNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowNegativeTrueAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['allowtrueFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${SO_itemEncIds4}
+    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['catalog']['encId']}    ${SO_Cata_Encid1}
+    Should Be Equal As Strings    ${resp.json()['catalog']['name']}    ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog']['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['spItem']['encId']}    ${itemEncId3}
+    Should Be Equal As Strings    ${resp.json()['spItem']['name']}    ${displayName2}
+    Should Be Equal As Strings    ${resp.json()['invCatItem']['encId']}    ${Inv_Cata_Item_Encid1}
+    Should Be Equal As Strings    ${resp.json()['taxes'][0]}    ${taxes}
+    Should Be Equal As Strings    ${resp.json()['taxInclude']}    ${bool[1]}

@@ -2288,6 +2288,7 @@ INVALID_SP_ITEM_ID= "Invalid SP Item Id"
 CANNOT_UPDATE="Cannot do this operation, because Catalog is in Disabled status"
 PRICE_REQUIRED="Price required"
 INVALID_INVENTORY_CATALOG_ITEM_ID="Invalid Inventory Catalog Item Id"
+CAP_INVALID_CATALOG_ITEM_Id="Invalid Catalog Item Id"
 
 # Vendor
 INVALID_NAME="Invalid Name"
