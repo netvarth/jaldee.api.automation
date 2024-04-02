@@ -156,7 +156,7 @@ JD-TC-Update SalesOrder Status-3
 
 JD-TC-Update SalesOrder Status-4
 
-    [Documentation]   update sales order catalog e then update status as  disable.
+    [Documentation]   update sales order cataloge then update status as  disable.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME38}  ${PASSWORD}
     Log   ${resp.content}
