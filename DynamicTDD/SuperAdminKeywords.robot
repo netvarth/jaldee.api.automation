@@ -2588,3 +2588,49 @@ Create Item Jrx
     Check And Create YNW Session
     ${resp}=  POST On Session  synw  /item/jrx  data=${data}  expected_status=any
     RETURN  ${resp}  
+
+Get Item Jrx by id
+
+    [Arguments]     ${id}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  synw  /item/jrx/${id}  expected_status=any
+    RETURN  ${resp}
+
+Update Item Jrx 
+
+    # description, sku, hsn are not mandatory
+    [Arguments]     ${itemCode}  &{kwargs}
+
+    ${data}=  Create Dictionary  itemCode=${itemCode}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary 	${data} 	${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PATCH On Session  synw  /item/jrx  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item Jrx Filter
+
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/jrx   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Item Jrx Filter Count
+
+    [Arguments]   &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /item/jrx/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Upload Jrx item SA
+
+    [Arguments]    ${file}    
+
+    ${headers2}=     Create Dictionary    Content-Type=multipart/form-data
+    
+    Check And Create YNW Session
+    ${resp}=    POST On Session  ynw  /item/upload   files=${file}   expected_status=any    headers=${headers2}
+    RETURN  ${resp}

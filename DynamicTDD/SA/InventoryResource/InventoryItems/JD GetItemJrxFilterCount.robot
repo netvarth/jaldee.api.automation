@@ -19,9 +19,9 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 
 *** Test Cases ***
 
-JD-TC-CreateItemJrx-1
+JD-TC-GetItemJrxFilterCount-1
 
-    [Documentation]  Create Item Jrx 
+    [Documentation]  Get Item Jrx Filter Count
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME269}  ${PASSWORD}
     Log  ${resp.content}
@@ -60,84 +60,83 @@ JD-TC-CreateItemJrx-1
     ${resp}=    Create Item Jrx   ${itemName}  description=${description}  sku=${sku}  hsnCode=${hsn}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${jrxid}    ${resp.json()}
+
+    ${resp}=    Get Item Jrx by id   ${jrxid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['itemCode']}              ${jrxid}
+    Should Be Equal As Strings  ${resp.json()['itemName']}              ${itemName}
+    Should Be Equal As Strings  ${resp.json()['description']}           ${description}
+    Should Be Equal As Strings  ${resp.json()['sku']}                   ${sku}
+    Should Be Equal As Strings  ${resp.json()['hsnCode']['id']}         ${hsn_id}
+    Should Be Equal As Strings  ${resp.json()['hsnCode']['status']}     ${Toggle[0]}
+
+    ${resp}=    Get Item Jrx Filter Count
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}       1
 
 
-JD-TC-CreateItemJrx-2
+JD-TC-GetItemJrxFilter-2
 
-    [Documentation]   Create Item Jrx  - with same item name
+    [Documentation]  Get Item Jrx Filter Count - itemCode Filter
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Create Item Jrx   ${itemName}
+    ${resp}=    Get Item Jrx Filter Count   itemCode-eq=${jrxid}  
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}       1
+
+JD-TC-GetItemJrxFilter-3
+
+    [Documentation]  Get Item Jrx Filter Count - itemName filter
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Item Jrx Filter Count   itemName-eq=${itemName}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}       1
+
+
+JD-TC-GetItemJrxFilter-4
+
+    [Documentation]  Get Item Jrx Filter Count - itemCode Filter invalid item code
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${inv}=     Random Int  min=999     max=9999
+
+    ${resp}=    Get Item Jrx Filter Count    itemCode-eq=${inv}   
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}       0
+
+JD-TC-GetItemJrxFilter-5
+
+    [Documentation]  Get Item Jrx Filter Count - hsnCode filter
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Get Item Jrx Filter Count   hsnCode-eq=${hsn_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()}       1
+
+JD-TC-GetItemJrxFilter-UH1
+
+    [Documentation]  Get Item Jrx Filter Count - without login
+
+    ${resp}=    Get Item Jrx Filter Count
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}       ${NAME_ALREADY_EXIST}
-
-JD-TC-CreateItemJrx-3
-
-    [Documentation]   Create Item Jrx  - item name is empty
-
-    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Create Item Jrx   ${empty}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-JD-TC-CreateItemJrx-4
-
-    [Documentation]  Create Item Jrx - where description is empty
-
-    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${itemName2}=        FakerLibrary.name
-
-    ${resp}=    Create Item Jrx   ${itemName2}  description=${empty}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-JD-TC-CreateItemJrx-5
-
-    [Documentation]  Create Item Jrx - where sku is empty
-
-    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${itemName2}=        FakerLibrary.name
-
-    ${resp}=    Create Item Jrx   ${itemName2}  sku=${empty}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-JD-TC-CreateItemJrx-6
-
-    [Documentation]  Create Item Jrx - where hsncode is empty
-
-    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${itemName2}=        FakerLibrary.name
-
-    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Hsn id
-
-    ${resp}=    Create Item Jrx   ${itemName2}  hsnCode=${empty}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  ${resp.json()}       ${INVALID_FIELD}
-
-JD-TC-CreateItemJrx-UH1
-
-    [Documentation]  Create Item Jrx - without login
-
-    ${itemName2}=        FakerLibrary.name
-
-    ${resp}=    Create Item Jrx   ${itemName2} 
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  419
