@@ -2171,8 +2171,8 @@ JD-TC-Reschedule Appointment-10
     @{slots_indexes}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
         # IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
-        END
+        #     Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        # END
         IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0
             Append To List   ${slots_indexes}  ${i}
         END
@@ -2535,8 +2535,8 @@ JD-TC-Reschedule Appointment-11
     @{slots_indexes}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
         # IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
-        END
+        #     Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        # END
         IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0
             Append To List   ${slots_indexes}  ${i}
         END
@@ -3522,8 +3522,8 @@ JD-TC-Reschedule Appointment-14
     @{slots_indexes}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
         # IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
-        END
+        #     Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        # END
         IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0
             Append To List   ${slots_indexes}  ${i}
         END
@@ -3842,8 +3842,8 @@ JD-TC-Reschedule Appointment-15
     @{slots_indexes}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
         # IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
-        END
+        #     Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        # END
         IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0
             Append To List   ${slots_indexes}  ${i}
         END
@@ -9123,8 +9123,8 @@ JD-TC-Reschedule Appointment-UH25
     @{slots_indexes}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
         # IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
-        END
+        #     Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        # END
         IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0
             Append To List   ${slots_indexes}  ${i}
         END
@@ -9396,8 +9396,8 @@ JD-TC-Reschedule Appointment-UH26
     @{slots_indexes}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
         # IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
-        END
+        #     Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        # END
         IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0
             Append To List   ${slots_indexes}  ${i}
         END
@@ -10334,8 +10334,8 @@ JD-TC-Reschedule Appointment-UH30
     @{slots_indexes}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
         # IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
-        END
+        #     Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        # END
         IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0
             Append To List   ${slots_indexes}  ${i}
         END
@@ -10645,8 +10645,8 @@ JD-TC-Reschedule Appointment-UH31
     @{slots_indexes}=  Create List
     FOR   ${i}  IN RANGE   0   ${no_of_slots}
         # IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0   
-            Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
-        END
+        #     Append To List   ${slots}  ${resp.json()['availableSlots'][${i}]['time']}
+        # END
         IF  ${resp.json()['availableSlots'][${i}]['noOfAvailbleSlots']} > 0
             Append To List   ${slots_indexes}  ${i}
         END
