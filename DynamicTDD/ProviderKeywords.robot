@@ -14236,7 +14236,7 @@ Get SalesOrder Catalog By Encid
 Get SalesOrder Catalog List
     [Arguments]  &{param}    
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/  params=${param}   expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/so/catalog  params=${param}   expected_status=any
     RETURN  ${resp} 
 
 Get SalesOrder Catalog Count
