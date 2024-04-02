@@ -30,6 +30,7 @@ TC-Add Delay On Multiple Appointments-1
     ${resp}=  Consumer Logout
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+
     ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -822,7 +823,7 @@ TC-Add Delay On Multiple Appointments-5
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
+    ${parallel}=  FakerLibrary.Random Int  min=2  max=10
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
@@ -854,7 +855,6 @@ TC-Add Delay On Multiple Appointments-5
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 

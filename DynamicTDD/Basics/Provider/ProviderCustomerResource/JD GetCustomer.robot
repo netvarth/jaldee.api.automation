@@ -422,7 +422,7 @@ JD-TC-Get Customers-8
     Set Test Variable  ${p_id}  ${decrypted_data['id']}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    ${ph2}=  Evaluate  ${PUSERNAME23}+73009
+    ${ph2}=  Evaluate  ${PUSERNAME23}+73011
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
     ${resp}=  AddCustomer  ${phone1}   firstName=${firstname}   lastName=${lastname}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}

@@ -611,13 +611,18 @@ JD-TC-GetFutureAppointment-4
     ${resp}=  Encrypted Provider Login  ${billable_providers[6]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Test Variable  ${pkgId}  ${decrypted_data['accountLicenseDetails']['accountLicense']['licPkgOrAddonId']}
 
-    ${highest_package}=  get_highest_license_pkg
-    Log  ${highest_package}
+    ${licid}  ${licname}=  get_highest_license_pkg
+    Log Many  ${licid}  ${licname}
 
-    ${resp}=   Change License Package  ${highest_package[0]}
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    IF  '${pkgId}' != '${licId}'
+        ${resp}=   Change License Package  ${licid}
+        Log  ${resp.json()}
+        Should Be Equal As Strings    ${resp.status_code}   200
+    END
 
     ${resp}=   Get Service
     Log   ${resp.json()}

@@ -352,3 +352,24 @@ SPConsumer Deactivation
     ${headers2}=     Create Dictionary    Content-Type=application/json  
     ${resp}=    DELETE On Session    ynw    /spconsumer/login/deActivate      expected_status=any
     RETURN  ${resp}
+
+Customer Take Appointment
+    [Arguments]    ${service_id}  ${schedule_id}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    ${cons_params}=  Create Dictionary  account=${accid}
+    ${sid}=  Create Dictionary  id=${service_id}
+    ${schedule}=  Create Dictionary  id=${schedule_id}    
+    ${data}=    Create Dictionary   service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}
+    ${data}=  json.dumps  ${data}
+    Log  ${cons_headers}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Log  ${cons_headers}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    Log  ${cons_params}
+    Check And Create YNW Session
+    # Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
+    # ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw   url=/consumer/appointment/add  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
+    RETURN  ${resp}

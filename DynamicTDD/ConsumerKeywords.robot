@@ -1508,26 +1508,26 @@ Get Individual Payment Records
     ${resp}=  GET On Session  ynw   /consumer/payment/${id}   params=${cons_params}   expected_status=any   headers=${cons_headers}   
     RETURN  ${resp}
     
-# Take Appointment For Provider 
-#     [Arguments]    ${accid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}  #${timeZone}=Asia/Kolkata
-#     ${cons_headers}=  Create Dictionary  &{headers} 
-#     ${cons_params}=  Create Dictionary  account=${accid}
-#     ${sid}=  Create Dictionary  id=${service_id}
-#     ${schedule}=  Create Dictionary  id=${schedule}    
-#     ${data}=    Create Dictionary    appointmentMode=ONLINE_APPOINTMENT   account=${accId}   service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}
-#     ${data}=  json.dumps  ${data}
-#     Log  ${cons_headers}
-#     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
-#     Log  ${kwargs}
-#     Set To Dictionary  ${cons_headers}   &{tzheaders}
-#     Log  ${cons_headers}
-#     Set To Dictionary  ${cons_params}   &{locparam}
-#     Log  ${cons_params}
-#     Check And Create YNW Session
-#     # Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
-#     # ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  expected_status=any   headers=${cons_headers}
-#     ${resp}=  POST On Session  ynw   url=/consumer/appointment  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
-#     RETURN  ${resp}
+Take Appointment For Provider 
+    [Arguments]    ${accid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}  #${timeZone}=Asia/Kolkata
+    ${cons_headers}=  Create Dictionary  &{headers} 
+    ${cons_params}=  Create Dictionary  account=${accid}
+    ${sid}=  Create Dictionary  id=${service_id}
+    ${schedule}=  Create Dictionary  id=${schedule}    
+    ${data}=    Create Dictionary    appointmentMode=ONLINE_APPOINTMENT   account=${accId}   service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}
+    ${data}=  json.dumps  ${data}
+    Log  ${cons_headers}
+    ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
+    Log  ${kwargs}
+    Set To Dictionary  ${cons_headers}   &{tzheaders}
+    Log  ${cons_headers}
+    Set To Dictionary  ${cons_params}   &{locparam}
+    Log  ${cons_params}
+    Check And Create YNW Session
+    # Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
+    # ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  expected_status=any   headers=${cons_headers}
+    ${resp}=  POST On Session  ynw   url=/consumer/appointment  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
+    RETURN  ${resp}
 
 Take Phonein Appointment For Provider 
     [Arguments]    ${accid}  ${service_id}  ${schedule}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}  #${timeZone}=Asia/Kolkata
@@ -3554,8 +3554,51 @@ Get ProviderConsumer FamilyMember
     RETURN  ${resp}
 
 
-Take Appointment For Provider 
-    [Arguments]    ${accid}  ${service_id}  ${schedule_id}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}
+Create Family Member   
+    [Arguments]  ${firstName}  ${lastName}  ${dob}  ${gender}   ${phoneNo}  ${countryCode}  ${address}  &{kwargs}
+
+    ${data}=  Create Dictionary  firstName=${firstName}  lastName=${lastName}  dob=${dob}   gender=${gender}  phoneNo=${phoneNo}  countryCode=${countryCode}    address=${address}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/family/member   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Update Family Members
+    [Arguments]   ${id}  ${parent}  ${firstName}  ${lastName}  ${dob}  ${gender}   ${phoneNo}  ${countryCode}  ${address}  &{kwargs}
+
+    ${data}=  Create Dictionary   id=${id}  parent=${parent}  firstName=${firstName}  lastName=${lastName}  dob=${dob}   gender=${gender}  phoneNo=${phoneNo}  countryCode=${countryCode}    address=${address}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /consumer/family/member   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get Family Members
+    [Arguments]  ${consumerId}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/family/member/${consumerId}   expected_status=any   
+    RETURN  ${resp}
+
+Delete Family Members
+    [Arguments]  ${memberId}  ${consumerId} 
+    Check And Create YNW Session
+    ${resp}=    DELETE On Session    ynw    /consumer/family/member/${memberId}/${consumerId}        expected_status=any
+    RETURN  ${resp}
+
+Get Family Member By Id
+    [Arguments]  ${memberId}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /consumer/family/member/details/${memberId}   expected_status=any   
+    RETURN  ${resp}
+
+
+Customer Take Appointment
+    [Arguments]    ${service_id}  ${schedule_id}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}
     ${cons_headers}=  Create Dictionary  &{headers} 
     ${cons_params}=  Create Dictionary  account=${accid}
     ${sid}=  Create Dictionary  id=${service_id}
@@ -3570,8 +3613,6 @@ Take Appointment For Provider
     Set To Dictionary  ${cons_params}   &{locparam}
     Log  ${cons_params}
     Check And Create YNW Session
-    # Set To Dictionary  ${cons_headers}   timeZone=${timeZone}
-    # ${resp}=  POST On Session  ynw   url=/consumer/appointment?account=${accId}  data=${data}  expected_status=any   headers=${cons_headers}
     ${resp}=  POST On Session  ynw   url=/consumer/appointment/add  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
     RETURN  ${resp}
 

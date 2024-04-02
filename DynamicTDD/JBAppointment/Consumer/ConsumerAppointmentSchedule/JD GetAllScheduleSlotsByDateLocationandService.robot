@@ -10,7 +10,7 @@ Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
-Variables         /ebs/TDD/varfiles/consumerlist.py
+Variables         /ebs/TDD/varfiles/consumerlist.py 
 
 *** Variables ***
 
@@ -1190,9 +1190,9 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-10
         ${et}=  timeto24hr  ${et12}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
-        Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${consumerParallel}
+        Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${parallel}
+        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumerParallel}
         Set Test Variable  ${st}  ${et}
     END
 
@@ -1279,7 +1279,7 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-11
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${Parallel1}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${parallel1}
+        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumerParallel}
         Set Test Variable  ${st}  ${et}
     END
 
@@ -1302,9 +1302,9 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-11
         ${et}=  timeto24hr  ${et12}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
-        Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${consumerParallel}
+        Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${parallel}
+        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumerParallel}
         Set Test Variable  ${st}  ${et}
     END
 
@@ -1389,9 +1389,9 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-12
         ${et}=  timeto24hr  ${et12}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
-        Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${consumerParallel1}
+        Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel1}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${parallel1}
+        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumerParallel1}
         Set Test Variable  ${st}  ${et}
     END
 
@@ -1414,9 +1414,9 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-12
         ${et}=  timeto24hr  ${et12}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
-        Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${consumerParallel}
+        Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${parallel}
+        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumerParallel}
         Set Test Variable  ${st}  ${et}
     END
 
@@ -1500,9 +1500,9 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-13
         ${et}=  timeto24hr  ${et12}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
-        Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${consumerParallel1}
+        Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel1}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${parallel1}
+        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumerParallel1}
         Set Test Variable  ${st}  ${et}
     END
 
@@ -1525,8 +1525,8 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-13
         ${et}=  timeto24hr  ${et12}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
-        Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${consumerParallel}
+        Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${parallel}
+        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumerParallel}
         Set Test Variable  ${st}  ${et}
     END

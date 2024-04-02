@@ -1327,7 +1327,7 @@ JD-TC-Update CustomerDetails-13
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
     Set Test Variable   ${gender}
-    ${phone1}=  Evaluate  ${PUSERNAME23}+73009
+    ${phone1}=  Evaluate  ${PUSERNAME23}+73012
     ${ph2}=  Evaluate  ${PUSERNAME230}+71013
     Set Suite Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}
     ${resp}=  AddCustomer  ${phone1}   firstName=${firstname}   lastName=${lastname}  secondaryCountryCode=${countryCodes[0]}  secondaryPhoneNo=${ph2}
@@ -1476,7 +1476,7 @@ JD-TC-Update CustomerDetails-UH8
     ${dob}=  FakerLibrary.Date
     ${gender}=  Random Element    ${Genderlist}
     Set Test Variable   ${gender}
-    ${phone1}=  Evaluate  ${PUSERNAME23}+73009
+    ${phone1}=  Evaluate  ${PUSERNAME23}+73013
     Set Suite Variable    ${phone1}  
     ${ph2}=  Evaluate  ${PUSERNAME230}+71013
     Set Suite Variable  ${email2}  ${firstname}${ph2}${C_Email}.${test_mail}

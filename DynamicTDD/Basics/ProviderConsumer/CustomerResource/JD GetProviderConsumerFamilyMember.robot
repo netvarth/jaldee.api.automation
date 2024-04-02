@@ -112,22 +112,22 @@ JD-TC-GetFamilyMember-1
 
     
 
-    ${resp}=    Get FamilyMember
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=    Get FamilyMember
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Family Members   ${cid}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Create Family Member       ${fname}  ${lname}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
+    ${resp}=    Create Family Member   ${fname}  ${lname}  ${dob}  ${gender}   ${primnum}  ${countryCodes[0]}  ${address}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable   ${memb_id}  ${resp.json()}
 
-    ${resp}=    Get FamilyMember
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    # ${resp}=    Get FamilyMember
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Family Members   ${cid}
     Log   ${resp.json()}

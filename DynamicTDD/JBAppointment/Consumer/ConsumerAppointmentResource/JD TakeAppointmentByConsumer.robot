@@ -3456,6 +3456,8 @@ JD-TC-Take Appointment-UH11
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    reset_queue_metric  ${pid_11}
+
     ${p1_l1}=  Create Sample Location
     Set Suite Variable   ${p1_l1}
     ${resp}=   Get Location ById  ${p1_l1}

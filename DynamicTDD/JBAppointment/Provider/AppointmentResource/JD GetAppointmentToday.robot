@@ -5958,7 +5958,7 @@ JD-TC-GetAppointmentToday-UH3
 
 JD-TC-GetAppointmentToday-29
 
-    [Documentation]  taking a appt for a provider who has a branch in us. base location is ist.(online appt from India),
+    [Documentation]  taking a appt for a provider who has a branch in US. base location is India.(online appt from India),
     ...   then verify get appt today details. 
 
     clear_service   ${PUSERNAME230}
@@ -6044,7 +6044,31 @@ JD-TC-GetAppointmentToday-29
     Set Test Variable  ${l_Name}  ${resp.json()['lastName']}
     Set Test Variable  ${ph_no}  ${resp.json()['primaryPhoneNumber']} 
 
-    ${cid}=  get_id  ${CUSERNAME9}   
+    ${resp}=  Customer Logout   
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME9}    ${pid}  alternateLoginId=${CUSEREMAIL9}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME9}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${CUSEREMAIL9}  ${CUSERNAME9}  ${pid}  countryCode=${countryCodes[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=  Customer Logout   
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME9}  ${pid}  ${token}   countryCode=${countryCodes[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Test Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+    # ${cid}=  get_id  ${CUSERNAME9}   
 
     ${resp}=  Get Appointment Schedule ById Consumer  ${sch_id1}   ${pid}  
     Log  ${resp.content}
@@ -6069,7 +6093,8 @@ JD-TC-GetAppointmentToday-29
     ${apptfor}=   Create List  ${apptfor1}
 
     ${cnote}=   FakerLibrary.word
-    ${resp}=   Take Appointment For Provider   ${pid}  ${s_id1}  ${sch_id1}  ${DAY}  ${cnote}   ${apptfor}   location=${{str('${loc_id1}')}}
+    # ${resp}=   Take Appointment For Provider   ${pid}  ${s_id1}  ${sch_id1}  ${DAY}  ${cnote}   ${apptfor}   location=${{str('${loc_id1}')}}
+    ${resp}=   Customer Take Appointment  ${s_id1}  ${sch_id1}  ${DAY}  ${cnote}  ${apptfor}  location=${{str('${loc_id1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}
@@ -6082,7 +6107,6 @@ JD-TC-GetAppointmentToday-29
     ${resp}=    Get Consumer Appointments Today  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
-
     ${len}=  Get Length  ${resp.json()}
     Should Be Equal As Integers  ${len}  1
 

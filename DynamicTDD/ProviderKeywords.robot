@@ -11323,7 +11323,7 @@ Account with Multiple Users in NBFC
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         IF  ${resp.json()['metricUsageInfo'][8]['total']} > 2 and ${resp.json()['metricUsageInfo'][8]['used']} < ${resp.json()['metricUsageInfo'][8]['total']}
-    Exit For Loop
+            Exit For Loop
         END
     END
    

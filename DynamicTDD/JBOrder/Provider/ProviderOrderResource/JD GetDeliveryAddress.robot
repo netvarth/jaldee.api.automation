@@ -234,7 +234,7 @@ JD-TC-GetDeliveryAddress-1
     Log   ${resp.json()}
     Should Be Equal As Strings      ${resp.status_code}  200
 
-    ${phoneNumber}=  Evaluate  ${PUSERNAME23}+73009
+    ${phoneNumber}=  Evaluate  ${PUSERNAME23}+73014
     ${firstName}=  FakerLibrary.first_name
     ${lastName}=  FakerLibrary.last_name
     Set Test Variable  ${email}  ${lastName}${CUSERNAME4}.${test_mail} 
@@ -242,7 +242,7 @@ JD-TC-GetDeliveryAddress-1
     ${city}=  FakerLibrary.first_name
     ${landMark}=  FakerLibrary.first_name
 
-    ${phoneNumber1}=  Evaluate  ${PUSERNAME23}+73009
+    ${phoneNumber1}=  Evaluate  ${PUSERNAME23}+73015
     ${firstName1}=  FakerLibrary.first_name
     ${lastName1}=  FakerLibrary.last_name
     Set Test Variable  ${email1}  ${lastName}${CUSERNAME4}.${test_mail} 

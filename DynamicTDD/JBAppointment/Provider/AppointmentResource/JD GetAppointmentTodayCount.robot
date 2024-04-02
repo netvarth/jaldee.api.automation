@@ -4064,7 +4064,9 @@ JD-TC-GetAppointmentTodayCount-19
     Should Be Equal As Strings  ${resp.json()['uuid']}  ${apptid1}  
     ${amount}=  Set Variable  ${resp.json()['amountDue']}  
 
-    ${resp}=  Accept Payment  ${apptid1}  cash  ${amount}
+    # ${resp}=  Accept Payment  ${apptid1}  cash  ${amount}
+    ${note}=    FakerLibrary.text
+    ${resp}=  Make Payment By Cash   ${apptid1}  ${payment_modes[0]}  ${amount}  ${note}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -4087,7 +4089,6 @@ JD-TC-GetAppointmentTodayCount-19
     ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
