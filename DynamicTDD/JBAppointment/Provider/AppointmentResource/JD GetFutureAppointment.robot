@@ -641,7 +641,6 @@ JD-TC-GetFutureAppointment-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
         ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
         Log  ${resp1.content}
@@ -661,6 +660,8 @@ JD-TC-GetFutureAppointment-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
+    clear_appt_schedule   ${billable_providers[6]}
+
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
     ${servicecharge}=   Random Int  min=100  max=500
@@ -670,9 +671,15 @@ JD-TC-GetFutureAppointment-4
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id1}  ${resp.json()}
 
+    ${resp}=  Auto Invoice Generation For Service   ${s_id1}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${s_id2}=  Create Sample Service  ${SERVICE2}
 
-    clear_appt_schedule   ${billable_providers[6]}
+    ${resp}=  Auto Invoice Generation For Service   ${s_id2}    ${toggle[0]}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -753,7 +760,6 @@ JD-TC-GetFutureAppointment-4
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id1}  ${sch_id}  ${DAY3}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid1}=  Get From Dictionary  ${resp.json()}  ${fname}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
@@ -797,7 +803,11 @@ JD-TC-GetFutureAppointment-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Get Bill By consumer  ${apptid1}  ${pid} 
+    # ${resp}=  Get Bill By consumer  ${apptid1}  ${pid} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -876,7 +886,6 @@ JD-TC-GetFutureAppointment-4
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
@@ -931,7 +940,11 @@ JD-TC-GetFutureAppointment-4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Bill By consumer  ${apptid1}  ${pid} 
+    # ${resp}=  Get Bill By consumer  ${apptid1}  ${pid} 
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get consumer Appt Bill Details   ${apptid1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
