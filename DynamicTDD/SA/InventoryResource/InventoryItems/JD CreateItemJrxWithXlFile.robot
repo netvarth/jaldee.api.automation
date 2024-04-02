@@ -38,7 +38,6 @@ JD-TC-CreateItemJrx-1
     ${sku}   getColumnValuesByName  ${sheet1}  ${colnames[2]}
     ${hsnCode}   getColumnValuesByName  ${sheet1}  ${colnames[3]}
     
-
     ${resp}=  Encrypted Provider Login  ${PUSERNAME269}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -56,7 +55,7 @@ JD-TC-CreateItemJrx-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Create Item Hsn SA  ${account_id}  ${hsnCode[0]}
+    ${cookie}  ${resp}=    Create Item Hsn SA  ${account_id}  ${hsnCode[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${hsn_id}      ${resp.json()}

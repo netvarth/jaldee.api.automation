@@ -13841,6 +13841,65 @@ Get Item Inventory
     ${resp}=    GET On Session    ynw   /provider/spitem/${id}     expected_status=any
     RETURN  ${resp}
 
+Update Item Inventory
+
+    [Arguments]   ${spCode}  &{kwargs}
+    Check And Create YNW Session
+  
+    ${data}=   Create Dictionary    spCode=${spCode}
+    
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        IF  "${key}" == "itemCode"
+            ${jaldeeRxCode}=    Create Dictionary  	itemCode=${value}
+            Set To Dictionary 	${data} 	jaldeeRxCode=${jaldeeRxCode}
+        ELSE IF  "${key}" == "categoryCode"
+            ${itemCategory}=  Create Dictionary 	categoryCode=${value}
+            Set To Dictionary 	${data} 	itemCategory=${itemCategory}
+        ELSE IF  "${key}" == "categoryCode2"
+            ${itemSubCategory}=  Create Dictionary 	categoryCode=${value}
+            Set To Dictionary 	${data} 	itemSubCategory=${itemSubCategory}
+        ELSE IF  "${key}" == "typeCode"
+            ${itemType}=  Create Dictionary 	typeCode=${value}
+            Set To Dictionary 	${data} 	itemType=${itemType}
+        ELSE IF  "${key}" == "typeCode2"
+            ${itemSubType}=  Create Dictionary   typeCode=${value}
+            Set To Dictionary 	${data} 	itemSubType=${itemSubType} 
+        ELSE IF  "${key}" == "hsnCode"
+            ${hsnCode}=    Create Dictionary 	hsnCode=${value}
+            Set To Dictionary 	${data} 	hsnCode=${hsnCode}
+        ELSE IF  "${key}" == "manufacturerCode"
+            ${itemManufacturer}=    Create Dictionary 	manufacturerCode=${value}
+            Set To Dictionary 	${data} 	itemManufacturer=${itemManufacturer}
+        ELSE
+            Set To Dictionary 	${data}    ${key}=${value}     
+        END
+
+    END 
+    ${data}=  json.dumps  ${data}   
+    ${resp}=  PATCH On Session  ynw  /provider/spitem  data=${data}   expected_status=any
+    RETURN  ${resp}
+
+Get Item inv Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem   params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Update Item Inv Status
+
+    [Arguments]   ${sprxitemid}   ${status}
+    Check And Create YNW Session
+    ${resp}=    PATCH On Session    ynw   /provider/spitem/${sprxitemid}/status/${status}   expected_status=any
+    RETURN  ${resp}
+
+Get Item inv Count Filter
+
+    [Arguments]    &{param}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    ynw   /provider/spitem/count   params=${param}   expected_status=any
+    RETURN  ${resp}
+
 
 # Data Migration
 

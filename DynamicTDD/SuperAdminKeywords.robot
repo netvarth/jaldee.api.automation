@@ -2624,13 +2624,3 @@ Get Item Jrx Filter Count
     Check And Create YNW Session
     ${resp}=    GET On Session    synw   /item/jrx/count   params=${param}   expected_status=any
     RETURN  ${resp}
-
-Upload Jrx item SA
-
-    [Arguments]    ${file}    
-
-    ${headers2}=     Create Dictionary    Content-Type=multipart/form-data
-    
-    Check And Create YNW Session
-    ${resp}=    POST On Session  ynw  /item/upload   files=${file}   expected_status=any    headers=${headers2}
-    RETURN  ${resp}
