@@ -297,47 +297,47 @@ Add Profile Photo
     RETURN  ${resp}
 
 
-Create Family Member   
-    [Arguments]  ${firstName}  ${lastName}  ${dob}  ${gender}   ${phoneNo}  ${countryCode}  ${address}  &{kwargs}
+# Create Family Member   
+#     [Arguments]  ${firstName}  ${lastName}  ${dob}  ${gender}   ${phoneNo}  ${countryCode}  ${address}  &{kwargs}
 
-    ${data}=  Create Dictionary  firstName=${firstName}  lastName=${lastName}  dob=${dob}   gender=${gender}  phoneNo=${phoneNo}  countryCode=${countryCode}    address=${address}
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary   ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /consumer/family/member   data=${data}  expected_status=any
-    RETURN  ${resp}
+#     ${data}=  Create Dictionary  firstName=${firstName}  lastName=${lastName}  dob=${dob}   gender=${gender}  phoneNo=${phoneNo}  countryCode=${countryCode}    address=${address}
+#     FOR    ${key}    ${value}    IN    &{kwargs}
+#         Set To Dictionary   ${data}   ${key}=${value}
+#     END
+#     ${data}=    json.dumps    ${data}
+#     Check And Create YNW Session
+#     ${resp}=  POST On Session  ynw  /consumer/family/member   data=${data}  expected_status=any
+#     RETURN  ${resp}
 
-Update Family Members
-    [Arguments]   ${id}  ${parent}  ${firstName}  ${lastName}  ${dob}  ${gender}   ${phoneNo}  ${countryCode}  ${address}  &{kwargs}
+# Update Family Members
+#     [Arguments]   ${id}  ${parent}  ${firstName}  ${lastName}  ${dob}  ${gender}   ${phoneNo}  ${countryCode}  ${address}  &{kwargs}
 
-    ${data}=  Create Dictionary   id=${id}  parent=${parent}  firstName=${firstName}  lastName=${lastName}  dob=${dob}   gender=${gender}  phoneNo=${phoneNo}  countryCode=${countryCode}    address=${address}
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary   ${data}   ${key}=${value}
-    END
-    ${data}=    json.dumps    ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /consumer/family/member   data=${data}  expected_status=any
-    RETURN  ${resp}
+#     ${data}=  Create Dictionary   id=${id}  parent=${parent}  firstName=${firstName}  lastName=${lastName}  dob=${dob}   gender=${gender}  phoneNo=${phoneNo}  countryCode=${countryCode}    address=${address}
+#     FOR    ${key}    ${value}    IN    &{kwargs}
+#         Set To Dictionary   ${data}   ${key}=${value}
+#     END
+#     ${data}=    json.dumps    ${data}
+#     Check And Create YNW Session
+#     ${resp}=  PUT On Session  ynw  /consumer/family/member   data=${data}  expected_status=any
+#     RETURN  ${resp}
 
-Get Family Members
-    [Arguments]  ${consumerId}  
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/family/member/${consumerId}   expected_status=any   
-    RETURN  ${resp}
+# Get Family Members
+#     [Arguments]  ${consumerId}  
+#     Check And Create YNW Session
+#     ${resp}=  GET On Session  ynw  /consumer/family/member/${consumerId}   expected_status=any   
+#     RETURN  ${resp}
 
-Delete Family Members
-    [Arguments]  ${memberId}  ${consumerId} 
-    Check And Create YNW Session
-    ${resp}=    DELETE On Session    ynw    /consumer/family/member/${memberId}/${consumerId}        expected_status=any
-    RETURN  ${resp}
+# Delete Family Members
+#     [Arguments]  ${memberId}  ${consumerId} 
+#     Check And Create YNW Session
+#     ${resp}=    DELETE On Session    ynw    /consumer/family/member/${memberId}/${consumerId}        expected_status=any
+#     RETURN  ${resp}
 
-Get Family Member By Id
-    [Arguments]  ${memberId}  
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /consumer/family/member/details/${memberId}   expected_status=any   
-    RETURN  ${resp}
+# Get Family Member By Id
+#     [Arguments]  ${memberId}  
+#     Check And Create YNW Session
+#     ${resp}=  GET On Session  ynw  /consumer/family/member/details/${memberId}   expected_status=any   
+#     RETURN  ${resp}
 
 Get Prescription By ProviderConsumer
 
