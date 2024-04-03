@@ -23,27 +23,13 @@ ${invalidEma}        asd122
 ${invalidstring}     _ad$.sa_
 @{spItemSource}      RX       Ayur
 
-*** Keywords ***
-Get SalesOrder Catalog Item Count
-    [Arguments]  &{param}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/count  params=${param}   expected_status=any
-    RETURN  ${resp} 
-
-Get Item List By Catalog EncId
-    [Arguments]  ${SO_Catalog_Encid}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/${SO_Catalog_Encid}/item/list     expected_status=any
-    RETURN  ${resp} 
-
-
 *** Test Cases ***
 
 JD-TC-Get item list by catalog encId-1
 
     [Documentation]  Test whether the system can successfully create items with all items having invMgmt set to false (with out Tax) Then it Get item list by catalog encId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -89,10 +75,10 @@ JD-TC-Get item list by catalog encId-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME53}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME15}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -225,19 +211,21 @@ JD-TC-Get item list by catalog encId-2
 
     ${resp}=  Get Item List By Catalog EncId     ${SO_Cata_Encid}      
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${CAP_Invalid_Catalog_id}
 
 JD-TC-Get item list by catalog encId-3
 
     [Documentation]   try Get item list by invalid catalog encId .
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME15}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Item List By Catalog EncId     ${invalidstring}      
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${CAP_Invalid_Catalog_id}
 
 JD-TC-Get item list by catalog encId-UH1
 
