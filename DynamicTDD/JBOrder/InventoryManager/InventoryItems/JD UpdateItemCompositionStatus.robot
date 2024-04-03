@@ -22,7 +22,7 @@ JD-TC-UpdateItemCompositionStatus-1
 
     [Documentation]  Update Item Composition Status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -58,7 +58,7 @@ JD-TC-UpdateItemCompositionStatus-2
 
     [Documentation]  Update Item Composition Status - Disable to Disable
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -77,7 +77,7 @@ JD-TC-UpdateItemCompositionStatus-3
 
     [Documentation]  Update Item Composition Status - Disable to Enable
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -103,7 +103,7 @@ JD-TC-UpdateItemCompositionStatus-4
 
     [Documentation]  Update Item Composition Status - Enable to Enable
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

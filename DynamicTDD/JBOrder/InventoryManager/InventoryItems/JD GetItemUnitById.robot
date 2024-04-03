@@ -22,7 +22,7 @@ JD-TC-GetItemUnitById-1
 
     [Documentation]  Get Item Unit By Id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME33}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -47,7 +47,7 @@ JD-TC-GetItemUnitById-UH1
 
     [Documentation]  Get Item Unit By Id - item unit id is invalid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME33}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

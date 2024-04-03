@@ -77,7 +77,7 @@ JD-TC-GetItemUnitByFilterSA-2
     ${resp}=    Get Item Unit By Filter SA  ${account_id}  status-eq=${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}    0
+    Should Be Equal As Strings    ${resp.json()}    []
 
 JD-TC-GetItemUnitByFilterSA-3
 
@@ -90,7 +90,9 @@ JD-TC-GetItemUnitByFilterSA-3
     ${resp}=    Get Item Unit By Filter SA   ${account_id}  unitCode-eq=${unit_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}            1
+    Should Be Equal As Strings    ${resp.json()[0]['unitCode']}    ${unit_id}
+    Should Be Equal As Strings    ${resp.json()[0]['unitName']}    ${unitName}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}      ${toggle[0]}
 
 JD-TC-GetItemUnitByFilterSA-4
 
@@ -103,7 +105,9 @@ JD-TC-GetItemUnitByFilterSA-4
     ${resp}=    Get Item Unit By Filter SA  ${account_id}  unitName-eq=${unitName}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}            1
+    Should Be Equal As Strings    ${resp.json()[0]['unitCode']}    ${unit_id}
+    Should Be Equal As Strings    ${resp.json()[0]['unitName']}    ${unitName}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}      ${toggle[0]}
 
 JD-TC-GetItemUnitByFilterSA-5
 

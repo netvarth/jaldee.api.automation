@@ -22,7 +22,7 @@ JD-TC-UpdateItemManufacture-1
 
     [Documentation]  Provider Create a Item Manufacture then Update Item Manufacture Name.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -56,7 +56,7 @@ JD-TC-UpdateItemManufacture-2
 
     [Documentation]  Provider Create another Item Manufacture contain 250 words then update contain 300 words.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -89,7 +89,7 @@ JD-TC-UpdateItemManufacture-3
 
     [Documentation]  Provider Create another Item Manufacture with Number then update with number and letter.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME46}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -22,7 +22,7 @@ JD-TC-UpdateItemUnitStatus-1
 
     [Documentation]  Update Item Unit Status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME52}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -59,26 +59,20 @@ JD-TC-UpdateItemUnitStatus-2
 
     [Documentation]  Update Item Unit Status as already disabled.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME52}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Update Item Unit Status   ${iu_id}    ${toggle[1]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Item Unit by id   ${iu_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['typeCode']}    ${iu_id}
-    Should Be Equal As Strings    ${resp.json()['typeName']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[1]}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${STATUS_ALREADY_UPDATED}
 
 JD-TC-UpdateItemUnitStatus-3
 
     [Documentation]  try to Enable ,Disabled Status.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME52}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -89,9 +83,9 @@ JD-TC-UpdateItemUnitStatus-3
     ${resp}=  Get Item Unit by id   ${iu_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['typeCode']}    ${iu_id}
-    Should Be Equal As Strings    ${resp.json()['typeName']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()['unitCode']}    ${iu_id}
+    Should Be Equal As Strings    ${resp.json()['unitName']}    ${unitName}
+    Should Be Equal As Strings    ${resp.json()['status']}      ${toggle[0]}
 
 JD-TC-UpdateItemUnitStatus-UH1
 

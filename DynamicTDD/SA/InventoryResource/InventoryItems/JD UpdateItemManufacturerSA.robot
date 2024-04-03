@@ -69,14 +69,6 @@ JD-TC-UpdateItemManufacture-1
     Should Be Equal As Strings    ${resp.json()['status']}               ${toggle[0]}
 
 
-
-
-
-
-
-
-
-
 JD-TC-UpdateItemManufacture-2
 
     [Documentation]  SA Update Item Manufacture - manufacture Name is empty 
@@ -85,7 +77,7 @@ JD-TC-UpdateItemManufacture-2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Manufacturer name 
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Manufacturer name${space}
 
     ${resp}=    Update Item manufacturer SA  ${account_id}  ${empty}  ${mft_id}
     Log  ${resp.content}

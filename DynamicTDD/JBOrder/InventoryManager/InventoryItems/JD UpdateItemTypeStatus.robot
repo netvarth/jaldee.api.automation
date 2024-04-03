@@ -22,7 +22,7 @@ JD-TC-UpdateItemTypeStatus-1
 
     [Documentation]  Provider Create a Item Type then try to Update Item Type Status.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -56,26 +56,20 @@ JD-TC-UpdateItemTypeStatus-2
 
     [Documentation]  Update Item Type Status as already disabled.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Update Item Type Status   ${Ty_Id}    ${toggle[1]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Item Type   ${Ty_Id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['typeCode']}    ${Ty_Id}
-    Should Be Equal As Strings    ${resp.json()['typeName']}    ${TypeName}
-    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[1]}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${STATUS_ALREADY_UPDATED}
 
 JD-TC-UpdateItemTypeStatus-3
 
     [Documentation]  try to Enable ,Disabled Status.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME50}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

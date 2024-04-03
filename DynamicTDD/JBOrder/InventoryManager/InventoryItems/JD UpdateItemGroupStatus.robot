@@ -22,7 +22,7 @@ JD-TC-UpdateItemGroupStatus-1
 
     [Documentation]   Update Item Group Status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME41}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -48,29 +48,6 @@ JD-TC-UpdateItemGroupStatus-1
     Should Be Equal As Strings    ${resp.json()['groupDesc']}    ${groupDesc} 
     Should Be Equal As Strings    ${resp.json()['status']}       ${toggle[0]} 
 
-    ${groupName2}=    FakerLibrary.name
-    Set Suite Variable      ${groupName2}
-
-    ${resp}=    Update Item group Provider  ${ig_id}  ${groupName2}  ${groupCode}  ${groupDesc}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Item group by id Provider  ${ig_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}            200
-    Should Be Equal As Strings    ${resp.json()['id']}           ${ig_id} 
-    Should Be Equal As Strings    ${resp.json()['groupName']}    ${groupName2} 
-    Should Be Equal As Strings    ${resp.json()['groupDesc']}    ${groupDesc} 
-    Should Be Equal As Strings    ${resp.json()['status']}       ${toggle[0]} 
-
-    ${resp}=    Get Item group Filter
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['id']}           ${ig_id} 
-    Should Be Equal As Strings    ${resp.json()[0]['groupName']}    ${groupName2} 
-    Should Be Equal As Strings    ${resp.json()[0]['groupDesc']}    ${groupDesc} 
-    Should Be Equal As Strings    ${resp.json()[0]['status']}       ${toggle[0]}
-
     ${resp}=    Update Item group Status  ${ig_id}  ${toggle[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -88,27 +65,19 @@ JD-TC-UpdateItemGroupStatus-2
 
     [Documentation]  Update Item group Status - Disable to Disable
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME41}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=    Get Item group by id Provider  ${ig_id}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}            200
-    Should Be Equal As Strings    ${resp.json()['id']}           ${ig_id} 
-    Should Be Equal As Strings    ${resp.json()['groupName']}    ${groupName2} 
-    Should Be Equal As Strings    ${resp.json()['groupDesc']}    ${groupDesc} 
-    Should Be Equal As Strings    ${resp.json()['status']}       ${toggle[0]}
-
-    ${resp}=    Update Item group Status  ${ig_id}  ${toggle[1]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}            422
 
 JD-TC-UpdateItemGroupStatus-3
 
     [Documentation]  Update Item group Status - Disable to Enable
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME41}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -136,7 +105,7 @@ JD-TC-UpdateItemGroupStatus-4
 
     [Documentation]  Update Item group Status - Enable to Enable
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME41}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

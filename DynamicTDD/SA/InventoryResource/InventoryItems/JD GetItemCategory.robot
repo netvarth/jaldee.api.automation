@@ -80,7 +80,7 @@ JD-TC-GetItemCategory-UH2
     ${resp}=    Get Item Category SA    ${account_id}  ${fake}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Empty   ${resp.json()}
+    Should Be Empty   ${resp.content}
 
 JD-TC-GetItemCategory-UH3
 

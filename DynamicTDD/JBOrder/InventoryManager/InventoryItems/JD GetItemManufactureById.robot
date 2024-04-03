@@ -22,7 +22,7 @@ JD-TC-GetItemManufactureById-1
 
     [Documentation]  Provider Create a Item Manufacture then try to get by id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME24}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -44,7 +44,7 @@ JD-TC-GetItemManufactureById-2
 
     [Documentation]  Provider Create another Item Manufacture contain 250 words then try to get by id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME24}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -65,7 +65,7 @@ JD-TC-GetItemManufactureById-3
 
     [Documentation]  Provider Create another Item Manufacture with Number then try to get by id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME24}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

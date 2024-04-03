@@ -77,7 +77,7 @@ JD-TC-UpdateItemType-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Type name  
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Type name${space}
 
     ${resp}=    Update Item Type SA   ${account_id}  ${empty}   ${type_Id}
     Log   ${resp.content}

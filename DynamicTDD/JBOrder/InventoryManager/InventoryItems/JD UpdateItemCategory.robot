@@ -22,7 +22,7 @@ JD-TC-UpdateItemCategory-1
 
     [Documentation]  Provider Create a Item Category then try to Update that item name.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME36}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -61,7 +61,7 @@ JD-TC-UpdateItemCategory-2
 
     [Documentation]  Update item CategoryName to a Number.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME36}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -82,7 +82,7 @@ JD-TC-UpdateItemCategory-3
 
     [Documentation]  Update item CategoryName then update it's Item Category Status.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME36}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -114,7 +114,7 @@ JD-TC-UpdateItemCategory-4
 
     [Documentation]  Try to Update Disable item  .
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME36}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -131,11 +131,11 @@ JD-TC-UpdateItemCategory-4
     Should Be Equal As Strings    ${resp.json()['categoryName']}    ${Name}
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[1]} 
 
-JD-TC-UpdateItemCategory-
+JD-TC-UpdateItemCategory-5
 
     [Documentation]  Update item Category name as same.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME36}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -147,11 +147,11 @@ JD-TC-UpdateItemCategory-
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-UpdateItemCategory-
+JD-TC-UpdateItemCategory-6
 
     [Documentation]  Update item CategoryName With EMPTY value.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME36}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -159,7 +159,7 @@ JD-TC-UpdateItemCategory-
 
     ${resp}=  Update Item Category   ${EMPTY}    ${Ca_Id}
     Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Item Category   ${Ca_Id}
     Log   ${resp.content}

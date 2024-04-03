@@ -22,7 +22,7 @@ JD-TC-GetitemUitCountFilter-1
 
     [Documentation]  Get Item Unit Count Filter
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -70,7 +70,7 @@ JD-TC-GetitemUitCountFilter-2
 
     [Documentation]  Get Item Unit Count Filter - unitCode    
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -83,7 +83,7 @@ JD-TC-GetitemUitCountFilter-3
 
     [Documentation]  Get Item Unit Count Filter - unitName
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -96,7 +96,7 @@ JD-TC-GetitemUitCountFilter-4
 
     [Documentation]  Get Item Unit Count Filter - status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

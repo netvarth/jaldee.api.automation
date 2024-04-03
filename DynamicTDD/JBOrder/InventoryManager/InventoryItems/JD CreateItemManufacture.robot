@@ -22,7 +22,7 @@ JD-TC-CreateItemManufacture-1
 
     [Documentation]  Provider Create a Item Manufacture.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -37,7 +37,7 @@ JD-TC-CreateItemManufacture-2
 
     [Documentation]  Provider Create another Item Manufacture contain 250 words.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -51,7 +51,7 @@ JD-TC-CreateItemManufacture-3
 
     [Documentation]  Provider Create another Item Manufacture with Number.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -65,7 +65,7 @@ JD-TC-CreateItemManufacture-UH1
 
     [Documentation]  Provider Create another Item Manufacture with same name.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -22,7 +22,7 @@ JD-TC-GetItemCompositionCountFilter-1
 
     [Documentation]  Get Item Composition Count Filter
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -91,7 +91,7 @@ JD-TC-GetItemCompositionCountFilter-2
 
     [Documentation]  Get Item Composition Count Filter - compositionCode
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -104,7 +104,7 @@ JD-TC-GetItemCompositionCountFilter-3
 
     [Documentation]  Get Item Composition Count Filter - compositionName
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -117,7 +117,7 @@ JD-TC-GetItemCompositionCountFilter-4
 
     [Documentation]  Get Item Composition Count Filter - status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME13}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -55,7 +55,7 @@ JD-TC-UpdateItemCompositionStatusSA-1
     Should Be Equal As Strings    ${resp.json()['compositionName']}    ${compositionName}
     Should Be Equal As Strings    ${resp.json()['status']}             ${toggle[0]} 
 
-    ${resp}=    Update Item Composition Status SA   ${account}  ${comp_id}   ${toggle[1]}
+    ${resp}=    Update Item Composition Status SA   ${account_id}  ${comp_id}   ${toggle[1]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

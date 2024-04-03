@@ -23,7 +23,7 @@ JD-TC-UpdateItemCategoryStatus-1
 
     [Documentation]  Provider Create a Item Category then try to Update Item Category Status.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -57,26 +57,20 @@ JD-TC-UpdateItemCategoryStatus-2
 
     [Documentation]  Update Item Category Status as already disabled.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Update Item Category Status   ${Ca_Id}    ${toggle[1]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Item Category   ${Ca_Id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['categoryCode']}    ${Ca_Id}
-    Should Be Equal As Strings    ${resp.json()['categoryName']}    ${categoryName}
-    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[1]}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}         ${STATUS_ALREADY_UPDATED}
 
 JD-TC-UpdateItemCategoryStatus-3
 
     [Documentation]  try to Enable ,Disabled Status.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME37}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

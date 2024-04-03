@@ -73,7 +73,7 @@ JD-TC-GetItemTypeCountFilter-2
     ${resp}=    Get Item Type Count By Filter SA   ${account_id}  status-eq=${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}    []
+    Should Be Equal As Strings    ${resp.json()}    0
 
 JD-TC-GetItemTypeCountFilter-3
 

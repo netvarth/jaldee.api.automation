@@ -77,7 +77,7 @@ JD-TC-CreateItemManufacture-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Manufacturer name 
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Manufacturer name${space}
 
     ${resp}=    Create Item manufacturer SA  ${account_id}  ${empty}
     Log  ${resp.content}

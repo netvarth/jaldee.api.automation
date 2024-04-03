@@ -22,7 +22,7 @@ JD-TC-GetItemTypeByFilter-1
 
     [Documentation]   Create a Item Type then try to get that item Type with filter(TypeCode).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -52,7 +52,7 @@ JD-TC-GetItemTypeByFilter-2
 
     [Documentation]   Create a Item Type then try to get that item Type with filter(TypeName).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -82,7 +82,7 @@ JD-TC-GetItemTypeByFilter-3
 
     [Documentation]   Create a Item Type then try to get that item Type with filter(status).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -97,7 +97,7 @@ JD-TC-GetItemTypeByFilter-4
 
     [Documentation]   Update a Item Type Status then try to get that item Type with filter(status).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

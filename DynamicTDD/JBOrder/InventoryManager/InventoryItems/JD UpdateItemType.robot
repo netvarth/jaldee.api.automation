@@ -22,7 +22,7 @@ JD-TC-UpdateItemType-1
 
     [Documentation]  Provider Create a Item Type then try to Update that item name.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -61,7 +61,7 @@ JD-TC-UpdateItemType-2
 
     [Documentation]  Update item TypeName to a Number.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -82,7 +82,7 @@ JD-TC-UpdateItemType-3
 
     [Documentation]  Update item TypeName then update it's Item Type Status.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -114,7 +114,7 @@ JD-TC-UpdateItemType-4
 
     [Documentation]  Try to Update Disable item  .
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -131,11 +131,11 @@ JD-TC-UpdateItemType-4
     Should Be Equal As Strings    ${resp.json()['typeName']}    ${Name}
     Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[1]} 
 
-JD-TC-UpdateItemType-
+JD-TC-UpdateItemType-5
 
     [Documentation]  Update item Type name as same.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -147,11 +147,11 @@ JD-TC-UpdateItemType-
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-UpdateItemType-
+JD-TC-UpdateItemType-6
 
     [Documentation]  Update item TypeName With EMPTY value.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME49}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

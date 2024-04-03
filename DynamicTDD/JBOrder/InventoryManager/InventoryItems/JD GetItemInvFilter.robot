@@ -28,7 +28,7 @@ JD-TC-GetItemInvFilter-1
 
     [Documentation]   Get Item Inv Filter
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -71,7 +71,7 @@ JD-TC-GetItemInvFilter-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -219,7 +219,7 @@ JD-TC-GetItemInvFilter-1
     Set Suite Variable  ${shortDesc}
     Set Suite Variable  ${internalDesc}
 
-    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplication=${boolean[0]}  isInventoryItem=${boolean[0]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}
+    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[0]}  isInventoryItem=${boolean[0]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable      ${item}  ${resp.json()}
@@ -260,7 +260,7 @@ JD-TC-GetItemInvFilter-1
     Should Be Equal As Strings      ${resp.json()['composition'][0]}                            ${compositionCode}
     Should Be Equal As Strings      ${resp.json()['sku']}                                       ${sku}
     Should Be Equal As Strings      ${resp.json()['itemUnits'][0]}                              ${iu_id}
-    Should Be Equal As Strings      ${resp.json()['isBatchApplication']}                        ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['isBatchApplicable']}                        ${bool[0]}
     Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileName']}                ${jpgfile}
     Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileSize']}                ${fileSize}
     Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileType']}                ${fileType}
@@ -305,7 +305,7 @@ JD-TC-GetItemInvFilter-1
     Should Be Equal As Strings      ${resp.json()[0]['composition'][0]}                            ${compositionCode}
     Should Be Equal As Strings      ${resp.json()[0]['sku']}                                       ${sku}
     Should Be Equal As Strings      ${resp.json()[0]['itemUnits'][0]}                              ${iu_id}
-    Should Be Equal As Strings      ${resp.json()[0]['isBatchApplication']}                        ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['isBatchApplicable']}                         ${bool[0]}
     Should Be Equal As Strings      ${resp.json()[0]['attachments'][0]['fileName']}                ${jpgfile}
     Should Be Equal As Strings      ${resp.json()[0]['attachments'][0]['fileSize']}                ${fileSize}
     Should Be Equal As Strings      ${resp.json()[0]['attachments'][0]['fileType']}                ${fileType}
@@ -319,7 +319,7 @@ JD-TC-GetItemInvFilter-2
 
     [Documentation]   Get Item Inv Filter - status filter
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -359,7 +359,7 @@ JD-TC-GetItemInvFilter-2
     Should Be Equal As Strings      ${resp.json()[0]['composition'][0]}                            ${compositionCode}
     Should Be Equal As Strings      ${resp.json()[0]['sku']}                                       ${sku}
     Should Be Equal As Strings      ${resp.json()[0]['itemUnits'][0]}                              ${iu_id}
-    Should Be Equal As Strings      ${resp.json()[0]['isBatchApplication']}                        ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['isBatchApplicable']}                         ${bool[0]}
     Should Be Equal As Strings      ${resp.json()[0]['attachments'][0]['fileName']}                ${jpgfile}
     Should Be Equal As Strings      ${resp.json()[0]['attachments'][0]['fileSize']}                ${fileSize}
     Should Be Equal As Strings      ${resp.json()[0]['attachments'][0]['fileType']}                ${fileType}
@@ -372,7 +372,7 @@ JD-TC-GetItemInvFilter-3
 
     [Documentation]   Get Item Inv Filter - status filter
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

@@ -61,7 +61,7 @@ JD-TC-CreateItemType-UH1
     ${resp}=  Create Item Type SA   ${account_id}  ${empty}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${${INVALID_FIELD}}
+    Should Be Equal As Strings    ${resp.json()}    ${INVALID_FIELD}
 
 JD-TC-CreateItemType-3
 
