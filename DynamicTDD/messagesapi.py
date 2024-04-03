@@ -2290,6 +2290,8 @@ PRICE_REQUIRED="Price required"
 INVALID_INVENTORY_CATALOG_ITEM_ID="Invalid Inventory Catalog Item Id"
 CAP_INVALID_CATALOG_ITEM_Id="Invalid Catalog Item Id"
 SO_CATA_ENCID_FILTER_REQUIRED="sorderCatalogEncId in Filter required"
+ITEM_PRICE_REQUIRED="Item Price required"
+STATUS_ALREADY_UPDATED="status already updated"
 
 # Vendor
 INVALID_NAME="Invalid Name"

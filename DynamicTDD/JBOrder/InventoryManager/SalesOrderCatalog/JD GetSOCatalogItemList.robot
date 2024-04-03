@@ -29,7 +29,7 @@ JD-TC-Get Sales Order Catalog Items List-1
 
     [Documentation]  Test whether the system can successfully create items with all items having invMgmt set to false (with out Tax) Then it get List by Encid param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -43,6 +43,7 @@ JD-TC-Get Sales Order Catalog Items List-1
 
     ${TypeName}=    FakerLibrary.name
     Set Suite Variable  ${TypeName}
+    sleep  02s
 
     ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
     Log   ${resp.content}
@@ -51,6 +52,7 @@ JD-TC-Get Sales Order Catalog Items List-1
     sleep  02s
     ${TypeName1}=    FakerLibrary.name
     Set Suite Variable  ${TypeName1}
+    sleep  02s
 
     ${resp}=  Create Store Type   ${TypeName1}    ${storeNature[1]}
     Log   ${resp.content}
@@ -59,6 +61,7 @@ JD-TC-Get Sales Order Catalog Items List-1
     sleep  02s
     ${TypeName2}=    FakerLibrary.name
     Set Suite Variable  ${TypeName2}
+    sleep  02s
 
     ${resp}=  Create Store Type   ${TypeName2}    ${storeNature[2]}
     Log   ${resp.content}
@@ -72,10 +75,10 @@ JD-TC-Get Sales Order Catalog Items List-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME53}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME7}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -202,7 +205,7 @@ JD-TC-Get Sales Order Catalog Items List-2
 
     [Documentation]  update sales order catalog Item .(inventory manager is false) then get sales order list by status
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -230,7 +233,7 @@ JD-TC-Get Sales Order Catalog Items List-3
 
     [Documentation]   Get SalesOrder Catalog item List by invCatId
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -259,7 +262,7 @@ JD-TC-Get Sales Order Catalog Items List-UH1
 
     [Documentation]  Get SalesOrder Catalog item List  with invalid catalog id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -309,7 +312,7 @@ JD-TC-Get Sales Order Catalog Items List-UH5
 
     [Documentation]  Get SalesOrder Catalog item List using with out sorderCatalogEncId param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

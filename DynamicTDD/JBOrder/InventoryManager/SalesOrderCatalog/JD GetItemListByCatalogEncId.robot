@@ -22,15 +22,28 @@ ${invalidNum}        1245
 ${invalidEma}        asd122
 ${invalidstring}     _ad$.sa_
 @{spItemSource}      RX       Ayur
-@{defaultBatchSelection}      Manual       FIFO
+
+*** Keywords ***
+Get SalesOrder Catalog Item Count
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/count  params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get Item List By Catalog EncId
+    [Arguments]  ${SO_Catalog_Encid}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/${SO_Catalog_Encid}/item/list     expected_status=any
+    RETURN  ${resp} 
+
 
 *** Test Cases ***
 
-JD-TC-Update Sales Order Catalog Items-1
+JD-TC-Get item list by catalog encId-1
 
-    [Documentation]  create SO Catalog items with all items having invMgmt set to false (with out Tax)Then Update it's price.
+    [Documentation]  Test whether the system can successfully create items with all items having invMgmt set to false (with out Tax) Then it Get item list by catalog encId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -44,8 +57,8 @@ JD-TC-Update Sales Order Catalog Items-1
 
     ${TypeName}=    FakerLibrary.name
     Set Suite Variable  ${TypeName}
-
     sleep  02s
+
     ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -76,10 +89,10 @@ JD-TC-Update Sales Order Catalog Items-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME9}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME53}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -156,6 +169,7 @@ JD-TC-Update Sales Order Catalog Items-1
 
     ${price}=    Random Int  min=2   max=40
     ${price}=   Convert To Number  ${price}  1
+    Set Suite Variable  ${price}
     ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId1}     ${price}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -181,21 +195,69 @@ JD-TC-Update Sales Order Catalog Items-1
     Should Be Equal As Strings    ${resp.json()['spItem']['encId']}    ${itemEncId1}
     Should Be Equal As Strings    ${resp.json()['spItem']['name']}    ${displayName}
 
-    ${resp}=    Update SalesOrder Catalog Item      ${SO_itemEncIds}     ${bool[0]}         ${price}   
+    ${resp}=  Get Item List By Catalog EncId     ${SO_Cata_Encid}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['price']}    ${price}
+    Should Be Equal As Strings    ${resp.json()[0]['taxInclude']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchPricing']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowNegativeTrueAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['allowtrueFutureNegativeAvial']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_itemEncIds}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}    ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog']['encId']}    ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog']['name']}    ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog']['invMgmt']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${displayName}
+    
+JD-TC-Get item list by catalog encId-2
+
+    [Documentation]  Another provider to try Get item list by catalog encId.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Update Sales Order Catalog Items-2
-
-    [Documentation]  create SO Catalog items with all items having invMgmt set to false (with out Tax)Then Update it's batchPricing to true.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Get Item List By Catalog EncId     ${SO_Cata_Encid}      
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${price}=    Random Int  min=2   max=40
-    ${price}=   Convert To Number  ${price}  1
+JD-TC-Get item list by catalog encId-3
 
-    ${resp}=    Update SalesOrder Catalog Item      ${SO_itemEncIds}     ${bool[1]}         ${price}   
+    [Documentation]   try Get item list by invalid catalog encId .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Item List By Catalog EncId     ${invalidstring}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Get item list by catalog encId-UH1
+
+    [Documentation]  Get item list by catalog encId without login.
+
+    ${resp}=  Get Item List By Catalog EncId     ${SO_Cata_Encid}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
+
+JD-TC-Get item list by catalog encId-UH2
+
+    [Documentation]  Get item list by catalog encId using sa login.
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Item List By Catalog EncId     ${SO_Cata_Encid}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}

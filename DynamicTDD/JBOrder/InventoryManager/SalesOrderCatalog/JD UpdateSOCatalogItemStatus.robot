@@ -30,7 +30,7 @@ JD-TC-Update Sales Order Catalog Item Status-1
 
     [Documentation]  create SO Catalog items with all items having invMgmt set to false (with out Tax)Then Update it's status as Disable.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -44,6 +44,7 @@ JD-TC-Update Sales Order Catalog Item Status-1
 
     ${TypeName}=    FakerLibrary.name
     Set Suite Variable  ${TypeName}
+    sleep  02s
 
     ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
     Log   ${resp.content}
@@ -52,6 +53,7 @@ JD-TC-Update Sales Order Catalog Item Status-1
     sleep  02s
     ${TypeName1}=    FakerLibrary.name
     Set Suite Variable  ${TypeName1}
+    sleep  02s
 
     ${resp}=  Create Store Type   ${TypeName1}    ${storeNature[1]}
     Log   ${resp.content}
@@ -60,6 +62,7 @@ JD-TC-Update Sales Order Catalog Item Status-1
     sleep  02s
     ${TypeName2}=    FakerLibrary.name
     Set Suite Variable  ${TypeName2}
+    sleep  02s
 
     ${resp}=  Create Store Type   ${TypeName2}    ${storeNature[2]}
     Log   ${resp.content}
@@ -73,10 +76,10 @@ JD-TC-Update Sales Order Catalog Item Status-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME53}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME10}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -192,7 +195,7 @@ JD-TC-Update Sales Order Catalog Item Status-2
 
     [Documentation]  update sales order catalog Item status as enable
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -209,7 +212,7 @@ JD-TC-Update Sales Order Catalog Item Status-UH1
 
     [Documentation]  update sales order catalog Item status as enable thats alreay enabled
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -222,7 +225,7 @@ JD-TC-Update Sales Order Catalog Item Status-UH2
 
     [Documentation]   update sales order catalog Item status as disable thats alreay disabled
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -262,7 +265,7 @@ JD-TC-Update Sales Order Catalog Item Status-UH5
 
     [Documentation]   update sales order catalog item status where catalog id is wrong
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

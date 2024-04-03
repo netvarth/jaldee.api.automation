@@ -22,15 +22,39 @@ ${invalidNum}        1245
 ${invalidEma}        asd122
 ${invalidstring}     _ad$.sa_
 @{spItemSource}      RX       Ayur
-@{defaultBatchSelection}      Manual       FIFO
+
+*** Keywords ***
+Get SalesOrder Catalog Item Count
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/count  params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get Item List By Catalog EncId
+    [Arguments]  ${SO_Catalog_Encid}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/${SO_Catalog_Encid}/item/list     expected_status=any
+    RETURN  ${resp} 
+
+Update SO Catalog Item Price
+
+    [Arguments]  ${catalogEncId}   ${itemEncId}    ${price}   ${batchEncId}     ${batch_price}
+
+    ${batch}=   Create Dictionary  batchEncId=${batchEncId}    price=${batch_price}     
+    ${batches}=     Create List       ${batch}
+    ${data}=  Create Dictionary  price=${price}      Batches=${batches}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/so/catalog/${catalogEncId}/item/${itemEncId}/price   data=${data}  expected_status=any
+    RETURN  ${resp} 
 
 *** Test Cases ***
 
-JD-TC-Update Sales Order Catalog Items-1
+JD-TC-Update SO Catalog Item Price-1
 
-    [Documentation]  create SO Catalog items with all items having invMgmt set to false (with out Tax)Then Update it's price.
+    [Documentation]  Update So Catalog Item Price (Batch is disables)
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -44,8 +68,8 @@ JD-TC-Update Sales Order Catalog Items-1
 
     ${TypeName}=    FakerLibrary.name
     Set Suite Variable  ${TypeName}
-
     sleep  02s
+
     ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -76,10 +100,10 @@ JD-TC-Update Sales Order Catalog Items-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME9}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME6}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -156,6 +180,7 @@ JD-TC-Update Sales Order Catalog Items-1
 
     ${price}=    Random Int  min=2   max=40
     ${price}=   Convert To Number  ${price}  1
+    Set Suite Variable  ${price}
     ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId1}     ${price}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -181,21 +206,65 @@ JD-TC-Update Sales Order Catalog Items-1
     Should Be Equal As Strings    ${resp.json()['spItem']['encId']}    ${itemEncId1}
     Should Be Equal As Strings    ${resp.json()['spItem']['name']}    ${displayName}
 
-    ${resp}=    Update SalesOrder Catalog Item      ${SO_itemEncIds}     ${bool[0]}         ${price}   
+    ${price1}=    Random Int  min=40   max=80
+    ${price1}=   Convert To Number  ${price1}  1
+
+    ${resp}=  Update SO Catalog Item Price     ${SO_Cata_Encid}     ${SO_itemEncIds}        ${price1}       ${EMPTY}    ${EMPTY}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Update Sales Order Catalog Items-2
+    ${resp}=  Get SalesOrder Catalog Item By Encid     ${SO_itemEncIds}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}
+    Should Be Equal As Strings    ${resp.json()['price']}    ${price1}   
 
-    [Documentation]  create SO Catalog items with all items having invMgmt set to false (with out Tax)Then Update it's batchPricing to true.
+JD-TC-Update SO Catalog Item Price-2
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    [Documentation]  Update So Catalog Item Price as Zero (Batch is disables)
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${price}=    Random Int  min=2   max=40
-    ${price}=   Convert To Number  ${price}  1
+    ${resp}=  Update SO Catalog Item Price     ${SO_Cata_Encid}     ${SO_itemEncIds}       0.0     ${EMPTY}    ${EMPTY}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${ITEM_PRICE_REQUIRED}
 
-    ${resp}=    Update SalesOrder Catalog Item      ${SO_itemEncIds}     ${bool[1]}         ${price}   
+JD-TC-Update SO Catalog Item Price-3
+
+    [Documentation]  Update So Catalog Item Price as Negative number (Batch is disables)
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update SO Catalog Item Price     ${SO_Cata_Encid}     ${SO_itemEncIds}       -8     ${EMPTY}    ${EMPTY}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${ITEM_PRICE_REQUIRED}
+
+
+JD-TC-Update SO Catalog Item Price-UH1
+
+    [Documentation]  Update So Catalog Item Price without login.
+
+    ${resp}=  Update SO Catalog Item Price     ${SO_Cata_Encid}     ${SO_itemEncIds}        ${price}       ${EMPTY}    ${EMPTY}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
+
+JD-TC-Update SO Catalog Item Price-UH2
+
+    [Documentation]  Update So Catalog Item Price using sa login.
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Update SO Catalog Item Price     ${SO_Cata_Encid}     ${SO_itemEncIds}        ${price}       ${EMPTY}    ${EMPTY}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}

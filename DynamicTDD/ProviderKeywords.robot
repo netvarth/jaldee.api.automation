@@ -14373,6 +14373,30 @@ Update Sales Order Catalog Item Status
     ${resp}=  PUT On Session  ynw  /provider/so/catalog/item/${cat_item_EncId}/${status}    expected_status=any
     RETURN  ${resp} 
 
+Get SalesOrder Catalog Item Count
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/count  params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get Item List By Catalog EncId
+    [Arguments]  ${SO_Catalog_Encid}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/${SO_Catalog_Encid}/item/list     expected_status=any
+    RETURN  ${resp} 
+
+Update SO Catalog Item Price
+
+    [Arguments]  ${catalogEncId}   ${itemEncId}    ${price}   ${batchEncId}     ${batch_price}
+
+    ${batch}=   Create Dictionary  batchEncId=${batchEncId}    price=${batch_price}     
+    ${batches}=     Create List       ${batch}
+    ${data}=  Create Dictionary  price=${price}      Batches=${batches}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/so/catalog/${catalogEncId}/item/${itemEncId}/price   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
 Create Catalog Item Batch-invMgmt False
 
     [Arguments]       ${SO_Cata_Item_Encid}   ${name}   ${price}      @{vargs}    &{kwargs}

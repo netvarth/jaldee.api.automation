@@ -22,15 +22,22 @@ ${invalidNum}        1245
 ${invalidEma}        asd122
 ${invalidstring}     _ad$.sa_
 @{spItemSource}      RX       Ayur
-@{defaultBatchSelection}      Manual       FIFO
+
+*** Keywords ***
+Get SalesOrder Catalog Item Count
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/count  params=${param}   expected_status=any
+    RETURN  ${resp} 
+
 
 *** Test Cases ***
 
-JD-TC-Update Sales Order Catalog Items-1
+JD-TC-Get Sales Order Catalog Items Count-1
 
-    [Documentation]  create SO Catalog items with all items having invMgmt set to false (with out Tax)Then Update it's price.
+    [Documentation]  Test whether the system can successfully create items with all items having invMgmt set to false (with out Tax) Then it get count by Encid param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -44,8 +51,8 @@ JD-TC-Update Sales Order Catalog Items-1
 
     ${TypeName}=    FakerLibrary.name
     Set Suite Variable  ${TypeName}
-
     sleep  02s
+
     ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -76,10 +83,10 @@ JD-TC-Update Sales Order Catalog Items-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME9}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME12}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -156,6 +163,7 @@ JD-TC-Update Sales Order Catalog Items-1
 
     ${price}=    Random Int  min=2   max=40
     ${price}=   Convert To Number  ${price}  1
+    Set Suite Variable  ${price}
     ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId1}     ${price}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -181,21 +189,83 @@ JD-TC-Update Sales Order Catalog Items-1
     Should Be Equal As Strings    ${resp.json()['spItem']['encId']}    ${itemEncId1}
     Should Be Equal As Strings    ${resp.json()['spItem']['name']}    ${displayName}
 
-    ${resp}=    Update SalesOrder Catalog Item      ${SO_itemEncIds}     ${bool[0]}         ${price}   
+    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${SO_Cata_Encid}    encId-eq=${SO_itemEncIds}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}    1
+
+JD-TC-Get Sales Order Catalog Items Count-2
+
+    [Documentation]  Try to get count by status filter param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Update Sales Order Catalog Items-2
+    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${SO_Cata_Encid}    status-eq=${toggle[0]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}    1
 
-    [Documentation]  create SO Catalog items with all items having invMgmt set to false (with out Tax)Then Update it's batchPricing to true.
+JD-TC-Get Sales Order Catalog Items Count-3
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME9}  ${PASSWORD}
+    [Documentation]  Try to get count by invCatId filter param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${price}=    Random Int  min=2   max=40
-    ${price}=   Convert To Number  ${price}  1
-
-    ${resp}=    Update SalesOrder Catalog Item      ${SO_itemEncIds}     ${bool[1]}         ${price}   
+    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${SO_Cata_Encid}    invCatId-eq=${SO_Cata_Encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}    1
+
+JD-TC-Get Sales Order Catalog Items Count-UH1
+
+    [Documentation]  Get SalesOrder Catalog Count  with invalid catalog id.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${SO_Cata_Encid}    encId-eq=${SO_Cata_Encid}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings   ${resp.json()}   0
+    
+
+JD-TC-Get Sales Order Catalog Items Count-UH2
+
+    [Documentation]  Get SalesOrder Catalog item Count without login.
+
+    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${SO_Cata_Encid}    invCatId-eq=${SO_Cata_Encid}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
+
+JD-TC-Get Sales Order Catalog Items Count-UH3
+
+    [Documentation]  Get SalesOrder Catalog item Count using sa login.
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${SO_Cata_Encid}    invCatId-eq=${SO_Cata_Encid}  
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-Get Sales Order Catalog Items Count-UH4
+
+    [Documentation]  Get SalesOrder Catalog item Count using another provider login
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get SalesOrder Catalog Item Count  sorderCatalogEncId-eq=${SO_Cata_Encid}    encId-eq=${SO_Cata_Encid} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings   ${resp.json()}    0
