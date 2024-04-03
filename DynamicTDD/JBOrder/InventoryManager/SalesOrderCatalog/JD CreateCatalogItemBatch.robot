@@ -161,14 +161,19 @@ JD-TC-Create Catalog Item Batch-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-
-    ${resp}=    Update SalesOrder Catalog Item      ${SO_itemEncIds}     ${bool[0]}         ${price}   
+    ${spItem}=  Create Dictionary  encId=${itemEncId1}   
+    ${resp}=    Update SalesOrder Catalog Item      ${SO_itemEncIds}     ${boolean[1]}         ${price}    spItem=${spItem}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create Catalog Item Batch-invMgmt False      ${SO_itemEncIds}     ${Name}     ${price}         
+    # ${catalogItem}=     Create Dictionary       encId=${SO_itemEncIds}
+    #  catalogItem=${catalogItem}    
+
+    ${resp}=   Create Catalog Item Batch-invMgmt False   ${SO_itemEncIds}     ${Name}     ${price}      
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+*** Comments ***
 
 JD-TC-Create Catalog Item Batch-2
 

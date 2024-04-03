@@ -14376,9 +14376,7 @@ Update Sales Order Catalog Item Status
 Create Catalog Item Batch-invMgmt False
 
     [Arguments]       ${SO_Cata_Item_Encid}   ${name}   ${price}      @{vargs}    &{kwargs}
-
-    ${catalogItem}=     Create Dictionary       encId=${SO_Cata_Item_Encid}
-    ${catalog_details}=  Create Dictionary        catalogItem=${catalogItem}   name=${name}   price=${price}     
+    ${catalog_details}=  Create Dictionary          name=${name}   price=${price}     
     ${items}=    Create List   ${catalog_details}  
     ${len}=  Get Length  ${vargs}
     FOR    ${index}    IN RANGE    ${len}  
