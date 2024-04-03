@@ -14411,7 +14411,7 @@ Update Catalog Item Batch-invMgmt False
     ${resp}=  PUT On Session  ynw   /provider/so/catalog/item/batch/${SO_Cata_Item_Batch_Encid}   data=${data}  expected_status=any
     RETURN  ${resp} 
 
-Update Catalog Item Batch
+Update Catalog Item Batch Status
 
     [Arguments]  ${SO_Cata_Item_Batch_Encid}   ${status}   
     Check And Create YNW Session
