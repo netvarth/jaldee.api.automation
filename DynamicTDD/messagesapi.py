@@ -2289,6 +2289,7 @@ CANNOT_UPDATE="Cannot do this operation, because Catalog is in Disabled status"
 PRICE_REQUIRED="Price required"
 INVALID_INVENTORY_CATALOG_ITEM_ID="Invalid Inventory Catalog Item Id"
 CAP_INVALID_CATALOG_ITEM_Id="Invalid Catalog Item Id"
+SO_CATA_ENCID_FILTER_REQUIRED="sorderCatalogEncId in Filter required"
 
 # Vendor
 INVALID_NAME="Invalid Name"

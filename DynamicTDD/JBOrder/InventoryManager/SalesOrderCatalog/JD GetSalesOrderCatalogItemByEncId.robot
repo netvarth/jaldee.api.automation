@@ -23,51 +23,6 @@ ${invalidEma}        asd122
 ${invalidstring}     _ad$.sa_
 @{spItemSource}      RX       Ayur
 
-*** Keywords ***
-Create SalesOrder Catalog Item-invMgmt True
-
-    [Arguments]   ${catEncId}    ${invMgmt}     ${Inv_Cata_Item_Encid}     ${price}    ${batchPricing}    @{vargs}    &{kwargs}
-
-    ${invCatItem}=     Create Dictionary       encId=${Inv_Cata_Item_Encid}
-    ${catalog_details}=  Create Dictionary   invMgmt=${invMgmt}       invCatItem=${invCatItem}    price=${price}     batchPricing=${batchPricing} 
-    ${items}=    Create List   ${catalog_details}  
-    ${len}=  Get Length  ${vargs}
-    FOR    ${index}    IN RANGE    ${len}  
-        Append To List  ${items}  ${vargs[${index}]}
-    END 
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary   ${catalog_details}   ${key}=${value}
-    END
-    ${data}=  json.dumps  ${items}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/so/catalog/${catEncId}/items  data=${data}  expected_status=any
-    RETURN  ${resp} 
-
-Create SalesOrder Catalog Item-invMgmt False
-
-    [Arguments]   ${catEncId}     ${Inv_Cata_Item_Encid}     ${price}      @{vargs}    &{kwargs}
-
-    ${invCatItem}=     Create Dictionary       encId=${Inv_Cata_Item_Encid}
-    ${catalog_details}=  Create Dictionary        spItem=${invCatItem}    price=${price}     
-    ${items}=    Create List   ${catalog_details}  
-    ${len}=  Get Length  ${vargs}
-    FOR    ${index}    IN RANGE    ${len}  
-        Append To List  ${items}  ${vargs[${index}]}
-    END 
-    FOR    ${key}    ${value}    IN    &{kwargs}
-        Set To Dictionary   ${catalog_details}   ${key}=${value}
-    END
-    ${data}=  json.dumps  ${items}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/so/catalog/${catEncId}/items   data=${data}  expected_status=any
-    RETURN  ${resp} 
-
-Get SalesOrder Catalog Item By Encid
-    [Arguments]  ${cat_item_EncId}      
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${cat_item_EncId}    expected_status=any
-    RETURN  ${resp} 
-
 *** Test Cases ***
 
 JD-TC-Get Sales Order Catalog Items By EncId-1
