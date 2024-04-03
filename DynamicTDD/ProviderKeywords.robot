@@ -14435,3 +14435,9 @@ Get Catalog Item Batch Count
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/so/catalog/item/batch/count  params=${param}   expected_status=any
     RETURN  ${resp} 
+
+Get list by item encId
+    [Arguments]  ${socitemEncId}     
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${socitemEncId}/batch/list    expected_status=any
+    RETURN  ${resp} 
