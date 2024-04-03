@@ -3331,3 +3331,33 @@ def DataMigrationUpload(cookie_dict, account, migrationType, *files):
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.traceback.tb_lineno)
+
+def UploadJrxitemSA(cookie_dict, file):
+    url = SA_BASE_URL + '/item/upload'
+    s = requests.Session()
+    s.cookies.update(cookie_dict)
+    print (file)      
+    try:
+        # headers = {
+        #     'Content-Type': "multipart/form-data",
+        # }
+
+        # files = {'file': (file, open(file, 'rb'),'text/csv')}
+        # files = {'file': (file, open(file, 'rb'),'application/vnd.ms-excel')}
+
+        mimetype, encoding = mimetypes.guess_type(file)
+        print (mimetype)
+        if mimetype == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+            mimetype = 'application/vnd.ms-excel'
+            print (mimetype)
+        data = {
+        'files': (file, open(file, 'rb'), mimetype), 
+        }
+        print (data)
+        resp = s.post(url, files=data)
+        log_request(resp)
+        log_response(resp)
+        return resp
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)

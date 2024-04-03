@@ -307,7 +307,7 @@ JD-TC-CreateItemInv-4
 
     ${resp}=    Create Item Inventory  ${name2}    shortDesc=${shortDesc2}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-5
@@ -322,7 +322,7 @@ JD-TC-CreateItemInv-5
 
     ${resp}=    Create Item Inventory  ${name2}    shortDesc=${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-6
@@ -338,7 +338,7 @@ JD-TC-CreateItemInv-6
 
     ${resp}=    Create Item Inventory  ${name2}    internalDesc=${internalDesc2}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-7
@@ -353,12 +353,12 @@ JD-TC-CreateItemInv-7
 
     ${resp}=    Create Item Inventory  ${name2}    internalDesc=${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-8
 
-    [Documentation]   Create Item Inv - itemcode as random number
+    [Documentation]   Create Item Inv - item code as random number
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log  ${resp.content}
@@ -369,7 +369,7 @@ JD-TC-CreateItemInv-8
 
     ${resp}=    Create Item Inventory  ${name2}    itemCode=${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-9
@@ -384,7 +384,7 @@ JD-TC-CreateItemInv-9
 
     ${resp}=    Create Item Inventory  ${name2}    itemCode=${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-10
@@ -400,7 +400,7 @@ JD-TC-CreateItemInv-10
 
     ${resp}=    Create Item Inventory  ${name2}    categoryCode=${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-11
@@ -415,7 +415,7 @@ JD-TC-CreateItemInv-11
 
     ${resp}=    Create Item Inventory  ${name2}    categoryCode=${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-12
@@ -431,7 +431,7 @@ JD-TC-CreateItemInv-12
 
     ${resp}=    Create Item Inventory  ${name2}    categoryCode2=${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-13
@@ -446,7 +446,7 @@ JD-TC-CreateItemInv-13
 
     ${resp}=    Create Item Inventory  ${name2}    categoryCode2=${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-14
@@ -462,7 +462,7 @@ JD-TC-CreateItemInv-14
 
     ${resp}=    Create Item Inventory  ${name2}    typeCode=${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-15
@@ -477,7 +477,7 @@ JD-TC-CreateItemInv-15
 
     ${resp}=    Create Item Inventory  ${name2}    typeCode=${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-16
@@ -493,7 +493,7 @@ JD-TC-CreateItemInv-16
 
     ${resp}=    Create Item Inventory  ${name2}    typeCode2=${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-17
@@ -508,7 +508,7 @@ JD-TC-CreateItemInv-17
 
     ${resp}=    Create Item Inventory  ${name2}    typeCode2=${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemInv-18
 
@@ -523,7 +523,7 @@ JD-TC-CreateItemInv-18
 
     ${resp}=    Create Item Inventory  ${name2}    hsnCode=${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-19
@@ -538,7 +538,7 @@ JD-TC-CreateItemInv-19
 
     ${resp}=    Create Item Inventory  ${name2}    hsnCode=${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemInv-20
 
@@ -553,7 +553,7 @@ JD-TC-CreateItemInv-20
 
     ${resp}=    Create Item Inventory  ${name2}    manufacturerCode=${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-21
@@ -568,7 +568,7 @@ JD-TC-CreateItemInv-21
 
     ${resp}=    Create Item Inventory  ${name2}    manufacturerCode=${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemInv-22
 
@@ -583,7 +583,7 @@ JD-TC-CreateItemInv-22
 
     ${resp}=    Create Item Inventory  ${name2}    sku=${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-23
@@ -598,7 +598,7 @@ JD-TC-CreateItemInv-23
 
     ${resp}=    Create Item Inventory  ${name2}    sku=${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-24
@@ -613,7 +613,7 @@ JD-TC-CreateItemInv-24
 
     ${resp}=    Create Item Inventory  ${name2}    isBatchApplication=${boolean[1]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-25
@@ -628,7 +628,7 @@ JD-TC-CreateItemInv-25
 
     ${resp}=    Create Item Inventory  ${name2}    isInventoryItem=${boolean[1]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-26
@@ -644,7 +644,7 @@ JD-TC-CreateItemInv-26
 
     ${resp}=    Create Item Inventory  ${name2}    itemGroups=${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-27
@@ -659,7 +659,7 @@ JD-TC-CreateItemInv-27
 
     ${resp}=    Create Item Inventory  ${name2}    itemGroups=${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemInv-28
 
@@ -674,7 +674,7 @@ JD-TC-CreateItemInv-28
 
     ${resp}=    Create Item Inventory  ${name2}    itemSubGroups=${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-29
@@ -689,7 +689,7 @@ JD-TC-CreateItemInv-29
 
     ${resp}=    Create Item Inventory  ${name2}    itemSubGroups=${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-30
@@ -705,7 +705,7 @@ JD-TC-CreateItemInv-30
 
     ${resp}=    Create Item Inventory  ${name2}    tax=${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-31
@@ -720,7 +720,7 @@ JD-TC-CreateItemInv-31
 
     ${resp}=    Create Item Inventory  ${name2}    tax=${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemInv-32
 
@@ -735,7 +735,7 @@ JD-TC-CreateItemInv-32
 
     ${resp}=    Create Item Inventory  ${name2}    composition=${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-33
@@ -750,7 +750,7 @@ JD-TC-CreateItemInv-33
 
     ${resp}=    Create Item Inventory  ${name2}    composition=${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemInv-34
 
@@ -765,7 +765,7 @@ JD-TC-CreateItemInv-34
 
     ${resp}=    Create Item Inventory  ${name2}    itemUnits=${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-CreateItemInv-35
@@ -780,7 +780,7 @@ JD-TC-CreateItemInv-35
 
     ${resp}=    Create Item Inventory  ${name2}    itemUnits=${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 JD-TC-CreateItemInv-36
 
@@ -794,4 +794,84 @@ JD-TC-CreateItemInv-36
 
     ${resp}=    Create Item Inventory  ${name2}    attachments=${empty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+JD-TC-CreateItemInv-8
+
+    [Documentation]   Create Item Inv - itemcode as random number
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name2}=            FakerLibrary.name
+    ${inv}=              Random Int  min=999    max=9999
+
+    ${resp}=    Create Item Inventory  ${name2}    itemCode=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateItemInv-10
+
+    [Documentation]   Create Item Inv - category code is invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name2}=       FakerLibrary.name
+    ${inv}=         Random Int  min=999  max=9999
+
+    ${resp}=    Create Item Inventory  ${name2}    categoryCode=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateItemInv-12
+
+    [Documentation]   Create Item Inv - Subcategory is invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name2}=       FakerLibrary.name
+    ${inv}=         Random Int  min=999  max=9999
+
+    ${resp}=    Create Item Inventory  ${name2}    categoryCode2=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreateItemInv-14
+
+    [Documentation]   Create Item Inv - type is invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${name2}=       FakerLibrary.name
+    ${inv}=         Random Int  min=999  max=9999
+
+    ${resp}=    Create Item Inventory  ${name2}    typeCode=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200

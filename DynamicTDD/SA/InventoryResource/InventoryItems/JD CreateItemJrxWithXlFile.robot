@@ -20,13 +20,14 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 *** Variables ***
 
-${xlFile}      ${EXECDIR}/TDD/JitemSample.xlsx
+${xlFile}       ${EXECDIR}/TDD/JitemSample.xlsx
+${xlFile2}      ${EXECDIR}/TDD/JitemSample2.xlsx
 
 *** Test Cases ***
 
 JD-TC-CreateItemJrx-1
 
-    [Documentation]  Create Item Jrx 
+    [Documentation]  Create Item Jrx with xlFile
 
     ${wb}=  readWorkbook  ${xlFile}
     ${sheet1}  GetCurrentSheet   ${wb}
@@ -37,6 +38,7 @@ JD-TC-CreateItemJrx-1
     ${description}   getColumnValuesByName  ${sheet1}  ${colnames[1]}
     ${sku}   getColumnValuesByName  ${sheet1}  ${colnames[2]}
     ${hsnCode}   getColumnValuesByName  ${sheet1}  ${colnames[3]}
+    Set Suite Variable      ${hsnCode}
     
     ${resp}=  Encrypted Provider Login  ${PUSERNAME269}  ${PASSWORD}
     Log  ${resp.content}
@@ -55,11 +57,65 @@ JD-TC-CreateItemJrx-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${cookie}  ${resp}=    Create Item Hsn SA  ${account_id}  ${hsnCode[0]}
+    ${resp}=    Create Item Hsn SA  ${account_id}  ${hsnCode[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable      ${hsn_id}      ${resp.json()}
 
-    ${resp}=    Upload Jrx item SA  ${xlFile}
+    ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Imageupload.UploadJrxitemSA   ${cookie}   ${xlFile}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+JD-TC-CreateItemJrx-UH1
+
+    [Documentation]  Create Item Jrx with xl file - same xl file  
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${hsn}=     Random Int  min=999  max=9999
+
+    ${resp}=    Create Item Hsn SA  ${account_id}  ${hsn}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable      ${hsn_id}      ${resp.json()}
+
+    ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Imageupload.UploadJrxitemSA   ${cookie}   ${xlFile}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.json()}          ${NAME_ALREADY_EXIST}
+
+JD-TC-CreateItemJrx-UH2
+
+    [Documentation]  Create Item Jrx with xl file - random hsn code  
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${inv}=     Random Int  min=999  max=9999
+
+    ${resp}=    Create Item Hsn SA  ${account_id}  ${inv}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable      ${hsn_id}      ${resp.json()}
+
+    ${cookie}  ${resp}=  Imageupload.SALogin    ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Hsn id
+
+    ${resp}=    Imageupload.UploadJrxitemSA   ${cookie}   ${xlFile2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}     422
+    Should Be Equal As Strings  ${resp.json()}          ${INVALID_FIELD}
