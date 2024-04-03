@@ -14372,3 +14372,66 @@ Update Sales Order Catalog Item Status
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/so/catalog/item/${cat_item_EncId}/${status}    expected_status=any
     RETURN  ${resp} 
+
+Create Catalog Item Batch-invMgmt False
+
+    [Arguments]       ${SO_Cata_Item_Encid}   ${name}   ${price}      @{vargs}    &{kwargs}
+
+    ${catalogItem}=     Create Dictionary       encId=${SO_Cata_Item_Encid}
+    ${catalog_details}=  Create Dictionary        catalogItem=${catalogItem}   name=${name}   price=${price}     
+    ${items}=    Create List   ${catalog_details}  
+    ${len}=  Get Length  ${vargs}
+    FOR    ${index}    IN RANGE    ${len}  
+        Append To List  ${items}  ${vargs[${index}]}
+    END 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${catalog_details}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${items}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/so/catalog/item/${SO_Cata_Item_Encid}/batch      data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Update Catalog Item Batch-invMgmt False
+
+    [Arguments]     ${SO_Cata_Item_Batch_Encid}    ${SO_Cata_Item_Encid}   ${name}   ${price}      @{vargs}    &{kwargs}
+
+    ${catalogItem}=     Create Dictionary       encId=${SO_Cata_Item_Encid}
+    ${catalog_details}=  Create Dictionary        catalogItem=${catalogItem}   name=${name}   price=${price}     
+    ${items}=    Create List   ${catalog_details}  
+    ${len}=  Get Length  ${vargs}
+    FOR    ${index}    IN RANGE    ${len}  
+        Append To List  ${items}  ${vargs[${index}]}
+    END 
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${catalog_details}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${items}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /provider/so/catalog/item/batch/${SO_Cata_Item_Batch_Encid}   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Update Catalog Item Batch
+
+    [Arguments]  ${SO_Cata_Item_Batch_Encid}   ${status}   
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw   /provider/so/catalog/item/batch/${SO_Cata_Item_Batch_Encid}/${status}    expected_status=any
+    RETURN  ${resp} 
+
+Get Catalog Item Batch By Encid
+    [Arguments]  ${SO_Cata_Item_Batch_Encid}      
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/batch/${SO_Cata_Item_Batch_Encid}    expected_status=any
+    RETURN  ${resp} 
+
+Get Catalog Item Batch List
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/batch  params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get Catalog Item Batch Count
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/batch/count  params=${param}   expected_status=any
+    RETURN  ${resp} 
