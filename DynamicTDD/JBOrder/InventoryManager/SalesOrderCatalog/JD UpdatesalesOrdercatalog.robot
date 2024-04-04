@@ -293,7 +293,7 @@ JD-TC-Update SalesOrder Catalog-UH5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update SalesOrder Status   ${sacatlogid1}     ${toggle[1]}
+    ${resp}=  Update SalesOrder Catalog Status   ${sacatlogid1}     ${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

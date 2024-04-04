@@ -157,7 +157,7 @@ JD-TC-Get SalesOrder Catalog Count-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update SalesOrder Status   ${sa_catlog_id}     ${toggle[1]}
+    ${resp}=  Update SalesOrder Catalog Status   ${sa_catlog_id}     ${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

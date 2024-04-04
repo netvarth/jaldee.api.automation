@@ -25,7 +25,7 @@ ${invalidstring}     _ad$.sa_
 
 *** Test Cases ***
 
-JD-TC-Update SalesOrder Status-1
+JD-TC-Update SalesOrder Catalog Status-1
 
     [Documentation]  create sales order  catalog .(inventory manager is false) and update status as disable
 
@@ -114,11 +114,11 @@ JD-TC-Update SalesOrder Status-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${saorder_catlog_id}  ${resp.json()}
 
-    ${resp}=  Update SalesOrder Status   ${saorder_catlog_id}     ${toggle[1]}
+    ${resp}=  Update SalesOrder Catalog Status   ${saorder_catlog_id}     ${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Update SalesOrder Status-2
+JD-TC-Update SalesOrder Catalog Status-2
 
     [Documentation]   update sales order catalog status as enable
 
@@ -126,11 +126,11 @@ JD-TC-Update SalesOrder Status-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update SalesOrder Status   ${saorder_catlog_id}     ${toggle[0]}
+    ${resp}=  Update SalesOrder Catalog Status   ${saorder_catlog_id}     ${toggle[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Update SalesOrder Status-3
+JD-TC-Update SalesOrder Catalog Status-3
 
     [Documentation]   create sales order catalog with inventory manager is true then update status as  disable.
 
@@ -150,11 +150,11 @@ JD-TC-Update SalesOrder Status-3
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${saorder_catlog_id_true}  ${resp.json()}
 
-    ${resp}=  Update SalesOrder Status   ${saorder_catlog_id_true}     ${toggle[1]}
+    ${resp}=  Update SalesOrder Catalog Status   ${saorder_catlog_id_true}     ${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Update SalesOrder Status-4
+JD-TC-Update SalesOrder Catalog Status-4
 
     [Documentation]   update sales order cataloge then update status as  disable.
 
@@ -181,14 +181,14 @@ JD-TC-Update SalesOrder Status-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update SalesOrder Status   ${saorder_catlog_id1}     ${toggle[1]}
+    ${resp}=  Update SalesOrder Catalog Status   ${saorder_catlog_id1}     ${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
 
 
-JD-TC-Update SalesOrder Status-UH1
+JD-TC-Update SalesOrder Catalog Status-UH1
 
     [Documentation]   update sales order catalog status as enable thats alreay enabled
 
@@ -196,12 +196,12 @@ JD-TC-Update SalesOrder Status-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update SalesOrder Status   ${saorder_catlog_id}     ${toggle[0]}
+    ${resp}=  Update SalesOrder Catalog Status   ${saorder_catlog_id}     ${toggle[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${CAP_ALREADY_ENABLED}
 
-JD-TC-Update SalesOrder Status-UH2
+JD-TC-Update SalesOrder Catalog Status-UH2
 
     [Documentation]   update sales order catalog status as disable thats alreay disabled
 
@@ -209,22 +209,22 @@ JD-TC-Update SalesOrder Status-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Update SalesOrder Status   ${saorder_catlog_id_true}     ${toggle[1]}
+    ${resp}=  Update SalesOrder Catalog Status   ${saorder_catlog_id_true}     ${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${CAP_ALREADY_DISABLED}
 
-JD-TC-Update SalesOrder Status-UH3
+JD-TC-Update SalesOrder Catalog Status-UH3
 
     [Documentation]   update sales order catalog status without login
 
-    ${resp}=  Update SalesOrder Status   ${saorder_catlog_id_true}     ${toggle[1]}
+    ${resp}=  Update SalesOrder Catalog Status   ${saorder_catlog_id_true}     ${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 
-JD-TC-Update SalesOrder Status-UH4
+JD-TC-Update SalesOrder Catalog Status-UH4
 
     [Documentation]  update sales order  catalog status using sa login.
 
@@ -232,12 +232,12 @@ JD-TC-Update SalesOrder Status-UH4
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Update SalesOrder Status   ${saorder_catlog_id_true}     ${toggle[1]}
+    ${resp}=  Update SalesOrder Catalog Status   ${saorder_catlog_id_true}     ${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Update SalesOrder Status-UH5
+JD-TC-Update SalesOrder Catalog Status-UH5
 
     [Documentation]   update sales order catalog status where catalog id is wrong
 
@@ -246,7 +246,7 @@ JD-TC-Update SalesOrder Status-UH5
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${Name}=    FakerLibrary.last name
-    ${resp}=  Update SalesOrder Status   ${Name}     ${toggle[1]}
+    ${resp}=  Update SalesOrder Catalog Status   ${Name}     ${toggle[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${CAP_Invalid_Catalog_id}

@@ -34,7 +34,7 @@ JD-TC-Get Inventory Catalog By account id-1
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
+    sleep  02s
     ${TypeName}=    FakerLibrary.name
     Set Suite Variable  ${TypeName}
 

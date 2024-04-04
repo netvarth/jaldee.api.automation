@@ -14198,7 +14198,8 @@ Create Inventory Catalog Item
     FOR    ${index}    IN RANGE    ${len}   
         Exit For Loop If  ${len}==0
         ${values}=  Create Dictionary   itemEncId=${vargs[${index}]}
-        Append To List  ${data}  ${values}
+        ${item}=  Create Dictionary   item=${values}
+        Append To List  ${data}  ${item}
 
     END
     ${data}=    json.dumps    ${data}  
@@ -14207,8 +14208,8 @@ Create Inventory Catalog Item
 
 Update Inventory Catalog Item
 
-    [Arguments]  ${batchApplicable}   ${lotNumber}    ${icEncId}   ${encId}  ${itemEncId}   
-    ${data}=  Create Dictionary  batchApplicable=${batchApplicable}    lotNumber=${lotNumber}  icEncId=${icEncId}   itemEncId=${itemEncId}   
+    [Arguments]  ${batchApplicable}   ${lotNumber}    ${icEncId}   ${encId}   
+    ${data}=  Create Dictionary  batchApplicable=${batchApplicable}    lotNumber=${lotNumber}  icEncId=${icEncId}      
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/inventory/inventorycatalog/items/${encId}   data=${data}  expected_status=any
@@ -14279,7 +14280,7 @@ Update SalesOrder Catalog
     ${resp}=  PUT On Session  ynw  /provider/so/catalog/${catEncId}   data=${data}  expected_status=any
     RETURN  ${resp} 
 
-Update SalesOrder Status
+Update SalesOrder Catalog Status
 
     [Arguments]  ${catEncId}   ${status}   
     Check And Create YNW Session

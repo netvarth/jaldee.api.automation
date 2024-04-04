@@ -418,16 +418,17 @@ JD-TC-update Inventory Catalog-UH5
 
 JD-TC-update Inventory Catalog-UH6
 
-    [Documentation]  Update Inventory Catalog where name(word length is 255).
+    [Documentation]  Update Inventory Catalog where name(word length is 256).
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME52}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Text}=  FakerLibrary.Sentence   nb_words=255
+    ${Text}=  Generate Random String  256
     ${resp}=  Update Inventory Catalog   ${Text}  ${store_id}   ${encid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${CATALOG_NAME_IS_BIG}
 
 
 

@@ -195,7 +195,7 @@ JD-TC-Create Inventory Catalog-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Get Inventory Catalog By EncId-7
+JD-TC-Create Inventory Catalog-7
 
     [Documentation]  create  inventory catalog from main account then create catalog with same name from user login(without admin privilege)
 
@@ -278,6 +278,19 @@ JD-TC-Get Inventory Catalog By EncId-7
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${SAME_NAME_EXIST}
 
+JD-TC-Create Inventory Catalog-8
+
+    [Documentation]  create  inventory catalog where name( length is 255).
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Text}=  Generate Random String  255
+    ${resp}=  Create Inventory Catalog   ${Text}  ${store_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
 
 
 JD-TC-Create Inventory Catalog-UH1
@@ -353,16 +366,17 @@ JD-TC-Create Inventory Catalog-UH5
 
 JD-TC-Create Inventory Catalog-UH6
 
-    [Documentation]  create  inventory catalog where name(word length is 255).
+    [Documentation]  create  inventory catalog where name(word length is 256).
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Text}=  FakerLibrary.Sentence   nb_words=255
+    ${Text}=  Generate Random String  256
     ${resp}=  Create Inventory Catalog   ${Text}  ${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${CATALOG_NAME_IS_BIG}
 
 JD-TC-Create Inventory Catalog-UH7
 

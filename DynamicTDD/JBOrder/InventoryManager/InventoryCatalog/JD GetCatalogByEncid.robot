@@ -37,7 +37,7 @@ JD-TC-Get Inventory Catalog By EncId-1
 
     ${TypeName}=    FakerLibrary.File Name
     Set Suite Variable  ${TypeName}
-
+    sleep  02s
     ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

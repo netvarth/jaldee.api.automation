@@ -153,6 +153,11 @@ JD-TC-Update Inventory Catalog Item Status-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=   Get Inventory Catalog item By EncId  ${EncId1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    Should Be Equal As Strings    ${resp.json()['status']}    ${InventoryCatalogStatus[0]}
+
 
 JD-TC-Update Inventory Catalog Item Status-2
 
@@ -226,6 +231,11 @@ JD-TC-Update Inventory Catalog Item Status-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=   Get Inventory Catalog item By EncId  ${EncId2}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    Should Be Equal As Strings    ${resp.json()['status']}    ${InventoryCatalogStatus[1]}
+
 JD-TC-Update Inventory Catalog Item Status-3
 
     [Documentation]  update inventory catalog item and Update Inventory Catalog Item status as inactive from user login.
@@ -234,13 +244,18 @@ JD-TC-Update Inventory Catalog Item Status-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Update Inventory Catalog Item    ${boolean[0]}  ${boolean[0]}      ${encid}     ${EncId1}  ${itemEncId1}  
+    ${resp}=   Update Inventory Catalog Item    ${boolean[0]}  ${boolean[0]}      ${encid}     ${EncId1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Update Inventory Catalog Item status    ${EncId1}  ${InventoryCatalogStatus[1]} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Inventory Catalog item By EncId  ${EncId1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    Should Be Equal As Strings    ${resp.json()['status']}    ${InventoryCatalogStatus[1]}
 
 JD-TC-Update Inventory Catalog Item Status-UH1
 
@@ -256,6 +271,7 @@ JD-TC-Update Inventory Catalog Item Status-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${Invalid_Catalog_id}
+
 
 
 JD-TC-Update Inventory Catalog Item Status-UH2
