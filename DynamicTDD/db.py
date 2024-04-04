@@ -311,6 +311,7 @@ def get_ser_id(email):
 
 def delete_entry(table,field,value,cur):
     try:
+        print('Clearing ',table)
         cur.execute("delete from %s where %s ='%s';" % (table,field,value))
         print(table, 'cleared')
     except Exception as e:
@@ -460,7 +461,9 @@ def delete_ML_table(aid):
         # cur = dbconn.cursor()
         with dbconn.cursor() as cur:
             cur.execute("SELECT id FROM queue_tbl WHERE account='%s'" % aid)
+            print(cur.fetchall())
             row = [str(item[0]) for item in cur.fetchall()]
+            print(row)
             for i in range(len(row)) :
                 cur.execute("DELETE FROM ml_tbl WHERE queue ='%s'" % (row[i]))
             dbconn.commit()
@@ -654,7 +657,7 @@ def clear_service (usrid):
             for index in range(len(row)):
                     delete_entry('virtual_service_tbl','id',int(row[index][0]),cur)
                     delete_entry('donation_service_tbl','id',int(row[index][0]),cur)
-                    delete_entry('transaction_payment_tbl',"JSON_UNQUOTE(JSON_EXTRACT(`service`, '$.id'))",int(row[index][0]),cur)
+                    # delete_entry('transaction_payment_tbl',"JSON_UNQUOTE(JSON_EXTRACT(`service`, '$.id'))",int(row[index][0]),cur)
                     delete_entry('wl_cache_tbl','service_id',int(row[index][0]),cur)
                     delete_entry('donation_tbl','service_id',int(row[index][0]),cur)
                     delete_entry('questionnaire_tbl','transaction_id',int(row[index][0]),cur)
@@ -758,7 +761,7 @@ def clear_location (usrid):
             update_entry('account_info_tbl','base_location','NULL','id',aid,cur)
             delete_search(aid)
             delete_schedule_service(aid)
-            delete_entry('transaction_payment_tbl','account',aid,cur)
+            # delete_entry('transaction_payment_tbl','account',aid,cur)
             delete_entry('donation_tbl','account',aid,cur)
             
             # cur.execute("SELECT id FROM location_tbl WHERE account='%s'" % aid)
@@ -2755,7 +2758,7 @@ def clear_appt_schedule(usrid):
                 delete_entry('appt_tbl','uid',apptid[index][0],cur)
             for index in range(len(apptschid)):
                 delete_entry('schedule_service_tbl','schedule_id',int(apptschid[index][0]),cur)
-                delete_entry('transaction_payment_tbl','schedule_id',int(apptschid[index][0]),cur)
+                # delete_entry('transaction_payment_tbl','schedule_id',int(apptschid[index][0]),cur)
             delete_entry('appmnt_archive_tbl','account',aid,cur)
             delete_entry('appt_daily_schedule_tbl','account',aid,cur)
             delete_entry('appt_queueset_tbl','account_id',aid,cur)
@@ -2799,7 +2802,7 @@ def clear_appt_schedule_user(user_num, branch_num):
                 delete_entry('appt_tbl','uid',apptid[index][0],cur)
             for index in range(len(apptschid)):
                 delete_entry('schedule_service_tbl','schedule_id',int(apptschid[index][0]),cur)
-                delete_entry('transaction_payment_tbl','schedule_id',int(apptschid[index][0]),cur)
+                # delete_entry('transaction_payment_tbl','schedule_id',int(apptschid[index][0]),cur)
             delete_entry_2Fields('appmnt_archive_tbl','account',aid,'provider',uid,cur)
             delete_entry('appt_daily_schedule_tbl','account',aid,cur)
             delete_entry('appt_queueset_tbl','account_id',aid,cur)
@@ -3014,7 +3017,7 @@ def clear_customer(phno):
                 # print ("deleting bill: "+  str(a[i]))
                 delete_entry('order_archive_tbl','bill',int(a[i]),cur)
                 delete_entry('order_tbl','bill',int(a[i]),cur)
-                delete_entry('transaction_payment_tbl','bill_id',int(a[i]),cur)
+                # delete_entry('transaction_payment_tbl','bill_id',int(a[i]),cur)
 
             # print  len(conid)
             for index in reversed(range(len(conid))):
@@ -6453,7 +6456,7 @@ def clear_multilocation (usrid):
             baseloc_id = row[0]
             delete_search(aid)
             delete_schedule_service(aid)
-            delete_entry('transaction_payment_tbl','account',aid,cursor)
+            # delete_entry('transaction_payment_tbl','account',aid,cursor)
             delete_entry('donation_tbl','account',aid,cursor)
             cursor.execute("SELECT id FROM location_tbl WHERE account='%s'" % aid)
             row = cursor.fetchall()
@@ -6501,3 +6504,75 @@ def get_filetype(file):
     mimetype, encoding = mimetypes.guess_type(file)
     ext= mimetypes.guess_extension(mimetype)
     return  ext
+
+
+def clear_location_n_service (usrid):
+    print("In function: ", inspect.stack()[0].function)
+    uid = get_id(usrid)
+    dbconn = connect_db(db_host, db_user, db_passwd, db)
+    try:
+        # cur = dbconn.cursor()
+        with dbconn.cursor() as cur:
+            cur.execute("SELECT id FROM account_info_tbl WHERE acct_linked_ph_no='%s'" % usrid)
+            row1 = cur.fetchone()
+            print (row1)
+            aid = row1[0]
+            print (aid)
+            delete_entry('queue_tbl','account',aid,cur)
+            delete_entry('wl_state_tbl','account',aid,cur)
+            delete_entry('wl_state_tbl','created_by',uid,cur)
+            delete_entry('wl_rating_tbl','account',aid,cur)
+            delete_entry('wl_history_tbl','account',aid,cur)
+            delete_entry('wl_history_tbl','created_by',uid,cur)
+            delete_entry('wl_history_tbl','consumer_id',uid,cur)
+            delete_entry('wl_cache_tbl','account',aid,cur)
+            delete_entry('wl_cache_tbl','created_by',uid,cur)
+            delete_entry('wl_cache_tbl','consumer_id',uid,cur)
+            delete_entry('donation_tbl','account',aid,cur)
+            delete_entry('appmnt_archive_tbl','account',aid,cur)
+            delete_entry('appt_rating_tbl','account',aid,cur)
+            delete_entry('appt_tbl','account',aid,cur)
+            delete_entry('appt_daily_schedule_tbl','account',aid,cur)
+            delete_entry('appt_queueset_tbl','account_id',aid,cur)
+            delete_entry('appt_state_tbl','account',aid,cur)
+            cur.execute("SELECT uid FROM appt_tbl WHERE account='%s'" % aid)
+            apptid = cur.fetchall()
+            print (apptid)
+            for index in range(len(apptid)):
+                delete_entry('appt_livetrack_tbl','uuid',apptid[index][0],cur)
+    
+            cur.execute("SELECT id FROM service_tbl WHERE account='%s'" % aid)
+            row = cur.fetchall()
+            print (row) 
+    
+            for index in range(len(row)):
+                    delete_entry('virtual_service_tbl','id',int(row[index][0]),cur)
+                    delete_entry('donation_service_tbl','id',int(row[index][0]),cur)
+                    # delete_entry('transaction_payment_tbl',"JSON_UNQUOTE(JSON_EXTRACT(`service`, '$.id'))",int(row[index][0]),cur)
+                    delete_entry('wl_cache_tbl','service_id',int(row[index][0]),cur)
+                    delete_entry('donation_tbl','service_id',int(row[index][0]),cur)
+                    delete_entry('questionnaire_tbl','transaction_id',int(row[index][0]),cur)
+                    delete_entry('virtual_service_tbl','id',int(row[index][0]),cur)
+                    delete_entry('queue_service_tbl','service_id',int(row[index][0]),cur)
+                    delete_entry('schedule_service_tbl','service_id',int(row[index][0]),cur)
+            
+            
+            delete_entry('appt_schedule_tbl','account',aid,cur)
+            delete_search(aid)
+            delete_queue_stats_table(aid)
+            delete_ML_table(aid)
+            clear_Rating(usrid)
+            delete_entry('queue_tbl','account',aid,cur)
+            delete_entry('holidays_tbl','account',aid,cur)
+            delete_entry('service_tbl','account',aid,cur)
+            update_entry('account_info_tbl','base_location','NULL','id',aid,cur)
+            delete_entry('location_tbl','account',aid,cur)
+            reset_queue_metric(aid)
+            dbconn.commit()
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)
+        return 0
+    finally:
+        if dbconn is not None:
+            dbconn.close()

@@ -43,10 +43,14 @@ JD-TC-GetFutureAppointment-1
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
     clear_customer   ${PUSERNAME256}
     
     ${resp}=   Get Service
@@ -69,8 +73,15 @@ JD-TC-GetFutureAppointment-1
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -84,7 +95,7 @@ JD-TC-GetFutureAppointment-1
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -230,10 +241,14 @@ JD-TC-GetFutureAppointment-2
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
    
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -255,8 +270,15 @@ JD-TC-GetFutureAppointment-2
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -270,7 +292,7 @@ JD-TC-GetFutureAppointment-2
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
@@ -294,7 +316,7 @@ JD-TC-GetFutureAppointment-2
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id2}  ${resp.json()}
@@ -451,7 +473,11 @@ JD-TC-GetFutureAppointment-3
     ${resp}=  Get Account Payment Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}
+        ${resp}=    Enable Disable Online Payment   ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     ${resp}=  Get Account Payment Settings
     Log  ${resp.json()}
@@ -460,7 +486,10 @@ JD-TC-GetFutureAppointment-3
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -502,7 +531,7 @@ JD-TC-GetFutureAppointment-3
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -635,7 +664,10 @@ JD-TC-GetFutureAppointment-4
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -694,7 +726,11 @@ JD-TC-GetFutureAppointment-4
     ${resp}=  Get Account Payment Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}
+        ${resp}=    Enable Disable Online Payment   ${toggle[0]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log  ${resp.json()}
@@ -713,7 +749,7 @@ JD-TC-GetFutureAppointment-4
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}                                                                                                            ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}                                                                                                            ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -1023,10 +1059,14 @@ JD-TC-GetFutureAppointment-5
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
     
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1048,8 +1088,15 @@ JD-TC-GetFutureAppointment-5
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -1063,7 +1110,7 @@ JD-TC-GetFutureAppointment-5
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -1151,7 +1198,6 @@ JD-TC-GetFutureAppointment-5
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY4}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname2}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid2}
@@ -1237,10 +1283,14 @@ JD-TC-GetFutureAppointment-6
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
     # clear_appt_schedule   ${PUSERNAME256}
 
     ${resp}=   Get Service
@@ -1263,9 +1313,15 @@ JD-TC-GetFutureAppointment-6
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -1279,7 +1335,7 @@ JD-TC-GetFutureAppointment-6
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -1320,7 +1376,6 @@ JD-TC-GetFutureAppointment-6
     ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id1}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -1350,7 +1405,6 @@ JD-TC-GetFutureAppointment-6
     ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id2}  ${sch_id}  ${DAY3}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
@@ -1429,10 +1483,14 @@ JD-TC-GetFutureAppointment-7
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
     
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1454,9 +1512,14 @@ JD-TC-GetFutureAppointment-7
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -1470,7 +1533,7 @@ JD-TC-GetFutureAppointment-7
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -1611,10 +1674,14 @@ JD-TC-GetFutureAppointment-8
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
     
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1636,9 +1703,14 @@ JD-TC-GetFutureAppointment-8
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -1652,7 +1724,7 @@ JD-TC-GetFutureAppointment-8
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -1793,10 +1865,14 @@ JD-TC-GetFutureAppointment-9
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
     
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1818,9 +1894,14 @@ JD-TC-GetFutureAppointment-9
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -1834,7 +1915,7 @@ JD-TC-GetFutureAppointment-9
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -1975,10 +2056,14 @@ JD-TC-GetFutureAppointment-10
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2000,9 +2085,14 @@ JD-TC-GetFutureAppointment-10
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -2016,7 +2106,7 @@ JD-TC-GetFutureAppointment-10
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
@@ -2040,7 +2130,7 @@ JD-TC-GetFutureAppointment-10
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id2}  ${resp.json()}
@@ -2176,10 +2266,14 @@ JD-TC-GetFutureAppointment-11
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2201,9 +2295,14 @@ JD-TC-GetFutureAppointment-11
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -2217,7 +2316,7 @@ JD-TC-GetFutureAppointment-11
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
@@ -2241,7 +2340,7 @@ JD-TC-GetFutureAppointment-11
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id2}  ${resp.json()}
@@ -2377,10 +2476,14 @@ JD-TC-GetFutureAppointment-12
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
     
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2402,9 +2505,14 @@ JD-TC-GetFutureAppointment-12
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -2418,7 +2526,7 @@ JD-TC-GetFutureAppointment-12
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -2555,10 +2663,14 @@ JD-TC-GetFutureAppointment-13
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
     
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2580,8 +2692,15 @@ JD-TC-GetFutureAppointment-13
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
@@ -2595,7 +2714,7 @@ JD-TC-GetFutureAppointment-13
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -2760,10 +2879,14 @@ JD-TC-GetFutureAppointment-14
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
     
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2785,9 +2908,14 @@ JD-TC-GetFutureAppointment-14
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -2801,7 +2929,7 @@ JD-TC-GetFutureAppointment-14
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -2945,10 +3073,14 @@ JD-TC-GetFutureAppointment-15
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service    ${multilocPro[6]}
-    clear_location   ${multilocPro[6]}
+    # clear_service    ${multilocPro[6]}
+    # clear_location   ${multilocPro[6]}
+    clear_location_n_service  ${multilocPro[6]}
     clear_customer   ${multilocPro[6]}
 
     ${resp}=   Get Service
@@ -2971,13 +3103,24 @@ JD-TC-GetFutureAppointment-15
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${lid2}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${multilocPro[6]}
+    # clear_appt_schedule   ${multilocPro[6]}
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10     
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
-    ${DAY4}=  db.add_timezone_date  ${tz}  6     
+    # ${DAY4}=  db.add_timezone_date  ${tz}  6     
     ${list}=  Create List  1  2  3  4  5  6  7
     ${sTime1}=  add_timezone_time  ${tz}  0  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
@@ -2987,7 +3130,7 @@ JD-TC-GetFutureAppointment-15
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid1}  ${duration}  ${bool1}  ${s_id1}
+    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid1}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
@@ -3003,7 +3146,11 @@ JD-TC-GetFutureAppointment-15
     Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     
-    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${DAY4}=  db.get_date_by_timezone  ${tz1}
+    ${DAY5}=  db.add_timezone_date  ${tz1}  10     
+    ${DAY6}=  db.add_timezone_date  ${tz1}  3  
+    # ${DAY4}=  db.add_timezone_date  ${tz}  6 
+    ${sTime2}=  add_timezone_time  ${tz1}  1  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}
     ${schedule_name2}=  FakerLibrary.bs
@@ -3011,7 +3158,7 @@ JD-TC-GetFutureAppointment-15
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${lid2}  ${duration}  ${bool1}  ${s_id1}
+    ${resp}=  Create Appointment Schedule  ${schedule_name2}  ${recurringtype[1]}  ${list}  ${DAY4}  ${DAY5}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${lid2}  ${duration}  ${bool1}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id2}  ${resp.json()}
@@ -3021,7 +3168,7 @@ JD-TC-GetFutureAppointment-15
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  id=${sch_id2}   name=${schedule_name2}  apptState=${Qstate[0]}
 
-    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY3}  ${s_id1}
+    ${resp}=  Get Appointment Slots By Date Schedule  ${sch_id2}  ${DAY6}  ${s_id1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  scheduleName=${schedule_name2}  scheduleId=${sch_id2}
@@ -3054,7 +3201,6 @@ JD-TC-GetFutureAppointment-15
     ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id1}  ${sch_id1}  ${DAY3}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -3081,10 +3227,9 @@ JD-TC-GetFutureAppointment-15
     ${apptfor}=   Create List  ${apptfor2}
     
     ${cnote}=   FakerLibrary.word
-    ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id1}  ${sch_id2}  ${DAY3}  ${cnote}  ${apptfor}
+    ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id1}  ${sch_id2}  ${DAY6}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
@@ -3096,7 +3241,7 @@ JD-TC-GetFutureAppointment-15
     ${resp}=  Get Appointment By Id   ${apptid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY3}   appmtTime=${slot2}  appointmentEncId=${encId2}  apptStatus=${apptStatus[1]}
+    Verify Response   ${resp}  uid=${apptid2}  appmtDate=${DAY6}   appmtTime=${slot2}  appointmentEncId=${encId2}  apptStatus=${apptStatus[1]}
     # Should Be Equal As Strings  ${resp.json()['consumer']['id']}   ${jdconID2}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['firstName']}   ${fname2}
     # Should Be Equal As Strings  ${resp.json()['consumer']['userProfile']['lastName']}   ${lname2}
@@ -3111,14 +3256,14 @@ JD-TC-GetFutureAppointment-15
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response List   ${resp}  0  uid=${apptid1}  appointmentEncId=${encId1}  appmtDate=${DAY3}  appmtTime=${slot1}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
-    Verify Response List   ${resp}  1  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY3}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
+    Verify Response List   ${resp}  1  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY6}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
 
     ${resp}=  Get Future Appointments   location-eq=${lid2}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${len}=  Get Length   ${resp.json()}
     Should Be Equal As Strings  ${len}  1
-    Verify Response List   ${resp}  0  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY3}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
+    Verify Response List   ${resp}  0  uid=${apptid2}  appointmentEncId=${encId2}  appmtDate=${DAY6}  appmtTime=${slot2}  apptBy=PROVIDER   paymentStatus=${paymentStatus[0]}  appointmentMode=${appointmentMode[0]}  apptStatus=${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()[0]['location']['id']}   ${lid2}
 
     ${resp}=  Provider Logout
@@ -3158,10 +3303,14 @@ JD-TC-GetFutureAppointment-16
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3183,9 +3332,14 @@ JD-TC-GetFutureAppointment-16
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -3199,7 +3353,7 @@ JD-TC-GetFutureAppointment-16
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -3339,10 +3493,14 @@ JD-TC-GetFutureAppointment-17
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
    
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3378,9 +3536,14 @@ JD-TC-GetFutureAppointment-17
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -3394,7 +3557,7 @@ JD-TC-GetFutureAppointment-17
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -3545,10 +3708,14 @@ JD-TC-GetFutureAppointment-18
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3570,9 +3737,14 @@ JD-TC-GetFutureAppointment-18
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -3586,7 +3758,7 @@ JD-TC-GetFutureAppointment-18
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -3743,10 +3915,14 @@ JD-TC-GetFutureAppointment-19
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
     
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3768,8 +3944,15 @@ JD-TC-GetFutureAppointment-19
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10   
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
@@ -3783,7 +3966,7 @@ JD-TC-GetFutureAppointment-19
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -3961,10 +4144,14 @@ JD-TC-GetFutureAppointment-20
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3986,9 +4173,14 @@ JD-TC-GetFutureAppointment-20
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -4002,7 +4194,7 @@ JD-TC-GetFutureAppointment-20
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -4166,10 +4358,14 @@ JD-TC-GetFutureAppointment-21
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4191,9 +4387,14 @@ JD-TC-GetFutureAppointment-21
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -4207,7 +4408,7 @@ JD-TC-GetFutureAppointment-21
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -4344,10 +4545,14 @@ JD-TC-GetFutureAppointment-22
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4369,9 +4574,14 @@ JD-TC-GetFutureAppointment-22
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -4385,7 +4595,7 @@ JD-TC-GetFutureAppointment-22
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -4584,10 +4794,14 @@ JD-TC-GetFutureAppointment-UH1
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME256}
-    clear_location  ${PUSERNAME256}
+    # clear_service   ${PUSERNAME256}
+    # clear_location  ${PUSERNAME256}
+    clear_location_n_service  ${PUSERNAME256}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4609,9 +4823,14 @@ JD-TC-GetFutureAppointment-UH1
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME256}
+    # clear_appt_schedule   ${PUSERNAME256}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY3}=  db.add_timezone_date  ${tz}  3  
     ${DAY4}=  db.add_timezone_date  ${tz}  6  
@@ -4626,7 +4845,7 @@ JD-TC-GetFutureAppointment-UH1
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}

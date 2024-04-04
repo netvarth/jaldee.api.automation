@@ -170,9 +170,9 @@ checkPincode()
 {
     pincount=$(mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} ${DATABASE_NAME} -se "select count(*) from postal_code_tbl;")
     if [ ! -z ${pincount} ] && (( ${pincount}>=84629 )); then
-        echo "Pincode table count= '$pincount'. Pincode table populated."
+        echo "postal_code_tbl count= '$pincount'. postal_code_tbl populated."
     else
-        echo "Populating pincode table encountered error. Please try populating manually using the command."
+        echo "Populating postal_code_tbl encountered error. Please try populating manually using the command."
         echo "mysql -u root -p ${DATABASE_NAME} < ${INPUT_PATH}/$PIN_TABLE"
     fi
 }
@@ -181,18 +181,18 @@ populateBankMasterTable()
 {
     bnkcount=$(mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} ${DATABASE_NAME} -se "select count(*) from bank_master_tbl;")
     if [ -z ${bnkcount} ] || [[ ${bnkcount}<=1 ]]; then
-        echo "Bank master table count= '$bnkcount'. Bank master table not populated. Populating it using ${INPUT_PATH}/$BANK_TABLE"
+        echo "bank_master_tbl count= '$bnkcount'. bank_master_tbl not populated. Populating it using ${INPUT_PATH}/$BANK_TABLE"
         mysql -f -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} ${DATABASE_NAME} < ${INPUT_PATH}/$BANK_TABLE
         bnkcount=$(mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} ${DATABASE_NAME} -se "select count(*) from bank_master_tbl;")
         if [ ! -z ${bnkcount} ] && (( ${bnkcount}>=1310 )); then
-            echo "Bank master table count= '$bnkcount'. Bank master table populated."
+            echo "bank_master_tbl count= '$bnkcount'. bank_master_tbl populated."
         else
-            echo "Populating Bank master table encountered error. Please try populating manually using the command."
+            echo "Populating bank_master_tbl encountered error. Please try populating manually using the command."
             echo "mysql -h ${MYSQL_HOST} -P ${MYSQL_PORT} -u ${MYSQL_USER} -p ${DATABASE_NAME} < ${INPUT_PATH}/$BANK_TABLE"
         fi
             
     else
-        echo "Bank master table count= '$bnkcount'. Bank master table already populated."
+        echo "bank_master_tbl count= '$bnkcount'. bank_master_tbl already populated."
     fi
 
 }
