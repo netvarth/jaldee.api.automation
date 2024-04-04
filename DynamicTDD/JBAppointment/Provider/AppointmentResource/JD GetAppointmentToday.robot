@@ -6254,9 +6254,9 @@ JD-TC-GetAppointmentToday-29
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
 
-    Set Test Variable  ${f_Name}  ${resp.json()['firstName']}
-    Set Test Variable  ${l_Name}  ${resp.json()['lastName']}
-    Set Test Variable  ${ph_no}  ${resp.json()['primaryPhoneNumber']} 
+    Set Test Variable  ${firstName}  ${resp.json()['firstName']}
+    Set Test Variable  ${lastName}  ${resp.json()['lastName']}
+    # Set Test Variable  ${ph_no}  ${resp.json()['primaryPhoneNumber']} 
 
     ${resp}=  Consumer Logout   
     Should Be Equal As Strings    ${resp.status_code}    200
