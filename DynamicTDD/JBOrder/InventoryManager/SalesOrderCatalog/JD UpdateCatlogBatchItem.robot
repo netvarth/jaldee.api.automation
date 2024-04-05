@@ -172,8 +172,10 @@ JD-TC-Update Catalog Item Batch-1
     Set Suite Variable  ${SO_Cata_Item_Batch_Encid}  ${resp.json()[0]}
 
     ${Name1}=    FakerLibrary.last name
+    Set Suite Variable  ${Name1}
     ${price1}=    Random Int  min=2   max=40
     ${price1}=  Convert To Number  ${price1}    1
+    Set Suite Variable  ${price1}
 
     ${resp}=  Update Catalog Item Batch-invMgmt False    ${SO_Cata_Item_Batch_Encid}      ${Name1}     ${price1}         
     Log   ${resp.content}
@@ -219,11 +221,11 @@ JD-TC-Update Catalog Item Batch-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_Cata_Item_Batch_Encid1}  ${resp.json()[0]}
 
-    ${Name1}=    FakerLibrary.last name
-    ${price1}=    Random Int  min=2   max=40
-    ${price1}=  Convert To Number  ${price1}    1
+    ${Name2}=    FakerLibrary.last name
+    ${price2}=    Random Int  min=2   max=40
+    ${price2}=  Convert To Number  ${price2}    1
 
-    ${resp}=  Update Catalog Item Batch-invMgmt False    ${SO_Cata_Item_Batch_Encid1}      ${Name1}     ${price1}         
+    ${resp}=  Update Catalog Item Batch-invMgmt False    ${SO_Cata_Item_Batch_Encid1}      ${Name2}     ${price2}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -231,8 +233,8 @@ JD-TC-Update Catalog Item Batch-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${netRate}=  Convert To Number  ${resp.json()['price']}    1
-    Should Be Equal As Strings    ${netRate}    ${price1}
-    Should Be Equal As Strings    ${resp.json()['name']}    ${Name1}  
+    Should Be Equal As Strings    ${netRate}    ${price2}
+    Should Be Equal As Strings    ${resp.json()['name']}    ${Name2}  
 
 
 
@@ -250,7 +252,7 @@ JD-TC-Update Catalog Item Batch-UH1
     ${resp}=   Update Catalog Item Batch-invMgmt False   ${SO_Cata_Item_Batch_Encid1}        ${EMPTY}     ${price}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
+    Should Be Equal As Strings    ${resp.json()}    ${BATCH_NAME_REQUIRED}
 
 JD-TC-Update Catalog Item Batch-UH2
     [Documentation]   create catalog item batch where price is empty
@@ -311,7 +313,7 @@ JD-TC-Update Catalog Item Batch-UH6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Update Catalog Item Batch-invMgmt False   ${SO_Cata_Item_Batch_Encid1}        ${Name}     ${price}         
+    ${resp}=   Update Catalog Item Batch-invMgmt False   ${SO_Cata_Item_Batch_Encid}        ${Name1}     ${price1}         
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings   ${resp.json()}   ${ITEM_BATCH_EXISTS_WITH_GIVEN_NAME}

@@ -2297,6 +2297,7 @@ ITEM_BATCH_EXISTS_WITH_GIVEN_NAME="Item batch exists with given name"
 QUANTITY_REQUIRED="Quantity required"
 INVALID_ITEMID="Invalid Item Id"
 CATALOG_ITEM_BATCH_ID_REQUIRED="Catalog Item batch Id required"
+BATCH_NAME_REQUIRED="Batch Name required"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"

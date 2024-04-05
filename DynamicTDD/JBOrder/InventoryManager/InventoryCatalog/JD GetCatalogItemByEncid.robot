@@ -168,10 +168,10 @@ JD-TC-GET Inventory Catalog Item ByEncid-1
     Should Be Equal As Strings    ${resp.json()['storeId']}    ${StoreId}
     Should Be Equal As Strings    ${resp.json()['status']}    ${InventoryCatalogStatus[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${EncId1}
-    Should Be Equal As Strings    ${resp.json()['item']['itemEncId']}   ${itemEncId1}
-    Should Be Equal As Strings    ${resp.json()['item']['itemName']}    ${displayName}
-    Should Be Equal As Strings    ${resp.json()['item']['itemType']}    ${itemSourceEnum}
-    Should Be Equal As Strings    ${resp.json()['item']['itemEncId']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()['item']['spCode']}   ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()['item']['name']}    ${displayName}
+    Should Be Equal As Strings    ${resp.json()['item']['itemSourceEnum']}    ${itemSourceEnum}
+    Should Be Equal As Strings    ${resp.json()['item']['spCode']}    ${itemEncId1}
 
 JD-TC-GET Inventory Catalog Item ByEncid-2
 
@@ -254,10 +254,10 @@ JD-TC-GET Inventory Catalog Item ByEncid-2
     Should Be Equal As Strings    ${resp.json()['storeId']}    ${StoreId}
     Should Be Equal As Strings    ${resp.json()['status']}    ${InventoryCatalogStatus[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${EncId2}
-    Should Be Equal As Strings    ${resp.json()['item']['itemEncId']}   ${itemEncIds}
-    Should Be Equal As Strings    ${resp.json()['item']['itemName']}    ${categoryName}
-    Should Be Equal As Strings    ${resp.json()['item']['itemType']}    ${itemSourceEnum1}
-    Should Be Equal As Strings    ${resp.json()['item']['itemEncId']}    ${itemEncIds}
+    Should Be Equal As Strings    ${resp.json()['item']['spCode']}   ${itemEncIds}
+    Should Be Equal As Strings    ${resp.json()['item']['name']}    ${categoryName}
+    Should Be Equal As Strings    ${resp.json()['item']['itemSourceEnum']}    ${itemSourceEnum1}
+    Should Be Equal As Strings    ${resp.json()['item']['spCode']}    ${itemEncIds}
 
 
 
@@ -285,10 +285,10 @@ JD-TC-GET Inventory Catalog Item ByEncid-3
     Should Be Equal As Strings    ${resp.json()['storeId']}    ${StoreId}
     Should Be Equal As Strings    ${resp.json()['status']}    ${InventoryCatalogStatus[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${EncId2}
-    Should Be Equal As Strings    ${resp.json()['item']['itemEncId']}   ${itemEncIds}
-    Should Be Equal As Strings    ${resp.json()['item']['itemName']}    ${categoryName}
-    Should Be Equal As Strings    ${resp.json()['item']['itemType']}    ${itemSourceEnum1}
-    Should Be Equal As Strings    ${resp.json()['item']['itemEncId']}    ${itemEncIds}
+    Should Be Equal As Strings    ${resp.json()['item']['spCode']}   ${itemEncIds}
+    Should Be Equal As Strings    ${resp.json()['item']['name']}    ${categoryName}
+    Should Be Equal As Strings    ${resp.json()['item']['itemSourceEnum']}    ${itemSourceEnum1}
+    Should Be Equal As Strings    ${resp.json()['item']['spCode']}    ${itemEncIds}
 
 JD-TC-GET Inventory Catalog Item ByEncid-4
 
@@ -314,10 +314,10 @@ JD-TC-GET Inventory Catalog Item ByEncid-4
     Should Be Equal As Strings    ${resp.json()['storeId']}    ${StoreId}
     Should Be Equal As Strings    ${resp.json()['status']}    ${InventoryCatalogStatus[1]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${EncId2}
-    Should Be Equal As Strings    ${resp.json()['item']['itemEncId']}   ${itemEncIds}
-    Should Be Equal As Strings    ${resp.json()['item']['itemName']}    ${categoryName}
-    Should Be Equal As Strings    ${resp.json()['item']['itemType']}    ${itemSourceEnum1}
-    Should Be Equal As Strings    ${resp.json()['item']['itemEncId']}    ${itemEncIds}
+    Should Be Equal As Strings    ${resp.json()['item']['spCode']}   ${itemEncIds}
+    Should Be Equal As Strings    ${resp.json()['item']['name']}    ${categoryName}
+    Should Be Equal As Strings    ${resp.json()['item']['itemSourceEnum']}    ${itemSourceEnum1}
+    Should Be Equal As Strings    ${resp.json()['item']['spCode']}    ${itemEncIds}
 
 
 

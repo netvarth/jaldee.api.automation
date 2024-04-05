@@ -283,7 +283,7 @@ JD-TC-Create Catalog Item Batch-UH2
     ${resp}=  Create Catalog Item Batch-invMgmt False      ${SO_itemEncId1}     ${EMPTY}     ${price}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
+    Should Be Equal As Strings    ${resp.json()}    ${BATCH_NAME_REQUIRED}
 
 JD-TC-Create Catalog Item Batch-UH3
 

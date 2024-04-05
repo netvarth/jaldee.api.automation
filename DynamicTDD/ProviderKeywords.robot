@@ -14197,7 +14197,7 @@ Create Inventory Catalog Item
 
     FOR    ${index}    IN RANGE    ${len}   
         Exit For Loop If  ${len}==0
-        ${values}=  Create Dictionary   itemEncId=${vargs[${index}]}
+        ${values}=  Create Dictionary   spCode=${vargs[${index}]}
         ${item}=  Create Dictionary   item=${values}
         Append To List  ${data}  ${item}
 
