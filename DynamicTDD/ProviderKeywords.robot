@@ -14420,15 +14420,14 @@ Update Catalog Item Batch-invMgmt False
     [Arguments]     ${SO_Cata_Item_Batch_Encid}     ${name}   ${price}      @{vargs}    &{kwargs}
 
     ${catalog_details}=  Create Dictionary       name=${name}   price=${price}     
-    ${items}=    Create List   ${catalog_details}  
     ${len}=  Get Length  ${vargs}
     FOR    ${index}    IN RANGE    ${len}  
-        Append To List  ${items}  ${vargs[${index}]}
+        Set To Dictionary   ${catalog_details}  ${vargs[${index}]}
     END 
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${catalog_details}   ${key}=${value}
     END
-    ${data}=  json.dumps  ${items}
+    ${data}=  json.dumps  ${catalog_details}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw   /provider/so/catalog/item/batch/${SO_Cata_Item_Batch_Encid}   data=${data}  expected_status=any
     RETURN  ${resp} 
