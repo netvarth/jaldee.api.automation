@@ -610,7 +610,10 @@ JD-TC-GetAppointmentToday-2
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${lid2}=  Create Sample Location
     Set Suite Variable   ${lid2}
@@ -716,7 +719,7 @@ JD-TC-GetAppointmentToday-2
 
         IF  '${resp.json()[${i}]['uid']}' == '${apptid1}'  
      
-            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid1}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid1}       
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id1}      
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
@@ -732,7 +735,7 @@ JD-TC-GetAppointmentToday-2
 
         ELSE IF     '${resp.json()[${i}]['uid']}' == '${apptid2}'   
     
-            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid2}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid2}       
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor2}        
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
@@ -748,7 +751,7 @@ JD-TC-GetAppointmentToday-2
 
         ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid3}' 
     
-            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid3}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid3}       
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['jaldeeFamilyMemberId']}    ${cidfor3}        
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
@@ -764,7 +767,7 @@ JD-TC-GetAppointmentToday-2
 
         ELSE IF   '${resp.json()[${i}]['uid']}' == '${apptid5}' 
     
-            Should Be Equal As Strings       ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid5}       
+            Should Be Equal As Strings  ${resp.json()[${i}]['appointmentEncId']}                       ${A_uuid5}       
             Should Be Equal As Strings  ${resp.json()[${i}]['appmtFor'][0]['id']}                      ${cons_id2}        
             Should Be Equal As Strings  ${resp.json()[${i}]['appointmentMode']}                        ${appointmentMode[2]}  
             Should Be Equal As Strings  ${resp.json()[${i}]['apptStatus']}                             ${apptStatus[1]}    
@@ -1250,6 +1253,7 @@ JD-TC-GetAppointmentToday-10
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Account Set Credential  ${PUSERNAME_A}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
+    
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -1357,7 +1361,26 @@ JD-TC-GetAppointmentToday-10
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
+        ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+    ${resp}=  Get jp finance settings    
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
+    Set Test Variable  ${accountId1}  ${resp.json()['accountId']}
 
     ${loc_id1}=  Create Sample Location
     Set Suite Variable   ${loc_id1}

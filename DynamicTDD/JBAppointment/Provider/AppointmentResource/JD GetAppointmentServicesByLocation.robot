@@ -400,8 +400,9 @@ JD-TC-GetAppointmentServicesByLocation-8
 
     [Documentation]  provider checks get service by location id for location in US
 
-    clear_service   ${PUSERNAME210}
-    clear_location   ${PUSERNAME210}
+    # clear_service   ${PUSERNAME210}
+    # clear_location   ${PUSERNAME210}
+    clear_location_n_service  ${PUSERNAME210}
     clear_queue     ${PUSERNAME210}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME210}  ${PASSWORD}
@@ -434,9 +435,10 @@ JD-TC-GetAppointmentServicesByLocation-8
     ${latti}  ${longi}  ${city}  ${country_abbr}  ${US_tz}=  FakerLibrary.Local Latlng  country_code=US  coords_only=False
 
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime}=  db.subtract_timezone_time  ${US_tz}  2  00
-    # ${sTime1}=  add_timezone_time  ${US_tz}  1  30  
-    ${eTime}=  add_timezone_time  ${US_tz}  3  00  
+    # ${sTime}=  db.subtract_timezone_time  ${US_tz}  2  00
+    ${sTime}=  db.get_time_by_timezone   ${tz}
+    ${sTime1}=  add_timezone_time  ${US_tz}  1  30  
+    # ${eTime}=  add_timezone_time  ${US_tz}  3  00  
 
     ${sTime1}  ${eTime1}=  db.endtime_conversion  ${sTime}  ${eTime}
 

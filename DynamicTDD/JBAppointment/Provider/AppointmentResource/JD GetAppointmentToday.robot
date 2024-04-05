@@ -6308,7 +6308,7 @@ JD-TC-GetAppointmentToday-29
 
     ${cnote}=   FakerLibrary.word
     # ${resp}=   Take Appointment For Provider   ${pid}  ${s_id1}  ${sch_id1}  ${DAY}  ${cnote}   ${apptfor}   location=${{str('${loc_id1}')}}
-    ${resp}=   Customer Take Appointment  ${s_id1}  ${sch_id1}  ${DAY}  ${cnote}  ${apptfor}  location=${{str('${loc_id1}')}}
+    ${resp}=   Customer Take Appointment  ${pid}   ${s_id1}  ${sch_id1}  ${DAY}  ${cnote}  ${apptfor}  location=${{str('${loc_id1}')}}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${apptid}=  Get Dictionary Values  ${resp.json()}

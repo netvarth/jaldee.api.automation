@@ -3598,9 +3598,9 @@ Get Family Member By Id
 
 
 Customer Take Appointment
-    [Arguments]    ${service_id}  ${schedule_id}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}
+    [Arguments]    ${accountId}  ${service_id}  ${schedule_id}  ${appmtDate}  ${consumerNote}  ${appmtFor}  &{kwargs}
     ${cons_headers}=  Create Dictionary  &{headers} 
-    ${cons_params}=  Create Dictionary  account=${accid}
+    ${cons_params}=  Create Dictionary  account=${accountId}
     ${sid}=  Create Dictionary  id=${service_id}
     ${schedule}=  Create Dictionary  id=${schedule_id}    
     ${data}=    Create Dictionary   service=${sid}  schedule=${schedule}  appmtFor=${appmtFor}  appmtDate=${appmtDate}  consumerNote=${consumerNote}
