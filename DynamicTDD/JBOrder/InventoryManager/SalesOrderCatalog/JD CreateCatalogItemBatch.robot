@@ -101,6 +101,7 @@ JD-TC-Create Catalog Item Batch-1
     END
 
     ${Name}=    FakerLibrary.last name
+    Set Suite Variable  ${Name}
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
@@ -155,6 +156,8 @@ JD-TC-Create Catalog Item Batch-1
     Set Suite Variable  ${Inv_Cata_Item_Encid}  ${resp.json()[0]}
 
     ${price}=    Random Int  min=2   max=40
+    ${price}=  Convert To Number  ${price}    1
+    Set Suite Variable  ${price}
 
     ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId1}     ${price}         
     Log   ${resp.content}
@@ -172,8 +175,16 @@ JD-TC-Create Catalog Item Batch-1
     ${resp}=   Create Catalog Item Batch-invMgmt False   ${SO_itemEncIds}     ${Name}     ${price}      
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_Cata_Item_Batch_Encid}  ${resp.json()[0]}
 
-*** Comments ***
+    ${resp}=   Get Catalog Item Batch By Encid   ${SO_Cata_Item_Batch_Encid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${netRate}=  Convert To Number  ${resp.json()['price']}    1
+    Should Be Equal As Strings    ${netRate}    ${price}
+    Should Be Equal As Strings    ${resp.json()['name']}    ${Name}  
+
+
 
 JD-TC-Create Catalog Item Batch-2
 
@@ -205,6 +216,44 @@ JD-TC-Create Catalog Item Batch-2
     ${resp}=  Create Catalog Item Batch-invMgmt False      ${SO_itemEncId1}     ${Name}     ${price}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Create Catalog Item Batch-3
+
+    [Documentation]    MULTIPLE DICTIONARIES IN CREATE SALES ORDER CATALOG
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Name1}=    FakerLibrary.last name
+    ${price1}=    Random Int  min=2   max=40
+    ${price1}=  Convert To Number  ${price1}    1
+    ${Name2}=    FakerLibrary.last name
+    ${price2}=    Random Int  min=2   max=40
+    ${price2}=  Convert To Number  ${price2}    1
+    ${catalog_details}=  Create Dictionary          name=${Name1}   price=${price1}   
+
+    ${resp}=   Create Catalog Item Batch-invMgmt False   ${SO_itemEncIds}     ${Name2}     ${price2}     ${catalog_details}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_Cata_Item_Batch_Encid2}  ${resp.json()[0]}
+    Set Suite Variable  ${SO_Cata_Item_Batch_Encid3}  ${resp.json()[1]}
+
+    ${resp}=   Get Catalog Item Batch By Encid   ${SO_Cata_Item_Batch_Encid2}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${netRate}=  Convert To Number  ${resp.json()['price']}    1
+    Should Be Equal As Strings    ${netRate}    ${price2}
+    Should Be Equal As Strings    ${resp.json()['name']}    ${Name2}  
+
+    ${resp}=   Get Catalog Item Batch By Encid   ${SO_Cata_Item_Batch_Encid3}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${netRate}=  Convert To Number  ${resp.json()['price']}    1
+    Should Be Equal As Strings    ${netRate}    ${price1}
+    Should Be Equal As Strings    ${resp.json()['name']}    ${Name1}  
+
+
 
 JD-TC-Create Catalog Item Batch-UH1
 
@@ -273,3 +322,50 @@ JD-TC-Create Catalog Item Batch-UH5
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
+
+JD-TC-Create Catalog Item Batch-UH6
+
+    [Documentation]    MULTIPLE DICTIONARIES IN CREATE SALES ORDER CATALOG
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Name1}=    FakerLibrary.last name
+    ${price1}=    Random Int  min=2   max=40
+    ${price1}=  Convert To Number  ${price1}    1
+    ${catalog_details}=  Create Dictionary          name=${Name1}   price=${price1}   
+
+    ${resp}=   Create Catalog Item Batch-invMgmt False   ${SO_itemEncIds}     ${Name}     ${price}     ${catalog_details}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${ITEM_BATCH_EXISTS_WITH_GIVEN_NAME}
+
+JD-TC-Create Catalog Item Batch-UH7
+
+    [Documentation]   create catalog item batch where price is zero
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Name}=    FakerLibrary.first name
+    ${resp}=  Create Catalog Item Batch-invMgmt False      ${SO_itemEncId1}     ${Name}    0        
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
+
+JD-TC-Create Catalog Item Batch-UH8
+
+    [Documentation]   create catalog item batch where price is negative
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Name}=    FakerLibrary.first name
+    ${resp}=  Create Catalog Item Batch-invMgmt False      ${SO_itemEncId1}     ${Name}    -1        
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}

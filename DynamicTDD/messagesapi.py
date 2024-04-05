@@ -2293,6 +2293,8 @@ SO_CATA_ENCID_FILTER_REQUIRED="sorderCatalogEncId in Filter required"
 ITEM_PRICE_REQUIRED="Item Price required"
 STATUS_ALREADY_UPDATED="status already updated"
 CATALOG_NAME_IS_BIG="Catalog name is too big"
+ITEM_BATCH_EXISTS_WITH_GIVEN_NAME="Item batch exists with given name"
+QUANTITY_REQUIRED="Quantity required"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"

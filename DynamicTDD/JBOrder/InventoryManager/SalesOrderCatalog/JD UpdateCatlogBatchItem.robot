@@ -158,7 +158,8 @@ JD-TC-Update Catalog Item Batch-1
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
 
-    ${resp}=    Update SalesOrder Catalog Item      ${SO_itemEncIds}     ${bool[0]}         ${price}   
+    ${spItem}=  Create Dictionary  encId=${itemEncId1}   
+    ${resp}=    Update SalesOrder Catalog Item      ${SO_itemEncIds}     ${boolean[1]}         ${price}    spItem=${spItem}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -167,7 +168,7 @@ JD-TC-Update Catalog Item Batch-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_Cata_Item_Batch_Encid}  ${resp.json()[0]}
 
-    ${resp}=  Update Catalog Item Batch-invMgmt False    ${SO_Cata_Item_Batch_Encid}   ${SO_itemEncIds}     ${Name}     ${price}         
+    ${resp}=  Update Catalog Item Batch-invMgmt False    ${SO_Cata_Item_Batch_Encid}      ${Name}     ${price}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -203,24 +204,11 @@ JD-TC-Update Catalog Item Batch-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_Cata_Item_Batch_Encid1}  ${resp.json()[0]}
 
-    ${resp}=  Update Catalog Item Batch-invMgmt False    ${SO_Cata_Item_Batch_Encid1}   ${SO_itemEncId1}     ${Name}     ${price}         
+    ${resp}=  Update Catalog Item Batch-invMgmt False    ${SO_Cata_Item_Batch_Encid1}      ${Name}     ${price}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Update Catalog Item Batch-UH1
 
-    [Documentation]   update catalog item batch where invalid SO_itemEncid
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME33}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${Name}=    FakerLibrary.first name
-    ${price}=    Random Int  min=2   max=40
-    ${resp}=   Update Catalog Item Batch-invMgmt False    ${SO_Cata_Item_Batch_Encid1}  ${Inv_Cata_Item_Encid}     ${Name}     ${price}         
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${CAP_INVALID_CATALOG_ITEM_Id}
     
 
 JD-TC-Update Catalog Item Batch-UH2
@@ -232,7 +220,7 @@ JD-TC-Update Catalog Item Batch-UH2
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${price}=    Random Int  min=2   max=40
-    ${resp}=   Update Catalog Item Batch-invMgmt False   ${SO_Cata_Item_Batch_Encid1}     ${SO_itemEncId1}     ${EMPTY}     ${price}         
+    ${resp}=   Update Catalog Item Batch-invMgmt False   ${SO_Cata_Item_Batch_Encid1}        ${EMPTY}     ${price}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
@@ -246,7 +234,7 @@ JD-TC-Update Catalog Item Batch-UH3
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${Name}=    FakerLibrary.first name
-    ${resp}=   Update Catalog Item Batch-invMgmt False  ${SO_Cata_Item_Batch_Encid1}   ${SO_itemEncId1}     ${Name}     ${EMPTY}         
+    ${resp}=   Update Catalog Item Batch-invMgmt False  ${SO_Cata_Item_Batch_Encid1}       ${Name}     ${EMPTY}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
@@ -256,7 +244,7 @@ JD-TC-Update Catalog Item Batch-UH4
     [Documentation]   create catalog item batch without login
 
     ${Name}=    FakerLibrary.first name
-    ${resp}=   Update Catalog Item Batch-invMgmt False    ${SO_Cata_Item_Batch_Encid1}   ${SO_itemEncId1}     ${Name}     ${EMPTY}         
+    ${resp}=   Update Catalog Item Batch-invMgmt False    ${SO_Cata_Item_Batch_Encid1}       ${Name}     ${EMPTY}         
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -270,7 +258,7 @@ JD-TC-Update Catalog Item Batch-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${Name}=    FakerLibrary.first name
-    ${resp}=   Update Catalog Item Batch-invMgmt False   ${SO_Cata_Item_Batch_Encid1}   ${SO_itemEncId1}     ${Name}     ${EMPTY}         
+    ${resp}=   Update Catalog Item Batch-invMgmt False   ${SO_Cata_Item_Batch_Encid1}       ${Name}     ${EMPTY}         
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -284,7 +272,7 @@ JD-TC-Update Catalog Item Batch-UH6
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${Name}=    FakerLibrary.first name
-    ${resp}=   Update Catalog Item Batch-invMgmt False   ${SO_itemEncId1}   ${SO_itemEncId1}     ${Name}     ${EMPTY}         
+    ${resp}=   Update Catalog Item Batch-invMgmt False   ${SO_itemEncId1}        ${Name}     ${EMPTY}         
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
