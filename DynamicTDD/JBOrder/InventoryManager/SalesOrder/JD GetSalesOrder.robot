@@ -80,22 +80,22 @@ Update SalesOrder Status
 Get SalesOrder List
     [Arguments]  &{param}    
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /provider/sorder   params=${param}   expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/sorder/item   params=${param}   expected_status=any
     RETURN  ${resp} 
 
 Get SalesOrder Count
     [Arguments]  &{param}    
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/sorder/count   params=${param}   expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/sorder/item/count   params=${param}   expected_status=any
     RETURN  ${resp} 
     
 *** Test Cases ***
 
-JD-TC-Create Sales Order-1
+JD-TC-Get Sales Order-1
 
-    [Documentation]   Create a sales Order with Valid Details.
+    [Documentation]   Create a sales Order with Valid Details then Get sales order by encid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -124,11 +124,11 @@ JD-TC-Create Sales Order-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME16}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME17}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -255,7 +255,7 @@ JD-TC-Create Sales Order-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -285,9 +285,9 @@ JD-TC-Create Sales Order-1
     Should Be Equal As Strings    ${resp.json()['store']['name']}                                   ${Name}
     Should Be Equal As Strings    ${resp.json()['store']['encId']}                                  ${store_id}
 
-    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
-    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
-    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['catalog']['name']}                                 ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog']['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog']['invMgmt']}                              ${bool[0]}
 
     Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
     Should Be Equal As Strings    ${resp.json()['orderFor']['id']}                                  ${cid}
@@ -319,223 +319,3 @@ JD-TC-Create Sales Order-1
     Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 # -----------------------------------------------------------------------------------------------------------------------------------------
-
-# ------------------------------------ Update order status --------------------------------------------------
-
-    ${quantity}=    Random Int  min=20   max=50
-
-    ${netTotal}=  Evaluate  ${price}*${quantity}
-    ${netTotal}=  Convert To Number  ${netTotal}   1
-
-    ${resp}=    Update Order Items    ${SO_EncIds}     ${SO_itemEncIds}    ${quantity}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Sales Order    ${SO_EncIds}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['encId']}                                           ${SO_EncIds}
-    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
-    Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
-# ------------------------------------------------------------------------------------------------------------------
-
-# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
-
-    # ${resp}=    Update SalesOrder Status    ${SO_EncIds}     ${orderStatus[1]}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # ${resp}=    Get Sales Order    ${SO_EncIds}   
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-    # Should Be Equal As Strings    ${resp.json()['encId']}                                           ${SO_EncIds}
-    # Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
-# ------------------------------------------------------------------------------------------------------------------------------------
-
-# --------------------------------------------- Get Order list -------------------------------------------------------------
-
-    ${resp}=    Get SalesOrder List     encId-eq=${SO_EncIds}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['encId']}                                           ${SO_EncIds}
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                  ${locId1}
-    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                   ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                  ${store_id}
-
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                 ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                ${SO_Cata_Encid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                              ${bool[0]}
-
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                          ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['id']}                                  ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['name']}                                ${firstName} ${lastName}
-
-    Should Be Equal As Strings    ${resp.json()[0]['orderType']}                                       ${bookingChannel[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['orderStatus']}                                     ${orderStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['deliveryType']}                                    ${deliveryType[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['deliveryStatus']}                                  ${deliveryStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['originFrom']}                                      ${originFrom}
-
-    Should Be Equal As Strings    ${resp.json()[0]['orderNum']}                                        1
-    Should Be Equal As Strings    ${resp.json()[0]['orderRef']}                                        1
-    Should Be Equal As Strings    ${resp.json()[0]['deliveryDate']}                                    ${DAY1}
-
-    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['phone']['number']}                  ${primaryMobileNo}
-    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['email']}                            ${email_id}
-
-    Should Be Equal As Strings    ${resp.json()[0]['itemCount']}                                       1
-    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                        ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['taxTotal']}                                        0.0
-    Should Be Equal As Strings    ${resp.json()[0]['discountTotal']}                                   0.0
-    Should Be Equal As Strings    ${resp.json()[0]['jaldeeCouponTotal']}                               0.0
-    Should Be Equal As Strings    ${resp.json()[0]['providerCouponTotal']}                             0.0
-    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                         ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
-
-    Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
-*** comments ***
-JD-TC-Create Sales Order-2
-
-    [Documentation]   Create a sales Order where quantity passes as zero
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${quantity}=    Random Int  min=0   max=0
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${QUANTITY_REQUIRED}
-
-JD-TC-Create Sales Order-3
-
-    [Documentation]   Create a sales Order using invalid provider consumer id.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${quantity}=    Random Int  min=500000   max=9000000
-    ${invalid}=    Random Int  min=5000   max=90000
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${invalid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_CONS_ID}
-
-JD-TC-Create Sales Order-4
-
-    [Documentation]   Create a sales Order where sales order catalog id is invalid.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${quantity}=    Random Int  min=500000   max=9000000
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${EMPTY}   ${quantity}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_ITEMID}
-
-
-JD-TC-Create Sales Order-5
-
-    [Documentation]   Create a sales Order without login.
-
-    ${quantity}=    Random Int  min=2   max=5
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   419
-    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
-
-JD-TC-Create Sales Order-6
-
-    [Documentation]   Create a sales Order using sa login.
-
-    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${quantity}=    Random Int  min=2   max=5
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   419
-    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
-
-JD-TC-Create Sales Order-7
-
-    [Documentation]   Create a sales Order using provider id instead of provider consumer id
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${quantity}=    Random Int  min=2   max=5
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${accountId}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_CONS_ID}
-
-JD-TC-Create Sales Order-8
-
-    [Documentation]   Create a sales Order using same item add two times.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${quantity}=    Random Int  min=2   max=5
-
-    ${item}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}   ${item}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-JD-TC-Create Sales Order-9
-
-    [Documentation]   Create a sales Order add invalid one item.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${quantity}=    Random Int  min=2   max=5
-
-    ${item}=  Create Dictionary   catItemEncId=${invalidItem}   quantity=${quantity}
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}   ${item}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-JD-TC-Create Sales Order-10
-
-    [Documentation]   Create a sales Order add Two different item.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${quantity}=    Random Int  min=2   max=5
-
-    ${item}=  Create Dictionary   catItemEncId=${SO_itemEncIds2}   quantity=${quantity}
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}   ${item}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Sales Order    ${SO_EncIds}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-
