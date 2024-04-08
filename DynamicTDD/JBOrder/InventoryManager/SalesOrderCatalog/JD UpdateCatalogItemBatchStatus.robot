@@ -161,8 +161,8 @@ JD-TC-Update Catalog Item Batch Status-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-
-    ${resp}=    Update SalesOrder Catalog Item      ${SO_itemEncIds}     ${bool[0]}         ${price}   
+    ${spItem}=  Create Dictionary  encId=${itemEncId1}   
+    ${resp}=    Update SalesOrder Catalog Item      ${SO_itemEncIds}     ${boolean[1]}         ${price}    spItem=${spItem}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -174,6 +174,11 @@ JD-TC-Update Catalog Item Batch Status-1
     ${resp}=  Update Catalog Item Batch Status      ${SO_Cata_Item_Batch_Encid}     ${toggle[1]}      
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Catalog Item Batch By Encid   ${SO_Cata_Item_Batch_Encid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[1]}
 
 
 
@@ -214,6 +219,11 @@ JD-TC-Update Catalog Item Batch Status-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=   Get Catalog Item Batch By Encid   ${SO_Cata_Item_Batch_Encid1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[1]}
+
 JD-TC-Update Catalog Item Batch Status-3
 
     [Documentation]   enable batch status
@@ -225,6 +235,11 @@ JD-TC-Update Catalog Item Batch Status-3
     ${resp}=  Update Catalog Item Batch Status      ${SO_Cata_Item_Batch_Encid1}     ${toggle[0]}      
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Get Catalog Item Batch By Encid   ${SO_Cata_Item_Batch_Encid1}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['status']}    ${toggle[0]}
 
 JD-TC-Update Catalog Item Batch Status-UH1
 
@@ -265,7 +280,7 @@ JD-TC-Update Catalog Item Batch Status-UH3
     ${resp}=   Update Catalog Item Batch Status      ${SO_itemEncId1}     ${toggle[1]}      
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    # Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
+    Should Be Equal As Strings    ${resp.json()}    ${INVENORY_CATALOG_ITEM_BATCH}
 
 JD-TC-Update Catalog Item Batch Status-UH4
 
