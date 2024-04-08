@@ -33,7 +33,15 @@ ${digits}       0123456789
 #         ${resp}=  View Waitlist Settings
 #         Log   ${resp.json()}
 #         Should Be Equal As Strings    ${resp.status_code}    200
-# 	    Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable  
+# 	    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END  
 #         ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
 #         Log   ${resp2.json()}
 #         Should Be Equal As Strings    ${resp.status_code}    200
@@ -1416,7 +1424,15 @@ JD-TC-Take Appointment-11
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME144}  ${PASSWORD}
     # Log   ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
@@ -4210,7 +4226,15 @@ JD-TC-Take Appointment-27
         ${resp}=  View Waitlist Settings
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-	    Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+	    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
         Exit For Loop If  '${status}' == 'PASS'
     END
     Set Suite Variable  ${a}

@@ -314,12 +314,28 @@ JD-TC-Get Bill By UUId -2
                 Log   ${resp.json()}
                 Should Be Equal As Strings    ${resp.status_code}    200
                 Continue For Loop If  '${resp.json()['maxPartySize']}' == '1'
-                Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable  
+                ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END  
                 Exit For Loop If     '${resp.json()['maxPartySize']}' > '1'  
                 # Exit For Loop If  '${domain}' == '${d1}' and '${subdomain}' == '${sd1}'
         END
         Set Suite Variable  ${a}
-        Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+        ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
         # ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
         # Log  ${resp.json()}
         # Should Be Equal As Strings    ${resp.status_code}    200 

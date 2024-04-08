@@ -872,7 +872,15 @@ JD-TC-ActivateVacation-4
     # Log  ${resp.json()}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+    # ${resp}=  ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     # Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
     # Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1106,7 +1114,15 @@ JD-TC-ActivateVacation-5
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+    ${resp}=  ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1319,7 +1335,15 @@ JD-TC-ActivateVacation-6
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+    ${resp}=  ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -1853,7 +1877,15 @@ JD-TC-ActivateVacation-8
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+    ${resp}=  ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2171,7 +2203,15 @@ JD-TC-ActivateVacation-9
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+    ${resp}=  ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -2561,7 +2601,15 @@ JD-TC-ActivateVacation-6
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+    ${resp}=  ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2865,7 +2913,15 @@ JD-TC-ActivateVacation-6
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+    ${resp}=  ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     Run Keyword If  '${resp}' != '${None}'   Log  ${resp.content}
     Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
     

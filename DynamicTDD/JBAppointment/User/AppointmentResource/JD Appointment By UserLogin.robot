@@ -1402,7 +1402,15 @@ JD-TC-AppointmentByUserLogin-11
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     clear_location  ${PUSERNAME${a}}
     clear_customer   ${PUSERNAME${a}}
 
@@ -4229,7 +4237,15 @@ JD-TC-AppointmentByUserLogin-27
         ${resp}=  View Waitlist Settings
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-	    Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+	    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
         Exit For Loop If  '${status}' == 'PASS'
     END
     Set Suite Variable  ${a}

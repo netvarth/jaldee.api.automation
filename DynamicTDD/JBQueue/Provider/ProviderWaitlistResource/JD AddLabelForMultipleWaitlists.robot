@@ -49,7 +49,15 @@ MultiLocation
         ${resp}=  View Waitlist Settings
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-	    Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+	    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     END
     RETURN  ${multiloc_providers}
 

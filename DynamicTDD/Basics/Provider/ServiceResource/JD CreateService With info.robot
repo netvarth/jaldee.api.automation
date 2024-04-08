@@ -72,7 +72,15 @@ ${ZOOM_url}    https://zoom.us/j/{}?pwd=THVLcTBZa2lESFZQbU9DQTQrWUxWZz09
 #                 ${resp}=  View Waitlist Settings
 #                 Log   ${resp.json()}
 #                 Should Be Equal As Strings    ${resp.status_code}    200
-#                 Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+#                 ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
 #         END
 #         RETURN  ${multiloc_providers}
 
@@ -875,7 +883,15 @@ JD-TC-Create Service With info-11
 
         ${resp}=  View Waitlist Settings
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp1}=   Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+        ${resp1}=   ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
         Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
 
         ${resp}=  Create Sample Service  ${SERVICE1}
@@ -1310,7 +1326,15 @@ JD-TC-Create Service With info-UH5
 
         ${resp}=  View Waitlist Settings
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${resp1}=   Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+        ${resp1}=   ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
         Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
 
         ${SERVICE1}=    FakerLibrary.word
@@ -1605,7 +1629,15 @@ Billable
         Should Be Equal As Strings  ${resp.status_code}  200
         Disable Services
         ${resp}=  View Waitlist Settings
-	Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable  
+	${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END  
         ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Suite Variable  ${check}    ${resp2.json()['serviceBillable']} 
@@ -1635,7 +1667,15 @@ Non Billable
         # ${domain}=   Set Variable    ${resp.json()['sector']}
         # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
         ${resp}=  View Waitlist Settings
-	Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable  
+	${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END  
         ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Suite Variable  ${check}    ${resp2.json()['serviceBillable']} 

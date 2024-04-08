@@ -203,7 +203,15 @@ JD-TC-ServiceCreationByUserLogin-4
 
      ${resp}=  View Waitlist Settings
      Should Be Equal As Strings  ${resp.status_code}  200
-     ${resp1}=   Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable
+     ${resp1}=   ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
      Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
 
      ${resp}=  Get Service

@@ -1050,7 +1050,15 @@ JD-TC-ActivateVacation-5
     ${resp}=  View Waitlist Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['filterByDept']}==${bool[1]}   Toggle Department Disable  
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END  
     
     ${resp}=    Get Locations
     Log   ${resp.json()}
