@@ -14466,3 +14466,16 @@ Get list by item encId
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/so/catalog/item/${socitemEncId}/batch/list    expected_status=any
     RETURN  ${resp} 
+
+# ...... INVENTORY PURCHASE ........
+
+Get Item Details Inventory
+
+    [Arguments]  ${storeEncId}  ${vendorEncId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}  ${amount}  ${fixedDiscount}  ${discountPercentage}
+
+    ${data}=  Create Dictionary  storeEncId=${storeEncId}    vendorEncId=${vendorEncId}  inventoryCatalogItem=${inventoryCatalogItem}       quantity=${quantity}  freeQuantity=${freeQuantity}  amount=${amount}  fixedDiscount=${fixedDiscount}   discountPercentage=${discountPercentage}  
+    ${data}=  json.dumps     ${data}
+    
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/inventory/purchase/item/details   data=${data}  expected_status=any
+    RETURN  ${resp} 
