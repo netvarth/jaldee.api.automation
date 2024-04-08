@@ -2316,3 +2316,4 @@ VENDOR_IS_ALREADY_IN_GIVEN_STATUS="Vendor is already in given status"
 ENTER_VALID_CONVERTION_QTY="Enter a valid conversion quantity"
 
 X_REQUIRED  = "{} required."
+ITEM_NOT_FOUND = "Item not found with id {}"
