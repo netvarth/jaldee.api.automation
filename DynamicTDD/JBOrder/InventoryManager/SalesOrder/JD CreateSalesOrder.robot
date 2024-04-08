@@ -32,8 +32,8 @@ ${originFrom}       NONE
 *** Keywords ***
 Create Sales Order
 
-    [Arguments]  ${SO_Catalog_Id}   ${Pro_Con}   ${OrderFor}   ${originFrom}    ${catItemEncId}   ${quantity}    @{vargs}
-    ${Cg_encid}=  Create Dictionary   encId=${SO_Catalog_Id}   
+    [Arguments]  ${SO_Catalog_Id}   ${Pro_Con}   ${OrderFor}   ${originFrom}    ${catItemEncId}   ${quantity}    @{vargs}    &{kwargs}
+    # ${Cg_encid}=  Create Dictionary   encId=${SO_Catalog_Id}   
     ${PC}=  Create Dictionary   id=${Pro_Con}   
     ${OrderFor}=  Create Dictionary   id=${OrderFor}   
 
@@ -43,7 +43,10 @@ Create Sales Order
     FOR    ${index}    IN RANGE    ${len}  
         Append To List  ${items}  ${vargs[${index}]}
     END 
-    ${data}=  Create Dictionary   catalog=${Cg_encid}    providerConsumer=${PC}    orderFor=${OrderFor}   originFrom=${originFrom}      items=${items}
+    ${data}=  Create Dictionary   catalog=${SO_Catalog_Id}    providerConsumer=${PC}    orderFor=${OrderFor}   originFrom=${originFrom}      items=${items}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END 
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/sorder   data=${data}  expected_status=any
@@ -258,7 +261,13 @@ JD-TC-Create Sales Order-1
 
     ${quantity}=    Random Int  min=2   max=5
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}
+    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+    Set Suite Variable  ${SO_Cata_Encid_List}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_EncIds}  ${resp.json()}
@@ -389,7 +398,7 @@ JD-TC-Create Sales Order-1
     Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
-*** Comments ***
+*** comments ***
 JD-TC-Create Sales Order-2
 
     [Documentation]   Create a sales Order where quantity passes as zero
@@ -400,7 +409,7 @@ JD-TC-Create Sales Order-2
 
     ${quantity}=    Random Int  min=0   max=0
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${QUANTITY_REQUIRED}
@@ -416,7 +425,7 @@ JD-TC-Create Sales Order-3
     ${quantity}=    Random Int  min=500000   max=9000000
     ${invalid}=    Random Int  min=5000   max=90000
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid}   ${invalid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${invalid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_CONS_ID}
@@ -431,7 +440,7 @@ JD-TC-Create Sales Order-4
 
     ${quantity}=    Random Int  min=500000   max=9000000
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid}   ${cid}   ${cid}   ${originFrom}    ${EMPTY}   ${quantity}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${EMPTY}   ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_ITEMID}
@@ -443,7 +452,7 @@ JD-TC-Create Sales Order-5
 
     ${quantity}=    Random Int  min=2   max=5
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -458,7 +467,7 @@ JD-TC-Create Sales Order-6
 
     ${quantity}=    Random Int  min=2   max=5
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -472,7 +481,7 @@ JD-TC-Create Sales Order-7
     Should Be Equal As Strings    ${resp.status_code}    200
     ${quantity}=    Random Int  min=2   max=5
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid}   ${accountId}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${accountId}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_CONS_ID}
@@ -489,7 +498,7 @@ JD-TC-Create Sales Order-8
 
     ${item}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}   ${item}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}   ${item}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -505,7 +514,7 @@ JD-TC-Create Sales Order-9
 
     ${item}=  Create Dictionary   catItemEncId=${invalidItem}   quantity=${quantity}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}   ${item}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}   ${item}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -521,7 +530,7 @@ JD-TC-Create Sales Order-10
 
     ${item}=  Create Dictionary   catItemEncId=${SO_itemEncIds2}   quantity=${quantity}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}   ${item}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}   ${item}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
