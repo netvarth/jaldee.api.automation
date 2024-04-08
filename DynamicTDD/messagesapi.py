@@ -2298,6 +2298,8 @@ QUANTITY_REQUIRED="Quantity required"
 INVALID_ITEMID="Invalid Item Id"
 CATALOG_ITEM_BATCH_ID_REQUIRED="Catalog Item batch Id required"
 BATCH_NAME_REQUIRED="Batch Name required"
+INVENORY_CATALOG_ITEM_BATCH="Invalid Catalog Item Batch"
+INVALID_ORDER_ID="Invalid Order Id"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"
