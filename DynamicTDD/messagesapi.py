@@ -2314,3 +2314,5 @@ VENDOR_ALREADY_ENABLED="Vendor already enabled"
 VENDOR_ALREADY_DISABLED="Vendor already disabled" 
 VENDOR_IS_ALREADY_IN_GIVEN_STATUS="Vendor is already in given status"
 ENTER_VALID_CONVERTION_QTY="Enter a valid conversion quantity"
+
+X_REQUIRED  = "{} required."
