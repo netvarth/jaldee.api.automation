@@ -138,11 +138,17 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-1
         ${muldur}=  Evaluate  (${index}+1)*${duration}
         ${et12}=  add_two  ${sTime1}  ${muldur}
         ${et}=  timeto24hr  ${et12}
+        ${active_slot}=  compare_slot_to_now  ${resp.json()[0]['availableSlots'][${index}]['time']}  timezone=${tz}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        # Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${parallel}
+        IF  '${active_slot}' == 'True'
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[0]}
+        ELSE
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        END
         Set Test Variable  ${st}  ${et}
     END
 
@@ -169,11 +175,17 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-2
         ${muldur}=  Evaluate  (${index}+1)*${duration}
         ${et12}=  add_two  ${sTime1}  ${muldur}
         ${et}=  timeto24hr  ${et12}
+        ${active_slot}=  compare_slot_to_now  ${resp.json()[0]['availableSlots'][${index}]['time']}  timezone=${tz}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        # Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${parallel}
+        IF  '${active_slot}' == 'True'
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[0]}
+        ELSE
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        END
         Set Test Variable  ${st}  ${et}
     END
 
@@ -200,11 +212,17 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-3
         ${muldur}=  Evaluate  (${index}+1)*${duration}
         ${et12}=  add_two  ${sTime1}  ${muldur}
         ${et}=  timeto24hr  ${et12}
+        ${active_slot}=  compare_slot_to_now  ${resp.json()[0]['availableSlots'][${index}]['time']}  timezone=${tz}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        # Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${parallel}
+        IF  '${active_slot}' == 'True'
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[0]}
+        ELSE
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        END
         Set Test Variable  ${st}  ${et}
     END
 
@@ -261,11 +279,17 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-4
         ${muldur}=  Evaluate  (${index}+1)*${duration}
         ${et12}=  add_two  ${sTime1}  ${muldur}
         ${et}=  timeto24hr  ${et12}
+        ${active_slot}=  compare_slot_to_now  ${resp.json()[0]['availableSlots'][${index}]['time']}  timezone=${tz}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        # Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${parallel}
+        IF  '${active_slot}' == 'True'
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[0]}
+        ELSE
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        END
         Set Test Variable  ${st}  ${et}
     END
 
@@ -315,12 +339,12 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-5
     Set Suite Variable  ${eTime2}
     ${schedule_name1}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name1}
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=1
+    ${parallel1}=  FakerLibrary.Random Int  min=1  max=1
     ${duration1}=  FakerLibrary.Random Int  min=1  max=${delta2}
     Set Suite Variable  ${duration1}
     ${bool1}=  Random Element  ${bool}
 
-    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${l_id}  ${duration1}  ${bool1}   ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel1}  ${parallel1}  ${l_id}  ${duration1}  ${bool1}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id2}  ${resp.json()}
@@ -357,11 +381,17 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-5
                 ${muldur}=  Evaluate  (${index}+1)*${duration}
                 ${et12}=  add_two  ${sTime1}  ${muldur}
                 ${et}=  timeto24hr  ${et12}
+                ${active_slot}=  compare_slot_to_now  ${resp.json()[${i}]['availableSlots'][${index}]['time']}  timezone=${tz}
                 
                 Should Be Equal As Strings  ${resp.json()[${i}]['availableSlots'][${index}]['time']}  ${st}-${et}
                 Should Be Equal As Strings  ${resp.json()[${i}]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
-                Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
+                # Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
                 Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['capacity']}   ${parallel}
+                IF  '${active_slot}' == 'True'
+                    Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[0]}
+                ELSE
+                    Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
+                END
                 Set Test Variable  ${st}  ${et}
             END
         ELSE IF   '${resp.json()[${i}]['scheduleId']}' == '${sch_id2}' 
@@ -375,11 +405,17 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-5
                 ${muldur}=  Evaluate  (${index}+1)*${duration1}
                 ${et12}=  add_two  ${sTime2}  ${muldur}
                 ${et}=  timeto24hr  ${et12}
+                ${active_slot}=  compare_slot_to_now  ${resp.json()[${i}]['availableSlots'][${index}]['time']}  timezone=${tz}
                 
                 Should Be Equal As Strings  ${resp.json()[${i}]['availableSlots'][${index}]['time']}  ${st}-${et}
                 Should Be Equal As Strings  ${resp.json()[${i}]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
-                Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
+                # Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
                 Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['capacity']}   ${parallel}
+                IF  '${active_slot}' == 'True'
+                    Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[0]}
+                ELSE
+                    Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
+                END
                 Set Test Variable  ${st}  ${et}
             END
         
@@ -461,11 +497,17 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-6
                 ${muldur}=  Evaluate  (${index}+1)*${duration}
                 ${et12}=  add_two  ${sTime1}  ${muldur}
                 ${et}=  timeto24hr  ${et12}
+                ${active_slot}=  compare_slot_to_now  ${resp.json()[${i}]['availableSlots'][${index}]['time']}  timezone=${tz}
                 
                 Should Be Equal As Strings  ${resp.json()[${i}]['availableSlots'][${index}]['time']}  ${st}-${et}
                 Should Be Equal As Strings  ${resp.json()[${i}]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
-                Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
+                # Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
                 Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['capacity']}   ${parallel}
+                IF  '${active_slot}' == 'True'
+                    Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[0]}
+                ELSE
+                    Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
+                END
                 Set Test Variable  ${st}  ${et}
             END
         ELSE IF   '${resp.json()[${i}]['scheduleId']}' == '${sch_id2}' 
@@ -479,11 +521,17 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-6
                 ${muldur}=  Evaluate  (${index}+1)*${duration}
                 ${et12}=  add_two  ${sTime2}  ${muldur}
                 ${et}=  timeto24hr  ${et12}
+                ${active_slot}=  compare_slot_to_now  ${resp.json()[${i}]['availableSlots'][${index}]['time']}  timezone=${tz}
                 
                 Should Be Equal As Strings  ${resp.json()[${i}]['availableSlots'][${index}]['time']}  ${st}-${et}
                 Should Be Equal As Strings  ${resp.json()[${i}]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
-                Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
+                # Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
                 Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['capacity']}   ${parallel}
+                IF  '${active_slot}' == 'True'
+                    Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[0]}
+                ELSE
+                    Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
+                END
                 Set Test Variable  ${st}  ${et}
             END
         
@@ -501,10 +549,8 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-UH2
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-         
     ${ri}=  Create List  1  2  3  4  5  6 
     
-
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -718,7 +764,7 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${ri}=  Create List  1  2  3  4  5  6  7
-    ${ri2}=  Create List  1  2  3  4  5  6
+    ${ri2}=  Create List  1  2  3  4  5  6  7
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
@@ -819,6 +865,20 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-UH3
         END
     END
 
+    ${resp}=  Consumer Logout
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${ProviderPH}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=   Delete Holiday  ${hId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=   Get Holiday By Account
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Not Contain   ${resp.json()}  "id":"${hId}"
+
 
 JD-TC-GetAllScheduleSlotsByDateLocationandService-8
     [Documentation]  Get slots when lead time is set for a service
@@ -849,7 +909,7 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-8
 
     ${ri}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable   ${ri}
-    ${ri2}=  Create List  1  2  3  4  5  6
+    ${ri2}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable   ${ri2}
 
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
@@ -867,21 +927,6 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-8
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    # ${d}=  FakerLibrary.Random Int  min=1  max=6
-    # ${holiday_date}=  db.add_timezone_date  ${tz}  ${d}  
-    # ${holidayname}=   FakerLibrary.word
-    # ${desc}=    FakerLibrary.name
-    # ${ri}=  Create List  1  2  3  4  5  6  7
-
-    # ${resp}=  Create Holiday   ${recurringtype[1]}  ${ri}  ${holiday_date}  ${holiday_date}  ${EMPTY}  ${stime}  ${etime}  ${desc}
-    # Log  ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Set Test Variable  ${hId}    ${resp.json()['holidayId']}
-
-    # ${resp}=   Get Holiday By Id  ${hId}
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings   ${resp.status_code}  200
 
     ${resp}=  Provider Logout
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -978,6 +1023,16 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-9
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Update Service  ${s_id}  ${resp.json()['name']}  ${EMPTY}   ${resp.json()['serviceDuration']}  ${status[0]}  ${btype}  ${bool[0]}  ${resp.json()['notificationType']}  ${EMPTY}  ${resp.json()['totalAmount']}  ${bool[0]}  ${bool[0]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=   Get Service By Id  ${s_id}
+    Should Be Equal As Strings  ${resp.status_code}  200
     
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.content}
@@ -1013,8 +1068,8 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-9
     Set Test Variable  ${stime2}   ${resp.json()['apptSchedule']['timeSlots'][0]['sTime']}
     Set Test Variable  ${etime2}   ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}
     Set Test Variable  ${etime2}   ${resp.json()['apptSchedule']['timeSlots'][0]['eTime']}
-    Set Test Variable  ${parallelServing1}  ${resp.json()['parallelServing']}  
-    Set Test Variable  ${consumerParallelServing1}    ${resp.json()['consumerParallelServing']}
+    Set Test Variable  ${parallel1}  ${resp.json()['parallelServing']}  
+    Set Test Variable  ${consumerParallel1}    ${resp.json()['consumerParallelServing']}
 
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
@@ -1052,11 +1107,17 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-9
                 ${muldur}=  Evaluate  (${index}+1)*${duration}
                 ${et12}=  add_two  ${sTime}  ${muldur}
                 ${et}=  timeto24hr  ${et12}
+                ${active_slot}=  compare_slot_to_now  ${resp.json()[${i}]['availableSlots'][${index}]['time']}  timezone=${tz}
                 
                 Should Be Equal As Strings  ${resp.json()[${i}]['availableSlots'][${index}]['time']}  ${st}-${et}
                 Should Be Equal As Strings  ${resp.json()[${i}]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallelserving}
-                Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
-                Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['capacity']}   ${parallelServing}
+                # Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
+                Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['capacity']}   ${consumerparallelserving}
+                IF  '${active_slot}' == 'True'
+                    Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[0]}
+                ELSE
+                    Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
+                END
                 Set Test Variable  ${st}  ${et}
             END
         ELSE IF   '${resp.json()[${i}]['scheduleId']}' == '${sch_id2}' 
@@ -1070,14 +1131,19 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-9
                 ${muldur}=  Evaluate  (${index}+1)*${duration1}
                 ${et12}=  add_two  ${sTime2}  ${muldur}
                 ${et}=  timeto24hr  ${et12}
+                ${active_slot}=  compare_slot_to_now  ${resp.json()[${i}]['availableSlots'][${index}]['time']}  timezone=${tz}
                 
                 Should Be Equal As Strings  ${resp.json()[${i}]['availableSlots'][${index}]['time']}  ${st}-${et}
-                Should Be Equal As Strings  ${resp.json()[${i}]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${consumerParallelServing1}
-                Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
-                Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['capacity']}   ${parallelServing}
+                Should Be Equal As Strings  ${resp.json()[${i}]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel1}
+                # Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
+                Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['capacity']}   ${consumerParallel1}
+                IF  '${active_slot}' == 'True'
+                    Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[0]}
+                ELSE
+                    Should Be Equal As Strings   ${resp.json()[${i}]['availableSlots'][${index}]['active']}      ${bool[1]}
+                END
                 Set Test Variable  ${st}  ${et}
             END
-        
         END
     END
 
@@ -1163,11 +1229,17 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-10
         ${muldur}=  Evaluate  (${index}+1)*${duration1}
         ${et12}=  add_two  ${stime2}  ${muldur}
         ${et}=  timeto24hr  ${et12}
+        ${active_slot}=  compare_slot_to_now  ${resp.json()[0]['availableSlots'][${index}]['time']}  timezone=${tz}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${ParallelServing1}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        # Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${parallelServing1}
+        IF  '${active_slot}' == 'True'
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[0]}
+        ELSE
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        END
         Set Test Variable  ${st}  ${et}
     END
 
@@ -1188,11 +1260,17 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-10
         ${muldur}=  Evaluate  (${index}+1)*${duration}
         ${et12}=  add_two  ${stime}  ${muldur}
         ${et}=  timeto24hr  ${et12}
+        ${active_slot}=  compare_slot_to_now  ${resp.json()[0]['availableSlots'][${index}]['time']}  timezone=${tz}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        # Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumerParallel}
+        IF  '${active_slot}' == 'True'
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[0]}
+        ELSE
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        END
         Set Test Variable  ${st}  ${et}
     END
 
@@ -1275,11 +1353,17 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-11
         ${muldur}=  Evaluate  (${index}+1)*${duration1}
         ${et12}=  add_two  ${sTime2}  ${muldur}
         ${et}=  timeto24hr  ${et12}
+        ${active_slot}=  compare_slot_to_now  ${resp.json()[0]['availableSlots'][${index}]['time']}  timezone=${tz}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${Parallel1}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        # Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumerParallel}
+        IF  '${active_slot}' == 'True'
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[0]}
+        ELSE
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        END
         Set Test Variable  ${st}  ${et}
     END
 
@@ -1300,11 +1384,17 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-11
         ${muldur}=  Evaluate  (${index}+1)*${duration}
         ${et12}=  add_two  ${sTime}  ${muldur}
         ${et}=  timeto24hr  ${et12}
+        ${active_slot}=  compare_slot_to_now  ${resp.json()[0]['availableSlots'][${index}]['time']}  timezone=${tz}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        # Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumerParallel}
+        IF  '${active_slot}' == 'True'
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[0]}
+        ELSE
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        END
         Set Test Variable  ${st}  ${et}
     END
 
@@ -1387,11 +1477,17 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-12
         ${muldur}=  Evaluate  (${index}+1)*${duration1}
         ${et12}=  add_two  ${sTime2}  ${muldur}
         ${et}=  timeto24hr  ${et12}
+        ${active_slot}=  compare_slot_to_now  ${resp.json()[0]['availableSlots'][${index}]['time']}  timezone=${tz}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel1}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        # Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumerParallel1}
+        IF  '${active_slot}' == 'True'
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[0]}
+        ELSE
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        END
         Set Test Variable  ${st}  ${et}
     END
 
@@ -1412,11 +1508,17 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-12
         ${muldur}=  Evaluate  (${index}+1)*${duration}
         ${et12}=  add_two  ${sTime}  ${muldur}
         ${et}=  timeto24hr  ${et12}
+        ${active_slot}=  compare_slot_to_now  ${resp.json()[0]['availableSlots'][${index}]['time']}  timezone=${tz}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        # Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumerParallel}
+        IF  '${active_slot}' == 'True'
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[0]}
+        ELSE
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        END
         Set Test Variable  ${st}  ${et}
     END
 
@@ -1498,11 +1600,17 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-13
         ${muldur}=  Evaluate  (${index}+1)*${duration1}
         ${et12}=  add_two  ${sTime2}  ${muldur}
         ${et}=  timeto24hr  ${et12}
+        ${active_slot}=  compare_slot_to_now  ${resp.json()[0]['availableSlots'][${index}]['time']}  timezone=${tz}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel1}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        # Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumerParallel1}
+        IF  '${active_slot}' == 'True'
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[0]}
+        ELSE
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        END
         Set Test Variable  ${st}  ${et}
     END
 
@@ -1523,10 +1631,16 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-13
         ${muldur}=  Evaluate  (${index}+1)*${duration}
         ${et12}=  add_two  ${sTime}  ${muldur}
         ${et}=  timeto24hr  ${et12}
+        ${active_slot}=  compare_slot_to_now  ${resp.json()[0]['availableSlots'][${index}]['time']}  timezone=${tz}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        # Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumerParallel}
+        IF  '${active_slot}' == 'True'
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[0]}
+        ELSE
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        END
         Set Test Variable  ${st}  ${et}
     END

@@ -33,12 +33,17 @@ JD-TC-CreateAppointmentSchedule-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME132}
-    clear_location  ${PUSERNAME132}
+    # clear_service   ${PUSERNAME132}
+    # clear_location  ${PUSERNAME132}
+    clear_location_n_service  ${PUSERNAME132}
     
     ${p1_lid}=  Create Sample Location
     Set Suite Variable   ${p1_lid}
-    clear_appt_schedule   ${PUSERNAME132}
+    ${resp}=   Get Location ById  ${p1_lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    # clear_appt_schedule   ${PUSERNAME132}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -51,6 +56,9 @@ JD-TC-CreateAppointmentSchedule-1
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id1}=  Create Sample Service  ${SERVICE2}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -64,15 +72,12 @@ JD-TC-CreateAppointmentSchedule-1
     Set Suite Variable  ${delta}
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     Set Suite Variable   ${eTime1}
-    
-    ${s_id}=  Create Sample Service  ${SERVICE1}
-    ${s_id1}=  Create Sample Service  ${SERVICE2}
     ${schedule_name}=  FakerLibrary.bs
     Set Suite Variable  ${schedule_name}
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${p1_lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -116,12 +121,17 @@ JD-TC-CreateAppointmentSchedule-2
     Run Keyword If  "${check}"=="True" and "${pkgId}"=="${licId}"  Exit For Loop
     END
     Set Suite Variable  ${a}
-    clear_service   ${PUSERNAME${a}}
-    clear_location  ${PUSERNAME${a}}
+    # clear_service   ${PUSERNAME${a}}
+    # clear_location  ${PUSERNAME${a}}
+    clear_location_n_service  ${PUSERNAME${a}}
     
     ${p2_lid}=  Create Sample Location
     Set Suite Variable  ${p2_lid}
-    clear_appt_schedule   ${PUSERNAME${a}}
+    ${resp}=   Get Location ById  ${p2_lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    # clear_appt_schedule   ${PUSERNAME${a}}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -140,7 +150,7 @@ JD-TC-CreateAppointmentSchedule-2
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p2_lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${p2_lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -178,7 +188,7 @@ JD-TC-CreateAppointmentSchedule-3
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${p2_lid}  ${duration}  ${bool1}  ${s_id2}  ${s_id3}  ${s_id4}  ${s_id5}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid}  ${duration}  ${bool1}  ${s_id2}  ${s_id3}  ${s_id4}  ${s_id5}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -208,7 +218,7 @@ JD-TC-CreateAppointmentSchedule-4
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${p2_lid}  ${duration}  ${bool1}  ${s_id6}  ${s_id7}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid}  ${duration}  ${bool1}  ${s_id6}  ${s_id7}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -231,9 +241,13 @@ JD-TC-CreateAppointmentSchedule-5
     Should Be Equal As Strings    ${resp.status_code}    200
     ${p2_lid1}=  Create Sample Location
     Set Suite Variable  ${p2_lid1}
+    ${resp}=   Get Location ById  ${p2_lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
     # clear_service   ${PUSERNAME${a}}
     # clear_location  ${PUSERNAME${a}}
-    clear_appt_schedule   ${PUSERNAME${a}}
+    # clear_appt_schedule   ${PUSERNAME${a}}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -255,7 +269,7 @@ JD-TC-CreateAppointmentSchedule-5
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
     ${bool1}=  Random Element  ${bool}
     ${list}=  Create List  1  3  5  7
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  ${parallel}    ${parallel}  ${p2_lid1}  ${duration}  ${bool1}  ${s_id2}  ${s_id3}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  ${parallel}  ${parallel}  ${p2_lid1}  ${duration}  ${bool1}  ${s_id2}  ${s_id3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -273,7 +287,7 @@ JD-TC-CreateAppointmentSchedule-5
     Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id3} 
     ${list}=  Create List  2  4  6
     ${schedule_name}=  FakerLibrary.bs
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  ${parallel}    ${parallel}  ${p2_lid1}  ${duration}  ${bool1}  ${s_id2}  ${s_id3}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  ${parallel}  ${parallel}  ${p2_lid1}  ${duration}  ${bool1}  ${s_id2}  ${s_id3}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
@@ -294,11 +308,16 @@ JD-TC-CreateAppointmentSchedule-6
     Should Be Equal As Strings    ${resp.status_code}    200
     # clear_service   ${PUSERNAME134}
     # clear_location  ${PUSERNAME134}
-    clear_service   ${PUSERNAME134}
-    clear_location  ${PUSERNAME134}
+    # clear_service   ${PUSERNAME134}
+    # clear_location  ${PUSERNAME134}
+    clear_location_n_service  ${PUSERNAME134}
 
     ${p2_lid1}=  Create Sample Location
-    clear_appt_schedule   ${PUSERNAME134}
+    ${resp}=   Get Location ById  ${p2_lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    # clear_appt_schedule   ${PUSERNAME134}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -324,7 +343,7 @@ JD-TC-CreateAppointmentSchedule-6
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  ${parallel}    ${parallel}  ${p2_lid1}  ${duration}  ${bool1}  ${s_id2}  ${s_id3}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  ${parallel}  ${parallel}  ${p2_lid1}  ${duration}  ${bool1}  ${s_id2}  ${s_id3}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -358,7 +377,7 @@ JD-TC-CreateAppointmentSchedule-6
     Should Be Equal As Strings  ${resp.json()['services'][1]['id']}  ${s_id3}  
 
     ${schedule_name}=  FakerLibrary.bs
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  ${parallel}    ${parallel}  ${p2_lid1}  ${duration}  ${bool1}  ${s_id2}  ${s_id3}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime3}  ${eTime3}  ${parallel}  ${parallel}  ${p2_lid1}  ${duration}  ${bool1}  ${s_id2}  ${s_id3}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
@@ -380,12 +399,17 @@ JD-TC-CreateAppointmentSchedule-7
     # clear_location  ${PUSERNAME${a}} 
     # clear_service   ${PUSERNAME${a}}  
     
-    clear_service   ${PUSERNAME${a}}
-    clear_location  ${PUSERNAME${a}}
+    # clear_service   ${PUSERNAME${a}}
+    # clear_location  ${PUSERNAME${a}}
+    clear_location_n_service  ${PUSERNAME${a}}
 
     ${p2_lid1}=  Create Sample Location
     Set Suite Variable  ${p2_lid1}
-    clear_appt_schedule   ${PUSERNAME${a}}
+    ${resp}=   Get Location ById  ${p2_lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    # clear_appt_schedule   ${PUSERNAME${a}}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -414,7 +438,7 @@ JD-TC-CreateAppointmentSchedule-7
     ${bool1}=  Random Element  ${bool}
     ${list}=  Create List  1  2  3  4  5  6  7
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p2_lid1}  ${duration1}  ${bool1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${p2_lid1}  ${duration1}  ${bool1}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -443,7 +467,7 @@ JD-TC-CreateAppointmentSchedule-7
     Set Suite Variable  ${eTime2}
     ${duration2}=  FakerLibrary.Random Int  min=1  max=${delta}
     ${schedule_name}=  FakerLibrary.bs
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}    ${parallel}  ${p2_lid1}  ${duration2}  ${bool1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime2}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid1}  ${duration2}  ${bool1}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id2}  ${resp.json()}
@@ -456,7 +480,7 @@ JD-TC-CreateAppointmentSchedule-7
     Verify Response  ${resp}  name=${schedule_name}  timeDuration=${duration2}  apptState=${Qstate[1]}  parallelServing=${parallel}  batchEnable=${bool1}
 
     ${schedule_name}=  FakerLibrary.bs
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}    ${parallel}  ${p2_lid1}  ${duration2}  ${bool1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid1}  ${duration2}  ${bool1}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id3}  ${resp.json()}
@@ -494,7 +518,7 @@ JD-TC-CreateAppointmentSchedule-8
     Set Suite Variable  ${schedule_name}
     Set Suite Variable  ${parallel}
     Set Suite Variable  ${bool1}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}    ${parallel}  ${p2_lid2}  ${duration}  ${bool1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid2}  ${duration}  ${bool1}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id4}  ${resp.json()}
@@ -515,7 +539,7 @@ JD-TC-CreateAppointmentSchedule-UH1
     [Documentation]    Create a schedule in different location with another service and already existing schedule name and time 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}    ${parallel}  ${p2_lid2}  ${duration}  ${bool1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid2}  ${duration}  ${bool1}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     
@@ -531,7 +555,7 @@ JD-TC-CreateAppointmentSchedule-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${schedule_name}=  FakerLibrary.bs
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}    ${parallel}  ${p2_lid1}  ${duration}  ${bool1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid1}  ${duration}  ${bool1}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${QUEUE_SCHEDULE_OVERLAPS_CREATE}"
@@ -546,7 +570,7 @@ JD-TC-CreateAppointmentSchedule-UH3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${schedule_name}=  FakerLibrary.bs
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}    ${parallel}  ${p2_lid1}  ${duration}  ${bool1}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid1}  ${duration}  ${bool1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${NECESSARY_FIELD_MISSING}"
@@ -556,7 +580,7 @@ JD-TC-CreateAppointmentSchedule-UH4
     ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${schedule_name}=  FakerLibrary.bs
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}    ${parallel}  ${EMPTY}  ${duration}  ${bool1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${EMPTY}  ${duration}  ${bool1}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${NECESSARY_FIELD_MISSING}"
@@ -565,9 +589,17 @@ JD-TC-CreateAppointmentSchedule-UH5
     [Documentation]    Create a schedule with another providers location details
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+    ${resp}=   Get License UsageInfo 
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    reset_user_metric  ${account_id}
     ${s_id5}=  Create Sample Service  ${SERVICE3}
     ${schedule_name}=  FakerLibrary.bs
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}    ${parallel}  ${p2_lid}  ${duration}  ${bool1}  ${s_id5}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid}  ${duration}  ${bool1}  ${s_id5}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${LOCATION_NOT_FOUND}"
@@ -595,7 +627,7 @@ JD-TC-CreateAppointmentSchedule-UH6
     ${mins_between}=  mins_diff  ${eTime1}  ${eTime2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${mins_between}
     ${schedule_name}=  FakerLibrary.bs
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${eTime1}  ${eTime2}  ${parallel}    ${parallel}  ${p1_lid}  ${duration}  ${bool1}  ${s_id6}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${eTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p1_lid}  ${duration}  ${bool1}  ${s_id6}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  401
     Should Be Equal As Strings  "${resp.json()}"  "${NO_PERMISSION}"
@@ -604,14 +636,14 @@ JD-TC-CreateAppointmentSchedule-UH7
     [Documentation]    Create a schedule with eTime is less than sTime
     ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}   ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
-    clear_appt_schedule   ${PUSERNAME${a}}
+    # clear_appt_schedule   ${PUSERNAME${a}}
     ${resp}=    Get Appointment Schedules
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${sTime9}=  add_timezone_time  ${tz}  5  15  
     ${eTime9}=  add_timezone_time  ${tz}  4  30  
     ${schedule_name}=  FakerLibrary.bs
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime9}  ${eTime9}  ${parallel}    ${parallel}  ${p2_lid1}  ${duration}  ${bool1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime9}  ${eTime9}  ${parallel}  ${parallel}  ${p2_lid1}  ${duration}  ${bool1}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${APPT_START_END_TIME_MISMATCH}"
@@ -627,7 +659,7 @@ JD-TC-CreateAppointmentSchedule-UH8
     ${max}=  Evaluate  ${delta}+100
     ${duration}=  FakerLibrary.Random Int  min=${min}  max=${max}
     ${schedule_name}=  FakerLibrary.bs
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime9}  ${eTime9}  ${parallel}    ${parallel}  ${p2_lid2}  ${duration}  ${bool1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime9}  ${eTime9}  ${parallel}  ${parallel}  ${p2_lid2}  ${duration}  ${bool1}  ${s_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${SLOT_DURATION_IS_MORE}" 
@@ -639,11 +671,16 @@ JD-TC-CreateAppointmentSchedule-UH9
     # clear_service   ${PUSERNAME133}
     # clear_location  ${PUSERNAME133}
 
-    clear_service   ${PUSERNAME133}
-    clear_location  ${PUSERNAME133}
+    # clear_service   ${PUSERNAME133}
+    # clear_location  ${PUSERNAME133}
+    clear_location_n_service  ${PUSERNAME133}
 
     ${p1_lid}=  Create Sample Location
-    clear_appt_schedule   ${PUSERNAME133}
+    ${resp}=   Get Location ById  ${p1_lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    # clear_appt_schedule   ${PUSERNAME133}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -675,7 +712,7 @@ JD-TC-CreateAppointmentSchedule-UH9
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${p1_lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
@@ -696,7 +733,7 @@ JD-TC-CreateAppointmentSchedule-UH9
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_lid}  ${duration}  ${bool1}   ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${p1_lid}  ${duration}  ${bool1}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${QUEUE_SCHEDULE_OVERLAPS_CREATE}"
@@ -781,13 +818,14 @@ JD-TC-CreateAppointmentSchedule-9
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
 
     ${s_id}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule For User  ${u_id}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule For User  ${u_id}  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${sch_id}  ${resp.json()}
@@ -816,11 +854,16 @@ JD-TC-CreateAppointmentSchedule-UH10
     ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME133}
-    clear_location  ${PUSERNAME133}
+    # clear_service   ${PUSERNAME133}
+    # clear_location  ${PUSERNAME133}
+    clear_location_n_service  ${PUSERNAME133}
 
     ${p1_lid}=  Create Sample Location
-    clear_appt_schedule   ${PUSERNAME133}
+    ${resp}=   Get Location ById  ${p1_lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    # clear_appt_schedule   ${PUSERNAME133}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -846,7 +889,7 @@ JD-TC-CreateAppointmentSchedule-UH10
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${p1_lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.content}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Set Test Variable  ${sch_id1}  ${resp.json()}
@@ -859,11 +902,16 @@ JD-TC-CreateAppointmentSchedule-UH11
     ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME133}
-    clear_location  ${PUSERNAME133}
+    # clear_service   ${PUSERNAME133}
+    # clear_location  ${PUSERNAME133}
+    clear_location_n_service  ${PUSERNAME133}
 
     ${p1_lid}=  Create Sample Location
-    clear_appt_schedule   ${PUSERNAME133}
+    ${resp}=   Get Location ById  ${p1_lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    # clear_appt_schedule   ${PUSERNAME133}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -889,14 +937,15 @@ JD-TC-CreateAppointmentSchedule-UH11
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${p1_lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${p1_lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${APPT_START_DATE_PAST}"
 
 
 JD-TC-CreateAppointmentSchedule-10
-    [Setup]   Run Keywords  clear_service   ${PUSERNAME133}  AND  clear_location  ${PUSERNAME133}  AND  clear_appt_schedule   ${PUSERNAME133}
+    # # [Setup]   Run Keywords  clear_service   ${PUSERNAME133}  AND  clear_location  ${PUSERNAME133}  AND  clear_appt_schedule   ${PUSERNAME133}
+    [Setup]    clear_location_n_service  ${PUSERNAME133}
     [Documentation]    Create an instant schedule
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
@@ -934,7 +983,7 @@ JD-TC-CreateAppointmentSchedule-10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
 
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool[0]}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool[0]}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -986,7 +1035,8 @@ JD-TC-CreateAppointmentSchedule-10
 
 
 JD-TC-CreateAppointmentSchedule-11
-    [Setup]   Run Keywords  clear_service   ${PUSERNAME133}  AND  clear_location  ${PUSERNAME133}  AND  clear_appt_schedule   ${PUSERNAME133}
+    # [Setup]   Run Keywords  clear_service   ${PUSERNAME133}  AND  clear_location  ${PUSERNAME133}  AND  clear_appt_schedule   ${PUSERNAME133}
+    [Setup]    clear_location_n_service  ${PUSERNAME133}
     [Documentation]    Create an instant schedule without end date
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
@@ -1023,7 +1073,7 @@ JD-TC-CreateAppointmentSchedule-11
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -1076,8 +1126,9 @@ JD-TC-CreateAppointmentSchedule-11
 
 
 JD-TC-CreateAppointmentSchedule-12
-    [Setup]   Run Keywords  clear_service   ${PUSERNAME133}  
-    ...   AND  clear_location  ${PUSERNAME133}  AND  clear_appt_schedule   ${PUSERNAME133}
+    # [Setup]   Run Keywords  clear_service   ${PUSERNAME133}  
+    # ...   AND  clear_location  ${PUSERNAME133}  AND  clear_appt_schedule   ${PUSERNAME133}
+    [Setup]    clear_location_n_service  ${PUSERNAME133}
     [Documentation]    Create an instant schedule with full repeat intervals
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
@@ -1114,7 +1165,7 @@ JD-TC-CreateAppointmentSchedule-12
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -1166,8 +1217,9 @@ JD-TC-CreateAppointmentSchedule-12
 
 
 JD-TC-CreateAppointmentSchedule-13
-    [Setup]   Run Keywords  clear_service   ${PUSERNAME133}  
-    ...   AND  clear_location  ${PUSERNAME133}  AND  clear_appt_schedule   ${PUSERNAME133}
+    # [Setup]   Run Keywords  clear_service   ${PUSERNAME133}  
+    # ...   AND  clear_location  ${PUSERNAME133}  AND  clear_appt_schedule   ${PUSERNAME133}
+    [Setup]    clear_location_n_service  ${PUSERNAME133}
     [Documentation]    Create an instant schedule with repeat intervals as today's weekday
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
@@ -1205,7 +1257,7 @@ JD-TC-CreateAppointmentSchedule-13
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -1257,8 +1309,9 @@ JD-TC-CreateAppointmentSchedule-13
 
 
 JD-TC-CreateAppointmentSchedule-14
-    [Setup]   Run Keywords  clear_service   ${PUSERNAME133}  
-    ...   AND  clear_location  ${PUSERNAME133}  AND  clear_appt_schedule   ${PUSERNAME133}
+    # [Setup]   Run Keywords  clear_service   ${PUSERNAME133}  
+    # ...   AND  clear_location  ${PUSERNAME133}  AND  clear_appt_schedule   ${PUSERNAME133}
+    [Setup]    clear_location_n_service  ${PUSERNAME133}
     [Documentation]    Create an instant schedule with repeat intervals as tomorrow's weekday
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
@@ -1297,7 +1350,7 @@ JD-TC-CreateAppointmentSchedule-14
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -1349,8 +1402,9 @@ JD-TC-CreateAppointmentSchedule-14
 
 
 JD-TC-CreateAppointmentSchedule-15
-    [Setup]   Run Keywords  clear_service   ${PUSERNAME133}  
-    ...   AND  clear_location  ${PUSERNAME133}  AND  clear_appt_schedule   ${PUSERNAME133}
+    # [Setup]   Run Keywords  clear_service   ${PUSERNAME133}  
+    # ...   AND  clear_location  ${PUSERNAME133}  AND  clear_appt_schedule   ${PUSERNAME133}
+    [Setup]    clear_location_n_service  ${PUSERNAME133}
     [Documentation]    Create an instant schedule with start date as future date 
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
@@ -1388,7 +1442,7 @@ JD-TC-CreateAppointmentSchedule-15
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -1442,8 +1496,9 @@ JD-TC-CreateAppointmentSchedule-15
 
 
 JD-TC-CreateAppointmentSchedule-16
-    [Setup]   Run Keywords  clear_service   ${PUSERNAME133}  
-    ...   AND  clear_location  ${PUSERNAME133}  AND  clear_appt_schedule   ${PUSERNAME133}
+    # [Setup]   Run Keywords  clear_service   ${PUSERNAME133}  
+    # ...   AND  clear_location  ${PUSERNAME133}  AND  clear_appt_schedule   ${PUSERNAME133}
+    [Setup]    clear_location_n_service  ${PUSERNAME133}
     [Documentation]    Create an instant schedule with multiple services
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
@@ -1481,7 +1536,7 @@ JD-TC-CreateAppointmentSchedule-16
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}  ${s_id1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -1560,9 +1615,11 @@ JD-TC-CreateAppointmentSchedule-17
     ${resp}=  Encrypted Provider Login  ${multilocPro[10]}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200    
 
-    clear_service   ${multilocPro[10]}
-    clear_location  ${multilocPro[10]}
-    clear_appt_schedule   ${multilocPro[10]}
+    # clear_service   ${multilocPro[10]}
+    # clear_location  ${multilocPro[10]}
+    # clear_appt_schedule   ${multilocPro[10]}
+    clear_location_n_service  ${multilocPro[10]}
+    
  
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -1608,7 +1665,7 @@ JD-TC-CreateAppointmentSchedule-17
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -1741,9 +1798,6 @@ JD-TC-CreateAppointmentSchedule-18
      Log Many  ${billable_providers} 	${multilocPro}
     Set Suite Variable   ${billable_providers}
     Set Suite Variable   ${multilocPro}
-
-
-
     
     ${resp}=  Encrypted Provider Login  ${multilocPro[10]}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200    
@@ -1755,15 +1809,17 @@ JD-TC-CreateAppointmentSchedule-18
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}   200
 
-    clear_service   ${multilocPro[10]}
-    clear_location  ${multilocPro[10]}
-    clear_appt_schedule   ${multilocPro[10]}
+    # clear_service   ${multilocPro[10]}
+    # clear_location  ${multilocPro[10]}
+    # clear_appt_schedule   ${multilocPro[10]}
+    clear_location_n_service  ${multilocPro[10]}
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${lid1}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid1}
     Log  ${resp.content}
@@ -1795,7 +1851,7 @@ JD-TC-CreateAppointmentSchedule-18
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -1849,7 +1905,7 @@ JD-TC-CreateAppointmentSchedule-18
     ${maxval1}=  Convert To Integer   ${delta1/2}
     # ${duration1}=  FakerLibrary.Random Int  min=1  max=${maxval1}
     ${bool2}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid1}  ${duration}  ${bool2}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name1}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid1}  ${duration}  ${bool2}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id1}  ${resp.json()}
@@ -1901,8 +1957,9 @@ JD-TC-CreateAppointmentSchedule-18
 
 
 JD-TC-CreateAppointmentSchedule-19
-    [Setup]   Run Keywords  clear_service   ${PUSERNAME133}  
-    ...   AND  clear_location  ${PUSERNAME133}  AND  clear_appt_schedule   ${PUSERNAME133}
+    # [Setup]   Run Keywords  clear_service   ${PUSERNAME133}  
+    # ...   AND  clear_location  ${PUSERNAME133}  AND  clear_appt_schedule   ${PUSERNAME133}
+    [Setup]    clear_location_n_service  ${PUSERNAME133}
     [Documentation]    Create an instant schedule with the same details as that of another schedule
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME133}  ${PASSWORD}
@@ -1917,7 +1974,7 @@ JD-TC-CreateAppointmentSchedule-19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME133}
+    # clear_appt_schedule   ${PUSERNAME133}
     ${s_id}=  Create Sample Service  ${SERVICE1}
 
     ${resp}=   Get Service
@@ -1943,7 +2000,7 @@ JD-TC-CreateAppointmentSchedule-19
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -1997,7 +2054,7 @@ JD-TC-CreateAppointmentSchedule-19
     ${maxval1}=  Convert To Integer   ${delta1/2}
         ${duration1}=  FakerLibrary.Random Int  min=1  max=${maxval1}
     ${bool2}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool2}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[4]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool2}  ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  "${resp.json()}"  "${APPT_SCHEDULE_NAME_ALREADY_EXISTS}"
@@ -2009,12 +2066,17 @@ JD-TC-CreateAppointmentSchedule-20
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME132}
-    clear_location  ${PUSERNAME132}
+    # clear_service   ${PUSERNAME132}
+    # clear_location  ${PUSERNAME132}
+    clear_location_n_service  ${PUSERNAME132}
     
     ${p1_lid}=  Create Sample Location
     Set Suite Variable   ${p1_lid}
-    clear_appt_schedule   ${PUSERNAME132}
+    ${resp}=   Get Location ById  ${p1_lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    # clear_appt_schedule   ${PUSERNAME132}
 
     ${resp}=   Get Service
     Log  ${resp.content}
@@ -2223,8 +2285,8 @@ JD-TC-CreateAppointmentSchedule-23
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${PUSERNAME132}
-    clear_appt_schedule   ${PUSERNAME132}
+    # clear_service   ${PUSERNAME132}
+    # clear_appt_schedule   ${PUSERNAME132}
 
     ${resp}=   Get Service
     Log  ${resp.content}

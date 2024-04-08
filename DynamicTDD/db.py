@@ -38,6 +38,7 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
 import socket
 from Keywordspy import create_tz, validatePhoneNumber
+from dateutil import tz
 
 
 if os.environ['SYSTEM_ENV'] == 'Microsoft WSL':
@@ -6576,3 +6577,30 @@ def clear_location_n_service (usrid):
     finally:
         if dbconn is not None:
             dbconn.close()
+
+
+def compare_slot_to_now(slot, timezone="Asia/Kolkata"):
+    cur_tz = tz.gettz(timezone) 
+    now = datetime.datetime.now(tz=cur_tz)
+    # print(now)
+    # print(now.tzname())
+    if "-" in slot:
+        t1= slot.split("-")[0].replace('"','')
+        # print(t1)
+        # t2= slot.split("-")[1].replace('"','')
+        # print(t2)
+        try:
+            # t1 = datetime.datetime.strptime(today+" "+str(t1), "%Y-%m-%d %H:%M")
+            t1 = datetime.datetime.strptime(str(t1), "%H:%M").time()
+            # print(t1)
+            t1 = datetime.datetime.combine(now.date(), t1, tzinfo=cur_tz)
+            # print(t1)
+            # print(t1.tzname())
+            # t2 = datetime.datetime.strptime(str(t2), "%H:%M")
+            # print(t2)
+            print("now:", now, "slot:", t1)
+            return (now > t1)
+        except Exception as e:
+            print("Exception:", e)
+            print("Exception at line no:", e.__traceback__.tb_lineno)
+            return 0

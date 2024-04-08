@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 LABEL Author="Suvaj S Parathanam" \
 Co-Author="Archana Gopi" \
 Application="Robot Framework" \
@@ -12,9 +12,9 @@ ARG DEBCONF_NONINTERACTIVE_SEEN=true
 ENV TZ "Asia/Kolkata"
 
 RUN set -ex; \ 
-apt-get update && apt-get upgrade -y; \
+apt update && apt upgrade -y; \
 # apt install -y --no-install-recommends ;\
-apt-get install -y \
+apt install -y \
 apt-utils \
 # python3 \
 python3-pip \

@@ -5334,7 +5334,7 @@ Create MR with patientId
 
 
 Billable Domain Providers
-    [Arguments]  ${min}=0   ${max}=260
+    [Arguments]  ${min}=0   ${max}=324
     ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
     ${len}=   Split to lines  ${resp}
     ${length}=  Get Length   ${len}
@@ -5358,7 +5358,7 @@ Billable Domain Providers
 
 
 Multiloc and Billable Providers
-    [Arguments]  ${min}=0   ${max}=260
+    [Arguments]  ${min}=0   ${max}=324
     @{dom_list}=  Create List
     @{provider_list}=  Create List
     @{multiloc_providers}=  Create List    
@@ -6101,7 +6101,7 @@ Add Label for Multiple Order
 
 
 MultiLocation Domain Providers
-    [Arguments]  ${min}=0   ${max}=260
+    [Arguments]  ${min}=0   ${max}=324
     ${multilocdoms}=  get_mutilocation_domains
     Log  ${multilocdoms}
     ${domlen}=  Get Length   ${multilocdoms}
@@ -7125,7 +7125,7 @@ Get Appointment Details with apptid
 
 
 Multiloc and Billable highest license Providers 
-    [Arguments]  ${min}=0   ${max}=260
+    [Arguments]  ${min}=0   ${max}=324
     @{dom_list}=  Create List
     @{provider_list}=  Create List
     @{multiloc_providers}=  Create List    
@@ -7164,13 +7164,17 @@ Multiloc and Billable highest license Providers
      
         ${status} 	${value} = 	Run Keyword And Ignore Error  List Should Contain Value  ${dom_list}  ${domain}
         Log Many  ${status} 	${value}
-        Run Keyword If  '${status}' == 'PASS' and '${check1}' == '${pkg_id[0]}'  Append To List   ${multiloc_providers}  ${PUSERNAME${a}}
+        IF  '${status}' == 'PASS' and '${check1}' == '${pkg_id[0]}'  
+            Append To List   ${multiloc_providers}  ${PUSERNAME${a}}
+        END
         ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
         Log   ${resp2.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Test Variable  ${check}    ${resp2.json()['serviceBillable']} 
        
-        Run Keyword If     '${check}' == 'True' and '${check1}' == '${pkg_id[0]}'  Append To List   ${provider_list}  ${PUSERNAME${a}}
+        IF  '${check}' == 'True' and '${check1}' == '${pkg_id[0]}'  
+            Append To List   ${provider_list}  ${PUSERNAME${a}}
+        END
         # Run Keyword If    '${status}' == 'PASS' and '${check}' == 'True'   Append To List  ${multiloc_billable_providers}  ${PUSERNAME${a}}
     END
     # RETURN  ${provider_list}  ${multiloc_providers}  ${multiloc_billable_providers}
