@@ -138,4 +138,5 @@ JD-TC-UpdateItemCategoryStatusSA-UH4
 
     ${resp}=    Update Item Category Status SA   ${account_id}  ${cat_Id}   ${Toggle[1]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 

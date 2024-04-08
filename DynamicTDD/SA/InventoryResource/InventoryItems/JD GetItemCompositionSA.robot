@@ -78,7 +78,7 @@ JD-TC-GetItemCompositionSA-UH2
     ${resp}=    Get Item Composition SA  ${account_id}  ${comp_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
-    Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 
 
 JD-TC-GetItemCompositionSA-UH3
 
@@ -90,4 +90,5 @@ JD-TC-GetItemCompositionSA-UH3
 
     ${resp}=    Get Item Composition SA  ${account_id}  ${comp_id}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 

@@ -112,7 +112,5 @@ JD-TC-GetItemCategoryFilter-5
 
     ${resp}=    Get Item Type By Filter SA   ${account_id} 
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['typeCode']}      ${type_Id}
-    Should Be Equal As Strings    ${resp.json()[0]['typeName']}      ${typeName}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}        ${toggle[0]}
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 

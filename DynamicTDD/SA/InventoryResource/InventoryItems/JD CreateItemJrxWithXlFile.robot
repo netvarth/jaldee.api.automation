@@ -1,7 +1,7 @@
 *** Settings ***
 Suite Teardown    Run Keywords  Delete All Sessions  
 Test Teardown     Delete All Sessions
-Force Tags        Questionnaire
+Force Tags        ITEM
 Library           Collections
 Library           String
 Library           json

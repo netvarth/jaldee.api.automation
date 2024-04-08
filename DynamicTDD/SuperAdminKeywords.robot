@@ -2198,7 +2198,7 @@ Create Store Type
 
 Get Store Type By EncId
     [Arguments]  ${storeTypeEncId}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /account/store/type/id/${storeTypeEncId}  expected_status=any
     RETURN  ${resp}
 
@@ -2207,13 +2207,13 @@ Update Store Type
     [Arguments]     ${uid}   ${name}   ${storeNature}
     ${data}=  Create Dictionary  name=${name}   storeNature=${storeNature}
     ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  PUT On Session  synw  /account/store/type/${uid}  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Store Type Filter
     [Arguments]   &{param}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /account/store/type   params=${param}   expected_status=any
     RETURN  ${resp}
 
@@ -2221,7 +2221,7 @@ Get Store Type Filter Count
 
     [Arguments]   &{param}
 
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session  synw  /account/store/type/count   params=${param}   expected_status=any
     RETURN  ${resp}  
 
@@ -2232,14 +2232,14 @@ Create Item Category SA
     [Arguments]  ${account}  ${categoryName}  
     ${data}=  Create Dictionary  categoryName=${categoryName}  
     ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /item/${account}/category  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item Category SA
 
     [Arguments]  ${account}  ${id}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/category/${id}  expected_status=any
     RETURN  ${resp}
 
@@ -2248,14 +2248,14 @@ Update Item Category SA
     [Arguments]   ${account}  ${categoryName}   ${categoryCode}
     ${data}=  Create Dictionary  categoryName=${categoryName}   categoryCode=${categoryCode}
     ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/category  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item Category By Filter SA  
 
     [Arguments]   ${account}  &{param}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/category   params=${param}   expected_status=any
     RETURN  ${resp}
 
@@ -2263,14 +2263,14 @@ Update Item Category Status SA
 
     [Arguments]   ${account}  ${categoryCode}   ${status}
     
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/category/${categoryCode}/status/${status}   expected_status=any
     RETURN  ${resp}  
 
 Get Item Category Count By Filter SA
 
     [Arguments]   ${account}  &{param}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/category/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
@@ -2281,14 +2281,14 @@ Create Item Type SA
     [Arguments]  ${account}  ${typeName}  
     ${data}=  Create Dictionary  typeName=${typeName}  
     ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /item/${account}/type  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item Type SA
 
     [Arguments]  ${account}  ${id}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/type/${id}  expected_status=any
     RETURN  ${resp}
 
@@ -2297,28 +2297,28 @@ Update Item Type SA
     [Arguments]   ${account}  ${typeName}   ${typeCode}
     ${data}=  Create Dictionary  typeName=${typeName}   typeCode=${typeCode}
     ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/type  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item Type By Filter SA
 
     [Arguments]   ${account}  &{param}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/type   params=${param}   expected_status=any
     RETURN  ${resp}
 
 Update Item Type Status SA
 
     [Arguments]   ${account}  ${typeCode}   ${status}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/type/${typeCode}/status/${status}   expected_status=any
     RETURN  ${resp}  
 
 Get Item Type Count By Filter SA
 
     [Arguments]   ${account}  &{param}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/type/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
@@ -2330,14 +2330,14 @@ Create Item manufacturer SA
     [Arguments]  ${account}  ${manufactureName}  
     ${data}=  Create Dictionary  manufacturerName=${manufactureName}  
     ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /item/${account}/manufacturer  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item manufacturer SA
 
     [Arguments]  ${account}  ${id}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/manufacturer/${id}  expected_status=any
     RETURN  ${resp}
 
@@ -2346,28 +2346,28 @@ Update Item manufacturer SA
     [Arguments]   ${account}  ${manufacturerName}   ${manufacturerCode}
     ${data}=  Create Dictionary  manufacturerName=${manufacturerName}   manufacturerCode=${manufacturerCode}
     ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/manufacturer  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item manufacturer By Filter SA
 
     [Arguments]   ${account}  &{param}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/manufacturer   params=${param}   expected_status=any
     RETURN  ${resp}
 
 Update Item manufacturer Status SA
 
     [Arguments]   ${account}  ${manufacturerCode}   ${status}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/manufacturer/${manufacturerCode}/status/${status}   expected_status=any
     RETURN  ${resp}  
 
 Get Item manufacturer Count By Filter SA
 
     [Arguments]   ${account}  &{param}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/manufacturer/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
@@ -2382,14 +2382,14 @@ Create Item Tax SA
         Set To Dictionary 	${data} 	${key}=${value}
     END
     ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /item/${account}/tax  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item Tax SA
 
     [Arguments]  ${account}  ${id}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/tax/${id}  expected_status=any
     RETURN  ${resp}
 
@@ -2401,28 +2401,28 @@ Update Item Tax SA
         Set To Dictionary 	${data} 	${key}=${value}
     END
     ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/tax  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item Tax By Filter SA
 
     [Arguments]   ${account}  &{param}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/tax   params=${param}   expected_status=any
     RETURN  ${resp}
 
 Update Item Tax Status SA
 
     [Arguments]   ${account}  ${taxCode}   ${status}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/tax/${taxCode}/status/${status}   expected_status=any
     RETURN  ${resp}  
 
 Get Item Tax Count By Filter SA
 
     [Arguments]   ${account}  &{param}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/tax/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
@@ -2434,14 +2434,14 @@ Create Item Unit SA
     [Arguments]  ${account}  ${unitName}    ${convertionQty}  
     ${data}=  Create Dictionary  unitName=${unitName}   convertionQty=${convertionQty}
     ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /item/${account}/unit  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item Unit SA
 
     [Arguments]  ${account}  ${id}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/unit/${id}  expected_status=any
     RETURN  ${resp}
 
@@ -2450,28 +2450,28 @@ Update Item Unit SA
     [Arguments]   ${account}  ${unitName}    ${convertionQty}  ${unitCode}
     ${data}=  Create Dictionary  unitName=${unitName}   convertionQty=${convertionQty}  unitCode=${unitCode}
     ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/unit  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item Unit By Filter SA
 
     [Arguments]   ${account}  &{param}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/unit   params=${param}   expected_status=any
     RETURN  ${resp}
 
 Update Item Unit Status SA
 
     [Arguments]   ${account}  ${unitCode}   ${status}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/unit/${unitCode}/status/${status}   expected_status=any
     RETURN  ${resp}  
 
 Get Item Unit Count By Filter SA
 
     [Arguments]   ${account}  &{param}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/unit/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
@@ -2483,14 +2483,14 @@ Create Item Composition SA
     [Arguments]  ${account}  ${compositionName} 
     ${data}=  Create Dictionary  compositionName=${compositionName} 
     ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /item/${account}/composition  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item Composition SA
 
     [Arguments]  ${account}  ${id}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/composition/${id}  expected_status=any
     RETURN  ${resp}
 
@@ -2499,28 +2499,28 @@ Update Item Composition SA
     [Arguments]   ${account}  ${compositionName}  ${compositionCode}
     ${data}=  Create Dictionary  compositionName=${compositionName}   compositionCode=${compositionCode}
     ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/composition  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item Composition By Filter SA
 
     [Arguments]   ${account}  &{param}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/composition   params=${param}   expected_status=any
     RETURN  ${resp}
 
 Update Item Composition Status SA
 
     [Arguments]   ${account}  ${compositionCode}   ${status}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/composition/${compositionCode}/status/${status}   expected_status=any
     RETURN  ${resp}  
 
 Get Item Composition Count By Filter SA
 
     [Arguments]   ${account}  &{param}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/composition/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
@@ -2531,14 +2531,14 @@ Create Item Hsn SA
     [Arguments]  ${account}  ${hsnCode} 
     ${data}=  Create Dictionary  hsnCode=${hsnCode} 
     ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /item/${account}/hsn  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item Hsn SA
 
     [Arguments]  ${account}  ${id}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/hsn/${id}  expected_status=any
     RETURN  ${resp}
 
@@ -2547,28 +2547,28 @@ Update Item Hsn SA
     [Arguments]   ${account}  ${id}  ${hsnCode}
     ${data}=  Create Dictionary  id=${id}   hsnCode=${hsnCode}
     ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/hsn  data=${data}  expected_status=any
     RETURN  ${resp}  
 
 Get Item Hsn By Filter SA
 
     [Arguments]   ${account}  &{param}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/hsn   params=${param}   expected_status=any
     RETURN  ${resp}
 
 Update Item Hsn Status SA
 
     [Arguments]   ${account}  ${id}   ${status}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/${account}/hsn/${id}/status/${status}   expected_status=any
     RETURN  ${resp}  
 
 Get Item Hsn Count By Filter SA
 
     [Arguments]   ${account}  &{param}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/${account}/hsn/count   params=${param}   expected_status=any
     RETURN  ${resp}
 
@@ -2585,7 +2585,7 @@ Create Item Jrx
         Set To Dictionary 	${data} 	${key}=${value}
     END
     ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  POST On Session  synw  /item/jrx  data=${data}  expected_status=any
     RETURN  ${resp}  
 
@@ -2593,7 +2593,7 @@ Get Item Jrx by id
 
     [Arguments]     ${id}
 
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  GET On Session  synw  /item/jrx/${id}  expected_status=any
     RETURN  ${resp}
 
@@ -2607,20 +2607,20 @@ Update Item Jrx
         Set To Dictionary 	${data} 	${key}=${value}
     END
     ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=  PATCH On Session  synw  /item/jrx  data=${data}  expected_status=any
     RETURN  ${resp} 
 
 Get Item Jrx Filter
 
     [Arguments]   &{param}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/jrx   params=${param}   expected_status=any
     RETURN  ${resp}
 
 Get Item Jrx Filter Count
 
     [Arguments]   &{param}
-    Check And Create YNW Session
+    Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/jrx/count   params=${param}   expected_status=any
     RETURN  ${resp}

@@ -74,7 +74,8 @@ JD-TC-CreateItemHsnSA-UH1
 
     ${resp}=    Create Item Hsn SA  ${account_id}  ${hsnCode}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 
 
 JD-TC-CreateItemHsnSA-3
 

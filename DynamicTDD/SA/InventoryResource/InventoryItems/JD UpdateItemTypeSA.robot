@@ -122,5 +122,6 @@ JD-TC-UpdateItemType-Uh4
 
     ${resp}=    Update Item Type SA   ${account_id}  ${typeName2}   ${type_Id}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 
 

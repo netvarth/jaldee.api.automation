@@ -286,5 +286,5 @@ JD-TC-UpdateItemTax-16
     ${resp}=    Update Item Tax SA  ${account_id}  ${taxName}  ${itemtax_id}  ${taxtypeenum[0]}  ${taxPercentage}  cgst=${cgst}   sgst=${sgst}  igst=${igst}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
-    Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 
 

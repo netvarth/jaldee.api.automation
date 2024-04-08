@@ -80,7 +80,7 @@ JD-TC-GetItemManufacture-UH2
     ${resp}=    Get Item manufacturer SA    ${account_id}  ${fake}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Empty  ${resp.json()}
+    Should Be Empty  ${resp.content}
 
 JD-TC-GetItemManufacture-UH3
 
@@ -88,5 +88,6 @@ JD-TC-GetItemManufacture-UH3
 
     ${resp}=    Get Item manufacturer SA    ${account_id}  ${mft_id}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 
  

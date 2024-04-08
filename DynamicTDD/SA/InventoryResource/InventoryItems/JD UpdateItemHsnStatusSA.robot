@@ -140,4 +140,5 @@ JD-TC-UpdateItemHsnStatus-UH4
 
     ${resp}=    Update Item Hsn Status SA   ${account_id}  ${hsn_id}   ${Toggle[1]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 

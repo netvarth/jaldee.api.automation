@@ -88,10 +88,11 @@ JD-TC-GetItemCategory-UH3
 
     ${resp}=    Get Item Category SA    ${account_id}  ${cat_Id}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 
 
 
-JD-TC-GetItemCategory-uH4
+JD-TC-GetItemCategory-UH4
 
     [Documentation]  SA Get a Item Category - get from provider side
 
@@ -101,4 +102,5 @@ JD-TC-GetItemCategory-uH4
 
     ${resp}=    Get Item Category   ${cat_Id}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['categoryCode']}        ${cat_Id}

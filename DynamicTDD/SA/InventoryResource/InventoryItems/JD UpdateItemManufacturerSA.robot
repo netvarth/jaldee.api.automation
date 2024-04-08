@@ -123,4 +123,5 @@ JD-TC-UpdateItemManufacture-5
 
     ${resp}=    Update Item manufacturer SA  ${account_id}  ${manufacturerName}  ${mft_id}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 

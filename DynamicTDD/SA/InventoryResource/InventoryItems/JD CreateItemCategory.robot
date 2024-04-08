@@ -100,7 +100,7 @@ JD-TC-CreateItemCategory-UH2
     ${resp}=  Create Item Category SA   ${account_id}  ${categoryName}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
-    Should Be Equal As Strings    ${resp.json()}    ${SESSION_EXPIRED} 
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 
 
 JD-TC-CreateItemCategory-UH3
 
@@ -114,8 +114,8 @@ JD-TC-CreateItemCategory-UH3
 
     ${resp}=  Create Item Category SA   ${account_id}  ${categoryName1}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    401
-    Should Be Equal As Strings    ${resp.json()}    ${NoAccess} 
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 
 
 JD-TC-CreateItemCategory-4
 
@@ -170,6 +170,7 @@ JD-TC-CreateItemCategory-UH5
     ${resp}=  Create Item Category SA   ${acc}  ${categoryName2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${Invalid_account_id}
 
 
 JD-TC-CreateItemCategory-6

@@ -23,7 +23,7 @@ JD-TC-CreateItemJrx-1
 
     [Documentation]  Create Item Jrx 
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME269}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME223}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

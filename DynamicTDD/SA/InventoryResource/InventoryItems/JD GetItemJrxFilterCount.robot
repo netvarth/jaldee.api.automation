@@ -23,7 +23,7 @@ JD-TC-GetItemJrxFilterCount-1
 
     [Documentation]  Get Item Jrx Filter Count
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME269}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME303}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -139,4 +139,5 @@ JD-TC-GetItemJrxFilter-UH1
 
     ${resp}=    Get Item Jrx Filter Count
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 

@@ -23,7 +23,7 @@ JD-TC-GetItemCategoryFilter-1
 
     [Documentation]  SA Get a Item Category filter.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME261}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME300}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -122,7 +122,5 @@ JD-TC-GetItemCategoryFilter-5
 
     ${resp}=    Get Item Category By Filter SA   ${account_id} 
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['categoryCode']}    ${cat_Id}
-    Should Be Equal As Strings    ${resp.json()[0]['categoryName']}    ${categoryName}
-    Should Be Equal As Strings    ${resp.json()[0]['status']}          ${Toggle[0]}
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 

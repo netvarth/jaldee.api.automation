@@ -23,7 +23,7 @@ JD-TC-GetItemTypeCountFilter-1
 
     [Documentation]  SA Get Item Type Count Filter
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME261}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME307}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -107,4 +107,5 @@ JD-TC-GetItemTypeCountFilter-5
 
     ${resp}=    Get Item Type Count By Filter SA   ${account_id} 
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 

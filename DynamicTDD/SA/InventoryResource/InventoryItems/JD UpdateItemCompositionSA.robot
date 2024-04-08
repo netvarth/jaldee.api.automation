@@ -23,7 +23,7 @@ JD-TC-UpdateItemCompositionSA-1
 
     [Documentation]  SA Update Item Composition - name updated
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME269}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME221}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -126,4 +126,5 @@ JD-TC-UpdateItemCompositionSA-UH3
 
     ${resp}=    Update Item Composition SA  ${account_id}  ${compositionName}  ${comp_id}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 

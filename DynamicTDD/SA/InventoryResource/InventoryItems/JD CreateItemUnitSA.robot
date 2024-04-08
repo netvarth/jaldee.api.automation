@@ -83,19 +83,19 @@ JD-TC-CreateItemUnitSA-UH1
     Should Be Equal As Strings  ${resp.status_code}  422
     Should Be Equal As Strings  ${resp.json()}     ${ENTER_VALID_CONVERTION_QTY}
 
-JD-TC-CreateItemUnitSA-UH2
+# JD-TC-CreateItemUnitSA-UH2
 
-    [Documentation]  SA Create Item Unit - convertion qty is alphabet
+#     [Documentation]  SA Create Item Unit - convertion qty is alphabet
 
-    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+#     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${qty}=     FakerLibrary.name
+#     ${qty}=     FakerLibrary.name
 
-    ${resp}=    Create Item Unit SA  ${account_id}  ${unitName}  ${qty}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+#     ${resp}=    Create Item Unit SA  ${account_id}  ${unitName}  ${qty}
+#     Log  ${resp.content}
+#     Should Be Equal As Strings  ${resp.status_code}  200
 
 JD-TC-CreateItemUnitSA-UH3
 

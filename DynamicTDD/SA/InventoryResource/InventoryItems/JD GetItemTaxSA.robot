@@ -87,7 +87,7 @@ JD-TC-GetItemTax-UH2
     ${resp}=    Get Item Tax SA  ${account_id}  ${itemtax_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
-    Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 
 
 JD-TC-GetItemTax-UH3
 
@@ -99,4 +99,5 @@ JD-TC-GetItemTax-UH3
 
     ${resp}=    Get Item Tax SA  ${account_id}  ${itemtax_id}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 

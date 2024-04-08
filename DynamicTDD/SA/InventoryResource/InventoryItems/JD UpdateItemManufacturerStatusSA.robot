@@ -139,4 +139,5 @@ JD-TC-GetItemManufactureStatusChange-UH4
 
     ${resp}=    Update Item manufacturer Status SA   ${account_id}  ${mft_id}   ${Toggle[1]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 

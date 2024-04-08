@@ -160,7 +160,7 @@ JD-TC-CreateItemTax-UH7
     ${resp}=    Create Item Tax SA  ${account_id}  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  cgst=${cgst}  sgst=${sgst}  igst=${igst}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
-    Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 
 
 
 JD-TC-CreateItemTax-UH8
@@ -173,8 +173,8 @@ JD-TC-CreateItemTax-UH8
 
     ${resp}=    Create Item Tax SA  ${account_id}  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  cgst=${cgst}  sgst=${sgst}  igst=${igst}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    401
-    Should Be Equal As Strings    ${resp.json()}         ${NoAccess}
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 
 
 JD-TC-CreateItemTax-UH9
 

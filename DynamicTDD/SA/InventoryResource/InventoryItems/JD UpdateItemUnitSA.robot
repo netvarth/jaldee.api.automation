@@ -23,7 +23,7 @@ JD-TC-UpdateItemUnitSA-1
 
     [Documentation]  SA Update Item Unit
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME269}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME215}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -169,3 +169,4 @@ JD-TC-UpdateItemUnitSA-UH3
     ${resp}=    Update Item Unit SA  ${account_id}  ${unitName}  ${convertionQty}  ${unit_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 

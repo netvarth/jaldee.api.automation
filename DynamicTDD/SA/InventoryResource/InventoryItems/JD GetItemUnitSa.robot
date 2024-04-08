@@ -23,7 +23,7 @@ JD-TC-GetItemUnitSA-1
 
     [Documentation]  SA Get Item Unit
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME269}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -83,7 +83,7 @@ JD-TC-GetItemUnitSA-UH2
     ${resp}=    Get Item Unit SA    ${account_id}  ${fake}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Empty  ${resp.json()}
+    Should Be Empty  ${resp.content}
 
 JD-TC-GetItemUnitSA-UH3
 
@@ -91,17 +91,19 @@ JD-TC-GetItemUnitSA-UH3
 
     ${resp}=    Get Item Unit SA    ${account_id}  ${unit_id}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 
 
 
 JD-TC-GetItemUnitSA-uH4
 
     [Documentation]  SA Get Item Unit - get from provider side
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME263}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME213}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Item Category   ${unit_id}
+    ${resp}=    Get Item Unit by id   ${unit_id}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    
+    Should Be Equal As Strings    ${resp.status_code}           200
+    Should Be Equal As Strings    ${resp.json()['unitCode']}    ${unit_id}            

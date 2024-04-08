@@ -90,7 +90,8 @@ JD-TC-CreateItemManufacture-UH3
 
     ${resp}=    Create Item manufacturer SA  ${account_id}  ${manufactureName}
     Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 
 
 JD-TC-CreateItemManufacture-2
 

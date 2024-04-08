@@ -23,7 +23,7 @@ JD-TC-GetItemTaxCountByFilter-1
 
     [Documentation]  SA Get Item Tax Count By Filter SA - tax name
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME269}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME306}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -55,6 +55,13 @@ JD-TC-GetItemTaxCountByFilter-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${itemtax_id}  ${resp.json()}
+
+    ${resp}=    Get Item Tax SA  ${account_id}  ${itemtax_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['taxCode']}         ${itemtax_id}
+    Should Be Equal As Strings    ${resp.json()['taxName']}         ${taxName}
+    Should Be Equal As Strings    ${resp.json()['taxTypeEnum']}     ${taxtypeenum[0]}
 
     ${resp}=    Get Item Tax Count By Filter SA  ${account_id} 
     Log   ${resp.content}
@@ -107,5 +114,5 @@ JD-TC-GetItemTaxCountByFilter-UH1
     ${resp}=    Get Item Tax Count By Filter SA  ${account_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
-    Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 
 

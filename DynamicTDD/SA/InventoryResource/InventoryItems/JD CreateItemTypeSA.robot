@@ -56,7 +56,7 @@ JD-TC-CreateItemType-UH1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Type name
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Type name${space}
 
     ${resp}=  Create Item Type SA   ${account_id}  ${empty}
     Log   ${resp.content}
@@ -76,6 +76,7 @@ JD-TC-CreateItemType-3
     ${resp}=  Create Item Type SA   ${ac}  ${typeName}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${Invalid_account_id}
 
 JD-TC-CreateItemType-UH2
 
@@ -93,7 +94,7 @@ JD-TC-CreateItemType-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-CreateItemType-4
+JD-TC-CreateItemType-5
 
     [Documentation]  Provider Login And get item type
 

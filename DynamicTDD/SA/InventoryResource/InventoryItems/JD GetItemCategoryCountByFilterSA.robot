@@ -23,7 +23,7 @@ JD-TC-GetItemCategoryFilterCount-1
 
     [Documentation]  SA Get a Item Category filter Count.
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME261}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME309}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -95,7 +95,7 @@ JD-TC-GetItemCategoryFilterCount-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Item Category Count By Filter SA   ${account_id}  categoryName-eq=${categoryName2}
+    ${resp}=    Get Item Category Count By Filter SA   ${account_id}  categoryName-eq=${categoryName}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}         1
@@ -106,4 +106,5 @@ JD-TC-GetItemCategoryFilterCount-5
 
     ${resp}=    Get Item Category Count By Filter SA   ${account_id} 
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422 
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED}  

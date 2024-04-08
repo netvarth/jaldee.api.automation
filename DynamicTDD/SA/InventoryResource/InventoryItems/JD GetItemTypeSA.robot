@@ -23,7 +23,7 @@ JD-TC-GetItemType-1
 
     [Documentation]  SA Get Item Type
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME261}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME211}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -81,7 +81,7 @@ JD-TC-GetItemType-UH2
     ${resp}=    Get Item Type SA    ${account_id}  ${fake}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Empty   ${resp.json()}
+    Should Be Empty   ${resp.content}
 
 JD-TC-GetItemType-UH3
 
@@ -89,17 +89,19 @@ JD-TC-GetItemType-UH3
 
     ${resp}=    Get Item Type SA    ${account_id}  ${type_Id}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    419
+    Should Be Equal As Strings    ${resp.json()}    ${SA_SESSION_EXPIRED} 
 
 
 JD-TC-GetItemType-uH4
 
     [Documentation]  SA Get Item Type - get from provider side
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME263}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME211}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Item Category   ${type_Id}
+    ${resp}=    Get Item Type   ${type_Id}
     Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['typeCode']}    ${type_Id}   
