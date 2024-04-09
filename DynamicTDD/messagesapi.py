@@ -2300,6 +2300,8 @@ CATALOG_ITEM_BATCH_ID_REQUIRED="Catalog Item batch Id required"
 BATCH_NAME_REQUIRED="Batch Name required"
 INVENORY_CATALOG_ITEM_BATCH="Invalid Catalog Item Batch"
 INVALID_ORDER_ID="Invalid Order Id"
+SORDERCATALOGITEMENCID_FILTER_REQUIRED="sorderCatalogItemEncId in filter required"
+INVALID_CATALOG_ITEM_BATCH_ID="Invalid Catalog Item Batch Id"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"

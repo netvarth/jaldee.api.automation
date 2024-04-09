@@ -256,10 +256,11 @@ JD-TC-Create SalesOrder Inventory Catalog-7
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+
     ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
+    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  ${OtpPurpose['ProviderResetPassword']}
     Should Be Equal As Strings  ${resp[0].status_code}  200
     Should Be Equal As Strings  ${resp[1].status_code}  200
 
@@ -364,13 +365,13 @@ JD-TC-Create SalesOrder Inventory Catalog-UH5
 
 JD-TC-Create SalesOrder Inventory Catalog-UH6
 
-    [Documentation]  create sales order inventory catalog where name(word length is 255).(inventory manager is false)
+    [Documentation]  create sales order inventory catalog where name(STRING length is 256).(inventory manager is false)
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Text}=  FakerLibrary.Sentence   nb_words=255
+    ${Text}=  Generate Random String  256
     ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id1}  ${Text}  ${boolean[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422

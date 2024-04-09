@@ -274,20 +274,20 @@ JD-TC-Update SalesOrder Catalog-UH3
 
 JD-TC-Update SalesOrder Catalog-UH4
 
-    [Documentation]  update  sales order  catalog where name(word length is 255).
+    [Documentation]  update  sales order  catalog where name(word length is 256).
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Text}=  FakerLibrary.Sentence   nb_words=255
+    ${Text}=  Generate Random String  256
     ${resp}=  Update SalesOrder Catalog   ${sacatlogid1}    name=${Text} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
 
 JD-TC-Update SalesOrder Catalog-UH5
 
-    [Documentation]  update  sales order  catalog where name(word length is 255).
+    [Documentation]  update  sales order  catalog .
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME39}  ${PASSWORD}
     Log   ${resp.content}

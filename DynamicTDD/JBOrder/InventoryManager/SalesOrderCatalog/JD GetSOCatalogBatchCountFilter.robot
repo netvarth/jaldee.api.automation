@@ -26,11 +26,11 @@ ${invalidstring}     _ad$.sa_
 
 *** Test Cases ***
 
-JD-TC-Get Catalog Batch Filter-1
+JD-TC-Get Catalog Batch Count Filter-1
 
-    [Documentation]   Get filter with salesorderItemEncid.
+    [Documentation]   Get count filter with salesorderItemEncid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -73,10 +73,10 @@ JD-TC-Get Catalog Batch Filter-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME31}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME30}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -191,46 +191,36 @@ JD-TC-Get Catalog Batch Filter-1
     ${resp}=   Get Catalog Item Batch List   sorderCatalogItemEncId-eq=${SO_itemEncIds}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${netRate}=  Convert To Number  ${resp.json()[0]['price']}    1
-    Should Be Equal As Strings    ${netRate}    ${price}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}    ${Name} 
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId} 
-    Should Be Equal As Strings    ${resp.json()[0]['catalogItem']['encId']}    ${SO_itemEncIds}    
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['id']}    ${sp-item-id} 
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}    ${itemEncId1} 
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${displayName}
-    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_Cata_Item_Batch_Encid} 
-    Should Be Equal As Strings    ${resp.json()[0]['status']}     ${toggle[0]} 
-    Should Be Equal As Strings    ${resp.json()[0]['name']}     ${Name} 
+    ${count}=  Get Length  ${resp.json()}
 
-JD-TC-Get Catalog Batch Filter-2
+    ${resp}=  Get Catalog Item Batch Count   sorderCatalogItemEncId-eq=${SO_itemEncIds}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings   ${resp.json()}   ${count}
 
-    [Documentation]   Get filter with price.
+JD-TC-Get Catalog Batch Count Filter-2
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    [Documentation]   Get count filter with price.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Catalog Item Batch List   sorderCatalogItemEncId-eq=${SO_itemEncIds}   price-eq=${price}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${netRate}=  Convert To Number  ${resp.json()[0]['price']}    1
-    Should Be Equal As Strings    ${netRate}    ${price}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}    ${Name} 
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId} 
-    Should Be Equal As Strings    ${resp.json()[0]['catalogItem']['encId']}    ${SO_itemEncIds}    
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['id']}    ${sp-item-id} 
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}    ${itemEncId1} 
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${displayName}
-    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_Cata_Item_Batch_Encid} 
-    Should Be Equal As Strings    ${resp.json()[0]['status']}     ${toggle[0]} 
-    Should Be Equal As Strings    ${resp.json()[0]['name']}     ${Name} 
+    ${count}=  Get Length  ${resp.json()}
 
-JD-TC-Get Catalog Batch Filter-3
+    ${resp}=  Get Catalog Item Batch Count   sorderCatalogItemEncId-eq=${SO_itemEncIds}   price-eq=${price} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings   ${resp.json()}   ${count}
 
-    [Documentation]   Get filter with catalog item batch id.
+JD-TC-Get Catalog Batch Count Filter-3
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    [Documentation]   Get count filter with catalog item batch id.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -238,23 +228,18 @@ JD-TC-Get Catalog Batch Filter-3
     ${resp}=   Get Catalog Item Batch List   sorderCatalogItemEncId-eq=${SO_itemEncIds}  encId-eq=${SO_Cata_Item_Batch_Encid}     
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${netRate}=  Convert To Number  ${resp.json()[0]['price']}    1
-    Should Be Equal As Strings    ${netRate}    ${price}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}    ${Name} 
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId} 
-    Should Be Equal As Strings    ${resp.json()[0]['catalogItem']['encId']}    ${SO_itemEncIds}    
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['id']}    ${sp-item-id} 
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}    ${itemEncId1} 
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${displayName}
-    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_Cata_Item_Batch_Encid} 
-    Should Be Equal As Strings    ${resp.json()[0]['status']}     ${toggle[0]} 
-    Should Be Equal As Strings    ${resp.json()[0]['name']}     ${Name} 
+    ${count}=  Get Length  ${resp.json()}
 
-JD-TC-Get Catalog Batch Filter-4
+    ${resp}=  Get Catalog Item Batch Count   sorderCatalogItemEncId-eq=${SO_itemEncIds}  encId-eq=${SO_Cata_Item_Batch_Encid} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings   ${resp.json()}   ${count}
 
-    [Documentation]   Get Catalog Item Batch List with enabled status
+JD-TC-Get Catalog Batch Count Filter-4
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    [Documentation]   Get Catalog Item Batch  count List with enabled status
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -262,23 +247,18 @@ JD-TC-Get Catalog Batch Filter-4
     ${resp}=   Get Catalog Item Batch List    sorderCatalogItemEncId-eq=${SO_itemEncIds}  status-eq=${toggle[0]}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${netRate}=  Convert To Number  ${resp.json()[0]['price']}    1
-    Should Be Equal As Strings    ${netRate}    ${price}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}    ${Name} 
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId} 
-    Should Be Equal As Strings    ${resp.json()[0]['catalogItem']['encId']}    ${SO_itemEncIds}    
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['id']}    ${sp-item-id} 
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}    ${itemEncId1} 
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${displayName}
-    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_Cata_Item_Batch_Encid} 
-    Should Be Equal As Strings    ${resp.json()[0]['status']}     ${toggle[0]} 
-    Should Be Equal As Strings    ${resp.json()[0]['name']}     ${Name} 
+    ${count}=  Get Length  ${resp.json()}
 
-JD-TC-Get Catalog Batch Filter-5
+    ${resp}=  Get Catalog Item Batch Count   sorderCatalogItemEncId-eq=${SO_itemEncIds}  status-eq=${toggle[0]}     
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings   ${resp.json()}   ${count}
 
-    [Documentation]   Get Catalog Item Batch filter with enabled status
+JD-TC-Get Catalog Batch Count Filter-5
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    [Documentation]   Get Catalog Item Batch  count filter with enabled status
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -286,24 +266,18 @@ JD-TC-Get Catalog Batch Filter-5
     ${resp}=   Get Catalog Item Batch List    sorderCatalogItemEncId-eq=${SO_itemEncIds}  sorderCatalogItem-eq=${catalogitemid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${netRate}=  Convert To Number  ${resp.json()[0]['price']}    1
-    Should Be Equal As Strings    ${netRate}    ${price}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}    ${Name} 
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId} 
-    Should Be Equal As Strings    ${resp.json()[0]['catalogItem']['encId']}    ${SO_itemEncIds}    
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['id']}    ${sp-item-id} 
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}    ${itemEncId1} 
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${displayName}
-    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_Cata_Item_Batch_Encid} 
-    Should Be Equal As Strings    ${resp.json()[0]['status']}     ${toggle[0]} 
-    Should Be Equal As Strings    ${resp.json()[0]['name']}     ${Name} 
+    ${count}=  Get Length  ${resp.json()}
 
+    ${resp}=  Get Catalog Item Batch Count   sorderCatalogItemEncId-eq=${SO_itemEncIds}  sorderCatalogItem-eq=${catalogitemid}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings   ${resp.json()}   ${count}
 
-JD-TC-Get Catalog Batch Filter-6
+JD-TC-Get Catalog Batch Count Filter-6
 
-    [Documentation]   Create Catalog Item Batch with same sales order item encid and then Get Catalog Item Batch filter 
+    [Documentation]   Create Catalog Item Batch with same sales order item encid and then Get Catalog Item Batch count filter 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -320,36 +294,19 @@ JD-TC-Get Catalog Batch Filter-6
     ${resp}=   Get Catalog Item Batch List    sorderCatalogItemEncId-eq=${SO_itemEncIds} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${netRate}=  Convert To Number  ${resp.json()[0]['price']}    1
-    Should Be Equal As Strings    ${netRate}    ${price1}
-    ${netRate1}=  Convert To Number  ${resp.json()[1]['price']}    1
-    Should Be Equal As Strings    ${netRate1}    ${price}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}    ${Name1} 
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId} 
-    Should Be Equal As Strings    ${resp.json()[0]['catalogItem']['encId']}    ${SO_itemEncIds}    
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['id']}    ${sp-item-id} 
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}    ${itemEncId1} 
-    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${displayName}
-    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_Cata_Item_Batch_Encid1} 
-    Should Be Equal As Strings    ${resp.json()[0]['status']}     ${toggle[0]} 
-    Should Be Equal As Strings    ${resp.json()[0]['name']}     ${Name1} 
-    Should Be Equal As Strings    ${resp.json()[1]['name']}    ${Name} 
-    Should Be Equal As Strings    ${resp.json()[1]['accountId']}    ${accountId} 
-    Should Be Equal As Strings    ${resp.json()[1]['catalogItem']['encId']}    ${SO_itemEncIds}    
-    Should Be Equal As Strings    ${resp.json()[1]['spItem']['id']}    ${sp-item-id} 
-    Should Be Equal As Strings    ${resp.json()[1]['spItem']['encId']}    ${itemEncId1} 
-    Should Be Equal As Strings    ${resp.json()[1]['spItem']['name']}    ${displayName}
-    Should Be Equal As Strings    ${resp.json()[1]['encId']}    ${SO_Cata_Item_Batch_Encid} 
-    Should Be Equal As Strings    ${resp.json()[1]['status']}     ${toggle[0]} 
-    Should Be Equal As Strings    ${resp.json()[1]['name']}     ${Name} 
+    ${count}=  Get Length  ${resp.json()}
+
+    ${resp}=  Get Catalog Item Batch Count    sorderCatalogItemEncId-eq=${SO_itemEncIds}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings   ${resp.json()}   ${count}
 
 
+JD-TC-Get Catalog Batch Count Filter-UH1
 
-JD-TC-Get Catalog Batch Filter-UH1
+    [Documentation]   Get Catalog Item Batch  count filter with invalid catalog item id
 
-    [Documentation]   Get Catalog Item Batch filter with invalid catalog item id
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -357,79 +314,99 @@ JD-TC-Get Catalog Batch Filter-UH1
     ${resp}=   Get Catalog Item Batch List    sorderCatalogItemEncId-eq=${SO_itemEncIds}  sorderCatalogItem-eq=${SO_itemEncIds}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}    []
+    ${count}=  Get Length  ${resp.json()}
 
-JD-TC-Get Catalog Batch Filter-UH2
+    ${resp}=  Get Catalog Item Batch Count   sorderCatalogItemEncId-eq=${SO_itemEncIds}  sorderCatalogItem-eq=${SO_itemEncIds}     
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings   ${resp.json()}   ${count}
 
-    [Documentation]   Get Catalog Item Batch filter without catalogItemEncid
+JD-TC-Get Catalog Batch Count Filter-UH2
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    [Documentation]   Get Catalog Item Batch count filter without catalogItemEncid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get Catalog Item Batch List    sorderCatalogItem-eq=${SO_itemEncIds}   
+    ${resp}=   Get Catalog Item Batch Count    sorderCatalogItem-eq=${SO_itemEncIds}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}    ${SORDERCATALOGITEMENCID_FILTER_REQUIRED}
 
-JD-TC-Get Catalog Batch Filter-UH3
+JD-TC-Get Catalog Batch Count Filter-UH3
 
-    [Documentation]   Get Catalog Item Batch filter with status as disabled
+    [Documentation]   Get Catalog Item Batch count filter with status as disabled
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Catalog Item Batch List    sorderCatalogItemEncId-eq=${SO_itemEncIds}  status-eq=${toggle[1]}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}    []
+    ${count}=  Get Length  ${resp.json()}
 
-JD-TC-Get Catalog Batch Filter-UH4
+    ${resp}=  Get Catalog Item Batch Count   sorderCatalogItemEncId-eq=${SO_itemEncIds}  status-eq=${toggle[1]}       
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings   ${resp.json()}   ${count}
 
-    [Documentation]   Get Catalog Item Batch filter where price is empty
+JD-TC-Get Catalog Batch Count Filter-UH4
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    [Documentation]   Get Catalog Item Batch count filter where price is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Catalog Item Batch List   sorderCatalogItemEncId-eq=${SO_itemEncIds}   price-eq=${EMPTY}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}    []
+    ${count}=  Get Length  ${resp.json()}
 
-JD-TC-Get Catalog Batch Filter-UH5
+    ${resp}=  Get Catalog Item Batch Count   sorderCatalogItemEncId-eq=${SO_itemEncIds}   price-eq=${EMPTY}        
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings   ${resp.json()}   ${count}
 
-    [Documentation]   Get Catalog Item Batch filter where sorderCatalogItemEncId is empty
+JD-TC-Get Catalog Batch Count Filter-UH5
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    [Documentation]   Get Catalog Item Batch count filter where sorderCatalogItemEncId is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Catalog Item Batch List   sorderCatalogItemEncId-eq=${EMPTY}     
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()}    []
+   ${count}=  Get Length  ${resp.json()}
 
-JD-TC-Get Catalog Batch Filter-UH6
+    ${resp}=  Get Catalog Item Batch Count    sorderCatalogItemEncId-eq=${EMPTY}        
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings   ${resp.json()}   ${count}
 
-    [Documentation]   Get filter without login
+JD-TC-Get Catalog Batch Count Filter-UH6
 
-    ${resp}=   Get Catalog Item Batch List   sorderCatalogItemEncId-eq=${SO_itemEncIds}  encId-eq=${SO_Cata_Item_Batch_Encid}     
+    [Documentation]   Get count filter without login
+
+    ${resp}=   Get Catalog Item Batch Count   sorderCatalogItemEncId-eq=${SO_itemEncIds}  encId-eq=${SO_Cata_Item_Batch_Encid}     
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 
-JD-TC-Get Catalog Batch Filter-UH7
+JD-TC-Get Catalog Batch Count Filter-UH7
 
-    [Documentation]  Get Catalog Item Batch filter using sa login.
+    [Documentation]  Get Catalog Item Batch count filter using sa login.
 
     ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Get Catalog Item Batch List   sorderCatalogItemEncId-eq=${SO_itemEncIds}  encId-eq=${SO_Cata_Item_Batch_Encid}     
+    ${resp}=   Get Catalog Item Batch Count   sorderCatalogItemEncId-eq=${SO_itemEncIds}  encId-eq=${SO_Cata_Item_Batch_Encid}     
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
