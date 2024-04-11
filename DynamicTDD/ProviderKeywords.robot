@@ -14554,6 +14554,15 @@ Get Purchase Item Filter Count
     ${resp}=  GET On Session  ynw  /provider/inventory/purchase/items/count  params=${param}   expected_status=any
     RETURN  ${resp}
 
+Update Purchase Status
+
+    [Arguments]  ${Status}  ${Uid}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/inventory/purchase/${uid}/status/${status}   expected_status=any
+    RETURN  ${resp} 
+
+
 #----------------------Remarks----------------------------------------
 Create Item Remarks
 
@@ -14587,7 +14596,7 @@ Get Item Remark Filter
 Get Item Remark Count Filter
     [Arguments]  &{param}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /provider/inventory/remark  params=${param}  expected_status=any
+    ${resp}=  GET On Session  ynw   /provider/inventory/remark/count  params=${param}  expected_status=any
     RETURN  ${resp}
 
 Get Inventoryitem
