@@ -64,13 +64,13 @@ Account Set Credential
     ${resp}=    PUT On Session    ynw    /provider/${key}/activate    data=${apple}    expected_status=any
     RETURN  ${resp}
 
-ProviderLogin
+Provider Login
     [Arguments]    ${usname}  ${passwrd}   ${countryCode}=91
     ${log}=  Login  ${usname}  ${passwrd}   countryCode=${countryCode}
     ${resp}=    POST On Session    ynw    /provider/login    data=${log}  expected_status=any
     RETURN  ${resp}
 
-ProviderLogout
+Provider Logout
     Check And Create YNW Session
     ${resp}=  DELETE On Session  ynw  /provider/login  expected_status=any
     RETURN  ${resp}       
@@ -7140,59 +7140,65 @@ Get Appointment Details with apptid
 
 
 Multiloc and Billable highest license Providers 
-    [Arguments]  ${min}=0   ${max}=324
+    [Arguments]  ${min}=0   ${max}=54
     @{dom_list}=  Create List
     @{provider_list}=  Create List
     @{multiloc_providers}=  Create List    
     ${multilocdoms}=  get_mutilocation_domains
     Log  ${multilocdoms}
     ${domlen}=  Get Length   ${multilocdoms}
-    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
+    ${resp}=   Get File    /ebs/TDD/varfiles/hl_providers.py
     ${len}=   Split to lines  ${resp}
     ${length}=  Get Length   ${len}
-    # ${length}   Run Keyword If     ${length}>${max}   Set Variable  ${max}
-    # ...  ELSE	 Set Variable    ${length}
+    IF  ${length} < ${min}
+        ${min}=  Set Variable  ${0}
+    END
+    IF  ${length} < ${max}
+        ${max}=  Set Variable  ${length}
+    END
 
     FOR   ${i}  IN RANGE   ${domlen}
         ${dom}=  Convert To String   ${multilocdoms[${i}]['domain']}
         Append To List   ${dom_list}  ${dom}
     END
     Log   ${dom_list}
-     
+    
+    Log Many  ${min}   ${max}
     FOR   ${a}  IN RANGE   ${min}   ${max}   
-        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        ${resp}=  Encrypted Provider Login  ${HLPUSERNAME${a}}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         ${decrypted_data}=  db.decrypt_data  ${resp.content}
         Log  ${decrypted_data}
         ${domain}=   Set Variable    ${decrypted_data['sector']}
         ${subdomain}=    Set Variable      ${decrypted_data['subSector']}
-        # ${domain}=   Set Variable    ${resp.json()['sector']}
-        # ${subdomain}=    Set Variable      ${resp.json()['subSector']}
-        Log  ${dom_list}
-        ${pkg_id}=   get_highest_license_pkg
+    
+        ${licid}  ${licname}=  get_highest_license_pkg
+        Log   ${licid}
+        
+        ${resp}=   Get Active License
+        Log  ${resp.content}
+        Should Be Equal As Strings    ${resp.status_code}   200
+        ${pkg_id}=   Set Variable  ${resp.json()['accountLicense']['licPkgOrAddonId']}
         Log   ${pkg_id}
-        Set Suite Variable     ${pkg_id[0]}   ${pkg_id[0]}
-        ${resp3}=  Get Business Profile
-        Log   ${resp3.json()}
-        Should Be Equal As Strings  ${resp3.status_code}  200
-        Set Suite Variable   ${check1}   ${resp3.json()['licensePkgID']}
      
-        ${status} 	${value} = 	Run Keyword And Ignore Error  List Should Contain Value  ${dom_list}  ${domain}
-        Log Many  ${status} 	${value}
-        IF  '${status}' == 'PASS' and '${check1}' == '${pkg_id[0]}'  
-            Append To List   ${multiloc_providers}  ${PUSERNAME${a}}
-        END
         ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
         Log   ${resp2.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
-        Set Test Variable  ${check}    ${resp2.json()['serviceBillable']} 
+        Set Test Variable  ${billableflag}    ${resp2.json()['serviceBillable']}
+        Set Test Variable  ${multilocflag}    ${resp2.json()['multipleLocation']}
+
+        IF  '${domain}' in @{dom_list}
+            IF  '${pkg_id}' == '${licid}'  
+                Append To List   ${multiloc_providers}  ${PUSERNAME${a}}
+            END
        
-        IF  '${check}' == 'True' and '${check1}' == '${pkg_id[0]}'  
-            Append To List   ${provider_list}  ${PUSERNAME${a}}
+            IF  '${billableflag}' == 'True'  
+                Append To List   ${provider_list}  ${PUSERNAME${a}}
+            END
         END
-        # Run Keyword If    '${status}' == 'PASS' and '${check}' == 'True'   Append To List  ${multiloc_billable_providers}  ${PUSERNAME${a}}
+        
     END
-    # RETURN  ${provider_list}  ${multiloc_providers}  ${multiloc_billable_providers}
+    
     RETURN  ${provider_list}  ${multiloc_providers}
 
 Create Sample Catalog

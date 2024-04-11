@@ -30,6 +30,9 @@ Remove Files
     Remove File   ${EXECDIR}/TDD/varfiles/providers.py
     Create File   ${EXECDIR}/TDD/varfiles/providers.py
 
+    Remove File   ${EXECDIR}/TDD/varfiles/hl_providers.py
+    Create File   ${EXECDIR}/TDD/varfiles/hl_providers.py
+
 JD-TC-Branch_Signup-1
     [Documentation]    Create a provider with all valid attributes
     Set Global Variable  ${US}  0

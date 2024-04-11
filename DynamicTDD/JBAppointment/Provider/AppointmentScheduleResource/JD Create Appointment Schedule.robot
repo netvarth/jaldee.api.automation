@@ -9,6 +9,7 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 Variables         /ebs/TDD/varfiles/musers.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/hl_providers.py
 
 
 *** Variables ***
@@ -596,7 +597,7 @@ JD-TC-CreateAppointmentSchedule-UH5
     ${resp}=   Get License UsageInfo 
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    reset_user_metric  ${account_id}
+    reset_queue_metric  ${account_id}
     ${s_id5}=  Create Sample Service  ${SERVICE3}
     ${schedule_name}=  FakerLibrary.bs
     ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${EMPTY}  ${EMPTY}  ${sTime1}  ${eTime2}  ${parallel}  ${parallel}  ${p2_lid}  ${duration}  ${bool1}  ${s_id5}
@@ -1606,8 +1607,8 @@ JD-TC-CreateAppointmentSchedule-17
   #  Set Suite Variable   ${multilocPro}
 
 
-    ${billable_providers}   ${multilocPro}=    Multiloc and Billable highest license Providers    min=0   max=260
-     Log Many  ${billable_providers} 	${multilocPro}
+    ${billable_providers}   ${multilocPro}=    Multiloc and Billable highest license Providers    min=0   max=54
+    Log Many  ${billable_providers} 	${multilocPro}
     Set Suite Variable   ${billable_providers}
     Set Suite Variable   ${multilocPro}
 
@@ -2285,8 +2286,8 @@ JD-TC-CreateAppointmentSchedule-23
     ${resp}=  Encrypted Provider Login  ${PUSERNAME132}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    # clear_service   ${PUSERNAME132}
-    # clear_appt_schedule   ${PUSERNAME132}
+    clear_service   ${PUSERNAME132}
+    clear_appt_schedule   ${PUSERNAME132}
 
     ${resp}=   Get Service
     Log  ${resp.content}
