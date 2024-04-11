@@ -91,11 +91,11 @@ Get SalesOrder Count
     
 *** Test Cases ***
 
-JD-TC-Create Sales Order-1
+JD-TC-Get Sales Order List -1
 
-    [Documentation]   Create a sales Order with Valid Details.
+    [Documentation]   Create a sales Order then try to get using encId param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -124,11 +124,11 @@ JD-TC-Create Sales Order-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME16}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME22}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -158,6 +158,8 @@ JD-TC-Create Sales Order-1
     Set Suite Variable  ${DAY1} 
 
     ${Name}=    FakerLibrary.last name
+    Set Suite Variable  ${Name} 
+
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
@@ -255,7 +257,7 @@ JD-TC-Create Sales Order-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -344,19 +346,6 @@ JD-TC-Create Sales Order-1
     Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
 # ------------------------------------------------------------------------------------------------------------------
 
-# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
-
-    # ${resp}=    Update SalesOrder Status    ${SO_EncIds}     ${orderStatus[1]}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-
-    # ${resp}=    Get Sales Order    ${SO_EncIds}   
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}   200
-    # Should Be Equal As Strings    ${resp.json()['encId']}                                           ${SO_EncIds}
-    # Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
-# ------------------------------------------------------------------------------------------------------------------------------------
-
 # --------------------------------------------- Get Order list -------------------------------------------------------------
 
     ${resp}=    Get SalesOrder List     encId-eq=${SO_Encid}   
@@ -401,145 +390,330 @@ JD-TC-Create Sales Order-1
     Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
-# *** comments ***
-JD-TC-Create Sales Order-2
 
-    [Documentation]   Create a sales Order where quantity passes as zero
+JD-TC-Get Sales Order List -2
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    [Documentation]    Try to get Sales Order List using uid param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${quantity}=    Random Int  min=0   max=0
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
+    ${resp}=    Get SalesOrder List     uid-eq=${SO_Uid}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${QUANTITY_REQUIRED}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}                                           ${SO_Encid}
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                  ${locId1}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                   ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                  ${store_id}
 
-JD-TC-Create Sales Order-3
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                 ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                              ${bool[0]}
 
-    [Documentation]   Create a sales Order using invalid provider consumer id.
+    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['id']}                                  ${cid}
+    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['name']}                                ${firstName} ${lastName}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.json()[0]['orderType']}                                       ${bookingChannel[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['orderStatus']}                                     ${orderStatus[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryType']}                                    ${deliveryType[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryStatus']}                                  ${deliveryStatus[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['originFrom']}                                      ${originFrom}
+
+    Should Be Equal As Strings    ${resp.json()[0]['orderNum']}                                        1
+    Should Be Equal As Strings    ${resp.json()[0]['orderRef']}                                        1
+    Should Be Equal As Strings    ${resp.json()[0]['deliveryDate']}                                    ${DAY1}
+
+    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['phone']['number']}                  ${primaryMobileNo}
+    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['email']}                            ${email_id}
+
+    Should Be Equal As Strings    ${resp.json()[0]['itemCount']}                                       1
+    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                        ${netTotal}
+    Should Be Equal As Strings    ${resp.json()[0]['taxTotal']}                                        0.0
+    Should Be Equal As Strings    ${resp.json()[0]['discountTotal']}                                   0.0
+    Should Be Equal As Strings    ${resp.json()[0]['jaldeeCouponTotal']}                               0.0
+    Should Be Equal As Strings    ${resp.json()[0]['providerCouponTotal']}                             0.0
+    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                         ${netTotal}
+    Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
+
+    Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
+
+JD-TC-Get Sales Order List -3
+
+    [Documentation]    Try to get Sales Order List using locationId param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${quantity}=    Random Int  min=500000   max=9000000
-    ${invalid}=    Random Int  min=5000   max=90000
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${invalid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
+    ${resp}=    Get SalesOrder List     locationId-eq=${locId1}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_CONS_ID}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                  ${locId1}
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}                                           ${SO_Encid}
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                   ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                  ${store_id}
 
-JD-TC-Create Sales Order-4
+JD-TC-Get Sales Order List -4
 
-    [Documentation]   Create a sales Order where sales order catalog id is invalid.
+    [Documentation]    Try to get Sales Order List using locationName param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${quantity}=    Random Int  min=500000   max=9000000
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${EMPTY}   ${quantity}     store=${store}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_ITEMID}
-
-
-JD-TC-Create Sales Order-5
-
-    [Documentation]   Create a sales Order without login.
-
-    ${quantity}=    Random Int  min=2   max=5
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   419
-    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
-
-JD-TC-Create Sales Order-6
-
-    [Documentation]   Create a sales Order using sa login.
-
-    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log   ${resp.content}
+    ${resp}=    Get Locations
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${location_name}   ${resp.json()[0]['place']}
 
-    ${quantity}=    Random Int  min=2   max=5
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
+    ${resp}=    Get SalesOrder List     locationName-eq=${location_name}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   419
-    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['location']['locationName']}                                  ${location_name}
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}                                           ${SO_Encid}
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                   ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                  ${store_id}
 
-JD-TC-Create Sales Order-7
+JD-TC-Get Sales Order List -5
 
-    [Documentation]   Create a sales Order using provider id instead of provider consumer id
+    [Documentation]    Try to get Sales Order List using storeId param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${quantity}=    Random Int  min=2   max=5
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${accountId}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}       store=${store}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_CONS_ID}
-
-JD-TC-Create Sales Order-8
-
-    [Documentation]   Create a sales Order using same item add two times.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${quantity}=    Random Int  min=2   max=5
+    ${resp}=    Get SalesOrder List     storeId-eq=${store_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                  ${store_id}
+    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                  ${locId1}
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}                                           ${SO_Encid}
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                   ${Name}
 
-    ${item}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}
+JD-TC-Get Sales Order List -6
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}   ${item}       store=${store}
+    [Documentation]    Try to get Sales Order List using storeName param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get SalesOrder List     storeName-eq=${Name}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                   ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                  ${store_id}
+    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                  ${locId1}
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}                                           ${SO_Encid}
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
+
+JD-TC-Get Sales Order List -7
+
+    [Documentation]    Try to get Sales Order List using orderNum param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get SalesOrder List     orderNum-eq=1   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                   ${Name}
+    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                  ${store_id}
+    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                  ${locId1}
+    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}                                           ${SO_Encid}
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
+
+JD-TC-Get Sales Order List -8
+
+    [Documentation]    Try to get Sales Order List using rxRefId param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get SalesOrder List     rxRefId-eq=1   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Create Sales Order-9
+JD-TC-Get Sales Order List -9
 
-    [Documentation]   Create a sales Order add invalid one item.
+    [Documentation]    Try to get Sales Order List using providerConsumerName param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${quantity}=    Random Int  min=2   max=5
-
-    ${item}=  Create Dictionary   catItemEncId=${invalidItem}   quantity=${quantity}
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}   ${item}   store=${store}
+    ${resp}=    Get SalesOrder List     providerConsumerName-eq=${firstName} ${lastName}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_ITEMID}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Create Sales Order-10
+JD-TC-Get Sales Order List -10
 
-    [Documentation]   Create a sales Order add Two different item.
+    [Documentation]    Try to get Sales Order List using sorderCatalogId param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${quantity}=    Random Int  min=2   max=5
-
-    ${item}=  Create Dictionary   catItemEncId=${SO_itemEncIds2}   quantity=${quantity}
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}   ${item}   store=${store}
+    ${resp}=    Get SalesOrder List     sorderCatalogId-eq=${SO_Cata_Encid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Sales Order    ${SO_Encid}   
+JD-TC-Get Sales Order List -11
+
+    [Documentation]    Try to get Sales Order List using soCatalogName param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get SalesOrder List     soCatalogName-eq=${Name}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+JD-TC-Get Sales Order List -12
 
+    [Documentation]    Try to get Sales Order List using originFrom param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get SalesOrder List     originFrom-eq=${originFrom}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Get Sales Order List -13
+
+    [Documentation]    Try to get Sales Order List using orderType param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get SalesOrder List     orderType-eq=${bookingChannel[0]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Get Sales Order List -14
+
+    [Documentation]    Try to get Sales Order List using orderStatus param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get SalesOrder List     orderStatus-eq=${orderStatus[0]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Get Sales Order List -15
+
+    [Documentation]    Try to get Sales Order List using deliveryType param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get SalesOrder List     deliveryType-eq=${deliveryType[0]}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Get Sales Order List -16
+
+    [Documentation]    Try to get Sales Order List using deliveryStatus param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get SalesOrder List     deliveryStatus-eq=${deliveryStatus[0]} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Get Sales Order List -17
+
+    [Documentation]    Try to get Sales Order List using partnerSpAccountId param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get SalesOrder List     partnerSpAccountId-eq=1   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Get Sales Order List -18
+
+    [Documentation]    Try to get Sales Order List using partnerSpName param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get SalesOrder List     partnerSpName-eq=1   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Get Sales Order List -19
+
+    [Documentation]    Try to get Sales Order List using partnerSpUserId param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get SalesOrder List     partnerSpUserId-eq=1   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Get Sales Order List -20
+
+    [Documentation]    Try to get Sales Order List using partnerSpUserName param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get SalesOrder List     partnerSpUserName-eq=1   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Get Sales Order List -21
+
+    [Documentation]    Try to get Sales Order List using partnerSpRxOwnerId param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get SalesOrder List     partnerSpRxOwnerId-eq=1   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Get Sales Order List -22
+
+    [Documentation]    Try to get Sales Order List using partnerSpRxOwnerName param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get SalesOrder List     partnerSpRxOwnerName-eq=1   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200

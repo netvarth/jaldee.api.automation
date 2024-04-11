@@ -80,22 +80,22 @@ Update SalesOrder Status
 Get SalesOrder List
     [Arguments]  &{param}    
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/sorder/item   params=${param}   expected_status=any
+    ${resp}=  GET On Session  ynw   /provider/sorder   params=${param}   expected_status=any
     RETURN  ${resp} 
 
 Get SalesOrder Count
     [Arguments]  &{param}    
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/sorder/item/count   params=${param}   expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/sorder/count   params=${param}   expected_status=any
     RETURN  ${resp} 
     
 *** Test Cases ***
 
-JD-TC-Get Sales Order-1
+JD-TC-Update Sales Order Status-1
 
-    [Documentation]   Create a sales Order with Valid Details then Get sales order by encid.
+    [Documentation]   Create a sales Order then change it's order status to ORDER_RECEIVED.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -124,11 +124,11 @@ JD-TC-Get Sales Order-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME17}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME16}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -255,7 +255,7 @@ JD-TC-Get Sales Order-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -266,6 +266,7 @@ JD-TC-Get Sales Order-1
     Set Suite Variable  ${SO_Cata_Encid_List}
 
     ${store}=  Create Dictionary   encId=${store_id}  
+    Set Suite Variable  ${store}
 
     ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
     Log   ${resp.content}
@@ -279,15 +280,17 @@ JD-TC-Get Sales Order-1
     ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
+
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
     Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
     Should Be Equal As Strings    ${resp.json()['store']['name']}                                   ${Name}
     Should Be Equal As Strings    ${resp.json()['store']['encId']}                                  ${store_id}
 
-    Should Be Equal As Strings    ${resp.json()['catalog']['name']}                                 ${Name}
-    Should Be Equal As Strings    ${resp.json()['catalog']['encId']}                                ${SO_Cata_Encid}
-    Should Be Equal As Strings    ${resp.json()['catalog']['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
 
     Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
     Should Be Equal As Strings    ${resp.json()['orderFor']['id']}                                  ${cid}
@@ -319,3 +322,128 @@ JD-TC-Get Sales Order-1
     Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 # -----------------------------------------------------------------------------------------------------------------------------------------
+
+# ------------------------------------ Update order status --------------------------------------------------
+
+    # ${quantity}=    Random Int  min=20   max=50
+
+    # ${netTotal}=  Evaluate  ${price}*${quantity}
+    # ${netTotal}=  Convert To Number  ${netTotal}   1
+
+    # ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+
+    # ${resp}=    Get Sales Order    ${SO_Uid}   
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    # Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    # Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
+    # Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
+    # Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
+# ------------------------------------------------------------------------------------------------------------------
+
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+JD-TC-Update Sales Order Status-2
+
+    [Documentation]   Update order status ORDER_RECEIVED to ORDER_CONFIRMED.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[2]}
+
+JD-TC-Update Sales Order Status-3
+
+    [Documentation]   Update order status ORDER_CONFIRMED to ORDER_COMPLETED.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[3]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[3]}
+
+JD-TC-Update Sales Order Status-4
+
+    [Documentation]   Update order status ORDER_COMPLETED to ORDER_CANCELED.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[4]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[4]}
+
+
+JD-TC-Update Sales Order Status-5
+
+    [Documentation]   Update order status ORDER_CANCELED to ORDER_DISCARDED.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[5]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[5]}
+
+JD-TC-Update Sales Order Status-6
+
+    [Documentation]   Update order status to same status.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[5]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[5]}
