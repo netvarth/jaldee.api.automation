@@ -14532,3 +14532,24 @@ Get Purchase By Uid
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/inventory/purchase/${uid}    expected_status=any
     RETURN  ${resp} 
+
+Get Purchase Filter
+
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/purchase  params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Purchase Item Filter
+
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/purchase/items  params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Purchase Item Filter Count
+
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/purchase/items/count  params=${param}   expected_status=any
+    RETURN  ${resp}
