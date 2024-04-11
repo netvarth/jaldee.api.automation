@@ -14581,17 +14581,17 @@ Update Item Remark
 Get Item Remark Filter
     [Arguments]  &{param}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw /provider/inventory/remark  params=${param}  expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/inventory/remark  params=${param}  expected_status=any
     RETURN  ${resp}
 
 Get Item Remark Count Filter
     [Arguments]  &{param}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw /provider/inventory/remark  params=${param}  expected_status=any
+    ${resp}=  GET On Session  ynw   /provider/inventory/remark  params=${param}  expected_status=any
     RETURN  ${resp}
 
 Get Inventoryitem
     [Arguments]   ${id}     
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/invcatalog/${id}   expected_status=any
+    ${resp}=  GET On Session  ynw   /provider/inventory/inventoryitem/invcatalog/${id}   expected_status=any
     RETURN  ${resp} 
