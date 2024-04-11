@@ -271,16 +271,16 @@ JD-TC-Update Sales Order-1
     ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${SO_EncIds}  ${resp.json()}
+    Set Suite Variable  ${SO_Uid}  ${resp.json()}
 
     ${netTotal}=  Evaluate  ${price}*${quantity}
     ${netTotal}=  Convert To Number  ${netTotal}   1
 
 
-    ${resp}=    Get Sales Order    ${SO_EncIds}   
+    ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['encId']}                                           ${SO_EncIds}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
     Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
     Should Be Equal As Strings    ${resp.json()['store']['name']}                                   ${Name}
@@ -328,14 +328,14 @@ JD-TC-Update Sales Order-1
     ${netTotal}=  Evaluate  ${price}*${quantity}
     ${netTotal}=  Convert To Number  ${netTotal}   1
 
-    ${resp}=    Update Order Items    ${SO_EncIds}     ${SO_itemEncIds}    ${quantity}
+    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Sales Order    ${SO_EncIds}   
+    ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['encId']}                                           ${SO_EncIds}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
     Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
     Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
@@ -354,14 +354,14 @@ JD-TC-Update Sales Order-2
     ${netTotal}=  Evaluate  ${price}*${quantity}
     ${netTotal}=  Convert To Number  ${netTotal}   1
 
-    ${resp}=    Update Order Items    ${SO_EncIds}     ${SO_itemEncIds2}    ${quantity}
+    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds2}    ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Sales Order    ${SO_EncIds}   
+    ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['encId']}                                           ${SO_EncIds}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
     Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
     Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
@@ -417,16 +417,16 @@ JD-TC-Update Sales Order-3
     ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncId1}   ${quantity}     store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${SO_EncIds}  ${resp.json()}
+    Set Suite Variable  ${SO_Uid}  ${resp.json()}
 
     ${netTotal}=  Evaluate  ${price}*${quantity}
     ${netTotal}=  Convert To Number  ${netTotal}   1
 
 
-    ${resp}=    Get Sales Order    ${SO_EncIds}   
+    ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['encId']}                                           ${SO_EncIds}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
     Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
     Should Be Equal As Strings    ${resp.json()['store']['name']}                                   ${Name}
@@ -437,14 +437,14 @@ JD-TC-Update Sales Order-3
     ${netTotal}=  Evaluate  ${price}*${quantity}
     ${netTotal}=  Convert To Number  ${netTotal}   1
 
-    ${resp}=    Update Order Items    ${SO_EncIds}     ${SO_itemEncId1}    ${quantity}
+    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncId1}    ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Sales Order    ${SO_EncIds}   
+    ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['encId']}                                           ${SO_EncIds}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
     Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
     Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
@@ -462,7 +462,7 @@ JD-TC-Update Sales Order-UH1
     ${quantity}=    Random Int  min=0   max=0
 
 
-    ${resp}=    Update Order Items    ${SO_EncIds}     ${SO_itemEncIds}    ${quantity}
+    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${QUANTITY_REQUIRED}
@@ -478,7 +478,7 @@ JD-TC-Update Sales Order-UH2
     ${quantity}=    Random Int  min=4   max=50
 
 
-    ${resp}=    Update Order Items    ${SO_EncIds}     ${EMPTY}    ${quantity}
+    ${resp}=    Update Order Items    ${SO_Uid}     ${EMPTY}    ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_ITEMID}
@@ -495,7 +495,7 @@ JD-TC-Update Sales Order-UH3
     ${quantity}=    Random Int  min=4   max=50
 
 
-    ${resp}=    Update Order Items    ${SO_EncIds}     ${SO_itemEncIds}    ${quantity}
+    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_ORDER_ID}
@@ -506,7 +506,7 @@ JD-TC-Update Sales Order-UH4
 
     ${quantity}=    Random Int  min=4   max=50
 
-    ${resp}=    Update Order Items    ${SO_EncIds}     ${SO_itemEncIds}    ${quantity}
+    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -520,7 +520,7 @@ JD-TC-Update Sales Order-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${quantity}=    Random Int  min=4   max=50
-    ${resp}=    Update Order Items    ${SO_EncIds}     ${SO_itemEncIds}    ${quantity}
+    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}

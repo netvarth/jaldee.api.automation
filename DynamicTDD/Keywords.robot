@@ -262,7 +262,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{customertitle}                    Mr.  Ms.  Mrs.  Master.
 @{InventoryCatalogStatus}           Active   Inactive
 @{transactionTypeEnum}              OPENING  ADJUSTMENT  PURCHASE_ORDER  PURCHASE  PURCHASE_RETURN	SALES_ORDER  SALES_ORDER_CANCEL  SALES  SALES_RETURN  TRANSFER_IN  TRANSFER_OUT
-
+@{PurchaseStatus}                   DRAFT  IN_REVIEW  APPROVED
 
 *** Keywords ***
 Login

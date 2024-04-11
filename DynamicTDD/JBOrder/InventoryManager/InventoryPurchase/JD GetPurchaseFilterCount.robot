@@ -26,9 +26,9 @@ ${order}        0
 
 *** Test Cases ***
 
-JD-TC-GetItemDetails-1
+JD-TC-GetPurchaseByFilterCount-1
 
-    [Documentation]  Get item Details.
+    [Documentation]  Get Purchase By Filter Count
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
@@ -42,6 +42,14 @@ JD-TC-GetItemDetails-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=  Create Sample Location
+    Set Suite Variable    ${loc_id}   ${resp}
+
+    ${resp}=   Get Location ById  ${loc_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Provider Logout
     Log  ${resp.content}
@@ -60,14 +68,6 @@ JD-TC-GetItemDetails-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${St_Id}    ${resp.json()}
-
-    # ${TypeName1}=    FakerLibrary.name
-    # Set Suite Variable  ${TypeName1}
-
-    # ${resp}=  Create Store Type   ${TypeName1}    ${storeNature[1]}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Suite Variable    ${St_Id1}    ${resp.json()}
 
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
@@ -321,52 +321,52 @@ JD-TC-GetItemDetails-1
 
     # ... Create itemUnits ....
 
-    ${unitName}=          FakerLibrary.name
-    ${convertionQty}=     Random Int  min=0  max=200
-    Set Suite Variable      ${unitName}
-    Set Suite Variable      ${convertionQty}
+    ${unitName}=                    FakerLibrary.name
+    ${convertionQty}=               Random Int  min=1  max=20
+    Set Suite Variable              ${unitName}
+    Set Suite Variable              ${convertionQty}
 
-    ${resp}=    Create Item Unit  ${unitName}  ${convertionQty}
+    ${resp}=    Create Item Unit    ${unitName}  ${convertionQty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${iu_id}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable   ${iu_id}   ${resp.json()}
 
-    ${itemUnits}=   Create List  ${iu_id}
+    ${itemUnits}=   Create List     ${iu_id}
 
     # .... Attachments ......
 
-    ${resp}=  db.getType   ${jpgfile} 
+    ${resp}=            db.getType  ${jpgfile} 
     Log  ${resp}
-    ${fileType}=  Get From Dictionary       ${resp}    ${jpgfile} 
-    Set Suite Variable    ${fileType}
-    ${caption}=  Fakerlibrary.Sentence
-    Set Suite Variable    ${caption}
+    ${fileType}=                    Get From Dictionary       ${resp}    ${jpgfile} 
+    Set Suite Variable              ${fileType}
+    ${caption}=                     Fakerlibrary.Sentence
+    Set Suite Variable              ${caption}
 
     ${resp}    upload file to temporary location    ${file_action[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200 
-    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+    Should Be Equal As Strings      ${resp.status_code}    200 
+    Set Suite Variable              ${driveId}    ${resp.json()[0]['driveId']}
 
     ${resp}    change status of the uploaded file    ${QnrStatus[1]}    ${driveId}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.status_code}    200
 
     ${attachments}=    Create Dictionary   action=${file_action[0]}  fileName=${jpgfile}  fileSize=${fileSize}  fileType=${fileType}  order=${order}    driveId=${driveId}
     Log  ${attachments}
-    ${attachments}=  Create List   ${attachments}
-    Set Suite Variable    ${attachments}
+    ${attachments}=  Create List    ${attachments}
+    Set Suite Variable              ${attachments}
 
-    ${name}=            FakerLibrary.name
-    ${shortDesc}=       FakerLibrary.sentence
-    ${internalDesc}=    FakerLibrary.sentence
-    Set Suite Variable  ${name}
-    Set Suite Variable  ${shortDesc}
-    Set Suite Variable  ${internalDesc}
+    ${name}=                        FakerLibrary.name
+    ${shortDesc}=                   FakerLibrary.sentence
+    ${internalDesc}=                FakerLibrary.sentence
+    Set Suite Variable              ${name}
+    Set Suite Variable              ${shortDesc}
+    Set Suite Variable              ${internalDesc}
 
     ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[0]}  isInventoryItem=${boolean[0]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable      ${itemEncId1}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable              ${itemEncId1}  ${resp.json()}
 
     ${resp}=    Get Item Inventory  ${itemEncId1}
     Log   ${resp.content}
@@ -415,26 +415,26 @@ JD-TC-GetItemDetails-1
 
     ${resp}=   Create Inventory Catalog Item  ${encid}   ${itemEncId1}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${ic_id}       ${resp.json()[0]}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable   ${ic_id}   ${resp.json()[0]}
 
-    ${quantity}=                Random Int  min=0  max=999
-    ${quantity}=                Convert To Number  ${quantity}  1
-    ${freeQuantity}=            Random Int  min=0  max=10
-    ${freeQuantity}=            Convert To Number  ${freeQuantity}  1
-    ${amount}=                  Random Int  min=1  max=999
-    ${amount}=                  Convert To Number  ${amount}  1
-    ${discountPercentage}=      Random Int  min=0  max=100
-    ${discountPercentage}=      Convert To Number  ${discountPercentage}  1
-    ${fixedDiscount}=           Random Int  min=0  max=200
-    ${fixedDiscount}=           Convert To Number  ${fixedDiscount}  1
-    ${inventoryCatalogItem}=    Create Dictionary   encId=${ic_id}
-    Set Suite Variable      ${quantity}
-    Set Suite Variable      ${freeQuantity}
-    Set Suite Variable      ${amount}
-    Set Suite Variable      ${discountPercentage}
-    Set Suite Variable      ${fixedDiscount}
-    Set Suite Variable      ${inventoryCatalogItem}
+    ${quantity}=                    Random Int  min=0  max=999
+    ${quantity}=                    Convert To Number  ${quantity}  1
+    ${freeQuantity}=                Random Int  min=0  max=10
+    ${freeQuantity}=                Convert To Number  ${freeQuantity}  1
+    ${amount}=                      Random Int  min=1  max=999
+    ${amount}=                      Convert To Number  ${amount}  1
+    ${discountPercentage}=          Random Int  min=0  max=100
+    ${discountPercentage}=          Convert To Number  ${discountPercentage}  1
+    ${fixedDiscount}=               Random Int  min=0  max=200
+    ${fixedDiscount}=               Convert To Number  ${fixedDiscount}  1
+    ${inventoryCatalogItem}=        Create Dictionary   encId=${ic_id}
+    Set Suite Variable              ${quantity}
+    Set Suite Variable              ${freeQuantity}
+    Set Suite Variable              ${amount}
+    Set Suite Variable              ${discountPercentage}
+    Set Suite Variable              ${fixedDiscount}
+    Set Suite Variable              ${inventoryCatalogItem}
 
     ${totalQuantity}=   Evaluate    ${quantity} + ${freeQuantity}
     ${netTotal}=        Evaluate    ${quantity} * ${amount}
@@ -444,7 +444,14 @@ JD-TC-GetItemDetails-1
     ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
     ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
     ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
-
+    Set Suite Variable              ${totalQuantity}
+    Set Suite Variable              ${netTotal}
+    Set Suite Variable              ${discountAmount}
+    Set Suite Variable              ${taxableAmount}
+    Set Suite Variable              ${cgstamount}
+    Set Suite Variable              ${sgstamount}
+    Set Suite Variable              ${taxAmount}
+    Set Suite Variable              ${netRate}
 
     ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
     Log   ${resp.content}
@@ -465,254 +472,38 @@ JD-TC-GetItemDetails-1
     Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
     Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
 
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${name}  ${boolean[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+    Set Suite Variable              ${inv_order_encid}    ${resp.json()}
 
-JD-TC-GetItemDetails-UH1
+    ${price}=    Random Int  min=2   max=40
+    ${price}=  Convert To Number  ${price}    1
+    Set Suite Variable  ${price}
 
-    [Documentation]  Get item Details - store id is empty
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${inv_order_encid}     ${itemEncId1}     ${price}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
-    ${X_REQUIRED}=  format String   ${X_REQUIRED}   Store enc id
+    ${expiryDate}=  db.add_timezone_date  ${tz}  50
 
-    ${resp}=    Get Item Details Inventory  ${empty}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
+    ${salesRate}=   Evaluate        ${amount} / ${convertionQty}
+    ${invoiceDate}=  db.add_timezone_date  ${tz}  1
+    ${rate}=        Evaluate        int(${salesRate})
+    ${mrp}=         Random Int      min=${rate}  max=9999
+    ${batchNo}=     Random Int      min=1  max=9999
+    ${invoiceReferenceNo}=          Random Int  min=1  max=999
+    ${purchaseNote}=                FakerLibrary.Sentence
+    ${roundOff}=                    Random Int  min=1  max=99
+
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${X_REQUIRED}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Set Suite Variable              ${purchaseId}           ${resp.json()}
 
-JD-TC-GetItemDetails-UH2
-
-    [Documentation]  Get item Details - store id is invalid
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=    Get Purchase Filter Count
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${inv}=     Random Int  min=999  max=9999
-
-    ${resp}=    Get Item Details Inventory  ${inv}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}        ${INVALID_STORE_ID}
-
-JD-TC-GetItemDetails-UH3
-
-    [Documentation]  Get item Details - vendor id is empty
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${X_REQUIRED}=  format String   ${X_REQUIRED}   Vendor enc id
-
-    ${resp}=    Get Item Details Inventory  ${store_id}  ${empty}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}        ${X_REQUIRED}
-
-JD-TC-GetItemDetails-UH4
-
-    [Documentation]  Get item Details - vendor id is inv
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Vendor Id
-
-    ${inv}=     Random Int  min=999  max=9999
-
-    ${resp}=    Get Item Details Inventory  ${store_id}  ${inv}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}        ${INVALID_FIELD}
-
-JD-TC-GetItemDetails-UH5
-
-    [Documentation]  Get item Details - inventory Catalog Item is empty
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${X_REQUIRED}=  format String   ${X_REQUIRED}   Inventory catalog item id
-
-    ${invcat}=     Create Dictionary  encId=${empty}
-
-    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${invcat}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}        ${X_REQUIRED}
-
-JD-TC-GetItemDetails-UH6
-
-    [Documentation]  Get item Details - inventory Catalog item is invalid
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${inv}=     Random Int  min=999  max=9999
-    ${invcat}=  Create Dictionary   encId=${inv}
-
-    ${ITEM_NOT_FOUND}=  format String   ${ITEM_NOT_FOUND}   ${inv}
-
-    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${invcat}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}        ${ITEM_NOT_FOUND}
-
-JD-TC-GetItemDetails-2
-
-    [Documentation]  Get item Details - quantity id is 0
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${totalQuantity}=   Evaluate    0 + ${freeQuantity}
-    ${netTotal}=        Evaluate    0 * ${amount}
-    ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
-    ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
-    ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
-    ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
-    ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
-    ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
-
-    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  0  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()['quantity']}              0.0
-    Should Be Equal As Strings      ${resp.json()['freeQuantity']}          ${freeQuantity}
-    Should Be Equal As Strings      ${resp.json()['totalQuantity']}         ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()['amount']}                ${amount}
-    Should Be Equal As Strings      ${resp.json()['discountPercentage']}    ${discountPercentage}
-    Should Be Equal As Strings      ${resp.json()['discountAmount']}        ${discountAmount}
-    Should Be Equal As Strings      ${resp.json()['taxableAmount']}         ${taxableAmount}
-    Should Be Equal As Strings      ${resp.json()['cgstPercentage']}        ${cgst}
-    Should Be Equal As Strings      ${resp.json()['sgstPercentage']}        ${sgst}
-    Should Be Equal As Strings      ${resp.json()['cgst']}                  ${cgstamount}
-    Should Be Equal As Strings      ${resp.json()['sgst']}                  ${sgstamount}
-    Should Be Equal As Strings      ${resp.json()['taxPercentage']}         ${taxPercentage}
-    Should Be Equal As Strings      ${resp.json()['taxAmount']}             ${taxAmount}
-    Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
-    Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
-
-
-JD-TC-GetItemDetails-3
-
-    [Documentation]  Get item Details - free quantity is empty
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${totalQuantity}=   Evaluate    ${quantity} + 0
-    ${netTotal}=        Evaluate    ${quantity} * ${amount}
-    ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
-    ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
-    ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
-    ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
-    ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
-    ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
-
-    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${empty}   ${amount}  ${fixedDiscount}  ${discountPercentage}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity}
-    Should Be Equal As Strings      ${resp.json()['freeQuantity']}          0.0
-    Should Be Equal As Strings      ${resp.json()['totalQuantity']}         ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()['amount']}                ${amount}
-    Should Be Equal As Strings      ${resp.json()['discountPercentage']}    ${discountPercentage}
-    Should Be Equal As Strings      ${resp.json()['discountAmount']}        ${discountAmount}
-    Should Be Equal As Strings      ${resp.json()['taxableAmount']}         ${taxableAmount}
-    Should Be Equal As Strings      ${resp.json()['cgstPercentage']}        ${cgst}
-    Should Be Equal As Strings      ${resp.json()['sgstPercentage']}        ${sgst}
-    Should Be Equal As Strings      ${resp.json()['cgst']}                  ${cgstamount}
-    Should Be Equal As Strings      ${resp.json()['sgst']}                  ${sgstamount}
-    Should Be Equal As Strings      ${resp.json()['taxPercentage']}         ${taxPercentage}
-    Should Be Equal As Strings      ${resp.json()['taxAmount']}             ${taxAmount}
-    Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
-    Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
-
-# JD-TC-GetItemDetails-4
-
-#     [Documentation]  Get item Details - amount is empty
-
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-#     Log   ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-
-#     ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${empty}  ${fixedDiscount}  ${discountPercentage}
-#     Log   ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-GetItemDetails-4
-
-    [Documentation]  Get item Details - amount is negative
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   -100  ${fixedDiscount}  ${discountPercentage}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
-
-JD-TC-GetItemDetails-5
-
-    [Documentation]  Get item Details - fixed discount is empty
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${totalQuantity}=   Evaluate    ${quantity} + ${freeQuantity}
-    ${netTotal}=        Evaluate    ${quantity} * ${amount}
-    ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
-    ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
-    ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
-    ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
-    ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
-    ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
-
-    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${empty}  ${discountPercentage}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity}
-    Should Be Equal As Strings      ${resp.json()['freeQuantity']}          ${freeQuantity}
-    Should Be Equal As Strings      ${resp.json()['totalQuantity']}         ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()['amount']}                ${amount}
-    Should Be Equal As Strings      ${resp.json()['discountPercentage']}    ${discountPercentage}
-    Should Be Equal As Strings      ${resp.json()['discountAmount']}        ${discountAmount}
-    Should Be Equal As Strings      ${resp.json()['taxableAmount']}         ${taxableAmount}
-    Should Be Equal As Strings      ${resp.json()['cgstPercentage']}        ${cgst}
-    Should Be Equal As Strings      ${resp.json()['sgstPercentage']}        ${sgst}
-    Should Be Equal As Strings      ${resp.json()['cgst']}                  ${cgstamount}
-    Should Be Equal As Strings      ${resp.json()['sgst']}                  ${sgstamount}
-    Should Be Equal As Strings      ${resp.json()['taxPercentage']}         ${taxPercentage}
-    Should Be Equal As Strings      ${resp.json()['taxAmount']}             ${taxAmount}
-    Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
-    Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
-
-# JD-TC-GetItemDetails-6
-
-#     [Documentation]  Get item Details - discount percentage is empty
-
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-#     Log   ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-
-#     ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${empty}
-#     Log   ${resp.content}
-#     Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-GetItemDetails-UH7
-
-    [Documentation]  Get item Details - without login
-
-    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    419
-    Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
+    Should Be Equal As Strings      ${resp.status_code}     200
