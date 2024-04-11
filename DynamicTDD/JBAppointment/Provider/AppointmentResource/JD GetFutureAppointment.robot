@@ -4178,6 +4178,10 @@ JD-TC-GetFutureAppointment-20
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
+    ${resp}=   Get Service
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     # clear_appt_schedule   ${PUSERNAME256}
