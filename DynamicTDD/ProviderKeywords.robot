@@ -14553,3 +14553,45 @@ Get Purchase Item Filter Count
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/inventory/purchase/items/count  params=${param}   expected_status=any
     RETURN  ${resp}
+
+#----------------------Remarks----------------------------------------
+Create Item Remarks
+
+    [Arguments]  ${remark}   ${transactionTypeEnum}  
+    ${data}=  Create Dictionary  remark=${remark}   transactionTypeEnum=${transactionTypeEnum}    
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/inventory/remark   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item Remark
+    [Arguments]   ${id}     
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/remark/${id}   expected_status=any
+    RETURN  ${resp} 
+
+Update Item Remark
+    [Arguments]  ${encId}  ${remark}   ${transactionTypeEnum}  
+    ${data}=  Create Dictionary    encId=${encId}   remark=${remark}   transactionTypeEnum=${transactionTypeEnum}    
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/inventory/remark   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item Remark Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw /provider/inventory/remark  params=${param}  expected_status=any
+    RETURN  ${resp}
+
+Get Item Remark Count Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw /provider/inventory/remark  params=${param}  expected_status=any
+    RETURN  ${resp}
+
+Get Inventoryitem
+    [Arguments]   ${id}     
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/invcatalog/${id}   expected_status=any
+    RETURN  ${resp} 

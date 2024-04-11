@@ -21,47 +21,7 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 ${invalidNum}        1245
 ${invalidEma}        asd122
 
-*** Keywords ***
-Create Item Remarks
 
-    [Arguments]  ${remark}   ${transactionTypeEnum}  
-    ${data}=  Create Dictionary  remark=${remark}   transactionTypeEnum=${transactionTypeEnum}    
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/inventory/remark   data=${data}  expected_status=any
-    RETURN  ${resp} 
-
-Get Item Remark
-    [Arguments]   ${id}     
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/inventory/remark/${id}   expected_status=any
-    RETURN  ${resp} 
-
-Update Item Remark
-    [Arguments]  ${encId}  ${remark}   ${transactionTypeEnum}  
-    ${data}=  Create Dictionary    encId=${encId}   remark=${remark}   transactionTypeEnum=${transactionTypeEnum}    
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/inventory/remark   data=${data}  expected_status=any
-    RETURN  ${resp} 
-
-Get Item Remark Filter
-    [Arguments]  &{param}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw /provider/inventory/remark  params=${param}  expected_status=any
-    RETURN  ${resp}
-
-Get Item Remark Count Filter
-    [Arguments]  &{param}
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw /provider/inventory/remark  params=${param}  expected_status=any
-    RETURN  ${resp}
-
-Get Inventoryitem
-    [Arguments]   ${id}     
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/invcatalog/${id}   expected_status=any
-    RETURN  ${resp} 
 
 *** Test Cases ***
 
@@ -224,6 +184,19 @@ JD-TC-CreateItemRemarks-12
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+JD-TC-CreateItemRemarks-13
+
+    [Documentation]  create item remarks thats already created.
+
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Create Item Remarks   ${remarks}  ${transactionTypeEnum[6]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
 
 JD-TC-CreateItemRemarks-UH1
 
@@ -261,4 +234,6 @@ JD-TC-CreateItemRemarks-UH3
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
+
 
