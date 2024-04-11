@@ -14494,3 +14494,41 @@ Get Item Details Inventory
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/inventory/purchase/item/details   data=${data}  expected_status=any
     RETURN  ${resp} 
+
+Create purchaseItemDtoList
+
+    # .....   discountPercentage or fixedDiscount as kwargs
+
+    [Arguments]  ${inv_cat_encid}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${taxableAmount}  ${taxAmount}  ${netAmount}  ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${unitCode}  
+    
+    ${inventoryCatalogItem}=    Create Dictionary  encId=${inv_cat_encid} 
+    ${invSOrderCatalog}=        Create Dictionary  encId=${inv_order_encid}
+    ${data}=                    Create Dictionary  inventoryCatalogItem=${inventoryCatalogItem}  invSOrderCatalog=${invSOrderCatalog}  quantity=${quantity}  freeQuantity=${freeQuantity}  totalQuantity=${totalQuantity}  amount=${amount}  discountAmount=${discountAmount}  discountPercentage=${discountPercentage}  fixedDiscount=${fixedDiscount}  taxableAmount=${taxableAmount}  taxAmount=${taxAmount}  netAmount=${netAmount}  expiryDate=${expiryDate}  mrp=${mrp}  salesRate=${salesRate}  batchNo=${batchNo}  cgst=${cgst}  sgst=${sgst}  unitCode=${unitCode}
+    RETURN  ${data}
+
+Create Purchase
+
+    [Arguments]  ${store_encid}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendor_encid}  ${ic_encid}  ${purchaseNote}  ${roundOff}  @{vargs}
+
+    ${purchaseItemDtoList}=     Create List
+    ${store}=                   Create Dictionary  encId=${store_encid}
+    ${vendor}=                  Create Dictionary  encId=${vendor_encid}  
+    ${inventoryCatalog}=        Create Dictionary  encId=${ic_encid} 
+    ${data}=                    Create Dictionary  store=${store}  invoiceReferenceNo=${invoiceReferenceNo}  invoiceDate=${invoiceDate}  vendor=${vendor}  inventoryCatalog=${inventoryCatalog}  purchaseNote=${purchaseNote}  roundOff=${roundOff}
+    ${len}=     Get Length      ${vargs}
+    FOR     ${index}    IN RANGE    ${len}  
+        Append To List  ${purchaseItemDtoList}  ${vargs[${index}]}
+    END 
+    Set To Dictionary   ${data}   purchaseItemDtoList=${purchaseItemDtoList}
+    ${data}=  json.dumps     ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/inventory/purchase   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get Purchase By Uid
+
+    [Arguments]  ${uid}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/purchase/${uid}    expected_status=any
+    RETURN  ${resp} 
