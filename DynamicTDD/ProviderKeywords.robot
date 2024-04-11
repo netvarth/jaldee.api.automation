@@ -14525,6 +14525,22 @@ Create Purchase
     ${resp}=  POST On Session  ynw  /provider/inventory/purchase   data=${data}  expected_status=any
     RETURN  ${resp}
 
+Update Purchase
+
+    [Arguments]  ${uid}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  @{vargs}
+
+    ${purchaseItemDtoList}=     Create List
+    ${data}=                    Create Dictionary  invoiceReferenceNo=${invoiceReferenceNo}  invoiceDate=${invoiceDate}  purchaseNote=${purchaseNote}  roundOff=${roundOff}
+    ${len}=     Get Length      ${vargs}
+    FOR     ${index}    IN RANGE    ${len}  
+        Append To List  ${purchaseItemDtoList}  ${vargs[${index}]}
+    END 
+    Set To Dictionary   ${data}   purchaseItemDtoList=${purchaseItemDtoList}
+    ${data}=  json.dumps     ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/inventory/purchase/${uid}   data=${data}  expected_status=any
+    RETURN  ${resp}
+
 Get Purchase By Uid
 
     [Arguments]  ${uid}
@@ -14538,6 +14554,13 @@ Get Purchase Filter
     [Arguments]  &{param}    
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/inventory/purchase  params=${param}   expected_status=any
+    RETURN  ${resp}
+
+Get Purchase Filter Count
+
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/purchase/count  params=${param}   expected_status=any
     RETURN  ${resp}
 
 Get Purchase Item Filter
