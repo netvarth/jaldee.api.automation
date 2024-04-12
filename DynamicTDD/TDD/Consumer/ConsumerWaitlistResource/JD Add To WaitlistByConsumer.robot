@@ -1234,7 +1234,10 @@ JD-TC-Add To WaitlistByConsumer-18
     ${resp}=  Get Account Payment Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log  ${resp.json()}
@@ -2492,7 +2495,10 @@ JD-TC-Add To WaitlistByConsumer-UH16
     ${resp}=  Get Account Payment Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${pid1}=  get_acc_id  ${PUSERPH3}
     # ${city}=   FakerLibrary.state
@@ -3240,7 +3246,10 @@ JD-TC-Add To WaitlistByConsumer-25
     ${resp}=  Get Account Payment Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log  ${resp.json()}

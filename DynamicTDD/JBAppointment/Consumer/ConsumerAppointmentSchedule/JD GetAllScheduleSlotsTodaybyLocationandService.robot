@@ -219,6 +219,11 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-3
 
     ${l_id1}=  Create Sample Location
     Set Suite Variable  ${l_id1}
+    ${resp}=   Get Location ById  ${l_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7 
@@ -349,9 +354,15 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-5
 
     ${l_id2}=  Create Sample Location
     Set Suite Variable   ${l_id2}
+    ${resp}=   Get Location ById  ${l_id2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${SERVICE2}=   FakerLibrary.name
     ${s_id2}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id2}
+
     ${SERVICE3}=   FakerLibrary.name
     ${s_id3}=  Create Sample Service  ${SERVICE3}
     Set Suite Variable   ${s_id3}
@@ -539,11 +550,15 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH4
 
     ${l_id3}=  Create Sample Location
     Set Suite Variable   ${l_id3}
+    ${resp}=   Get Location ById  ${l_id3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${SERVICE4}=   FakerLibrary.name
     ${s_id4}=  Create Sample Service  ${SERVICE4}
     Set Suite Variable   ${s_id4}
  
-
     ${DAY1}=  db.add_timezone_date  ${tz}  1  
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7 
@@ -706,6 +721,10 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-UH8
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${l_id4}=  Create Sample Location
+    ${resp}=   Get Location ById  ${l_id4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${SERVICE5}=   FakerLibrary.name
     ${s_id5}=  Create Sample Service  ${SERVICE5}
@@ -765,7 +784,11 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-6
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${l_id4}=  Create Sample Location
-    # Set Suite Variable   ${l_id3}
+    ${resp}=   Get Location ById  ${l_id4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${SERVICE5}=   FakerLibrary.name
     ${s_id5}=  Create Sample Service  ${SERVICE5}
     Set Suite Variable   ${s_id5}
@@ -774,7 +797,8 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-6
     ${DAY1}=  db.get_date_by_timezone  ${tz}  
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7 
-    ${sTime1}=  add_timezone_time  ${tz}  3  30  
+    # ${sTime1}=  add_timezone_time  ${tz}  3  30  
+    ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.name
@@ -816,11 +840,19 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-6
         ${muldur}=  Evaluate  (${index}+1)*${duration}
         ${et12}=  add_two  ${sTime1}  ${muldur}
         ${et}=  timeto24hr  ${et12}
+        ${active_slot}=  compare_slot_to_now  ${resp.json()[0]['availableSlots'][${index}]['time']}  timezone=${tz}
         
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
-        Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        # Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
+        # Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
         Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumer_parallel}
+        IF  '${active_slot}' == 'True'
+            Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  0
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[0]}
+        ELSE
+            Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${parallel}
+            Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
+        END
         Set Test Variable  ${st}  ${et}
     END
 
@@ -831,7 +863,12 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-7
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${l_id5}=  Create Sample Location
-    # Set Suite Variable   ${l_id3}
+    # Set Suite Variable   ${l_id5}
+    ${resp}=   Get Location ById  ${l_id5}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${SERVICE6}=   FakerLibrary.name
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -950,7 +987,12 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-8
 
 
     ${l_id6}=  Create Sample Location
-    # Set Suite Variable   ${l_id3}
+    # Set Suite Variable   ${l_id6}
+    ${resp}=   Get Location ById  ${l_id6}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    
     ${SERVICE7}=   FakerLibrary.name
     ${desc}=   FakerLibrary.sentence
     ${min_pre}=   Random Int   min=1   max=50
@@ -987,8 +1029,8 @@ JD-TC-GetScheduleSlotsTodayByLocationandService-8
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.name
-    ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${consumer_parallel}=  FakerLibrary.Random Int  min=1  max=3
+    ${parallel}=  FakerLibrary.Random Int  min=3  max=10
+    ${consumer_parallel}=  FakerLibrary.Random Int  min=1  max=${parallel}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
     ${bool1}=  Random Element  ${bool}
 

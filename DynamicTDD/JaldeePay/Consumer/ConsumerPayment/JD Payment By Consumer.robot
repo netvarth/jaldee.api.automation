@@ -178,9 +178,10 @@ JD-TC-Payment By Consumer-1
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -472,7 +473,10 @@ JD-TC-Payment By Consumer-2
     ${resp}=  Get Account Payment Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log   ${resp.content}
@@ -1157,7 +1161,10 @@ JD-TC-Payment By Consumer-6
     ${resp}=  Get Account Payment Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log   ${resp.content}
@@ -1360,7 +1367,10 @@ JD-TC-Payment By Consumer-UH1
     ${resp}=  Get Account Payment Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log   ${resp.content}
@@ -1484,7 +1494,10 @@ JD-TC-Payment By Consumer-UH2
     ${resp}=  Get Account Payment Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log   ${resp.content}
@@ -1944,7 +1957,10 @@ JD-TC-Payment By Consumer-UH11
     ${resp}=  Get Account Payment Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log   ${resp.content}
@@ -2094,7 +2110,10 @@ JD-TC-Payment By Consumer-UH12
     ${resp}=  Get Account Payment Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log   ${resp.content}
@@ -2396,9 +2415,10 @@ JD-TC-Payment By Consumer-13
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     ${GST_num}  ${pan_num}=   db.Generate_gst_number   ${Container_id}
     ${resp}=  Update Tax Percentage  ${gstpercentage[3]}  ${GST_num} 
@@ -2774,7 +2794,10 @@ JD-TC-Payment By Consumer-1
     ${resp}=  Get Account Payment Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log   ${resp.content}
@@ -3085,7 +3108,10 @@ JD-TC-Payment By Consumer-2
     ${resp}=  Get Account Payment Settings
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log   ${resp.content}

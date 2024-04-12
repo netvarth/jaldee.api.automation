@@ -1358,7 +1358,7 @@ JD-TC-GetAllScheduleSlotsByDateLocationandService-11
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['time']}  ${st}-${et}
         Should Be Equal As Strings  ${resp.json()[0]['availableSlots'][${index}]['noOfAvailbleSlots']}  ${Parallel1}
         # Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[1]}
-        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumerParallel}
+        Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['capacity']}   ${consumerParallel1}
         IF  '${active_slot}' == 'True'
             Should Be Equal As Strings   ${resp.json()[0]['availableSlots'][${index}]['active']}      ${bool[0]}
         ELSE

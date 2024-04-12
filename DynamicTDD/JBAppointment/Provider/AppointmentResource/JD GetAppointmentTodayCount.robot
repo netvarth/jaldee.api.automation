@@ -42,11 +42,17 @@ JD-TC-GetAppointmentTodayCount-1
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
+
+
     clear_customer   ${PUSERNAME178}
 
     ${resp}=   Get Service
@@ -69,8 +75,16 @@ JD-TC-GetAppointmentTodayCount-1
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -223,8 +237,9 @@ JD-TC-GetAppointmentTodayCount-2
     Log   ${multilocPro}
     Set Suite Variable   ${multilocPro}
     ${pro_len}=  Get Length   ${billable_providers}
-    clear_service   ${billable_providers[3]}
-    clear_location  ${billable_providers[3]}
+    # clear_service   ${billable_providers[3]}
+    # clear_location  ${billable_providers[3]}
+    clear_location_n_service  ${billable_providers[3]}
     ${pid}=  get_acc_id  ${billable_providers[3]}
     # ${cid}=  get_id  ${CUSERNAME15}
 
@@ -243,13 +258,14 @@ JD-TC-GetAppointmentTodayCount-2
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-    
     IF  ${resp.json()['enableJaldeeFinance']}==${bool[0]}
         ${resp1}=    Enable Disable Jaldee Finance   ${toggle[0]}
         Log  ${resp1.content}
@@ -263,7 +279,6 @@ JD-TC-GetAppointmentTodayCount-2
     Set Test Variable  ${accountId1}  ${resp.json()['accountId']}
 
     ${lid}=  Create Sample Location
-
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -278,7 +293,7 @@ JD-TC-GetAppointmentTodayCount-2
     Should Be Equal As Strings  ${resp.status_code}   200
     Set Test Variable  ${s_id}  ${resp.json()}
 
-    clear_appt_schedule   ${billable_providers[3]}
+    # clear_appt_schedule   ${billable_providers[3]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -287,7 +302,11 @@ JD-TC-GetAppointmentTodayCount-2
     ${resp}=  Get Account Payment Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+    
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     ${resp}=  Get Account Payment Settings
     Log  ${resp.json()}
@@ -402,8 +421,9 @@ JD-TC-GetAppointmentTodayCount-3
     [Documentation]  Get provider's appointments for service with prepayment after prepayment
     Log   ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
-    clear_service   ${billable_providers[3]}
-    clear_location  ${billable_providers[3]}
+    # clear_service   ${billable_providers[3]}
+    # clear_location  ${billable_providers[3]}
+    clear_location_n_service  ${billable_providers[3]}
     ${pid}=  get_acc_id  ${billable_providers[3]}
     ${cid}=  get_id  ${CUSERNAME15}
 
@@ -422,7 +442,10 @@ JD-TC-GetAppointmentTodayCount-3
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get jp finance settings
     Log  ${resp.json()}
@@ -440,6 +463,12 @@ JD-TC-GetAppointmentTodayCount-3
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+
 
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
@@ -461,7 +490,7 @@ JD-TC-GetAppointmentTodayCount-3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_appt_schedule   ${billable_providers[3]}
+    # clear_appt_schedule   ${billable_providers[3]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -682,11 +711,17 @@ JD-TC-GetAppointmentTodayCount-4
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
+
+
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -708,8 +743,16 @@ JD-TC-GetAppointmentTodayCount-4
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -888,11 +931,17 @@ JD-TC-GetAppointmentTodayCount-5
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
+
+
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -914,8 +963,16 @@ JD-TC-GetAppointmentTodayCount-5
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -1102,11 +1159,17 @@ JD-TC-GetAppointmentTodayCount-6
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
+
+
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1128,8 +1191,16 @@ JD-TC-GetAppointmentTodayCount-6
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -1303,11 +1374,17 @@ JD-TC-GetAppointmentTodayCount-7
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
+
+
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1329,8 +1406,16 @@ JD-TC-GetAppointmentTodayCount-7
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -1507,11 +1592,17 @@ JD-TC-GetAppointmentTodayCount-8
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
+
+
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1533,8 +1624,16 @@ JD-TC-GetAppointmentTodayCount-8
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -1704,11 +1803,17 @@ JD-TC-GetAppointmentTodayCount-9
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
+
+
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1730,8 +1835,16 @@ JD-TC-GetAppointmentTodayCount-9
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -1901,11 +2014,17 @@ JD-TC-GetAppointmentTodayCount-10
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
+
+
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1927,9 +2046,17 @@ JD-TC-GetAppointmentTodayCount-10
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -2091,11 +2218,17 @@ JD-TC-GetAppointmentTodayCount-11
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
+
+
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2117,9 +2250,17 @@ JD-TC-GetAppointmentTodayCount-11
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -2280,11 +2421,17 @@ JD-TC-GetAppointmentTodayCount-12
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
+
+
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2306,9 +2453,18 @@ JD-TC-GetAppointmentTodayCount-12
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -2469,11 +2625,17 @@ JD-TC-GetAppointmentTodayCount-13
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
+
+
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2495,9 +2657,18 @@ JD-TC-GetAppointmentTodayCount-13
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10     
     # ${DAY3}=  db.add_timezone_date  ${tz}  15  
@@ -2682,11 +2853,17 @@ JD-TC-GetAppointmentTodayCount-14
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
+
+
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2708,9 +2885,17 @@ JD-TC-GetAppointmentTodayCount-14
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10  
     # ${DAY3}=  db.add_timezone_date  ${tz}  15  
@@ -2888,11 +3073,17 @@ JD-TC-GetAppointmentTodayCount-15
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
+
+
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2914,8 +3105,16 @@ JD-TC-GetAppointmentTodayCount-15
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -3019,7 +3218,6 @@ JD-TC-GetAppointmentTodayCount-15
     ${resp}=   Take Appointment For Provider   ${pid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}   ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${apptid2}=  Get From Dictionary  ${resp.json()}  ${fname2}
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid2}
@@ -3118,11 +3316,17 @@ JD-TC-GetAppointmentTodayCount-16
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
+
+
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3144,9 +3348,17 @@ JD-TC-GetAppointmentTodayCount-16
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -3193,7 +3405,6 @@ JD-TC-GetAppointmentTodayCount-16
     ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -3224,7 +3435,6 @@ JD-TC-GetAppointmentTodayCount-16
     ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
@@ -3279,8 +3489,9 @@ JD-TC-GetAppointmentTodayCount-17
     [Documentation]  Get provider's appointments today where paymentStatus is NotPaid
     Log   ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
-    clear_service   ${billable_providers[3]}
-    clear_location  ${billable_providers[3]}
+    # clear_service   ${billable_providers[3]}
+    # clear_location  ${billable_providers[3]}
+    clear_location_n_service  ${billable_providers[3]}
     ${pid}=  get_acc_id  ${billable_providers[3]}
     # ${cid}=  get_id  ${CUSERNAME15}
 
@@ -3310,14 +3521,17 @@ JD-TC-GetAppointmentTodayCount-17
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${lid}=  Create Sample Location
-
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
 
     ${SERVICE1}=    FakerLibrary.Word
     ${min_pre}=   Random Int   min=10   max=50
@@ -3328,7 +3542,7 @@ JD-TC-GetAppointmentTodayCount-17
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_appt_schedule   ${billable_providers[3]}
+    # clear_appt_schedule   ${billable_providers[3]}
     clear_customer   ${billable_providers[3]}
 
     ${resp}=  Get Appointment Schedules
@@ -3588,8 +3802,9 @@ JD-TC-GetAppointmentTodayCount-18
     [Documentation]  Get provider's appointments today where paymentStatus is PartiallyPaid
     Log   ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
-    clear_service   ${billable_providers[3]}
-    clear_location  ${billable_providers[3]}
+    # clear_service   ${billable_providers[3]}
+    # clear_location  ${billable_providers[3]}
+    clear_location_n_service  ${billable_providers[3]}
     ${pid}=  get_acc_id  ${billable_providers[3]}
     # ${cid}=  get_id  ${CUSERNAME15}
 
@@ -3619,9 +3834,17 @@ JD-TC-GetAppointmentTodayCount-18
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
 
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
@@ -3637,7 +3860,7 @@ JD-TC-GetAppointmentTodayCount-18
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_appt_schedule   ${billable_providers[3]}
+    # clear_appt_schedule   ${billable_providers[3]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -3950,10 +4173,14 @@ JD-TC-GetAppointmentTodayCount-19
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${billable_providers[3]}
-    clear_location  ${billable_providers[3]}
+    # clear_service   ${billable_providers[3]}
+    # clear_location  ${billable_providers[3]}
+    clear_location_n_service  ${billable_providers[3]}
     # clear_appt_schedule   ${billable_providers[3]}
 
     ${resp}=   Get Service
@@ -3976,6 +4203,12 @@ JD-TC-GetAppointmentTodayCount-19
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
 
@@ -3987,7 +4220,7 @@ JD-TC-GetAppointmentTodayCount-19
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_appt_schedule   ${billable_providers[3]}
+    # clear_appt_schedule   ${billable_providers[3]}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -4147,8 +4380,9 @@ JD-TC-GetAppointmentTodayCount-20
     [Documentation]  Get provider's appointments today where paymentStatus is Refund
     Log   ${billable_providers}
     ${pro_len}=  Get Length   ${billable_providers}
-    clear_service   ${billable_providers[3]}
-    clear_location  ${billable_providers[3]}
+    # clear_service   ${billable_providers[3]}
+    # clear_location  ${billable_providers[3]}
+    clear_location_n_service  ${billable_providers[3]}
     ${pid}=  get_acc_id  ${billable_providers[3]}
     # ${cid}=  get_id  ${CUSERNAME15}
 
@@ -4178,10 +4412,12 @@ JD-TC-GetAppointmentTodayCount-20
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${lid}=  Create Sample Location
-
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -4196,7 +4432,7 @@ JD-TC-GetAppointmentTodayCount-20
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    clear_appt_schedule   ${billable_providers[3]}
+    # clear_appt_schedule   ${billable_providers[3]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -4527,10 +4763,14 @@ JD-TC-GetAppointmentTodayCount-21
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${multilocPro[3]}
-    clear_location  ${multilocPro[3]}
+    # clear_service   ${multilocPro[3]}
+    # clear_location  ${multilocPro[3]}
+    clear_location_n_service  ${multilocPro[3]}
     # clear_appt_schedule   ${PUSERNAME178}
 
     ${resp}=   Get Service
@@ -4553,13 +4793,24 @@ JD-TC-GetAppointmentTodayCount-21
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${lid2}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${multilocPro[3]}
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${DAY2}=  db.add_timezone_date  ${tz}  10     
+    # clear_appt_schedule   ${multilocPro[3]}
+
+    ${DAY1}=  db.get_date_by_timezone  ${tz1}
+    ${DAY2}=  db.add_timezone_date  ${tz1}  10     
     ${list}=  Create List  1  2  3  4  5  6  7
-    ${sTime1}=  db.get_time_by_timezone  ${tz}
+    ${sTime1}=  db.get_time_by_timezone  ${tz1}
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name1}=  FakerLibrary.bs
@@ -4583,7 +4834,7 @@ JD-TC-GetAppointmentTodayCount-21
     Verify Response  ${resp}  scheduleName=${schedule_name1}  scheduleId=${sch_id1}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
     
-    ${sTime2}=  add_timezone_time  ${tz}  1  15  
+    ${sTime2}=  add_timezone_time  ${tz2}  1  15  
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime2}=  add_two   ${sTime2}  ${delta}
     ${schedule_name2}=  FakerLibrary.bs
@@ -4772,10 +5023,14 @@ JD-TC-GetAppointmentTodayCount-22
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
 
     ${resp}=   Get Service
@@ -4798,9 +5053,17 @@ JD-TC-GetAppointmentTodayCount-22
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -4813,7 +5076,7 @@ JD-TC-GetAppointmentTodayCount-22
     ${maxval}=  Convert To Integer   ${delta/2}
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id1}  ${s_id2}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -4847,7 +5110,6 @@ JD-TC-GetAppointmentTodayCount-22
     ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -4878,7 +5140,6 @@ JD-TC-GetAppointmentTodayCount-22
     ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
@@ -4966,10 +5227,14 @@ JD-TC-GetAppointmentTodayCount-23
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
 
     ${resp}=   Get Service
@@ -4980,24 +5245,22 @@ JD-TC-GetAppointmentTodayCount-23
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    # ${resp}=   Get jaldeeIntegration Settings
-    # Log   ${resp.json()}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
+        ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[1]}'
+        ${resp1}=   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]} 
+    Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -5006,9 +5269,15 @@ JD-TC-GetAppointmentTodayCount-23
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     ${s_id2}=  Create Sample Service  ${SERVICE2}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -5071,7 +5340,6 @@ JD-TC-GetAppointmentTodayCount-23
     ${resp}=  Take Appointment For Consumer  ${cid1}  ${s_id1}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -5102,7 +5370,6 @@ JD-TC-GetAppointmentTodayCount-23
     ${resp}=  Take Appointment For Consumer  ${cid2}  ${s_id2}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
@@ -5189,10 +5456,14 @@ JD-TC-GetAppointmentTodayCount-24
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
 
     ${resp}=   Get Service
@@ -5215,8 +5486,16 @@ JD-TC-GetAppointmentTodayCount-24
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -5403,11 +5682,17 @@ JD-TC-GetAppointmentTodayCount-25
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
+
+
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5429,8 +5714,16 @@ JD-TC-GetAppointmentTodayCount-25
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -5612,11 +5905,17 @@ JD-TC-GetAppointmentTodayCount-26
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
+
+
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5638,8 +5937,16 @@ JD-TC-GetAppointmentTodayCount-26
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -5834,11 +6141,17 @@ JD-TC-GetAppointmentTodayCount-27
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
     # clear_appt_schedule   ${PUSERNAME178}
+
+
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5860,8 +6173,16 @@ JD-TC-GetAppointmentTodayCount-27
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -6050,11 +6371,17 @@ JD-TC-GetAppointmentTodayCount-28
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME178}
-    clear_location  ${PUSERNAME178}
-    clear_appt_schedule   ${PUSERNAME178}
+    # clear_service   ${PUSERNAME178}
+    # clear_location  ${PUSERNAME178}
+    clear_location_n_service  ${PUSERNAME178}
+    # clear_appt_schedule   ${PUSERNAME178}
+
+
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6083,6 +6410,12 @@ JD-TC-GetAppointmentTodayCount-28
     ${delta}=  FakerLibrary.Random Int  min=10  max=60
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${lid}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10

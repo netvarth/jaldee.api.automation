@@ -529,7 +529,10 @@ JD-TC-GetFutureAppointmentCount-3
     ${resp}=  Get Account Payment Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     ${resp}=  Get Account Payment Settings
     Log  ${resp.json()}
@@ -3112,7 +3115,18 @@ JD-TC-GetFutureAppointmentCount-15
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}    
     
     ${lid1}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${lid2}=  Create Sample Location
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz2}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     clear_appt_schedule   ${multilocPro[56]}
     ${DAY1}=  db.get_date_by_timezone  ${tz}

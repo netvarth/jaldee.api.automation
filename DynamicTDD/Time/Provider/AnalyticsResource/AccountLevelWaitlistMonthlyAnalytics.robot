@@ -203,9 +203,10 @@ JD-TC-MONTHLY_PHONE_TOKEN-1
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
@@ -557,9 +558,10 @@ JD-TC-MONTHLY_WALK_IN_TOKEN and ARRIVED_TOKEN-2
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
@@ -955,9 +957,10 @@ JD-TC-MONTHLY_ONLINE_TOKEN and CHECKED_IN_TOKEN-3
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
@@ -1293,9 +1296,10 @@ JD-TC-MONTHLY_TELE_SERVICE_TOKEN-4
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
@@ -1702,9 +1706,10 @@ JD-TC-MONTHLY_TELEGRAM_TOKEN and WEB_TOKENS-5
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
@@ -2050,9 +2055,10 @@ JD-TC-MONTHLY STARTED_TOKEN-6
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
@@ -2468,9 +2474,10 @@ JD-TC-MONTHLY CANCELLED_TOKEN-7
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
@@ -2862,9 +2869,10 @@ JD-TC-MONTHLY DONE_TOKEN-8
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
@@ -3237,9 +3245,10 @@ JD-TC-MONTHLY RESCHEDULED_TOKEN-9
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=  Get Account Payment Settings
     Log  ${resp.content}

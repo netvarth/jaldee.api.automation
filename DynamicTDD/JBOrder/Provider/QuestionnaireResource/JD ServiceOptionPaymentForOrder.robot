@@ -369,9 +369,10 @@ JD-TC-ServiceOptionPaymentForOrder-2
     ${resp}=   Get Account Payment Settings 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${resp1}=   Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
   
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}
@@ -663,9 +664,10 @@ JD-TC-ServiceOptionPaymentForOrder-3
     ${resp}=   Get Account Payment Settings 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
-    ${resp1}=   Run Keyword If  ${resp.json()['onlinePayment']}==${bool[0]}   Enable Disable Online Payment   ${toggle[0]}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.content}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['onlinePayment']}==${bool[0]}   
+        ${resp}=   Enable Disable Online Payment   ${toggle[0]}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
   
     ${resp}=  Get Order Settings by account id
     Log  ${resp.content}

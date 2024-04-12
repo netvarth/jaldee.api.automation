@@ -438,7 +438,7 @@ JD-TC-GetAppointmentServicesByLocation-8
     # ${sTime}=  db.subtract_timezone_time  ${US_tz}  2  00
     ${sTime}=  db.get_time_by_timezone   ${tz}
     ${sTime1}=  add_timezone_time  ${US_tz}  1  30  
-    # ${eTime}=  add_timezone_time  ${US_tz}  3  00  
+    ${eTime}=  add_timezone_time  ${US_tz}  3  00  
 
     ${sTime1}  ${eTime1}=  db.endtime_conversion  ${sTime}  ${eTime}
 
