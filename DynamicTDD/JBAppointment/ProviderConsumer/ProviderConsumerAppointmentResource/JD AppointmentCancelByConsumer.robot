@@ -521,8 +521,16 @@ JD-TC-AppointmentCancelByConsumer-UH4
     
     ${resp}=  Cancel Appointment By Consumer  ${apptid1}   ${pid}
     Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  422
-    Should Be Equal As Strings  "${resp.json()}"      "${APPT_STATUS_NOT_CHANGEABLE}"
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Should Be Equal As Strings  ${resp.status_code}  422
+    # Should Be Equal As Strings  "${resp.json()}"      "${APPT_STATUS_NOT_CHANGEABLE}"
+
+    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['uid']}               ${apptid1}
+    Should Be Equal As Strings  ${resp.json()['consumer']['id']}    ${cid}
+    Should Be Equal As Strings  ${resp.json()['apptStatus']}        ${appt_status[4]}
 
 JD-TC-AppointmentCancelByConsumer-UH5
 

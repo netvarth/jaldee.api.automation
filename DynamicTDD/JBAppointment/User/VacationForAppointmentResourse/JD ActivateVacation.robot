@@ -748,10 +748,12 @@ JD-TC-ActivateVacation-4
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
 
     clear_queue      ${HLMUSERNAME6}
     clear_service    ${HLMUSERNAME6}
@@ -1302,44 +1304,44 @@ JD-TC-ActivateVacation-6
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    
-    ${resp}=  Run Keyword If  ${resp.json()['filterByDept']}==${bool[0]}   Toggle Department Enable
-    Run Keyword If  '${resp}' != '${None}'   Log   ${resp.json()}
-    Run Keyword If  '${resp}' != '${None}'   Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Get Locations
-    Log   ${resp.json()}
+    END
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable   ${lid}   ${resp.json()[0]['id']}
-    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
-    
-    ${DAY1}=  db.get_date_by_timezone  ${tz}
-    Set Suite Variable  ${DAY1}  ${DAY1}
-    ${list}=  Create List  1  2  3  4  5  6  7
-    Set Suite Variable  ${list}  ${list}
-
-    # ${resp}=  Get Departments
-    # Log  ${resp.content}
-    # Should Be Equal As Strings  ${resp.status_code}  200
-    # IF   '${resp.content}' == '${emptylist}'
+    IF   '${resp.content}' == '${emptylist}'
         ${dep_name1}=  FakerLibrary.bs
         ${dep_code1}=   Random Int  min=100   max=999
         ${dep_desc1}=   FakerLibrary.word  
         ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${dep_id}  ${resp1.json()}
-    # ELSE
-    #     Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    # END
+        Set Suite Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+        Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
 
+    ${resp}=    Get Locations
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable   ${lid}   ${resp.json()[0]['id']}
+    Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+
+    ${s_id}=  Create Sample Service   ${Service1}   department=${dep_id}
+    
+    ${DAY1}=  db.get_date_by_timezone  ${tz}
+    Set Suite Variable  ${DAY1}  ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
     # ${sTime1}=  db.get_time_by_timezone   ${tz}
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${eTime1}=  add_timezone_time  ${tz}  2  00   
     # ${s_id}=  Create Sample Service For User   ${Service1}   ${dep_id}   ${pro_id}
-    ${s_id}=  Create Sample Service   ${Service1}   department=${dep_id}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${duration}=  FakerLibrary.Random Int  min=1  max=10
@@ -1372,7 +1374,6 @@ JD-TC-ActivateVacation-6
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -1386,21 +1387,6 @@ JD-TC-ActivateVacation-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}  uid=${apptid1}  appmtDate=${DAY1}   appmtTime=${slot1}  appointmentEncId=${encId}  apptStatus=${apptStatus[1]}     
     ...   appointmentMode=${appointmentMode[0]}   consumerNote=${cnote}   apptBy=${apptBy[0]}  paymentStatus=${paymentStatus[0]}   phoneNumber=${CUSERNAME8}
-  
-    ${resp}=  View Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
-
-    ${resp}=  Get Departments
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
     ${resp}=  Get User
     Log  ${resp.content}
@@ -1447,15 +1433,15 @@ JD-TC-ActivateVacation-6
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
+    ${SERVICE1}=    FakerLibrary.Word
+    ${s_id1}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id1}
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     Set Suite Variable  ${DAY2}
-    
     ${sTime2}=  add_timezone_time  ${tz}  0  15  
     ${eTime2}=  add_timezone_time  ${tz}  1  00  
-    ${SERVICE1}=    FakerLibrary.Word
-    ${s_id1}=  Create Sample Service For User  ${SERVICE1}  ${dep_id}  ${u_id1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
     ${duration}=  FakerLibrary.Random Int  min=1  max=${delta}
@@ -1488,7 +1474,6 @@ JD-TC-ActivateVacation-6
     ${resp}=  User Take Appointment For Consumer    ${u_id1}   ${cid1}  ${s_id1}  ${sch_id1}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid2}  ${apptid[0]}
 
@@ -1536,7 +1521,6 @@ JD-TC-ActivateVacation-6
     ${resp}=   Take Appointment For User    ${pid_B}  ${s_id1}  ${sch_id1}  ${CUR_DAY}  ${cnote}  ${u_id1}   ${apptfor1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}
     Set Suite Variable  ${apptid01}  ${apptid[0]}
    
@@ -1655,15 +1639,20 @@ JD-TC-ActivateVacation-7
     END
 
     ${resp}=   Get jaldeeIntegration Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[0]}'
+        ${resp1}=   Set jaldeeIntegration Settings    ${boolean[1]}  ${boolean[1]}  ${boolean[0]}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    ELSE IF    '${resp.json()['walkinConsumerBecomesJdCons']}'=='${bool[0]}' and '${resp.json()['onlinePresence']}'=='${bool[1]}'
+        ${resp1}=   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${boolean[0]}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]} 
 
     ${resp}=  View Waitlist Settings
@@ -1719,7 +1708,7 @@ JD-TC-ActivateVacation-7
     ${sTime1}=  db.get_time_by_timezone  ${tz}
     ${delta1}=  FakerLibrary.Random Int  min=30  max=60
     ${eTime1}=  db.add_two   ${sTime1}  ${delta}  
-    ${schedule_name}=  FakerLibrary.bs
+    ${schedule_name1}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=1
     ${duration1}=  FakerLibrary.Random Int  min=1  max=${delta}
     ${bool1}=  Random Element  ${bool}
@@ -1766,7 +1755,7 @@ JD-TC-ActivateVacation-7
     Should Be Equal As Strings  ${resp.status_code}  200
     ${sch_length}=  get_slot_length  ${delta}  ${duration}
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
-    Should Be Equal As Integers  ${sLength}  ${sch_length}
+    Should Be Equal As Integers  ${no_of_slots}  ${sch_length}
     ${st}=  timeto24hr  ${sTime1}
     FOR  ${index}  IN RANGE  ${sch_length}
         ${muldur}=  Evaluate  (${index}+1)*${duration}
@@ -1783,7 +1772,7 @@ JD-TC-ActivateVacation-7
     Should Be Equal As Strings  ${resp.status_code}  200
     ${sch_length}=  get_slot_length  ${delta1}  ${duration1}
     ${no_of_slots}=  Get Length  ${resp.json()['availableSlots']}
-    Should Be Equal As Integers  ${sLength}  ${sch_length}
+    Should Be Equal As Integers  ${no_of_slots}  ${sch_length}
     ${st}=  timeto24hr  ${sTime1}
     FOR  ${index}  IN RANGE  ${sch_length}
         ${muldur}=  Evaluate  (${index}+1)*${duration}
