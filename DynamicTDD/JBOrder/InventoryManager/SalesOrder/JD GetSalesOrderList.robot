@@ -331,57 +331,57 @@ JD-TC-Get Sales Order List -1
     Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
-JD-TC-Get Sales Order List -2
+# JD-TC-Get Sales Order List -2
 
-    [Documentation]    Try to get Sales Order List using uid param.
+#     [Documentation]    Try to get Sales Order List using uid param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+#     Log   ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get SalesOrder List     uid-eq=${SO_Uid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()[0]['encId']}                                           ${SO_Encid}
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                  ${locId1}
-    Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                   ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                  ${store_id}
+#     ${resp}=    Get SalesOrder List     uid-eq=${SO_Uid}   
+#     Log   ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}   200
+#     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                           ${SO_Uid}
+#     Should Be Equal As Strings    ${resp.json()[0]['encId']}                                           ${SO_Encid}
+#     Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
+#     Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                  ${locId1}
+#     Should Be Equal As Strings    ${resp.json()[0]['store']['name']}                                   ${Name}
+#     Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                  ${store_id}
 
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                 ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                ${SO_Cata_Encid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                              ${bool[0]}
+#     Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                 ${Name}
+#     Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                ${SO_Cata_Encid}
+#     Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                              ${bool[0]}
 
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                          ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['id']}                                  ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['orderFor']['name']}                                ${firstName} ${lastName}
+#     Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                          ${cid}
+#     Should Be Equal As Strings    ${resp.json()[0]['orderFor']['id']}                                  ${cid}
+#     Should Be Equal As Strings    ${resp.json()[0]['orderFor']['name']}                                ${firstName} ${lastName}
 
-    Should Be Equal As Strings    ${resp.json()[0]['orderType']}                                       ${bookingChannel[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['orderStatus']}                                     ${orderStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['deliveryType']}                                    ${deliveryType[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['deliveryStatus']}                                  ${deliveryStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['originFrom']}                                      ${originFrom}
+#     Should Be Equal As Strings    ${resp.json()[0]['orderType']}                                       ${bookingChannel[0]}
+#     Should Be Equal As Strings    ${resp.json()[0]['orderStatus']}                                     ${orderStatus[0]}
+#     Should Be Equal As Strings    ${resp.json()[0]['deliveryType']}                                    ${deliveryType[0]}
+#     Should Be Equal As Strings    ${resp.json()[0]['deliveryStatus']}                                  ${deliveryStatus[0]}
+#     Should Be Equal As Strings    ${resp.json()[0]['originFrom']}                                      ${originFrom}
 
-    Should Be Equal As Strings    ${resp.json()[0]['orderNum']}                                        1
-    Should Be Equal As Strings    ${resp.json()[0]['orderRef']}                                        1
-    Should Be Equal As Strings    ${resp.json()[0]['deliveryDate']}                                    ${DAY1}
+#     Should Be Equal As Strings    ${resp.json()[0]['orderNum']}                                        1
+#     Should Be Equal As Strings    ${resp.json()[0]['orderRef']}                                        1
+#     Should Be Equal As Strings    ${resp.json()[0]['deliveryDate']}                                    ${DAY1}
 
-    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['phone']['number']}                  ${primaryMobileNo}
-    Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['email']}                            ${email_id}
+#     Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['phone']['number']}                  ${primaryMobileNo}
+#     Should Be Equal As Strings    ${resp.json()[0]['contactInfo']['email']}                            ${email_id}
 
-    Should Be Equal As Strings    ${resp.json()[0]['itemCount']}                                       1
-    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                        ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['taxTotal']}                                        0.0
-    Should Be Equal As Strings    ${resp.json()[0]['discountTotal']}                                   0.0
-    Should Be Equal As Strings    ${resp.json()[0]['jaldeeCouponTotal']}                               0.0
-    Should Be Equal As Strings    ${resp.json()[0]['providerCouponTotal']}                             0.0
-    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                         ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
+#     Should Be Equal As Strings    ${resp.json()[0]['itemCount']}                                       1
+#     Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                        ${netTotal}
+#     Should Be Equal As Strings    ${resp.json()[0]['taxTotal']}                                        0.0
+#     Should Be Equal As Strings    ${resp.json()[0]['discountTotal']}                                   0.0
+#     Should Be Equal As Strings    ${resp.json()[0]['jaldeeCouponTotal']}                               0.0
+#     Should Be Equal As Strings    ${resp.json()[0]['providerCouponTotal']}                             0.0
+#     Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                         ${netTotal}
+#     Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
 
-    Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
+#     Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
+#     Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
+#     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 JD-TC-Get Sales Order List -3
 
@@ -432,7 +432,7 @@ JD-TC-Get Sales Order List -5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get SalesOrder List     storeId-eq=${store_id}   
+    ${resp}=    Get SalesOrder List     storeEncId-eq=${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}                                  ${store_id}

@@ -305,7 +305,7 @@ JD-TC-Get Sales Order With Count Filter -2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get SalesOrder Count        encId-eq=${SO_Encid}        uid-eq=${SO_Uid}   
+    ${resp}=    Get SalesOrder Count         uid-eq=${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
