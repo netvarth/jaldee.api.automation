@@ -14633,3 +14633,63 @@ Get Inventoryitem
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw   /provider/inventory/inventoryitem/invcatalog/${id}   expected_status=any
     RETURN  ${resp} 
+
+
+Create Sales Order
+
+    [Arguments]  ${SO_Catalog_Id}   ${Pro_Con}   ${OrderFor}   ${originFrom}    ${catItemEncId}   ${quantity}    @{vargs}    &{kwargs}
+    # ${Cg_encid}=  Create Dictionary   encId=${SO_Catalog_Id}   
+    ${PC}=  Create Dictionary   id=${Pro_Con}   
+    ${OrderFor}=  Create Dictionary   id=${OrderFor}   
+
+    ${item}=  Create Dictionary   catItemEncId=${catItemEncId}    quantity=${quantity}
+    ${items}=   Create List    ${item} 
+    ${len}=  Get Length  ${vargs}
+    FOR    ${index}    IN RANGE    ${len}  
+        Append To List  ${items}  ${vargs[${index}]}
+    END 
+    ${data}=  Create Dictionary   catalog=${SO_Catalog_Id}    providerConsumer=${PC}    orderFor=${OrderFor}   originFrom=${originFrom}      items=${items}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${data}   ${key}=${value}
+    END 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/sorder   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Update Order Items
+
+    [Arguments]   ${orderEncId}     ${catItemEncId}    ${quantity}
+
+    ${item}=  Create Dictionary   catItemEncId=${catItemEncId}    quantity=${quantity}
+    ${data}=   Create List    ${item} 
+    # ${data}=  Create Dictionary        items=${items}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/sorder/${orderEncId}/changeitems   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Sales Order
+    [Arguments]  ${orderEncId}      
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/sorder/${orderEncId}    expected_status=any
+    RETURN  ${resp} 
+
+Update SalesOrder Status
+
+    [Arguments]  ${orderEncId}   ${status}   
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/sorder/${orderEncId}/${status}   expected_status=any
+    RETURN  ${resp} 
+
+Get SalesOrder List
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /provider/sorder   params=${param}   expected_status=any
+    RETURN  ${resp} 
+
+Get SalesOrder Count
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/sorder/count   params=${param}   expected_status=any
+    RETURN  ${resp} 
