@@ -405,14 +405,14 @@ Billable
         Should Be Equal As Strings  ${resp.status_code}  200
         ${resp}=  View Waitlist Settings
 	${resp}=  View Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[1]}
-        ${resp}=  Toggle Department Disable
         Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings    ${resp.status_code}    200
+        IF  ${resp.json()['filterByDept']}==${bool[1]}
+                ${resp}=  Toggle Department Disable
+                Log  ${resp.content}
+                Should Be Equal As Strings  ${resp.status_code}  200
 
-    END  
+        END  
         ${resp2}=   Get Sub Domain Settings    ${domain}    ${subdomain}
         Should Be Equal As Strings    ${resp.status_code}    200
         delete_donation_service  ${PUSERNAME${a}}

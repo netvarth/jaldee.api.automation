@@ -36,7 +36,7 @@ JD-TC-ConsumerAppointmentCommunication-1
 
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
-    ${PUSERNAME_H}=  Evaluate  ${PUSERNAME}+5566003
+    ${PUSERNAME_H}=  Evaluate  ${PUSERNAME}+5566004
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_H}    ${highest_package[0]}
     Log  ${resp.json()}

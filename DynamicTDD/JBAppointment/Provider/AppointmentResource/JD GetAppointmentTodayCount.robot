@@ -302,7 +302,6 @@ JD-TC-GetAppointmentTodayCount-2
     ${resp}=  Get Account Payment Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     IF  ${resp.json()['onlinePayment']}==${bool[0]}   
         ${resp}=   Enable Disable Online Payment   ${toggle[0]}
         Should Be Equal As Strings  ${resp.status_code}  200
