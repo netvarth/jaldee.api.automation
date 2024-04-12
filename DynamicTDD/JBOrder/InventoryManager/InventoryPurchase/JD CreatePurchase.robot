@@ -501,3 +501,7 @@ JD-TC-CreatePurchase-1
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   200
+
+    ${resp}=  Get Inventoryitem      ${ic_id}         
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
