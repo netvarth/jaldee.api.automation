@@ -673,9 +673,11 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-4
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -859,9 +861,11 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-5
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -1048,9 +1052,11 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-UH3
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
-    ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}

@@ -70,9 +70,11 @@ JD-TC-GetSlots By Date and service -1
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     # ${resp2}=   Run Keyword If  ${resp.json()['onlinePresence']}==${bool[1]}   Set jaldeeIntegration Settings  ${boolean[0]}  ${EMPTY}   ${EMPTY}  
     # Run Keyword If   '${resp2}' != '${None}'  Log  ${resp1.json()}
     # Run Keyword If   '${resp2}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
@@ -1228,9 +1230,11 @@ JD-TC-GetSlots By Date and service-9
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -2409,9 +2413,11 @@ JD-TC-GetSlots By Date and service -11
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     # ${resp2}=   Run Keyword If  ${resp.json()['onlinePresence']}==${bool[1]}   Set jaldeeIntegration Settings  ${boolean[0]}  ${EMPTY}   ${EMPTY}  
     # Run Keyword If   '${resp2}' != '${None}'  Log  ${resp1.json()}
     # Run Keyword If   '${resp2}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
@@ -4355,9 +4361,11 @@ JD-TC-GetSlots By Date and service -18
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
   
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -5637,9 +5645,11 @@ JD-TC-GetSlots By Date and service -UH8
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
   
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -5755,9 +5765,11 @@ JD-TC-GetSlots By Date and service -UH9
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
    
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
@@ -5969,9 +5981,11 @@ JD-TC-Take Appointment-2
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}   Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['walkinConsumerBecomesJdCons']}==${bool[0]}
+        ${resp}=  Set jaldeeIntegration Settings    ${EMPTY}  ${boolean[1]}  ${EMPTY}
+        Log   ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     ${resp2}=   Run Keyword If  ${resp.json()['onlinePresence']}==${bool[0]}   Set jaldeeIntegration Settings  ${boolean[1]}  ${EMPTY}   ${EMPTY}  
     Run Keyword If   '${resp2}' != '${None}'  Log  ${resp1.json()}
     Run Keyword If   '${resp2}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
