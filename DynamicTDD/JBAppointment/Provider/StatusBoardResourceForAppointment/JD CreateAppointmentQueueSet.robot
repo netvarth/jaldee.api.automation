@@ -65,11 +65,12 @@ JD-TC-CreateAppointmentQueueSet-1
     Set Suite Variable  ${PUSERNAME_M}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${result}=  Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
-    Log   ${result.json()}
-    Should Be Equal As Strings  ${result.status_code}  200
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     IF  ${resp.json()['enableAppt']}==${bool[0]}   
+          ${resp}=   Enable Appointment 
+          Should Be Equal As Strings  ${resp.status_code}  200
+     END
 
 
     ${p1_sid1}=  Create Sample Service  ${SERVICE1}
@@ -208,11 +209,12 @@ JD-TC-CreateAppointmentQueueSet-2
     Set Suite Variable  ${MUSERNAME_M}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${result}=  Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
-    Log   ${result.json()}
-    Should Be Equal As Strings  ${result.status_code}  200
+     Log  ${resp.content}
+     Should Be Equal As Strings  ${resp.status_code}  200
+     IF  ${resp.json()['enableAppt']}==${bool[0]}   
+          ${resp}=   Enable Appointment 
+          Should Be Equal As Strings  ${resp.status_code}  200
+     END
 
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
@@ -405,22 +407,22 @@ JD-TC-CreateAppointmentQueueSet-4
 
     ${resp}=  View Waitlist Settings
     Should Be Equal As Strings  ${resp.status_code}  200
-	${resp1}=   ${resp}=  View Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[1]}
+	IF  ${resp.json()['filterByDept']}==${bool[1]}
         ${resp}=  Toggle Department Disable
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
 
     END
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
 
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  
-    Set Suite Variable  ${s_id1}
+    Set Suite Variable  ${lid1}
+    ${resp}=   Get Location ById  ${lid}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -508,6 +510,11 @@ JD-TC-CreateAppointmentQueueSet-5
     clear_Addon  ${PUSERNAME129}
     ${lid1}=  Create Sample Location  
     Set Suite Variable  ${lid1}
+    ${resp}=   Get Location ById  ${lid1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
@@ -541,6 +548,7 @@ JD-TC-CreateAppointmentQueueSet-5
 
     ${fieldList}=  Create Fieldlist For QueueSet  ${Values[0]}  ${Values[1]}  ${Values[2]}  ${bool[0]}  ${order1}
     Log  ${fieldList}
+    Set Suite Variable  ${fieldList}
     ${s_name}=  FakerLibrary.Words  nb=2
     ${s_desc}=  FakerLibrary.Sentence
    
@@ -567,6 +575,7 @@ JD-TC-CreateAppointmentQueueSet-UH1
     ${Values}=  FakerLibrary.Words  	nb=3
     ${fieldList}=  Create Fieldlist For QueueSet  ${Values[0]}  ${Values[1]}  ${Values[2]}  ${bool[1]}  ${order1}
     Log  ${fieldList}
+
     ${s_name}=  FakerLibrary.Words  nb=2
     ${s_desc}=  FakerLibrary.Sentence
     ${s_id2}=  Create Sample Service  ${SERVICE2}
@@ -588,6 +597,11 @@ JD-TC-CreateAppointmentQueueSet-UH2
     [Documentation]   Provider create a Appointment QueueSet without login 
     ${s_name}=  FakerLibrary.Words  nb=2
     ${s_desc}=  FakerLibrary.Sentence
+    ${order1}=   Random Int   min=0   max=1
+    ${Values}=  FakerLibrary.Words  	nb=3
+    ${fieldList}=  Create Fieldlist For QueueSet  ${Values[0]}  ${Values[1]}  ${Values[2]}  ${bool[0]}  ${order1}
+    Log  ${fieldList}
+
     ${department_list}=  Create List  ${depid1}
     ${ser}=  Create List  
     ${dept1}=   Create Dictionary  departmentId=${depid1}
@@ -609,6 +623,11 @@ JD-TC-CreateAppointmentQueueSet-UH3
 
     ${s_name}=  FakerLibrary.Words  nb=2
     ${s_desc}=  FakerLibrary.Sentence
+    ${order1}=   Random Int   min=0   max=1
+    ${Values}=  FakerLibrary.Words  	nb=3
+    ${fieldList}=  Create Fieldlist For QueueSet  ${Values[0]}  ${Values[1]}  ${Values[2]}  ${bool[0]}  ${order1}
+    Log  ${fieldList}
+
     ${department_list}=  Create List  ${depid1}
     ${ser}=  Create List  
     ${dept1}=   Create Dictionary  departmentId=${depid1}
@@ -639,8 +658,12 @@ JD-TC-CreateAppointmentQueueSet-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable   ${sch_id}   ${resp.json()[0]['id']}
 
-    # ${dept1}=   Create Dictionary  departmentId=${depid1}
-    # ${dep}=  Create List   ${dept1}
+    ${order1}=   Random Int   min=0   max=1
+    ${Values}=  FakerLibrary.Words  	nb=3
+
+    ${fieldList}=  Create Fieldlist For QueueSet  ${Values[0]}  ${Values[1]}  ${Values[2]}  ${bool[0]}  ${order1}
+    Log  ${fieldList}
+
     ${appt_sh}=   Create Dictionary  id=${sch_id}
     ${appt_shd}=    Create List   ${appt_sh}
     ${app_status}=    Create List   ${apptStatus[2]}
@@ -737,6 +760,16 @@ JD-TC-CreateAppointmentQueueSet-UH6
     clear_service   ${PUSERNAME111}
     clear_location  ${PUSERNAME111}
     clear_Addon  ${PUSERNAME111}
+
+    ${resp}=  View Waitlist Settings
+    Should Be Equal As Strings  ${resp.status_code}  200
+	IF  ${resp.json()['filterByDept']}==${bool[1]}
+        ${resp}=  Toggle Department Disable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+    
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  

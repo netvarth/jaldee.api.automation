@@ -223,11 +223,20 @@ JD-TC-CreateStatusBoardAppoinment-UH4
 
 JD-TC-CreateStatusBoardAppoinment-UH6
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME82}  ${PASSWORD} 
+    ${required_lic}    Random Element    ['Basic' , 'Premium' , 'Team' , 'Enterprise']
+
+    ${PUSERNAMEA}=  Provider with license  ${required_lic}
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMEA}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${PUSERNAME82}
-    clear_location  ${PUSERNAME82}
-    clear_Addon  ${PUSERNAME82}
+    clear_service   ${PUSERNAMEA}
+    clear_location  ${PUSERNAMEA}
+    clear_Addon  ${PUSERNAMEA}
+
+    ${resp}=   Get Active License
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${lic1}  ${resp.json()['accountLicense']['licPkgOrAddonId']}
+
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  
@@ -302,11 +311,16 @@ JD-TC-CreateStatusBoardAppoinment-UH6
 JD-TC-CreateStatusBoardAppoinment-UH7
 
     [Documentation]    Create a StatusBoard with empty status board layout
-     ${resp}=  Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
+    
+    ${required_lic}    Random Element    ['Basic' , 'Premium' , 'Team' , 'Enterprise']
+
+    ${PUSERNAMEA}=  Provider with license  ${required_lic}
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMEA}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${PUSERNAME81}
-    clear_location  ${PUSERNAME81}
-    clear_Addon  ${PUSERNAME81}
+    clear_service   ${PUSERNAMEA}
+    clear_location  ${PUSERNAMEA}
+    clear_Addon  ${PUSERNAMEA}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  
@@ -378,11 +392,16 @@ JD-TC-CreateStatusBoardAppoinment-UH7
 
 JD-TC-CreateStatusBoardAppoinment-UH8
     [Documentation]  Create a StatusBoard with empty status board display name
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME81}  ${PASSWORD} 
+    
+    ${required_lic}    Random Element    ['Basic' , 'Premium' , 'Team' , 'Enterprise']
+
+    ${PUSERNAMEA}=  Provider with license  ${required_lic}
+    
+    ${resp}=  Encrypted Provider Login  ${PUSERNAMEA}  ${PASSWORD} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    clear_service   ${PUSERNAME81}
-    clear_location  ${PUSERNAME81}
-    clear_Addon  ${PUSERNAME81}
+    clear_service   ${PUSERNAMEA}
+    clear_location  ${PUSERNAMEA}
+    clear_Addon  ${PUSERNAMEA}
     ${s_id1}=  Create Sample Service  ${SERVICE1}
     Set Suite Variable  ${s_id1}
     ${lid1}=  Create Sample Location  

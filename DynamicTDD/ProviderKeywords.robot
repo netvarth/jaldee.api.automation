@@ -14703,3 +14703,31 @@ Get SalesOrder Count
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/sorder/count   params=${param}   expected_status=any
     RETURN  ${resp} 
+
+
+Provider with license
+    [Arguments]  ${licensename}
+    ${resp}=   Get File    /ebs/TDD/varfiles/providers.py
+    ${len}=   Split to lines  ${resp}
+    ${length}=  Get Length   ${len}
+    
+    FOR   ${i}  IN RANGE   100 
+        ${a}=  FakerLibrary.Random Int  min=0  max=${length}
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME${a}}  ${PASSWORD}
+        Should Be Equal As Strings    ${resp.status_code}    200
+        ${decrypted_data}=  db.decrypt_data  ${resp.content}
+        Log  ${decrypted_data}
+        ${active_lic_name}=  Set Variable  ${decrypted_data['accountLicenseDetails']['accountLicense']['name']}
+        
+        IF  ${active_lic_name.lower()}==${licensename.lower()}
+            RETURN  ${PUSERNAME${a}}
+        END
+    END
+
+    
+    
+    # ${resp}=   Get Active License
+    # Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Suite Variable  ${lic_name}  ${resp.json()['accountLicense']['name']}
+    
+    # RETURN  

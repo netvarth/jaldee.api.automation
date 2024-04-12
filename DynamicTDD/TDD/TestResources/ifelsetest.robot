@@ -25,8 +25,18 @@ ${latti}         ${-0.190822}
 ${longi}    ${-68.031759}
 ${latti1}         ${0.190822}
 ${longi1}    ${68.031759}
+${word1}        Python
+${word2}        PYTHON
+${word3}        python
 
 *** Test Cases ***  
+
+Testing python lower fn
+    log  ${word1.lower()}
+    log  ${word2.lower()}
+    log  ${word3.lower()}
+
+*** Comments ***
 
 Check empty Dictionary
 
@@ -65,8 +75,6 @@ Check empty Dictionary
     END
 
 
-
-*** Comments ***
 Testing py fn
 
     Log  ${TEST NAME}
