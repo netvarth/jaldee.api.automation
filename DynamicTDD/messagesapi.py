@@ -2302,6 +2302,8 @@ INVENORY_CATALOG_ITEM_BATCH="Invalid Catalog Item Batch"
 INVALID_ORDER_ID="Invalid Order Id"
 SORDERCATALOGITEMENCID_FILTER_REQUIRED="sorderCatalogItemEncId in filter required"
 INVALID_CATALOG_ITEM_BATCH_ID="Invalid Catalog Item Batch Id"
+INVALID_REMARK_NAME="Invalid Remark name "
+INVALID_REMARK_CODE="Invalid Remark code"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"

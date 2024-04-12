@@ -210,6 +210,7 @@ JD-TC-CreateItemRemarks-UH1
     ${resp}=  Create Item Remarks   ${EMPTY}  ${transactionTypeEnum[10]}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_REMARK_NAME}
 
 
 JD-TC-CreateItemRemarks-UH2

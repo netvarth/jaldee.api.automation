@@ -199,25 +199,7 @@ JD-TC-UpdateItemRemarks-5
     Should Be Equal As Strings    ${resp.json()['encId']}    ${remarks_encid}
 
 
-JD-TC-UpdateItemRemarks-6
 
-    [Documentation]    Update Item Remarks with empty remarks
-
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Update Item Remark    ${remarks_encid1}   ${EMPTY}  ${transactionTypeEnum[5]}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Item Remark   ${remarks_encid1}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()['remark']}    ${EMPTY}
-    Should Be Equal As Strings    ${resp.json()['transactionTypeEnum']}    ${transactionTypeEnum[5]}
-    Should Be Equal As Strings    ${resp.json()['encId']}    ${remarks_encid1}
 
 
 JD-TC-UpdateItemRemarks-UH1
@@ -232,6 +214,7 @@ JD-TC-UpdateItemRemarks-UH1
     ${resp}=  Update Item Remark    ${remarks}   ${remarks}  ${transactionTypeEnum[5]}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_REMARK_CODE}
 
 
 
@@ -256,4 +239,19 @@ JD-TC-UpdateItemRemarks-UH3
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+
+JD-TC-UpdateItemRemarks-UH4
+
+    [Documentation]    Update Item Remarks with empty remarks
+
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Update Item Remark    ${remarks_encid1}   ${EMPTY}  ${transactionTypeEnum[5]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_REMARK_NAME}
+
 
