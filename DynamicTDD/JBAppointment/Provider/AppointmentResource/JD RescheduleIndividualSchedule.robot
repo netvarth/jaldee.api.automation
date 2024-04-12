@@ -35,7 +35,7 @@ JD-TC-Reschedule Appointment-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -59,13 +59,15 @@ JD-TC-Reschedule Appointment-1
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -106,7 +108,7 @@ JD-TC-Reschedule Appointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -277,7 +279,7 @@ JD-TC-Reschedule Appointment-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -305,9 +307,10 @@ JD-TC-Reschedule Appointment-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]}
    
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -326,7 +329,7 @@ JD-TC-Reschedule Appointment-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -513,13 +516,14 @@ JD-TC-Reschedule Appointment-3
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -538,7 +542,7 @@ JD-TC-Reschedule Appointment-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -719,7 +723,7 @@ JD-TC-Reschedule Appointment-5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -735,9 +739,10 @@ JD-TC-Reschedule Appointment-5
     # ${resp}=  Add addon  ${aId} 
     # Should Be Equal As Strings    ${resp.status_code}   200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -756,7 +761,7 @@ JD-TC-Reschedule Appointment-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -969,7 +974,7 @@ JD-TC-Reschedule Appointment-6
     Set Suite Variable   ${billable_providers}
     Set Suite Variable   ${multilocPro}
 
-    ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${multilocPro[5]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -995,13 +1000,15 @@ JD-TC-Reschedule Appointment-6
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${multilocPro[4]}
-    clear_location  ${multilocPro[4]}
-    clear_customer   ${multilocPro[4]}
+    # clear_service   ${multilocPro[5]}
+    # clear_location  ${multilocPro[5]}
+    clear_location_n_service  ${multilocPro[5]}
+    clear_customer   ${multilocPro[5]}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1032,7 +1039,7 @@ JD-TC-Reschedule Appointment-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
-    clear_appt_schedule   ${multilocPro[4]}
+    # clear_appt_schedule   ${multilocPro[5]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -1238,13 +1245,14 @@ JD-TC-Reschedule Appointment-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1263,7 +1271,7 @@ JD-TC-Reschedule Appointment-7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -1440,7 +1448,7 @@ JD-TC-Reschedule Appointment-9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -1450,11 +1458,12 @@ JD-TC-Reschedule Appointment-9
 
     # Set Test Variable  ${p_id}  ${resp.json()['id']}
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
     clear_consumer_msgs  ${CUSERNAME33}
-    clear_provider_msgs  ${PUSERNAME149}
+    clear_provider_msgs  ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1473,7 +1482,7 @@ JD-TC-Reschedule Appointment-9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -1704,7 +1713,7 @@ JD-TC-Reschedule Appointment-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[5]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -1751,9 +1760,10 @@ JD-TC-Reschedule Appointment-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-    clear_service   ${billable_providers[4]}
-    clear_location  ${billable_providers[4]}
-    clear_customer   ${billable_providers[4]}
+    # clear_service   ${billable_providers[5]}
+    # clear_location  ${billable_providers[5]}
+    clear_location_n_service  ${billable_providers[5]}
+    clear_customer   ${billable_providers[5]}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1774,7 +1784,7 @@ JD-TC-Reschedule Appointment-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${billable_providers[4]}
+    # clear_appt_schedule   ${billable_providers[5]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -1891,7 +1901,7 @@ JD-TC-Reschedule Appointment-10
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login   ${billable_providers[4]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${billable_providers[5]}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -1945,7 +1955,7 @@ JD-TC-Reschedule Appointment-10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[5]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2098,7 +2108,7 @@ JD-TC-Reschedule Appointment-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[5]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -2112,9 +2122,10 @@ JD-TC-Reschedule Appointment-11
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_service   ${billable_providers[4]}
-    clear_location  ${billable_providers[4]}
-    clear_customer   ${billable_providers[4]}
+    # clear_service   ${billable_providers[5]}
+    # clear_location  ${billable_providers[5]}
+    clear_location_n_service  ${billable_providers[5]}
+    clear_customer   ${billable_providers[5]}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2143,7 +2154,7 @@ JD-TC-Reschedule Appointment-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${billable_providers[4]}
+    # clear_appt_schedule   ${billable_providers[5]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -2265,7 +2276,7 @@ JD-TC-Reschedule Appointment-11
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login   ${billable_providers[4]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${billable_providers[5]}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -2319,7 +2330,7 @@ JD-TC-Reschedule Appointment-11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[5]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2473,7 +2484,7 @@ JD-TC-Reschedule Appointment-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2483,9 +2494,10 @@ JD-TC-Reschedule Appointment-12
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2504,7 +2516,7 @@ JD-TC-Reschedule Appointment-12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -2603,7 +2615,7 @@ JD-TC-Reschedule Appointment-12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2764,7 +2776,7 @@ JD-TC-Reschedule Appointment-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -2774,9 +2786,10 @@ JD-TC-Reschedule Appointment-13
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -2795,7 +2808,7 @@ JD-TC-Reschedule Appointment-13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -2892,7 +2905,7 @@ JD-TC-Reschedule Appointment-13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3084,7 +3097,7 @@ JD-TC-Reschedule Appointment-14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3135,9 +3148,10 @@ JD-TC-Reschedule Appointment-14
 
     sleep   01s
 
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3156,7 +3170,7 @@ JD-TC-Reschedule Appointment-14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -3248,7 +3262,7 @@ JD-TC-Reschedule Appointment-14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3402,7 +3416,7 @@ JD-TC-Reschedule Appointment-16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -3411,9 +3425,10 @@ JD-TC-Reschedule Appointment-16
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
    
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3432,7 +3447,7 @@ JD-TC-Reschedule Appointment-16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -3607,13 +3622,14 @@ JD-TC-Reschedule Appointment-18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3632,7 +3648,7 @@ JD-TC-Reschedule Appointment-18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -3792,7 +3808,7 @@ JD-TC-Reschedule Appointment-21
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -3816,13 +3832,15 @@ JD-TC-Reschedule Appointment-21
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -3863,7 +3881,7 @@ JD-TC-Reschedule Appointment-21
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -4053,7 +4071,7 @@ JD-TC-Reschedule Appointment-22
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4077,13 +4095,15 @@ JD-TC-Reschedule Appointment-22
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4124,7 +4144,7 @@ JD-TC-Reschedule Appointment-22
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -4324,13 +4344,14 @@ JD-TC-Reschedule Appointment-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4349,7 +4370,7 @@ JD-TC-Reschedule Appointment-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -4503,7 +4524,7 @@ JD-TC-Reschedule Appointment-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME148}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -4522,13 +4543,15 @@ JD-TC-Reschedule Appointment-UH2
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp1}=   Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
-    Run Keyword If   '${resp1}' != '${None}'  Log  ${resp1.json()}
-    Run Keyword If   '${resp1}' != '${None}'  Should Be Equal As Strings  ${resp1.status_code}  200
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
-    clear_service   ${PUSERNAME148}
-    clear_location  ${PUSERNAME148}
-    clear_customer   ${PUSERNAME148}
+    # clear_service   ${PUSERNAME151}
+    # clear_location  ${PUSERNAME151}
+    clear_location_n_service  ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4550,7 +4573,7 @@ JD-TC-Reschedule Appointment-UH2
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid1}=  Create Sample Location  
-    clear_appt_schedule   ${PUSERNAME148}
+    # clear_appt_schedule   ${PUSERNAME151}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -4597,13 +4620,14 @@ JD-TC-Reschedule Appointment-UH2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4622,7 +4646,7 @@ JD-TC-Reschedule Appointment-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -4739,13 +4763,14 @@ JD-TC-Reschedule Appointment-UH4
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4764,7 +4789,7 @@ JD-TC-Reschedule Appointment-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -4826,7 +4851,6 @@ JD-TC-Reschedule Appointment-UH4
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -4884,13 +4908,14 @@ JD-TC-Reschedule Appointment-UH5
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -4909,7 +4934,7 @@ JD-TC-Reschedule Appointment-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -4971,7 +4996,6 @@ JD-TC-Reschedule Appointment-UH5
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -5029,13 +5053,14 @@ JD-TC-Reschedule Appointment-UH6
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5054,7 +5079,7 @@ JD-TC-Reschedule Appointment-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -5116,7 +5141,6 @@ JD-TC-Reschedule Appointment-UH6
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -5174,13 +5198,14 @@ JD-TC-Reschedule Appointment-UH7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5199,7 +5224,7 @@ JD-TC-Reschedule Appointment-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -5261,7 +5286,6 @@ JD-TC-Reschedule Appointment-UH7
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -5323,13 +5347,14 @@ JD-TC-Reschedule Appointment-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5348,7 +5373,7 @@ JD-TC-Reschedule Appointment-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -5417,7 +5442,6 @@ JD-TC-Reschedule Appointment-UH8
     ${resp}=  Take Appointment For Consumer  ${cid}  ${s_id}  ${sch_id}  ${DAY1}  ${cnote}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-          
     ${apptid}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${apptid[0]}
 
@@ -5484,13 +5508,14 @@ JD-TC-Reschedule Appointment-UH9
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5509,7 +5534,7 @@ JD-TC-Reschedule Appointment-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -5647,13 +5672,14 @@ JD-TC-Reschedule Appointment-UH10
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5672,7 +5698,7 @@ JD-TC-Reschedule Appointment-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -5819,13 +5845,14 @@ JD-TC-Reschedule Appointment-UH11
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -5844,7 +5871,7 @@ JD-TC-Reschedule Appointment-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -5975,13 +6002,14 @@ JD-TC-Reschedule Appointment-UH12
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6000,7 +6028,7 @@ JD-TC-Reschedule Appointment-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -6127,13 +6155,14 @@ JD-TC-Reschedule Appointment-UH13
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6152,7 +6181,7 @@ JD-TC-Reschedule Appointment-UH13
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -6273,13 +6302,14 @@ JD-TC-Reschedule Appointment-UH14
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6298,7 +6328,7 @@ JD-TC-Reschedule Appointment-UH14
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -6363,7 +6393,7 @@ JD-TC-Reschedule Appointment-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME148}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME151}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -6371,9 +6401,10 @@ JD-TC-Reschedule Appointment-UH16
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME148}
-    clear_location  ${PUSERNAME148}
-    clear_customer   ${PUSERNAME148}
+    # clear_service   ${PUSERNAME151}
+    # clear_location  ${PUSERNAME151}
+    clear_location_n_service  ${PUSERNAME151}
+    clear_customer   ${PUSERNAME151}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6383,7 +6414,7 @@ JD-TC-Reschedule Appointment-UH16
     ${s_id1}=  Create Sample Service  ${SERVICE1}
 
     ${lid1}=  Create Sample Location  
-    clear_appt_schedule   ${PUSERNAME148}
+    # clear_appt_schedule   ${PUSERNAME151}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -6427,13 +6458,14 @@ JD-TC-Reschedule Appointment-UH16
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6452,7 +6484,7 @@ JD-TC-Reschedule Appointment-UH16
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -6538,13 +6570,14 @@ JD-TC-Reschedule Appointment-UH17
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6563,7 +6596,7 @@ JD-TC-Reschedule Appointment-UH17
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -6686,13 +6719,14 @@ JD-TC-Reschedule Appointment-UH18
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6711,7 +6745,7 @@ JD-TC-Reschedule Appointment-UH18
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -6842,13 +6876,14 @@ JD-TC-Reschedule Appointment-UH19
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -6867,7 +6902,7 @@ JD-TC-Reschedule Appointment-UH19
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -6986,13 +7021,14 @@ JD-TC-Reschedule Appointment-UH20
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -7011,7 +7047,7 @@ JD-TC-Reschedule Appointment-UH20
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -7131,13 +7167,14 @@ JD-TC-Reschedule Appointment-UH21
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -7156,7 +7193,7 @@ JD-TC-Reschedule Appointment-UH21
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -7275,13 +7312,14 @@ JD-TC-Reschedule Appointment-UH22
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -7300,7 +7338,7 @@ JD-TC-Reschedule Appointment-UH22
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -7418,7 +7456,7 @@ JD-TC-Reschedule Appointment-UH23
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -7428,9 +7466,10 @@ JD-TC-Reschedule Appointment-UH23
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -7449,7 +7488,7 @@ JD-TC-Reschedule Appointment-UH23
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -7542,7 +7581,7 @@ JD-TC-Reschedule Appointment-UH23
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -7662,7 +7701,7 @@ JD-TC-Reschedule Appointment-UH24
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -7672,9 +7711,10 @@ JD-TC-Reschedule Appointment-UH24
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -7693,7 +7733,7 @@ JD-TC-Reschedule Appointment-UH24
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -7785,7 +7825,7 @@ JD-TC-Reschedule Appointment-UH24
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -7905,7 +7945,7 @@ JD-TC-Reschedule Appointment-UH25
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -7915,9 +7955,10 @@ JD-TC-Reschedule Appointment-UH25
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
     
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -7936,7 +7977,7 @@ JD-TC-Reschedule Appointment-UH25
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -8038,7 +8079,7 @@ JD-TC-Reschedule Appointment-UH25
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -8166,7 +8207,7 @@ JD-TC-Reschedule Appointment-UH26
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[5]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -8180,9 +8221,10 @@ JD-TC-Reschedule Appointment-UH26
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_service   ${billable_providers[4]}
-    clear_location  ${billable_providers[4]}
-    clear_customer   ${billable_providers[4]}
+    # clear_service   ${billable_providers[5]}
+    # clear_location  ${billable_providers[5]}
+    clear_location_n_service  ${billable_providers[5]}
+    clear_customer   ${billable_providers[5]}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -8203,7 +8245,7 @@ JD-TC-Reschedule Appointment-UH26
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${billable_providers[4]}
+    # clear_appt_schedule   ${billable_providers[5]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -8367,7 +8409,7 @@ JD-TC-Reschedule Appointment-UH26
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[5]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -8457,13 +8499,14 @@ JD-TC-Reschedule Appointment-UH28
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${multilocPro[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${multilocPro[5]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    clear_service   ${multilocPro[4]}
-    clear_location  ${multilocPro[4]}
-    clear_customer   ${multilocPro[4]}
+    # clear_service   ${multilocPro[5]}
+    # clear_location  ${multilocPro[5]}
+    clear_location_n_service  ${multilocPro[5]}
+    clear_customer   ${multilocPro[5]}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -8486,7 +8529,7 @@ JD-TC-Reschedule Appointment-UH28
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
-    clear_appt_schedule   ${multilocPro[4]}
+    # clear_appt_schedule   ${multilocPro[5]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -8640,7 +8683,7 @@ JD-TC-Reschedule Appointment-UH30
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[5]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -8661,9 +8704,10 @@ JD-TC-Reschedule Appointment-UH30
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_service   ${billable_providers[4]}
-    clear_location  ${billable_providers[4]}
-    clear_customer   ${billable_providers[4]}
+    # clear_service   ${billable_providers[5]}
+    # clear_location  ${billable_providers[5]}
+    clear_location_n_service  ${billable_providers[5]}
+    clear_customer   ${billable_providers[5]}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -8684,7 +8728,7 @@ JD-TC-Reschedule Appointment-UH30
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${billable_providers[4]}
+    # clear_appt_schedule   ${billable_providers[5]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -8803,7 +8847,7 @@ JD-TC-Reschedule Appointment-UH30
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login   ${billable_providers[4]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${billable_providers[5]}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -8848,7 +8892,7 @@ JD-TC-Reschedule Appointment-UH30
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[5]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -8955,7 +8999,7 @@ JD-TC-Reschedule Appointment-UH31
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[5]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -8969,9 +9013,10 @@ JD-TC-Reschedule Appointment-UH31
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_service   ${billable_providers[4]}
-    clear_location  ${billable_providers[4]}
-    clear_customer   ${billable_providers[4]}
+    # clear_service   ${billable_providers[5]}
+    # clear_location  ${billable_providers[5]}
+    clear_location_n_service  ${billable_providers[5]}
+    clear_customer   ${billable_providers[5]}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -8995,7 +9040,7 @@ JD-TC-Reschedule Appointment-UH31
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${billable_providers[4]}
+    # clear_appt_schedule   ${billable_providers[5]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -9114,7 +9159,7 @@ JD-TC-Reschedule Appointment-UH31
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Encrypted Provider Login   ${billable_providers[4]}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login   ${billable_providers[5]}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -9168,7 +9213,7 @@ JD-TC-Reschedule Appointment-UH31
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${billable_providers[4]}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${billable_providers[5]}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -9274,7 +9319,7 @@ JD-TC-Reschedule Appointment-UH33
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME149}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME150}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
@@ -9283,9 +9328,10 @@ JD-TC-Reschedule Appointment-UH33
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}
    
-    clear_service   ${PUSERNAME149}
-    clear_location  ${PUSERNAME149}
-    clear_customer   ${PUSERNAME149}
+    # clear_service   ${PUSERNAME150}
+    # clear_location  ${PUSERNAME150}
+    clear_location_n_service  ${PUSERNAME150}
+    clear_customer   ${PUSERNAME150}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -9304,7 +9350,7 @@ JD-TC-Reschedule Appointment-UH33
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME149}
+    # clear_appt_schedule   ${PUSERNAME150}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}

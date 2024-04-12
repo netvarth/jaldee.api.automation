@@ -1208,7 +1208,7 @@ JD-TC-Reschedule Appointment-6
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']} 
-    clear_appt_schedule   ${multilocPro[4]}
+    # clear_appt_schedule   ${multilocPro[4]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -2105,8 +2105,9 @@ JD-TC-Reschedule Appointment-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['enableJaldeeFinance']}  ${bool[1]}
 
-    clear_service   ${billable_providers[4]}
-    clear_location  ${billable_providers[4]}
+    # clear_service   ${billable_providers[4]}
+    # clear_location  ${billable_providers[4]}
+    clear_location_n_service  ${billable_providers[4]}
     clear_customer   ${billable_providers[4]}
 
     ${resp}=   Get Service
@@ -2128,7 +2129,7 @@ JD-TC-Reschedule Appointment-10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${billable_providers[4]}
+    # clear_appt_schedule   ${billable_providers[4]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -2461,8 +2462,9 @@ JD-TC-Reschedule Appointment-11
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_service   ${billable_providers[4]}
-    clear_location  ${billable_providers[4]}
+    # clear_service   ${billable_providers[4]}
+    # clear_location  ${billable_providers[4]}
+    clear_location_n_service  ${billable_providers[4]}
     clear_customer   ${billable_providers[4]}
 
     ${resp}=   Get Service
@@ -2492,7 +2494,7 @@ JD-TC-Reschedule Appointment-11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${billable_providers[4]}
+    # clear_appt_schedule   ${billable_providers[4]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -5584,8 +5586,9 @@ JD-TC-Reschedule Appointment-UH2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME148}
-    clear_location  ${PUSERNAME148}
+    # clear_service   ${PUSERNAME148}
+    # clear_location  ${PUSERNAME148}
+    clear_location_n_service  ${PUSERNAME148}
     clear_customer   ${PUSERNAME148}
 
     ${resp}=   Get Service
@@ -5608,7 +5611,7 @@ JD-TC-Reschedule Appointment-UH2
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid1}=  Create Sample Location  
-    clear_appt_schedule   ${PUSERNAME148}
+    # clear_appt_schedule   ${PUSERNAME148}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -7375,8 +7378,9 @@ JD-TC-Reschedule Appointment-UH15
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME148}
-    clear_location  ${PUSERNAME148}
+    # clear_service   ${PUSERNAME148}
+    # clear_location  ${PUSERNAME148}
+    clear_location_n_service  ${PUSERNAME148}
     clear_customer   ${PUSERNAME148}
 
     ${resp}=   Get Service
@@ -7387,7 +7391,7 @@ JD-TC-Reschedule Appointment-UH15
     ${s_id1}=  Create Sample Service  ${SERVICE1}
 
     ${lid1}=  Create Sample Location  
-    clear_appt_schedule   ${PUSERNAME148}
+    # clear_appt_schedule   ${PUSERNAME148}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -7569,8 +7573,9 @@ JD-TC-Reschedule Appointment-UH16
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
-    clear_service   ${PUSERNAME148}
-    clear_location  ${PUSERNAME148}
+    # clear_service   ${PUSERNAME148}
+    # clear_location  ${PUSERNAME148}
+    clear_location_n_service  ${PUSERNAME148}
     clear_customer   ${PUSERNAME148}
 
     ${resp}=   Get Service
@@ -7581,7 +7586,7 @@ JD-TC-Reschedule Appointment-UH16
     ${s_id1}=  Create Sample Service  ${SERVICE1}
 
     ${lid1}=  Create Sample Location  
-    clear_appt_schedule   ${PUSERNAME148}
+    # clear_appt_schedule   ${PUSERNAME148}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -9374,8 +9379,9 @@ JD-TC-Reschedule Appointment-UH26
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_service   ${billable_providers[4]}
-    clear_location  ${billable_providers[4]}
+    # clear_service   ${billable_providers[4]}
+    # clear_location  ${billable_providers[4]}
+    clear_location_n_service  ${billable_providers[4]}
     clear_customer   ${billable_providers[4]}
 
     ${resp}=   Get Service
@@ -9397,7 +9403,7 @@ JD-TC-Reschedule Appointment-UH26
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${billable_providers[4]}
+    # clear_appt_schedule   ${billable_providers[4]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -9843,7 +9849,7 @@ JD-TC-Reschedule Appointment-UH28
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz1}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
-    clear_appt_schedule   ${multilocPro[4]}
+    # clear_appt_schedule   ${multilocPro[4]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -10038,8 +10044,9 @@ JD-TC-Reschedule Appointment-UH29
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${billable_providers[4]}
-    clear_location  ${billable_providers[4]}
+    # clear_service   ${billable_providers[4]}
+    # clear_location  ${billable_providers[4]}
+    clear_location_n_service  ${billable_providers[4]}
     clear_customer   ${billable_providers[4]}
 
     ${resp}=   Get Service
@@ -10062,7 +10069,7 @@ JD-TC-Reschedule Appointment-UH29
     Should Be Equal As Strings  ${resp.json()['enableToday']}   ${bool[1]}  
 
     ${lid}=  Create Sample Location   
-    clear_appt_schedule   ${billable_providers[4]}
+    # clear_appt_schedule   ${billable_providers[4]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -10312,8 +10319,9 @@ JD-TC-Reschedule Appointment-UH30
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_service   ${billable_providers[4]}
-    clear_location  ${billable_providers[4]}
+    # clear_service   ${billable_providers[4]}
+    # clear_location  ${billable_providers[4]}
+    clear_location_n_service  ${billable_providers[4]}
     clear_customer   ${billable_providers[4]}
 
     ${resp}=   Get Service
@@ -10335,7 +10343,7 @@ JD-TC-Reschedule Appointment-UH30
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${billable_providers[4]}
+    # clear_appt_schedule   ${billable_providers[4]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
@@ -10620,8 +10628,9 @@ JD-TC-Reschedule Appointment-UH31
     Set Test Variable  ${pid}  ${resp.json()['id']}
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
-    clear_service   ${billable_providers[4]}
-    clear_location  ${billable_providers[4]}
+    # clear_service   ${billable_providers[4]}
+    # clear_location  ${billable_providers[4]}
+    clear_location_n_service  ${billable_providers[4]}
     clear_customer   ${billable_providers[4]}
 
     ${resp}=   Get Service
@@ -10646,7 +10655,7 @@ JD-TC-Reschedule Appointment-UH31
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${billable_providers[4]}
+    # clear_appt_schedule   ${billable_providers[4]}
 
     ${resp}=  Get Appointment Schedules
     Log  ${resp.json()}
