@@ -2304,6 +2304,8 @@ SORDERCATALOGITEMENCID_FILTER_REQUIRED="sorderCatalogItemEncId in filter require
 INVALID_CATALOG_ITEM_BATCH_ID="Invalid Catalog Item Batch Id"
 INVALID_REMARK_NAME="Invalid Remark name "
 INVALID_REMARK_CODE="Invalid Remark code"
+INVALID_REMARKS_ID="Invalid remark Id"
+INVALID_QUANTITY="Invalid Quantity"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"

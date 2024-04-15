@@ -25,11 +25,11 @@ ${invalidstring}     _ad$.sa_
 
 *** Test Cases ***
 
-JD-TC-Create Stock Adjustment-1
+JD-TC-Update Stock Adjustment-1
 
-    [Documentation]  Create stock adjustment with valid details.
+    [Documentation]  update stock adjustment with same details.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -72,10 +72,10 @@ JD-TC-Create Stock Adjustment-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME1}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME2}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -160,13 +160,18 @@ JD-TC-Create Stock Adjustment-1
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Suite Variable  ${remarks_encid1}  ${resp.json()}
+    Set Suite Variable  ${uid}  ${resp.json()}
 
-JD-TC-Create Stock Adjustment-2
+    ${resp}=  Update Stock Adjustment  ${uid}    ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
-    [Documentation]  Create stock adjustment with multiple stockAdjustDetailsDtos.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+JD-TC-Update Stock Adjustment-2
+
+    [Documentation]  Create stock adjustment with multiple stockAdjustDetailsDtos. then update stock adjustment by adding one more  stockAdjustDetailsDtos
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -177,86 +182,82 @@ JD-TC-Create Stock Adjustment-2
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data}   ${data1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${uid1}  ${resp.json()}
 
-JD-TC-Create Stock Adjustment-3
+    ${quantity1}=   Random Int  min=10  max=15
+    ${quantity1}=  Convert To Number  ${quantity1}  1
+    ${data2}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity1}   
 
-    [Documentation]  Create stock adjustment thats already created.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Update Stock Adjustment  ${uid1}   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data}   ${data1}   ${data2}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-    ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    200 
 
 
 
-JD-TC-Create Stock Adjustment-UH1
 
-    [Documentation]  Create stock adjustment without login
+JD-TC-Update Stock Adjustment-UH1
 
-    ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data}  
+    [Documentation]  update stock adjustment without login
+
+    ${resp}=  Update Stock Adjustment  ${uid}    ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Create Stock Adjustment-UH2
+JD-TC-Update Stock Adjustment-UH2
 
-    [Documentation]  Create stock adjustment with empty store id.
+    [Documentation]  update stock adjustment with empty store id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  Create Stock Adjustment   ${locId1}  ${EMPTY}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data}  
+    ${resp}=  Update Stock Adjustment  ${uid}    ${locId1}  ${EMPTY}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_STORE_ID}
     
 
-JD-TC-Create Stock Adjustment-UH3
+JD-TC-Update Stock Adjustment-UH3
 
-    [Documentation]  Create stock adjustment with empty inventory_catalog_encid.
+    [Documentation]  Update stock adjustment with empty inventory_catalog_encid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-
-    ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${EMPTY}   ${remarks_encid1}      ${data}  
+    ${resp}=  Update Stock Adjustment  ${uid}    ${locId1}  ${store_id}   ${EMPTY}   ${remarks_encid1}      ${data} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${CAP_Invalid_Catalog_id}
     
 
-JD-TC-Create Stock Adjustment-UH4
+JD-TC-Update Stock Adjustment-UH4
 
-    [Documentation]  Create stock adjustment with empty remarks_encid1.
+    [Documentation]  Update stock adjustment with empty remarks_encid1.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${EMPTY}      ${data}  
+    ${resp}=  Update Stock Adjustment  ${uid}    ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${EMPTY}      ${data} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_REMARKS_ID}
 
-JD-TC-Create Stock Adjustment-UH5
+JD-TC-Update Stock Adjustment-UH5
 
-    [Documentation]  Create stock adjustment with empty quantity.
+    [Documentation]  update stock adjustment with empty quantity.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${data1}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${EMPTY}    
 
-    ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data1} 
+    ${resp}=  Update Stock Adjustment  ${uid}    ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_QUANTITY}

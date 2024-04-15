@@ -14731,3 +14731,78 @@ Provider with license
     # Set Suite Variable  ${lic_name}  ${resp.json()['accountLicense']['name']}
     
     # RETURN  
+
+#---------------------------Stock Adjutment-----------------------------------------
+Create Stock Adjustment
+
+    [Arguments]  ${location}   ${store_encId}  ${catalog_encId}  ${remarks_encId}   @{vargs}
+    Check And Create YNW Session
+    ${store}=  Create Dictionary   encId=${store_encId}   
+    ${catalogDto}=  Create Dictionary   encId=${catalog_encId} 
+    ${inventoryRemarkDto}=  Create Dictionary   encId=${remarks_encId} 
+
+    ${len}=  Get Length  ${vargs}
+    ${stockAdjustDetailsDtos}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${stockAdjustDetailsDtos}  ${vargs[${index}]}
+
+    END
+    ${data}=  Create Dictionary   location=${location}  store=${store}    catalogDto=${catalogDto}    inventoryRemarkDto=${inventoryRemarkDto}   stockAdjustDetailsDtos=${stockAdjustDetailsDtos}
+    ${data}=    json.dumps    ${data}  
+    ${resp}=  POST On Session  ynw  /provider/inventory/stockadjust   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Update Stock Adjustment
+
+    [Arguments]  ${uid}  ${location}   ${store_encId}  ${catalog_encId}  ${remarks_encId}   @{vargs}
+    Check And Create YNW Session
+    ${store}=  Create Dictionary   encId=${store_encId}   
+    ${catalogDto}=  Create Dictionary   encId=${catalog_encId} 
+    ${inventoryRemarkDto}=  Create Dictionary   encId=${remarks_encId} 
+
+    ${len}=  Get Length  ${vargs}
+    ${stockAdjustDetailsDtos}=  Create List  
+
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${stockAdjustDetailsDtos}  ${vargs[${index}]}
+
+    END
+    ${data}=  Create Dictionary   uid=${uid}  location=${location}  store=${store}    catalogDto=${catalogDto}    inventoryRemarkDto=${inventoryRemarkDto}   stockAdjustDetailsDtos=${stockAdjustDetailsDtos}
+    ${data}=    json.dumps    ${data}  
+    ${resp}=  PUT On Session  ynw  /provider/inventory/stockadjust   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Stock Adjustment By Id
+
+    [Arguments]  ${id}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/stockadjust/${id}    expected_status=any
+    RETURN  ${resp} 
+
+
+Get Item Stock adjust Filter
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/stockadjust  params=${param}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item Stock adjust Count Filter
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/stockadjust/count  params=${param}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item Stock adjust Details Filter
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/stockadjust/item   params=${param}  expected_status=any
+    RETURN  ${resp} 
+
+Get Item Stock adjust Details Count Filter
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/stockadjust/item/count  params=${param}  expected_status=any
+    RETURN  ${resp} 
