@@ -28,7 +28,7 @@ ${order}        0
 
 JD-TC-UpdatePurchaseStatus-1
 
-    [Documentation]  Update Purchase Status
+    [Documentation]  Update Purchase Status - change status to IN REVIEW
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
@@ -517,3 +517,197 @@ JD-TC-UpdatePurchaseStatus-1
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                 200
     Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[1]}
+
+JD-TC-UpdatePurchaseStatus-2
+
+    [Documentation]  Update Purchase Status - change status to IN REVIEW to IN REVIEW
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[1]}
+
+    ${PURCHASE_ALREADY_IN_STATUS}=  format String   ${PURCHASE_ALREADY_IN_STATUS}   In Review
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[1]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_ALREADY_IN_STATUS}
+
+JD-TC-UpdatePurchaseStatus-3
+
+    [Documentation]  Update Purchase Status - change status to IN REVIEW to Draft
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[1]}
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[0]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[0]}
+
+JD-TC-UpdatePurchaseStatus-4
+
+    [Documentation]  Update Purchase Status - change status DRAFT to DRAFT
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[0]}
+
+    ${PURCHASE_ALREADY_IN_STATUS}=  format String   ${PURCHASE_ALREADY_IN_STATUS}   Draft
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[0]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_ALREADY_IN_STATUS}
+
+JD-TC-UpdatePurchaseStatus-5
+
+    [Documentation]  Update Purchase Status - change status DRAFT to DRAFT
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[0]}
+
+    ${PURCHASE_ALREADY_IN_STATUS}=  format String   ${PURCHASE_ALREADY_IN_STATUS}   Draft
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[0]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_ALREADY_IN_STATUS}
+
+JD-TC-UpdatePurchaseStatus-6
+
+    [Documentation]  Update Purchase Status - change status DRAFT to APPROVED
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[0]}
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[2]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_IN_DRAFT_STATUS}
+
+
+JD-TC-UpdatePurchaseStatus-7
+
+    [Documentation]  Update Purchase Status - change status DRAFT to IN REVIEW and then change to APPROVED
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[0]}
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[1]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[1]}
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[2]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
+
+JD-TC-UpdatePurchaseStatus-8
+
+    [Documentation]  Update Purchase Status - change status APPROVED to APPROVED
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[2]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_IN_DRAFT_STATUS}
+
+JD-TC-UpdatePurchaseStatus-9
+
+    [Documentation]  Update Purchase Status - change status APPROVED to Draft
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[0]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_IN_DRAFT_STATUS}
+
+JD-TC-UpdatePurchaseStatus-10
+
+    [Documentation]  Update Purchase Status - change status APPROVED to IN REVIEW
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[1]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_IN_DRAFT_STATUS}
+
+JD-TC-UpdatePurchaseStatus-11
+
+    [Documentation]  Update Purchase Status - without login
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[2]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     419

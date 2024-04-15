@@ -2321,3 +2321,5 @@ ENTER_VALID_CONVERTION_QTY="Enter a valid conversion quantity"
 
 X_REQUIRED  = "{} required."
 ITEM_NOT_FOUND = "Item not found with id {}"
+PURCHASE_ALREADY_IN_STATUS = "Purchase is already in {} status"
+PURCHASE_IN_DRAFT_STATUS = "Purchase in Draft status can only be changed to In Review Status"

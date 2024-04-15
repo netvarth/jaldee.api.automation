@@ -127,12 +127,12 @@ JD-TC-GetPurchaseByUid-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${Name}=    FakerLibrary.last name
+    ${SName}=    FakerLibrary.last name
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
-    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
+    Set Test Variable  ${email_id}  ${SName}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
-    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Create Store   ${SName}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable            ${store_id}           ${resp.json()} 
@@ -489,6 +489,7 @@ JD-TC-GetPurchaseByUid-1
     ${expiryDate}=  db.add_timezone_date  ${tz}  50
 
     ${salesRate}=   Evaluate        ${amount} / ${convertionQty}
+    ${totalAmount}=     Evaluate    ${amount} * ${quantity}
     ${invoiceDate}=  db.add_timezone_date  ${tz}  1
     ${rate}=        Evaluate        int(${salesRate})
     ${mrp}=         Random Int      min=${rate}  max=9999
@@ -496,6 +497,7 @@ JD-TC-GetPurchaseByUid-1
     ${invoiceReferenceNo}=          Random Int  min=1  max=999
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=99
+    ${totalDiscountAmount}=     Evaluate    ${totalAmount} / ${discountPercentage} * 100
 
     ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
 
@@ -507,3 +509,67 @@ JD-TC-GetPurchaseByUid-1
     ${resp}=    Get Purchase By Uid  ${purchaseId} 
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${SName}
+    Should Be Equal As Strings      ${resp.json()['store']['encId']}      ${store_id}
+    Should Be Equal As Strings      ${resp.json()['inventoryCatalog']['encId']}      ${encid}
+    Should Be Equal As Strings      ${resp.json()['uid']}      ${purchaseId}
+    Should Be Equal As Strings      ${resp.json()['invoiceReferenceNo']}      ${invoiceReferenceNo}
+    Should Be Equal As Strings      ${resp.json()['invoiceDate']}      ${invoiceDate}
+    Should Be Equal As Strings      ${resp.json()['purchaseNote']}      ${purchaseNote}
+    Should Be Equal As Strings      ${resp.json()['vendor']['vendorName']}      ${vender_name}
+    Should Be Equal As Strings      ${resp.json()['vendor']['encId']}      ${vendorId}
+    Should Be Equal As Strings      ${resp.json()['totalQuantity']}      ${quantity}
+    Should Be Equal As Strings      ${resp.json()['totalFreeQuantity']}      ${freeQuantity}
+    Should Be Equal As Strings      ${resp.json()['netQuantity']}      ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()['totalAmount']}      ${totalAmount}
+    Should Be Equal As Strings      ${resp.json()['totalDiscountAmount']}      ${totalDiscountAmount}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${Name}
+
+JD-TC-GetPurchaseByUid-2
+
+    [Documentation]  Get Purchase By Uid - where purchase is not created
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+
+JD-TC-GetPurchaseByUid-3
+
+    [Documentation]  Get Purchase By Uid - without login
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     419
+    Should Be Equal As Strings      ${resp.json()}          ${SESSION_EXPIRED}
