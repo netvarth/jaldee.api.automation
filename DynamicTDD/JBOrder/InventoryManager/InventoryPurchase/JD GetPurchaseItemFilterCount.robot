@@ -28,7 +28,7 @@ ${order}        0
 
 JD-TC-GetPurchaseItemFilterCount-1
 
-    [Documentation]  Get Purchase Item Filter Count
+    [Documentation]  Get Purchase Item Filter Count Count
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
@@ -487,6 +487,7 @@ JD-TC-GetPurchaseItemFilterCount-1
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
     ${expiryDate}=  db.add_timezone_date  ${tz}  50
+    Set Suite Variable      ${expiryDate}
 
     ${salesRate}=   Evaluate        ${amount} / ${convertionQty}
     ${invoiceDate}=  db.add_timezone_date  ${tz}  1
@@ -507,3 +508,44 @@ JD-TC-GetPurchaseItemFilterCount-1
     ${resp}=    Get Purchase Item Filter Count
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()}          1
+
+
+JD-TC-GetPurchaseItemFilter-2
+
+    [Documentation]  Get Purchase Item Filter Count
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+ 
+    ${resp}=    Get Purchase Item Filter Count  accountId-eq=${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()}          1
+
+JD-TC-GetPurchaseItemFilter-3
+
+    [Documentation]  Get Purchase Item Filter Count
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+ 
+    ${resp}=    Get Purchase Item Filter Count  purchaseUid-eq=${purchaseId}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()}          1
+
+JD-TC-GetPurchaseItemFilter-4
+
+    [Documentation]  Get Purchase Item Filter Count
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+ 
+    ${resp}=    Get Purchase Item Filter Count  expiryDate-eq=${expiryDate}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()}          1
