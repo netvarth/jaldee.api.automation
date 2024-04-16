@@ -39,6 +39,7 @@ from cryptography.hazmat.primitives import padding
 import socket
 from Keywordspy import create_tz, validatePhoneNumber
 from dateutil import tz
+import re
 
 
 if os.environ['SYSTEM_ENV'] == 'Microsoft WSL':
@@ -6605,3 +6606,22 @@ def compare_slot_to_now(slot, timezone="Asia/Kolkata"):
             print("Exception:", e)
             print("Exception at line no:", e.__traceback__.tb_lineno)
             return 0
+
+
+def find_last(file):
+    with open(file, 'rb') as f:
+        try:  # catch OSError in case of a one line file 
+            f.seek(-2, os.SEEK_END)
+            while f.read(1) != b'\n':
+                f.seek(-2, os.SEEK_CUR)
+        except OSError:
+            f.seek(0)
+        last_line = f.readline().decode()
+        print(last_line)
+        var,num = last_line.split("=", 1)
+        regex = re.compile(r'\d+')
+        # print(regex.findall(a))
+        # print([int(x) for x in regex.findall(a)])
+        var_num=[int(x) for x in regex.findall(var)]
+        # print(var_num[0])
+        return var_num[0]

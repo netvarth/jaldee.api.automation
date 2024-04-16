@@ -202,10 +202,15 @@ setDefaults()
             setPaths
             key=2
             ;;
+        test)
+            env="test"
+            setPaths
+            key=3
+            ;;
         scale)
             env="scale"
             setPaths
-            key=3
+            key=4
             ;;
         *)
             echo "Invalid Option."
@@ -447,6 +452,8 @@ selectVarFile ()
     elif [ $key -eq 2 ];then
         echo -e "VARFILE=VariablesForJenkins" >> $1
     elif [ $key -eq 3 ];then
+        echo -e "VARFILE=VariablesForTest" >> $1
+    elif [ $key -eq 4 ];then
         echo -e "VARFILE=VariablesForScale" >> $1
     fi
 }
@@ -653,6 +660,8 @@ setDateTimeSync()
     elif [ $key -eq 2 ];then
         echo -e "Time and Date change not set for Jenkins environment"
     elif [ $key -eq 3 ];then
+        echo -e "Time and Date change not set for Test environment"
+    elif [ $key -eq 4 ];then
         echo -e "Time and Date change not set for Scale environment"
     fi
 }

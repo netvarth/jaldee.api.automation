@@ -388,16 +388,16 @@ case $ENV_KEY in
         echo "Executing case *- Jenkins- Time"
         runTime VariablesForJenkins.py "$tddpath"
     elif [ "${var}" == "Provider" ]; then
-        echo "Executing case *- local- Provider"
+        echo "Executing case *- Jenkins- Provider"
         runProvider VariablesForJenkins.py "$tddpath"
     elif [ "${var}" == "Consumer" ]; then
-        echo "Executing case *- local- Consumer"
+        echo "Executing case *- Jenkins- Consumer"
         runConsumer VariablesForJenkins.py "$tddpath"
     elif [ "${var}" == "User" ]; then
-        echo "Executing case *- local- User"
+        echo "Executing case *- Jenkins- User"
         runUser VariablesForJenkins.py "$tddpath"
     elif [ "${var}" == "Partner" ]; then
-        echo "Executing case *- local- Partner"
+        echo "Executing case *- Jenkins- Partner"
         runPartner VariablesForJenkins.py "$tddpath"
     fi
 
@@ -413,6 +413,73 @@ case $ENV_KEY in
     fi
     ;;
 3 )
+    echo "Executing case 3- Test"
+
+    if [ "${var}" != "APre" ] && [ "$SIGN_UP" == "yes" ]; then
+        echo "Executing case *- Test- Signup flag APre"
+        runAPre VariablesForTest.py TDD/APre
+    fi
+
+    if [ "$FULL_RUN" == "True" ]; then
+        echo "Executing case *- Test- FULL_RUN"
+        fullRun VariablesForTest.py
+    elif [ "${MAIN}" == "True" ]; then
+        echo "Executing case *- Test- MAIN"
+        mainRun VariablesForTest.py
+    elif [ "${var}" == "APre" ]; then
+        echo "Executing case *- Test- APre"
+        
+        if [[ $SUITE == *.robot ]]; then 
+            echo "Running $SUITE" 
+            runAPre VariablesForTest.py "$tddpath"
+        else 
+            echo "Running APre Resource" 
+            runAPre VariablesForTest.py "$tddpath"
+            
+        fi
+    elif [ "${var}" == "TDD" ]; then
+        echo "Executing case *- Test- TDD"
+        runTDD VariablesForTest.py "$tddpath"
+    elif [ "${var}" == "Basics" ]; then
+        echo "Executing case *- Test- Basics"
+        runBasics VariablesForTest.py "$tddpath"
+    elif [ "${var}" == "JBQueue" ]; then
+        echo "Executing case *- Test- JBQueue"
+        runJBQueue VariablesForTest.py "$tddpath"
+    elif [ "${var}" == "JBAppointment" ]; then
+        echo "Executing case *- Test- JBAppointment"
+        runJBAppointment VariablesForTest.py "$tddpath"
+    elif [ "${var}" == "JBOrder" ]; then
+        echo "Executing case *- Test- JBOrder"
+        runJBOrder VariablesForTest.py "$tddpath"
+    elif [ "${var}" == "LendingCRM" ]; then
+        echo "Executing case *- Test- LendingCRM"
+        runLendingCRM VariablesForTest.py "$tddpath"
+    elif [ "${var}" == "JaldeePay" ]; then
+        echo "Executing case *- Test- JaldeePay"
+        runPay VariablesForTest.py "$tddpath"
+    elif [ "${var}" == "Communications" ]; then
+        echo "Executing case *- Test- Communications"
+        runComms VariablesForTest.py "$tddpath"
+    elif [ "${var}" == "JCloudAPI" ]; then
+        echo "Executing case *- Test- JCloudAPI"
+        runAPI VariablesForTest.py "$tddpath"
+    elif [ "${var}" == "Reports" ]; then
+        echo "Executing case *- Test- Reports"
+        runReports VariablesForTest.py "$tddpath"
+    elif [ "${var}" == "Analytics" ]; then
+        echo "Executing case *- Test- Analytics"
+        runAnalytics VariablesForTest.py "$tddpath"
+    elif [ "${var}" == "TDDSE" ]; then
+        echo "Executing case *- Test- TDDSE"
+        runSE VariablesForTest.py "$tddpath"
+    elif  [ "${var}" == "SA" ]; then
+        echo "Executing case *- Test- SA"
+        runSA VariablesForTest.py "$tddpath"
+    
+    fi    
+    ;;
+4 )
     echo "Executing case 3- scale"
     # redis-cli flushdb
     # populatePostalCodeTable

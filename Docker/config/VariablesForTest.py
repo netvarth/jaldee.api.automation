@@ -1,0 +1,8 @@
+HOSTED_IP     ="test.jaldee.com"
+SA_HOSTED_IP  ="test.jaldee.com"
+BASE_URL      ="https://"+HOSTED_IP+"/v1/rest"
+SEARCH_END    ="http://search-jaldeetest-aic4hfc23lkmjsm5qtqklyanrq.ap-southeast-1.cloudsearch.amazonaws.com"
+S3_URL        ="https://s3-us-west-1.amazonaws.com/ynwtest.youneverwait.com"
+SA_BASE_URL   ="https://"+SA_HOSTED_IP+"/superadmin/rest"
+DB_ENDPOINT   ="tz-test-cluster.cluster-cjdm2mkutrqm.ap-south-1.rds.amazonaws.com"
+ENVIRONMENT   ="test"
