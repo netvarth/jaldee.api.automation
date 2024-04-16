@@ -31,13 +31,44 @@ ${originFrom}       NONE
 
 *** Test Cases ***
 
-JD-TC-Update Sales Order Delivery Status-1
+JD-TC-Unassign User-1
 
-    [Documentation]   Create a sales Order with Valid Details then Update Sales Order Delivery Status .
+    [Documentation]   Create a sales Order with Valid Details then assign to a user and unassign.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${acc_id}   ${resp.json()['id']}
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${dep_name1}=  FakerLibrary.bs
+        ${dep_code1}=   Random Int  min=100   max=999
+        ${dep_desc1}=   FakerLibrary.word  
+        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
 
     ${resp}=  Get Store Type By Filter     
     Log   ${resp.content}
@@ -64,11 +95,11 @@ JD-TC-Update Sales Order Delivery Status-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME23}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME17}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -195,9 +226,12 @@ JD-TC-Update Sales Order Delivery Status-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${so_id1}=  Create Sample User 
+    Set Suite Variable  ${so_id1}
 
     ${quantity}=    Random Int  min=2   max=5
 
@@ -225,16 +259,63 @@ JD-TC-Update Sales Order Delivery Status-1
     Should Be Equal As Strings    ${resp.json()['store']['name']}                                   ${Name}
     Should Be Equal As Strings    ${resp.json()['store']['encId']}                                  ${store_id}
 
-# -----------------------------------------------------------------------------------------------------------------
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
 
-# ----------------------------- Update Sales Order Delivery Status ------------------------------------------------
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['orderFor']['id']}                                  ${cid}
+    Should Be Equal As Strings    ${resp.json()['orderFor']['name']}                                ${firstName} ${lastName}
 
+    Should Be Equal As Strings    ${resp.json()['orderType']}                                       ${bookingChannel[0]}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['deliveryType']}                                    ${deliveryType[0]}
+    Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['originFrom']}                                      ${originFrom}
 
-    ${resp}=    Update Sales Order Delivery Status    ${SO_Uid}      ${deliveryStatus[1]}
+    Should Be Equal As Strings    ${resp.json()['orderNum']}                                        1
+    Should Be Equal As Strings    ${resp.json()['orderRef']}                                        1
+    Should Be Equal As Strings    ${resp.json()['deliveryDate']}                                    ${DAY1}
+
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                  ${primaryMobileNo}
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['email']}                            ${email_id}
+
+    Should Be Equal As Strings    ${resp.json()['itemCount']}                                       1
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                        0.0
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                   0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                               0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                             0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+# -----------------------------------------------------------------------------------------------------------------------------------------
+
+# ------------------------------------------------ Assign User For Sales Order ---------------------------------------------------
+
+    ${resp}=    Assign User For Sales Order    ${SO_Uid}     ${so_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+
+    ${resp}=    UnAssign User For Sales Order    ${SO_Uid}     
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[1]}
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+
+JD-TC-Unassign User-2
+
+    [Documentation]   Create a sales Order with Valid Details then assign to a user and unassign.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200

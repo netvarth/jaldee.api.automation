@@ -28,17 +28,55 @@ ${originFrom}       NONE
 @{orderStatus}      ORDER_PENDING    ORDER_RECEIVED      ORDER_CONFIRMED      ORDER_COMPLETED     ORDER_CANCELED      ORDER_DISCARDED
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
 @{deliveryStatus}     NOT_DELIVERED        DELIVERED    READY_FOR_PICKUP    READY_FOR_SHIPMENT      READY_FOR_DELIVERY      SHIPPED     IN_TRANSIST
-${s_len}            1
+
+*** Keywords ***
+
+Assign User For Sales Order
+    [Arguments]  ${orderUid}  ${userId}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/sorder/${orderUid}/assign/${userId}  expected_status=any
+    RETURN  ${resp} 
 
 *** Test Cases ***
 
-JD-TC-Get Sales Order With Count Filter -1
+JD-TC-Assign User For Sales Order-1
 
-    [Documentation]   Create a sales Order then try to get sales order count with encId param.
+    [Documentation]   Create a sales Order with Valid Details then Assign user for sales order.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${acc_id}   ${resp.json()['id']}
+    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
+
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
+
+    ${resp}=  Get Departments
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${dep_name1}=  FakerLibrary.bs
+        ${dep_code1}=   Random Int  min=100   max=999
+        ${dep_desc1}=   FakerLibrary.word  
+        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        Set Test Variable  ${dep_id}  ${resp1.json()}
+    ELSE
+        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
+    END
 
     ${resp}=  Get Store Type By Filter     
     Log   ${resp.content}
@@ -65,11 +103,11 @@ JD-TC-Get Sales Order With Count Filter -1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME22}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME17}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -99,8 +137,6 @@ JD-TC-Get Sales Order With Count Filter -1
     Set Suite Variable  ${DAY1} 
 
     ${Name}=    FakerLibrary.last name
-    Set Suite Variable  ${Name} 
-
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
@@ -198,9 +234,18 @@ JD-TC-Get Sales Order With Count Filter -1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${so_id1}=  Create Sample User 
+    Set Suite Variable  ${so_id1}
+
+    ${resp}=  Get User By Id  ${so_id1}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${f_name}  ${resp.json()['firstName']}
+    Set Suite Variable  ${l_name}  ${resp.json()['lastName']}
 
     ${quantity}=    Random Int  min=2   max=5
 
@@ -209,13 +254,11 @@ JD-TC-Get Sales Order With Count Filter -1
     Set Suite Variable  ${SO_Cata_Encid_List}
 
     ${store}=  Create Dictionary   encId=${store_id}  
-    Set Suite Variable  ${store}
 
     ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid}  ${resp.json()}
-    # ${s_len}=  Get Length  ${resp.content}
 
     ${netTotal}=  Evaluate  ${price}*${quantity}
     ${netTotal}=  Convert To Number  ${netTotal}   1
@@ -224,8 +267,6 @@ JD-TC-Get Sales Order With Count Filter -1
     ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
-
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
     Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
@@ -267,310 +308,175 @@ JD-TC-Get Sales Order With Count Filter -1
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 # -----------------------------------------------------------------------------------------------------------------------------------------
 
-# ------------------------------------ Update order status --------------------------------------------------
+# ------------------------------------------------ Assign User For Sales Order ---------------------------------------------------
 
-    ${quantity}=    Random Int  min=20   max=50
-
-    ${netTotal}=  Evaluate  ${price}*${quantity}
-    ${netTotal}=  Convert To Number  ${netTotal}   1
-
-    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
+    ${resp}=    Assign User For Sales Order    ${SO_Uid}     ${so_id1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Sales Order    ${SO_Uid}   
+    ${resp}=    Get Sales Order    ${SO_Uid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
-    Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['assignedUser']}        ${so_id1}
+    Should Be Equal As Strings    ${resp.json()['assignedUserName']}        ${f_name} ${l_name}
 
 
-# ------------------------------------------------------------------------------------------------------------------
+JD-TC-Assign User For Sales Order-2
 
-# --------------------------------------------- Get Order list -------------------------------------------------------------
+    [Documentation]   Assign Sales order to assistant type user.
 
-    ${resp}=    Get SalesOrder Count     encId-eq=${SO_Encid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}                         
-    
-JD-TC-Get Sales Order With Count Filter -2
-
-    [Documentation]    Try to get sales order count with uid param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get SalesOrder Count         uid-eq=${SO_Uid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
+    ${us_id2}=  Create Sample User    
+    Set Suite Variable    ${us_id2}
 
-JD-TC-Get Sales Order With Count Filter -3
-
-    [Documentation]    Try to get sales order count with locationId param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     locationId-eq=${locId1}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -4
-
-    [Documentation]    Try to get sales order count with locationName param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Locations
+    ${resp}=  Get User By Id  ${us_id2}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${location_name}   ${resp.json()[0]['place']}
+    Set Suite Variable  ${f_name1}  ${resp.json()['firstName']}
+    Set Suite Variable  ${l_name1}  ${resp.json()['lastName']}
 
-    ${resp}=    Get SalesOrder Count     locationName-eq=${location_name}   
+    ${resp}=    Assign User For Sales Order    ${SO_Uid}     ${us_id2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
-JD-TC-Get Sales Order With Count Filter -5
+    ${resp}=    Get Sales Order    ${SO_Uid}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['assignedUser']}        ${us_id2}
+    Should Be Equal As Strings    ${resp.json()['assignedUserName']}        ${f_name1} ${l_name1}
 
-    [Documentation]    Try to get sales order count with storeId param.
+JD-TC-Assign User For Sales Order-3
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    [Documentation]   Assign Sales order to with admin privilage user.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get SalesOrder Count     storeId-eq=${store_id}   
+    ${us_id3}=  Create Sample User    admin=${bool[0]}
+    Set Suite Variable  ${us_id3}
+
+    ${resp}=  Get User By Id  ${us_id3}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${f_name2}  ${resp.json()['firstName']}
+    Set Suite Variable  ${l_name2}  ${resp.json()['lastName']}
+
+    ${resp}=    Assign User For Sales Order    ${SO_Uid}     ${us_id3}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
-JD-TC-Get Sales Order With Count Filter -6
+    ${resp}=    Get Sales Order    ${SO_Uid}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['assignedUser']}        ${us_id3}
+    Should Be Equal As Strings    ${resp.json()['assignedUserName']}        ${f_name2} ${l_name2}
 
-    [Documentation]    Try to get sales order count with storeName param.
+JD-TC-Assign User For Sales Order-UH1
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    [Documentation]   Assign Sales order to inactive user.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get SalesOrder Count     storeName-eq=${Name}   
+    ${us_id4}=  Create Sample User
+
+    ${resp}=  EnableDisable User  ${us_id4}  ${toggle[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    Assign User For Sales Order    ${SO_Uid}     ${us_id4}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-JD-TC-Get Sales Order With Count Filter -7
+    Should Be Equal As Strings    ${resp.status_code}   422
 
-    [Documentation]    Try to get sales order count with orderNum param.
+JD-TC-Assign User For Sales Order-UH2
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    [Documentation]   Assign Sales order to user without login.
+
+    ${resp}=    Assign User For Sales Order    ${SO_Uid}     ${us_id2}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-    ${resp}=    Get SalesOrder Count     orderNum-eq=1   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
-JD-TC-Get Sales Order With Count Filter -8
+JD-TC-Assign User For Sales Order-UH3
 
-    [Documentation]    Try to get sales order count with rxRefId param.
+    [Documentation]   Assign Sales order to user where sales order id is invalid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     rxRefId-eq=1   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -9
-
-    [Documentation]    Try to get sales order count with providerConsumerName param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get SalesOrder Count     providerConsumerName-eq=${firstName} ${lastName}   
+    ${resp}=    Assign User For Sales Order    ${SPACE}     ${us_id2}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_ORDER_ID}
 
-JD-TC-Get Sales Order With Count Filter -10
+JD-TC-Assign User For Sales Order-UH4
 
-    [Documentation]    Try to get sales order count with sorderCatalogId param.
+    [Documentation]   Assign Sales order to user where user id is invalid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     sorderCatalogId-eq=${SO_Cata_Encid}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -11
-
-    [Documentation]    Try to get sales order count with soCatalogName param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get SalesOrder Count     soCatalogName-eq=${Name}
+    ${resp}=    Assign User For Sales Order    ${SO_Uid}     ${invalidNum}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_FM_USER_ID}
 
-JD-TC-Get Sales Order With Count Filter -12
+JD-TC-Assign User For Sales Order-UH5
 
-    [Documentation]    Try to get sales order count with originFrom param.
+    [Documentation]    Try to Assign Sales order to already assigned user.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     originFrom-eq=${originFrom}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -13
-
-    [Documentation]    Try to get sales order count with orderType param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get SalesOrder Count     orderType-eq=${bookingChannel[0]}   
+    ${us_id5}=  Create Sample User
+    Set Suite Variable  ${us_id5}
+    ${resp}=    Assign User For Sales Order    ${SO_Uid}     ${us_id5}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
+    # Should Be Equal As Strings   ${resp.json()}   ${INVALID_FM_USER_ID}
 
-JD-TC-Get Sales Order With Count Filter -14
+    ${resp}=    Assign User For Sales Order    ${SO_Uid}     ${us_id5}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-    [Documentation]    Try to get sales order count with orderStatus param.
+JD-TC-Assign User For Sales Order-UH6
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    [Documentation]    Try to Assign Sales order to user login.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get SalesOrder Count     orderStatus-eq=${orderStatus[0]}  
+    ${us_id6}=  Create Sample User
+
+    ${resp}=  Get User By Id  ${us_id6}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${f_name1}  ${resp.json()['firstName']}
+    Set Suite Variable  ${l_name1}  ${resp.json()['lastName']}
+    Set Suite Variable  ${PUSERNAME_U1}  ${resp.json()['mobileNo']}
+
+    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
+    Should Be Equal As Strings  ${resp[0].status_code}  200
+    Should Be Equal As Strings  ${resp[1].status_code}  200
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-Get Sales Order With Count Filter -15
-
-    [Documentation]    Try to get sales order count with deliveryType param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=    Assign User For Sales Order    ${SO_Uid}     ${us_id6}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   422
 
-    ${resp}=    Get SalesOrder Count     deliveryType-eq=${deliveryType[0]}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
-JD-TC-Get Sales Order With Count Filter -16
-
-    [Documentation]    Try to get sales order count with deliveryStatus param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     deliveryStatus-eq=${deliveryStatus[0]} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-    
-*** Commnets ***
-JD-TC-Get Sales Order With Count Filter -17
-
-    [Documentation]    Try to get sales order count with partnerSpAccountId param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     partnerSpAccountId-eq=1   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -18
-
-    [Documentation]    Try to get sales order count with partnerSpName param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     partnerSpName-eq=1   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -19
-
-    [Documentation]    Try to get sales order count with partnerSpUserId param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     partnerSpUserId-eq=1   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -20
-
-    [Documentation]    Try to get sales order count with partnerSpUserName param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     partnerSpUserName-eq=1   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -21
-
-    [Documentation]    Try to get sales order count with partnerSpRxOwnerId param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     partnerSpRxOwnerId-eq=1   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -22
-
-    [Documentation]    Try to get sales order count with partnerSpRxOwnerName param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     partnerSpRxOwnerName-eq=1   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    

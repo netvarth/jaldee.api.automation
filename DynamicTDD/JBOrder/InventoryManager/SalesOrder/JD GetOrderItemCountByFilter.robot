@@ -28,14 +28,15 @@ ${originFrom}       NONE
 @{orderStatus}      ORDER_PENDING    ORDER_RECEIVED      ORDER_CONFIRMED      ORDER_COMPLETED     ORDER_CANCELED      ORDER_DISCARDED
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
 @{deliveryStatus}     NOT_DELIVERED        DELIVERED    READY_FOR_PICKUP    READY_FOR_SHIPMENT      READY_FOR_DELIVERY      SHIPPED     IN_TRANSIST
+${s_len}            1
 
 *** Test Cases ***
 
-JD-TC-Update Sales Order Delivery Status-1
+JD-TC-Get Order Item Count By Filter-1
 
-    [Documentation]   Create a sales Order with Valid Details then Update Sales Order Delivery Status .
+    [Documentation]   Create a sales Order with Valid Details then Get sales order Item count by filter.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -64,11 +65,11 @@ JD-TC-Update Sales Order Delivery Status-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME23}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME17}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -98,6 +99,8 @@ JD-TC-Update Sales Order Delivery Status-1
     Set Suite Variable  ${DAY1} 
 
     ${Name}=    FakerLibrary.last name
+    Set Suite Variable    ${Name}
+
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
@@ -119,6 +122,7 @@ JD-TC-Update Sales Order Delivery Status-1
 # ----------------------------------------  Create Item ---------------------------------------------------
 
     ${displayName}=     FakerLibrary.name
+    Set Suite Variable    ${displayName}
     ${displayName1}=     FakerLibrary.name
     ${resp}=    Create Item Inventory  ${displayName}    
     Log   ${resp.json()}
@@ -195,7 +199,7 @@ JD-TC-Update Sales Order Delivery Status-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -219,22 +223,143 @@ JD-TC-Update Sales Order Delivery Status-1
     ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
+
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
     Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
     Should Be Equal As Strings    ${resp.json()['store']['name']}                                   ${Name}
     Should Be Equal As Strings    ${resp.json()['store']['encId']}                                  ${store_id}
 
-# -----------------------------------------------------------------------------------------------------------------
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
 
-# ----------------------------- Update Sales Order Delivery Status ------------------------------------------------
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['orderFor']['id']}                                  ${cid}
+    Should Be Equal As Strings    ${resp.json()['orderFor']['name']}                                ${firstName} ${lastName}
 
+    Should Be Equal As Strings    ${resp.json()['orderType']}                                       ${bookingChannel[0]}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['deliveryType']}                                    ${deliveryType[0]}
+    Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['originFrom']}                                      ${originFrom}
 
-    ${resp}=    Update Sales Order Delivery Status    ${SO_Uid}      ${deliveryStatus[1]}
+    Should Be Equal As Strings    ${resp.json()['orderNum']}                                        1
+    Should Be Equal As Strings    ${resp.json()['orderRef']}                                        1
+    Should Be Equal As Strings    ${resp.json()['deliveryDate']}                                    ${DAY1}
+
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                  ${primaryMobileNo}
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['email']}                            ${email_id}
+
+    Should Be Equal As Strings    ${resp.json()['itemCount']}                                       1
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                        0.0
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                   0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                               0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                             0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+# -----------------------------------------------------------------------------------------------------------------------------------------
+
+# ------------------------------------------------  Get Order Item Count  -------------------------------------------------------------------
+
+    ${resp}=    Get Order Item count By Filter
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}                                           ${s_len}   
 
-    ${resp}=    Get Sales Order    ${SO_Uid}   
+JD-TC-Get Order Item Count By Filter-2
+
+    [Documentation]   Try to get sales order item count with uid param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Order Item count By Filter        uid-eq=${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[1]}
+    Should Be Equal As Strings    ${resp.json()}              ${s_len}  
+
+JD-TC-Get Order Item Count By Filter-3
+
+    [Documentation]   Try to get sales order item count with locationId param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Order Item count By Filter        locationId-eq=${locId1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}              ${s_len}  
+
+JD-TC-Get Order Item Count By Filter-4
+
+    [Documentation]   Try to get sales order item count with locationName param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Order Item count By Filter        locationName-eq=${location_name} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}              ${s_len} 
+
+JD-TC-Get Order Item Count By Filter-5
+
+    [Documentation]   Try to get sales order item count with storeId param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Order Item count By Filter        storeId-eq=${store_id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}              ${s_len} 
+
+JD-TC-Get Order Item Count By Filter-6
+
+    [Documentation]   Try to get sales order item count with storeName param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Order Item count By Filter        storeName-eq=${Name}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}              ${s_len} 
+
+JD-TC-Get Order Item Count By Filter-7
+
+    [Documentation]   Try to get sales order item count with sorderCatalogId param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Order Item count By Filter        sorderCatalogId-eq=${SO_Cata_Encid}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}              ${s_len} 
+
+JD-TC-Get Order Item Count By Filter-8
+
+    [Documentation]   Try to get sales order item count with soCatalogName param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Order Item count By Filter        soCatalogName-eq=${Name}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}              ${s_len} 

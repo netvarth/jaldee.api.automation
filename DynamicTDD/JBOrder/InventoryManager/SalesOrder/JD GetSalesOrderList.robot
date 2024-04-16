@@ -417,7 +417,7 @@ JD-TC-Get Sales Order List -4
     ${resp}=    Get SalesOrder List     locationName-eq=${location_name}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['location']['locationName']}                                  ${location_name}
+    Should Be Equal As Strings    ${resp.json()[0]['location']['name']}                                  ${location_name}
     Should Be Equal As Strings    ${resp.json()[0]['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}                                           ${SO_Encid}
     Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
@@ -586,6 +586,7 @@ JD-TC-Get Sales Order List -16
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
+*** Comments ***
 JD-TC-Get Sales Order List -17
 
     [Documentation]    Try to get Sales Order List using partnerSpAccountId param.

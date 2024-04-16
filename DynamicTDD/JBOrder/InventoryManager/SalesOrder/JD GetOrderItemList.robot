@@ -31,11 +31,11 @@ ${originFrom}       NONE
 
 *** Test Cases ***
 
-JD-TC-Update Sales Order Delivery Status-1
+JD-TC-Get Order Item List-1
 
-    [Documentation]   Create a sales Order with Valid Details then Update Sales Order Delivery Status .
+    [Documentation]   Create a sales Order with Valid Details then Get sales order Item by list.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -64,11 +64,11 @@ JD-TC-Update Sales Order Delivery Status-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME23}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME17}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -195,7 +195,7 @@ JD-TC-Update Sales Order Delivery Status-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -219,22 +219,100 @@ JD-TC-Update Sales Order Delivery Status-1
     ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
+
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
     Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
     Should Be Equal As Strings    ${resp.json()['store']['name']}                                   ${Name}
     Should Be Equal As Strings    ${resp.json()['store']['encId']}                                  ${store_id}
 
-# -----------------------------------------------------------------------------------------------------------------
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
 
-# ----------------------------- Update Sales Order Delivery Status ------------------------------------------------
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['orderFor']['id']}                                  ${cid}
+    Should Be Equal As Strings    ${resp.json()['orderFor']['name']}                                ${firstName} ${lastName}
 
+    Should Be Equal As Strings    ${resp.json()['orderType']}                                       ${bookingChannel[0]}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['deliveryType']}                                    ${deliveryType[0]}
+    Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['originFrom']}                                      ${originFrom}
 
-    ${resp}=    Update Sales Order Delivery Status    ${SO_Uid}      ${deliveryStatus[1]}
+    Should Be Equal As Strings    ${resp.json()['orderNum']}                                        1
+    Should Be Equal As Strings    ${resp.json()['orderRef']}                                        1
+    Should Be Equal As Strings    ${resp.json()['deliveryDate']}                                    ${DAY1}
+
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                  ${primaryMobileNo}
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['email']}                            ${email_id}
+
+    Should Be Equal As Strings    ${resp.json()['itemCount']}                                       1
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                        0.0
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                   0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                               0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                             0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+# -----------------------------------------------------------------------------------------------------------------------------------------
+
+# ------------------------------------------------  Get Order Item List  -------------------------------------------------------------------
+
+    ${resp}=    Get Order Item List    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    # Should Be Equal As Strings    ${resp.json()[0]['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                  ${locId1}
+    # Should Be Equal As Strings    ${resp.json()[0]['store']['id']}                                     ${store_id}
+    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                  ${SO_Uid}
 
-    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Should Be Equal As Strings    ${resp.json()[0]['catalog']['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()[0]['catalog']['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['catalogItem']['encId']}                                 ${SO_itemEncIds}
+
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}                          ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}                                  ${displayName}
+    # Should Be Equal As Strings    ${resp.json()[0]['orderFor']['name']}                                ${firstName} ${lastName}
+
+    # Should Be Equal As Strings    ${resp.json()[0]['encId']}                                       ${SO_Encid}
+    Should Be Equal As Strings    ${resp.json()[0]['orderQuantity']}                                     ${quantity}
+    Should Be Equal As Strings    ${resp.json()[0]['fullfilledQuantity']}                                   0
+    Should Be Equal As Strings    ${resp.json()[0]['dueQuantity']}                                  ${quantity}
+    Should Be Equal As Strings    ${resp.json()[0]['status']}                                      ${toggle[0]}
+
+    Should Be Equal As Strings    ${resp.json()[0]['itemAmount']}                                       ${price}
+    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                      0
+    Should Be Equal As Strings    ${resp.json()[0]['taxableAmount']}                                 0
+
+    Should Be Equal As Strings    ${resp.json()[0]['taxAmount']}                                     0  
+    Should Be Equal As Strings    ${resp.json()[0]['discountedAmount']}                              0
+
+    Should Be Equal As Strings    ${resp.json()[0]['jaldeeCouponAmount']}                            0
+    Should Be Equal As Strings    ${resp.json()[0]['providerCouponAmount']}                          0
+    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()[0]['cgst']}                                          0
+    Should Be Equal As Strings    ${resp.json()[0]['sgst']}                                          0
+    Should Be Equal As Strings    ${resp.json()[0]['igst']}                                          0
+    Should Be Equal As Strings    ${resp.json()[0]['cess']}                                          0
+
+
+JD-TC-Get Order Item List-2
+
+    [Documentation]   Try to get Sales Order Item List using locationId param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Order Item List     locationId-eq=${locId1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()[0]['location']['id']}                                  ${locId1}

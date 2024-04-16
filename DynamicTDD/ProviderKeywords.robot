@@ -14704,6 +14704,38 @@ Get SalesOrder Count
     ${resp}=  GET On Session  ynw  /provider/sorder/count   params=${param}   expected_status=any
     RETURN  ${resp} 
 
+Assign User For Sales Order
+    [Arguments]  ${orderUid}  ${userId}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/sorder/${orderUid}/assign/${userId}  expected_status=any
+    RETURN  ${resp} 
+
+UnAssign User For Sales Order
+    [Arguments]  ${orderUid} 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/sorder/${orderUid}/unassign  expected_status=any
+    RETURN  ${resp} 
+
+Update Sales Order Delivery Status
+
+    [Arguments]   ${orderUid}     ${status}   
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/sorder/${orderUid}/delivery/${status}    expected_status=any
+    RETURN  ${resp} 
+
+Get Order Item List
+    [Arguments]   &{param}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/sorder/item    params=${param}  expected_status=any
+    RETURN  ${resp} 
+
+Get Order Item count By Filter
+    [Arguments]  &{param}  
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/sorder/item/count    params=${param}   expected_status=any
+    RETURN  ${resp} 
+
 
 Provider with license
     [Arguments]  ${licensename}
