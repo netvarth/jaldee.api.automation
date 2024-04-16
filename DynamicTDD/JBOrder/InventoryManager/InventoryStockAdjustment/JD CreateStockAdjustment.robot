@@ -261,5 +261,45 @@ JD-TC-Create Stock Adjustment-UH5
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_QUANTITY}
 
+JD-TC-Create Stock Adjustment-UH6
+
+    [Documentation]  Stock Adjustment Dto -invCatalogItemId not added in the invoice catalog id thats we are given.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Name1}=    FakerLibrary.last name
+    Set Suite Variable  ${Name1}
+
+    ${resp}=  Create Inventory Catalog   ${Name1}  ${store_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${inventory_catalog_encid1}  ${resp.json()}
+
+
+    ${quantity}=   Random Int  min=5  max=10
+    ${quantity}=  Convert To Number  ${quantity}  1
+    Set Suite Variable  ${quantity}  
+    ${data3}=  Create Dictionary   invCatalogId=${inventory_catalog_encid1}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity}    
+    Set Suite Variable  ${data3}  
+
+    ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid1}   ${remarks_encid1}    ${data3} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+
+JD-TC-Create Stock Adjustment-UH7
+
+    [Documentation]  Catalog Dto encid and Stock Adjustment Dto - invoice catalog id is different.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}    ${data3} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+
+
 
 

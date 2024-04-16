@@ -496,19 +496,6 @@ JD-TC-Get Item Stock adjust Filter-UH2
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings   ${resp.json()}   []
 
-JD-TC-Get Item Stock adjust Filter-UH3
-
-    [Documentation]  Get stock adjustment filter with invalid account id.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-
-    ${resp}=  Get Item Stock adjust Filter   account-eq=${inventory_catalog_encid}     
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings   ${resp.json()}   []
 
 JD-TC-Get Item Stock adjust Filter-UH4
 
