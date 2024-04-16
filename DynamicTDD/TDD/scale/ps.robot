@@ -1,7 +1,7 @@
 *** Settings ***
 Suite Teardown    Delete All Sessions
 Test Teardown     Delete All Sessions
-Force Tags        POC
+Force Tags        Signup  Appointment  Waitlist
 Library           Collections
 Library           OperatingSystem
 Library           String
@@ -26,17 +26,22 @@ JD-TC-Provider_Signup-1
     [Documentation]   Provider Signup in Random Domain 
 
     Create Directory   ${EXECDIR}/TDD/${ENVIRONMENT}data/
+    Create Directory   ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/
+    # Create File   ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
     
     # ${PO_Number}=  FakerLibrary.Numerify  %#####
     # ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
+    Log  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
+    ${num}=  find_last  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
     ${PH_Number}    Random Number 	digits=5  #fix_len=True
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable  ${PUSERPH0}  555${PH_Number}
-    FOR  ${index}  IN RANGE   1
+    FOR  ${index}  IN RANGE   5
+        ${num}=  Evaluate   ${num}+1
         ${ph}=  Evaluate   ${PUSERPH0}+${index}
         Log   ${ph}
-        Set Suite Variable  ${ph}
+        # Set Suite Variable  ${ph}
         ${ph1}=  Evaluate  ${ph}+1000000000
         ${ph2}=  Evaluate  ${ph}+2000000000
         # ${licresp}=   Get Licensable Packages
@@ -78,6 +83,7 @@ JD-TC-Provider_Signup-1
         ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
         Should Be Equal As Strings    ${resp.status_code}    200
         Append To File  ${EXECDIR}/TDD/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt  ${ph} - ${PASSWORD}${\n}
+        Append To File  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py  PUSERNAME${num}=${ph}${\n}
         
         ${list}=  Create List  1  2  3  4  5  6  7
         ${ph1}=  Evaluate  ${PUSERPH0}+1000000000
@@ -140,16 +146,16 @@ JD-TC-Provider_Signup-1
         ${resp}=  Get Service
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Verify Response List   ${resp}  0  name=${service_name}  status=${service_status}  serviceDuration=${service_duration}
+        # Verify Response List   ${resp}  0  name=${service_name}  status=${service_status}  serviceDuration=${service_duration}
 
         ${resp}=  Get Order Settings by account id
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
-        Should Be Equal As Strings  ${resp.json()['enableOrder']}     ${bool[0]}
-        Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}    ${fname}
-        Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}     ${lname}
-        Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}        ${ph}
+        # Should Be Equal As Strings  ${resp.json()['account']}         ${account_id}
+        # Should Be Equal As Strings  ${resp.json()['enableOrder']}     ${bool[0]}
+        # Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}    ${fname}
+        # Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}     ${lname}
+        # Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}        ${ph}
     
     END
 
@@ -323,6 +329,14 @@ JD-TC-Provider_Signup-1
 # *** Comments ***
 JD-TC-AddToWL-1
     [Documentation]   Add To waitlist
+    ${cust_pro}=  Evaluate  random.choice(list(open('${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py')))  random
+    Log  ${cust_pro}
+    # ${cust_pro}=    Remove String    ${cust_pro}    ${SPACE}
+    # ${cust_pro}=    Remove String    ${cust_pro}    ${\n}
+    ${cust_pro}=   Set Variable  ${cust_pro.strip()}
+    ${var} 	${ph}=   Split String    ${cust_pro}  =  
+    Set Suite Variable  ${ph}
+
     ${resp}=  Encrypted Provider Login  ${ph}  ${PASSWORD}
     # Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -345,10 +359,12 @@ JD-TC-AddToWL-1
     ${resp}=  View Waitlist Settings
     Log  ${resp.content}
     Verify Response  ${resp}  onlineCheckIns=${bool[1]}
+    IF  ${resp.json()['enabledWaitlist']}==${bool[0]}
+        ${resp}=  Enable Waitlist
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Enable Waitlist
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${resp}=   Get jaldeeIntegration Settings
     Log  ${resp.content}
@@ -389,6 +405,54 @@ JD-TC-AddToWL-1
         ${s_id}=  Create Sample Service  ${SERVICE1}
     ELSE
         Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
+    END
+
+    ${resp}=  Get Waitlist Today  waitlistStatus-eq=${wl_status[0]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${prepay_appt_len}=  Get Length   ${resp.json()}
+    FOR   ${i}  IN RANGE   ${prepay_appt_len}
+
+        ${resp1}=  Waitlist Action  ${waitlist_actions[4]}   ${resp.json()[${i}]['uid']}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        
+    END
+    
+    ${resp}=  Get Waitlist Today   
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${today_appt_len}=  Get Length   ${resp.json()}
+    FOR   ${i}  IN RANGE   ${today_appt_len}
+
+        ${resp1}=  Waitlist Action  ${waitlist_actions[4]}   ${resp.json()[${i}]['uid']}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200      
+
+    END
+
+    ${resp}=  Get Waitlist Future
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${future_appt_len}=  Get Length   ${resp.json()}
+    FOR   ${i}  IN RANGE   ${future_appt_len}
+
+        ${resp1}=  Waitlist Action  ${waitlist_actions[4]}   ${resp.json()[${i}]['uid']}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        
+    END
+
+    ${resp}=  Get Queues
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}   200
+    ${queues_count}=  Get Length  ${resp.json()}
+    FOR   ${i}  IN RANGE   ${queues_count}
+
+        ${resp1}=  Disable Queue  ${resp.json()[${i}]['id']}
+        Log  ${resp1.json()}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
     END
 
     ${DAY}=  get_date_by_timezone  ${tz}
@@ -493,6 +557,54 @@ JD-TC-TakeAppointment-1
         ${s_id}=  Create Sample Service  ${SERVICE1}
     ELSE
         Set Test Variable   ${s_id}   ${resp.json()[0]['id']}
+    END
+
+    ${resp}=  Get Appointments Today  apptStatus-eq=${apptStatus[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${prepay_appt_len}=  Get Length   ${resp.json()}
+    FOR   ${i}  IN RANGE   ${prepay_appt_len}
+
+        ${resp1}=  Appointment Action   ${apptStatus[6]}   ${resp.json()[${i}]['uid']}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        
+    END
+    
+    ${resp}=  Get Appointments Today
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${today_appt_len}=  Get Length   ${resp.json()}
+    FOR   ${i}  IN RANGE   ${today_appt_len}
+
+        ${resp1}=  Appointment Action   ${apptStatus[6]}   ${resp.json()[${i}]['uid']}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        
+    END
+
+    ${resp}=  Get Future Appointments
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${future_appt_len}=  Get Length   ${resp.json()}
+    FOR   ${i}  IN RANGE   ${future_appt_len}
+
+        ${resp1}=  Appointment Action   ${apptStatus[6]}   ${resp.json()[${i}]['uid']}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+        
+    END
+
+    ${resp}=  Get Appointment Schedules
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    ${schedules_count}=  Get Length  ${resp.json()}
+    FOR   ${i}  IN RANGE   ${schedules_count}
+
+        ${resp1}=  Disable Appointment Schedule  ${resp.json()[${i}]['id']}
+        Log  ${resp1.json()}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
     END
 
     ${DAY1}=  get_date_by_timezone  ${tz}

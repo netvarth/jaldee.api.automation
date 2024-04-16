@@ -837,6 +837,7 @@ JD-TC-SendMessageWithAppt-30
 
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 
     ${uuid}=    Create List    ${apptid1}   
