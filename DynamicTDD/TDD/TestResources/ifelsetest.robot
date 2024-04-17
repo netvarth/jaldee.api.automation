@@ -32,6 +32,10 @@ ${word3}        python
 *** Test Cases ***  
 
 Testing python lower fn
+
+    ${s_id}=  Set Variable  ${NONE}
+    ${srv_val}=    Get Variable Value    ${s_id}
+
     log  ${word1.lower()}
     log  ${word2.lower()}
     log  ${word3.lower()}
@@ -40,6 +44,9 @@ Testing python lower fn
 
 Check empty Dictionary
 
+    ${s_id}=  Set Variable  ${NONE}
+    ${srv_val}=    Get Variable Value    ${s_id}
+    
     ${whatsApp}=  Create Dictionary
     ${telegram}=  Create Dictionary
     IF  ${whatsApp} == &{EMPTY}

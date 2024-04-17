@@ -1091,10 +1091,10 @@ Get Service By Location
     ${resp}=    GET On Session    ynw  /consumer/waitlist/services/${locationId}   params=${cons_params}   expected_status=any   headers=${cons_headers}     
     RETURN  ${resp} 
 
-Get history Waitlist 
+Get Waitlist History Consumer
     [Arguments]  &{cons_params} 
     ${cons_headers}=  Create Dictionary  &{headers}
-    ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{params}
+    ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{cons_params}
     Log  ${cons_params}
     Set To Dictionary  ${cons_headers}   &{headers}
     Set To Dictionary  ${cons_params}   &{locparam}
@@ -1118,7 +1118,7 @@ AddFamilyMemberWithPhNo
     ${resp}=  POST On Session  ynw  /consumer/familyMember   data=${data}   params=${cons_params}   expected_status=any   headers=${cons_headers}
     RETURN  ${resp}    
 
-Get history Waitlist Count
+Get Waitlist History Count Consumer
     [Arguments]   &{cons_params} 
     ${cons_headers}=  Create Dictionary  &{headers}
     ${headers}  ${cons_params}  ${locparam}=  db.Set_TZ_Header  &{cons_params}

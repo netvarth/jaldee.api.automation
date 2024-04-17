@@ -143,7 +143,7 @@ JD-TC-GetWaitlistHistory-1
       ${T_DAY}=  db.get_date_by_timezone  ${tz}
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Get Waitlist History
+      ${resp}=  Get history Waitlist
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable    ${cname4}    ${resp.json()[0]['consumer']['firstName']}
@@ -171,7 +171,7 @@ JD-TC-GetWaitlistHistory-2
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Get Waitlist History
+      ${resp}=  Get history Waitlist
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       change_system_date  -3
@@ -188,16 +188,16 @@ JD-TC-GetWaitlistHistory-2
       ${resp}=  Get Waitlist By Id  ${waitlist_id}
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Get Waitlist History
+      ${resp}=  Get history Waitlist
       Log   ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Get Waitlist History  waitlistStatus-eq=${wl_status[4]}  from=0  count=10
+      ${resp}=  Get history Waitlist  waitlistStatus-eq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       Log   ${resp.json()}
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
       Verify Response List  ${resp}  0  ynwUuid=h_${waitlist_id}
-      ${resp}=  Get Waitlist History  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
+      ${resp}=  Get history Waitlist  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  3
@@ -210,7 +210,7 @@ JD-TC-GetWaitlistHistory-3
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Get Waitlist History  waitlistStatus-neq=${wl_status[1]}  from=0  count=10
+      ${resp}=  Get history Waitlist  waitlistStatus-neq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -221,7 +221,7 @@ JD-TC-GetWaitlistHistory-4
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  waitlistStatus-neq=${wl_status[4]}  from=0  count=10
+      ${resp}=  Get history Waitlist  waitlistStatus-neq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  3
@@ -234,7 +234,7 @@ JD-TC-GetWaitlistHistory-5
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  firstName-eq=${cname1}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-eq=${cname1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -245,7 +245,7 @@ JD-TC-GetWaitlistHistory-6
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  firstName-neq=${cname1}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-neq=${cname1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  3
@@ -258,7 +258,7 @@ JD-TC-GetWaitlistHistory-7
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  firstName-eq=${cname2}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-eq=${cname2}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -269,7 +269,7 @@ JD-TC-GetWaitlistHistory-8
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History   firstName-neq=${cname2}  from=0  count=10
+      ${resp}=  Get history Waitlist   firstName-neq=${cname2}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  3
@@ -282,7 +282,7 @@ JD-TC-GetWaitlistHistory-9
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  service-eq=${s_id1}  from=0  count=10
+      ${resp}=  Get history Waitlist  service-eq=${s_id1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  4
@@ -318,7 +318,7 @@ JD-TC-GetWaitlistHistory-10
       ${T_DAY}=  db.get_date_by_timezone  ${tz}
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200
-      ${resp}=  Get Waitlist History  service-neq=${s_id1}  from=0  count=10
+      ${resp}=  Get history Waitlist  service-neq=${s_id1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  2
@@ -330,7 +330,7 @@ JD-TC-GetWaitlistHistory-11
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200      
-      ${resp}=  Get Waitlist History  firstName-eq=${cname1}  waitlistStatus-eq=${wl_status[4]}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-eq=${cname1}  waitlistStatus-eq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -341,7 +341,7 @@ JD-TC-GetWaitlistHistory-12
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  firstName-neq=${cname1}  waitlistStatus-neq=${wl_status[4]}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-neq=${cname1}  waitlistStatus-neq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  4
@@ -355,7 +355,7 @@ JD-TC-GetWaitlistHistory-13
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  firstName-eq=${cname1}  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-eq=${cname1}  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1    
@@ -366,7 +366,7 @@ JD-TC-GetWaitlistHistory-14
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  firstName-eq=${cname2}  waitlistStatus-eq=${wl_status[4]}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-eq=${cname2}  waitlistStatus-eq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  0
@@ -376,7 +376,7 @@ JD-TC-GetWaitlistHistory-15
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  firstName-neq=${cname2}  waitlistStatus-neq=${wl_status[4]}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-neq=${cname2}  waitlistStatus-neq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  3
@@ -389,7 +389,7 @@ JD-TC-GetWaitlistHistory-16
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  firstName-eq=${cname2}  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-eq=${cname2}  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  2
@@ -401,7 +401,7 @@ JD-TC-GetWaitlistHistory-17
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  firstName-eq=${cname1}  service-eq=${s_id1}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-eq=${cname1}  service-eq=${s_id1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -412,7 +412,7 @@ JD-TC-GetWaitlistHistory-18
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  firstName-neq=${cname1}  service-neq=${s_id1}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-neq=${cname1}  service-neq=${s_id1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -423,7 +423,7 @@ JD-TC-GetWaitlistHistory-19
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  firstName-eq=${cname2}  service-eq=${s_id1}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-eq=${cname2}  service-eq=${s_id1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -434,7 +434,7 @@ JD-TC-GetWaitlistHistory-20
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  firstName-neq=${cname2}  service-neq=${s_id1}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-neq=${cname2}  service-neq=${s_id1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -445,7 +445,7 @@ JD-TC-GetWaitlistHistory-21
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  firstName-eq=${cname1}  service-eq=${s_id2}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-eq=${cname1}  service-eq=${s_id2}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -456,7 +456,7 @@ JD-TC-GetWaitlistHistory-22
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  firstName-neq=${cname1}  service-neq=${s_id2}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-neq=${cname1}  service-neq=${s_id2}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  3
@@ -469,7 +469,7 @@ JD-TC-GetWaitlistHistory-23
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  firstName-eq=${cname2}  service-eq=${s_id2}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-eq=${cname2}  service-eq=${s_id2}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -480,7 +480,7 @@ JD-TC-GetWaitlistHistory-24
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  firstName-neq=${cname2}  service-neq=${s_id2}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-neq=${cname2}  service-neq=${s_id2}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  3
@@ -493,7 +493,7 @@ JD-TC-GetWaitlistHistory-25
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  service-eq=${s_id1}  waitlistStatus-eq=${wl_status[4]}  from=0  count=10
+      ${resp}=  Get history Waitlist  service-eq=${s_id1}  waitlistStatus-eq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -504,7 +504,7 @@ JD-TC-GetWaitlistHistory-26
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200      
-      ${resp}=  Get Waitlist History  service-neq=${s_id1}  waitlistStatus-neq=${wl_status[4]}  from=0  count=10
+      ${resp}=  Get history Waitlist  service-neq=${s_id1}  waitlistStatus-neq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  2
@@ -516,7 +516,7 @@ JD-TC-GetWaitlistHistory-27
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  service-eq=${s_id1}  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
+      ${resp}=  Get history Waitlist  service-eq=${s_id1}  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  3
@@ -529,7 +529,7 @@ JD-TC-GetWaitlistHistory-28
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  service-eq=${s_id2}  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
+      ${resp}=  Get history Waitlist  service-eq=${s_id2}  waitlistStatus-eq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  2
@@ -541,7 +541,7 @@ JD-TC-GetWaitlistHistory-29
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  service-eq=${s_id2}  waitlistStatus-eq=${wl_status[4]}  from=0  count=10
+      ${resp}=  Get history Waitlist  service-eq=${s_id2}  waitlistStatus-eq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  0
@@ -551,7 +551,7 @@ JD-TC-GetWaitlistHistory-30
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200      
-      ${resp}=  Get Waitlist History  service-neq=${s_id2}  waitlistStatus-neq=${wl_status[4]}  from=0  count=10
+      ${resp}=  Get history Waitlist  service-neq=${s_id2}  waitlistStatus-neq=${wl_status[4]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  3
@@ -564,7 +564,7 @@ JD-TC-GetWaitlistHistory-31
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  token-eq=${token_id}  from=0  count=10
+      ${resp}=  Get history Waitlist  token-eq=${token_id}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -575,7 +575,7 @@ JD-TC-GetWaitlistHistory-32
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  token-neq=${token_id}  from=0  count=10
+      ${resp}=  Get history Waitlist  token-neq=${token_id}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  5
@@ -590,7 +590,7 @@ JD-TC-GetWaitlistHistory-33
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  token-eq=${token_id}  service-eq=${s_id1}  from=0  count=10
+      ${resp}=  Get history Waitlist  token-eq=${token_id}  service-eq=${s_id1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -601,7 +601,7 @@ JD-TC-GetWaitlistHistory-34
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  token-neq=${token_id}  service-neq=${s_id2}  from=0  count=10
+      ${resp}=  Get history Waitlist  token-neq=${token_id}  service-neq=${s_id2}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  3
@@ -614,7 +614,7 @@ JD-TC-GetWaitlistHistory-35
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  firstName-eq=${cname1}  date-eq=${DAY1}  from=0  count=10
+      ${resp}=  Get history Waitlist  firstName-eq=${cname1}  date-eq=${DAY1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  2
@@ -626,7 +626,7 @@ JD-TC-GetWaitlistHistory-36
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  date-neq=${DAY1}  from=0  count=10
+      ${resp}=  Get history Waitlist  date-neq=${DAY1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  0
@@ -636,7 +636,7 @@ JD-TC-GetWaitlistHistory-37
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  date-eq=${DAY1}  service-neq=${s_id2}  from=0  count=10
+      ${resp}=  Get history Waitlist  date-eq=${DAY1}  service-neq=${s_id2}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  4
@@ -650,7 +650,7 @@ JD-TC-GetWaitlistHistory-38
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  waitlistStatus-eq=${wl_status[4]}  date-eq=${DAY1}  from=0  count=10
+      ${resp}=  Get history Waitlist  waitlistStatus-eq=${wl_status[4]}  date-eq=${DAY1}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -661,7 +661,7 @@ JD-TC-GetWaitlistHistory-39
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  queue-eq=${qid1}   from=0  count=10
+      ${resp}=  Get history Waitlist  queue-eq=${qid1}   from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  6
@@ -677,7 +677,7 @@ JD-TC-GetWaitlistHistory-40
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  queue-neq=${qid1}   from=0  count=10
+      ${resp}=  Get history Waitlist  queue-neq=${qid1}   from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  0
@@ -687,7 +687,7 @@ JD-TC-GetWaitlistHistory-41
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  queue-eq=${qid1}  token-eq=${token_id}    from=0  count=10
+      ${resp}=  Get history Waitlist  queue-eq=${qid1}  token-eq=${token_id}    from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -698,7 +698,7 @@ JD-TC-GetWaitlistHistory-42
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  queue-eq=${qid1}  token-neq=${token_id}    from=0  count=10
+      ${resp}=  Get history Waitlist  queue-eq=${qid1}  token-neq=${token_id}    from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  5
@@ -713,7 +713,7 @@ JD-TC-GetWaitlistHistory-43
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  queue-eq=${qid1}  firstName-eq=${cname2}   from=0  count=10
+      ${resp}=  Get history Waitlist  queue-eq=${qid1}  firstName-eq=${cname2}   from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  2
@@ -725,7 +725,7 @@ JD-TC-GetWaitlistHistory-44
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  queue-eq=${qid1}  service-eq=${s_id1}   from=0  count=10
+      ${resp}=  Get history Waitlist  queue-eq=${qid1}  service-eq=${s_id1}   from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  4
@@ -739,7 +739,7 @@ JD-TC-GetWaitlistHistory-45
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  queue-eq=${qid1}  waitlistStatus-eq=${wl_status[4]}   from=0  count=10
+      ${resp}=  Get history Waitlist  queue-eq=${qid1}  waitlistStatus-eq=${wl_status[4]}   from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -750,7 +750,7 @@ JD-TC-GetWaitlistHistory-46
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  queue-eq=${qid1}  date-eq=${DAY1}   from=0  count=10
+      ${resp}=  Get history Waitlist  queue-eq=${qid1}  date-eq=${DAY1}   from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  6
@@ -766,7 +766,7 @@ JD-TC-GetWaitlistHistory-47
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  location-eq=${lid}   from=0  count=10
+      ${resp}=  Get history Waitlist  location-eq=${lid}   from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  6
@@ -782,7 +782,7 @@ JD-TC-GetWaitlistHistory-48
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  location-neq=${lid}   from=0  count=10
+      ${resp}=  Get history Waitlist  location-neq=${lid}   from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  0
@@ -792,7 +792,7 @@ JD-TC-GetWaitlistHistory-49
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  location-eq=${lid}  token-eq=${token_id}    from=0  count=10
+      ${resp}=  Get history Waitlist  location-eq=${lid}  token-eq=${token_id}    from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -803,7 +803,7 @@ JD-TC-GetWaitlistHistory-50
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  location-eq=${lid}  token-neq=${token_id}    from=0  count=10
+      ${resp}=  Get history Waitlist  location-eq=${lid}  token-neq=${token_id}    from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  5
@@ -818,7 +818,7 @@ JD-TC-GetWaitlistHistory-51
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  location-eq=${lid}  firstName-eq=${cname2}   from=0  count=10
+      ${resp}=  Get history Waitlist  location-eq=${lid}  firstName-eq=${cname2}   from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  2
@@ -830,7 +830,7 @@ JD-TC-GetWaitlistHistory-52
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  location-eq=${lid}  service-eq=${s_id1}   from=0  count=10
+      ${resp}=  Get history Waitlist  location-eq=${lid}  service-eq=${s_id1}   from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  4
@@ -844,7 +844,7 @@ JD-TC-GetWaitlistHistory-53
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  location-eq=${lid}  waitlistStatus-eq=${wl_status[4]}   from=0  count=10
+      ${resp}=  Get history Waitlist  location-eq=${lid}  waitlistStatus-eq=${wl_status[4]}   from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  1
@@ -855,7 +855,7 @@ JD-TC-GetWaitlistHistory-54
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  location-eq=${lid}  date-eq=${DAY1}   from=0  count=10
+      ${resp}=  Get history Waitlist  location-eq=${lid}  date-eq=${DAY1}   from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  6
@@ -871,7 +871,7 @@ JD-TC-GetWaitlistHistory-55
 
       ${resp}=  Encrypted Provider Login  ${PUSERNAME24}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200 
-      ${resp}=  Get Waitlist History  location-eq=${lid}  queue-eq=${qid1}   from=0  count=10
+      ${resp}=  Get history Waitlist  location-eq=${lid}  queue-eq=${qid1}   from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  200
       ${len}=  Get Length  ${resp.json()}
       Should Be Equal As Integers  ${len}  6
@@ -887,13 +887,13 @@ JD-TC-GetWaitlistHistory-UH1
 
       ${resp}=  ConsumerLogin  ${CUSERNAME0}  ${PASSWORD}
       Should Be Equal As Strings  ${resp.status_code}  200      
-      ${resp}=  Get Waitlist History  service-neq=${s_id2}  waitlistStatus-neq=${wl_status[1]}  from=0  count=10
+      ${resp}=  Get history Waitlist  service-neq=${s_id2}  waitlistStatus-neq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  401
       Should Be Equal As Strings   "${resp.json()}"     "${LOGIN_NO_ACCESS_FOR_URL}"
       
 JD-TC-GetWaitlistHistory-UH2
       [Documentation]   Get waitlist without login
 
-      ${resp}=  Get Waitlist History  service-neq=${s_id2}  waitlistStatus-neq=${wl_status[1]}  from=0  count=10
+      ${resp}=  Get history Waitlist  service-neq=${s_id2}  waitlistStatus-neq=${wl_status[1]}  from=0  count=10
       Should Be Equal As Strings  ${resp.status_code}  419
       Should Be Equal As Strings   "${resp.json()}"     "${SESSION_EXPIRED}"

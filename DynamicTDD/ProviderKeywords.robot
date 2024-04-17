@@ -644,8 +644,9 @@ Update Queue without service
 
    
 Get Queues
+    [Arguments]  &{kwargs}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/waitlist/queues  expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/waitlist/queues  params=${kwargs}  expected_status=any
     RETURN  ${resp}
 
 Get Queue ById
@@ -655,8 +656,9 @@ Get Queue ById
     RETURN  ${resp}
     
 Get Queues Counts
+    [Arguments]  &{kwargs}
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/waitlist/queues/count  expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/waitlist/queues/count  params=${kwargs}  expected_status=any
     RETURN  ${resp}
 
 Enable Queue
@@ -1986,7 +1988,7 @@ Get Waitlist Count Future
     ${resp}=    GET On Session    ynw  /provider/waitlist/future/count  params=${kwargs}  expected_status=any
     RETURN  ${resp}
     
-Get Waitlist History
+Get history Waitlist
     [Arguments]    &{kwargs}
     ${pro_headers}=  Create Dictionary  &{headers}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}
@@ -1997,7 +1999,7 @@ Get Waitlist History
     ${resp}=    GET On Session    ynw  /provider/waitlist/history  params=${kwargs}  expected_status=any
     RETURN  ${resp}
 
-Get Waitlist Count History
+Get history Waitlist Count
     [Arguments]    &{kwargs}
     ${pro_headers}=  Create Dictionary  &{headers}
     ${tzheaders}  ${kwargs}  ${locparam}=  db.Set_TZ_Header  &{kwargs}

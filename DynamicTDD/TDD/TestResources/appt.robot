@@ -72,6 +72,10 @@ JD-TC-Reschedule Appointment-10
     ${servicecharge}=   Random Int  min=100  max=200
     ${s_id}=  Create Sample Service with Prepayment   ${SERVICE1}  ${min_pre}  ${servicecharge}
 
+    ${resp}=   Get Service By Id  ${s_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     ${lid}=  Create Sample Location  
     ${resp}=   Get Location ById  ${lid}
     Log  ${resp.content}

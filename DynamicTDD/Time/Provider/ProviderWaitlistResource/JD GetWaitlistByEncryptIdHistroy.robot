@@ -99,7 +99,7 @@ JD-TC-GetWaitlistByEncryptedIDHistory-1
     change_system_date   3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME68}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Get Waitlist History
+    ${resp}=  Get history Waitlist
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response List  ${resp}   0   date=${DAY1}
