@@ -645,6 +645,7 @@ Update Queue without service
    
 Get Queues
     [Arguments]  &{kwargs}
+    # Available filters- id, account, branchId, location, state, provider, service, instantQueue
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/waitlist/queues  params=${kwargs}  expected_status=any
     RETURN  ${resp}
@@ -3974,6 +3975,7 @@ Disable Appointment Schedule
     
 Get Appointment Schedules
     [Arguments]  &{kwargs}
+    # Available filters- id, location, state, provider, batch, name, service, account
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/schedule  params=${kwargs}  expected_status=any
     RETURN  ${resp}
