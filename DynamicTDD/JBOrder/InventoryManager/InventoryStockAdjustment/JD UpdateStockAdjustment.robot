@@ -28,7 +28,7 @@ ${invalidstring}     _ad$.sa_
 JD-TC-Update Stock Adjustment-1
 
     [Documentation]  update stock adjustment with same details.
-
+    comment  NOTE-------------UPDATE STOCK ADJUSTMENT ---WE CAN ONLY UPDATE REMARKS AND STOCK ADJUSTMENT DTO
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -192,6 +192,49 @@ JD-TC-Update Stock Adjustment-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
+    ${resp}=  Get Stock Adjustment By Id  ${uid1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+JD-TC-Update Stock Adjustment-3
+
+    [Documentation]  create one remarks and update stock adjustment
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${remarks1}=    FakerLibrary.name
+    Set Suite Variable  ${remarks1}
+
+    ${resp}=  Create Item Remarks   ${remarks1}  ${transactionTypeEnum[1]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${remarks_encid2}  ${resp.json()}
+
+
+    ${resp}=  Update Stock Adjustment  ${uid1}   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid2}      ${data}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+
+    ${resp}=  Get Stock Adjustment By Id  ${uid1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['uid']}    ${uid1} 
+    Should Be Equal As Strings    ${resp.json()['location']}    ${locId1}     
+    Should Be Equal As Strings    ${resp.json()['remark']}     ${remarks1}
+    Should Be Equal As Strings    ${resp.json()['invStatus']}     ${couponStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['store']['name']}    ${Name}
+    Should Be Equal As Strings    ${resp.json()['store']['encId']}    ${store_id}
+    Should Be Equal As Strings    ${resp.json()['catalogDto']['encId']}    ${inventory_catalog_encid}
+    Should Be Equal As Strings    ${resp.json()['catalogDto']['status']}    ${InventoryCatalogStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['inventoryRemarkDto']['encId']}    ${remarks_encid2}
+    Should Be Equal As Strings    ${resp.json()['inventoryRemarkDto']['transactionTypeEnum']}    ${transactionTypeEnum[1]}
+    Should Be Equal As Strings    ${resp.json()['inventoryRemarkDto']['remark']}    ${remarks1}
+    Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['invCatalogId']}    ${inventory_catalog_encid}
+    Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['invCatalogItemId']}    ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()['stockAdjustDetailsDtos'][0]['qty']}    ${quantity}
 
 
 

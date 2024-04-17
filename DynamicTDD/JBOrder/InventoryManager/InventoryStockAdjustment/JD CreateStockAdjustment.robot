@@ -265,7 +265,7 @@ JD-TC-Create Stock Adjustment-UH6
 
     [Documentation]  Stock Adjustment Dto -invCatalogItemId not added in the invoice catalog id thats we are given.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -287,18 +287,36 @@ JD-TC-Create Stock Adjustment-UH6
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid1}   ${remarks_encid1}    ${data3} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_INVENTORY_CATALOG_ITEM_ID}
+
 
 JD-TC-Create Stock Adjustment-UH7
 
     [Documentation]  Catalog Dto encid and Stock Adjustment Dto - invoice catalog id is different.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}    ${data3} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${Invalid_Catalog_id}
+
+
+JD-TC-Create Stock Adjustment-UH8
+
+    [Documentation]  Create stock adjustment with zero quantity.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${data1}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=0
+    ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_QUANTITY}
 
 
 
