@@ -29,22 +29,13 @@ ${originFrom}       NONE
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
 @{deliveryStatus}     NOT_DELIVERED        DELIVERED    READY_FOR_PICKUP    READY_FOR_SHIPMENT      READY_FOR_DELIVERY      SHIPPED     IN_TRANSIST
 
-*** Keywords ***
-
-Create Sales Order Invoice
-
-    [Arguments]  ${orderuid}   
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/sorder/${orderuid}/invoice   expected_status=any
-    RETURN  ${resp} 
-
 *** Test Cases ***
 
-JD-TC-Create Sales Order Invoice-1
+JD-TC-Update Sales Order Item Item-1
 
-    [Documentation]   Create a sales Order with Valid Details then Genarate sales order invoice.
+    [Documentation]   Create a sales Order with Valid Details then update order quantity(inventory manager is false).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -73,11 +64,11 @@ JD-TC-Create Sales Order Invoice-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME17}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME18}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -152,6 +143,7 @@ JD-TC-Create Sales Order Invoice-1
 # -------------------------------- Create SalesOrder Catalog Item-invMgmt False -----------------------------------
 
     ${price}=    Random Int  min=2   max=40
+    Set Suite Variable  ${price}
     ${invCatItem}=     Create Dictionary       encId=${itemEncId2}
     ${Item_details}=  Create Dictionary        spItem=${invCatItem}    price=${price}   
 
@@ -204,7 +196,7 @@ JD-TC-Create Sales Order Invoice-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -269,152 +261,206 @@ JD-TC-Create Sales Order Invoice-1
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 # -----------------------------------------------------------------------------------------------------------------------------------------
 
-# ------------------------------------------------Create Sales Order Invoice----------------------------------------------
+# ------------------------------------ Update order status --------------------------------------------------
 
-    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
+    ${quantity}=    Random Int  min=20   max=50
+
+    ${netTotal}=  Evaluate  ${price}*${quantity}
+    ${netTotal}=  Convert To Number  ${netTotal}   1
+
+    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Create Sales Order Invoice-2
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
 
-    [Documentation]    Genarate sales order invoice multiple times.
+JD-TC-Update Sales Order Item-2
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    [Documentation]    update sales order Item Encid.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
+    ${quantity}=    Random Int  min=20   max=50
+
+    ${netTotal}=  Evaluate  ${price}*${quantity}
+    ${netTotal}=  Convert To Number  ${netTotal}   1
+
+    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds2}    ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
+    ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
 
-JD-TC-Create Sales Order Invoice-3
+JD-TC-Update Sales Order Item-3
 
-    [Documentation]    order assign to a user then user Genarate sales order invoice.
+    [Documentation]    Create a sales Order with Valid Details then update order quantity(inventory manager is True).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${acc_id}   ${resp.json()['id']}
-    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
-
-    ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
+    ${Name}=    FakerLibrary.first name
+    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${inv_cat_encid}  ${resp.json()}
+    ${inv_cat_encid_List}=  Create List  ${inv_cat_encid}
 
-    END
+    ${displayName}=     FakerLibrary.name
 
-    ${resp}=  Get Departments
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${dep_name1}=  FakerLibrary.bs
-        ${dep_code1}=   Random Int  min=100   max=999
-        ${dep_desc1}=   FakerLibrary.word  
-        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${dep_id}  ${resp1.json()}
-    ELSE
-        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    END
+    ${resp}=    Create Item Inventory  ${displayName}    
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${itemEncId1}  ${resp.json()}
 
-    ${us_id2}=  Create Sample User    
-    Set Suite Variable    ${us_id2}
+    ${resp}=   Create Inventory Catalog Item  ${inv_cat_encid}   ${itemEncId1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${Inv_Cata_Item_Encid}  ${resp.json()[0]}
 
-    ${resp}=  Get User By Id  ${us_id2}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${f_name1}  ${resp.json()['firstName']}
-    Set Suite Variable  ${l_name1}  ${resp.json()['lastName']}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid_List}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_Cata_Encid1}  ${resp.json()}
 
-    Set Suite Variable  ${PUSERNAME_U1}  ${resp.json()['mobileNo']}
+    ${price}=    Random Int  min=2   max=40
 
-    ${resp}=    Assign User For Sales Order    ${SO_Uid}     ${us_id2}
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${SO_Cata_Encid1}    ${boolean[1]}     ${Inv_Cata_Item_Encid}     ${price}    ${boolean[1]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_itemEncId1}  ${resp.json()[0]}
+
+    ${quantity}=    Random Int  min=2   max=5
+
+    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid1}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+    Set Suite Variable  ${SO_Cata_Encid_List}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncId1}   ${quantity}     store=${store}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid}  ${resp.json()}
+
+    ${netTotal}=  Evaluate  ${price}*${quantity}
+    ${netTotal}=  Convert To Number  ${netTotal}   1
+
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
+    Should Be Equal As Strings    ${resp.json()['store']['name']}                                   ${Name}
+    Should Be Equal As Strings    ${resp.json()['store']['encId']}                                  ${store_id}
+
+    ${quantity}=    Random Int  min=20   max=50
+
+    ${netTotal}=  Evaluate  ${price}*${quantity}
+    ${netTotal}=  Convert To Number  ${netTotal}   1
+
+    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncId1}    ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
+    ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
 
+    
+JD-TC-Update Sales Order Item-UH1
 
-JD-TC-Create Sales Order Invoice-
+    [Documentation]    update sales order quantity as Zero.
 
-    [Documentation]    Genarate  invoice with invalid Sales order Uid.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Create Sales Order Invoice    ${invalidNum}   
+    ${quantity}=    Random Int  min=0   max=0
+
+
+    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${QUANTITY_REQUIRED}
+
+JD-TC-Update Sales Order Item-UH2
+
+    [Documentation]    update sales order with EMPTY Sales order Item Encid.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${quantity}=    Random Int  min=4   max=50
+
+
+    ${resp}=    Update Order Items    ${SO_Uid}     ${EMPTY}    ${quantity}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${INVALID_ITEMID}
+
+
+JD-TC-Update Sales Order Item-UH3
+
+    [Documentation]    Another provider try to update sales order quantity.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${quantity}=    Random Int  min=4   max=50
+
+
+    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_ORDER_ID}
 
-JD-TC-Create Sales Order Invoice-
+JD-TC-Update Sales Order Item-UH4
 
-    [Documentation]    Genarate  invoice with not assigned user.
+    [Documentation]  Update sales odrer without login
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${quantity}=    Random Int  min=4   max=50
+
+    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-    ${us_id3}=  Create Sample User    
-    Set Suite Variable    ${us_id3}
 
-    ${resp}=  Get User By Id  ${us_id3}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${f_name1}  ${resp.json()['firstName']}
-    Set Suite Variable  ${l_name1}  ${resp.json()['lastName']}
+JD-TC-Update Sales Order Item-UH5
 
-    Set Suite Variable  ${PUSERNAME_U2}  ${resp.json()['mobileNo']}
-
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U2}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U2}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
+    [Documentation]  Update sales order using sa login
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
+    ${quantity}=    Random Int  min=4   max=50
+    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-
-JD-TC-Create Sales Order Invoice-
-
-    [Documentation]    Genarate invoice with another provider.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-
+    Should Be Equal As Strings  ${resp.status_code}  419
+    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}

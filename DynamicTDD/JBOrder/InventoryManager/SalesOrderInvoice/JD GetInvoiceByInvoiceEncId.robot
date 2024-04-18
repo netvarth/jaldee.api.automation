@@ -38,6 +38,47 @@ Create Sales Order Invoice
     ${resp}=  POST On Session  ynw  /provider/sorder/${orderuid}/invoice   expected_status=any
     RETURN  ${resp} 
 
+Get Invoice By Invoice EncId
+
+    [Arguments]  ${invoiceuid}   
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/invoice/${invoiceuid}   expected_status=any
+    RETURN  ${resp} 
+
+Get Invoice By Order EncId
+
+    [Arguments]  ${orderUid}   
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/invoice/order/${orderUid}   expected_status=any
+    RETURN  ${resp} 
+
+Make Cash Payment For SalesOrder
+
+    [Arguments]  ${SO_uuid}     ${acceptPaymentMode}    ${amount}     ${paymentNote}
+    ${data}=  Create Dictionary    uuid=${SO_uuid}   acceptPaymentBy=${acceptPaymentMode}   amount=${amount}     paymentNote=${paymentNote}    
+    ${data}=  json.dumps  ${data}  
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/sorder/${orderuid}/invoice        data=${data}     expected_status=any
+    RETURN  ${resp} 
+
+Apply discount For SalesOrder
+
+    [Arguments]  ${SO_uid}     ${id}    ${privateNote}     ${displayNote}   ${discountValue}
+    ${data}=  Create Dictionary    id=${SO_uuid}   privateNote=${privateNote}   displayNote=${displayNote}     discountValue=${discountValue}    
+    ${data}=  json.dumps  ${data}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/sorder/${SO_uid}/apply/discount        data=${data}     expected_status=any
+    RETURN  ${resp} 
+
+Remove SalesOrder discount 
+
+    [Arguments]  ${SO_uid}     ${id}    ${privateNote}     ${displayNote}   ${discountValue}
+    ${data}=  Create Dictionary    id=${SO_uuid}   privateNote=${privateNote}   displayNote=${displayNote}     discountValue=${discountValue}    
+    ${data}=  json.dumps  ${data}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/sorder/${SO_uid}/apply/discount        data=${data}     expected_status=any
+    RETURN  ${resp} 
+
 *** Test Cases ***
 
 JD-TC-Create Sales Order Invoice-1
@@ -274,147 +315,29 @@ JD-TC-Create Sales Order Invoice-1
     ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable      ${SO_Inv}    ${resp.json()}  
+# ------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Get Invoice By Invoice EncId -----------------------------------------------
 
-JD-TC-Create Sales Order Invoice-2
-
-    [Documentation]    Genarate sales order invoice multiple times.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
+    ${resp}=    Get Invoice By Invoice EncId    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-JD-TC-Create Sales Order Invoice-3
-
-    [Documentation]    order assign to a user then user Genarate sales order invoice.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Get Business Profile
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${acc_id}   ${resp.json()['id']}
-    Set Suite Variable  ${sub_domain_id}  ${resp.json()['serviceSubSector']['id']}
-
-    ${resp}=  View Waitlist Settings
-    Log  ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.json()}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
-
-    ${resp}=  Get Departments
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF   '${resp.content}' == '${emptylist}'
-        ${dep_name1}=  FakerLibrary.bs
-        ${dep_code1}=   Random Int  min=100   max=999
-        ${dep_desc1}=   FakerLibrary.word  
-        ${resp1}=  Create Department  ${dep_name1}  ${dep_code1}  ${dep_desc1} 
-        Log  ${resp1.content}
-        Should Be Equal As Strings  ${resp1.status_code}  200
-        Set Test Variable  ${dep_id}  ${resp1.json()}
-    ELSE
-        Set Test Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
-    END
-
-    ${us_id2}=  Create Sample User    
-    Set Suite Variable    ${us_id2}
-
-    ${resp}=  Get User By Id  ${us_id2}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${f_name1}  ${resp.json()['firstName']}
-    Set Suite Variable  ${l_name1}  ${resp.json()['lastName']}
-
-    Set Suite Variable  ${PUSERNAME_U1}  ${resp.json()['mobileNo']}
-
-    ${resp}=    Assign User For Sales Order    ${SO_Uid}     ${us_id2}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U1}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U1}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-
-JD-TC-Create Sales Order Invoice-
-
-    [Documentation]    Genarate  invoice with invalid Sales order Uid.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Create Sales Order Invoice    ${invalidNum}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_ORDER_ID}
-
-JD-TC-Create Sales Order Invoice-
-
-    [Documentation]    Genarate  invoice with not assigned user.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${us_id3}=  Create Sample User    
-    Set Suite Variable    ${us_id3}
-
-    ${resp}=  Get User By Id  ${us_id3}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${f_name1}  ${resp.json()['firstName']}
-    Set Suite Variable  ${l_name1}  ${resp.json()['lastName']}
-
-    Set Suite Variable  ${PUSERNAME_U2}  ${resp.json()['mobileNo']}
-
-    ${resp}=  SendProviderResetMail   ${PUSERNAME_U2}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    @{resp}=  ResetProviderPassword  ${PUSERNAME_U2}  ${PASSWORD}  2
-    Should Be Equal As Strings  ${resp[0].status_code}  200
-    Should Be Equal As Strings  ${resp[1].status_code}  200
-
-    ${resp}=  Encrypted Provider Login  ${PUSERNAME_U2}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-
-JD-TC-Create Sales Order Invoice-
-
-    [Documentation]    Genarate invoice with another provider.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME19}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 
