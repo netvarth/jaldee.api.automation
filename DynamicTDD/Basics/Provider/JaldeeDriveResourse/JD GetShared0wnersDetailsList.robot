@@ -867,7 +867,6 @@ JD-TC-GetSharedOnwnersDetailsList-11
     ${acc_id}=  get_acc_id  ${PUSERNAME130}
     Set Test Variable   ${acc_id}
      
-   
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -892,13 +891,11 @@ JD-TC-GetSharedOnwnersDetailsList-11
     ${s_id1}=  Create Sample Service  ${SERVICE2}
     Set Suite Variable   ${s_id1}
    
-   
     ${resp}=  Create Sample Schedule  ${lid}   ${s_id}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
-   
     ${resp}=  Get Appointment Schedule ById  ${sch_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
