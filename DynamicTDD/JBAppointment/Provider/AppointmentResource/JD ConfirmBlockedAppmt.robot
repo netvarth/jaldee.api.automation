@@ -5,6 +5,7 @@ Force Tags        Appointment  Confirm
 Library           FakerLibrary
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py 
 
@@ -52,10 +53,11 @@ JD-TC-Confirm Blocked Appointment-1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
-    clear_appt_schedule   ${PUSERNAME47}
+    # # clear_appt_schedule   ${PUSERNAME47}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -236,8 +238,9 @@ JD-TC-Confirm Blocked Appointment-2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
 
     ${resp}=   Get Service
@@ -265,7 +268,7 @@ JD-TC-Confirm Blocked Appointment-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME47}
+    # clear_appt_schedule   ${PUSERNAME47}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -386,8 +389,9 @@ JD-TC-Confirm Blocked Appointment-3
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
 
     ${resp}=   Get Service
@@ -434,7 +438,7 @@ JD-TC-Confirm Blocked Appointment-3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME47}
+    # clear_appt_schedule   ${PUSERNAME47}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -580,8 +584,9 @@ JD-TC-Confirm Blocked Appointment-4
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
 
     ${resp}=   Get Service
@@ -621,7 +626,7 @@ JD-TC-Confirm Blocked Appointment-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME47}
+    # clear_appt_schedule   ${PUSERNAME47}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -761,8 +766,9 @@ JD-TC-Confirm Blocked Appointment-5
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
 
     ${resp}=   Get Service
@@ -779,7 +785,7 @@ JD-TC-Confirm Blocked Appointment-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME47}
+    # clear_appt_schedule   ${PUSERNAME47}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -925,8 +931,9 @@ JD-TC-Confirm Blocked Appointment-6
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
 
     ${resp}=   Get Service
@@ -943,7 +950,7 @@ JD-TC-Confirm Blocked Appointment-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME47}
+    # clear_appt_schedule   ${PUSERNAME47}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1108,18 +1115,11 @@ JD-TC-Confirm Blocked Appointment-7
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    ${resp}=   Get Appointment Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    IF  ${resp.json()['enableAppt']}==${bool[0]}   
-        ${resp}=   Enable Appointment 
-        Should Be Equal As Strings  ${resp.status_code}  200
-    END
-
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
-    clear_appt_schedule   ${PUSERNAME47}
+    # # clear_appt_schedule   ${PUSERNAME47}
 
     ${resp}=   Get Service
     Log   ${resp.json()}
@@ -1175,11 +1175,13 @@ JD-TC-Confirm Blocked Appointment-7
     ${s_id}=  Create Sample Service  ${SERVICE1}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}    ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
-    Log  ${resp.json()}
+    # ${maxval}=  Convert To Integer   ${delta/2}
+    # ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    ${time}=   Create List    ${sTime1}
+    ${iA}=   Create Dictionary  availableDate=${DAY1}  availabilityTime=${time}
+    ${iA}=   Create List    ${iA}
+    ${resp}=  Create Individual Schedule  ${schedule_name}  ${parallel}  ${parallel}  ${lid}  ${bool[0]}  ${s_id}   individualApptSchedule=${iA}  
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
 
@@ -1200,7 +1202,6 @@ JD-TC-Confirm Blocked Appointment-7
     ${resp}=  Block Appointment For Consumer  ${s_id}  ${sch_id}  ${DAY1}  ${apptfor}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    
     ${value}=  Get Dictionary Values  ${resp.json()}   sort_keys=False
     Set Test Variable  ${apptid1}  ${value[0]}
     ${Keys}=  Get Dictionary Keys  ${resp.json()}
@@ -1242,10 +1243,30 @@ JD-TC-Confirm Blocked Appointment-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME39}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${jdconID}   ${resp.json()['id']}
+    # ${resp}=  Consumer Login  ${CUSERNAME39}  ${PASSWORD}
+    # Log   ${resp.json()}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${jdconID}   ${resp.json()['id']}
+
+    # ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
+    # Log  ${resp.json()}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[2]}
+    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${fname}
+    # Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
+
+    ${resp}=    Send Otp For Login    ${CUSERNAME39}    ${pid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${CUSERNAME39}   ${OtpPurpose['Authentication']}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    ProviderConsumer Login with token   ${CUSERNAME39}    ${pid}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings              ${resp.status_code}   200
 
     ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
     Log  ${resp.json()}
@@ -1289,8 +1310,9 @@ JD-TC-Confirm Blocked Appointment-UH1
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
 
     ${resp}=   Get Service
@@ -1318,7 +1340,7 @@ JD-TC-Confirm Blocked Appointment-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME47}
+    # # clear_appt_schedule   ${PUSERNAME47}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1445,8 +1467,9 @@ JD-TC-Confirm Blocked Appointment-UH2
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
 
     ${resp}=   Get Service
@@ -1474,7 +1497,7 @@ JD-TC-Confirm Blocked Appointment-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME47}
+    # clear_appt_schedule   ${PUSERNAME47}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1595,8 +1618,9 @@ JD-TC-Confirm Blocked Appointment-UH3
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
 
     ${resp}=   Get Service
@@ -1624,7 +1648,7 @@ JD-TC-Confirm Blocked Appointment-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME47}
+    # clear_appt_schedule   ${PUSERNAME47}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1726,8 +1750,9 @@ JD-TC-Confirm Blocked Appointment-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
 
     ${resp}=   Get Service
@@ -1755,7 +1780,7 @@ JD-TC-Confirm Blocked Appointment-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME47}
+    # clear_appt_schedule   ${PUSERNAME47}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -1902,8 +1927,9 @@ JD-TC-Confirm Blocked Appointment-UH5
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
 
     ${resp}=   Get Service
@@ -1931,7 +1957,7 @@ JD-TC-Confirm Blocked Appointment-UH5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME47}
+    # clear_appt_schedule   ${PUSERNAME47}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2048,8 +2074,9 @@ JD-TC-Confirm Blocked Appointment-UH6
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
 
     ${resp}=   Get Service
@@ -2077,7 +2104,7 @@ JD-TC-Confirm Blocked Appointment-UH6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME47}
+    # clear_appt_schedule   ${PUSERNAME47}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2192,8 +2219,9 @@ JD-TC-Confirm Blocked Appointment-UH7
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
 
     ${resp}=   Get Service
@@ -2221,7 +2249,7 @@ JD-TC-Confirm Blocked Appointment-UH7
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME47}
+    # clear_appt_schedule   ${PUSERNAME47}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2340,8 +2368,9 @@ JD-TC-Confirm Blocked Appointment-UH8
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
 
     ${resp}=   Get Service
@@ -2369,7 +2398,7 @@ JD-TC-Confirm Blocked Appointment-UH8
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME47}
+    # clear_appt_schedule   ${PUSERNAME47}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2480,8 +2509,9 @@ JD-TC-Confirm Blocked Appointment-UH9
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
 
     ${resp}=   Get Service
@@ -2509,7 +2539,7 @@ JD-TC-Confirm Blocked Appointment-UH9
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME47}
+    # clear_appt_schedule   ${PUSERNAME47}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2624,8 +2654,9 @@ JD-TC-Confirm Blocked Appointment-UH10
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
 
     ${resp}=   Get Service
@@ -2653,7 +2684,7 @@ JD-TC-Confirm Blocked Appointment-UH10
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME47}
+    # clear_appt_schedule   ${PUSERNAME47}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2762,8 +2793,9 @@ JD-TC-Confirm Blocked Appointment-UH11
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
 
     ${resp}=   Get Service
@@ -2791,7 +2823,7 @@ JD-TC-Confirm Blocked Appointment-UH11
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME47}
+    # clear_appt_schedule   ${PUSERNAME47}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -2898,8 +2930,9 @@ JD-TC-Confirm Blocked Appointment-UH12
         Should Be Equal As Strings  ${resp.status_code}  200
     END
 
-    clear_service   ${PUSERNAME47}
-    clear_location  ${PUSERNAME47}
+    # clear_service   ${PUSERNAME47}
+    # clear_location  ${PUSERNAME47}
+    clear_location_n_service  ${PUSERNAME47}
     clear_customer   ${PUSERNAME47}
 
     ${resp}=   Get Service
@@ -2927,7 +2960,7 @@ JD-TC-Confirm Blocked Appointment-UH12
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
-    clear_appt_schedule   ${PUSERNAME47}
+    # clear_appt_schedule   ${PUSERNAME47}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        

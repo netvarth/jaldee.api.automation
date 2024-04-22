@@ -1585,9 +1585,9 @@ JD-TC-Block Appointment-11
     ${eTime1}=  add_two   ${sTime1}  ${delta}
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
-    ${maxval}=  Convert To Integer   ${delta/2}
-    ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
-    ${bool1}=  Random Element  ${bool}
+    # ${maxval}=  Convert To Integer   ${delta/2}
+    # ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
+    # ${bool1}=  Random Element  ${bool}
     ${time}=   Create List    ${sTime1}
     ${iA}=   Create Dictionary  availableDate=${DAY1}  availabilityTime=${time}
     ${iA}=   Create List    ${iA}
