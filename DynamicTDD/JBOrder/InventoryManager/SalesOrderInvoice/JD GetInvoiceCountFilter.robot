@@ -26,6 +26,12 @@ Get invoice filter
     ${resp}=  GET On Session  ynw  /provider/so/invoice   params=${param}  expected_status=any
     RETURN  ${resp} 
 
+Get invoice count filter
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/invoice/count   params=${param}  expected_status=any
+    RETURN  ${resp} 
+
 *** Variables ***
 ${invalidNum}        1245
 ${invalidEma}        asd122
@@ -36,12 +42,12 @@ ${originFrom}       NONE
 @{orderStatus}      ORDER_PENDING    ORDER_RECEIVED      ORDER_CONFIRMED      ORDER_COMPLETED     ORDER_CANCELED      ORDER_DISCARDED
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
 @{deliveryStatus}     NOT_DELIVERED        DELIVERED    READY_FOR_PICKUP    READY_FOR_SHIPMENT      READY_FOR_DELIVERY      SHIPPED     IN_TRANSIST
-
+${count}        1
 *** Test Cases ***
 
 JD-TC-Get invoice filter-1
 
-    [Documentation]   Create a sales Order with Valid Details then Get invoice filter by uid param.
+    [Documentation]   Create a sales Order with Valid Details then Get invoice count filter by uid param.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
@@ -307,235 +313,100 @@ JD-TC-Get invoice filter-1
     Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 
-    ${resp}=    Get invoice filter    uid-eq=${SO_Inv}   
+    ${resp}=    Get invoice count filter    uid-eq=${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                       ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                          ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                 ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                ${SO_Cata_Encid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                              ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['taxTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['discountTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['jaldeeCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['providerCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                      ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['amountPaid']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()}     ${count}
 
 
 JD-TC-Get invoice filter-2
 
-    [Documentation]   Get invoice filter by status param.
+    [Documentation]   Get invoice count filter by status param.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get invoice filter    status-eq=${billStatus[0]}   
+    ${resp}=    Get invoice count filter    status-eq=${billStatus[0]}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                       ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                          ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                 ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                ${SO_Cata_Encid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                              ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['taxTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['discountTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['jaldeeCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['providerCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                      ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['amountPaid']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()}     ${count}
+
 
 JD-TC-Get invoice filter-3
 
-    [Documentation]   Get invoice filter by storeId param.
+    [Documentation]   Get invoice count filter by storeId param.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get invoice filter    storeId-eq=${st_id}   
+    ${resp}=    Get invoice count filter    storeId-eq=${st_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                       ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                          ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                 ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                ${SO_Cata_Encid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                              ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['taxTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['discountTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['jaldeeCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['providerCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                      ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['amountPaid']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()}     ${count}
 
 JD-TC-Get invoice filter-4
 
-    [Documentation]   Get invoice filter by locationId param.
+    [Documentation]   Get invoice count filter by locationId param.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get invoice filter    locationId-eq=${locId1}   
+    ${resp}=    Get invoice count filter    locationId-eq=${locId1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                       ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                          ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                 ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                ${SO_Cata_Encid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                              ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['taxTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['discountTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['jaldeeCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['providerCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                      ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['amountPaid']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()}     ${count}
 
 JD-TC-Get invoice filter-5
 
-    [Documentation]   Get invoice filter by orderUid param.
+    [Documentation]   Get invoice count filter by orderUid param.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get invoice filter    orderUid-eq=${SO_Uid}   
+    ${resp}=    Get invoice count filter    orderUid-eq=${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                       ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                          ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                 ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                ${SO_Cata_Encid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                              ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['taxTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['discountTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['jaldeeCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['providerCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                      ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['amountPaid']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()}     ${count}
 
 JD-TC-Get invoice filter-6
 
-    [Documentation]   Get invoice filter by providerConsumerId param.
+    [Documentation]   Get invoice count filter by providerConsumerId param.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get invoice filter    providerConsumerId-eq=${cid}   
+    ${resp}=    Get invoice count filter    providerConsumerId-eq=${cid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                       ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                          ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                 ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                ${SO_Cata_Encid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                              ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['taxTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['discountTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['jaldeeCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['providerCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                      ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['amountPaid']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()}     ${count}
 
 JD-TC-Get invoice filter-7
 
-    [Documentation]   Get invoice filter by providerConsumerName param.
+    [Documentation]   Get invoice count filter by providerConsumerName param.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get invoice filter    providerConsumerName-eq=${firstName} ${lastName}
+    ${resp}=    Get invoice count filter    providerConsumerName-eq=${firstName} ${lastName}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                       ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                          ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                 ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                ${SO_Cata_Encid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                              ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['taxTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['discountTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['jaldeeCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['providerCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                      ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['amountPaid']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()}     ${count}
 
 JD-TC-Get invoice filter-8
 
-    [Documentation]   Get invoice filter by paymentStatus param.
+    [Documentation]   Get invoice count filter by paymentStatus param.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get invoice filter    paymentStatus-eq=${paymentStatus[0]} 
+    ${resp}=    Get invoice count filter    paymentStatus-eq=${paymentStatus[0]} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()[0]['order']['uid']}                                       ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()[0]['providerConsumer']['id']}                          ${cid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['name']}                                 ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['encId']}                                ${SO_Cata_Encid}
-    Should Be Equal As Strings    ${resp.json()[0]['catalog'][0]['invMgmt']}                              ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['taxTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['discountTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['jaldeeCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['providerCouponTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['amountDue']}                                      ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['amountPaid']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()}     ${count}
