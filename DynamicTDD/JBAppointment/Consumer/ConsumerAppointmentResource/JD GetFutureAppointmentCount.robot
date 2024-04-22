@@ -601,9 +601,12 @@ JD-TC-GetFutureAppointmentCount-2
     clear_location  ${PUSERNAME183}
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${lid2}=  Create Sample Location
     Set Suite Variable   ${lid2}
@@ -1412,9 +1415,12 @@ JD-TC-GetFutureAppointmentCount-10
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${loc_id1}=  Create Sample Location
     ${resp}=   Get Location ById  ${loc_id1}

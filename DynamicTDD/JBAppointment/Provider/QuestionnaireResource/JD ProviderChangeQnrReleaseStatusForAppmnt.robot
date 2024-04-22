@@ -189,7 +189,10 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-1
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -371,7 +374,10 @@ JD-TC-ProviderChangeQnrReleaseStatusForAppt-2
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}

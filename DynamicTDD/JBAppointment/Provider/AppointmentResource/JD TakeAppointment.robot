@@ -81,9 +81,12 @@ JD-TC-Take Appointment-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME144}
     clear_location  ${PUSERNAME144}
@@ -4261,9 +4264,12 @@ JD-TC-Take Appointment-27
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME${a}}
     clear_location  ${PUSERNAME${a}}
@@ -4437,9 +4443,12 @@ JD-TC-Take Appointment-28
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME144}
     clear_location  ${PUSERNAME144}
@@ -4663,9 +4672,12 @@ JD-TC-Take Appointment-29
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME144}
     clear_location  ${PUSERNAME144}
@@ -4991,9 +5003,12 @@ JD-TC-Take Appointment-30
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME144}
     clear_location  ${PUSERNAME144}
@@ -5386,9 +5401,12 @@ JD-TC-Take Appointment-33
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     Run Keyword If  ${resp.json()['enableToday']}==${bool[0]}   Enable Today Appointment
 
     clear_service   ${ml_pro}
@@ -5871,9 +5889,12 @@ JD-TC-Take Appointment-36
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME144}
     clear_location  ${PUSERNAME144}
@@ -6035,9 +6056,12 @@ JD-TC-Take Appointment-37
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${lid}=  Create Sample Location
 
@@ -6307,9 +6331,12 @@ JD-TC-Take Appointment-38
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${lid}=  Create Sample Location
 
@@ -6607,9 +6634,12 @@ JD-TC-Take Appointment-39
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME144}
     clear_location  ${PUSERNAME144}
@@ -6976,9 +7006,12 @@ JD-TC-Take Appointment-UH1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${lid}=  Create Sample Location
     ${resp}=   Get Location ById  ${lid}
@@ -8980,9 +9013,12 @@ JD-TC-Take Appointment-UH25
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME144}
     clear_location  ${PUSERNAME144}
@@ -9165,9 +9201,12 @@ JD-TC-Take Appointment-UH26
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME144}
     clear_location  ${PUSERNAME144}
@@ -9297,9 +9336,12 @@ JD-TC-Take Appointment-UH28
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME144}
     clear_location  ${PUSERNAME144}
@@ -9663,9 +9705,12 @@ JD-TC-Take Appointment-40
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME144}
     clear_location  ${PUSERNAME144}
@@ -9799,9 +9844,12 @@ JD-TC-Take Appointment-41
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME144}
     clear_location  ${PUSERNAME144}
@@ -10117,9 +10165,12 @@ JD-TC-Take Appointment-UH30
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     ${lid}=  Create Sample Location
 
@@ -10638,9 +10689,12 @@ JD-TC-Take Appointment-45
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME144}
     clear_location  ${PUSERNAME144}
@@ -10835,9 +10889,12 @@ JD-TC-Take Appointment-UH32
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME144}
     clear_location  ${PUSERNAME144}
@@ -11056,9 +11113,12 @@ JD-TC-Take Appointment-46
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME144}
     clear_location  ${PUSERNAME144}

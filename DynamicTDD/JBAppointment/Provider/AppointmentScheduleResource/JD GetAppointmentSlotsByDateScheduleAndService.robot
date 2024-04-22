@@ -51,9 +51,12 @@ JD-TC-GetSlots By Date and service -1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME185}
     clear_location  ${PUSERNAME185}
@@ -2394,9 +2397,12 @@ JD-TC-GetSlots By Date and service -11
     END
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
@@ -2672,9 +2678,12 @@ JD-TC-GetSlots By Date and service -12
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
@@ -2889,9 +2898,12 @@ JD-TC-GetSlots By Date and service -13
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
@@ -3103,9 +3115,12 @@ JD-TC-GetSlots By Date and service -14
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
    ${resp}=   Get Account Payment Settings
     Log  ${resp.content}
@@ -3435,9 +3450,12 @@ JD-TC-GetSlots By Date and service -15
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
@@ -3754,9 +3772,12 @@ JD-TC-GetSlots By Date and service -16
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
@@ -4060,9 +4081,12 @@ JD-TC-GetSlots By Date and service -17
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
@@ -4342,9 +4366,12 @@ JD-TC-GetSlots By Date and service -18
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
@@ -4565,9 +4592,12 @@ JD-TC-GetSlots By Date and service -19
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
@@ -4837,9 +4867,12 @@ JD-TC-GetSlots By Date and service -20
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
@@ -5069,9 +5102,12 @@ JD-TC-GetSlots By Date and service -21
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
@@ -5353,9 +5389,12 @@ JD-TC-GetSlots By Date and service -22
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
@@ -5626,9 +5665,12 @@ JD-TC-GetSlots By Date and service -UH8
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
@@ -5746,9 +5788,12 @@ JD-TC-GetSlots By Date and service -UH9
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME180}
     clear_location  ${PUSERNAME180}
@@ -5962,9 +6007,12 @@ JD-TC-Take Appointment-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
     clear_service   ${PUSERNAME186}
     clear_location  ${PUSERNAME186}

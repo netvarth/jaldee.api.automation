@@ -54,9 +54,12 @@ JD-TC-AddMultipleAppointmentLabel-1
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -295,9 +298,12 @@ JD-TC-AddMultipleAppointmentLabel-2
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -596,9 +602,12 @@ JD-TC-AddMultipleAppointmentLabel-3
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -731,9 +740,12 @@ JD-TC-AddMultipleAppointmentLabel-4
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -915,9 +927,12 @@ JD-TC-AddMultipleAppointmentLabel-5
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -1118,9 +1133,12 @@ JD-TC-AddMultipleAppointmentLabel-6
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -1328,9 +1346,12 @@ JD-TC-AddMultipleAppointmentLabel-7
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -1517,9 +1538,12 @@ JD-TC-AddMultipleAppointmentLabel-8
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -1743,9 +1767,12 @@ JD-TC-AddMultipleAppointmentLabel-9
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -2034,9 +2061,12 @@ JD-TC-AddMultipleAppointmentLabel-10
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -2255,9 +2285,12 @@ JD-TC-AddMultipleAppointmentLabel-11
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -2453,9 +2486,12 @@ JD-TC-AddMultipleAppointmentLabel-12
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -2651,9 +2687,12 @@ JD-TC-AddMultipleAppointmentLabel-13
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -2799,9 +2838,12 @@ JD-TC-AddMultipleAppointmentLabel-14
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -2985,9 +3027,12 @@ JD-TC-AddMultipleAppointmentLabel-15
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}
@@ -4598,9 +4643,12 @@ JD-TC-AddMultipleAppointmentLabel-UH13
     Should Be Equal As Strings  ${resp.json()['onlinePresence']}   ${bool[1]}  
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log   ${resp.json()}

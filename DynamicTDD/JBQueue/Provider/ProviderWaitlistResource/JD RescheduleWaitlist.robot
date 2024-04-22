@@ -661,9 +661,12 @@ JD-TC-Reschedule Waitlist-4
     Set Test Variable  ${uniqueId}  ${resp.json()['uniqueId']}
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
 
    ${resp}=   Get Account Payment Settings
     Log  ${resp.content}

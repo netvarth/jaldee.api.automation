@@ -179,7 +179,10 @@ JD-TC-SubmitQuestionnaireForAppointment-1
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -352,7 +355,10 @@ JD-TC-SubmitQuestionnaireForAppointment-2
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -524,7 +530,10 @@ JD-TC-SubmitQuestionnaireForAppointment-3
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -704,7 +713,10 @@ JD-TC-SubmitQuestionnaireForAppointment-4
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -1061,7 +1073,10 @@ JD-TC-SubmitQuestionnaireForAppointment-UH1
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -1263,7 +1278,10 @@ JD-TC-SubmitQuestionnaireForAppointment-UH2
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -1423,7 +1441,10 @@ JD-TC-SubmitQuestionnaireForAppointment-UH3
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -1596,7 +1617,10 @@ JD-TC-SubmitQuestionnaireForAppointment-UH4
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -1753,7 +1777,10 @@ JD-TC-SubmitQuestionnaireForAppointment-UH5
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
@@ -1970,7 +1997,10 @@ JD-TC-SubmitQuestionnaireForAppointment-6
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment 
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END 
 
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}

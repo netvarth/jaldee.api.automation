@@ -106,9 +106,12 @@ JD-TC-Get Appmt Schedule By ServiceId and LocationId-1
     Set Suite Variable   ${accId}
 
     ${resp}=   Get Appointment Settings
-    Log   ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Run Keyword If  ${resp.json()['enableAppt']}==${bool[0]}   Enable Appointment
+    IF  ${resp.json()['enableAppt']}==${bool[0]}   
+        ${resp}=   Enable Appointment 
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
     
     
     ${list}=  Create List  1  2  3  4  5  6  7
