@@ -487,16 +487,44 @@ JD-TC-CreatePurchase-1
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
     ${expiryDate}=  db.add_timezone_date  ${tz}  50
-    ${invoiceDate}=  db.add_timezone_date  ${tz}  1
-    ${salesRate}=   Evaluate        ${amount} / ${convertionQty}
-    ${rate}=        Evaluate        int(${salesRate})
-    ${mrp}=         Random Int      min=${rate}  max=9999
-    ${batchNo}=     Random Int      min=1  max=9999
-    ${invoiceReferenceNo}=          Random Int  min=1  max=999
-    ${purchaseNote}=                FakerLibrary.Sentence
-    ${roundOff}=                    Random Int  min=1  max=99
+    Set Suite Variable          ${expiryDate}
+
+    ${sRate}=                   Evaluate                 ${amount} / ${convertionQty}
+    ${salesRate}=               Evaluate                round(${sRate}, 2)
+    ${totalAmount}=             Evaluate                ${amount} * ${quantity}
+    ${invoiceDate}=             db.add_timezone_date    ${tz}  1
+    ${rate}=                    Evaluate                int(${salesRate})
+    ${mrp}=                     Random Int              min=${rate}  max=9999
+    ${mrp}=                     Convert To Number  ${mrp}  1
+    ${batchNo}=                 Random Int              min=1  max=9999
+    ${invoiceReferenceNo}=      Random Int              min=1  max=999
+    ${purchaseNote}=            FakerLibrary.Sentence
+    ${roundOff}=                Random Int              min=1  max=99
+    ${totalDiscountAmount}=     Evaluate                ${totalAmount} * ${discountPercentage} / 100
+    ${totaltaxable}=            Evaluate                ${totalAmount} - ${totalDiscountAmount}
+    ${totaltaxableamount}=      Evaluate                round(${totaltaxable}, 2)
+    ${tcgst}=                   Evaluate                ${totaltaxableamount} * ${cgst} / 100
+    ${totalcgst}=               Evaluate                round(${tcgst}, 2)
+    ${tsgst}=                   Evaluate                ${totaltaxableamount} * ${sgst} / 100
+    ${totalSgst}=               Evaluate                round(${tsgst}, 2)
+    ${taxAmount}=               Evaluate                round(${taxAmount}, 2)
+    Set Suite Variable          ${invoiceReferenceNo}
+    Set Suite Variable          ${purchaseNote}
+    Set Suite Variable          ${invoiceDate}
+    Set Suite Variable          ${totaltaxableamount}
+    Set Suite Variable          ${totalDiscountAmount}
+    Set Suite Variable          ${totalSgst}
+    Set Suite Variable          ${totalcgst}
+    Set Suite Variable          ${totaltaxable}
+    Set Suite Variable          ${totalAmount}
+    Set Suite Variable          ${roundOff}
+    Set Suite Variable          ${taxAmount}
+    Set Suite Variable          ${mrp}
+    Set Suite Variable          ${salesRate}
+    Set Suite Variable          ${batchNo}
 
     ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
+    Set Suite Variable              ${purchaseItemDtoList1}
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
     Log   ${resp.content}
@@ -505,3 +533,17 @@ JD-TC-CreatePurchase-1
     ${resp}=  Get Inventoryitem      ${ic_id}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-CreatePurchase-2
+
+    [Documentation]  Create Purchase
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200

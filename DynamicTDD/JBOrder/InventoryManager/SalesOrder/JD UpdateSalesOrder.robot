@@ -29,13 +29,26 @@ ${originFrom}       NONE
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
 @{deliveryStatus}     NOT_DELIVERED        DELIVERED    READY_FOR_PICKUP    READY_FOR_SHIPMENT      READY_FOR_DELIVERY      SHIPPED     IN_TRANSIST
 
+*** Keywords ***
+Update Sales Order
+
+    [Arguments]   ${uid}     ${notes}    ${notesForCustomer}   ${billingAddress}   ${homeDeliveryAddress}   ${contactInfo}
+
+    ${data}=  Create Dictionary   notes=${notes}    notesForCustomer=${notesForCustomer}     billingAddress=${billingAddress}    homeDeliveryAddress=${homeDeliveryAddress}    contactInfo=${contactInfo}
+    # ${data}=   Create List    ${item} 
+    # ${data}=  Create Dictionary        items=${items}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/sorder/${uid}   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
 *** Test Cases ***
 
 JD-TC-Update Sales Order-1
 
-    [Documentation]   Create a sales Order with Valid Details then update order quantity(inventory manager is false).
+    [Documentation]   Create a sales Order with Valid Details then Update sales order.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -64,11 +77,11 @@ JD-TC-Update Sales Order-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME18}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME17}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -99,7 +112,7 @@ JD-TC-Update Sales Order-1
 
     ${Name}=    FakerLibrary.last name
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
-    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
+    Set Suite Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
     ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
@@ -143,7 +156,6 @@ JD-TC-Update Sales Order-1
 # -------------------------------- Create SalesOrder Catalog Item-invMgmt False -----------------------------------
 
     ${price}=    Random Int  min=2   max=40
-    Set Suite Variable  ${price}
     ${invCatItem}=     Create Dictionary       encId=${itemEncId2}
     ${Item_details}=  Create Dictionary        spItem=${invCatItem}    price=${price}   
 
@@ -196,7 +208,7 @@ JD-TC-Update Sales Order-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -260,41 +272,89 @@ JD-TC-Update Sales Order-1
     Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 # -----------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------ Update Sales Order --------------------------------------------------------
 
-# ------------------------------------ Update order status --------------------------------------------------
+    ${note}=  FakerLibrary.word
+    Set Suite Variable  ${note}
+    ${notesForCustomer}=  FakerLibrary.word
+    Set Suite Variable  ${notesForCustomer}
+    ${firstName}=  FakerLibrary.name
+    Set Suite Variable  ${firstName}
+    ${lastName}=  FakerLibrary.last_name
+    Set Suite Variable  ${lastName}
+ 
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    Set Suite Variable  ${address}
+    Set Suite Variable  ${postcode}
+    Set Suite Variable  ${city}
 
-    ${quantity}=    Random Int  min=20   max=50
 
-    ${netTotal}=  Evaluate  ${price}*${quantity}
-    ${netTotal}=  Convert To Number  ${netTotal}   1
 
-    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
+    ${bill_Phone}=   Create Dictionary   countryCode=${countryCodes[0]}           number=${primaryMobileNo}
+    Set Suite Variable  ${bill_Phone}
+
+    ${billingAddress}=   Create Dictionary    phone=${bill_Phone}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
+    Set Suite Variable  ${billingAddress}
+
+    ${homeDeliveryAddress}=   Create Dictionary    phone=${bill_Phone}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
+    Set Suite Variable  ${homeDeliveryAddress}
+
+    ${contactInfo}=   Create Dictionary    phone=${bill_Phone}         email=${email_id}      
+
+    ${resp}=    Update Sales Order    ${SO_Uid}    ${note}   ${notesForCustomer}    ${billingAddress}    ${homeDeliveryAddress}     ${contactInfo}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+# ---------------------------------------------------------------------------------------------------------------------------
 
     ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
-    Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['notes']}                                       ${note}
+    Should Be Equal As Strings    ${resp.json()['notesForCustomer']}                                  ${notesForCustomer}
+
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['firstName']}                                   ${firstName}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['lastName']}                                  ${lastName}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['email']}                                  ${email_id}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['address']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['city']}                                  ${city}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['postalCode']}                                  ${postcode}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['landMark']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['phone']['countryCode']}                                  ${countryCodes[0]} 
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['phone']['number']}                                  ${primaryMobileNo} 
+
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['firstName']}                                   ${firstName}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['lastName']}                                  ${lastName}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['email']}                                  ${email_id}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['address']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['city']}                                  ${city}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['postalCode']}                                  ${postcode}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['landMark']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['phone']['countryCode']}                                  ${countryCodes[0]} 
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['phone']['number']}                                  ${primaryMobileNo} 
+
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['email']}                                  ${email_id}
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['countryCode']}                                  ${countryCodes[0]} 
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                                  ${primaryMobileNo} 
 
 JD-TC-Update Sales Order-2
 
-    [Documentation]    update sales order Item Encid.
+    [Documentation]    Update sales order contactinfo number.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${quantity}=    Random Int  min=20   max=50
+    ${primaryMobileNo1}    Generate random string    10    123456789
+    Set Suite Variable  ${primaryMobileNo1}
 
-    ${netTotal}=  Evaluate  ${price}*${quantity}
-    ${netTotal}=  Convert To Number  ${netTotal}   1
+    ${bill_Phone1}=   Create Dictionary   countryCode=${countryCodes[0]}           number=${primaryMobileNo1}
 
-    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds2}    ${quantity}
+    ${contactInfo1}=   Create Dictionary    phone=${bill_Phone1}         email=${email_id}      
+    Set Suite Variable  ${contactInfo1}
+
+    ${resp}=    Update Sales Order    ${SO_Uid}    ${note}   ${notesForCustomer}    ${billingAddress}    ${homeDeliveryAddress}     ${contactInfo1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -302,82 +362,49 @@ JD-TC-Update Sales Order-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
-    Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['notes']}                                       ${note}
+    Should Be Equal As Strings    ${resp.json()['notesForCustomer']}                                  ${notesForCustomer}
+
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['firstName']}                                   ${firstName}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['lastName']}                                  ${lastName}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['email']}                                  ${email_id}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['address']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['city']}                                  ${city}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['postalCode']}                                  ${postcode}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['landMark']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['phone']['countryCode']}                                  ${countryCodes[0]} 
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['phone']['number']}                                  ${primaryMobileNo} 
+
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['firstName']}                                   ${firstName}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['lastName']}                                  ${lastName}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['email']}                                  ${email_id}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['address']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['city']}                                  ${city}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['postalCode']}                                  ${postcode}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['landMark']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['phone']['countryCode']}                                  ${countryCodes[0]} 
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['phone']['number']}                                  ${primaryMobileNo} 
+
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['email']}                                  ${email_id}
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['countryCode']}                                  ${countryCodes[0]} 
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                                  ${primaryMobileNo1} 
 
 JD-TC-Update Sales Order-3
 
-    [Documentation]    Create a sales Order with Valid Details then update order quantity(inventory manager is True).
+    [Documentation]    Update sales order homeDeliveryAddress number.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Name}=    FakerLibrary.first name
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${inv_cat_encid}  ${resp.json()}
-    ${inv_cat_encid_List}=  Create List  ${inv_cat_encid}
+    # ${primaryMobileNo1}    Generate random string    10    123456789
 
-    ${displayName}=     FakerLibrary.name
+    ${bill_Phone1}=   Create Dictionary   countryCode=${countryCodes[0]}           number=${primaryMobileNo1}
 
-    ${resp}=    Create Item Inventory  ${displayName}    
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${itemEncId1}  ${resp.json()}
+    ${homeDeliveryAddress1}=   Create Dictionary    phone=${bill_Phone1}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
+    Set Suite Variable  ${homeDeliveryAddress1}
 
-    ${resp}=   Create Inventory Catalog Item  ${inv_cat_encid}   ${itemEncId1}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${Inv_Cata_Item_Encid}  ${resp.json()[0]}
-
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid_List}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${SO_Cata_Encid1}  ${resp.json()}
-
-    ${price}=    Random Int  min=2   max=40
-
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${SO_Cata_Encid1}    ${boolean[1]}     ${Inv_Cata_Item_Encid}     ${price}    ${boolean[1]}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${SO_itemEncId1}  ${resp.json()[0]}
-
-    ${quantity}=    Random Int  min=2   max=5
-
-    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid1}   
-    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
-    Set Suite Variable  ${SO_Cata_Encid_List}
-
-    ${store}=  Create Dictionary   encId=${store_id}  
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncId1}   ${quantity}     store=${store}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable  ${SO_Uid}  ${resp.json()}
-
-    ${netTotal}=  Evaluate  ${price}*${quantity}
-    ${netTotal}=  Convert To Number  ${netTotal}   1
-
-
-    ${resp}=    Get Sales Order    ${SO_Uid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
-    Should Be Equal As Strings    ${resp.json()['store']['name']}                                   ${Name}
-    Should Be Equal As Strings    ${resp.json()['store']['encId']}                                  ${store_id}
-
-    ${quantity}=    Random Int  min=20   max=50
-
-    ${netTotal}=  Evaluate  ${price}*${quantity}
-    ${netTotal}=  Convert To Number  ${netTotal}   1
-
-    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncId1}    ${quantity}
+    ${resp}=    Update Sales Order    ${SO_Uid}    ${note}   ${notesForCustomer}    ${billingAddress}    ${homeDeliveryAddress1}     ${contactInfo1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -385,82 +412,77 @@ JD-TC-Update Sales Order-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
-    Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['notes']}                                       ${note}
+    Should Be Equal As Strings    ${resp.json()['notesForCustomer']}                                  ${notesForCustomer}
 
-    
-JD-TC-Update Sales Order-UH1
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['firstName']}                                   ${firstName}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['lastName']}                                  ${lastName}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['email']}                                  ${email_id}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['address']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['city']}                                  ${city}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['postalCode']}                                  ${postcode}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['landMark']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['phone']['countryCode']}                                  ${countryCodes[0]} 
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['phone']['number']}                                  ${primaryMobileNo} 
 
-    [Documentation]    update sales order quantity as Zero.
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['firstName']}                                   ${firstName}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['lastName']}                                  ${lastName}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['email']}                                  ${email_id}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['address']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['city']}                                  ${city}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['postalCode']}                                  ${postcode}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['landMark']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['phone']['countryCode']}                                  ${countryCodes[0]} 
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['phone']['number']}                                  ${primaryMobileNo1} 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['email']}                                  ${email_id}
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['countryCode']}                                  ${countryCodes[0]} 
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                                  ${primaryMobileNo1} 
+
+JD-TC-Update Sales Order-4
+
+    [Documentation]    Update sales order billingAddress number.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${quantity}=    Random Int  min=0   max=0
+    # ${primaryMobileNo1}    Generate random string    10    123456789
 
+    ${bill_Phone1}=   Create Dictionary   countryCode=${countryCodes[0]}           number=${primaryMobileNo1}
+    ${billingAddress1}=   Create Dictionary    phone=${bill_Phone1}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
 
-    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
+    ${resp}=    Update Sales Order    ${SO_Uid}    ${note}   ${notesForCustomer}    ${billingAddress1}    ${homeDeliveryAddress1}     ${contactInfo1}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${QUANTITY_REQUIRED}
+    Should Be Equal As Strings    ${resp.status_code}   200
 
-JD-TC-Update Sales Order-UH2
-
-    [Documentation]    update sales order with EMPTY Sales order Item Encid.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME18}  ${PASSWORD}
+    ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['notes']}                                       ${note}
+    Should Be Equal As Strings    ${resp.json()['notesForCustomer']}                                  ${notesForCustomer}
 
-    ${quantity}=    Random Int  min=4   max=50
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['firstName']}                                   ${firstName}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['lastName']}                                  ${lastName}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['email']}                                  ${email_id}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['address']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['city']}                                  ${city}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['postalCode']}                                  ${postcode}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['landMark']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['phone']['countryCode']}                                  ${countryCodes[0]} 
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['phone']['number']}                                  ${primaryMobileNo1} 
 
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['firstName']}                                   ${firstName}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['lastName']}                                  ${lastName}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['email']}                                  ${email_id}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['address']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['city']}                                  ${city}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['postalCode']}                                  ${postcode}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['landMark']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['phone']['countryCode']}                                  ${countryCodes[0]} 
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['phone']['number']}                                  ${primaryMobileNo1} 
 
-    ${resp}=    Update Order Items    ${SO_Uid}     ${EMPTY}    ${quantity}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_ITEMID}
-
-
-JD-TC-Update Sales Order-UH3
-
-    [Documentation]    Another provider try to update sales order quantity.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${quantity}=    Random Int  min=4   max=50
-
-
-    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   422
-    Should Be Equal As Strings    ${resp.json()}   ${INVALID_ORDER_ID}
-
-JD-TC-Update Sales Order-UH4
-
-    [Documentation]  Update sales odrer without login
-
-    ${quantity}=    Random Int  min=4   max=50
-
-    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
-
-
-JD-TC-Update Sales Order-UH5
-
-    [Documentation]  Update sales order using sa login
-    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${quantity}=    Random Int  min=4   max=50
-    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
-    Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  419
-    Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['email']}                                  ${email_id}
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['countryCode']}                                  ${countryCodes[0]} 
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                                  ${primaryMobileNo1} 

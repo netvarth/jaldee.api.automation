@@ -301,7 +301,7 @@ JD-TC-Create Stock Adjustment-UH7
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}    ${data3} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${Invalid_Catalog_id}
+    Should Be Equal As Strings   ${resp.json()}   ${CAP_Invalid_inventory_catalog_Id}
 
 
 JD-TC-Create Stock Adjustment-UH8
