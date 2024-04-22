@@ -597,6 +597,7 @@ JD-TC-Update cash payment- finance invoice level-3
 
     ${resp}=   Get Category With Filter  categoryType-eq=${categoryType[3]}  
     Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
 
     ${resp}=  ProviderLogout
@@ -670,6 +671,14 @@ JD-TC-Update cash payment- finance invoice level-3
     Set Suite Variable   ${payref}   ${resp.json()['paymentRefId']}
 
     sleep   02s
+
+    ${resp}=  Get Payment Details  account-eq=${pid2}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[1]['amount']}   ${min_pre1}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[1]['accountId']}   ${pid2}
+    # Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['amount']}   ${bal_amt}
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()[0]['accountId']}   ${pid2}
 
     ${resp}=  Encrypted Provider Login  ${PUSERPH2}  ${PASSWORD}
     Log  ${resp.json()}
