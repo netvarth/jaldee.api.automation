@@ -834,19 +834,35 @@ JD-TC-UpdatePurchaseStatus-1
     Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
     Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${name}  ${boolean[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}   200
-    Set Suite Variable              ${inv_order_encid}    ${resp.json()}
-
+    # ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${name}  ${boolean[0]}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings      ${resp.status_code}   200
+    # Set Suite Variable              ${inv_order_encid}    ${resp.json()}
+    ${inv_cat_encid_List}=  Create List  ${encid}
     ${price}=    Random Int  min=2   max=40
     ${price}=  Convert To Number  ${price}    1
     Set Suite Variable  ${price}
+    # ${resp}=   Create Inventory Catalog Item  ${inv_cat_encid}   ${itemEncId1}  
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${Inv_Cata_Item_Encid}  ${resp.json()[0]}
 
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${inv_order_encid}     ${itemEncId1}     ${price}         
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid_List}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${inv_order_encid}  ${resp.json()}
+
+
+
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${inv_order_encid}    ${boolean[1]}     ${ic_id}     ${price}    ${boolean[1]}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
+
+    # ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${inv_order_encid}     ${itemEncId1}     ${price}         
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
     ${expiryDate}=  db.add_timezone_date  ${tz}  50
 
@@ -911,7 +927,9 @@ JD-TC-UpdatePurchaseStatus-1
     ${encid}=  Create Dictionary          encId=${batch_encid} 
 
     ${Name1}=    FakerLibrary.last name
-    ${catalog_details}=  Create Dictionary          name=${Name1}   inventoryItemBatch=${encid}   
+    ${price1}=    Random Int  min=2   max=40
+    ${price1}=  Convert To Number  ${price1}    1
+    ${catalog_details}=  Create Dictionary          name=${Name1}  price=${price1}   inventoryItemBatch=${encid}   
 
     ${resp}=   Create Catalog Item Batch-invMgmt True   ${SO_itemEncIds}    ${catalog_details}  
     Log   ${resp.content}

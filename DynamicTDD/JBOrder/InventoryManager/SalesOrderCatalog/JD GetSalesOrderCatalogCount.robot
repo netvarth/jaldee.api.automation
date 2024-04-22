@@ -221,12 +221,12 @@ JD-TC-Get SalesOrder Catalog Count-5
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${sa_catlog_id2}  ${resp.json()}
 
-    ${resp}=  Get SalesOrder Catalog List  store::id-eq=${store_id1}   
+    ${resp}=  Get SalesOrder Catalog List  store-eq=${store_id1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${count}=  Get Length  ${resp.json()}
 
-    ${resp}=  Get SalesOrder Catalog Count    store::id-eq=${store_id1}   
+    ${resp}=  Get SalesOrder Catalog Count    store-eq=${store_id1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}    ${count}
