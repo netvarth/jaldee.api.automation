@@ -618,6 +618,10 @@ JD-TC-UpdatePurchaseStatus-6
     Should Be Equal As Strings      ${resp.status_code}     422
     Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_IN_DRAFT_STATUS}
 
+    ${resp}=  Get Inventoryitem      ${ic_id}         
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
 
 JD-TC-UpdatePurchaseStatus-7
 

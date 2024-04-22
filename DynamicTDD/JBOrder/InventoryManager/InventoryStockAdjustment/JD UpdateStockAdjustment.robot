@@ -100,6 +100,7 @@ JD-TC-Update Stock Adjustment-1
     END
 
     ${Name}=    FakerLibrary.last name
+    Set Suite Variable  ${Name}  
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
@@ -155,6 +156,7 @@ JD-TC-Update Stock Adjustment-1
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
+    Set Suite Variable  ${quantity} 
     ${data}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity}    
     Set Suite Variable  ${data}  
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data} 

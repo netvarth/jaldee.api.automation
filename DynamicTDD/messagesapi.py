@@ -2306,6 +2306,7 @@ INVALID_REMARK_NAME="Invalid Remark name "
 INVALID_REMARK_CODE="Invalid Remark code"
 INVALID_REMARKS_ID="Invalid remark Id"
 INVALID_QUANTITY="Invalid Quantity"
+CAP_Invalid_inventory_catalog_Id="Invalid Inventory Catalog Id"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"
