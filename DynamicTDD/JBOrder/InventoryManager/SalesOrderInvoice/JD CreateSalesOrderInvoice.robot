@@ -29,15 +29,6 @@ ${originFrom}       NONE
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
 @{deliveryStatus}     NOT_DELIVERED        DELIVERED    READY_FOR_PICKUP    READY_FOR_SHIPMENT      READY_FOR_DELIVERY      SHIPPED     IN_TRANSIST
 
-*** Keywords ***
-
-Create Sales Order Invoice
-
-    [Arguments]  ${orderuid}   
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/sorder/${orderuid}/invoice   expected_status=any
-    RETURN  ${resp} 
-
 *** Test Cases ***
 
 JD-TC-Create Sales Order Invoice-1
@@ -58,7 +49,7 @@ JD-TC-Create Sales Order Invoice-1
 # --------------------- Create Store Type from sa side -------------------------------
     ${TypeName}=    FakerLibrary.name
     Set Suite Variable  ${TypeName}
-    sleep  02s
+    sleep  03s
 
     ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
     Log   ${resp.content}

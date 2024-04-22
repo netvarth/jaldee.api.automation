@@ -31,11 +31,11 @@ ${originFrom}       NONE
 
 *** Test Cases ***
 
-JD-TC-Get Sales Order Invoice-1
+JD-TC-Apply SalesOrder discount-1
 
-    [Documentation]   Create a sales Order with Valid Details then Genarate sales order invoice and verify.
+    [Documentation]   Create a sales Order with Valid Details and Genarate then apply discount(Percentage).
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -64,11 +64,11 @@ JD-TC-Get Sales Order Invoice-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME24}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME28}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -195,7 +195,7 @@ JD-TC-Get Sales Order Invoice-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -219,6 +219,7 @@ JD-TC-Get Sales Order Invoice-1
     ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
     Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
@@ -291,3 +292,49 @@ JD-TC-Get Sales Order Invoice-1
     Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 
+# --------------------------------------------- Apply discount For SalesOrder -----------------------------------------------
+
+    ${discount1}=     FakerLibrary.word
+    ${desc}=   FakerLibrary.word
+    ${discountprice1}=     Random Int   min=50   max=100
+    ${discountprice}=  Convert To Number  ${discountprice1}  1
+    Set Suite Variable   ${discountprice}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice}   ${calctype[0]}  ${disctype[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${discountId}   ${resp.json()}   
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${discountValue1}=     Random Int   min=50   max=100
+    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+
+    ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId}   ${privateNote}    ${displayNote}   ${discountValue1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${bal_Total}=  Evaluate  ${netTotal}-${discountValue1}
+    ${bal_Total}=  Convert To Number  ${bal_Total}   1
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       ${discountValue1}
+
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${bal_Total}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${bal_Total}
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0

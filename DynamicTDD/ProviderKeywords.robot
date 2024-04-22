@@ -14842,3 +14842,52 @@ Get Item Stock adjust Details Count Filter
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/inventory/stockadjust/item/count  params=${param}  expected_status=any
     RETURN  ${resp} 
+
+
+Create Sales Order Invoice
+
+    [Arguments]  ${orderuid}   
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/sorder/${orderuid}/invoice   expected_status=any
+    RETURN  ${resp} 
+
+Get Invoice By Invoice Uid
+
+    [Arguments]  ${invoiceuid}   
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/invoice/${invoiceuid}   expected_status=any
+    RETURN  ${resp} 
+
+Get Invoice By Order Uid
+
+    [Arguments]  ${orderUid}   
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/invoice/order/${orderUid}   expected_status=any
+    RETURN  ${resp} 
+
+Make Cash Payment For SalesOrder
+
+    [Arguments]  ${SO_uuid}     ${acceptPaymentMode}    ${amount}     ${paymentNote}
+    ${data}=  Create Dictionary    uuid=${SO_uuid}   acceptPaymentBy=${acceptPaymentMode}   amount=${amount}     paymentNote=${paymentNote}    
+    ${data}=  json.dumps  ${data}  
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/so/payment/acceptPayment        data=${data}     expected_status=any
+    RETURN  ${resp} 
+
+Apply discount For SalesOrder
+
+    [Arguments]  ${SO_uid}     ${id}    ${privateNote}     ${displayNote}   ${discountValue}
+    ${data}=  Create Dictionary    id=${id}   privateNote=${privateNote}   displayNote=${displayNote}     discountValue=${discountValue}    
+    ${data}=  json.dumps  ${data}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/sorder/${SO_uid}/apply/discount        data=${data}     expected_status=any
+    RETURN  ${resp} 
+
+Remove SalesOrder discount 
+
+    [Arguments]  ${SO_uid}     ${id}      ${discountValue}
+    ${data}=  Create Dictionary    id=${id}    discountValue=${discountValue}    
+    ${data}=  json.dumps  ${data}  
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/sorder/${SO_uid}/apply/discount        data=${data}     expected_status=any
+    RETURN  ${resp} 

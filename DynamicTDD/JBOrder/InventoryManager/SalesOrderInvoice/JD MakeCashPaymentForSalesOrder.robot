@@ -31,11 +31,11 @@ ${originFrom}       NONE
 
 *** Test Cases ***
 
-JD-TC-Get Sales Order Invoice-1
+JD-TC-Make Cash Payment For Sales Order-1
 
-    [Documentation]   Create a sales Order with Valid Details then Genarate sales order invoice and verify.
+    [Documentation]   Create a sales Order with Valid Details then Make cash payment.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -64,11 +64,11 @@ JD-TC-Get Sales Order Invoice-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME24}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME20}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -195,7 +195,7 @@ JD-TC-Get Sales Order Invoice-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -219,6 +219,7 @@ JD-TC-Get Sales Order Invoice-1
     ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
     Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
@@ -291,3 +292,19 @@ JD-TC-Get Sales Order Invoice-1
     Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 
+# ------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Make Cash Payment For SalesOrder -----------------------------------------------
+
+    ${note}=  FakerLibrary.name
+
+    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv}   ${acceptPaymentBy[0]}	${netTotal}     ${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       ${netTotal}
