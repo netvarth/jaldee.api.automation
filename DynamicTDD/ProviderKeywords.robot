@@ -4030,7 +4030,7 @@ Individual Schedule
     [Arguments]  ${name}   ${parallel}   ${consumerParallelServing}   ${loc}   ${batch}  @{vargs}   &{kwargs}
 
     ${location}=  Create Dictionary  id=${loc}
-    ${data}=  Create Dictionary  name=${name}     parallelServing=${parallel}    consumerParallelServing=${consumerParallelServing}  location=${location}    batchEnable=${batch}   
+    ${data}=  Create Dictionary  scheduleType=individual  name=${name}     parallelServing=${parallel}    consumerParallelServing=${consumerParallelServing}  location=${location}    batchEnable=${batch}   
     ${len}=  Get Length  ${vargs}
     ${services}=  Create List  
     FOR    ${index}    IN RANGE  0  ${len}
@@ -4043,8 +4043,9 @@ Individual Schedule
         Set To Dictionary 	${data} 	${key}=${value}
     END 
     RETURN  ${data}
+
 Create Individual Schedule
-    [Arguments]  ${name}   ${parallel}   ${consumerParallelServing}    ${loc}    ${batch}  @{vargs}   &{kwargs}
+    [Arguments]  ${name}   ${parallel}   ${consumerParallelServing}   ${loc}   ${batch}  @{vargs}   &{kwargs}
     ${data}=  Individual Schedule  ${name}   ${parallel}    ${consumerParallelServing}   ${loc}    ${batch}  @{vargs}     &{kwargs}
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary 	${data} 	${key}=${value}
