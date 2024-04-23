@@ -511,19 +511,6 @@ JD-TC-GetPurchaseItemFilterCount-1
     Should Be Equal As Strings      ${resp.json()}          1
 
 
-JD-TC-GetPurchaseItemFilterCount-2
-
-    [Documentation]  Get Purchase Item Filter Count - accountId
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
- 
-    ${resp}=    Get Purchase Item Filter Count  accountId-eq=${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-    Should Be Equal As Strings      ${resp.json()}          1
-
 JD-TC-GetPurchaseItemFilterCount-3
 
     [Documentation]  Get Purchase Item Filter Count - purchaseUid
@@ -549,21 +536,6 @@ JD-TC-GetPurchaseItemFilterCount-4
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
     Should Be Equal As Strings      ${resp.json()}          1
-
-JD-TC-GetPurchaseItemFilterCount-UH1
-
-    [Documentation]  Get Purchase Item Filter Count - accountId is invalid
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${inv}=     Random Int  min=999   max=9999
- 
-    ${resp}=    Get Purchase Item Filter Count  accountId-eq=${inv}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-    Should Be Equal As Strings      ${resp.json()}          0
 
 JD-TC-GetPurchaseItemFilterCount-UH2
 

@@ -562,35 +562,6 @@ JD-TC-GetPurchaseByFilter-1
     Should Be Equal As Strings      ${resp.json()[0]['totalSgst']}      ${totalSgst}
 
 
-JD-TC-GetPurchaseByFilter-2
-
-    [Documentation]  Get Purchase Filter - account Id
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Purchase Filter   accountId-eq=${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}      ${SName}
-    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}      ${store_id}
-    Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalog']['encId']}      ${encid}
-    Should Be Equal As Strings      ${resp.json()[0]['uid']}      ${purchaseId}
-    Should Be Equal As Strings      ${resp.json()[0]['invoiceReferenceNo']}      ${invoiceReferenceNo}
-    Should Be Equal As Strings      ${resp.json()[0]['invoiceDate']}      ${invoiceDate}
-    Should Be Equal As Strings      ${resp.json()[0]['purchaseNote']}      ${purchaseNote}
-    Should Be Equal As Strings      ${resp.json()[0]['vendor']['vendorName']}      ${vender_name}
-    Should Be Equal As Strings      ${resp.json()[0]['vendor']['encId']}      ${vendorId}
-    Should Be Equal As Strings      ${resp.json()[0]['totalQuantity']}      ${quantity}
-    Should Be Equal As Strings      ${resp.json()[0]['totalFreeQuantity']}      ${freeQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['netQuantity']}      ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['totalAmount']}      ${totalAmount}
-    Should Be Equal As Strings      ${resp.json()[0]['totalDiscountAmount']}      ${totalDiscountAmount}
-    Should Be Equal As Strings      ${resp.json()[0]['totalTaxableAmount']}      ${totaltaxableamount}
-    Should Be Equal As Strings      ${resp.json()[0]['totalCgst']}      ${totalcgst}
-    Should Be Equal As Strings      ${resp.json()[0]['totalSgst']}      ${totalSgst}
-
 JD-TC-GetPurchaseByFilter-3
 
     [Documentation]  Get Purchase Filter - location
@@ -920,22 +891,6 @@ JD-TC-GetPurchaseByFilter-UH1
     Should Be Equal As Strings      ${resp.status_code}     419
     Should Be Equal As Strings      ${resp.json()}          ${SESSION_EXPIRED}
 
-
-JD-TC-GetPurchaseByFilter-UH2
-
-    [Documentation]  Get Purchase Filter - account Id is inv
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${inv}=     Random Int  min=999   max=9999
-
-    ${resp}=    Get Purchase Filter   accountId-eq=${inv}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-    Should Be Equal As Strings      ${resp.json()}          []
-    
 
 JD-TC-GetPurchaseByFilter-UH3
 

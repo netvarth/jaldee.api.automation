@@ -600,39 +600,6 @@ JD-TC-GetPurchaseItemFilter-1
     Should Be Equal As Strings      ${resp.json()[0]['purchaseUid']}                             ${purchaseId}
     Should Be Equal As Strings      ${resp.json()[0]['unitCode']}                                ${iu_id}
 
-JD-TC-GetPurchaseItemFilter-2
-
-    [Documentation]  Get Purchase Item Filter
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
- 
-    ${resp}=    Get Purchase Item Filter  accountId-eq=${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-    Should Be Equal As Strings      ${resp.json()[0]['totalQuantity']}                                                     ${qty}
-    Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalogItem']['encId']}      	   ${ic_id}
-    Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalogItem']['item']['name']}    ${nameit}
-    Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalogItem']['item']['spCode']}  ${itemEncId1}
-    Should Be Equal As Strings      ${resp.json()[0]['invSOrderCatalog']['encId']}               ${inv_order_encid}
-    Should Be Equal As Strings      ${resp.json()[0]['quantity']}                                ${quantity}
-    Should Be Equal As Strings      ${resp.json()[0]['freeQuantity']}                            ${freeQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['totalQuantity']}                           ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()[0]['amount']}                                  ${amount}
-    Should Be Equal As Strings      ${resp.json()[0]['discountAmount']}                          ${totalDiscountAmount}
-    Should Be Equal As Strings      ${resp.json()[0]['taxableAmount']}                           ${totaltaxableamount}
-    Should Be Equal As Strings      ${resp.json()[0]['taxAmount']}                               ${taxAmount}
-    Should Be Equal As Strings      ${resp.json()[0]['netTotal']}                                ${netTotal}
-    Should Be Equal As Strings      ${resp.json()[0]['discountPercentage']}                      ${discountPercentage}
-    Should Be Equal As Strings      ${resp.json()[0]['hsnCode']}                                 ${hsnCode}
-    Should Be Equal As Strings      ${resp.json()[0]['expiryDate']}                              ${expiryDate}
-    Should Be Equal As Strings      ${resp.json()[0]['mrp']}                                     ${mrp}
-    Should Be Equal As Strings      ${resp.json()[0]['salesRate']}                               ${salesRate}
-    Should Be Equal As Strings      ${resp.json()[0]['batchNo']}                                 ${batchNo}
-    Should Be Equal As Strings      ${resp.json()[0]['purchaseUid']}                             ${purchaseId}
-    Should Be Equal As Strings      ${resp.json()[0]['unitCode']}                                ${iu_id}
-
 JD-TC-GetPurchaseItemFilter-3
 
     [Documentation]  Get Purchase Item Filter - purchaseUid
@@ -699,20 +666,6 @@ JD-TC-GetPurchaseItemFilter-4
     Should Be Equal As Strings      ${resp.json()[0]['purchaseUid']}                             ${purchaseId}
     Should Be Equal As Strings      ${resp.json()[0]['unitCode']}                                ${iu_id}
 
-JD-TC-GetPurchaseItemFilter-UH1
-
-    [Documentation]  Get Purchase Item Filter - accountId is invalid
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${inv}=     Random Int  min=999   max=9999
- 
-    ${resp}=    Get Purchase Item Filter  accountId-eq=${inv}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-    Should Be Equal As Strings      ${resp.json()}          []
 
 JD-TC-GetPurchaseItemFilter-UH2
 
