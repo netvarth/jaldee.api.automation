@@ -175,9 +175,22 @@ JD-TC-AddToWL-1
             
         END
 
-        ${resp}=  Get history Waitlist
+        ${resp}=  Get history Waitlist  waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
+        ${past_wl_len}=  Get Length   ${resp.json()}
+        FOR   ${i}  IN RANGE   ${past_wl_len}
+
+            ${resp1}=  Waitlist Action  ${waitlist_actions[4]}   ${resp.json()[${i}]['ynwUuid']}
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+            
+        END
+
+        ${resp}=  Get history Waitlist  
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${past_wl_len}=  Get Length   ${resp.json()}
 
         ${resp}=  Get Queues  state-eq=${Qstate[0]}
         Log  ${resp.content}

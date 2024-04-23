@@ -171,9 +171,22 @@ JD-TC-TakeAppointment-1
             
         END
 
+        ${resp}=   Get Appointments History  apptStatus-neq=${apptStatus[6]},${apptStatus[5]},${apptStatus[4]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${past_appt_len}=  Get Length   ${resp.json()}
+        FOR   ${i}  IN RANGE   ${past_appt_len}
+
+            ${resp1}=  Appointment Action   ${apptStatus[6]}   ${resp.json()[${i}]['uid']}
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+            
+        END
+
         ${resp}=   Get Appointments History
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
+        ${past_appt_len}=  Get Length   ${resp.json()}
 
         ${resp}=  Get Appointment Schedules  state-eq=${Qstate[0]}
         Log  ${resp.content}
