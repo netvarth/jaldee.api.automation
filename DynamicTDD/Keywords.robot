@@ -35,7 +35,7 @@ ${bType}                  Waitlist
 @{disctype}               Predefine   OnDemand
 @{recurringtype}          Daily  Weekly  Monthly  MonthlyWeekly  Once
 @{parkingType}            street  privatelot  valet  free   paid   none
-@{purpose}                prePayment  billPayment  subscriptionLicenseInvoicePayment  verifyPayuPayment  verifyPaytmPayment  donation   financeInvoicePayment
+@{purpose}                prePayment  billPayment  subscriptionLicenseInvoicePayment  verifyPayuPayment  verifyPaytmPayment  donation   financeInvoicePayment    salesOrderInvoice
 @{paymentStatus}          NotPaid  PartiallyPaid  FullyPaid  Refund  PartiallyRefunded  Paid
 @{billStatus}             New  Settled  Cancel
 @{billViewStatus}         Show  Notshow
