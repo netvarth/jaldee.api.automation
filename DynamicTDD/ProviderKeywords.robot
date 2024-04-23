@@ -14472,6 +14472,33 @@ Update Catalog Item Batch-invMgmt False
     ${resp}=  PUT On Session  ynw   /provider/so/catalog/item/batch/${SO_Cata_Item_Batch_Encid}   data=${data}  expected_status=any
     RETURN  ${resp} 
 
+Create Catalog Item Batch-invMgmt True
+
+    [Arguments]       ${SO_Cata_Item_Encid}         @{vargs}      
+    ${items}=    Create List   
+    ${len}=  Get Length  ${vargs}
+    FOR    ${index}    IN RANGE    ${len}  
+        Append To List  ${items}  ${vargs[${index}]}
+    END 
+    ${data}=  json.dumps  ${items}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/so/catalog/item/${SO_Cata_Item_Encid}/batch      data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+
+Update Catalog Item Batch-invMgmt True
+
+    [Arguments]       ${SO_Cata_Item_Batch_Encid}         @{vargs}      
+    ${items}=    Create List   
+    ${len}=  Get Length  ${vargs}
+    FOR    ${index}    IN RANGE    ${len}  
+        Append To List  ${items}  ${vargs[${index}]}
+    END 
+    ${data}=  json.dumps  ${items}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/so/catalog/item/batch/${SO_Cata_Item_Batch_Encid}      data=${data}  expected_status=any
+    RETURN  ${resp} 
+
 Update Catalog Item Batch Status
 
     [Arguments]  ${SO_Cata_Item_Batch_Encid}   ${status}   
