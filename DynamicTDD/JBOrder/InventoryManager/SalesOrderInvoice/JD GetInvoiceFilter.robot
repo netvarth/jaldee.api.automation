@@ -18,14 +18,6 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
-*** Keywords ***
-
-Get invoice filter
-    [Arguments]  &{param}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/invoice   params=${param}  expected_status=any
-    RETURN  ${resp} 
-
 *** Variables ***
 ${invalidNum}        1245
 ${invalidEma}        asd122

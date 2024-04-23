@@ -28,14 +28,15 @@ ${originFrom}       NONE
 @{orderStatus}      ORDER_PENDING    ORDER_RECEIVED      ORDER_CONFIRMED      ORDER_COMPLETED     ORDER_CANCELED      ORDER_DISCARDED
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
 @{deliveryStatus}     NOT_DELIVERED        DELIVERED    READY_FOR_PICKUP    READY_FOR_SHIPMENT      READY_FOR_DELIVERY      SHIPPED     IN_TRANSIST
-${count}        1
+
+
 *** Test Cases ***
 
-JD-TC-Get invoice filter-1
+JD-TC-Update Sales Order Invoice Status-1
 
-    [Documentation]   Create a sales Order with Valid Details then Get invoice count filter by uid param.
+    [Documentation]   Create a sales Order with Valid Details then Update sales order invoice Status New to Settled.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -64,11 +65,11 @@ JD-TC-Get invoice filter-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME29}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME32}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -98,8 +99,6 @@ JD-TC-Get invoice filter-1
     Set Suite Variable  ${DAY1} 
 
     ${Name}=    FakerLibrary.last name
-    Set Suite Variable  ${Name}
-
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
@@ -108,11 +107,6 @@ JD-TC-Get invoice filter-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
-
-    ${resp}=    Get Store ByEncId   ${store_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${st_id}  ${resp.json()['id']}
 
 # ---------------------------------------------------------------------------------------------------
 
@@ -202,7 +196,7 @@ JD-TC-Get invoice filter-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -221,7 +215,6 @@ JD-TC-Get invoice filter-1
 
     ${netTotal}=  Evaluate  ${price}*${quantity}
     ${netTotal}=  Convert To Number  ${netTotal}   1
-    Set Suite Variable  ${netTotal}
 
 
     ${resp}=    Get Sales Order    ${SO_Uid}   
@@ -266,16 +259,16 @@ JD-TC-Get invoice filter-1
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
-# -----------------------------------------------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------------------
 
-# ------------------------------------------------Create Sales Order Invoice----------------------------------------------
+# ------------------------------------------------Create Sales Order Invoice---------------------------------------------
 
     ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable      ${SO_Inv}    ${resp.json()}  
 # ------------------------------------------------------------------------------------------------------------------------
-# --------------------------------------------- Get Invoice By Invoice EncId -----------------------------------------------
+# --------------------------------------------- Get Invoice By Invoice EncId ---------------------------------------------
 
     ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
     Log   ${resp.content}
@@ -298,101 +291,39 @@ JD-TC-Get invoice filter-1
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[0]}
 
-    ${resp}=    Get invoice count filter    uid-eq=${SO_Inv}   
+# ----------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Generate SO Payment Link -----------------------------------------------
+
+    ${resp}=    Generate SO Payment Link    ${SO_Inv}   ${primaryMobileNo}   ${countryCodes[0]}   ${email_id}    ${bool[1]}    ${bool[0]}    ${bool[0]}   ${primaryMobileNo}   ${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}     ${count}
 
-
-JD-TC-Get invoice filter-2
-
-    [Documentation]   Get invoice count filter by status param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get invoice count filter    status-eq=${billStatus[0]}   
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}     ${count}
 
+# --------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Share SO Invoice -----------------------------------------------
 
-JD-TC-Get invoice filter-3
+    ${PO_Number}    Generate random string    5    123456789
+    ${PO_Number}=  Evaluate  ${PUSERNAME}+${PO_Number}
 
-    [Documentation]   Get invoice count filter by storeId param.
+    ${phone}=   Create Dictionary       number=${PO_Number}      countryCode=${countryCodes[0]}  
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get invoice count filter    storeId-eq=${st_id}   
+    ${resp}=    Share SO Invoice    ${SO_Inv}    ${email_id}   ${bool[1]}    ${bool[0]}  ${bool[0]}   ${bool[0]}    ${html}   phone=${phone}    whatsappPhNo=${phone}      telegramPhNo=${phone}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}     ${count}
 
-JD-TC-Get invoice filter-4
+# --------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Consumer do the payment via link -----------------------------------------------
 
-    [Documentation]   Get invoice count filter by locationId param.
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get invoice count filter    locationId-eq=${locId1}   
+    ${resp}=    SO Payment Via Link    ${SO_Inv}    ${netTotal}   ${purpose[7]}    ${accountId}    ${finance_payment_modes[8]}     ${bool[0]} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}     ${count}
 
-JD-TC-Get invoice filter-5
-
-    [Documentation]   Get invoice count filter by orderUid param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get invoice count filter    orderUid-eq=${SO_Uid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}     ${count}
-
-JD-TC-Get invoice filter-6
-
-    [Documentation]   Get invoice count filter by providerConsumerId param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get invoice count filter    providerConsumerId-eq=${cid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}     ${count}
-
-JD-TC-Get invoice filter-7
-
-    [Documentation]   Get invoice count filter by providerConsumerName param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get invoice count filter    providerConsumerName-eq=${firstName} ${lastName}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}     ${count}
-
-JD-TC-Get invoice filter-8
-
-    [Documentation]   Get invoice count filter by paymentStatus param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get invoice count filter    paymentStatus-eq=${paymentStatus[0]} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}     ${count}

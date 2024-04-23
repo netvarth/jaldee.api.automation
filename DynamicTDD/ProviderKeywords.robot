@@ -14919,3 +14919,54 @@ Remove SalesOrder discount
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/sorder/${SO_uid}/apply/discount        data=${data}     expected_status=any
     RETURN  ${resp} 
+
+Update Sales Order Invoice Status
+    [Arguments]    ${invoiceUid}  ${status}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/so/invoice/${invoiceUid}/${status}   expected_status=any
+    RETURN  ${resp} 
+
+Generate SO Payment Link
+
+    [Arguments]     ${uuid}   ${phNo}    ${countryCode}   ${email}   ${email}   ${sms}   ${whatsapp}   ${whatsappPhNo}   ${whatsappCountryCode}  
+    ${data}=  Create Dictionary  uuid=${uuid}    phNo=${phNo}   countryCode=${countryCode}   email=${email}   emailNotification=${email}   smsNotification=${sms}   whatsappNotification=${whatsapp}   whatsappPhNo=${whatsappPhNo}     whatsappCountryCode=${whatsappCountryCode} 
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/so/payment/createLink   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Share SO Invoice
+
+    [Arguments]     ${invoiceUid}   ${email}    ${emailNotification}   ${smsNotification}   ${whatsappNotification}   ${telegramNotification}   ${html}     &{kwargs}
+    ${data}=   Create Dictionary   email=${email}    emailNotification=${emailNotification}   smsNotification=${smsNotification}   whatsappNotification=${whatsappNotification}   telegramNotification=${telegramNotification}   html=${html}  
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/so/invoice/${invoiceUid}/share   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+SO Payment Via Link
+
+    [Arguments]       ${uuid}    ${amount}   ${purpose}    ${accountId}   ${paymentMode}    ${isInternational}     &{kwargs}
+    ${data}=   Create Dictionary   uuid=${uuid}    amount=${amount}   purpose=${purpose}     accountId=${accountId}   paymentMode=${paymentMode}    isInternational=${isInternational} 
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /consumer/so/pay   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get invoice filter
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/invoice   params=${param}  expected_status=any
+    RETURN  ${resp} 
+
+Get invoice count filter
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/so/invoice/count   params=${param}  expected_status=any
+    RETURN  ${resp} 

@@ -483,3 +483,36 @@ JD-TC-Create Sales Order-10
     Should Be Equal As Strings    ${resp.status_code}   200
 
 
+JD-TC-Create Sales Order-11
+
+    [Documentation]   Create a sales Order with prescribedBy details.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${quantity}=    Random Int  min=2   max=5
+
+    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+    Set Suite Variable  ${SO_Cata_Encid_List}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+    Set Suite Variable  ${store}
+
+    ${prescribe}=  Create Dictionary   id=${accountId}  
+
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}   prescribedBy=${prescribe}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid1}  ${resp.json()}
+
+    ${netTotal}=  Evaluate  ${price}*${quantity}
+    ${netTotal}=  Convert To Number  ${netTotal}   1
+
+
+    ${resp}=    Get Sales Order    ${SO_Uid1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}

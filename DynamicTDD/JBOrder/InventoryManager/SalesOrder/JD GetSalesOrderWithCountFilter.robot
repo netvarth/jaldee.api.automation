@@ -496,7 +496,7 @@ JD-TC-Get Sales Order With Count Filter -16
     Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
 
     
-*** Commnets ***
+*** Comments ***
 JD-TC-Get Sales Order With Count Filter -17
 
     [Documentation]    Try to get sales order count with partnerSpAccountId param.
