@@ -536,14 +536,717 @@ JD-TC-CreatePurchase-1
 
 JD-TC-CreatePurchase-2
 
-    [Documentation]  Create Purchase
+    [Documentation]  Create Purchase - where store id is empty
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
+    ${resp}=    Create Purchase  ${empty}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+
+JD-TC-CreatePurchase-3
+
+    [Documentation]  Create Purchase - store id is invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=999  max=9999
+
+    ${resp}=    Create Purchase  ${inv}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+
+JD-TC-CreatePurchase-4
+
+    [Documentation]  Create Purchase - invoice reference number is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Create Purchase  ${store_id}  ${empty}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+
+JD-TC-CreatePurchase-5
+
+    [Documentation]  Create Purchase - invoice reference numbe is invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=999  max=9999
+
+    ${resp}=    Create Purchase  ${store_id}  ${inv}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+
+JD-TC-CreatePurchase-6
+
+    [Documentation]  Create Purchase - invoice date is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${empty}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+
+JD-TC-CreatePurchase-7
+
+    [Documentation]  Create Purchase - invoice date is past date
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${invoiceDate}=             db.add_timezone_date    ${tz}  -10
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   200
+
+JD-TC-CreatePurchase-8
+
+    [Documentation]  Create Purchase - vendor id is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${empty}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+
+JD-TC-CreatePurchase-9
+
+    [Documentation]  Create Purchase - vendor id is invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=99  max=999
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${inv}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+
+JD-TC-CreatePurchase-10
+
+    [Documentation]  Create Purchase - item catalogue enc id is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${empty}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+
+JD-TC-CreatePurchase-11
+
+    [Documentation]  Create Purchase - item catalogue enc id is invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=99  max=999
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${inv}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+
+JD-TC-CreatePurchase-12
+
+    [Documentation]  Create Purchase - purchase note is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${empty}  ${roundOff}  ${purchaseItemDtoList1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+
+JD-TC-CreatePurchase-13
+
+    [Documentation]  Create Purchase - roundoff is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${empty}  ${purchaseItemDtoList1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+
+JD-TC-CreatePurchase-14
+
+    [Documentation]  Create Purchase - purchase Item to List is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  []  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+
+JD-TC-CreatePurchase-15
+
+    [Documentation]  Create Purchase - inventory catalogue encid in invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv_ic_id}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${inv_ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+
+JD-TC-CreatePurchase-16
+
+    [Documentation]  Create Purchase - inventory order encid in invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-17
+
+    [Documentation]  Create Purchase - quantity is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${empty}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase18
+
+    [Documentation]  Create Purchase - ifree quantity as empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${empty}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-19
+
+    [Documentation]  Create Purchase - total quantity is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${empty}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-20
+
+    [Documentation]  Create Purchase - total quantity is invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${inv}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-21
+
+    [Documentation]  Create Purchase - amount is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${empty}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-22
+
+    [Documentation]  Create Purchase - amount is changed
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${amount2}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount2}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-23
+
+    [Documentation]  Create Purchase - discount amount is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv_ic_id}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${empty}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-24
+
+    [Documentation]  Create Purchase - discount amount is updated
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${dis}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${dis}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-25
+
+    [Documentation]  Create Purchase - discount Percentage is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${empty}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-26
+
+    [Documentation]  Create Purchase - discount percentage is above 100
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${disp2}=                Random Int              min=100  max=999  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${disp2}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-27
+
+    [Documentation]  Create Purchase - fixed discount is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv_ic_id}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${empty}  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-28
+
+    [Documentation]  Create Purchase - fixed discount is above total
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${fix}=                Evaluate   ${amount} * ${quantity}  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${empty}  ${empty}  ${fix}  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-29
+
+    [Documentation]  Create Purchase - taxable amount is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv_ic_id}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${empty}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-30
+
+    [Documentation]  Create Purchase - taxable amount is updated
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${txlamt}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${txlamt}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-31
+
+    [Documentation]  Create Purchase - tax amount is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv_ic_id}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${empty}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-32
+
+    [Documentation]  Create Purchase - tax amount is updated
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inc}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${inv}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-33
+
+    [Documentation]  Create Purchase - net total is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${empty}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-34
+
+    [Documentation]  Create Purchase - net total is updated
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${inv}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-35
+
+    [Documentation]  Create Purchase - expairy date is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv_ic_id}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${empty}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-36
+
+    [Documentation]  Create Purchase - expairy date is changed
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${expiryDate2}=  db.add_timezone_date  ${tz}  40
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate2}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-37
+
+    [Documentation]  Create Purchase - expairy date is past date
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${expiryDate3}=  db.add_timezone_date  ${tz}  -5
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate3}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-38
+
+    [Documentation]  Create Purchase - mrp is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${empty}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-39
+
+    [Documentation]  Create Purchase - mrp is changed
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${mrp2}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp2}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-40
+
+    [Documentation]  Create Purchase - sales rate is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv_ic_id}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${empty}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-41
+
+    [Documentation]  Create Purchase - sales rate is updated
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${inv}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-42
+
+    [Documentation]  Create Purchase - batch number is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${empty}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-43
+
+    [Documentation]  Create Purchase - batch number is updated
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${inv}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-44
+
+    [Documentation]  Create Purchase - cgst is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${empty}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-45
+
+    [Documentation]  Create Purchase - cgst is above 100
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${cg}=                Random Int              min=100  max=999  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cg}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-46
+
+    [Documentation]  Create Purchase - sgst is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${empty}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-47
+
+    [Documentation]  Create Purchase - sgst above 100
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${sg}=                Random Int              min=100  max=999
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sg}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-48
+
+    [Documentation]  Create Purchase - unit code is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv_ic_id}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${empty}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-49
+
+    [Documentation]  Create Purchase - unit code is invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${inv}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreatePurchase-50
+
+    [Documentation]  Create Purchase - without login 
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200

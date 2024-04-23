@@ -32,7 +32,7 @@ JD-TC-GetPurchaseByFilterCount-1
 
     [Documentation]  Get Purchase By Filter Count
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -44,15 +44,6 @@ JD-TC-GetPurchaseByFilterCount-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
-
-    ${resp}=  Create Sample Location
-    Set Suite Variable    ${loc_id}   ${resp}
-
-    ${resp}=   Get Location ById  ${loc_id}
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
-    Set Suite Variable  ${place}    ${resp.json()['place']}
 
     ${resp}=  Provider Logout
     Log  ${resp.content}
@@ -105,7 +96,7 @@ JD-TC-GetPurchaseByFilterCount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -125,9 +116,11 @@ JD-TC-GetPurchaseByFilterCount-1
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${place}    ${resp.json()[0]['place']}
     ELSE
         Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+        Set Suite Variable  ${place}    ${resp.json()[0]['place']}
     END
 
     ${SName}=    FakerLibrary.last name
@@ -523,11 +516,11 @@ JD-TC-GetPurchaseByFilterCount-1
     Should Be Equal As Strings      ${resp.status_code}     200
     Should Be Equal As Strings      ${resp.json()}          1
 
-JD-TC-GetPurchaseItemFilter-2
+JD-TC-GetPurchaseByFilterCount-2
 
     [Documentation]  Get Purchase Filter Count - account Id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -537,24 +530,24 @@ JD-TC-GetPurchaseItemFilter-2
     Should Be Equal As Strings      ${resp.json()}          1
     
 
-JD-TC-GetPurchaseItemFilter-3
+JD-TC-GetPurchaseByFilterCount-3
 
     [Documentation]  Get Purchase Filter Count - location
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Purchase Filter Count   location-eq=${loc_id}
+    ${resp}=    Get Purchase Filter Count   location-eq=${locId1}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
     Should Be Equal As Strings      ${resp.json()}          1    
 
-JD-TC-GetPurchaseItemFilter-4
+JD-TC-GetPurchaseByFilterCount-4
 
     [Documentation]  Get Purchase Filter Count - locationName
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -563,11 +556,11 @@ JD-TC-GetPurchaseItemFilter-4
     Should Be Equal As Strings      ${resp.status_code}     200
     Should Be Equal As Strings      ${resp.json()}          1
 
-JD-TC-GetPurchaseItemFilter-5
+JD-TC-GetPurchaseByFilterCount-5
 
     [Documentation]  Get Purchase Filter Count - storeEncId
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -576,11 +569,11 @@ JD-TC-GetPurchaseItemFilter-5
     Should Be Equal As Strings      ${resp.status_code}     200
     Should Be Equal As Strings      ${resp.json()}          1
 
-JD-TC-GetPurchaseItemFilter-6
+JD-TC-GetPurchaseByFilterCount-6
 
     [Documentation]  Get Purchase Filter Count - storeName
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -589,11 +582,11 @@ JD-TC-GetPurchaseItemFilter-6
     Should Be Equal As Strings      ${resp.status_code}     200
     Should Be Equal As Strings      ${resp.json()}          1
 
-JD-TC-GetPurchaseItemFilter-7
+JD-TC-GetPurchaseByFilterCount-7
 
     [Documentation]  Get Purchase Filter Count - uid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -602,11 +595,11 @@ JD-TC-GetPurchaseItemFilter-7
     Should Be Equal As Strings      ${resp.status_code}     200
     Should Be Equal As Strings      ${resp.json()}          1
 
-JD-TC-GetPurchaseItemFilter-8
+JD-TC-GetPurchaseByFilterCount-8
 
     [Documentation]  Get Purchase Filter Count - purchaseReferenceNo
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -615,11 +608,11 @@ JD-TC-GetPurchaseItemFilter-8
     Should Be Equal As Strings      ${resp.status_code}     200
     Should Be Equal As Strings      ${resp.json()}          1
 
-JD-TC-GetPurchaseItemFilter-9
+JD-TC-GetPurchaseByFilterCount-9
 
     [Documentation]  Get Purchase Filter Count - purchaseOrderId
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -628,11 +621,11 @@ JD-TC-GetPurchaseItemFilter-9
     Should Be Equal As Strings      ${resp.status_code}     200
     Should Be Equal As Strings      ${resp.json()}          1
 
-JD-TC-GetPurchaseItemFilter-10
+JD-TC-GetPurchaseByFilterCount-10
 
     [Documentation]  Get Purchase Filter Count - poReferenceNo
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -641,11 +634,11 @@ JD-TC-GetPurchaseItemFilter-10
     Should Be Equal As Strings      ${resp.status_code}     200
     Should Be Equal As Strings      ${resp.json()}          1
 
-JD-TC-GetPurchaseItemFilter-11
+JD-TC-GetPurchaseByFilterCount-11
 
     [Documentation]  Get Purchase Filter Count - invoicereferenceNo
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -654,11 +647,11 @@ JD-TC-GetPurchaseItemFilter-11
     Should Be Equal As Strings      ${resp.status_code}     200
     Should Be Equal As Strings      ${resp.json()}          1
 
-JD-TC-GetPurchaseItemFilter-12
+JD-TC-GetPurchaseByFilterCount-12
 
     [Documentation]  Get Purchase Filter Count - invoiceDate
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -667,11 +660,11 @@ JD-TC-GetPurchaseItemFilter-12
     Should Be Equal As Strings      ${resp.status_code}     200
     Should Be Equal As Strings      ${resp.json()}          1
 
-JD-TC-GetPurchaseItemFilter-13
+JD-TC-GetPurchaseByFilterCount-13
 
     [Documentation]  Get Purchase Filter Count - purchaseStatus
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -679,3 +672,188 @@ JD-TC-GetPurchaseItemFilter-13
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
     Should Be Equal As Strings      ${resp.json()}          1
+
+JD-TC-GetPurchaseItemFilterCount-UH1
+
+    [Documentation]  Get Purchase Filter Count - without login
+
+    ${resp}=    Get Purchase Filter Count 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     419
+    Should Be Equal As Strings      ${resp.json()}          ${SESSION_EXPIRED}
+
+
+JD-TC-GetPurchaseByFilterCount-UH2
+
+    [Documentation]  Get Purchase Filter Count - account Id is inv
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=999   max=9999
+
+    ${resp}=    Get Purchase Filter Count   accountId-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()}          0
+    
+
+JD-TC-GetPurchaseByFilterCount-UH3
+
+    [Documentation]  Get Purchase Filter Count - location invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=999   max=9999
+
+    ${resp}=    Get Purchase Filter Count   location-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()}          0   
+
+JD-TC-GetPurchaseByFilterCount-UH4
+
+    [Documentation]  Get Purchase Filter Count - locationName invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Purchase Filter Count   locationName-eq=abcd
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()}          0
+
+JD-TC-GetPurchaseByFilterCount-UH5
+
+    [Documentation]  Get Purchase Filter Count - storeEncId invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=999   max=9999
+
+    ${resp}=    Get Purchase Filter Count   storeEncId-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()}          0
+
+JD-TC-GetPurchaseByFilterCount-UH6
+
+    [Documentation]  Get Purchase Filter Count - storeName invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Purchase Filter Count   storeName-eq=abcd
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()}          0
+
+JD-TC-GetPurchaseByFilterCount-UH7
+
+    [Documentation]  Get Purchase Filter Count - uid is invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=999   max=9999
+
+    ${resp}=    Get Purchase Filter Count   uid-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()}          0
+
+JD-TC-GetPurchaseByFilterCount-UH8
+
+    [Documentation]  Get Purchase Filter Count - purchaseReferenceNo invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=999   max=9999
+
+    ${resp}=    Get Purchase Filter Count   purchaseReferenceNo-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()}          0
+
+JD-TC-GetPurchaseByFilterCount-UH9
+
+    [Documentation]  Get Purchase Filter Count - purchaseOrderId invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=999   max=9999
+
+    ${resp}=    Get Purchase Filter Count   purchaseOrderId-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()}          0
+
+JD-TC-GetPurchaseByFilterCount-UH10
+
+    [Documentation]  Get Purchase Filter Count - poReferenceNo invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=999   max=9999
+
+    ${resp}=    Get Purchase Filter Count   poReferenceNo-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()}          0
+
+JD-TC-GetPurchaseByFilterCount-UH11
+
+    [Documentation]  Get Purchase Filter Count - invoicereferenceNo invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=999   max=9999
+
+    ${resp}=    Get Purchase Filter Count   invoiceReferenceNo-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()}          0
+
+JD-TC-GetPurchaseByFilterCount-UH12
+
+    [Documentation]  Get Purchase Filter Count - invoiceDate invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=999   max=9999
+
+    ${resp}=    Get Purchase Filter Count   invoiceDate-eq=${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()}          0
+
+JD-TC-GetPurchaseByFilterCount-UH13
+
+    [Documentation]  Get Purchase Filter Count - purchaseStatus is another
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Purchase Filter Count   purchaseStatus-eq=${PurchaseStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.json()}          0
