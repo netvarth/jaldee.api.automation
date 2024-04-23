@@ -674,7 +674,7 @@ JD-TC-UpdatePurchaseStatus-8
     ${resp}=    Update Purchase Status  ${PurchaseStatus[2]}  ${purchaseId} 
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_IN_DRAFT_STATUS}
+    Should Be Equal As Strings      ${resp.json()}          ${ALREADY_APPROVED_STATUS}
 
 JD-TC-UpdatePurchaseStatus-9
 
@@ -692,7 +692,7 @@ JD-TC-UpdatePurchaseStatus-9
     ${resp}=    Update Purchase Status  ${PurchaseStatus[0]}  ${purchaseId} 
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_IN_DRAFT_STATUS}
+    Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_APPROVED_STATUS}
 
 JD-TC-UpdatePurchaseStatus-10
 
@@ -710,7 +710,7 @@ JD-TC-UpdatePurchaseStatus-10
     ${resp}=    Update Purchase Status  ${PurchaseStatus[1]}  ${purchaseId} 
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_IN_DRAFT_STATUS}
+    Should Be Equal As Strings      ${resp.json()}          ${PURCHASE_APPROVED_STATUS}
 
 JD-TC-UpdatePurchaseStatus-11
 
