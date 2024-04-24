@@ -14498,12 +14498,8 @@ Create Catalog Item Batch-invMgmt True
 
 Update Catalog Item Batch-invMgmt True
 
-    [Arguments]       ${SO_Cata_Item_Batch_Encid}    ${name}   ${price}      @{vargs}       
+    [Arguments]       ${SO_Cata_Item_Batch_Encid}    ${name}   ${price}       &{kwargs}       
     ${catalog_details}=  Create Dictionary       name=${name}   price=${price}     
-    ${len}=  Get Length  ${vargs}
-    FOR    ${index}    IN RANGE    ${len}  
-        Set To Dictionary   ${catalog_details}  ${vargs[${index}]}
-    END 
     FOR    ${key}    ${value}    IN    &{kwargs}
         Set To Dictionary   ${catalog_details}   ${key}=${value}
     END
@@ -14686,7 +14682,7 @@ Get Item Remark Count Filter
 Get Inventoryitem
     [Arguments]   ${id}     
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw   /provider/inventory/inventoryitem/invcatalog/${id}   expected_status=any
+    ${resp}=  GET On Session  ynw   /provider/inventory/inventoryitem/invcatalogitem/${id}   expected_status=any
     RETURN  ${resp} 
 
 
@@ -14983,3 +14979,10 @@ Get invoice count filter
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/so/invoice/count   params=${param}  expected_status=any
     RETURN  ${resp} 
+
+Enable Disable Inventory
+    [Arguments]  ${status} 
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/account/settings/inventory/${status}  expected_status=any 
+    RETURN  ${resp}
+       

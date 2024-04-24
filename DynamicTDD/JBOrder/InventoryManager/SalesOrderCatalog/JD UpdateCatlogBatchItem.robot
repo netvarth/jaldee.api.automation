@@ -132,7 +132,7 @@ JD-TC-Update Catalog Item Batch-1
 
     ${displayName}=     FakerLibrary.name
 
-    ${resp}=    Create Item Inventory  ${displayName}    
+    ${resp}=    Create Item Inventory  ${displayName}   isBatchApplicable=${boolean[1]}  
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
@@ -432,6 +432,13 @@ JD-TC-Update Catalog Item Batch-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable            ${store_id}           ${resp.json()} 
+
+    #------------------Enable inventory-------------
+
+    
+    ${resp}=  Enable Disable Inventory  ${toggle[0]}  
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
 
     # ............... Create Vendor ...............
 
@@ -873,14 +880,14 @@ JD-TC-Update Catalog Item Batch-4
     ${catalog_details}=  Create Dictionary          name=${Name1}  price=${price1}   inventoryItemBatch=${encid}   
     Set Suite Variable  ${catalog_details}  
 
-    ${catalog_details1}=  Create Dictionary    inventoryItemBatch=${encid}   
-    Set Suite Variable  ${catalog_details1}  
+    # ${catalog_details1}=  Create Dictionary    inventoryItemBatch=${encid}   
+    # Set Suite Variable  ${catalog_details1}  
 
     ${resp}=   Create Catalog Item Batch-invMgmt True   ${SO_itemEncIds}    ${catalog_details}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_Cata_Item_Batch_Encid}  ${resp.json()[0]}
 
-    ${resp}=   Update Catalog Item Batch-invMgmt True   ${SO_Cata_Item_Batch_Encid}  ${Name1}     ${price1}     ${catalog_details1}  
+    ${resp}=   Update Catalog Item Batch-invMgmt True   ${SO_Cata_Item_Batch_Encid}  ${Name1}     ${price1}     inventoryItemBatch=${encid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
