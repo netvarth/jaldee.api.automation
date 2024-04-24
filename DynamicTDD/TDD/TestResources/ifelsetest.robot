@@ -8,6 +8,7 @@ Library     json
 Library     requests
 Library     RequestsLibrary
 Library     FakerLibrary
+Library     DateTime
 # Library    FakerLibrary    locale=en_IN
 # Library   FakerLibrary   WITH NAME   faker
 Library     /ebs/TDD/db.py
@@ -28,11 +29,25 @@ ${longi1}    ${68.031759}
 ${word1}        Python
 ${word2}        PYTHON
 ${word3}        python
+@{cancelReason}             noshowup  blocked  closingSoon  tooFull  self  prePaymentPending  QueueDisabled  holiday
+
+*** Keywords ***
+Check kwargs
+    [Arguments]   &{DICT}
+    FOR    ${item}    IN    &{DICT}
+        Log  ${item}
+        Log    Key is '${item}[0]' and value is '${item}[1]'.
+    END
 
 *** Test Cases ***  
 
 Testing python lower fn
 
+    ${date} = 	DateTime.Get Current Date 	
+    ${reason}=  Random Element  ${cancelReason}
+    ${message}=   FakerLibrary.sentence
+    Check kwargs  cancelReason=${reason}  communicationMessage=${message}   date=${date}
+    
     ${s_id}=  Set Variable  ${NONE}
     ${srv_val}=    Get Variable Value    ${s_id}
 

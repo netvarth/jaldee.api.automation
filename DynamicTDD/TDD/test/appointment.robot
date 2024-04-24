@@ -18,6 +18,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 ${count}  ${50}
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${zero}        0
+@{emptylist}
 
 
 *** Test Cases ***
@@ -93,11 +94,12 @@ JD-TC-TakeAppointment-1
             Set Test Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
         END
 
+        ${s_id}=  Set Variable  ${NONE}
         ${resp}=   Get Service
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
-        ${s_id}=  Set Variable  ${NONE}
-        IF   '${resp.content}' != '${emptylist}'
+        # IF   "${resp.content}" != "${emptylist}"
+        IF   "$resp.content" != "${emptylist}"
             
             ${service_len}=  Get Length   ${resp.json()}
             FOR   ${i}  IN RANGE   ${service_len}

@@ -13,12 +13,64 @@ Variables         /ebs/TDD/varfiles/providers.py
 
 *** Variables ***
 
-
+@{emptylist}
+${count}  ${50}
 
 
 
 *** Test Cases ***   
 TC-1
+    [Documentation]   Checking if condition
+
+    ${resp}=  Encrypted Provider Login  ${PUSERNAME180}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${s_id}=  Set Variable  ${NONE}
+    ${resp}=   Get Service
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    # IF   '${resp.content}' != '${emptylist}'
+    IF   "$resp.content" != "${emptylist}"
+        
+        ${service_len}=  Get Length   ${resp.json()}
+        FOR   ${i}  IN RANGE   ${service_len}
+            IF  '${resp.json()[${i}]['status']}' == '${status[0]}'
+                Set Test Variable   ${s_id}   ${resp.json()[${i}]['id']}
+
+                IF  '${resp.json()[${i}]['isPrePayment']}' == '${bool[1]}'
+                    ${maxbookings}=   Random Int   min=5   max=10
+                    ${resp}=  Update Service  ${s_id}  ${resp.json()[${i}]['name']}  ${EMPTY}  ${resp.json()[${i}]['serviceDuration']}  ${resp.json()[${i}]['status']}  ${btype}  ${resp.json()[${i}]['notification']}  ${resp.json()[${i}]['notificationType']}  ${resp.json()[${i}]['minPrePaymentAmount']}  ${resp.json()[${i}]['totalAmount']}  ${resp.json()[${i}]['isPrePayment']}  ${resp.json()[${i}]['taxable']}  maxBookingsAllowed=${count}
+                    Log  ${resp.content}
+                    Should Be Equal As Strings  ${resp.status_code}  200
+                ELSE
+
+                    ${maxbookings}=   Random Int   min=5   max=10
+                    ${resp}=  Update Service  ${s_id}  ${resp.json()[${i}]['name']}  ${EMPTY}  ${resp.json()[${i}]['serviceDuration']}  ${resp.json()[${i}]['status']}  ${btype}  ${resp.json()[${i}]['notification']}  ${resp.json()[${i}]['notificationType']}  ${EMPTY}  ${resp.json()[${i}]['totalAmount']}  ${resp.json()[${i}]['isPrePayment']}  ${resp.json()[${i}]['taxable']}  maxBookingsAllowed=${count}
+                    Log  ${resp.content}
+                    Should Be Equal As Strings  ${resp.status_code}  200
+
+                END
+                BREAK
+
+            END
+        END
+
+        ${srv_val}=    Get Variable Value    ${s_id}
+        IF  '${srv_val}'=='${None}'
+            ${SERVICE1}=    FakerLibrary.job
+            ${maxbookings}=   Random Int   min=5   max=10
+            ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=${count}
+        END
+    ELSE
+
+        ${SERVICE1}=    FakerLibrary.job
+        ${maxbookings}=   Random Int   min=5   max=10
+        ${s_id}=  Create Sample Service  ${SERVICE1}  maxBookingsAllowed=${count}
+
+    END
+
+*** Comments ***
     [Documentation]   Create Location with timezone=Asia/Dubai
     Comment  Provider in Middle East (UAE)
     ${PO_Number}=  FakerLibrary.Numerify  %#####
