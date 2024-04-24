@@ -873,7 +873,7 @@ JD-TC-Update Catalog Item Batch-4
     ${catalog_details}=  Create Dictionary          name=${Name1}  price=${price1}   inventoryItemBatch=${encid}   
     Set Suite Variable  ${catalog_details}  
 
-    ${catalog_details1}=  Create Dictionary          name=${Name1}  price=${price1}   inventoryItemBatch=${encid}   
+    ${catalog_details1}=  Create Dictionary    inventoryItemBatch=${encid}   
     Set Suite Variable  ${catalog_details1}  
 
     ${resp}=   Create Catalog Item Batch-invMgmt True   ${SO_itemEncIds}    ${catalog_details}  
@@ -881,6 +881,6 @@ JD-TC-Update Catalog Item Batch-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_Cata_Item_Batch_Encid}  ${resp.json()[0]}
 
-    ${resp}=   Update Catalog Item Batch-invMgmt True   ${SO_Cata_Item_Batch_Encid}    ${catalog_details}  
+    ${resp}=   Update Catalog Item Batch-invMgmt True   ${SO_Cata_Item_Batch_Encid}  ${Name1}     ${price1}     ${catalog_details1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200

@@ -254,7 +254,7 @@ JD-TC-GET Inventory Catalog Item Count Filter-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Update Inventory Catalog Item    ${boolean[1]}  ${boolean[1]}      ${encid}     ${EncId2}   
+    ${resp}=   Update Inventory Catalog Item     ${boolean[1]}      ${encid}     ${EncId2}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

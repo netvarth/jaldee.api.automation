@@ -145,7 +145,7 @@ JD-TC-Update Inventory Catalog Item-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${EncId1}  ${resp.json()[0]}
 
-    ${resp}=   Update Inventory Catalog Item    ${boolean[0]}  ${boolean[0]}      ${encid}     ${EncId1}  
+    ${resp}=   Update Inventory Catalog Item      ${boolean[0]}      ${encid}     ${EncId1}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -225,14 +225,14 @@ JD-TC-Update Inventory Catalog Item-2
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Update Inventory Catalog Item    ${boolean[1]}  ${boolean[1]}      ${encid}     ${EncId2}   
+    ${resp}=   Update Inventory Catalog Item     ${boolean[1]}      ${encid}     ${EncId2}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Inventory Catalog item By EncId  ${EncId2}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200 
-    Should Be Equal As Strings    ${resp.json()['batchApplicable']}     ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()['batchApplicable']}     ${bool[0]}
     Should Be Equal As Strings    ${resp.json()['lotNumber']}     ${bool[1]}
 
 
@@ -244,7 +244,7 @@ JD-TC-Update Inventory Catalog Item-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Update Inventory Catalog Item    ${boolean[0]}  ${boolean[1]}      ${encid}     ${EncId2}   
+    ${resp}=   Update Inventory Catalog Item      ${boolean[1]}      ${encid}     ${EncId2}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -262,14 +262,14 @@ JD-TC-Update Inventory Catalog Item-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Update Inventory Catalog Item    ${boolean[1]}  ${boolean[0]}      ${encid}     ${EncId2}   
+    ${resp}=   Update Inventory Catalog Item     ${boolean[0]}      ${encid}     ${EncId2}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=   Get Inventory Catalog item By EncId  ${EncId2}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200 
-    Should Be Equal As Strings    ${resp.json()['batchApplicable']}     ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()['batchApplicable']}     ${bool[0]}
     Should Be Equal As Strings    ${resp.json()['lotNumber']}     ${bool[0]}
 
 
@@ -295,7 +295,7 @@ JD-TC-Update Inventory Catalog Item-UH2
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${Name}=    FakerLibrary.first name
-    ${resp}=   Update Inventory Catalog Item    ${boolean[1]}  ${boolean[0]}      ${EncId2}     ${EncId2}  
+    ${resp}=   Update Inventory Catalog Item      ${boolean[0]}      ${EncId2}     ${EncId2}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${Catalog_id_can_not_be_updated}
@@ -310,7 +310,7 @@ JD-TC-Update Inventory Catalog Item-UH3
 
     ${Name}=    FakerLibrary.first name
 
-    ${resp}=   Update Inventory Catalog Item    ${boolean[1]}  ${boolean[0]}      ${encid}     ${encid}  
+    ${resp}=   Update Inventory Catalog Item      ${boolean[0]}      ${encid}     ${encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${Invalid_Catalog_id}
@@ -320,7 +320,7 @@ JD-TC-Update Inventory Catalog Item-UH4
     [Documentation]  Create Inventory Catalog Item without login.
 
 
-    ${resp}=   Update Inventory Catalog Item    ${boolean[1]}  ${boolean[0]}      ${encid}     ${encid}  
+    ${resp}=   Update Inventory Catalog Item     ${boolean[0]}      ${encid}     ${encid}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -334,7 +334,7 @@ JD-TC-Update Inventory Catalog Item-UH5
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=   Update Inventory Catalog Item    ${boolean[1]}  ${boolean[0]}      ${encid}     ${encid}   
+    ${resp}=   Update Inventory Catalog Item     ${boolean[0]}      ${encid}     ${encid}   
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -349,7 +349,7 @@ JD-TC-Update Inventory Catalog Item-UH6
 
     ${Name}=    FakerLibrary.first name
 
-    ${resp}=   Update Inventory Catalog Item    ${boolean[1]}  ${boolean[0]}      ${encid}     ${encid}   
+    ${resp}=   Update Inventory Catalog Item    ${boolean[0]}      ${encid}     ${encid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${Invalid_Catalog_id}

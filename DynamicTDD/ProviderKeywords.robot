@@ -14248,8 +14248,8 @@ Create Inventory Catalog Item
 
 Update Inventory Catalog Item
 
-    [Arguments]  ${batchApplicable}   ${lotNumber}    ${icEncId}   ${encId}   
-    ${data}=  Create Dictionary  batchApplicable=${batchApplicable}    lotNumber=${lotNumber}  icEncId=${icEncId}      
+    [Arguments]     ${lotNumber}    ${icEncId}   ${encId}   
+    ${data}=  Create Dictionary      lotNumber=${lotNumber}  icEncId=${icEncId}      
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/inventory/inventorycatalog/items/${encId}   data=${data}  expected_status=any
@@ -14488,13 +14488,16 @@ Create Catalog Item Batch-invMgmt True
 
 Update Catalog Item Batch-invMgmt True
 
-    [Arguments]       ${SO_Cata_Item_Batch_Encid}         @{vargs}      
-    ${items}=    Create List   
+    [Arguments]       ${SO_Cata_Item_Batch_Encid}    ${name}   ${price}      @{vargs}       
+    ${catalog_details}=  Create Dictionary       name=${name}   price=${price}     
     ${len}=  Get Length  ${vargs}
     FOR    ${index}    IN RANGE    ${len}  
-        Append To List  ${items}  ${vargs[${index}]}
+        Set To Dictionary   ${catalog_details}  ${vargs[${index}]}
     END 
-    ${data}=  json.dumps  ${items}
+    FOR    ${key}    ${value}    IN    &{kwargs}
+        Set To Dictionary   ${catalog_details}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${catalog_details}
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/so/catalog/item/batch/${SO_Cata_Item_Batch_Encid}      data=${data}  expected_status=any
     RETURN  ${resp} 
