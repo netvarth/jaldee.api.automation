@@ -283,7 +283,7 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Update Inventory Catalog Item    ${boolean[1]}  ${boolean[1]}      ${encid}     ${EncId2}    
+    ${resp}=   Update Inventory Catalog Item      ${boolean[1]}      ${encid}     ${EncId2}    
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -306,7 +306,7 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-3
     Should Be Equal As Strings    ${resp.json()[1]['accountId']}    ${accountId} 
     Should Be Equal As Strings    ${resp.json()[1]['inventoryCatalogId']}    ${inventoryCatalogId}     
     Should Be Equal As Strings    ${resp.json()[1]['icEncId']}   ${encid}
-    Should Be Equal As Strings    ${resp.json()[1]['batchApplicable']}     ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()[1]['batchApplicable']}     ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[1]['lotNumber']}     ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[1]['locationId']}    ${locId1}
     Should Be Equal As Strings    ${resp.json()[1]['storeId']}    ${StoreId}
@@ -348,7 +348,7 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-4
     Should Be Equal As Strings    ${resp.json()[1]['accountId']}    ${accountId} 
     Should Be Equal As Strings    ${resp.json()[1]['inventoryCatalogId']}    ${inventoryCatalogId}     
     Should Be Equal As Strings    ${resp.json()[1]['icEncId']}   ${encid}
-    Should Be Equal As Strings    ${resp.json()[1]['batchApplicable']}     ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()[1]['batchApplicable']}     ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[1]['lotNumber']}     ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[1]['locationId']}    ${locId1}
     Should Be Equal As Strings    ${resp.json()[1]['storeId']}    ${StoreId}

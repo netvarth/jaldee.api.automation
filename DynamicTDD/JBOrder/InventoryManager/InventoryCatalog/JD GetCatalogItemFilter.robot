@@ -282,7 +282,7 @@ JD-TC-GET Inventory Catalog Item Filter-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Update Inventory Catalog Item    ${boolean[1]}  ${boolean[1]}      ${encid}     ${EncId2}   
+    ${resp}=   Update Inventory Catalog Item      ${boolean[1]}      ${encid}     ${EncId2}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -293,15 +293,27 @@ JD-TC-GET Inventory Catalog Item Filter-3
     Should Be Equal As Strings    ${resp.json()[0]['inventoryCatalogId']}    ${inventoryCatalogId}     
     Should Be Equal As Strings    ${resp.json()[0]['icEncId']}   ${encid}
     Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}     ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['lotNumber']}     ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['lotNumber']}     ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['locationId']}    ${locId1}
     Should Be Equal As Strings    ${resp.json()[0]['storeId']}    ${StoreId}
     Should Be Equal As Strings    ${resp.json()[0]['status']}    ${InventoryCatalogStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${EncId1}
-    Should Be Equal As Strings    ${resp.json()[0]['item']['spCode']}   ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${EncId2}
     Should Be Equal As Strings    ${resp.json()[0]['item']['name']}    ${displayName}
     Should Be Equal As Strings    ${resp.json()[0]['item']['itemSourceEnum']}    ${itemSourceEnum1}
-    Should Be Equal As Strings    ${resp.json()[0]['item']['spCode']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['item']['spCode']}    ${itemEncIds}
+
+    Should Be Equal As Strings    ${resp.json()[1]['accountId']}    ${accountId} 
+    Should Be Equal As Strings    ${resp.json()[1]['inventoryCatalogId']}    ${inventoryCatalogId}     
+    Should Be Equal As Strings    ${resp.json()[1]['icEncId']}   ${encid}
+    Should Be Equal As Strings    ${resp.json()[1]['batchApplicable']}     ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[1]['lotNumber']}     ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()[1]['locationId']}    ${locId1}
+    Should Be Equal As Strings    ${resp.json()[1]['storeId']}    ${StoreId}
+    Should Be Equal As Strings    ${resp.json()[1]['status']}    ${InventoryCatalogStatus[0]}
+    Should Be Equal As Strings    ${resp.json()[1]['encId']}    ${EncId1}
+    Should Be Equal As Strings    ${resp.json()[1]['item']['name']}    ${displayName}
+    Should Be Equal As Strings    ${resp.json()[1]['item']['itemSourceEnum']}    ${itemSourceEnum1}
+    Should Be Equal As Strings    ${resp.json()[1]['item']['spCode']}    ${itemEncId1}
 
 JD-TC-GET Inventory Catalog Item Filter-4
 
@@ -321,7 +333,7 @@ JD-TC-GET Inventory Catalog Item Filter-4
     Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId} 
     Should Be Equal As Strings    ${resp.json()[0]['inventoryCatalogId']}    ${inventoryCatalogId}     
     Should Be Equal As Strings    ${resp.json()[0]['icEncId']}   ${encid}
-    Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}     ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}     ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['lotNumber']}     ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['locationId']}    ${locId1}
     Should Be Equal As Strings    ${resp.json()[0]['storeId']}    ${StoreId}
@@ -374,7 +386,7 @@ JD-TC-GET Inventory Catalog Item Filter-6
     Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId} 
     Should Be Equal As Strings    ${resp.json()[0]['inventoryCatalogId']}    ${inventoryCatalogId}     
     Should Be Equal As Strings    ${resp.json()[0]['icEncId']}   ${encid}
-    Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}     ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}     ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['lotNumber']}     ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['locationId']}    ${locId1}
     Should Be Equal As Strings    ${resp.json()[0]['storeId']}    ${StoreId}
@@ -414,7 +426,7 @@ JD-TC-GET Inventory Catalog Item Filter-7
     Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId} 
     Should Be Equal As Strings    ${resp.json()[0]['inventoryCatalogId']}    ${inventoryCatalogId}     
     Should Be Equal As Strings    ${resp.json()[0]['icEncId']}   ${encid}
-    Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}     ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}     ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['lotNumber']}     ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['locationId']}    ${locId1}
     Should Be Equal As Strings    ${resp.json()[0]['storeId']}    ${StoreId}
@@ -453,7 +465,7 @@ JD-TC-GET Inventory Catalog Item Filter-8
     Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId} 
     Should Be Equal As Strings    ${resp.json()[0]['inventoryCatalogId']}    ${inventoryCatalogId}     
     Should Be Equal As Strings    ${resp.json()[0]['icEncId']}   ${encid}
-    Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}     ${bool[1]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}     ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['lotNumber']}     ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['locationId']}    ${locId1}
     Should Be Equal As Strings    ${resp.json()[0]['storeId']}    ${StoreId}
