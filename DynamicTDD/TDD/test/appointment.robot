@@ -17,7 +17,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 # ${count}  ${1000}
 ${count}  ${50}
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
-${order}        0
+${zero}        0
 
 
 *** Test Cases ***
@@ -42,7 +42,7 @@ JD-TC-TakeAppointment-1
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         Set Test Variable  ${account_id}  ${resp.json()['id']}
-        Set TEst Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
+        # Set TEst Variable  ${tz}  ${resp.json()['baseLocation']['bSchedule']['timespec'][0]['timezone']}
 
         ${resp}=   Get License UsageInfo 
         Log  ${resp.content}
@@ -146,6 +146,12 @@ JD-TC-TakeAppointment-1
             Should Be Equal As Strings  ${resp1.status_code}  200
             
         END
+
+        ${resp}=  Get Appointments Today  apptStatus-eq=${apptStatus[1]}  apptStatus-neq=${apptStatus[6]},${apptStatus[5]},${apptStatus[4]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${prepay_appt_len}=  Get Length   ${resp.json()}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${prepay_appt_len}  ${zero}
         
         ${resp}=  Get Appointments Today  apptStatus-neq=${apptStatus[6]},${apptStatus[5]},${apptStatus[4]}
         Log  ${resp.content}
@@ -159,6 +165,12 @@ JD-TC-TakeAppointment-1
             
         END
 
+        ${resp}=  Get Appointments Today  apptStatus-neq=${apptStatus[6]},${apptStatus[5]},${apptStatus[4]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${today_appt_len}=  Get Length   ${resp.json()}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${today_appt_len}  ${zero}
+
         ${resp}=  Get Future Appointments  apptStatus-neq=${apptStatus[6]},${apptStatus[5]},${apptStatus[4]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -170,6 +182,12 @@ JD-TC-TakeAppointment-1
             Should Be Equal As Strings  ${resp1.status_code}  200
             
         END
+
+        ${resp}=  Get Future Appointments  apptStatus-neq=${apptStatus[6]},${apptStatus[5]},${apptStatus[4]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${future_appt_len}=  Get Length   ${resp.json()}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${future_appt_len}  ${zero}
 
         ${resp}=   Get Appointments History
         Log  ${resp.content}
