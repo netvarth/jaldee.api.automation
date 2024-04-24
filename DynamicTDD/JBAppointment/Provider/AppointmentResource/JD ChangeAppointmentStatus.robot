@@ -5330,7 +5330,7 @@ JD-TC-ChangeAppointmentStatus-14
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
 
-    ${resp}=  Appointment Action   ${apptStatus[4]}   ${apptid1}
+    ${resp}=  Appointment Action   ${apptStatus[6]}   ${apptid1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     # Should Be Equal As Strings  "${resp.json()}"  "${APPOINTMET_AlREADY_TAKEN}"
