@@ -25,15 +25,15 @@ ${invalidstring}     _ad$.sa_
 ${invalidItem}     sprx-3250dr0-800
 @{spItemSource}      RX       Ayur
 ${originFrom}       NONE
-@{orderStatus}      ORDER_PENDING    ORDER_RECEIVED      ORDER_CONFIRMED      ORDER_COMPLETED     ORDER_CANCELED      ORDER_DISCARDED
+@{orderStatus}      ORDER_DRAFT        ORDER_CONFIRMED      ORDER_COMPLETED     ORDER_CANCELED      ORDER_DISCARDED
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
-@{deliveryStatus}     NOT_DELIVERED        DELIVERED    READY_FOR_PICKUP    READY_FOR_SHIPMENT      READY_FOR_DELIVERY      SHIPPED     IN_TRANSIST
+@{deliveryStatus}     NOT_DELIVERED        ORDER_RECEIVED    PACKING    READY_FOR_PICKUP      IN_TRANSIST      DELIVERED    
     
 *** Test Cases ***
 
 JD-TC-Update Sales Order Status-1
 
-    [Documentation]   Create a sales Order then change it's order status to ORDER_RECEIVED.
+    [Documentation]   Create a sales Order then change it's order status to ORDER_CONFIRMED.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
@@ -299,25 +299,7 @@ JD-TC-Update Sales Order Status-1
 
 JD-TC-Update Sales Order Status-2
 
-    [Documentation]   Update order status ORDER_RECEIVED to ORDER_CONFIRMED.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[2]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Sales Order    ${SO_Uid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[2]}
-
-JD-TC-Update Sales Order Status-3
-
-    [Documentation]   Update order status ORDER_CONFIRMED to ORDER_COMPLETED.
+    [Documentation]   Update order status ORDER_CONFIRMED to ORDER_CANCELED.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
@@ -333,9 +315,105 @@ JD-TC-Update Sales Order Status-3
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[3]}
 
+JD-TC-Update Sales Order Status-3
+
+    [Documentation]   Update order status ORDER_CANCELED to ORDER_DRAFT.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
+
 JD-TC-Update Sales Order Status-4
 
+    [Documentation]   Update order status ORDER_DRAFT to ORDER_CONFIRMED then change to ORDER_COMPLETED.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[2]}
+
+
+JD-TC-Update Sales Order Status-5
+
+    [Documentation]   Update order status ORDER_COMPLETED to ORDER_DRAFT.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
+
+JD-TC-Update Sales Order Status-6
+
+    [Documentation]   Update order status ORDER_COMPLETED to ORDER_CONFIRMED.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+
+JD-TC-Update Sales Order Status-7
+
     [Documentation]   Update order status ORDER_COMPLETED to ORDER_CANCELED.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[3]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[3]}
+
+
+JD-TC-Update Sales Order Status-8
+
+    [Documentation]   Update order status ORDER_COMPLETED to ORDER_DISCARDED.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
@@ -351,16 +429,15 @@ JD-TC-Update Sales Order Status-4
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[4]}
 
+JD-TC-Update Sales Order Status-9
 
-JD-TC-Update Sales Order Status-5
-
-    [Documentation]   Update order status ORDER_CANCELED to ORDER_DISCARDED.
+    [Documentation]   Update order status ORDER_COMPLETED to ORDER_COMPLETED.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[5]}
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[2]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -368,17 +445,55 @@ JD-TC-Update Sales Order Status-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[5]}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[2]}
 
-JD-TC-Update Sales Order Status-6
+JD-TC-Update Sales Order Status-10
 
-    [Documentation]   Update order status to same status.
+    [Documentation]   Update order status ORDER_DRAFT to ORDER_COMPLETED.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[5]}
+    ${quantity}=    Random Int  min=2   max=5
+
+    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+    Set Suite Variable  ${SO_Cata_Encid_List}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+    Set Suite Variable  ${store}
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid}  ${resp.json()}
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Update Sales Order Status-11
+
+    [Documentation]   Update order status ORDER_DRAFT to ORDER_CANCELED.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[3]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Update Sales Order Status-12
+
+    [Documentation]   Update order status ORDER_DRAFT to ORDER_CONFIRMED then try to change ORDER_DRAFT.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -386,4 +501,20 @@ JD-TC-Update Sales Order Status-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[5]}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Update Sales Order Status-13
+
+    [Documentation]   Update order status ORDER_CONFIRMED to ORDER_DISCARDED.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[4]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
