@@ -17,7 +17,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 # ${count}  ${1000}
 ${count}  ${50}
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
-${order}        0
+${zero}        0
 
 
 *** Test Cases ***
@@ -150,6 +150,12 @@ JD-TC-AddToWL-1
             
 
         END
+
+        ${resp}=  Get Waitlist Today  waitlistStatus-eq=${wl_status[0]}  waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${prepay_wl_len}=  Get Length   ${resp.json()}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${prepay_wl_len}  ${zero}
         
         ${resp}=  Get Waitlist Today   waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
         Log  ${resp.content}
@@ -163,6 +169,17 @@ JD-TC-AddToWL-1
 
         END
 
+        ${resp}=  Get Waitlist Today   waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${today_wl_len}=  Get Length   ${resp.json()}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${today_wl_len}  ${zero}
+
+        ${resp}=  Get Waitlist Today
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${today_wl_len}=  Get Length   ${resp.json()}
+
         ${resp}=  Get Waitlist Future  waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -174,6 +191,17 @@ JD-TC-AddToWL-1
             Should Be Equal As Strings  ${resp1.status_code}  200
             
         END
+
+        ${resp}=  Get Waitlist Future  waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${future_wl_len}=  Get Length   ${resp.json()}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${future_wl_len}  ${zero}
+
+        ${resp}=  Get Waitlist Future
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${future_wl_len}=  Get Length   ${resp.json()}
 
         ${resp}=  Get history Waitlist  waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
         Log  ${resp.content}
@@ -187,10 +215,21 @@ JD-TC-AddToWL-1
             
         END
 
+        ${resp}=  Get history Waitlist  waitlistStatus-neq=${wl_status[5]},${wl_status[4]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${past_wl_len}=  Get Length   ${resp.json()}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${past_wl_len}  ${zero}
+
         ${resp}=  Get history Waitlist  
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${past_wl_len}=  Get Length   ${resp.json()}
+
+        ${resp}=  Get Queues
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}   200
+        ${queues_count}=  Get Length  ${resp.json()}
 
         ${resp}=  Get Queues  state-eq=${Qstate[0]}
         Log  ${resp.content}
