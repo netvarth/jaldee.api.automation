@@ -28,15 +28,14 @@ ${originFrom}       NONE
 @{orderStatus}      ORDER_PENDING    ORDER_RECEIVED      ORDER_CONFIRMED      ORDER_COMPLETED     ORDER_CANCELED      ORDER_DISCARDED
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
 @{deliveryStatus}     NOT_DELIVERED        DELIVERED    READY_FOR_PICKUP    READY_FOR_SHIPMENT      READY_FOR_DELIVERY      SHIPPED     IN_TRANSIST
-${s_len}            1
-
+${count}        1
 *** Test Cases ***
 
-JD-TC-Get Sales Order With Count Filter -1
+JD-TC-Get invoice filter-1
 
-    [Documentation]   Create a sales Order then try to get sales order count with encId param.
+    [Documentation]   Create a sales Order with Valid Details then Get invoice count filter by uid param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -65,11 +64,11 @@ JD-TC-Get Sales Order With Count Filter -1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME22}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME29}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -99,7 +98,7 @@ JD-TC-Get Sales Order With Count Filter -1
     Set Suite Variable  ${DAY1} 
 
     ${Name}=    FakerLibrary.last name
-    Set Suite Variable  ${Name} 
+    Set Suite Variable  ${Name}
 
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
@@ -109,6 +108,11 @@ JD-TC-Get Sales Order With Count Filter -1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
+
+    ${resp}=    Get Store ByEncId   ${store_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${st_id}  ${resp.json()['id']}
 
 # ---------------------------------------------------------------------------------------------------
 
@@ -198,7 +202,7 @@ JD-TC-Get Sales Order With Count Filter -1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -209,23 +213,20 @@ JD-TC-Get Sales Order With Count Filter -1
     Set Suite Variable  ${SO_Cata_Encid_List}
 
     ${store}=  Create Dictionary   encId=${store_id}  
-    Set Suite Variable  ${store}
 
     ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid}  ${resp.json()}
-    # ${s_len}=  Get Length  ${resp.content}
 
     ${netTotal}=  Evaluate  ${price}*${quantity}
     ${netTotal}=  Convert To Number  ${netTotal}   1
+    Set Suite Variable  ${netTotal}
 
 
     ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
-
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
     Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
@@ -267,310 +268,131 @@ JD-TC-Get Sales Order With Count Filter -1
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 # -----------------------------------------------------------------------------------------------------------------------------------------
 
-# ------------------------------------ Update order status --------------------------------------------------
+# ------------------------------------------------Create Sales Order Invoice----------------------------------------------
 
-    ${quantity}=    Random Int  min=20   max=50
-
-    ${netTotal}=  Evaluate  ${price}*${quantity}
-    ${netTotal}=  Convert To Number  ${netTotal}   1
-
-    ${resp}=    Update Order Items    ${SO_Uid}     ${SO_itemEncIds}    ${quantity}
+    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable      ${SO_Inv}    ${resp.json()}  
+# ------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Get Invoice By Invoice EncId -----------------------------------------------
 
-    ${resp}=    Get Sales Order    ${SO_Uid}   
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
-    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
-    Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 
-
-# ------------------------------------------------------------------------------------------------------------------
-
-# --------------------------------------------- Get Order list -------------------------------------------------------------
-
-    ${resp}=    Get SalesOrder Count     encId-eq=${SO_Encid}   
+    ${resp}=    Get invoice count filter    uid-eq=${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}                         
-    
-JD-TC-Get Sales Order With Count Filter -2
+    Should Be Equal As Strings    ${resp.json()}     ${count}
 
-    [Documentation]    Try to get sales order count with uid param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+JD-TC-Get invoice filter-2
+
+    [Documentation]   Get invoice count filter by status param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get SalesOrder Count         uid-eq=${SO_Uid}   
+    ${resp}=    Get invoice count filter    status-eq=${billStatus[0]}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
+    Should Be Equal As Strings    ${resp.json()}     ${count}
 
-JD-TC-Get Sales Order With Count Filter -3
 
-    [Documentation]    Try to get sales order count with locationId param.
+JD-TC-Get invoice filter-3
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    [Documentation]   Get invoice count filter by storeId param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get SalesOrder Count     locationId-eq=${locId1}   
+    ${resp}=    Get invoice count filter    storeId-eq=${st_id}   
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()}     ${count}
 
-JD-TC-Get Sales Order With Count Filter -4
+JD-TC-Get invoice filter-4
 
-    [Documentation]    Try to get sales order count with locationName param.
+    [Documentation]   Get invoice count filter by locationId param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Locations
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${location_name}   ${resp.json()[0]['place']}
-
-    ${resp}=    Get SalesOrder Count     locationName-eq=${location_name}   
+    ${resp}=    Get invoice count filter    locationId-eq=${locId1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
+    Should Be Equal As Strings    ${resp.json()}     ${count}
 
-JD-TC-Get Sales Order With Count Filter -5
+JD-TC-Get invoice filter-5
 
-    [Documentation]    Try to get sales order count with storeId param.
+    [Documentation]   Get invoice count filter by orderUid param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get SalesOrder Count     storeId-eq=${store_id}   
+    ${resp}=    Get invoice count filter    orderUid-eq=${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
+    Should Be Equal As Strings    ${resp.json()}     ${count}
 
-JD-TC-Get Sales Order With Count Filter -6
+JD-TC-Get invoice filter-6
 
-    [Documentation]    Try to get sales order count with storeName param.
+    [Documentation]   Get invoice count filter by providerConsumerId param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get SalesOrder Count     storeName-eq=${Name}   
+    ${resp}=    Get invoice count filter    providerConsumerId-eq=${cid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-JD-TC-Get Sales Order With Count Filter -7
+    Should Be Equal As Strings    ${resp.json()}     ${count}
 
-    [Documentation]    Try to get sales order count with orderNum param.
+JD-TC-Get invoice filter-7
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    [Documentation]   Get invoice count filter by providerConsumerName param.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get SalesOrder Count     orderNum-eq=1   
+    ${resp}=    Get invoice count filter    providerConsumerName-eq=${firstName} ${lastName}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
+    Should Be Equal As Strings    ${resp.json()}     ${count}
 
-JD-TC-Get Sales Order With Count Filter -8
+JD-TC-Get invoice filter-8
 
-    [Documentation]    Try to get sales order count with rxRefId param.
+    [Documentation]   Get invoice count filter by paymentStatus param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get SalesOrder Count     rxRefId-eq=1   
+    ${resp}=    Get invoice count filter    paymentStatus-eq=${paymentStatus[0]} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -9
-
-    [Documentation]    Try to get sales order count with providerConsumerName param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     providerConsumerName-eq=${firstName} ${lastName}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -10
-
-    [Documentation]    Try to get sales order count with sorderCatalogId param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     sorderCatalogId-eq=${SO_Cata_Encid}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -11
-
-    [Documentation]    Try to get sales order count with soCatalogName param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     soCatalogName-eq=${Name}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -12
-
-    [Documentation]    Try to get sales order count with originFrom param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     originFrom-eq=${originFrom}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -13
-
-    [Documentation]    Try to get sales order count with orderType param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     orderType-eq=${bookingChannel[0]}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -14
-
-    [Documentation]    Try to get sales order count with orderStatus param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     orderStatus-eq=${orderStatus[0]}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -15
-
-    [Documentation]    Try to get sales order count with deliveryType param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     deliveryType-eq=${deliveryType[0]}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -16
-
-    [Documentation]    Try to get sales order count with deliveryStatus param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     deliveryStatus-eq=${deliveryStatus[0]} 
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-    
-*** Comments ***
-JD-TC-Get Sales Order With Count Filter -17
-
-    [Documentation]    Try to get sales order count with partnerSpAccountId param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     partnerSpAccountId-eq=1   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -18
-
-    [Documentation]    Try to get sales order count with partnerSpName param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     partnerSpName-eq=1   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -19
-
-    [Documentation]    Try to get sales order count with partnerSpUserId param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     partnerSpUserId-eq=1   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -20
-
-    [Documentation]    Try to get sales order count with partnerSpUserName param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     partnerSpUserName-eq=1   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -21
-
-    [Documentation]    Try to get sales order count with partnerSpRxOwnerId param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     partnerSpRxOwnerId-eq=1   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
-
-JD-TC-Get Sales Order With Count Filter -22
-
-    [Documentation]    Try to get sales order count with partnerSpRxOwnerName param.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get SalesOrder Count     partnerSpRxOwnerName-eq=1   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()}                 ${s_len}    
+    Should Be Equal As Strings    ${resp.json()}     ${count}

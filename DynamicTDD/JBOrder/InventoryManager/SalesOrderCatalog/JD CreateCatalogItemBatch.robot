@@ -15,6 +15,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/musers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -27,20 +28,8 @@ ${pngfile}      /ebs/TDD/upload.png
 ${fileSize}     0.00458
 ${order}        0
 
-*** Keywords ***
 
-Create Catalog Item Batch-invMgmt True
 
-    [Arguments]       ${SO_Cata_Item_Encid}         @{vargs}      
-    ${items}=    Create List   
-    ${len}=  Get Length  ${vargs}
-    FOR    ${index}    IN RANGE    ${len}  
-        Append To List  ${items}  ${vargs[${index}]}
-    END 
-    ${data}=  json.dumps  ${items}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/so/catalog/item/${SO_Cata_Item_Encid}/batch      data=${data}  expected_status=any
-    RETURN  ${resp} 
 
 *** Test Cases ***
 
@@ -388,11 +377,11 @@ JD-TC-Create Catalog Item Batch-UH8
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
 
-JD-TC-UpdatePurchaseStatus-1
+JD-TC-Create Catalog Item Batch-4
 
-    [Documentation]  Update Purchase Status - change status to IN REVIEW
+    [Documentation]  creating batch item when inventory manager is on
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -464,7 +453,7 @@ JD-TC-UpdatePurchaseStatus-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -924,13 +913,177 @@ JD-TC-UpdatePurchaseStatus-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${batch_encid}  ${resp.json()[0]['uid']}
-    ${encid}=  Create Dictionary          encId=${batch_encid} 
+    ${enccid}=  Create Dictionary          encId=${batch_encid} 
+    Set Suite Variable  ${enccid}
 
     ${Name1}=    FakerLibrary.last name
     ${price1}=    Random Int  min=2   max=40
     ${price1}=  Convert To Number  ${price1}    1
-    ${catalog_details}=  Create Dictionary          name=${Name1}  price=${price1}   inventoryItemBatch=${encid}   
+    ${catalog_details}=  Create Dictionary          name=${Name1}  price=${price1}   inventoryItemBatch=${enccid}   
+    Set Suite Variable  ${catalog_details}  
 
     ${resp}=   Create Catalog Item Batch-invMgmt True   ${SO_itemEncIds}    ${catalog_details}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+JD-TC-Create Catalog Item Batch-UH9
+
+    [Documentation]  creating same batch item when inventory manager is on
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Name1}=    FakerLibrary.first name
+    ${price1}=    Random Int  min=2   max=40
+    ${price1}=  Convert To Number  ${price1}    1
+    ${catalog_details1}=  Create Dictionary          name=${Name1}  price=${price1}   inventoryItemBatch=${enccid}   
+
+    ${resp}=   Create Catalog Item Batch-invMgmt True   ${SO_itemEncIds}    ${catalog_details}   ${catalog_details1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${ITEM_BATCH_EXISTS_WITH_GIVEN_NAME}
+
+
+JD-TC-Create Catalog Item Batch-5
+
+    [Documentation]  creating multiple batch item for same catalog item batch when inventory manager is on
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Name1}=    FakerLibrary.last name
+
+    ${resp}=  Create Inventory Catalog   ${Name1}  ${store_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${encid1}  ${resp.json()}
+
+    ${resp}=   Create Inventory Catalog Item  ${encid1}   ${itemEncId1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Test Variable   ${ic_id1}   ${resp.json()[0]}
+
+
+
+    ${quantity}=                    Random Int  min=0  max=999
+    ${quantity}=                    Convert To Number  ${quantity}  1
+    ${freeQuantity}=                Random Int  min=0  max=10
+    ${freeQuantity}=                Convert To Number  ${freeQuantity}  1
+    ${amount}=                      Random Int  min=1  max=999
+    ${amount}=                      Convert To Number  ${amount}  1
+    ${discountPercentage}=          Random Int  min=0  max=100
+    ${discountPercentage}=          Convert To Number  ${discountPercentage}  1
+    ${fixedDiscount}=               Random Int  min=0  max=200
+    ${fixedDiscount}=               Convert To Number  ${fixedDiscount}  1
+    ${inventoryCatalogItem}=        Create Dictionary   encId=${ic_id1}
+
+
+    ${totalQuantity}=   Evaluate    ${quantity} + ${freeQuantity}
+    ${netTotal}=        Evaluate    ${quantity} * ${amount}
+    ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
+    ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
+    ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
+    ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
+    ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
+    ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
+
+
+    ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                     200
+    Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity}
+    Should Be Equal As Strings      ${resp.json()['freeQuantity']}          ${freeQuantity}
+    Should Be Equal As Strings      ${resp.json()['totalQuantity']}         ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()['amount']}                ${amount}
+    Should Be Equal As Strings      ${resp.json()['discountPercentage']}    ${discountPercentage}
+    Should Be Equal As Strings      ${resp.json()['discountAmount']}        ${discountAmount}
+    Should Be Equal As Strings      ${resp.json()['taxableAmount']}         ${taxableAmount}
+    Should Be Equal As Strings      ${resp.json()['cgstPercentage']}        ${cgst}
+    Should Be Equal As Strings      ${resp.json()['sgstPercentage']}        ${sgst}
+    Should Be Equal As Strings      ${resp.json()['cgst']}                  ${cgstamount}
+    Should Be Equal As Strings      ${resp.json()['sgst']}                  ${sgstamount}
+    Should Be Equal As Strings      ${resp.json()['taxPercentage']}         ${taxPercentage}
+    Should Be Equal As Strings      ${resp.json()['taxAmount']}             ${taxAmount}
+    Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
+    Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
+
+    ${inv_cat_encid_List}=  Create List  ${encid1}
+    ${price}=    Random Int  min=2   max=40
+    ${price}=  Convert To Number  ${price}    1
+
+
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid_List}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${inv_order_encid1}  ${resp.json()}
+
+
+
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${inv_order_encid1}    ${boolean[1]}     ${ic_id1}     ${price}    ${boolean[1]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${SO_itemEncIds1}  ${resp.json()[0]}
+
+
+    ${expiryDate}=  db.add_timezone_date  ${tz}  50
+
+    ${salesRate}=   Evaluate        ${amount} / ${convertionQty}
+    ${invoiceDate}=  db.add_timezone_date  ${tz}  1
+    ${rate}=        Evaluate        int(${salesRate})
+    ${mrp}=         Random Int      min=${rate}  max=9999
+    ${batchNo}=     Random Int      min=1  max=9999
+    ${invoiceReferenceNo}=          Random Int  min=1  max=999
+    ${purchaseNote}=                FakerLibrary.Sentence
+    ${roundOff}=                    Random Int  min=1  max=99
+
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id1}  ${inv_order_encid1}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid1}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Set Test Variable              ${purchaseId}           ${resp.json()}
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[0]}
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[1]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[1]}
+
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[2]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
+
+
+    ${resp}=  Get Inventoryitem      ${ic_id1}         
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${batch_encid1}  ${resp.json()[0]['uid']}
+    ${enccid1}=  Create Dictionary          encId=${batch_encid1} 
+    Set Test Variable  ${enccid1}
+
+    ${price1}=    Random Int  min=2   max=40
+    ${price1}=  Convert To Number  ${price1}    1
+    ${catalog_details1}=  Create Dictionary          name=${Name1}  price=${price1}   inventoryItemBatch=${enccid1}   
+    Set Test Variable  ${catalog_details1}  
+
+    ${resp}=   Create Catalog Item Batch-invMgmt True   ${SO_itemEncIds}     ${catalog_details1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+

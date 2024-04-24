@@ -171,6 +171,11 @@ JD-TC-TakeAppointment-1
         ${today_appt_len}=  Get Length   ${resp.json()}
         Run Keyword And Continue On Failure  Should Be Equal As Strings  ${today_appt_len}  ${zero}
 
+        ${resp}=  Get Appointments Today
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${today_appt_len}=  Get Length   ${resp.json()}
+
         ${resp}=  Get Future Appointments  apptStatus-neq=${apptStatus[6]},${apptStatus[5]},${apptStatus[4]}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -189,9 +194,38 @@ JD-TC-TakeAppointment-1
         ${future_appt_len}=  Get Length   ${resp.json()}
         Run Keyword And Continue On Failure  Should Be Equal As Strings  ${future_appt_len}  ${zero}
 
+        ${resp}=  Get Future Appointments
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${future_appt_len}=  Get Length   ${resp.json()}
+        
+        ${resp}=   Get Appointments History  apptStatus-neq=${apptStatus[6]},${apptStatus[5]},${apptStatus[4]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${past_appt_len}=  Get Length   ${resp.json()}
+        FOR   ${i}  IN RANGE   ${past_appt_len}
+
+            ${resp1}=  Appointment Action   ${apptStatus[6]}   ${resp.json()[${i}]['uid']}
+            Log  ${resp1.content}
+            Should Be Equal As Strings  ${resp1.status_code}  200
+            
+        END
+
+        ${resp}=   Get Appointments History  apptStatus-neq=${apptStatus[6]},${apptStatus[5]},${apptStatus[4]}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${past_appt_len}=  Get Length   ${resp.json()}
+        Run Keyword And Continue On Failure  Should Be Equal As Strings  ${past_appt_len}  ${zero}
+
         ${resp}=   Get Appointments History
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
+        ${past_appt_len}=  Get Length   ${resp.json()}
+
+        ${resp}=  Get Appointment Schedules
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        ${schedules_count}=  Get Length  ${resp.json()}
 
         ${resp}=  Get Appointment Schedules  state-eq=${Qstate[0]}
         Log  ${resp.content}

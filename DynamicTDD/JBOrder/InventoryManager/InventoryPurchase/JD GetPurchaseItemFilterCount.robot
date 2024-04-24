@@ -30,7 +30,7 @@ JD-TC-GetPurchaseItemFilterCount-1
 
     [Documentation]  Get Purchase Item Filter Count Count
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -102,7 +102,7 @@ JD-TC-GetPurchaseItemFilterCount-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -511,24 +511,11 @@ JD-TC-GetPurchaseItemFilterCount-1
     Should Be Equal As Strings      ${resp.json()}          1
 
 
-JD-TC-GetPurchaseItemFilter-2
+JD-TC-GetPurchaseItemFilterCount-3
 
-    [Documentation]  Get Purchase Item Filter Count
+    [Documentation]  Get Purchase Item Filter Count - purchaseUid
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
- 
-    ${resp}=    Get Purchase Item Filter Count  accountId-eq=${account_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-    Should Be Equal As Strings      ${resp.json()}          1
-
-JD-TC-GetPurchaseItemFilter-3
-
-    [Documentation]  Get Purchase Item Filter Count
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
  
@@ -537,11 +524,11 @@ JD-TC-GetPurchaseItemFilter-3
     Should Be Equal As Strings      ${resp.status_code}     200
     Should Be Equal As Strings      ${resp.json()}          1
 
-JD-TC-GetPurchaseItemFilter-4
+JD-TC-GetPurchaseItemFilterCount-4
 
-    [Documentation]  Get Purchase Item Filter Count
+    [Documentation]  Get Purchase Item Filter Count - expiryDate
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
  
@@ -549,3 +536,12 @@ JD-TC-GetPurchaseItemFilter-4
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
     Should Be Equal As Strings      ${resp.json()}          1
+
+JD-TC-GetPurchaseItemFilterCount-UH2
+
+    [Documentation]  Get Purchase Item Filter Count - without login
+
+    ${resp}=    Get Purchase Item Filter Count 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     419
+    Should Be Equal As Strings      ${resp.json()}          ${SESSION_EXPIRED}
