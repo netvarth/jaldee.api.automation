@@ -4498,9 +4498,14 @@ Reject Appointment
     RETURN  ${resp}
     
 Appointment Action 
-    [Arguments]   ${status}   ${appmntId}   
+    [Arguments]   ${status}   ${appmntId}   &{kwargs}
+    ${data}=  Create Dictionary
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}
     Check And Create YNW Session
-    ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/${status}/${appmntId}  expected_status=any
+    ${resp}=  PUT On Session   ynw  /provider/appointment/statuschange/${status}/${appmntId}  data=${data}  expected_status=any
     RETURN  ${resp}
     
 Enable Future Appointment
@@ -4692,6 +4697,11 @@ Get Future Appointment Count
     RETURN  ${resp}
 
 Get Appointments Today
+    # Available Filters:- service, consumer(procon id), firstName, lastName, appointmentEncId, 
+    # account, schedule, date, apptdate, apptBy, apptTime, apptStatus, paymentStatus, location,
+    # provider(user id), apptstartTime, jaldeeConsumer, rejectReason, cancelReason, appointmentMode
+    # gender, dob, department, label, groups, phoneNo, appmtFor, accessScope, apptForId, apptForIds
+    # providerOwnConsumerId, team, deptId, businessLoc, internalStatus, countryCode, subServiceData
     [Arguments]  &{kwargs}
     Check And Create YNW Session
     ${resp}=    GET On Session     ynw   /provider/appointment/today  params=${kwargs}  expected_status=any
