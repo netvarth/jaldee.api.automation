@@ -19,13 +19,14 @@ ${count}  ${50}
 ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${zero}        0
 @{emptylist}
+${var_file}     ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
 
 
 *** Test Cases ***
 
 JD-TC-AddToWL-1
     [Documentation]   Add To waitlist
-    ${providers_list}=   Get File    ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
+    ${providers_list}=   Get File    ${var_file}
     ${pro_list}=   Split to lines  ${providers_list}
 
     FOR  ${provider}  IN  @{pro_list}
@@ -262,7 +263,7 @@ JD-TC-AddToWL-1
             ${PH_Number}=  FakerLibrary.Numerify  %#####
             # ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
             # Log  ${PH_Number}
-            # Set Suite Variable  ${CUSERPH}  555${PH_Number}
+            # Set Test Variable  ${CUSERPH}  555${PH_Number}
             ${CUSERPH}=  Evaluate  ${CUSERNAME}+${PH_Number}
             Set Test Variable  ${CUSERPH${a}}  ${CUSERPH}
             ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${a}}  
