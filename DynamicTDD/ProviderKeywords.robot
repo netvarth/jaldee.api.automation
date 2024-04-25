@@ -98,7 +98,12 @@ Business Profile
     ${bs}=  Create List  ${bs}
     ${bs}=  Create Dictionary  timespec=${bs}
     ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${bs}  pinCode=${pin}  address=${adds}
-    ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    # ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    IF  '${ph1}' != '${EMPTY}' and '${ph1}' != '${NONE}' and '${ph2}' != '${EMPTY}' and '${ph2}' != '${NONE}'
+        ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    ELSE
+        ${ph_nos}=  Create List
+    END
     ${emails}=  Create List  ${email1}
     ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}  phoneNumbers=${ph_nos}  emails=${emails}
     ${data}=  json.dumps  ${data}
@@ -185,7 +190,13 @@ Business Profile with schedule
     ${bs}=  Create List  ${bs}
     ${bs}=  Create Dictionary  timespec=${bs}
     ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${bs}  pinCode=${pin}  address=${adds}  id=${lid}
-    ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    
+    # ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    IF  '${ph1}' != '${EMPTY}' and '${ph1}' != '${NONE}' and '${ph2}' != '${EMPTY}' and '${ph2}' != '${NONE}'
+        ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    ELSE
+        ${ph_nos}=  Create List
+    END
     ${emails}=  Create List  ${email1}
     ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}  phoneNumbers=${ph_nos}  emails=${emails}
     FOR    ${key}    ${value}    IN    &{kwargs}
