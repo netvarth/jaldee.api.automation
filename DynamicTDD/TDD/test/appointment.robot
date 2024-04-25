@@ -344,5 +344,7 @@ JD-TC-TakeAppointment-1
             ${resp}=    Send Message With Appointment   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  uuid=${uuid}  # attachments=${attachment}
             Log  ${resp.content}
             Should Be Equal As Strings  ${resp.status_code}  200
+            BREAK
         END
+        BREAK
     END

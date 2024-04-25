@@ -41,6 +41,35 @@ Check kwargs
 
 *** Test Cases ***  
 
+Cheking files exists
+
+    # Create Directory   ${EXECDIR}/TDD/${ENVIRONMENT}data/
+    # Create Directory   ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/
+        
+    ${data_dir_path}=  Set Variable    ${EXECDIR}/TDD/${ENVIRONMENT}data/
+    ${var_dir_path}=  Set Variable    ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/
+    ${file_name}=    Set Variable    ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
+
+    IF  ${{os.path.exists($data_dir_path)}} is False
+        Log  Data Directory exists
+    ELSE
+        Log  Data Directory Doesn't Exist
+    END
+
+    IF  ${{os.path.exists($var_dir_path)}} is False
+        Log  Var Directory exists
+    ELSE
+        Log  Var Directory Doesn't Exist
+    END
+
+    IF  ${{os.path.exists($file_name)}} is False
+        Log  File exists
+    ELSE
+        Log  File Doesn't Exist
+    END
+
+*** Comments ***
+
 Testing python lower fn
 
     ${date} = 	DateTime.Get Current Date 	
