@@ -15005,3 +15005,14 @@ Get Stock Avaliability
     ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/invcatalogitem/${InvCatalogItemEncId}  expected_status=any 
     RETURN  ${resp}
 
+Update Sales Order
+
+    [Arguments]   ${uid}     ${notes}    ${notesForCustomer}   ${billingAddress}   ${homeDeliveryAddress}   ${contactInfo}
+
+    ${data}=  Create Dictionary   notes=${notes}    notesForCustomer=${notesForCustomer}     billingAddress=${billingAddress}    homeDeliveryAddress=${homeDeliveryAddress}    contactInfo=${contactInfo}
+    # ${data}=   Create List    ${item} 
+    # ${data}=  Create Dictionary        items=${items}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/sorder/${uid}   data=${data}  expected_status=any
+    RETURN  ${resp} 

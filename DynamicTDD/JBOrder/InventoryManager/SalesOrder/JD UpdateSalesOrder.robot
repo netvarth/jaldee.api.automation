@@ -29,18 +29,6 @@ ${originFrom}       NONE
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
 @{deliveryStatus}     NOT_DELIVERED        DELIVERED    READY_FOR_PICKUP    READY_FOR_SHIPMENT      READY_FOR_DELIVERY      SHIPPED     IN_TRANSIST
 
-*** Keywords ***
-Update Sales Order
-
-    [Arguments]   ${uid}     ${notes}    ${notesForCustomer}   ${billingAddress}   ${homeDeliveryAddress}   ${contactInfo}
-
-    ${data}=  Create Dictionary   notes=${notes}    notesForCustomer=${notesForCustomer}     billingAddress=${billingAddress}    homeDeliveryAddress=${homeDeliveryAddress}    contactInfo=${contactInfo}
-    # ${data}=   Create List    ${item} 
-    # ${data}=  Create Dictionary        items=${items}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/sorder/${uid}   data=${data}  expected_status=any
-    RETURN  ${resp} 
 
 *** Test Cases ***
 
@@ -51,6 +39,16 @@ JD-TC-Update Sales Order-1
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=  Get Store Type By Filter     
     Log   ${resp.content}
