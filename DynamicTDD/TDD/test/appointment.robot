@@ -281,9 +281,10 @@ JD-TC-TakeAppointment-1
         FOR   ${a}  IN RANGE   ${count}
         
             ${PH_Number}=  FakerLibrary.Numerify  %#####
-            ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-            Log  ${PH_Number}
-            Set Suite Variable  ${CUSERPH}  555${PH_Number}
+            # ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+            # Log  ${PH_Number}
+            # Set Suite Variable  ${CUSERPH}  555${PH_Number}
+            ${CUSERPH}=  Evaluate  ${CUSERNAME}+${PH_Number}
             Set Test Variable  ${CUSERPH${a}}  ${CUSERPH}
             ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${a}}  
             Log  ${resp.content}
@@ -345,7 +346,7 @@ JD-TC-TakeAppointment-1
             ${resp}=    Send Message With Appointment   ${caption1}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  ${boolean[1]}  uuid=${uuid}  # attachments=${attachment}
             Log  ${resp.content}
             Should Be Equal As Strings  ${resp.status_code}  200
-            BREAK
+            # BREAK
         END
-        BREAK
+        # BREAK
     END
