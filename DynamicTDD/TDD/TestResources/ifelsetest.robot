@@ -45,6 +45,35 @@ Cheking files exists
 
     # Create Directory   ${EXECDIR}/TDD/${ENVIRONMENT}data/
     # Create Directory   ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/
+
+    # ${ph1}=  Evaluate  ${PUSERPH0}+1000000000
+    # ${ph2}=  Evaluate  ${PUSERPH0}+2000000000
+    # ${ph1}=  Set Variable  ${EMPTY}
+    # ${ph2}=  Set Variable  ${EMPTY}
+    ${null_list}=  Create List  ${EMPTY}  ${NONE}
+    ${ph1}=  Set Variable  ${NONE}
+    ${ph2}=  Set Variable  ${NONE}
+    # ${ph1.strip()}
+    # ${ph2.strip()}
+    # IF  not ${ph1.strip()}
+    #     Log  nothing
+    # END
+    # IF    not ${items}
+    IF  '${ph1}' != '${EMPTY}' and '${ph1}' != '${NONE}' and '${ph2}' != '${EMPTY}' and '${ph2}' != '${NONE}'
+        ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    # ELSE IF  '${ph1}' != '${NONE}' and '${ph2}' != '${NONE}'
+    #     ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    ELSE
+        ${ph_nos}=  Create List
+    END
+    # IF  '${ph1}' != '${EMPTY}' and '${ph2.strip()}' != '${EMPTY}'
+    # IF  '${ph1}' not in @{null_list} and '${ph2}' not in @{null_list}
+    #     ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    # ELSE
+    #     ${ph_nos}=  Create List
+    # END
+    # ${ph_nos}=  Create List  ${ph1.strip()}  ${ph2.strip()}
+    Log  ${ph_nos}
         
     ${data_dir_path}=  Set Variable    ${EXECDIR}/TDD/${ENVIRONMENT}data/
     ${var_dir_path}=  Set Variable    ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/
