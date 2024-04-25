@@ -91,4 +91,7 @@ UPDATE ynw.local_user_tbl localuser_tbl, ynw.user_profile_tbl profile_tbl SET lo
 -- Archana 26-10-2023
 UPDATE ynw.account_tbl SET timezone = 'Asia/Kolkata' WHERE (id = '1');
 
+ALTER TABLE ynw.account_info_tbl 
+CHANGE COLUMN cover cover LONGTEXT NULL DEFAULT NULL ;
+
 

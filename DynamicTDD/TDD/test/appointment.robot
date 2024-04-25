@@ -328,9 +328,9 @@ JD-TC-TakeAppointment-1
             Should Be Equal As Strings  ${resp.json()['appointmentEncId']}   ${encId${a}}
 
             ${fileSize}=  OperatingSystem.Get File Size  ${jpgfile}
-            ${resp}=  db.getType   ${jpgfile}
-            Log  ${resp}
-            ${fileType1}=  Get From Dictionary       ${resp}    ${jpgfile}
+            ${type}=  db.getType   ${jpgfile}
+            Log  ${type}
+            ${fileType1}=  Get From Dictionary       ${type}    ${jpgfile}
             ${caption1}=  Fakerlibrary.Sentence
             ${path} 	${file} = 	Split String From Right 	${jpgfile} 	/ 	1
             ${fileName}  ${file_ext}= 	Split String 	${file}  .

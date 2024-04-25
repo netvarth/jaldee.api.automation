@@ -10081,6 +10081,22 @@ Get Department Icon
     RETURN  ${resp}
 
 
+Upload Cover Picture
+    [Arguments]    ${cookie}  ${caption}   ${file}
+    ${prop}=  Create Dictionary  caption=${caption}
+    ${prop}=  json.dumps  ${prop}
+    Create File  TDD/cover.json  ${prop}  
+    ${resp}=  uploadCoverPhoto   ${cookie}  img=${file}
+    RETURN  ${resp}
+
+
+Get Cover Picture
+    # [Arguments]    ${cookie}  ${caption}   ${file}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   url=/provider/cover    expected_status=any
+    RETURN  ${resp}
+
+
 #   MFA Login
 
 Multi Factor Authentication

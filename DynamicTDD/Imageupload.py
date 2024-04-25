@@ -3361,3 +3361,30 @@ def UploadJrxitemSA(cookie_dict, file):
     except Exception as e:
         print ("Exception:", e)
         print ("Exception at line no:", e.__traceback__.tb_lineno)
+
+
+coverimg = '/ebs/TDD/cover.jpg'
+coverpty='/ebs/TDD/cover.json'
+def uploadCoverPhoto(cookie_dict,ppty=coverpty,img=coverimg):
+    url = BASE_URL + '/provider/coverPicture'
+    s = requests.Session()
+    s.cookies.update(cookie_dict)      
+    try:
+        # headers = {
+        #     'Content-Type': "multipart/form-data",
+        # }
+
+        mimetype, encoding = mimetypes.guess_type(img)
+        data = {
+        'files': (img, open(img, 'rb'), mimetype), 
+        'properties': (None, open(ppty, 'rb'), 'application/json')
+        }
+    
+        # print (data)
+        resp = s.post(url, files=data)
+        log_request(resp)
+        log_response(resp)
+        return resp
+    except Exception as e:
+        print ("Exception:", e)
+        print ("Exception at line no:", e.__traceback__.tb_lineno)

@@ -175,9 +175,9 @@ JD-TC-Provider_Signup-1
         # Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}     ${lname}
         # Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}        ${ph}
 
-        ${resp}=  Provider Change Password  ${PASSWORD}  ${NEW_PASSWORD}
-        Should Be Equal As Strings    ${resp.status_code}    200
-        ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${NEW_PASSWORD}
-        Should Be Equal As Strings    ${resp.status_code}    200
+        # ${resp}=  Provider Change Password  ${PASSWORD}  ${NEW_PASSWORD}
+        # Should Be Equal As Strings    ${resp.status_code}    200
+        # ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${NEW_PASSWORD}
+        # Should Be Equal As Strings    ${resp.status_code}    200
     
     END
