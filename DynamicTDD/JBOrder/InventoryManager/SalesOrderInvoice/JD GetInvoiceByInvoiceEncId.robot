@@ -35,9 +35,25 @@ JD-TC-Get Sales Order Invoice-1
 
     [Documentation]   Create a sales Order with Valid Details then Genarate sales order invoice and verify.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    sleep  01s
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+        ${resp}=  Get Account Settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableInventory']}  ${bool[1]}
+    END
 
     ${resp}=  Get Store Type By Filter     
     Log   ${resp.content}
@@ -64,11 +80,11 @@ JD-TC-Get Sales Order Invoice-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME24}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME31}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -195,7 +211,7 @@ JD-TC-Get Sales Order Invoice-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME24}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

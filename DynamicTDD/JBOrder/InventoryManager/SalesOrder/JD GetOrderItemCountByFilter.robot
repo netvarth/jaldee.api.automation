@@ -36,10 +36,11 @@ JD-TC-Get Order Item Count By Filter-1
 
     [Documentation]   Create a sales Order with Valid Details then Get sales order Item count by filter.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    sleep  02s
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -48,6 +49,11 @@ JD-TC-Get Order Item Count By Filter-1
         ${resp1}=  Enable Disable Inventory  ${toggle[0]}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
+
+        ${resp}=  Get Account Settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableInventory']}  ${bool[1]}
     END
 
     ${resp}=  Get Store Type By Filter     
@@ -75,11 +81,11 @@ JD-TC-Get Order Item Count By Filter-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME17}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME8}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -209,7 +215,7 @@ JD-TC-Get Order Item Count By Filter-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -287,7 +293,7 @@ JD-TC-Get Order Item Count By Filter-2
 
     [Documentation]   Try to get sales order item count with uid param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -300,7 +306,7 @@ JD-TC-Get Order Item Count By Filter-3
 
     [Documentation]   Try to get sales order item count with locationId param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -313,7 +319,7 @@ JD-TC-Get Order Item Count By Filter-4
 
     [Documentation]   Try to get sales order item count with locationName param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -326,7 +332,7 @@ JD-TC-Get Order Item Count By Filter-5
 
     [Documentation]   Try to get sales order item count with storeId param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -339,7 +345,7 @@ JD-TC-Get Order Item Count By Filter-6
 
     [Documentation]   Try to get sales order item count with storeName param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -352,7 +358,7 @@ JD-TC-Get Order Item Count By Filter-7
 
     [Documentation]   Try to get sales order item count with sorderCatalogId param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -365,7 +371,7 @@ JD-TC-Get Order Item Count By Filter-8
 
     [Documentation]   Try to get sales order item count with soCatalogName param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME17}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME8}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

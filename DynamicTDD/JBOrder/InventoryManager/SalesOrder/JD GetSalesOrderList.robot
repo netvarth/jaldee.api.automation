@@ -35,10 +35,11 @@ JD-TC-Get Sales Order List -1
 
     [Documentation]   Create a sales Order then try to get using encId param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    sleep  02s
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -47,6 +48,11 @@ JD-TC-Get Sales Order List -1
         ${resp1}=  Enable Disable Inventory  ${toggle[0]}
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
+
+        ${resp}=  Get Account Settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableInventory']}  ${bool[1]}
     END
 
     ${resp}=  Get Store Type By Filter     
@@ -74,11 +80,11 @@ JD-TC-Get Sales Order List -1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME22}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME6}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -207,7 +213,7 @@ JD-TC-Get Sales Order List -1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -345,7 +351,7 @@ JD-TC-Get Sales Order List -1
 
 #     [Documentation]    Try to get Sales Order List using uid param.
 
-#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -397,7 +403,7 @@ JD-TC-Get Sales Order List -3
 
     [Documentation]    Try to get Sales Order List using locationId param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -415,7 +421,7 @@ JD-TC-Get Sales Order List -4
 
     [Documentation]    Try to get Sales Order List using locationName param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -438,7 +444,7 @@ JD-TC-Get Sales Order List -5
 
     [Documentation]    Try to get Sales Order List using storeId param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -456,7 +462,7 @@ JD-TC-Get Sales Order List -6
 
     [Documentation]    Try to get Sales Order List using storeName param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -474,7 +480,7 @@ JD-TC-Get Sales Order List -7
 
     [Documentation]    Try to get Sales Order List using orderNum param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -492,7 +498,7 @@ JD-TC-Get Sales Order List -8
 
     [Documentation]    Try to get Sales Order List using rxRefId param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -504,7 +510,7 @@ JD-TC-Get Sales Order List -9
 
     [Documentation]    Try to get Sales Order List using providerConsumerName param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -516,7 +522,7 @@ JD-TC-Get Sales Order List -10
 
     [Documentation]    Try to get Sales Order List using sorderCatalogId param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -528,7 +534,7 @@ JD-TC-Get Sales Order List -11
 
     [Documentation]    Try to get Sales Order List using soCatalogName param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -540,7 +546,7 @@ JD-TC-Get Sales Order List -12
 
     [Documentation]    Try to get Sales Order List using originFrom param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -552,7 +558,7 @@ JD-TC-Get Sales Order List -13
 
     [Documentation]    Try to get Sales Order List using orderType param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -564,7 +570,7 @@ JD-TC-Get Sales Order List -14
 
     [Documentation]    Try to get Sales Order List using orderStatus param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -576,7 +582,7 @@ JD-TC-Get Sales Order List -15
 
     [Documentation]    Try to get Sales Order List using deliveryType param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -588,7 +594,7 @@ JD-TC-Get Sales Order List -16
 
     [Documentation]    Try to get Sales Order List using deliveryStatus param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -601,7 +607,7 @@ JD-TC-Get Sales Order List -17
 
     [Documentation]    Try to get Sales Order List using partnerSpAccountId param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -613,7 +619,7 @@ JD-TC-Get Sales Order List -18
 
     [Documentation]    Try to get Sales Order List using partnerSpName param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -625,7 +631,7 @@ JD-TC-Get Sales Order List -19
 
     [Documentation]    Try to get Sales Order List using partnerSpUserId param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -637,7 +643,7 @@ JD-TC-Get Sales Order List -20
 
     [Documentation]    Try to get Sales Order List using partnerSpUserName param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -649,7 +655,7 @@ JD-TC-Get Sales Order List -21
 
     [Documentation]    Try to get Sales Order List using partnerSpRxOwnerId param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -661,7 +667,7 @@ JD-TC-Get Sales Order List -22
 
     [Documentation]    Try to get Sales Order List using partnerSpRxOwnerName param.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME22}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

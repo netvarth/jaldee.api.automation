@@ -35,9 +35,25 @@ JD-TC-Make Cash Payment For Sales Order-1
 
     [Documentation]   Create a sales Order with Valid Details then Make cash payment.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    sleep  01s
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+        ${resp}=  Get Account Settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableInventory']}  ${bool[1]}
+    END
 
     ${resp}=  Get Store Type By Filter     
     Log   ${resp.content}
@@ -64,11 +80,11 @@ JD-TC-Make Cash Payment For Sales Order-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME20}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME35}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -109,14 +125,14 @@ JD-TC-Make Cash Payment For Sales Order-1
 
 # ---------------------------------------------------------------------------------------------------
 
-# --------------------------- Create SalesOrder Inventory Catalog-InvMgr False ------------------------------------
+# --------------------------- Create SalesOrder Inventory Catalog-InvMgr False ----------------------
 
     ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_Cata_Encid}  ${resp.json()}
-# --------------------------------------------------------------------------------------------------------------
-# ----------------------------------------  Create Item ---------------------------------------------------
+# ----------------------------------------------------------------------------------------------------
+# ----------------------------------------  Create Item ----------------------------------------------
 
     ${displayName}=     FakerLibrary.name
     ${displayName1}=     FakerLibrary.name
@@ -195,7 +211,7 @@ JD-TC-Make Cash Payment For Sales Order-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME20}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
