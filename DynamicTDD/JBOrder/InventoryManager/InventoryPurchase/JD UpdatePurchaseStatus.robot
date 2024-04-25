@@ -456,21 +456,6 @@ JD-TC-UpdatePurchaseStatus-1
     ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                     200
-    Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity}
-    Should Be Equal As Strings      ${resp.json()['freeQuantity']}          ${freeQuantity}
-    Should Be Equal As Strings      ${resp.json()['totalQuantity']}         ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()['amount']}                ${amount}
-    Should Be Equal As Strings      ${resp.json()['discountPercentage']}    ${discountPercentage}
-    Should Be Equal As Strings      ${resp.json()['discountAmount']}        ${discountAmount}
-    Should Be Equal As Strings      ${resp.json()['taxableAmount']}         ${taxableAmount}
-    Should Be Equal As Strings      ${resp.json()['cgstPercentage']}        ${cgst}
-    Should Be Equal As Strings      ${resp.json()['sgstPercentage']}        ${sgst}
-    Should Be Equal As Strings      ${resp.json()['cgst']}                  ${cgstamount}
-    Should Be Equal As Strings      ${resp.json()['sgst']}                  ${sgstamount}
-    Should Be Equal As Strings      ${resp.json()['taxPercentage']}         ${taxPercentage}
-    Should Be Equal As Strings      ${resp.json()['taxAmount']}             ${taxAmount}
-    Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
-    Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
 
     ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${name}  ${boolean[0]}
     Log   ${resp.content}

@@ -5,7 +5,6 @@ Force Tags        PURCHASE
 Library           Collections
 Library           String
 Library           json
-
 Library           DateTime
 Library           requests
 Library           FakerLibrary
@@ -27,11 +26,11 @@ ${order}        0
 
 *** Test Cases ***
 
-JD-TC-GetPurchaseByUid-1
+JD-TC-StockAvaliability-1
 
-    [Documentation]  Get Purchase By Uid
+    [Documentation]  Get Stock Avaliability
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -103,7 +102,7 @@ JD-TC-GetPurchaseByUid-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -128,12 +127,12 @@ JD-TC-GetPurchaseByUid-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
-    ${SName}=    FakerLibrary.last name
+    ${Name}=    FakerLibrary.last name
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
-    Set Test Variable  ${email_id}  ${SName}${PhoneNumber}.${test_mail}
+    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
-    ${resp}=  Create Store   ${SName}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable            ${store_id}           ${resp.json()} 
@@ -364,7 +363,7 @@ JD-TC-GetPurchaseByUid-1
     Set Suite Variable              ${shortDesc}
     Set Suite Variable              ${internalDesc}
 
-    ${resp}=    Create Item Inventory  ${nameit}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[0]}  isInventoryItem=${boolean[0]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}
+    ${resp}=    Create Item Inventory  ${nameit}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[1]}  isInventoryItem=${boolean[0]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable              ${itemEncId1}  ${resp.json()}
@@ -405,7 +404,7 @@ JD-TC-GetPurchaseByUid-1
     Should Be Equal As Strings      ${resp.json()['composition'][0]}                            ${compositionCode}
     Should Be Equal As Strings      ${resp.json()['sku']}                                       ${sku}
     Should Be Equal As Strings      ${resp.json()['itemUnits'][0]}                              ${iu_id}
-    Should Be Equal As Strings      ${resp.json()['isBatchApplicable']}                        ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['isBatchApplicable']}                        ${bool[1]}
     Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileName']}                ${jpgfile}
     Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileSize']}                ${fileSize}
     Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileType']}                ${fileType}
@@ -488,6 +487,7 @@ JD-TC-GetPurchaseByUid-1
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
     ${expiryDate}=  db.add_timezone_date  ${tz}  50
+    Set Suite Variable          ${expiryDate}
 
     ${sRate}=                   Evaluate                 ${amount} / ${convertionQty}
     ${salesRate}=               Evaluate                round(${sRate}, 2)
@@ -508,86 +508,36 @@ JD-TC-GetPurchaseByUid-1
     ${tsgst}=                   Evaluate                ${totaltaxableamount} * ${sgst} / 100
     ${totalSgst}=               Evaluate                round(${tsgst}, 2)
     ${taxAmount}=               Evaluate                round(${taxAmount}, 2)
+    Set Suite Variable          ${invoiceReferenceNo}
+    Set Suite Variable          ${purchaseNote}
+    Set Suite Variable          ${invoiceDate}
+    Set Suite Variable          ${totaltaxableamount}
+    Set Suite Variable          ${totalDiscountAmount}
+    Set Suite Variable          ${totalSgst}
+    Set Suite Variable          ${totalcgst}
+    Set Suite Variable          ${totaltaxable}
+    Set Suite Variable          ${totalAmount}
+    Set Suite Variable          ${roundOff}
+    Set Suite Variable          ${taxAmount}
+    Set Suite Variable          ${mrp}
+    Set Suite Variable          ${salesRate}
+    Set Suite Variable          ${batchNo}
+
+    ${resp}=    Enable Disable Inventory  ${toggle[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
     ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
+    Set Suite Variable              ${purchaseItemDtoList1}
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-    Set Suite Variable              ${purchaseId}           ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}   200
 
-    ${resp}=    Get Purchase By Uid  ${purchaseId} 
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-    Should Be Equal As Strings      ${resp.json()['store']['name']}      ${SName}
-    Should Be Equal As Strings      ${resp.json()['store']['encId']}      ${store_id}
-    Should Be Equal As Strings      ${resp.json()['inventoryCatalog']['encId']}      ${encid}
-    Should Be Equal As Strings      ${resp.json()['uid']}      ${purchaseId}
-    Should Be Equal As Strings      ${resp.json()['invoiceReferenceNo']}      ${invoiceReferenceNo}
-    Should Be Equal As Strings      ${resp.json()['invoiceDate']}      ${invoiceDate}
-    Should Be Equal As Strings      ${resp.json()['purchaseNote']}      ${purchaseNote}
-    Should Be Equal As Strings      ${resp.json()['vendor']['vendorName']}      ${vender_name}
-    Should Be Equal As Strings      ${resp.json()['vendor']['encId']}      ${vendorId}
-    Should Be Equal As Strings      ${resp.json()['totalQuantity']}      ${quantity}
-    Should Be Equal As Strings      ${resp.json()['totalFreeQuantity']}      ${freeQuantity}
-    Should Be Equal As Strings      ${resp.json()['netQuantity']}      ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()['totalAmount']}      ${totalAmount}
-    Should Be Equal As Strings      ${resp.json()['totalDiscountAmount']}      ${totalDiscountAmount}
-    Should Be Equal As Strings      ${resp.json()['totalTaxableAmount']}      ${totaltaxableamount}
-    Should Be Equal As Strings      ${resp.json()['totalCgst']}      ${totalcgst}
-    Should Be Equal As Strings      ${resp.json()['totalSgst']}      ${totalSgst}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['inventoryCatalogItem']['encId']}      	${ic_id}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['inventoryCatalogItem']['item']['name']}      ${nameit}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['inventoryCatalogItem']['item']['spCode']}      ${itemEncId1}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['invSOrderCatalog']['encId']}       ${inv_order_encid}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['quantity']}      ${quantity}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['freeQuantity']}      ${freeQuantity}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['totalQuantity']}      ${totalQuantity}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['amount']}      ${amount}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['discountAmount']}      ${totalDiscountAmount}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['taxableAmount']}      ${totaltaxableamount}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['taxAmount']}      ${taxAmount}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['netTotal']}      ${netTotal}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['discountPercentage']}      ${discountPercentage}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['hsnCode']}      ${hsnCode}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['expiryDate']}      ${expiryDate}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['mrp']}      ${mrp}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['salesRate']}      ${salesRate}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['batchNo']}      ${batchNo}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['purchaseUid']}      ${purchaseId}
-    Should Be Equal As Strings      ${resp.json()['purchaseItemDtoList'][0]['unitCode']}      ${iu_id}
-
-JD-TC-GetPurchaseByUid-2
-
-    [Documentation]  Get Purchase By Uid - where purchase is not created
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
+    ${resp}=  Get Inventoryitem      ${ic_id}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Get Purchase By Uid  ${purchaseId} 
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     422
-
-JD-TC-GetPurchaseByUid-3
-
-    [Documentation]  Get Purchase By Uid - without login
-
-    ${resp}=    Get Purchase By Uid  ${purchaseId} 
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     419
-    Should Be Equal As Strings      ${resp.json()}          ${SESSION_EXPIRED}
-
-JD-TC-GetPurchaseByUid-4
-
-    [Documentation]  Get Purchase By Uid - where purchase iD is inv
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=    Get Stock Avaliability  ${ic_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${inv}=     Random Int  min=999  max=9999
-
-    ${resp}=    Get Purchase By Uid  ${inv} 
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200

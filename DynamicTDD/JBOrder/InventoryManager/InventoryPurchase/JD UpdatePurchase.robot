@@ -919,6 +919,37 @@ JD-TC-UpdatePurchase-12
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
 
+JD-TC-UpdatePurchase-12.1
+
+    [Documentation]  Update Purchase - amount is null
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${null}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+
+JD-TC-UpdatePurchase-12.2
+
+    [Documentation]  Update Purchase - amount is negative
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200    
+
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   item amount
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  -100  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
+
 JD-TC-UpdatePurchase-13
 
     [Documentation]  Update Purchase - amount is changed
@@ -981,6 +1012,37 @@ JD-TC-UpdatePurchase-16
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
 
+JD-TC-UpdatePurchase-16.1
+
+    [Documentation]  Update Purchase - discount Percentage is null
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${null}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     400
+
+JD-TC-UpdatePurchase-16.2
+
+    [Documentation]  Update Purchase - discount Percentage is negative
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200    
+
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   item discount percentage 
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  -10  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
+
 JD-TC-UpdatePurchase-17
 
     [Documentation]  Update Purchase - discount percentage is above 100
@@ -1013,6 +1075,41 @@ JD-TC-UpdatePurchase-18
     ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-UpdatePurchase-18.1
+
+    [Documentation]  Update Purchase - fixed discount is null
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv_ic_id}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${null}  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+
+JD-TC-UpdatePurchase-18.2
+
+    [Documentation]  Update Purchase - fixed discount is negative
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv_ic_id}=                Random Int              min=1  max=99  
+
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   item discount amount
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  -50  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
 JD-TC-UpdatePurchase-19
 
@@ -1189,6 +1286,37 @@ JD-TC-UpdatePurchase-30
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
 
+JD-TC-UpdatePurchase-30.1
+
+    [Documentation]  Update Purchase - mrp is null
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${null}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+
+JD-TC-UpdatePurchase-30.2
+
+    [Documentation]  Update Purchase - mrp is negative
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   item mrp
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  -100  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
+
 JD-TC-UpdatePurchase-31
 
     [Documentation]  Update Purchase - mrp is changed
@@ -1220,6 +1348,41 @@ JD-TC-UpdatePurchase-32
     ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-UpdatePurchase-40.1
+
+    [Documentation]  Update Purchase - sales rate is null
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv_ic_id}=                Random Int              min=1  max=99  
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${null}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+
+JD-TC-UpdatePurchase-40.2
+
+    [Documentation]  Update Purchase - sales rate is negative
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200      
+
+    ${inv_ic_id}=                Random Int              min=1  max=99  
+
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   item sales rate
+    
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  -100  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}                                                               
+
+    ${resp}=    Update Purchase  ${purchaseId}  ${invoiceReferenceNo}  ${invoiceDate}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
 
 JD-TC-UpdatePurchase-33
 

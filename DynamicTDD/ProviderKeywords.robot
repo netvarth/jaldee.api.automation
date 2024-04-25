@@ -14986,3 +14986,11 @@ Enable Disable Inventory
     ${resp}=  PUT On Session  ynw  /provider/account/settings/inventory/${status}  expected_status=any 
     RETURN  ${resp}
        
+Get Stock Avaliability
+
+    [Arguments]     ${InvCatalogItemEncId}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/invcatalogitem/${InvCatalogItemEncId}  expected_status=any 
+    RETURN  ${resp}
+
