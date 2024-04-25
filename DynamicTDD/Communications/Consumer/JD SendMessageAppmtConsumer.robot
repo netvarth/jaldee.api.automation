@@ -61,7 +61,7 @@ JD-TC-SendMessageWithAppmt-1
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${pid}  ${decrypted_data['id']}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
     Set Suite Variable  ${PUSERNAME_B}
 
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -189,7 +189,7 @@ JD-TC-SendMessageWithAppmt-1
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     Set Suite Variable  ${consumerFirstName}
     ${consumerLastName}=    FakerLibrary.last_name  

@@ -47,7 +47,7 @@ JD-TC-ONLINE_ORDER and RECEIVED_ORDER-1
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_A}    ${highest_package[0]}
@@ -381,7 +381,7 @@ JD-TC-BRAND_NEW_ORDERS-2
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_A}    ${highest_package[0]}
@@ -706,7 +706,7 @@ JD-TC-PHONE_IN_ORDER-3
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_A}    ${highest_package[0]}
@@ -1045,7 +1045,7 @@ JD-TC-WALK_IN_ORDER-4
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_A}    ${highest_package[0]}
@@ -1382,7 +1382,7 @@ JD-TC-ACKNOWLEDGED_ORDER-5
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
 
     ${highest_package}=  get_highest_license_pkg
@@ -1744,7 +1744,7 @@ JD-TC-CONFIRMED_ORDER-6
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
 
     ${highest_package}=  get_highest_license_pkg
@@ -2105,7 +2105,7 @@ JD-TC-PREPARING_ORDER-7
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
 
     ${highest_package}=  get_highest_license_pkg
@@ -2465,7 +2465,7 @@ JD-TC-PACKING_ORDER-8
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
 
     ${highest_package}=  get_highest_license_pkg
@@ -2825,7 +2825,7 @@ JD-TC-READY_FOR_PICKUP_ORDER-9
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
 
     ${highest_package}=  get_highest_license_pkg
@@ -3175,7 +3175,7 @@ JD-TC-READY_FOR_SHIPMENT_ORDER-10
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
 
     ${highest_package}=  get_highest_license_pkg
@@ -3537,7 +3537,7 @@ JD-TC-READY_FOR_DELIVERY_ORDER-11
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
 
     ${highest_package}=  get_highest_license_pkg
@@ -3897,7 +3897,7 @@ JD-TC-COMPLETED_ORDER-12
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
 
     ${highest_package}=  get_highest_license_pkg
@@ -4257,7 +4257,7 @@ JD-TC-PAYMENT_REQUIRED_ORDER-13
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
 
     ${highest_package}=  get_highest_license_pkg
@@ -4617,7 +4617,7 @@ JD-TC-IN_TRANSIT_ORDER-14
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
 
     ${highest_package}=  get_highest_license_pkg
@@ -4978,7 +4978,7 @@ JD-TC-SHIPPED_ORDER-15
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
 
     ${highest_package}=  get_highest_license_pkg
@@ -5339,7 +5339,7 @@ JD-TC-ORDERS_FOR_BILLING-17
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
 
     ${highest_package}=  get_highest_license_pkg
@@ -5700,7 +5700,7 @@ JD-TC-CANCEL_ORDER-16
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
 
     ${highest_package}=  get_highest_license_pkg

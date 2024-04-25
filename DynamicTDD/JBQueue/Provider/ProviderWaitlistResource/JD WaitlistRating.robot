@@ -112,7 +112,7 @@ JD-TC-Waitist Rating-2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_U}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_U}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_U}${\n}
     Set Suite Variable  ${PUSERNAME_U}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_U}  ${PASSWORD}

@@ -69,7 +69,7 @@ JD-TC-Update JDN Settings-1
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+850999
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     ${licid}  ${licname}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERPH0}   ${licid}
     Log  ${resp.json()}
@@ -90,9 +90,9 @@ JD-TC-Update JDN Settings-1
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+851
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+852
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
     ${PUSERMAIL0}=   Set Variable  ${P_Email}850.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name
@@ -218,7 +218,7 @@ JD-TC-Update JDN Settings-3
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERPH3}=  Evaluate  ${PUSERNAME}+860
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH3}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH3}${\n}
     ${licid}  ${licname}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERPH3}   ${licid}
     Log  ${resp.json()}
@@ -239,9 +239,9 @@ JD-TC-Update JDN Settings-3
     ${DAY}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${DAY}
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+861
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+862
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
     ${PUSERMAIL3}=   Set Variable  ${P_Email}860.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name

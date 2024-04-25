@@ -33,7 +33,7 @@ JD-TC-ConsumerMassCommunication-1
      
     ${CUSERPH0}=  Evaluate  ${CUSERPH}+180521
     Set Suite Variable   ${CUSERPH0}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -65,7 +65,7 @@ JD-TC-ConsumerMassCommunication-1
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_B}=  Evaluate  ${PUSERNAME}+55688520
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${dom}  ${sub_dom}  ${PUSERNAME_B}    ${highest_package[0]}
     Log  ${resp.json()}
@@ -203,7 +203,7 @@ JD-TC-ConsumerMassCommunication-1
     Set Suite Variable  ${wid2}  ${wid[0]}
     sleep   5s
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     Set Suite Variable  ${msg}
 
     # ${resp}=  Get bsconf Messages
@@ -484,10 +484,10 @@ JD-TC-ConsumerMassCommunication-3
     ${filecap_dict3}=  Create Dictionary   file=${pdffile}   caption=${caption3}
     ${fileswithcaption}=  Create List   ${filecap_dict1}   ${filecap_dict2}  ${filecap_dict3}
     #${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
    
     # ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
    
     ${resp}=  Consumer Mass Communication   ${cookie}  ${bool[1]}  ${bool[1]}  ${bool[1]}   ${bool[1]}  ${msg}    ${fileswithcaption}    ${wid1}  ${wid2}
     Log   ${resp.json()}

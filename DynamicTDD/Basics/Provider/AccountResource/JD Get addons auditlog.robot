@@ -36,7 +36,7 @@ JD-TC-Get addons auditlog-1
        Log  ${resp.json()}
        Should Be Equal As Strings    ${resp.status_code}    200
        Set Suite Variable  ${PUSERNAME}
-       Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
+       Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
        clear_Addon  ${PUSERNAME}
        ${up_addons}=   Get upgradable addons
        Log  ${up_addons.json()}

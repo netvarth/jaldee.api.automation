@@ -40,7 +40,7 @@ JD-TC-Get Account Contact information-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME}
     Set Test Variable  ${pro_id}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n} 
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME}${\n} 
 
     ${pid}=  get_acc_id  ${PUSERNAME}
     ${resp}=  Get Provider Details    ${pro_id}
@@ -254,7 +254,7 @@ JD-TC-Get Account Contact information-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME1}
     Set Test Variable  ${pro_id1}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME1}${\n} 
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME1}${\n} 
 
     ${pid}=  get_acc_id  ${PUSERNAME1}
     ${resp}=  Get Provider Details    ${pro_id1} 
@@ -469,7 +469,7 @@ JD-TC-Get Account Contact information-3
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id2}  ${resp.json()['id']}
     Set Suite Variable  ${PUSERNAME0}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME0}${\n}
     ${pid0}=  get_acc_id  ${PUSERNAME0}  
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
@@ -608,7 +608,7 @@ JD-TC-Get Account Contact information-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id2}  ${resp.json()['id']}
     Set Suite Variable  ${PUSERNAME2}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME2}${\n}
     ${pid0}=  get_acc_id  ${PUSERNAME2}  
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
@@ -757,7 +757,7 @@ JD-TC-Get Account Contact information-5
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id2}  ${resp.json()['id']}
     Set Suite Variable  ${PUSERNAME3}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME3}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME3}${\n}
     ${pid0}=  get_acc_id  ${PUSERNAME3}  
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
@@ -902,9 +902,9 @@ JD-TC-Get Account Contact information-6
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id3}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
     Set Suite Variable  ${MUSERNAME_K}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
     ${pid3}=  get_acc_id  ${MUSERNAME_K}  
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
@@ -1117,9 +1117,9 @@ JD-TC-Get Account Contact information-7
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${subdomain}  ${resp.json()['subSector']}
     Set Test Variable  ${pro_id3}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_L}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_L}${\n}
     Set Suite Variable  ${MUSERNAME_L}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_L}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_L}${\n}
     ${pid4}=  get_acc_id  ${MUSERNAME_L}  
     ${resp}=  Get Account contact information
     Log  ${resp.json()}

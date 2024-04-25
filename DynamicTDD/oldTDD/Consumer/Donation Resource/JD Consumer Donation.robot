@@ -442,7 +442,7 @@ JD-TC-ConsumerDonation-6
         Log  ${resp.content}
         Should Be Equal As Strings    ${resp.status_code}    200
 
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
 
         # ${resp}=   Consumer Login  ${CUSERNAME9}   ${PASSWORD}
         # Should Be Equal As Strings    ${resp.status_code}   200

@@ -47,7 +47,7 @@ JD-TC-AccountLevelAnalytics-1
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service  ${PUSERPH0}  AND  clear_Item    ${PUSERPH0}  AND   clear_Coupon   ${PUSERPH0}   AND  clear_Discount  ${PUSERPH0}  AND  clear_appt_schedule   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -86,7 +86,7 @@ JD-TC-AccountLevelAnalytics-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${PUSERPH0}${\n}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -2907,7 +2907,7 @@ JD-TC-AccountLevelAnalytics-19
         
         ${reason}=  Random Element  ${cancelReason}
         ${msg}=   FakerLibrary.sentence
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=    Provider Cancel Appointment  ${apptid${a}}  ${reason}  ${msg}  ${DAY1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -3443,7 +3443,7 @@ JD-TC-AccountLevelAnalytics-21
         
         ${reason}=  Random Element  ${cancelReason}
         ${msg}=   FakerLibrary.sentence
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=    Provider Cancel Appointment  ${apptid${a}}  ${reason}  ${msg}  ${DAY1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -3653,7 +3653,7 @@ JD-TC-AccountLevelAnalytics-22
         
         ${reason}=  Random Element  ${cancelReason}
         ${msg}=   FakerLibrary.sentence
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=    Reject Appointment  ${apptid${a}}  ${reason}  ${msg}  ${DAY1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -3853,7 +3853,7 @@ JD-TC-AccountLevelAnalytics-23
         
         ${reason}=  Random Element  ${cancelReason}
         ${msg}=   FakerLibrary.sentence
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=   Reject Appointment  ${apptid${a}}  ${reason}  ${msg}  ${DAY1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -4336,7 +4336,7 @@ JD-TC-AccountLevelAnalytics-25
         
         ${reason}=  Random Element  ${cancelReason}
         ${msg}=   FakerLibrary.sentence
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=    Provider Cancel Appointment  ${apptid${a}}  ${reason}  ${msg}  ${DAY1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -4619,7 +4619,7 @@ JD-TC-AccountLevelAnalytics-26
         
         ${reason}=  Random Element  ${cancelReason}
         ${msg}=   FakerLibrary.sentence
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=    Provider Cancel Appointment  ${apptid${a}}  ${reason}  ${msg}  ${DAY1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -4907,7 +4907,7 @@ JD-TC-AccountLevelAnalytics-27
         
         ${reason}=  Random Element  ${cancelReason}
         ${msg}=   FakerLibrary.sentence
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=    Provider Cancel Appointment  ${apptid${a}}  ${reason}  ${msg}  ${DAY1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -5238,7 +5238,7 @@ JD-TC-AccountLevelAnalytics-28
         
         ${reason}=  Random Element  ${cancelReason}
         ${msg}=   FakerLibrary.sentence
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=    Reject Appointment  ${apptid${a}}  ${reason}  ${msg}  ${DAY1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200

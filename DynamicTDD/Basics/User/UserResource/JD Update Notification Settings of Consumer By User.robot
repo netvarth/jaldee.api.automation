@@ -62,7 +62,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-1
      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
      Set Suite Variable  ${MUSERNAME_E1}
      ${id}=  get_id  ${MUSERNAME_E1}
      Set Suite Variable  ${id}
@@ -636,7 +636,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-10
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     # ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${CUR_DAY}=  db.add_timezone_date  ${tz}  2   
     ${date}=  Convert Date  ${CUR_DAY}  result_format=%d-%m-%Y
@@ -1126,7 +1126,7 @@ JD-TC-Update_Notification_Settings_of_ConsumerByUser-UH6
      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E2}${\n}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E2}${\n}
      Set Suite Variable  ${MUSERNAME_E2}
      ${id}=  get_id  ${MUSERNAME_E2}
      Set Suite Variable  ${id}

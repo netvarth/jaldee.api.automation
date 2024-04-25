@@ -237,7 +237,7 @@ JD-TC-OrderQuestionnaireNotification-1
     Should Be Equal As Strings  ${resp.json()['storePickup']}             ${bool[0]} 
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Update Order Notification  ${orderid1}  ${id}  ${msg}  ${bool[0]}  ${bool[1]}  ${bool[0]}  ${bool[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -444,7 +444,7 @@ JD-TC-OrderQuestionnaireNotification-2
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Update Order Notification  ${orderid1}  ${id}  ${msg}  ${bool[0]}  ${bool[1]}  ${bool[0]}  ${bool[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -454,7 +454,7 @@ JD-TC-OrderQuestionnaireNotification-2
     Should Be Equal As Strings  ${resp.status_code}  200
     
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Update Order Notification  ${orderid1}  ${id}  ${msg}  ${bool[0]}  ${bool[1]}  ${bool[0]}  ${bool[0]}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

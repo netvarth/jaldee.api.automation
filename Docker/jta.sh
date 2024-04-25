@@ -145,6 +145,7 @@ setPaths()
 {
     defaultDockerPath="$(pwd)"
     defaultInputPath="$(dirname "$defaultDockerPath")/DynamicTDD"
+    defaultDataPath="$(dirname "$defaultDockerPath")/Data"
     defaultOutputPath="$defaultInputPath/Output"
     defaultSuitePath="$defaultInputPath/"
     Workspace="$(basename "$(dirname "$(dirname "$defaultDockerPath")")")"
@@ -981,15 +982,16 @@ if [ "$parallelContainers" -gt "1" ]; then
             winInputPath=$(wslpath -w "$inputPath")
             winOutputPath=$(wslpath -w "$newoutputPath")
             winDockerPath=$(wslpath -w "$defaultDockerPath")
+            winDataPath="$(wslpath -w "$defaultDataPath")"
             winConfPath=$(wslpath -w "$CONF_DIR")
             echo -e "SYSTEM_ENV=Microsoft WSL" >> env$c.list
-            time docker run --rm --network="host" -v $winConfPath:/ebs/ynwconf -v "$winInputPath:/ebs/TDD" -v "$winInputPath/$VAR_DIR/$c:/ebs/TDD/varfiles" -v "$winOutputPath:/ebs/TDD_Output" -v "$winDockerPath/config:/ebs/conf" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env$c.list jaldeetdd &
+            time docker run --rm --network="host" -v $winConfPath:/ebs/ynwconf -v "$winInputPath:/ebs/TDD" -v "$winInputPath/$VAR_DIR/$c:/ebs/TDD/varfiles" -v "$winOutputPath:/ebs/TDD_Output" -v "$winDockerPath/config:/ebs/conf" -v "$winDataPath/$c:/ebs/data" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env$c.list jaldeetdd &
             
         else 
             echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - Ubuntu" >> $LogFileName
             echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux"
             echo -e "SYSTEM_ENV=LINUX" >> env$c.list
-            time docker run --rm --network="host" -v $CONF_DIR:/ebs/ynwconf -v "$inputPath:/ebs/TDD" -v "$inputPath/$VAR_DIR/$c:/ebs/TDD/varfiles" -v "$newoutputPath:/ebs/TDD_Output" -v "$defaultDockerPath/config:/ebs/conf" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env$c.list jaldeetdd &
+            time docker run --rm --network="host" -v $CONF_DIR:/ebs/ynwconf -v "$inputPath:/ebs/TDD" -v "$inputPath/$VAR_DIR/$c:/ebs/TDD/varfiles" -v "$newoutputPath:/ebs/TDD_Output" -v "$defaultDockerPath/config:/ebs/conf" -v "$defaultDataPath/$c:/ebs/data" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env$c.list jaldeetdd &
         fi
         
     done
@@ -1013,6 +1015,7 @@ if [ "$parallelContainers" -gt "1" ]; then
 else
     createDir 1 0 "$outputPath"
     createDir 1 0 "$inputPath/$VAR_DIR/"
+    createDir 1 0 "$inputPath/$VAR_DIR/"
     if  [ "$timeFlag" == "True" ]; then
         setDateTimeSync 0
         echo "Ready" > "$inputPath/$TIME_FILE"
@@ -1024,14 +1027,14 @@ else
         echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - WSL" >> $LogFileName
         echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] Ubuntu on Windows- Windows Subsystem for Linux"
         echo -e "SYSTEM_ENV=Microsoft WSL" >> env.list
-        time docker run --rm --network="host" -v "${CONF_DIR}:/ebs/ynwconf/:ro" -v "${inputPath}:/ebs/TDD"  -v "${inputPath}/$VAR_DIR:/ebs/TDD/varfiles" -v "$outputPath:/ebs/TDD_Output" -v "${defaultDockerPath}/config:/ebs/conf:ro" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd
+        time docker run --rm --network="host" -v "${CONF_DIR}:/ebs/ynwconf/:ro" -v "${inputPath}:/ebs/TDD"  -v "${inputPath}/$VAR_DIR:/ebs/TDD/varfiles" -v "$outputPath:/ebs/TDD_Output" -v "${defaultDockerPath}/config:/ebs/conf:ro" -v "$defaultDataPath:/ebs/data" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd
         # setDateTimeSync 1
         # echo -n > "$inputPath/$TIME_FILE"
     else 
         echo  "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] /proc/sys/kernel/osrelease check - Ubuntu" >> $LogFileName
         echo "[${BASH_SOURCE##*/}] [$FUNCNAME] [$LINENO] native Linux"
         echo -e "SYSTEM_ENV=LINUX" >> env.list
-        time docker run --rm --network="host" -v $CONF_DIR:/ebs/ynwconf/:ro -v "$inputPath:/ebs/TDD"  -v "$inputPath/$VAR_DIR:/ebs/TDD/varfiles" -v "$outputPath:/ebs/TDD_Output" -v "$defaultDockerPath/config:/ebs/conf:ro" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd   
+        time docker run --rm --network="host" -v $CONF_DIR:/ebs/ynwconf/:ro -v "$inputPath:/ebs/TDD"  -v "$inputPath/$VAR_DIR:/ebs/TDD/varfiles" -v "$outputPath:/ebs/TDD_Output" -v "$defaultDockerPath/config:/ebs/conf:ro" -v "$defaultDataPath:/ebs/data" -u $(id -u ${USER}):$(id -g ${USER}) --env-file env.list jaldeetdd   
         # setDateTimeSync 1
         # echo -n > "$inputPath/$TIME_FILE"
     fi

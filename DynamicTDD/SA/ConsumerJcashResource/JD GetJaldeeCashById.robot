@@ -91,7 +91,7 @@ JD-TC-GetAvailableJcashById-2
     
     # ${CUSERPH1}=  Evaluate  ${CUSERPH}+1077473201
     # Set Suite Variable   ${CUSERPH1}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
     # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+4468
     # ${firstname}=  FakerLibrary.first_name
     # Set Suite Variable   ${firstname}
@@ -139,7 +139,7 @@ JD-TC-GetAvailableJcashById-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${cons_id}   ${resp.json()['id']}      
                       
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
     
     ${resp}=  Get All Jaldee Cash Available
     Log  ${resp.content}
@@ -211,7 +211,7 @@ JD-TC-GetAvailableJcashById-3
     
     # ${CUSERPH1}=  Evaluate  ${CUSERPH}+1047890880
     # Set Test Variable   ${CUSERPH1}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
     # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+4468
     # ${firstname1}=  FakerLibrary.first_name
     # ${lastname1}=  FakerLibrary.last_name
@@ -259,7 +259,7 @@ JD-TC-GetAvailableJcashById-3
                                                    
                                                                                                   
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
 
     ${resp}=  Get All Jaldee Cash Available
     Log  ${resp.content}

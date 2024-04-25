@@ -42,7 +42,7 @@ ${CUSERPH}      ${CUSERNAME}
 #         ${CO_Number}    Generate random string    7    0123456789
 #         ${CO_Number}    Convert To Integer  ${CO_Number}
 #         ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${CO_Number}
-#         Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+#         Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
 #         Set Test Variable   ${CUSERPH0}   
 
 #         ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -175,7 +175,7 @@ JD-TC-WEB_NEW_CONSUMER_COUNT-1
 #         ${CO_Number}    Generate random string    7    0123456789
 #         ${CO_Number}    Convert To Integer  ${CO_Number}
 #         ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${CO_Number}
-#         Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+#         Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
 #         Set Test Variable   ${CUSERPH0}   
 
 #         ${DAY1}=  db.get_date_by_timezone  ${tz}

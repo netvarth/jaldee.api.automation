@@ -110,7 +110,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  "${resp.json()}"    "true"
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
 
     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
     Log   ${resp.json()}
@@ -391,7 +391,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid1}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -466,7 +466,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-2
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid2}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -569,7 +569,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH1
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid3}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -638,7 +638,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-3
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid4}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -721,7 +721,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-4
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid5}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -800,7 +800,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-UH2
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid6}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -878,7 +878,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-5
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid7}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -957,7 +957,7 @@ JD-TC-TeleserviceWaitlist-(Billable Subdomain)-6
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Waitlist Action Cancel  ${wid8}  ${waitlist_cancl_reasn[4]}   ${msg}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1039,7 +1039,7 @@ JD-TC-TeleserviceWaitlist-(Non billable Subdomain)-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  "${resp.json()}"    "true"
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
 
     ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  0
     Log   ${resp.json()}

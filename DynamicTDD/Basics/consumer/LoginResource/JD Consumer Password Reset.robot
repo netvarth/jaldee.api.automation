@@ -87,7 +87,7 @@ JD-TC-ResetPassword-UH4
     ${dob}=  FakerLibrary.Date
     ${gender}    Random Element    ${Genderlist}
     ${CUSERPH1}=  Evaluate  ${CUSERNAME}+100100601
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
     Set Suite Variable   ${CUSERPH1}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+1000
     ${CUSERMAIL1}=   Set Variable  ${C_Email}ph601.${test_mail}
@@ -137,7 +137,7 @@ JD-TC-ResetPassword-4
     ${country_code}=  Set Variable  ${PO_Number.country_code}
     ${CUSERPH3}=  Set Variable  ${PO_Number.national_number}
     Set Suite Variable   ${CUSERPH3}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH3}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -157,7 +157,7 @@ JD-TC-ResetPassword-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
 
     ${resp}=  Consumer Login  ${CUSERPH3}  ${PASSWORD}  countryCode=+${country_code}
     Log   ${resp.content}
@@ -268,7 +268,7 @@ JD-TC-ResetPassword-6
     ${country_code}=  Set Variable  ${PO_Number.country_code}
     ${CUSERPH5}=  Set Variable  ${PO_Number.national_number}
     Set Suite Variable   ${CUSERPH5}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH5}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH5}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH5}+1000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -322,7 +322,7 @@ JD-TC-ResetPassword-7
     ${country_code}=  Set Variable  ${PO_Number.country_code}
     ${CUSERPH5}=  Set Variable  ${PO_Number.national_number}
     Set Suite Variable   ${CUSERPH5}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH5}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH5}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH5}+1000
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
@@ -470,7 +470,7 @@ JD-TC-ResetPassword-5
 
     Comment   with default country code +91
     # ${CUSERPH4}=  Evaluate  ${CUSERNAME}+${PO_Number}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH4}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH4}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH4}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name

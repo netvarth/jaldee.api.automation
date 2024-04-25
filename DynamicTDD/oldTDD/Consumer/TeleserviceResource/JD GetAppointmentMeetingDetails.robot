@@ -96,7 +96,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  "${resp.json()}"    "true"
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
 
     ${resp}=  Account Set Credential  ${PUSERPH0}  ${PASSWORD}  0
     Log   ${resp.json()}
@@ -414,7 +414,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-1
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid1}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -491,7 +491,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-2
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid2}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -580,7 +580,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-UH1
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid3}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -699,7 +699,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-3
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid4}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -804,7 +804,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-4
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid5}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -911,7 +911,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-UH2
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid6}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1017,7 +1017,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-5
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid7}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1108,7 +1108,7 @@ JD-TC-GetAppointmentMeetingDetails-(Billable Subdomain)-6
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid8}  ${reason}  ${msg}  ${DAY1}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1200,7 +1200,7 @@ JD-TC-GetAppointmentMeetingDetails-(Non billable Subdomain)-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  "${resp.json()}"    "true"
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
 
     ${resp}=  Account Set Credential  ${PUSERPH2}  ${PASSWORD}  0
     Log   ${resp.json()}

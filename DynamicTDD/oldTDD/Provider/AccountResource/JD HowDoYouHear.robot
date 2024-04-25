@@ -132,7 +132,7 @@ JD-TC-HowDoYouHear1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_M}${\n}   
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_M}${\n}   
     ${resp}=   Get SalesChannel
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings   ${resp.content}    ${EMPTY}
@@ -260,7 +260,7 @@ JD-TC-HowDoYouHear2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_M}${\n}   
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_M}${\n}   
      ${resp}=   Get SalesChannel
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings   "${resp.json()}"    "${sc_code}" 
@@ -386,7 +386,7 @@ JD-TC-HowDoYouHear_UH1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_M}${\n}   
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_M}${\n}   
     ${resp}=   Get SalesChannel
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings   ${resp.content}    ${EMPTY} 
@@ -511,7 +511,7 @@ JD-TC-HowDoYouHear_UH2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_M}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_M}${\n}   
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_M}${\n}   
     ${resp}=   Get SalesChannel
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings   ${resp.content}    ${EMPTY} 

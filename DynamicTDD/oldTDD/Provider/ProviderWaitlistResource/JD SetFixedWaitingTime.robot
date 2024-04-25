@@ -219,7 +219,7 @@ JD-TC-FixedWaitingTime-6
       Set Test Variable   ${sector}        ${resp['domain']}
       Set Test Variable   ${sub_sector}    ${resp['subdomain']}
       ${PUSERNAME}=  Evaluate  ${PUSERNAME}+56710
-      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}   
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}   
       ${pkg_id}=   get_highest_license_pkg
       ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME}  ${pkg_id[0]}
       Log   ${resp.json()}
@@ -492,7 +492,7 @@ JD-TC-FixedWaitingTime-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
     Set Suite Variable  ${pid}  ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME30}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME30}${\n}
     ${resp}=  Add To Waitlist  ${pid}  ${ser_id2}  ${que_id1}  ${DAY1}  ${desc}  ${bool[1]}  ${pid}
     Should Be Equal As Strings  ${resp.status_code}  200
     ${wid}=  Get Dictionary Values  ${resp.json()}

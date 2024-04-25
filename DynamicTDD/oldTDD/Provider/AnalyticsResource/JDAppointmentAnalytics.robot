@@ -54,7 +54,7 @@ JD-TC-WALK_IN_APPMT and ARRIVED_APPMT-1
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -322,7 +322,7 @@ JD-TC-ONLINE_APPMT and CONFIRMED_APPMT-2
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -590,7 +590,7 @@ JD-TC-PHONE_APPMT-3
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -848,7 +848,7 @@ JD-TC-TELEGRAM_APPMT and WEB_APPMTS-4
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -1130,7 +1130,7 @@ JD-TC-STARTED_APPMT-5
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -1423,7 +1423,7 @@ JD-TC-COMPLETED_APPMT-6
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -1716,7 +1716,7 @@ JD-TC-CANCELLED_APPMT-7
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -2019,7 +2019,7 @@ JD-TC-IOS_APPMT-8
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -2338,7 +2338,7 @@ JD-TC-ANDROID_APPMT-9
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -2643,7 +2643,7 @@ JD-TC-JALDEE_LINK_APPMT-10
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -2913,7 +2913,7 @@ JD-TC-TOTAL_ON_APPMT-11
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -3248,7 +3248,7 @@ JD-TC-RESCHEDULED_APPMT-12
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}

@@ -87,7 +87,7 @@ JD-TC-Get Provider Note-1
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${cookie}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}
@@ -253,7 +253,7 @@ JD-TC-Get Provider Note-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}   ${pngfile} 
@@ -333,7 +333,7 @@ JD-TC-Get Provider Note-3
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${cookie}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}   ${pdffile} 
@@ -403,7 +403,7 @@ JD-TC-Get Provider Note-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}   ${jpegfile} 
@@ -484,7 +484,7 @@ JD-TC-Get Provider Note-5
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${cookie}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}   ${giffile} 
@@ -549,7 +549,7 @@ JD-TC-Get Provider Note-6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}   ${txtfile} 
@@ -613,7 +613,7 @@ JD-TC-Get Provider Note-7
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}   ${docfile} 
@@ -703,7 +703,7 @@ JD-TC-Get Provider Note-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}   ${shfile} 

@@ -888,7 +888,7 @@ JD-TC-ResubmitServiceoptionsForWaitlist-UH1
 
     ${reason}=  Random Element  ${waitlist_cancl_reasn}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=   Waitlist Action Cancel  ${wid}  ${reason}  ${msg}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

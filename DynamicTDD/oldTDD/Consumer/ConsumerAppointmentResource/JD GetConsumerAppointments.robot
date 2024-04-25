@@ -839,7 +839,7 @@ JD-TC-GetConsumerAppointments-9
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
     Set Suite Variable  ${PUSERNAME_D}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
@@ -1408,7 +1408,7 @@ JD-TC-GetConsumerAppointments-15
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid2}  ${reason}  ${msg}  ${DAY1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1458,7 +1458,7 @@ JD-TC-GetConsumerAppointments-16
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Reject Appointment  ${apptid3}  ${reason}  ${msg}  ${DAY1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

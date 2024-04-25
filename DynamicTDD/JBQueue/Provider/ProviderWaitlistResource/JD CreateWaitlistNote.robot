@@ -47,7 +47,7 @@ JD-TC-Provider Note-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_J}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_J}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_J}${\n}
     Set Suite Variable  ${PUSERNAME_J}
 
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -127,7 +127,7 @@ JD-TC-Provider Note-1
     Set Suite Variable  ${cid}  ${resp.json()}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph2}${\n}
 
     ${resp}=   Create Sample Location
     Set Suite Variable    ${loc_id1}    ${resp}  
@@ -175,7 +175,7 @@ JD-TC-Provider Note-1
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${cookie}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
 
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}  
@@ -361,7 +361,7 @@ JD-TC-Provider Note-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}   ${pngfile} 
@@ -443,7 +443,7 @@ JD-TC-Provider Note-3
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${cookie}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}   ${pdffile} 
@@ -512,7 +512,7 @@ JD-TC-Provider Note-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}   ${jpegfile} 
@@ -582,7 +582,7 @@ JD-TC-Provider Note-5
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${EMPTY}  ${caption}  
@@ -651,7 +651,7 @@ JD-TC-Provider Note-6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${EMPTY} 
@@ -732,7 +732,7 @@ JD-TC-Provider Note-7
     Should Be Equal As Strings  ${resp.status_code}  200 
     Set Suite Variable  ${cookie}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}   ${giffile} 
@@ -797,7 +797,7 @@ JD-TC-Provider Note-8
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}   ${docfile} 
@@ -861,7 +861,7 @@ JD-TC-Provider Note-9
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}   ${txtfile} 
@@ -884,7 +884,7 @@ JD-TC-Provider Note-UH1
     # ${comm_msg}=   FakerLibrary.sentence 
     # Set Suite Variable   ${comm_msg}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}
     Log  ${resp.json()}
@@ -904,7 +904,7 @@ JD-TC-Provider Note-UH2
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}
     Log  ${resp.json()}
@@ -917,7 +917,7 @@ JD-TC-Provider Note-UH3
     [Documentation]   create note  without login
     
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}
     Log  ${resp.json()}
@@ -933,7 +933,7 @@ JD-TC-Provider Note-UH4
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   -114  ${msg}  ${caption}
     Log  ${resp.json()}
@@ -992,7 +992,7 @@ JD-TC-Provider Note-UH6
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.WaitlistNote   ${cookie}   ${uuid}  ${msg}  ${caption}   ${shfile} 

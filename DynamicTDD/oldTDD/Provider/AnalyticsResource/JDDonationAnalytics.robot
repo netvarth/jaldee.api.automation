@@ -29,7 +29,7 @@ JD-TC-DONATION_COUNT-1
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Test Variable   ${PUSERNAME_A}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -71,7 +71,7 @@ JD-TC-DONATION_COUNT-1
     Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
     # Set Test Variable  ${acc_id}  ${resp.json()['id']}
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
   
     ${pid}=  get_acc_id  ${PUSERNAME_A}
    

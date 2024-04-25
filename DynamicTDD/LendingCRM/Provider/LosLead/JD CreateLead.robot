@@ -92,7 +92,7 @@ JD-TC-CreateLead-1
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -239,7 +239,7 @@ JD-TC-CreateLead-2
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${requestedAmount}=     Random Int  min=30000  max=600000
     ${description}=         FakerLibrary.bs
     ${consumerFirstName}=   FakerLibrary.first_name
@@ -385,7 +385,7 @@ JD-TC-CreateLead-3
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -562,7 +562,7 @@ JD-TC-CreateLead-4
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -712,7 +712,7 @@ JD-TC-CreateLead-5
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -841,7 +841,7 @@ JD-TC-CreateLead-6
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -1017,7 +1017,7 @@ JD-TC-CreateLead-7
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -1166,7 +1166,7 @@ JD-TC-CreateLead-8
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -1340,7 +1340,7 @@ JD-TC-CreateLead-9
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -1489,7 +1489,7 @@ JD-TC-CreateLead-10
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -1638,7 +1638,7 @@ JD-TC-CreateLead-11
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -1787,7 +1787,7 @@ JD-TC-CreateLead-12
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -1936,7 +1936,7 @@ JD-TC-CreateLead-13
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -2086,7 +2086,7 @@ JD-TC-CreateLead-14
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -2236,7 +2236,7 @@ JD-TC-CreateLead-15
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -2385,7 +2385,7 @@ JD-TC-CreateLead-16
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -2535,7 +2535,7 @@ JD-TC-CreateLead-17
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -2685,7 +2685,7 @@ JD-TC-CreateLead-18
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -2816,7 +2816,7 @@ JD-TC-CreateLead-19
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -2966,7 +2966,7 @@ JD-TC-CreateLead-UH1
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -3064,7 +3064,7 @@ JD-TC-CreateLead-UH2
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -3168,7 +3168,7 @@ JD-TC-CreateLead-UH3
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -3277,7 +3277,7 @@ JD-TC-CreateLead-UH4
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -3369,7 +3369,7 @@ JD-TC-CreateLead-UH5
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -3526,7 +3526,7 @@ JD-TC-CreateLead-UH6
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -3623,7 +3623,7 @@ JD-TC-CreateLead-UH7
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -3719,7 +3719,7 @@ JD-TC-CreateLead-UH8
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -3815,7 +3815,7 @@ JD-TC-CreateLead-UH9
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -3911,7 +3911,7 @@ JD-TC-CreateLead-UH10
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -4007,7 +4007,7 @@ JD-TC-CreateLead-UH11
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -4111,7 +4111,7 @@ JD-TC-CreateLead-UH12
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -4207,7 +4207,7 @@ JD-TC-CreateLead-UH13
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -4303,7 +4303,7 @@ JD-TC-CreateLead-UH14
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -4407,7 +4407,7 @@ JD-TC-CreateLead-UH15
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     ${consumerLastName}=    FakerLibrary.last_name  
     ${dob}=    FakerLibrary.Date
@@ -4506,7 +4506,7 @@ JD-TC-CreateLead-UH15
 #     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
 #     Log  ${PH_Number}
 #     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
 #     ${consumerFirstName}=   FakerLibrary.first_name
 #     ${consumerLastName}=    FakerLibrary.last_name  
 #     ${dob}=    FakerLibrary.Date
@@ -4615,7 +4615,7 @@ JD-TC-CreateLead-UH15
 #     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
 #     Log  ${PH_Number}
 #     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
 #     ${consumerFirstName}=   FakerLibrary.first_name
 #     ${consumerLastName}=    FakerLibrary.last_name  
 #     ${dob}=    FakerLibrary.Date
@@ -4719,7 +4719,7 @@ JD-TC-CreateLead-UH15
 #     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
 #     Log  ${PH_Number}
 #     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
 #     ${consumerFirstName}=   FakerLibrary.first_name
 #     ${consumerLastName}=    FakerLibrary.last_name  
 #     ${dob}=    FakerLibrary.Date
@@ -4822,7 +4822,7 @@ JD-TC-CreateLead-UH15
 #     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
 #     Log  ${PH_Number}
 #     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
 #     ${consumerFirstName}=   FakerLibrary.first_name
 #     ${consumerLastName}=    FakerLibrary.last_name  
 #     ${dob}=    FakerLibrary.Date
@@ -4927,7 +4927,7 @@ JD-TC-CreateLead-UH15
 #     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
 #     Log  ${PH_Number}
 #     Set Test Variable    ${consumerPhone}  555${PH_Number}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
 #     ${consumerFirstName}=   FakerLibrary.first_name
 #     ${consumerLastName}=    FakerLibrary.last_name  
 #     ${dob}=    FakerLibrary.Date

@@ -112,7 +112,7 @@ JD-TC-AddToWaitlistBlock-2
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
     Set Test Variable  ${PUSERNAME_C}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
@@ -572,7 +572,7 @@ JD-TC-AddToWaitlistBlock-6
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
     Set Test Variable  ${PUSERNAME_C}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
@@ -873,7 +873,7 @@ JD-TC-AddToWaitlistBlock-7
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
     Set Test Variable  ${PUSERNAME_C}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
@@ -1186,7 +1186,7 @@ JD-TC-AddToWaitlistBlock-8
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
     Set Test Variable  ${PUSERNAME_C}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}

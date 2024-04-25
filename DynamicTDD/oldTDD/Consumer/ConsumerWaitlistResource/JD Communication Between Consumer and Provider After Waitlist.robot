@@ -29,7 +29,7 @@ ${parallel}            1
 JD-TC-Communication Between Consumer and Provider-1
 	[Documentation]   Communication Between Consumer and Provider after waitlist operation by provider side
 	${PUSERPH0}=  Evaluate  ${PUSERNAME}+100100601
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
     
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_location  ${PUSERPH0}   AND   clear_service   ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}
@@ -83,10 +83,10 @@ JD-TC-Communication Between Consumer and Provider-1
     ${list}=  Create List  1  2  3  4  5  6  7
     
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+100100602
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
     
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+100100603
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
     
     ${PUSERMAIL0}=   Set Variable  ${P_Email}ph601.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
@@ -251,7 +251,7 @@ JD-TC-Communication Between Consumer and Provider-1
     Should Be Equal As Strings   ${resp.status_code}    200
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Imageupload.ConsWLCommunication   ${cookie}  ${wid}  ${pid0}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile}
     Log  ${resp}
@@ -337,7 +337,7 @@ JD-TC-Communication Between Consumer and Provider-2
     Should Be Equal As Strings   ${resp.status_code}    200
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Imageupload.ConsWLCommunication   ${cookie}  ${wid}  ${pid0}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  
     Log  ${resp}
@@ -467,7 +467,7 @@ JD-TC-Communication Between Consumer and Provider-3
     Should Be Equal As Strings   ${resp.status_code}    200
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Imageupload.ConsWLCommunication   ${cookie}  ${wid1}  ${pid0}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  
     Log  ${resp}
@@ -603,7 +603,7 @@ JD-TC-Communication Between Consumer and Provider-4
     Should Be Equal As Strings   ${resp.status_code}    200
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Imageupload.ConsWLCommunication   ${cookie}  ${wid1}  ${pid0}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile}
     Log  ${resp}
@@ -691,7 +691,7 @@ JD-TC-Communication Between Consumer and Provider-5
     Should Be Equal As Strings   ${resp.status_code}    200
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Imageupload.ConsWLCommunication   ${cookie}  ${wid1}  ${pid0}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${pngfile}
     Log  ${resp}
@@ -778,7 +778,7 @@ JD-TC-Communication Between Consumer and Provider-6
     Should Be Equal As Strings   ${resp.status_code}    200
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Imageupload.ConsWLCommunication   ${cookie}  ${wid1}  ${pid0}  ${msg}  ${messageType[0]}  ${EMPTY}  ${EMPTY} 
     Log  ${resp}
@@ -865,7 +865,7 @@ JD-TC-Communication Between Consumer and Provider-7
     Should Be Equal As Strings   ${resp.status_code}    200
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Imageupload.ConsWLCommunication   ${cookie}  ${wid1}  ${pid0}  ${EMPTY}  ${messageType[0]}  ${caption}  ${EMPTY} 
     Log  ${resp}
@@ -959,7 +959,7 @@ JD-TC-Communication Between Consumer and Provider-8
     @{fileswithcaption}=  Create List   ${filecap_dict1}   ${filecap_dict2}
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.CWLSCommMultiFile   ${cookie}  ${pid0}  ${wid}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1048,7 +1048,7 @@ JD-TC-Communication Between Consumer and Provider-9
     ${filecap_dict2}=  Create Dictionary   file=${pngfile}   caption=${EMPTY}
     @{fileswithcaption}=  Create List   ${filecap_dict1}   ${filecap_dict2}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.CWLSCommMultiFile   ${cookie}  ${pid0}  ${wid}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1134,7 +1134,7 @@ JD-TC-Communication Between Consumer and Provider-10
     Should Be Equal As Strings   ${resp.status_code}    200
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Imageupload.ConsWLCommunication   ${cookie}  ${wid1}  ${pid0}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${pdffile}
     Log  ${resp}
@@ -1168,7 +1168,7 @@ JD-TC-Communication Between Consumer and Provider-10
 
 #     ${pid0}=  get_acc_id  ${PUSERPH0}
 #     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
 #     ${caption}=  Fakerlibrary.sentence
 #     ${resp}=  Imageupload.consumercomupload   ${pid0}  ${wid1}  ${msg}  ${caption}
 #     Log  ${resp}
@@ -1235,7 +1235,7 @@ JD-TC-Communication Between Consumer and Provider-UH2
     Should Be Equal As Strings   ${resp.status_code}    200
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     ${resp}=  Imageupload.ConsWLCommunication   ${cookie}  ${wid1}  ${pid0}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile}
     Log  ${resp}

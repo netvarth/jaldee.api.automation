@@ -23,7 +23,7 @@ JD-TC-UpConsumerProf-1
     [Documentation]   update Consumer profile of a valid Consumer
     ${CUSERPH0}=  Evaluate  ${CUSERPH}+100100401
     Set Suite Variable   ${CUSERPH0}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -106,7 +106,7 @@ JD-TC-UpConsumerProf-6
 
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+1007895
     Set Suite Variable   ${CUSERPH1}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -206,7 +206,7 @@ JD-TC-UpConsumerProf-UH2
     [Documentation]   update Consumer profile of a valid Consumer with already existing consumer mail id
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+100100402
     Set Suite Variable   ${CUSERPH1}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name

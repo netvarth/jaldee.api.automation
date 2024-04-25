@@ -116,8 +116,8 @@ JD-TC-GetConsumerJcashOfferStatCount-2
 
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+17788552
     Set Suite Variable   ${CUSERPH1}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
     
     ${create_day}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${create_day}
@@ -238,8 +238,8 @@ JD-TC-GetConsumerJcashOfferStatCount-3
 
     ${CUSERPH2}=  Evaluate  ${CUSERPH}+17788558
     Set Suite Variable   ${CUSERPH2}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH2}${\n}
   
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH2}+4468
     ${firstname1}=  FakerLibrary.first_name
@@ -342,8 +342,8 @@ JD-TC-GetConsumerJcashOfferStatCount-4
 
     ${CUSERPH3}=  Evaluate  ${CUSERPH}+17788550
     Set Suite Variable   ${CUSERPH3}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH3}${\n}
     
     ${create_day}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable   ${create_day}
@@ -549,8 +549,8 @@ JD-TC-GetConsumerJcashOfferStatCount-5
     
     ${CUSERPH5}=  Evaluate  ${CUSERPH}+104996369
     Set Suite Variable   ${CUSERPH5}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH5}${\n}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH5}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH5}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH5}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH5}+4468
     ${firstname5}=  FakerLibrary.first_name
@@ -747,8 +747,8 @@ JD-TC-GetConsumerJcashOfferStatCount-6
     
     ${CUSERPH6}=  Evaluate  ${CUSERPH}+104996371
     Set Suite Variable   ${CUSERPH6}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH6}${\n}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH6}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH6}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH6}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH6}+4468
     ${firstname6}=  FakerLibrary.first_name
@@ -1050,8 +1050,8 @@ JD-TC-GetConsumerJcashOfferStatCount-11
     
     ${CUSERPH7}=  Evaluate  ${CUSERPH}+104996387
     Set Suite Variable   ${CUSERPH7}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH7}${\n}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH7}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH7}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH7}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH7}+4468
     ${firstname7}=  FakerLibrary.first_name
@@ -1256,8 +1256,8 @@ JD-TC-GetConsumerJcashOfferStatCount-12
     
     ${CUSERPH8}=  Evaluate  ${CUSERPH}+1049900227
     Set Suite Variable   ${CUSERPH8}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH8}${\n}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH8}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH8}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH8}${\n}
 
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH8}+4468
     ${firstname8}=  FakerLibrary.first_name

@@ -38,7 +38,7 @@ JD-TC-AddonAndAdwords -1
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
        Should Be Equal As Strings    ${resp.status_code}    200
-       Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
+       Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
        ${resp}=   Get Adword Count   
        Log   ${resp.json()}
        Should Be Equal As Strings  ${resp.status_code}   200
@@ -100,7 +100,7 @@ JD-TC-AddonAndAdwords -2
        Should Be Equal As Strings    ${resp.status_code}    200
        ${resp}=  Encrypted Provider Login  ${PUSERNAMEA}  ${PASSWORD}
        Should Be Equal As Strings    ${resp.status_code}    200
-       Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAMEA}${\n}  
+       Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAMEA}${\n}  
        ${resp}=  Get upgradable license 
        Log   ${resp.json()}
        Should Be Equal As Strings    ${resp.status_code}   200

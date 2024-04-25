@@ -54,7 +54,7 @@ JD-TC-GetAppointmentMRById-1
     Log  ${decrypted_data}
     Set Suite Variable  ${pro_id}  ${decrypted_data['id']}
     # Set Test Variable  ${pro_id}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
     Set Suite Variable  ${PUSERNAME_C}
     
 

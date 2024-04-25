@@ -69,7 +69,7 @@ JD-TC-Get Consumer-2
     ${resp}=  AddCustomer without email   ${firstname}  ${lastname}  ${EMPTY}   ${gender}  ${dob}  ${ph2}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph2}${\n}
 
     ${resp}=  Get Consumer  primaryMobileNo-eq=${ph2}   
     Log  ${resp.json()}   

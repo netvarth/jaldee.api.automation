@@ -55,7 +55,7 @@ JD-TC-Consumer Signup-1
     [Documentation]   Create consumer with all valid attributes except email
     ${CUSERPH0}=  Evaluate  ${CUSERPH}+100100201
     Set Suite Variable   ${CUSERPH0}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -75,12 +75,12 @@ JD-TC-Consumer Signup-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
 
 JD-TC-Consumer Signup-2
     [Documentation]    Create another consumer with phone number which is not activated but have done signup
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+100100202
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
     Set Suite Variable   ${CUSERPH1}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+1000
     ${firstname}=  FakerLibrary.first_name
@@ -114,15 +114,15 @@ JD-TC-Consumer Signup-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
 
 JD-TC-Consumer Signup-3
     [Documentation]   Create consumer with email
     ${CUSERPH2}=  Evaluate  ${CUSERPH}+100100203
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
     Set Suite Variable   ${CUSERPH2}
     ${CUSERPH3}=  Evaluate  ${CUSERPH}+100100204
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     Set Suite Variable   ${CUSERPH3}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH2}+1000
     ${CUSERMAIL2}=   Set Variable  ${C_Email}ph203.${test_mail}
@@ -144,7 +144,7 @@ JD-TC-Consumer Signup-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH2}${\n}
 
 JD-TC-Consumer Signup-4
     [Documentation]   Create a Consumer with existing provider's phone number
@@ -158,7 +158,7 @@ JD-TC-Consumer Signup-4
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${PUSERNAME5}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${PUSERNAME5}${\n}
 
 
 # JD-TC-Consumer Signup-5
@@ -210,10 +210,10 @@ JD-TC-Consumer Signup-4
 #     Set Suite Variable  ${list}  ${list}
     
 #     ${CUSERPH3}=  Evaluate  ${CUSERPH}+100100204
-#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
+#     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
 #     Set Suite Variable   ${CUSERPH3}
 #     ${CUSERPH4}=  Evaluate  ${CUSERPH}+100100205
-#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH4}${\n}
+#     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH4}${\n}
 #     Set Suite Variable   ${CUSERPH4}
 #     ${CUSERMAIL0}=   Set Variable  ${C_Email}ph201.${test_mail}
 #     ${views}=  Evaluate  random.choice($Views)  random
@@ -313,7 +313,7 @@ JD-TC-Consumer Signup-5
     # END
     # ${country_code}    Generate random string    2    0123456789
     # ${country_code}    Convert To Integer  ${country_code}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH3}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -336,7 +336,7 @@ JD-TC-Consumer Signup-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH3}${\n}
 
 
 JD-TC-Consumer Signup-6
@@ -383,7 +383,7 @@ JD-TC-Consumer Signup-6
 
     Comment   with default country code +91
     # ${CUSERPH4}=  Evaluate  ${CUSERPH}+${PO_Number1}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH4}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH4}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH4}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -405,7 +405,7 @@ JD-TC-Consumer Signup-6
     ${resp}=  Consumer Logout
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH4}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH4}${\n}
 
     Comment   with country code   ${country_code1}
     
@@ -536,7 +536,7 @@ JD-TC-Consumer Signup-7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
 
 
 JD-TC-Consumer Signup-8
@@ -591,7 +591,7 @@ JD-TC-Consumer Signup-8
     
     # ${country_code}    Convert To Integer  ${country_code}
     # ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number1}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
     ${resp}=  AddCustomer  ${CUSERPH0}  firstName=${fname}  lastName=${lname}
@@ -636,7 +636,7 @@ JD-TC-Consumer Signup-8
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
 
 
 JD-TC-Consumer Signup-9
@@ -692,7 +692,7 @@ JD-TC-Consumer Signup-9
     # ${country_code}    Generate random string    2    0123456789
     # ${country_code}    Convert To Integer  ${country_code}
     # ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number1}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
     ${resp}=   AddCustomer  ${CUSERPH0}  countryCode=${country_code}  firstName=${fname}  lastName=${lname}  
@@ -737,7 +737,7 @@ JD-TC-Consumer Signup-9
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
 
 
 JD-TC-Consumer Signup-10
@@ -788,7 +788,7 @@ JD-TC-Consumer Signup-10
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Test Variable  ${pid}  ${resp.json()['id']}
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -887,7 +887,7 @@ JD-TC-Consumer Signup-10
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${PUSERNAME12}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${PUSERNAME12}${\n}
 
 
 JD-TC-Consumer Signup-UH3
@@ -926,7 +926,7 @@ JD-TC-Consumer Signup-UH4
     # ${country_code}    Generate random string    2    0123456789
     # ${country_code}    Convert To Integer  ${country_code}
     # ${CUSERPH3}=  Evaluate  ${CUSERPH}+${PO_Number}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     ${PO_Number}=  random_phone_num_generator
     Log  ${PO_Number}
     ${country_code}=  Set Variable  ${PO_Number.country_code}
@@ -1039,7 +1039,7 @@ JD-TC-Consumer Signup-11
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
 
 
 JD-TC-Consumer Signup-12
@@ -1142,7 +1142,7 @@ JD-TC-Consumer Signup-12
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${PUSERPH0}${\n}
 
 
 JD-TC-Consumer Signup-13
@@ -1265,7 +1265,7 @@ JD-TC-Consumer Signup-13
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${PUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${PUSERPH1}${\n}
 
 
 

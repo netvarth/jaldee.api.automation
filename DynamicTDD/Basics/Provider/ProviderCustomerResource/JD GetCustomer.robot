@@ -50,7 +50,7 @@ JD-TC-Get Customers-1
     ${resp}=  AddCustomer without email   ${firstname1}  ${lastname1}  ${EMPTY}  ${gender1}  ${dob1}  ${ph}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph}${\n}
     ${resp}=  GetCustomer   account-eq=${cid} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200  
@@ -74,7 +74,7 @@ JD-TC-Get Customers-2
     ${resp}=  AddCustomer without email   ${firstname}  ${lastname}  ${EMPTY}   ${gender}  ${dob}  ${ph2}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph2}${\n}
     # ${resp}=  ProviderLogout
     # Should Be Equal As Strings  ${resp.status_code}  200
     ${resp}=  GetCustomer  phoneNo-eq=${ph2}   status-eq=ACTIVE 
@@ -100,7 +100,7 @@ JD-TC-Get Customers-3
     ${resp}=  AddCustomer without email   ${firstname}  ${lastname}  ${EMPTY}   ${gender}  ${dob}  ${ph2}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid1}  ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph2}${\n}
     ${resp}=  GetCustomer    firstName-eq=${firstname}   lastName-eq=${lastname}
     Log  ${resp.json()}   
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -209,7 +209,7 @@ JD-TC-Get Customers-6
     ${country_code}    Convert To Integer  ${country_code}
     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number}
     # clear_consumer_msgs  ${CUSERPH0}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -301,10 +301,10 @@ JD-TC-Get Customers-6
 JD-TC-Get Customers-7
     [Documentation]   A consumer signup and message passed to a provider , that  consumer added as provider customer
     ${CUSERPH75}=  Evaluate  ${CUSERPH}+100100157
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH75}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH75}${\n}
     Set Suite Variable   ${CUSERPH75}
    # ${CUSERPH3}=  Evaluate  ${CUSERPH}+100100204
-    #Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
+    #Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
    # Set Suite Variable   ${CUSERPH3}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH75}+1000
     ${CUSERMAIL2}=   Set Variable  ${C_Email}ph9o9j.${test_mail}
@@ -326,7 +326,7 @@ JD-TC-Get Customers-7
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH75}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH75}${\n}
 
 
     ${resp}=  Consumer Logout
@@ -365,7 +365,7 @@ JD-TC-Get Customers-7
     # Set Suite Variable    ${cookie} 
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile}  
     Log  ${resp.json()}
@@ -431,7 +431,7 @@ JD-TC-Get Customers-8
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
     Set Test Variable  ${cid}  ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph2}${\n}
 
     ${resp}=  GetCustomer    secondaryPhoneNo-eq=${ph2}    status-eq=ACTIVE
     Should Be Equal As Strings  ${resp.status_code}  200

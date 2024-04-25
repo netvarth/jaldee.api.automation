@@ -358,7 +358,7 @@ Get Random Valid Phone Number
             Return From Keyword  ${PO_Number}
         END
     END
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${PO_Number}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${PO_Number}${\n}
 
 Generate Random Phone Number
     
@@ -374,7 +374,7 @@ Generate Random Phone Number
             Return From Keyword  ${PH_Number}
         END
     END
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${PH_Number}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${PH_Number}${\n}
 
 
 
@@ -383,7 +383,7 @@ Generate Random 555 Test Phone Number
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable    ${Phone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${Phone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${Phone}${\n}
     RETURN  ${Phone}
     
 
@@ -393,7 +393,7 @@ Generate Random Test Phone Number
     # ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     ${Phone}=  Evaluate  ${baseNumber}+${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${Phone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${Phone}${\n}
     RETURN  ${Phone}
 
 

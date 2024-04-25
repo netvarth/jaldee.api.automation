@@ -374,7 +374,7 @@ JD-TC-CreateService-7
         ${firstname}=  FakerLibrary.name
         ${lastname}=  FakerLibrary.last_name
         ${PUSERNAME_Y}=  Evaluate  ${PUSERNAME}+1530      
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_Y}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_Y}${\n}
         ${pkg_id}=   get_highest_license_pkg
         ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERNAME_Y}   ${pkg_id[0]}
         Log  ${resp.json()}
@@ -394,9 +394,9 @@ JD-TC-CreateService-7
         ${list}=  Create List  1  2  3  4  5  6  7
         Set Suite Variable    ${list}
         ${PUSERPH4}=  Evaluate  ${multilocPro[1]}+1505
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
         ${PUSERPH5}=  Evaluate  ${PUSERNAME}+1506
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
         ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
         ${views}=  Evaluate  random.choice($Views)  random
         ${name1}=  FakerLibrary.name

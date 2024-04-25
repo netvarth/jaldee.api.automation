@@ -40,7 +40,7 @@ JD-TC-Update Account Contact information-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id}  ${resp.json()['id']}
     Set Suite Variable  ${PUSERNAME}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
     ${pid}=  get_acc_id  ${PUSERNAME}
     ${resp}=  Get Provider Details    ${pro_id} 
     Log  ${resp.json()}
@@ -193,7 +193,7 @@ JD-TC-Update Account Contact information-2
     Set Suite Variable  ${pro_id0}  ${decrypted_data['id']}
     # Set Test Variable  ${pro_id0}  ${resp.json()['id']}
     Set Suite Variable  ${PUSERNAME0}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME0}${\n}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME0}${\n}  
     ${pid}=  get_acc_id  ${PUSERNAME0}
     ${resp}=  Get Provider Details    ${pro_id0} 
     Log  ${resp.json()}
@@ -377,7 +377,7 @@ JD-TC-Update Account Contact information-3
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id00}  ${resp.json()['id']}
     Set Suite Variable  ${PUSERNAME_00}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_00}${\n}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_00}${\n}  
     ${pid}=  get_acc_id  ${PUSERNAME_00}
     ${resp}=  Get Provider Details    ${pro_id00} 
     Log  ${resp.json()}
@@ -565,7 +565,7 @@ JD-TC-Update Account Contact information-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_id1}  ${resp.json()['id']}
     Set Suite Variable  ${PUSERNAME1}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME1}${\n}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME1}${\n}  
     ${pid}=  get_acc_id  ${PUSERNAME1}
     ${resp}=  Get Provider Details    ${pro_id1} 
     Log  ${resp.json()}
@@ -711,9 +711,9 @@ JD-TC-Update Account Contact information-5
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_K}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
     Set Suite Variable  ${MUSERNAME_K}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_K}${\n}
     ${pid2}=  get_acc_id  ${MUSERNAME_K}  
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
@@ -770,9 +770,9 @@ JD-TC-Update Account Contact information-6
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${subdomain}  ${resp.json()['subSector']}
     Set Test Variable  ${pro_id3}  ${resp.json()['id']}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_L}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_L}${\n}
     Set Suite Variable  ${MUSERNAME_L}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_L}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_L}${\n}
     ${pid4}=  get_acc_id  ${MUSERNAME_L}  
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
@@ -1185,7 +1185,7 @@ JD-TC-Update Account Contact information-13
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${pro_idN}  ${resp.json()['id']}
     Set Test Variable  ${PUSERNAME_N}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_N}${\n}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_N}${\n}  
     
     Set Test Variable    ${first-name}    ${resp.json()['firstName']}  
     Set Test Variable    ${last-name}     ${resp.json()['lastName']} 
@@ -1280,7 +1280,7 @@ JD-TC-Update Account Contact information-14
     Set Suite Variable  ${pro_id}  ${decrypted_data['id']}
     # Set Test Variable  ${pro_id}  ${resp.json()['id']}
     Set Test Variable  ${PUSERNAME_C}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}  
     ${pid}=  get_acc_id  ${PUSERNAME_C}
     ${resp}=  Get Provider Details    ${pro_id} 
     Log  ${resp.json()}
@@ -1370,7 +1370,7 @@ JD-TC-Update Account Contact information-15
     Set Suite Variable  ${pro_id0}  ${decrypted_data['id']}
     # Set Test Variable  ${pro_id0}  ${resp.json()['id']}
     Set Suite Variable  ${PUSERNAME0}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME0}${\n}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME0}${\n}  
     ${pid}=  get_acc_id  ${PUSERNAME0}
     ${resp}=  Get Provider Details    ${pro_id0} 
     Log  ${resp.json()}
@@ -1499,7 +1499,7 @@ JD-TC-Update Account Contact information-UH3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME5}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME5}${\n}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME5}${\n}  
     ${pid5}=  get_acc_id  ${PUSERNAME5}
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
@@ -1543,7 +1543,7 @@ JD-TC-Update Account Contact information-UH4
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
     ${pid5}=  get_acc_id  ${PUSERNAME}
     ${resp}=  Get Account contact information
     Log  ${resp.json()}
@@ -1658,7 +1658,7 @@ JD-TC-Update Account Contact information-3
     Set Suite Variable  ${pro_id0}  ${decrypted_data['id']}
     # Set Test Variable  ${pro_id0}  ${resp.json()['id']}
     Set Suite Variable  ${PUSERNAME0}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME0}${\n}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME0}${\n}  
     ${pid}=  get_acc_id  ${PUSERNAME0}
     ${resp}=  Get Provider Details    ${pro_id0} 
     Log  ${resp.json()}
@@ -1806,7 +1806,7 @@ JD-TC-Update Account Contact information-2
     Set Suite Variable  ${pro_id0}  ${decrypted_data['id']}
     # Set Test Variable  ${pro_id0}  ${resp.json()['id']}
     Set Suite Variable  ${PUSERNAME0}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME0}${\n}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME0}${\n}  
     ${pid}=  get_acc_id  ${PUSERNAME0}
     ${resp}=  Get Provider Details    ${pro_id0} 
     Log  ${resp.json()}

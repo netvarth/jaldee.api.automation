@@ -45,7 +45,7 @@ JD-TC-AccountLevelAnalyticsforOrder-1
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
     # ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+7857711
@@ -68,7 +68,7 @@ JD-TC-AccountLevelAnalyticsforOrder-1
     Log  ${decrypted_data}
     Set Suite Variable  ${acc_id}  ${decrypted_data['id']}
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Suite Variable  ${PUSERNAME_A}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}

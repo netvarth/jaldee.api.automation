@@ -77,7 +77,7 @@ JD-TC-ShareFiles-1
 
     ${msg}=   FakerLibrary.Word
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
 
     ${firstname_C1}=    FakerLibrary.first_name
     ${lastname_C1}=     FakerLibrary.last_name

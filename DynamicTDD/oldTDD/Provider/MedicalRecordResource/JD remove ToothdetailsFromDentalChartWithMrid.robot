@@ -151,7 +151,7 @@ JD-TC-RemoveToothDetailsFromdentalchart-1
     Set Suite Variable  ${userName}  ${decrypted_data['userName']}
     # Set Suite Variable    ${id}    ${resp.json()['id']} 
     # Set Suite Variable    ${userName}    ${resp.json()['userName']}         
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
     Set Suite Variable  ${PUSERNAME_C}
 
     ${pid}=  get_acc_id  ${PUSERNAME_C}

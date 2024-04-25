@@ -1953,7 +1953,7 @@ JD-TC-AddMultipleWaitlistLabel-11
     Verify Response  ${resp}  date=${DAY1}  waitlistStatus=${wl_status[1]}  label=${Emptydict}
 
     ${msg}=  FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${wl_cancel}=  Evaluate  random.choice($waitlist_cancl_reasn)  random
     ${resp}=  Waitlist Action Cancel  ${wid1}  ${wl_cancel}   ${msg}
     Log  ${resp.json()}

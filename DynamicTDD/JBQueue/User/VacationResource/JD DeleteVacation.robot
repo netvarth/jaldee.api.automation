@@ -48,7 +48,7 @@ JD-TC-DeleteVacation-1
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E4}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E4}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E4}${\n}
     Set Suite Variable  ${MUSERNAME_E4}
     ${id}=  get_id  ${MUSERNAME_E4}
     Set Suite Variable  ${id}

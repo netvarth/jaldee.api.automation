@@ -37,7 +37,7 @@ JD-TC-CreateBusinessProfile-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
+#     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
 #     Set Suite Variable  ${PUSERNAME_B}
 #     ${DAY1}=  db.get_date_by_timezone  ${tz}
 #     Set Suite Variable  ${DAY1}  ${DAY1}
@@ -62,7 +62,7 @@ JD-TC-CreateBusinessProfile-1
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
+#     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
 #     Set Suite Variable  ${PUSERNAME_C}
 #     ${companySuffix}=  FakerLibrary.companySuffix
 #     Set Suite Variable  ${companySuffix}
@@ -102,7 +102,7 @@ JD-TC-CreateBusinessProfile-1
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
+#     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
 #     Set Suite Variable  ${PUSERNAME_D}
 #     ${bs}=  FakerLibrary.bs
 #     Set Suite Variable  ${bs}
@@ -124,7 +124,7 @@ JD-TC-CreateBusinessProfile-1
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+#     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
 #     Set Suite Variable  ${PUSERNAME_E}
 #     ${resp}=  Create Business Profile without details  ${bs}  ${bs} Desc   ${companySuffix}  ${ph_nos1}  ${ph_nos2}  ${emails1}
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -144,7 +144,7 @@ JD-TC-CreateBusinessProfile-1
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_F}${\n}
+#     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_F}${\n}
 #     Set Suite Variable  ${PUSERNAME_F}
 #     ${city}=   get_place
 #     Set Suite Variable  ${city}
@@ -186,7 +186,7 @@ JD-TC-CreateBusinessProfile-1
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_G}${\n}
+#     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_G}${\n}
 #     Set Suite Variable  ${PUSERNAME_G}
 #     ${resp}=  Create Business Profile with location only   ${EMPTY}   ${EMPTY}   ${EMPTY}  ${city}  ${longi}  ${latti}  www.${city}.com  ${parking_type}  ${24hours}  ${postcode}  ${address}  
 #     Should Be Equal As Strings  ${resp.status_code}  200
@@ -220,7 +220,7 @@ JD-TC-CreateBusinessProfile-1
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME_H}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_H}${\n}
+#     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_H}${\n}
 #     Set Suite Variable  ${PUSERNAME_H}
 #     ${city8}=   get_place
 #     Set Suite Variable  ${city8}
@@ -257,7 +257,7 @@ JD-TC-CreateBusinessProfile-1
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME_I}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_I}${\n}
+#     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_I}${\n}
 #     Set Suite Variable  ${PUSERNAME_I}
 #     ${sTime9}=  add_timezone_time  ${tz}  1  0  
 #     Set Suite Variable   ${sTime9}
@@ -294,7 +294,7 @@ JD-TC-CreateBusinessProfile-1
 #     ${resp}=  Encrypted Provider Login  ${PUSERNAME_J}  ${PASSWORD}
 #     Log  ${resp.json()}
 #     Should Be Equal As Strings    ${resp.status_code}    200
-#     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_J}${\n}
+#     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_J}${\n}
 #     Set Suite Variable  ${PUSERNAME_J}
 #     ${sTime11}=  add_timezone_time  ${tz}  1  0  
 #     Set Suite Variable   ${sTime11}

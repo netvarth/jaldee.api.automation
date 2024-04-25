@@ -946,7 +946,7 @@ JD-TC-PCTakeIndividualScheduleAppointment-9
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_X}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_X}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_X}${\n}
     Set Suite Variable  ${PUSERNAME_X}
     # Set Test Variable  ${pid}  ${resp.json()['id']}
 
@@ -4053,7 +4053,7 @@ JD-TC-PCTakeIndividualScheduleAppointment-UH13
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_W}  ${PASSWORD}
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_W}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_W}${\n}
     Set Suite Variable  ${PUSERNAME_W}
 
     ${decrypted_data}=  db.decrypt_data  ${resp.content}

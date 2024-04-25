@@ -201,7 +201,7 @@ JD-TC-UpdateDeliveryCharge-1
     
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+154686
     Set Suite Variable   ${CUSERPH1}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -223,7 +223,7 @@ JD-TC-UpdateDeliveryCharge-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
 
     # ${resp}=  Consumer Login  ${CUSERPH1}  ${PASSWORD}
     # Log   ${resp.json()}
@@ -892,7 +892,7 @@ JD-TC-UpdateDeliveryCharge-7
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
     Set Suite Variable  ${PUSERNAME_C}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_C}  ${PASSWORD}
@@ -1131,7 +1131,7 @@ JD-TC-UpdateDeliveryCharge-7
     
     ${CUSERPH0}=  Evaluate  ${CUSERPH}+1546005
     Set Suite Variable   ${CUSERPH0}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -1153,7 +1153,7 @@ JD-TC-UpdateDeliveryCharge-7
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
 
     # ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}
     # Log   ${resp.json()}

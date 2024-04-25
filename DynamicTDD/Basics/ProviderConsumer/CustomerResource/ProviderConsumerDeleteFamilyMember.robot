@@ -299,7 +299,7 @@ JD-TC-DeleteFamilyMembersFormProviderConsumer-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${pcid}  ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph2}${\n}
     ${firstname1}=  FakerLibrary.first_name
     Set Suite Variable  ${firstname1}
     ${lastname1}=  FakerLibrary.last_name

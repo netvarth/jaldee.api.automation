@@ -172,7 +172,7 @@ SignUp Account
         # Run Keyword If  '${is_corp}' == 'False'  Append To File  ${EXECDIR}/TDD/varfiles/providers.py  PUSERNAME${PC}=${PUSERNAME}${\n}
         # Append To File  ${EXECDIR}/TDD/varfiles/branches.py  BUSERNAME${US}= ${BUSER}${\n}
         # Append To File  ${EXECDIR}/TDD/varfiles/musers.py  MUSERNAME${US}= ${BUSER}${\n}
-        # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt   ${BUSER}${\n}
+        # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt   ${BUSER}${\n}
         ${highest_pkg}=  get_highest_license_pkg
         # Run Keyword If  '${pkgId}' == '${highest_pkg[0]}'   Append To File  ${EXECDIR}/TDD/varfiles/branches_highestlic.py  BHUSERNAME${BR}= ${BUSER}${\n}
         IF  '${pkgId}' == '${highest_pkg[0]}'

@@ -63,7 +63,7 @@ JD-TC-Consumer Signup-1
   
     ${CUSERPH0}=  Evaluate  ${CUSERPH}+100200201
     Set Suite Variable   ${CUSERPH0}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -81,7 +81,7 @@ JD-TC-Consumer Signup-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME152}  ${PASSWORD}
     Log  ${resp.json()}
@@ -104,7 +104,7 @@ JD-TC-Consumer Signup-2
     ${pid}=  get_acc_id  ${PUSERNAME15}
     
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+100200210
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
     Set Suite Variable   ${CUSERPH1}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -132,7 +132,7 @@ JD-TC-Consumer Signup-2
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     Log  ${resp.json()}
@@ -159,7 +159,7 @@ JD-TC-Consumer Signup-3
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings  "${resp.json()}"     "${MOBILE_NO_USED}"
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${PUSERNAME5}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${PUSERNAME5}${\n}
 
     # ${resp}=  Consumer Activation  ${email}  1
     # Log  ${resp.content}
@@ -193,7 +193,7 @@ JD-TC-Consumer Signup-4
     ${pid}=  get_acc_id  ${PUSERNAME15}
     
     ${CUSERPH2}=  Evaluate  ${CUSERPH}+100200206
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
     Set Suite Variable   ${CUSERPH2}
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -215,7 +215,7 @@ JD-TC-Consumer Signup-4
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH2}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH2}${\n}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     # Log  ${resp.json()}
@@ -310,7 +310,7 @@ JD-TC-Consumer Signup-5
     # ${resp}=  Consumer Logout
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${PUSERPH0}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${PUSERPH0}${\n}
 
     # ${resp}=  Encrypted Provider Login  ${buser}  ${PASSWORD}
     # Log  ${resp.content}
@@ -325,7 +325,7 @@ JD-TC-Consumer Signup-5
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
 
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME8}  ${PASSWORD}
@@ -442,7 +442,7 @@ JD-TC-Consumer Signup-6
     # ${resp}=  Consumer Logout
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${PUSERPH0}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${PUSERPH0}${\n}
 
     # ${resp}=  Encrypted Provider Login  ${buser}  ${PASSWORD}
     # Log  ${resp.content}
@@ -479,7 +479,7 @@ JD-TC-Consumer Signup-7
     Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
       
     ${CUSERPH3}=  Evaluate  ${CUSERPH}+100200204
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH3}${\n}
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
     ${email}=   FakerLibrary.email
@@ -532,7 +532,7 @@ JD-TC-Consumer Signup-7
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH3}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH3}${\n}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME82}  ${PASSWORD}
     # Log  ${resp.content}
@@ -579,7 +579,7 @@ JD-TC-Consumer Signup-UH3
     ${pid}=  get_acc_id  ${PUSERNAME15}
     
     ${CUSERPH1}=  Evaluate  ${CUSERPH}+100200204
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
     Set Suite Variable   ${CUSERPH1}
 
     ${firstname}=  FakerLibrary.first_name
@@ -601,7 +601,7 @@ JD-TC-Consumer Signup-UH3
     # Log  ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME15}  ${PASSWORD}
     # Log  ${resp.json()}

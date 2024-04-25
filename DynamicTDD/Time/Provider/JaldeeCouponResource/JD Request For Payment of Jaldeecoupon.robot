@@ -45,7 +45,7 @@ JD-TC-Request for payment-1
     [Documentation]  Provider apply a coupon after waitlist ,done payment and settle bill then Request for payment 
     
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+100100701
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
     
     # clear_reimburseReport  

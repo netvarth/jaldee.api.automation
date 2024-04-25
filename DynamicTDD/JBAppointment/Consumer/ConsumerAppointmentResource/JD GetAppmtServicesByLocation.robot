@@ -44,7 +44,7 @@ JD-TC-GetAppmtServicesByLocation-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_R}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_R}${\n}
     Set Suite Variable  ${PUSERNAME_R}
     ${pid}=  get_acc_id  ${PUSERNAME_R}
 
@@ -720,7 +720,7 @@ JD-TC-GetAppmtServicesByLocation-10
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_R}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_R}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_R}${\n}
     ${pid}=  get_acc_id  ${PUSERNAME_R}
 
     ${list}=  Create List  1  2  3  4  5  6  7

@@ -499,7 +499,7 @@ JD-TC-ConsumerOrderCommunication-1
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     # @{fileswithcaption}=  Create List   ${EMPTY}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.consumerOrderCommunication   ${cookie}  ${accId3}  ${orderid41}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -577,7 +577,7 @@ JD-TC-ConsumerOrderCommunication-2
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.consumerOrderCommunication   ${cookie}  ${accId3}  ${orderid11}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption} 
     Log  ${resp}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -673,7 +673,7 @@ JD-TC-ConsumerOrderCommunication-3
     @{fileswithcaption}=  Create List   ${filecap_dict1}   ${filecap_dict2}  ${filecap_dict3}
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.consumerOrderCommunication   ${cookie}  ${accId3}  ${orderid11}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption}  
     Log  ${resp}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -776,7 +776,7 @@ JD-TC-ConsumerOrderCommunication-4
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${EMPTY}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=  Imageupload.consumerOrderCommunication   ${cookie}  ${accId3}  ${orderid11}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption}  
     Log  ${resp}
     Should Be Equal As Strings   ${resp.status_code}    200
@@ -854,7 +854,7 @@ JD-TC-ConsumerOrderCommunication-5
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     # ${resp}=  Imageupload.COrderCommunication   ${cookie}  ${orderid11}  ${accId3}   ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile}
     ${resp}=  Imageupload.consumerOrderCommunication   ${cookie}  ${accId3}  ${orderid11}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption}  
     Log  ${resp}
@@ -928,7 +928,7 @@ JD-TC-ConsumerOrderCommunication-6
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     # ${resp}=  Imageupload.COrderCommunication   ${cookie}  ${orderid11}  ${accId3}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile} 
     ${resp}=  Imageupload.consumerOrderCommunication   ${cookie}  ${accId3}  ${orderid11}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption} 
     Log  ${resp}
@@ -1009,7 +1009,7 @@ JD-TC-ConsumerOrderCommunication-7
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     # ${resp}=  Imageupload.COrderCommunication   ${cookie}  ${orderid11}  ${accId3}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile} 
     ${resp}=  Imageupload.consumerOrderCommunication   ${cookie}  ${accId3}  ${orderid22}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption}
     Log  ${resp}
@@ -1101,7 +1101,7 @@ JD-TC-ConsumerOrderCommunication-8
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     # ${resp}=  Imageupload.COrderCommunication   ${cookie}  ${orderid11}  ${accId3}   ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile}
     ${resp}=  Imageupload.consumerOrderCommunication   ${cookie}  ${accId3}  ${orderid11}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption}  
     Log  ${resp}
@@ -1161,7 +1161,7 @@ JD-TC-ConsumerOrderCommunication-UH1
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     # ${resp}=  Imageupload.COrderCommunication   ${cookie}  ${orderid11}  ${accId3}   ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile} 
     ${resp}=  Imageupload.consumerOrderCommunication   ${empty_cookie}  ${accId3}  ${orderid11}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption} 
     Log  ${resp}
@@ -1180,7 +1180,7 @@ JD-TC-ConsumerOrderCommunication-UH2
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     # ${resp}=  Imageupload.COrderCommunication   ${cookie}  ${orderid11}  ${accId3}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile} 
     ${resp}=  Imageupload.consumerOrderCommunication   ${cookie}  ${accId3}  ${orderid11}  ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption} 
     Log  ${resp}
@@ -1199,7 +1199,7 @@ JD-TC-ConsumerOrderCommunication-UH3
     ${filecap_dict1}=  Create Dictionary   file=${jpgfile}   caption=${caption1}
     @{fileswithcaption}=  Create List   ${filecap_dict1}
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     # ${resp}=  Imageupload.COrderCommunication   ${cookie}  00000ab  ${accId3}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile} 
     ${resp}=  Imageupload.consumerOrderCommunication   ${cookie}  ${accId3}   00000ab   ${msg}  ${messageType[0]}  ${EMPTY}  @{fileswithcaption} 
     Log  ${resp}

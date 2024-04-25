@@ -52,7 +52,7 @@ JD-TC-PHONE_TOKEN-1
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -298,7 +298,7 @@ JD-TC-WALK_IN_TOKEN and ARRIVED_TOKEN-2
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -566,7 +566,7 @@ JD-TC-ONLINE_TOKEN and CHECKED_IN_TOKEN-3
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -836,7 +836,7 @@ JD-TC-TELE_SERVICE_TOKEN-4
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -1122,7 +1122,7 @@ JD-TC-TELEGRAM_TOKEN-5
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -1435,7 +1435,7 @@ JD-TC-STARTED_TOKEN-6
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -1727,7 +1727,7 @@ JD-TC-CANCELLED_TOKEN-7
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -2020,7 +2020,7 @@ JD-TC-DONE_TOKEN-8
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -2309,7 +2309,7 @@ JD-TC-RESCHEDULED_TOKEN-9
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -2663,7 +2663,7 @@ JD-TC-JALDEE_LINK_TOKENS and WEB_TOKENS-10
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
     Log  ${licname}
@@ -2981,7 +2981,7 @@ JD-TC-IOS_TOKENS-11
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
     Log  ${licname}
@@ -3307,7 +3307,7 @@ JD-TC-ANDROID_TOKENS-12
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
     Log  ${licname}
@@ -3648,7 +3648,7 @@ JD-TC-TELEGRAM_TOKEN-13
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}
@@ -3956,7 +3956,7 @@ JD-TC-TOTAL_ON_TOKEN-14
     ${PO_Number}    Generate random string    7    0123456789
     ${PO_Number}    Convert To Integer  ${PO_Number}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Test Variable   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
     Log  ${licid}

@@ -57,7 +57,7 @@ JD-TC-Update CustomerDetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${cid}  ${resp.json()}
     Log  ${resp.json()}  
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph}${\n}
     ${firstname1}=  FakerLibrary.first_name
     ${lastname1}=  FakerLibrary.last_name
     ${dob1}=  FakerLibrary.Date
@@ -68,7 +68,7 @@ JD-TC-Update CustomerDetails-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ncid}  ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph1}${\n}
     ${resp}=  GetCustomer  firstName-eq=${firstname1}  phoneNo-eq=${ph1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()} 
@@ -92,7 +92,7 @@ JD-TC-Update CustomerDetails-2
     ${resp}=  AddCustomer with email  ${firstname}  ${lastname}  ${EMPTY}  ${email2}  ${gender}  ${dob}  ${ph2}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}  
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph2}${\n}
     Set Test Variable  ${cid2}  ${resp.json()}
     ${firstname1}=  FakerLibrary.first_name
     ${lastname1}=  FakerLibrary.last_name
@@ -104,7 +104,7 @@ JD-TC-Update CustomerDetails-2
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ncid}  ${resp.json()}
     Log  ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph3}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph3}${\n}
     ${resp}=  GetCustomer  firstName-eq=${firstname1}  phoneNo-eq=${ph3}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response List  ${resp}  0  firstName=${firstname1}  lastName=${lastname1}  phoneNo=${ph3}  dob=${dob1}  gender=${gender}   email=${email3}   email_verified=${bool[0]}   phone_verified=${bool[0]}   id=${cid2}   favourite=${bool[0]}
@@ -122,7 +122,7 @@ JD-TC-Update CustomerDetails-3
     Set Test Variable  ${email8}  ${firstname}${ph2}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email8}  ${gender}  ${dob}  ${ph2}  ${EMPTY} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph2}${\n}
     Set Test Variable  ${cid3}  ${resp.json()}
     ${firstname2}=  FakerLibrary.first_name
     ${lastname2}=  FakerLibrary.last_name
@@ -133,7 +133,7 @@ JD-TC-Update CustomerDetails-3
     ${resp}=  AddCustomer with email   ${firstname2}  ${lastname2}  ${EMPTY}  ${email9}  ${gender2}  ${dob2}  ${ph0}  ${EMPTY} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph0}${\n}
     Set Test Variable  ${cid4}  ${resp.json()}
     ${resp}=  UpdateCustomer with email   ${cid4}  ${firstname2}  ${lastname2}  ${EMPTY}  ${email8}  ${gender2}  ${dob2}  ${ph0}  ${EMPTY}
     Log   ${resp.json()}
@@ -182,7 +182,7 @@ JD-TC-Update CustomerDetails-UH3
     ${resp}=  AddCustomer with email   ${firstname}  ${lastname}  ${EMPTY}  ${email5}  ${gender}  ${dob}  ${ph5}  ${EMPTY}
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph5}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph5}${\n}
     Set Test Variable  ${cid5}  ${resp.json()}
     ${firstname1}=  FakerLibrary.first_name
     Set Test Variable  ${firstname1}
@@ -197,7 +197,7 @@ JD-TC-Update CustomerDetails-UH3
     ${resp}=  AddCustomer with email   ${firstname1}  ${lastname1}  ${EMPTY}  ${email}  ${gender1}  ${dob1}  ${ph3}  ${EMPTY} 
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph3}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph3}${\n}
     Set Test Variable  ${cid6}  ${resp.json()}
     ${resp}=  UpdateCustomer with email   ${cid6}  ${firstname1}  ${lastname1}  ${EMPTY}  ${email}  ${gender1}  ${dob1}  ${ph5}  ${EMPTY}
     Log  ${resp.json()}
@@ -220,7 +220,7 @@ JD-TC-Update CustomerDetails-UH4
     Set Test Variable  ${email4}  ${firstname}${ph2}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email  ${firstname}  ${lastname}  ${EMPTY}  ${email4}  ${gender}  ${dob}  ${ph2}  ${EMPTY} 
     Should Be Equal As Strings  ${resp.status_code}  200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph2}${\n}
     Set Test Variable  ${cid1}  ${resp.json()}
     ${firstname1}=  FakerLibrary.first_name
     ${lastname1}=  FakerLibrary.last_name
@@ -252,7 +252,7 @@ JD-TC-Update CustomerDetails-4
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}  ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph}${\n}
     ${firstname1}=  FakerLibrary.first_name
     ${lastname1}=  FakerLibrary.last_name
     ${ph1}=  Evaluate  ${PUSERNAME230}+71019
@@ -261,7 +261,7 @@ JD-TC-Update CustomerDetails-4
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${ncid}  ${resp.json()}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph1}${\n}
     ${resp}=  GetCustomer    phoneNo-eq=${ph1}
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()} 
@@ -819,7 +819,7 @@ JD-TC-Update CustomerDetails-UH6
 
     # Should Be Equal As Strings  "${resp.json()}"     "${PHONE_NOT_UPDATE}"
     # Set Test Variable  ${ncid}  ${resp.json()}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph1}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph1}${\n}
     # ${resp}=  GetCustomer    phoneNo-eq=${ph1}
     # Should Be Equal As Strings  ${resp.status_code}  200
     # Log  ${resp.json()}
@@ -874,7 +874,7 @@ JD-TC-Update CustomerDetails-9
     ${country_code}    Generate random string    2    0123456789
     ${country_code}    Convert To Integer  ${country_code}
     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number1}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
     ${resp}=   AddCustomer  ${CUSERPH0}  firstName=${fname}  lastName=${lname}  
@@ -946,7 +946,7 @@ JD-TC-Update CustomerDetails-10
     #${country_code2}    Convert To Integer  ${country_code2}
 
     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number1}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
     ${resp}=   AddCustomer   ${CUSERPH0}      firstName=${fname}  lastName=${lname}  
@@ -1076,7 +1076,7 @@ JD-TC-Update CustomerDetails-11
     ${country_code}    Generate random string    2    0123456789
     ${country_code}    Convert To Integer  ${country_code}
     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number1}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
     ${resp}=   AddCustomer  ${CUSERPH0}  firstName=${fname}  lastName=${lname}  
@@ -1216,7 +1216,7 @@ JD-TC-Update CustomerDetails-12
     ${country_code}    Convert To Integer  ${country_code}
     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number}
     # clear_consumer_msgs  ${CUSERPH0}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -1347,7 +1347,7 @@ JD-TC-Update CustomerDetails-UH7
     ${country_code2}    Convert To Integer  ${country_code2}
     
     ${CUSERPH0}=  Evaluate  ${CUSERNAME}+${PO_Number1}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${fname}=  FakerLibrary.first_name
     ${lname}=  FakerLibrary.last_name
     ${resp}=   AddCustomer  ${CUSERPH0}  firstName=${fname}  lastName=${lname}  

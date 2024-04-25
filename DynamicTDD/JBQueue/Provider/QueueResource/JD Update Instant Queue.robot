@@ -26,7 +26,7 @@ Jaldee-TC-UpdateIQ-1
     Set Test Variable   ${sector}        ${resp[0]['domain']}
     Set Test Variable   ${sub_sector}    ${resp[0]['subdomains'][0]}
     ${PUSER_J}=  Evaluate  ${PUSERNAME}+224558
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSER_J}${\n}   
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSER_J}${\n}   
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSER_J}  ${pkg_id[0]}
     Log   ${resp.json()}

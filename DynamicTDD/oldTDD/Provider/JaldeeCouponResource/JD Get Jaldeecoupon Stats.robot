@@ -60,7 +60,7 @@ ${self}        0
 JD-TC-GetJaldeeCouponStats-1
     [Documentation]  Consumer apply a coupon at self payment and check get jaldee coupon stats
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+100100088
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_service  ${PUSERPH0}  AND  clear_Item    ${PUSERPH0}  AND   clear_Coupon   ${PUSERPH0}   AND  clear_Discount  ${PUSERPH0}  AND  clear_customer   ${PUSERPH0}
     ${licid}  ${licname}=  get_highest_license_pkg
@@ -829,7 +829,7 @@ JD-TC-GetJaldeeCouponStats-UH5
     [Documentation]  Consumer apply a coupon at Checkin time.but coupon apply only at firstCheckinOnly and check its status
     ${CUSERNAME7}=  Evaluate  ${CUSERNAME7}+100100164
     Set Suite Variable   ${CUSERNAME7}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERNAME7}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERNAME7}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERNAME7}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name

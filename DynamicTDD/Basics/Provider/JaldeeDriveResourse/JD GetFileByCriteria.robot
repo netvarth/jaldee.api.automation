@@ -108,7 +108,7 @@ JD-TC-GetFileByCriteria-1
 
     ${msg}=   FakerLibrary.Word
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
 
     ${firstname_C1}=    FakerLibrary.first_name
     ${lastname_C1}=     FakerLibrary.last_name
@@ -738,7 +738,7 @@ JD-TC-GetFileByCriteria-14
     Set Suite Variable  ${userName}  ${decrypted_data['userName']}
     # Set Suite Variable    ${id}    ${resp.json()['id']} 
     # Set Suite Variable    ${userName}    ${resp.json()['userName']}         
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}
     Set Suite Variable  ${PUSERNAME_C}
 
     ${pid}=  get_acc_id  ${PUSERNAME_C}
@@ -1209,7 +1209,7 @@ JD-TC-GetFileByCriteria-16
      
     ${CUSERPH0}=  Evaluate  ${CUSERPH}+100100521
     Set Suite Variable   ${CUSERPH0}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name
@@ -1252,7 +1252,7 @@ JD-TC-GetFileByCriteria-16
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
     Set Suite Variable  ${PUSERNAME_B}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_B}  ${PASSWORD}
@@ -1387,7 +1387,7 @@ JD-TC-GetFileByCriteria-16
     sleep   5s
     ${msg}=  FakerLibrary.sentence
     Set Suite Variable  ${msg}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
 
     ${resp}=  Get Appointment Messages
     Log  ${resp.json()}

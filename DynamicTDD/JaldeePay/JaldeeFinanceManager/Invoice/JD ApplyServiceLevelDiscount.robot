@@ -102,7 +102,7 @@ JD-TC-Apply Service Level Discount-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  "${resp.json()}"    "true"
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH10}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH10}${\n}
 
     ${resp}=  Account Set Credential  ${PUSERPH10}  ${PASSWORD}  0
     Log   ${resp.json()}

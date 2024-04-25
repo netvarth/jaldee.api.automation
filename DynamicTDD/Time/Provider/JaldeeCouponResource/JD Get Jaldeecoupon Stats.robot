@@ -760,7 +760,7 @@ JD-TC-GetJaldeeCouponStats-UH5
     [Documentation]  Consumer apply a coupon at Checkin time.but coupon apply only at firstCheckinOnly and check its status
     ${CUSERNAME7}=  Evaluate  ${CUSERNAME7}+100100299
     Set Suite Variable   ${CUSERNAME7}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERNAME7}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERNAME7}${\n}
     ${CUSERPH_SECOND}=  Evaluate  ${CUSERNAME7}+1000
     ${firstname}=  FakerLibrary.first_name
     ${lastname}=  FakerLibrary.last_name

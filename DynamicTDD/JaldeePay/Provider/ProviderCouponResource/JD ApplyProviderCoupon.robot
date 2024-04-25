@@ -1757,7 +1757,7 @@ JD-TC-ProviderCouponBill-10
     Set Test Variable   ${sector}        ${resp['domain']}
     Set Test Variable   ${sub_sector}    ${resp['subdomain']}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+87044706
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}   
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}   
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME_A}  ${pkg_id[0]}
     Log   ${resp.json()}
@@ -1773,10 +1773,10 @@ JD-TC-ProviderCouponBill-10
     Set Suite Variable   ${PUSERNAME_A}
 
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+342
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
 
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+343
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
 
     ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERNAME_A}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random

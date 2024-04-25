@@ -38,7 +38,7 @@ JD-TC-EnableJDN-1
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_Z}=  Evaluate  ${PUSERNAME}+9563      
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_Z}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_Z}${\n}
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERNAME_Z}   ${pkg_id[0]}
     Log  ${resp.json()}
@@ -58,9 +58,9 @@ JD-TC-EnableJDN-1
     ${list}=  Create List  1  2  3  4  5  6  7
     Set Suite Variable    ${list}
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+305
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+306
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
     ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name
@@ -212,7 +212,7 @@ JD-TC-EnableJDN-3
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_Y}=  Evaluate  ${PUSERNAME}+6530      
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_Y}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_Y}${\n}
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERNAME_Y}   ${pkg_id[0]}
     Log  ${resp.json()}
@@ -227,9 +227,9 @@ JD-TC-EnableJDN-3
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200 
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+505
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+506
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
     ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name
@@ -519,7 +519,7 @@ JD-TC-EnableJDN-8
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+3338        
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     ${licid}  ${licname}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERNAME_A}   ${licid}
     Log  ${resp.json()}
@@ -538,9 +538,9 @@ JD-TC-EnableJDN-8
     Should Be Equal As Strings    ${resp.status_code}    200 
 
     ${PUSERPH4}=  Evaluate  ${PUSERNAME}+666
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
     ${PUSERPH5}=  Evaluate  ${PUSERNAME}+665
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
     ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH5}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random
     ${name1}=  FakerLibrary.name

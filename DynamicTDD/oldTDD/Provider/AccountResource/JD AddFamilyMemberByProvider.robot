@@ -204,7 +204,7 @@ JD-TC-AddFamilyMemberByProvider-6
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${mem_id2}  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph3}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph3}${\n}
       ${address}=  FakerLibrary.Address
       ${alternativeNo}=  Evaluate  ${PUSERNAME23}+73006
       ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${ph3}    ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}
@@ -286,7 +286,7 @@ JD-TC-AddFamilyMemberByProvider-7
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${mem_id4}  ${resp.json()}
-      # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph3}${\n}
+      # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph3}${\n}
       ${address}=  FakerLibrary.Address
       ${alternativeNo}=  Evaluate  ${PUSERNAME23}+73008
       ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${ph4}   ${alternativeNo}  ${dob}  ${gender}   ${EMPTY}

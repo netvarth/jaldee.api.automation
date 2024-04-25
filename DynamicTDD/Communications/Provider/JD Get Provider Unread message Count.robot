@@ -36,7 +36,7 @@ JD-TC-Get Unread Message Count-INDEPENDENT_SP-1
     ${c_id}=  get_id  ${CUSERNAME1}
     clear_Consumermsg  ${CUSERNAME1}
     ${msg}=  FakerLibrary.text
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     # ${resp}=  General Communication with Provider   ${msg}   ${a_id}
     # Should Be Equal As Strings  ${resp.status_code}  200
@@ -65,7 +65,7 @@ JD-TC-Get Unread Message Count-INDEPENDENT_SP-2
     ${c_id}=  get_id  ${CUSERNAME1}
     clear_Consumermsg  ${CUSERNAME1}
     ${msg}=  FakerLibrary.text
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     # ${resp}=  General Communication with Provider   ${msg}   ${a_id}
     # Should Be Equal As Strings  ${resp.status_code}  200 
@@ -330,7 +330,7 @@ JD-TC-Get Unread Message Count-BRANCH-5
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E1}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E1}${\n}
     Set Suite Variable  ${MUSERNAME_E1}
     ${id}=  get_id  ${MUSERNAME_E1}
     Set Suite Variable  ${id}

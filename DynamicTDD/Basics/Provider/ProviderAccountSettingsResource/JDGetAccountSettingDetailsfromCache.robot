@@ -78,7 +78,7 @@ JD-TC-GetAccountSettingsfromCache-2
     ${uid}=  get_uid     ${PUSERNAME_A}
     Set Suite Variable   ${uid} 
    
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Suite Variable  ${PUSERNAME_A}
 
     ${pid}=  get_acc_id  ${PUSERNAME_A}

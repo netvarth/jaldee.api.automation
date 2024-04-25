@@ -72,7 +72,7 @@ JD-TC-Take Appointment in Different Timezone-1
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${pid}  ${decrypted_data['id']}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_X}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_X}${\n}
     Set Test Variable  ${PUSERNAME_X}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_X}  ${PASSWORD}

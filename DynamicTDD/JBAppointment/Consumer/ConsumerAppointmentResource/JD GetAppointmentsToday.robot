@@ -51,7 +51,7 @@ JD-TC-GetAppointmentToday-1
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${p_id}  ${decrypted_data['id']}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_T}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_T}${\n}
     Set Suite Variable  ${PUSERNAME_T}
     # Set Suite Variable  ${PUSERNAME_T}   ${PUSERNAME136}
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_T}  ${PASSWORD}
@@ -1260,7 +1260,7 @@ JD-TC-GetAppointmentToday-10
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${pid}  ${decrypted_data['id']}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}
     Set Suite Variable  ${PUSERNAME_A}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_A}  ${PASSWORD}
@@ -1836,7 +1836,7 @@ JD-TC-GetAppointmentToday-16
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid2}  ${reason}  ${msg}  ${DAY1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1885,7 +1885,7 @@ JD-TC-GetAppointmentToday-17
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Reject Appointment  ${apptid3}  ${reason}  ${msg}  ${DAY1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

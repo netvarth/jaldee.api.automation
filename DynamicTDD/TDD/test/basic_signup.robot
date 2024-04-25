@@ -27,10 +27,10 @@ ${count}  ${1}
 JD-TC-Provider_Signup-1
     [Documentation]   Provider Signup in Random Domain 
 
-    ${data_dir_path}=  Set Variable    ${EXECDIR}/TDD/${ENVIRONMENT}data/
-    ${data_file}=  Set Variable    ${EXECDIR}/TDD/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt
-    ${var_dir_path}=  Set Variable    ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/
-    ${var_file}=    Set Variable    ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
+    ${data_dir_path}=  Set Variable    ${EXECDIR}/data/${ENVIRONMENT}data/
+    ${data_file}=  Set Variable    ${EXECDIR}/data/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt
+    ${var_dir_path}=  Set Variable    ${EXECDIR}/data/${ENVIRONMENT}_varfiles/
+    ${var_file}=    Set Variable    ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
 
     IF  ${{os.path.exists($data_dir_path)}} is False
         Create Directory   ${data_dir_path}
@@ -49,7 +49,7 @@ JD-TC-Provider_Signup-1
     # ${PO_Number}=  FakerLibrary.Numerify  %#####
     # ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
     # Log  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
-    ${num}=  find_last  ${EXECDIR}/TDD/${ENVIRONMENT}_varfiles/providers.py
+    ${num}=  find_last  ${var_file}
     ${PH_Number}    Random Number 	digits=5  #fix_len=True
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
@@ -174,5 +174,10 @@ JD-TC-Provider_Signup-1
         # Should Be Equal As Strings  ${resp.json()['storeContactInfo']['firstName']}    ${fname}
         # Should Be Equal As Strings  ${resp.json()['storeContactInfo']['lastName']}     ${lname}
         # Should Be Equal As Strings  ${resp.json()['storeContactInfo']['phone']}        ${ph}
+
+        ${resp}=  Provider Change Password  ${PASSWORD}  ${NEW_PASSWORD}
+        Should Be Equal As Strings    ${resp.status_code}    200
+        ${resp}=  Encrypted Provider Login  ${PUSERNAME30}  ${NEW_PASSWORD}
+        Should Be Equal As Strings    ${resp.status_code}    200
     
     END

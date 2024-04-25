@@ -344,7 +344,7 @@ JD-TC-UpdateProviderConsumer-4
 
     # Set Test Variable  ${pro_idN}  ${resp.json()['id']}
     Set Test Variable  ${PUSERNAME_N}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_N}${\n}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_N}${\n}  
     
     Set Test Variable    ${first-name}    ${decrypted_data['firstName']}  
     Set Test Variable    ${last-name}     ${decrypted_data['lastName']} 

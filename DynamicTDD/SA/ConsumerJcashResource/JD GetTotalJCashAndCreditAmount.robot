@@ -153,7 +153,7 @@ JD-TC-GetTotalJCashAndCreditAmount-2
 
     ${CUSERPH0}=  Evaluate  ${CUSERPH}+97675
     Set Suite Variable   ${CUSERPH0}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     ${firstname_C0}=  FakerLibrary.first_name
     ${lastname_C0}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date
@@ -248,7 +248,7 @@ JD-TC-GetTotalJCashAndCreditAmount-3
 
     ${CUSERPH2}=  Evaluate  ${CUSERPH}+9864233
     Set Suite Variable   ${CUSERPH2}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH2}${\n}
     ${firstname_C0}=  FakerLibrary.first_name
     ${lastname_C0}=  FakerLibrary.last_name
     ${dob}=  FakerLibrary.Date

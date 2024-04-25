@@ -43,7 +43,7 @@ JD-TC-ChangeProviderLoginId-2
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${PUSERPH18}=  Evaluate  ${PUSERPH}+456782
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH18}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH18}${\n}
     Set Suite Variable   ${PUSERPH18}
     ${resp}=  Send Verify Login   ${PUSERPH18}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -153,7 +153,7 @@ JD-TC-ChangeProviderLoginId-H
     ${country_code}    Generate random string    2    0123456789
     ${country_code}    Convert To Integer  ${country_code}
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+${PO_Number}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH18}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH18}${\n}
     # Set Suite Variable   ${PUSERPH18}
     ${resp}=  Send Verify Login   ${PUSERPH0}  countryCode=${country_code}
     Log   ${resp.json()}

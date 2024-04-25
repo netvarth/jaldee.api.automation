@@ -43,7 +43,7 @@ JD-TC-Share consumer location-1
 
 *** Comments ***
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+100100319
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
     
     ${resp}=   Run Keywords  clear_queue  ${PUSERPH0}   AND  clear_location  ${PUSERPH0}   AND   clear_service   ${PUSERPH0}  AND  clear waitlist   ${PUSERPH0}
@@ -82,10 +82,10 @@ JD-TC-Share consumer location-1
     ${list}=  Create List  1  2  3  4  5  6  7
     
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+100100302
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
     
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+100100303
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
     
     ${PUSERMAIL0}=   Set Variable  ${P_Email}ph301.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random

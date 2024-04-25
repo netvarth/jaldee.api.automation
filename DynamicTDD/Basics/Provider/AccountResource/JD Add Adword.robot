@@ -63,7 +63,7 @@ JD-TC-Add Adwords -2
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}    200
        Set Suite Variable  ${PUSERNAME}
-       Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
+       Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
        ${resp}=   Get Adword Count   
        Should Be Equal As Strings  ${resp.status_code}   200
        Set Test Variable  ${addword_count1}  ${resp.json()}
@@ -128,7 +128,7 @@ JD-TC-Add Adwords -3
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}    200
        Set Suite Variable  ${PUSERNAME}
-       Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
+       Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
        ${resp}=   Get Adword Count   
        Should Be Equal As Strings  ${resp.status_code}   200
        Set Test Variable  ${addword_count1}  ${resp.json()}
@@ -181,7 +181,7 @@ JD-TC-Add Adwords -UH1
        Log  ${resp.content}
        Should Be Equal As Strings    ${resp.status_code}    200
        Set Suite Variable  ${PUSERNAME}
-       Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
+       Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
        ${resp}=   Get Adword Count   
        Should Be Equal As Strings  ${resp.status_code}   200
        Set Test Variable  ${addword_count1}  ${resp.json()}

@@ -652,7 +652,7 @@ JD-TC-SendMessageWithAppt-25
     ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
     Log  ${PH_Number}
     Set Suite Variable    ${consumerPhone}  555${PH_Number}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/proconnum.txt  ${SUITE NAME} - ${TEST NAME} - ${consumerPhone}${\n}
     ${consumerFirstName}=   FakerLibrary.first_name
     Set Suite Variable  ${consumerFirstName}
     ${consumerLastName}=    FakerLibrary.last_name  
@@ -737,7 +737,7 @@ JD-TC-SendMessageWithAppt-26
         ${DAY1}=  db.get_date_by_timezone  ${tz}
         ${reason}=  Random Element  ${cancelReason}
         ${msg}=   FakerLibrary.sentence
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=    Provider Cancel Appointment  ${apptid2}  ${reason}  ${msg}  ${DAY1}
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200

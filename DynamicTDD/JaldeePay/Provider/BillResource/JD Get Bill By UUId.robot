@@ -46,7 +46,7 @@ JD-TC-Get Bill By UUId -1
         ${firstname}=  FakerLibrary.name
         ${lastname}=  FakerLibrary.last_name
         ${PUSERNAME_Z}=  Evaluate  ${PUSERNAME}+31481             
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_Z}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_Z}${\n}
         ${pkg_id}=   get_highest_license_pkg
         ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERNAME_Z}   ${pkg_id[0]}
         Log  ${resp.json()}
@@ -75,9 +75,9 @@ JD-TC-Get Bill By UUId -1
         Set Suite Variable  ${sid1}  ${resp.json()}
         ${list}=  Create List  1  2  3  4  5  6  7
         ${PUSERPH4}=  Evaluate  ${PUSERNAME}+305
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH4}${\n}
         ${PUSERPH5}=  Evaluate  ${PUSERNAME}+306
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH5}${\n}
         ${PUSERMAIL3}=   Set Variable  ${P_Email}${PUSERPH4}.${test_mail}
         ${views}=  Evaluate  random.choice($Views)  random
         ${name1}=  FakerLibrary.name
@@ -455,7 +455,7 @@ JD-TC-Get Bill By UUId -2
         Should Be Equal As Strings  "${resp.json()}"   "${CANNOT_CREATE_BILL}"
 
         ${msg}=  Fakerlibrary.word
-        Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+        Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=  Waitlist Action Cancel  ${wait_id1}  ${waitlist_cancl_reasn[4]}  ${msg}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -508,7 +508,7 @@ JD-TC-Get Bill By UUId -2
         Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}         3.0
 
         ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=  Waitlist Action Cancel  ${wait_id2}  ${waitlist_cancl_reasn[4]}  ${msg}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
@@ -555,7 +555,7 @@ JD-TC-Get Bill By UUId -2
         Should Be Equal As Strings  ${resp.json()['service'][0]['quantity']}         2.0
 
         ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
         ${resp}=  Waitlist Action Cancel  ${wait_id3}  ${waitlist_cancl_reasn[4]}  ${msg}
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200

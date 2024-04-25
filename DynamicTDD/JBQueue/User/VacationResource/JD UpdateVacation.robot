@@ -53,7 +53,7 @@ JD-TC-UpdateVacation-1
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E3}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E3}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E3}${\n}
     Set Suite Variable  ${MUSERNAME_E3}
     ${id}=  get_id  ${MUSERNAME_E3}
     Set Suite Variable  ${id}
@@ -1483,7 +1483,7 @@ JD-TC-UpdateVacation-UH13
 
     
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${CUR_DAY}  ${s_id}  ${msg}  ${bool[0]}  ${u_id}   0
     Log  ${resp.json()}
@@ -1512,7 +1512,7 @@ JD-TC-UpdateVacation-UH13
     Set Suite Variable  ${Conid1}  ${resp.json()['id']}
     
     ${msg}=  Fakerlibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${CUR_DAY}=  db.get_date_by_timezone  ${tz}
     ${resp}=  Add To Waitlist Consumer For User  ${p_id}  ${que_id}  ${CUR_DAY}  ${s_id}  ${msg}  ${bool[0]}  ${u_id}   0
     Log  ${resp.json()}
@@ -2024,7 +2024,7 @@ JD-TC-UpdateVacation-13
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E2}${\n}
     Set Suite Variable  ${MUSERNAME_E2}
     ${id}=  get_id  ${MUSERNAME_E2}
     ${bs}=  FakerLibrary.bs

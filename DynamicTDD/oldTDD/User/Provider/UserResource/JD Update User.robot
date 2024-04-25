@@ -44,8 +44,8 @@ JD-TC-UpdateUser-1
      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}   
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${id}=  get_id  ${MUSERNAME_E}
      Set Suite Variable  ${id}
@@ -515,7 +515,7 @@ JD-TC-UpdateUser-UH9
      ${resp}=  Encrypted Provider Login  ${MUSERNAME_E2}  ${PASSWORD}
      Log  ${resp.json()}
      Should Be Equal As Strings    ${resp.status_code}    200
-     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E2}${\n}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E2}${\n}
      Set Suite Variable  ${MUSERNAME_E2}
      ${DAY1}=  db.get_date_by_timezone  ${tz}
      Set Suite Variable  ${DAY1}  ${DAY1}
@@ -911,7 +911,7 @@ JD-TC-UpdateUser -10
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
     ${resp}=  View Waitlist Settings
@@ -1018,7 +1018,7 @@ JD-TC-UpdateUser -11
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
     ${resp}=  View Waitlist Settings
@@ -1168,7 +1168,7 @@ JD-TC-UpdateUser -12
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
     ${resp}=  View Waitlist Settings
@@ -1313,7 +1313,7 @@ JD-TC-UpdateUser -13
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
     ${resp}=  View Waitlist Settings
@@ -1394,7 +1394,7 @@ JD-TC-UpdateUser -14
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
     ${resp}=  View Waitlist Settings
@@ -1477,7 +1477,7 @@ JD-TC-UpdateUser -15
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
     ${resp}=  View Waitlist Settings
@@ -1568,7 +1568,7 @@ JD-TC-UpdateUser -16
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
     ${resp}=  View Waitlist Settings
@@ -1659,7 +1659,7 @@ JD-TC-UpdateUser -17
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
     ${resp}=  View Waitlist Settings
@@ -1754,7 +1754,7 @@ JD-TC-UpdateUser -18
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
     ${resp}=  View Waitlist Settings
@@ -1845,7 +1845,7 @@ JD-TC-UpdateUser -19
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
     ${resp}=  View Waitlist Settings
@@ -1936,7 +1936,7 @@ JD-TC-UpdateUser -20
     ${resp}=  Encrypted Provider Login  ${BUSERPH0}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${BUSERPH0}${\n}
     ${id}=  get_id  ${BUSERPH0}
     
     ${resp}=  View Waitlist Settings

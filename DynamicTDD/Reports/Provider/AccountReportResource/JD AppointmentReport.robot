@@ -3397,8 +3397,8 @@ JD-TC-Appointment_Report-9
      Should Be Equal As Strings    ${resp.status_code}    200
      ${Bid_MUSERNAME_E}=  get_acc_id  ${MUSERNAME_E}
      Set Suite variable  ${Bid_MUSERNAME_E}
-     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${resp}=  Get Business Profile
      Log  ${resp.content}

@@ -311,7 +311,7 @@ JD-TC-JaldeeCouponAndProviderCoupon-2
     [Documentation]  create Provider coupon and jaldee coupon in appointment case and apply in bill for a taxable service
 
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+100257301
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH0}${\n}
     Set Suite Variable   ${PUSERPH0}
     
     ${domresp}=  Get BusinessDomainsConf
@@ -347,10 +347,10 @@ JD-TC-JaldeeCouponAndProviderCoupon-2
     ${list}=  Create List  1  2  3  4  5  6  7
     
     ${PUSERPH1}=  Evaluate  ${PUSERNAME}+100100302
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH1}${\n}
     
     ${PUSERPH2}=  Evaluate  ${PUSERNAME}+100100303
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH2}${\n}
     
     ${PUSERMAIL0}=   Set Variable  ${P_Email}${PUSERPH0}.${test_mail}
     ${views}=  Evaluate  random.choice($Views)  random

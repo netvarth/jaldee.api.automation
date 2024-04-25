@@ -163,7 +163,7 @@ JD-TC-Send Bill Email -UH1
     ${resp}=  Consumer Login  ${CUSERNAME}  ${PASSWORD} 
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERNAME}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERNAME}${\n}
     ${resp}=  Encrypted Provider Login  ${PUSERNAME166}  ${PASSWORD}
     Should Be Equal As Strings  ${resp.status_code}  200
     # ${resp}=  GetCustomer  phoneNo-eq=${CUSERNAME}

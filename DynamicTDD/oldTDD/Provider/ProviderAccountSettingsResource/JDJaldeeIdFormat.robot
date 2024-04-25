@@ -36,7 +36,7 @@ JD-TC-JaldeeIDformat-1
     Set Test Variable  ${cid}  ${resp.json()}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph2}${\n}
     ${resp}=  GetCustomer ById  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
@@ -75,7 +75,7 @@ JD-TC-JaldeeIDformat-2
     Set Test Variable  ${cid}  ${resp.json()}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph2}${\n}
     ${resp}=  GetCustomer ById  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
@@ -117,7 +117,7 @@ JD-TC-JaldeeIDformat-3
     Set Test Variable  ${cid}  ${resp.json()}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph2}${\n}
     ${resp}=  GetCustomer ById  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}
@@ -155,7 +155,7 @@ JD-TC-JaldeeIDformat-4
     Set Test Variable  ${cid}  ${resp.json()}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph2}${\n}
     ${resp}=  GetCustomer ById  ${cid}
     Should Be Equal As Strings  ${resp.status_code}  200
     Log  ${resp.json()}

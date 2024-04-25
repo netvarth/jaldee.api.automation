@@ -49,7 +49,7 @@ JD-TC- AppointmentAdvancePaymentdetails-1
     [Documentation]  Get appointment payment details without prepayment and coupon
 
     ${PUSERNAME_B}=  Evaluate  ${PUSERNAME}+100100212
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}
     Set Suite Variable   ${PUSERNAME_B}
     ${resp}=   Run Keywords  clear_queue  ${PUSERNAME_B}  AND  clear_service  ${PUSERNAME_B}  AND  clear_location  ${PUSERNAME_B}
     ${licid}  ${licname}=  get_highest_license_pkg

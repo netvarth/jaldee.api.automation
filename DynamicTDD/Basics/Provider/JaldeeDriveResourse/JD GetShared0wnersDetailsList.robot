@@ -86,7 +86,7 @@ JD-TC-GetSharedOnwnersDetailsList-1
    
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${pdffile}  
     Log  ${resp.json()}
@@ -160,7 +160,7 @@ JD-TC-GetSharedOnwnersDetailsList-2
 
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpgfile}  
     Log  ${resp.json()}
@@ -198,7 +198,7 @@ JD-TC-GetSharedOnwnersDetailsList-3
     ${resp}=  Encrypted Provider Login   ${PUSERNAME30}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-     #Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME14}${\n}
+     #Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME14}${\n}
     Set Test Variable   ${PUSERNAME30}
     ${acc_id}=  get_acc_id  ${PUSERNAME30}
     Set Test Variable   ${acc_id}
@@ -223,7 +223,7 @@ JD-TC-GetSharedOnwnersDetailsList-3
 
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${pngfile} 
     Log  ${resp.json()}
@@ -285,7 +285,7 @@ JD-TC-GetSharedOnwnersDetailsList-4
 
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${jpegfile} 
     Log  ${resp.json()}
@@ -345,7 +345,7 @@ JD-TC-GetSharedOnwnersDetailsList-5
 
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}  ${giffile}  
     Log  ${resp.json()}
@@ -406,7 +406,7 @@ JD-TC-GetSharedOnwnersDetailsList-6
 
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}    ${docfile}  
     Log  ${resp.json()}
@@ -469,7 +469,7 @@ JD-TC-GetSharedOnwnersDetailsList-7
 
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}   ${txtfile}    
     Log  ${resp.json()}
@@ -2825,7 +2825,7 @@ JD-TC-GetSharedOnwnersDetailsList-UH3
     ${resp}=  Encrypted Provider Login  ${PUSERNAME107}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-     #Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME14}${\n}
+     #Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME14}${\n}
     Set Test Variable  ${PUSERNAME107}
     ${acc_id4}=  get_acc_id  ${PUSERNAME107}
     Set Test Variable   ${acc_id4}
@@ -2848,7 +2848,7 @@ JD-TC-GetSharedOnwnersDetailsList-UH3
 
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.GeneralCommunicationWithProvider   ${cookie}   ${acc_id4}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}    ${EMPTY}  
     Log  ${resp.json()}
@@ -2893,7 +2893,7 @@ JD-TC-GetSharedOnwnersDetailsList-UH5
     ${resp}=  Encrypted Provider Login  ${PUSERNAME167}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-     #Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME14}${\n}
+     #Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME14}${\n}
     Set Test Variable  ${PUSERNAME167}
     ${acc_id}=  get_acc_id  ${PUSERNAME167}
     Set Test Variable   ${acc_id}
@@ -2915,7 +2915,7 @@ JD-TC-GetSharedOnwnersDetailsList-UH6
     ${resp}=  Encrypted Provider Login  ${PUSERNAME167}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-     #Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME14}${\n}
+     #Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME14}${\n}
     Set Test Variable  ${PUSERNAME167}
     ${acc_id}=  get_acc_id  ${PUSERNAME167}
     Set Test Variable   ${acc_id}

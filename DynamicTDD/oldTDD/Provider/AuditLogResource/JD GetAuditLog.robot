@@ -124,7 +124,7 @@ JD-TC-GetAuditLog -5
     Set Test Variable   ${sector}        ${resp[0]['domain']}
     Set Test Variable   ${sub_sector}    ${resp[0]['subdomains'][0]}
     ${PUSERNAME_P}=  Evaluate  ${PUSERNAME}+99643
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_P}${\n}   
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_P}${\n}   
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME_P}  ${pkg_id[0]}
     Log   ${resp.json()}
@@ -173,7 +173,7 @@ JD-TC-GetAuditLog -6
     Set Test Variable   ${sector}        ${resp[2]['domain']}
     Set Test Variable   ${sub_sector}    ${resp[2]['subdomains'][0]}
     ${PUSERNAME_K}=  Evaluate  ${PUSERNAME}+99644
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_K}${\n}   
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_K}${\n}   
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME_K}  ${pkg_id[0]}
     Log   ${resp.json()}
@@ -758,7 +758,7 @@ JD-TC-GetAuditLog -28
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
     ${addword}=   FakerLibrary.word  
     ${resp}=  Add Adword  ${addword} 
     Log   ${resp.json()}
@@ -811,7 +811,7 @@ JD-TC-GetAuditLog -30
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}  
     ${resp}=  Get Addons Metadata
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -871,7 +871,7 @@ JD-TC-GetAuditLog -32
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n} 
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME}${\n} 
     ${resp}=  Get upgradable license
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -929,7 +929,7 @@ JD-TC-GetAuditLog -35
     ${dob}=     FakerLibrary.date
     ${gender}=    Random Element    ${Genderlist}
     ${PUSERPH26}=  Evaluate  ${PUSERNAME}+475638
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH26}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH26}${\n}
     Set Test Variable   ${PUSERPH26}
     Set Test Variable  ${email}  ${fname}${PUSERPH26}${C_Email}.${test_mail}
     ${resp}=  AddCustomer with email  ${fname}  ${lname}  ${EMPTY}  ${email}  ${gender}  ${dob}  ${PUSERPH26}   ${EMPTY}  
@@ -955,7 +955,7 @@ JD-TC-GetAuditLog -36
     ${dob}=     FakerLibrary.date
     ${gender}=    Random Element    ${Genderlist}
     ${PUSERPH27}=  Evaluate  ${PUSERNAME}+475574
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERPH27}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERPH27}${\n}
     Set Test Variable   ${PUSERPH27}
     ${resp}=  AddCustomer without email  ${fname}  ${lname}  ${EMPTY}  ${gender}  ${dob}  ${PUSERPH27}   ${EMPTY}
     Log   ${resp.json()}

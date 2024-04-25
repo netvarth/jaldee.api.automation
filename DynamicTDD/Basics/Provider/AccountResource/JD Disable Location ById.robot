@@ -42,7 +42,7 @@ JD-TC-DisableLocation-1
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
       Set Suite Variable  ${PUSERNAME_D}
       ${lid1}=  Create Sample Location
       ${resp}=   Get Location ById  ${lid1}
@@ -125,7 +125,7 @@ JD-TC-DisableLocation-2
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_E}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_E}${\n}
       Set Suite Variable  ${PUSERNAME_E}
       ${uid}=  get_uid  ${PUSERNAME_E}
       ${lid}=  Create Sample Location
@@ -199,7 +199,7 @@ JD-TC-DisableLocation-UH2
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_G}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_G}${\n}
       ${lid3}=  Create Sample Location
       Set Suite Variable  ${lid3}
       ${resp}=   Get Location ById  ${lid3}
@@ -250,7 +250,7 @@ JD-TC-DisableLocation-UH6
       ${resp}=  Encrypted Provider Login  ${PUSERNAME_F}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_F}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_F}${\n}
       Set Suite Variable  ${PUSERNAME_F}
       ${lid4}=  Create Sample Location
       ${resp}=   Get Location ById  ${lid4}
@@ -282,8 +282,8 @@ JD-TC-DisableLocation-UH7
       ${resp}=  Encrypted Provider Login  ${MUSERNAME_E}  ${PASSWORD}
       Log  ${resp.json()}
       Should Be Equal As Strings    ${resp.status_code}    200
-      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
       Set Suite Variable  ${MUSERNAME_E}
       ${uid}=  get_uid  ${MUSERNAME_E}
       # ${city8}=   get_place

@@ -161,7 +161,7 @@ JD-TC-Create_CrifScore-1
     ${firstname}=  FakerLibrary.name
     ${lastname}=  FakerLibrary.last_name
     ${PUSERNAME_Z}=  Evaluate  ${PUSERNAME}+76448          
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_Z}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_Z}${\n}
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname}  ${lastname}  ${None}  ${domain}  ${subdomain}  ${PUSERNAME_Z}   ${pkg_id[0]}
     Log  ${resp.json()}

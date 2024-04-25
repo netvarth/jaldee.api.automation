@@ -52,7 +52,7 @@ JD-TC-CreateCustomViewApis-1
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_A}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_A}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_A}${\n}
     Set Suite Variable  ${MUSERNAME_A}
     ${id}=  get_id  ${MUSERNAME_A}
     Set Suite Variable  ${id}
@@ -159,7 +159,7 @@ JD-TC-CreateCustomViewApis-2
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_B}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_B}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_B}${\n}
     Set Suite Variable  ${MUSERNAME_B}
     ${id}=  get_id  ${MUSERNAME_B}
     Set Suite Variable  ${id}

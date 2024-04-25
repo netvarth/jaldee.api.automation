@@ -56,7 +56,7 @@ JD-TC-Create Department-1
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_H}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_H}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_H}${\n}
     Set Suite Variable  ${MUSERNAME_H}
     ${id}=  get_id  ${MUSERNAME_H}
     Set Suite Variable  ${id}
@@ -304,7 +304,7 @@ JD-TC-Create Department-6
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_I}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_I}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_I}${\n}
     Set Suite Variable  ${MUSERNAME_I}
     ${id}=  get_id  ${MUSERNAME_I}
     Set Suite Variable  ${id}
@@ -366,7 +366,7 @@ JD-TC-Create Department-8
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_J}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_J}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_J}${\n}
     Set Suite Variable  ${MUSERNAME_J}
     ${id}=  get_id  ${MUSERNAME_J}
     Set Suite Variable  ${id}

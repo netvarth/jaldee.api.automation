@@ -32,7 +32,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-1
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${pcid}  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph2}${\n}
       ${firstname1}=  FakerLibrary.first_name
       Set Suite Variable  ${firstname1}
       ${lastname1}=  FakerLibrary.last_name
@@ -108,7 +108,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-3
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${pcid1}  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph2}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph2}${\n}
       ${firstname}=  FakerLibrary.first_name
       ${lastname}=  FakerLibrary.last_name
       ${dob}=  FakerLibrary.Date
@@ -170,7 +170,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-4
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${pcid2}  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME0}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME0}${\n}
       ${resp}=  AddFamilyMemberByProviderWithPhoneNo  ${pcid2}  ${firstname}  ${lastname}  ${dob}   ${gender}  ${Familymember_ph}
       Log  ${resp.json()}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -241,7 +241,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-6
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${pcid3}  ${resp.json()}
       Log  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph3}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph3}${\n}
       ${firstname1}=  FakerLibrary.first_name
       ${lastname1}=  FakerLibrary.last_name
       ${dob1}=  FakerLibrary.Date
@@ -261,7 +261,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-6
       ${resp}=  AddFamilyMemberByProviderWithPhoneNo   ${pcid3}  ${firstname2}  ${lastname2}  ${dob2}  ${gender2}   ${Familymember_ph}
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${mem_id2}  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph3}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph3}${\n}
       ${address}=  FakerLibrary.Address
       ${alternativeNo}=  Evaluate  ${PUSERNAME23}+73006
       ${resp}=  Consumer SignUp  ${firstname}  ${lastname}  ${address}  ${ph3}    ${alternativeNo}  ${dob}  ${gender}  ${EMPTY}
@@ -316,7 +316,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-7
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${pcid4}  ${resp.json()}
       Log  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph4}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph4}${\n}
       ${firstname1}=  FakerLibrary.first_name
       Set Test Variable  ${firstname1}
       ${lastname1}=  FakerLibrary.last_name
@@ -347,7 +347,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-7
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Suite Variable  ${pcid5}  ${resp.json()}
       Log  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph4}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph4}${\n}
       # ${Familymember_ph}=  Evaluate  ${PUSERNAME0}+300008
 
       ${resp}=  AddFamilyMemberByProviderWithPhoneNo   ${pcid5}  ${firstname1}  ${lastname1}  ${dob1}  ${gender1}   ${Familymember_ph1}
@@ -425,7 +425,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-8
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${pcid44}  ${resp.json()}
       Log  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph4}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph4}${\n}
       ${firstname1}=  FakerLibrary.first_name
       ${lastname1}=  FakerLibrary.last_name
       ${dob1}=  FakerLibrary.Date
@@ -451,7 +451,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-8
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${pcid55}  ${resp.json()}
       Log  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph4}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph4}${\n}
       ${firstname3}=  FakerLibrary.first_name
       ${lastname3}=  FakerLibrary.last_name
       ${dob3}=  FakerLibrary.Date
@@ -471,7 +471,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-8
       Should Be Equal As Strings  ${resp.status_code}  200
       Log  ${resp.json()}
       Set Test Variable  ${mem_id4}  ${resp.json()}
-      # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph3}${\n}
+      # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph3}${\n}
       Should Be Equal As Strings  ${resp.status_code}  200
       ${resp}=  ListFamilyMemberByProvider  ${pcid55}
       Should Be Equal As Strings  ${resp.status_code}  200
@@ -700,7 +700,7 @@ JD-TC-AddFamilyMemberOfProvidercustomer-UH2
       Should Be Equal As Strings  ${resp.status_code}  200
       Set Test Variable  ${pcid6}  ${resp.json()}
       Log  ${resp.json()}
-      Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${ph5}${\n}
+      Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${ph5}${\n}
       ${firstname4}=  FakerLibrary.first_name
       Set Test Variable  ${firstname4}
       ${lastname4}=  FakerLibrary.last_name

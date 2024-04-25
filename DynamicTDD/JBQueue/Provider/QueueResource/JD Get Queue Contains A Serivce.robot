@@ -42,7 +42,7 @@ JD-TC-GetQueueService-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_G}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_G}${\n}
     Set Suite Variable  ${PUSERNAME_G}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_G}  ${PASSWORD}

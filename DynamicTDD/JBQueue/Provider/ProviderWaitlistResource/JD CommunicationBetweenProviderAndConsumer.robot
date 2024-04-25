@@ -38,7 +38,7 @@ JD-TC-Communication Between Provider And Consumer-1
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_P}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_P}${\n}
     Set Suite Variable  ${PUSERNAME_P}
 
     ${resp}=  Encrypted Provider Login  ${PUSERNAME_P}  ${PASSWORD}
@@ -175,7 +175,7 @@ JD-TC-Communication Between Provider And Consumer-1
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
 
     ${resp}=  Imageupload.providerWLCom   ${cookie}   ${wid}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}
@@ -225,7 +225,7 @@ JD-TC-Communication Between Provider And Consumer-2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
 
     ${resp}=  Imageupload.providerWLCom   ${cookie}   ${wid}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}
@@ -236,7 +236,7 @@ JD-TC-Communication Between Provider And Consumer-2
     # Log  ${resp}
     # Should Be Equal As Strings  ${resp}  200
     # ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     # ${caption}=  Fakerlibrary.sentence
     # ${resp}=  Imageupload.providercomupload   ${wid}  ${msg}  ${caption}
     # Log  ${resp}
@@ -282,7 +282,7 @@ JD-TC-Communication Between Provider And Consumer-3
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     Set Suite Variable   ${msg} 
     ${caption}=  Fakerlibrary.sentence
 
@@ -307,7 +307,7 @@ JD-TC-Communication Between Provider And Consumer-UH2
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
 
     ${resp}=  Imageupload.providerWLCom   ${cookie}   ${wid}  ${msg}  ${messageType[0]}  ${caption}  ${EMPTY}

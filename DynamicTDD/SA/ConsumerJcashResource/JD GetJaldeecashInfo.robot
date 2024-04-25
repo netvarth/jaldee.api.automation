@@ -89,7 +89,7 @@ JD-TC-GetJcashDetails-1
     
     # ${CUSERPH1}=  Evaluate  ${CUSERPH}+1077400201
     # Set Suite Variable   ${CUSERPH1}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH1}${\n}
     # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH1}+4468
     # ${firstname}=  FakerLibrary.first_name
     # Set Suite Variable   ${firstname}
@@ -137,7 +137,7 @@ JD-TC-GetJcashDetails-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${cons_id}   ${resp.json()['id']}      
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH1}${\n}
     
     ${resp}=  Get Jaldee Cash Details
     Log  ${resp.content}
@@ -234,7 +234,7 @@ JD-TC-GetJcashDetails-2
     
     # ${CUSERPH0}=  Evaluate  ${CUSERPH}+100104401
     # Set Suite Variable   ${CUSERPH0}
-    # Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
+    # Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${CUSERPH0}${\n}
     # ${CUSERPH_SECOND}=  Evaluate  ${CUSERPH0}+48752
     # ${firstname1}=  FakerLibrary.first_name
     # Set Suite Variable   ${firstname1}
@@ -283,7 +283,7 @@ JD-TC-GetJcashDetails-2
     # Should Be Equal As Strings    ${resp.status_code}    200
     # Set Suite Variable   ${cons_id1}   ${resp.json()['id']}                                                         
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH0}${\n}
 
     ${resp}=  Consumer Login  ${CUSERPH0}  ${PASSWORD}
     Log   ${resp.content}
@@ -476,7 +476,7 @@ JD-TC-GetJcashDetails-5
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${cons_id1}   ${resp.json()['id']}      
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH2}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH2}${\n}
 
     ${resp}=  Get Jaldee Cash Details
     Log  ${resp.content}
@@ -572,7 +572,7 @@ JD-TC-GetJcashDetails-6
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable   ${cons_id}   ${resp.json()['id']}      
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${CUSERPH3}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${CUSERPH3}${\n}
     
     sleep  2s
 

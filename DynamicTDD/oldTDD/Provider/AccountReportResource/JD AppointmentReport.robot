@@ -421,7 +421,7 @@ JD-TC-Appointment_Report-1
     # -----------------
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Reject Appointment  ${apptid05}  ${reason}  ${msg}  ${TODAY}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3301,7 +3301,7 @@ JD-TC-Verify-2-Appointment_Report-8
         
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid01}  ${reason}  ${msg}  ${DAY1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -3375,8 +3375,8 @@ JD-TC-Appointment_Report-9
      Should Be Equal As Strings    ${resp.status_code}    200
      ${Bid_MUSERNAME_E}=  get_acc_id  ${MUSERNAME_E}
      Set Suite variable  ${Bid_MUSERNAME_E}
-     Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
+     Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_E}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/providernumbers.txt  ${SUITE NAME} - ${TEST NAME} - ${MUSERNAME_E}${\n}
      Set Suite Variable  ${MUSERNAME_E}
      ${resp}=  Get Business Profile
      Log  ${resp.content}
@@ -4029,7 +4029,7 @@ JD-TC-Verify-4-Appointment_Report-9
         
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid03}  ${reason}  ${msg}  ${DAY1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -4414,7 +4414,7 @@ JD-TC-Appointment_Report-UH14
         
 #     ${reason}=  Random Element  ${cancelReason}
 #     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
 #     ${resp}=    Provider Cancel Appointment  ${apptid03}  ${reason}  ${msg}  ${DAY1}
 #     Log  ${resp.content}
 #     Should Be Equal As Strings  ${resp.status_code}  200

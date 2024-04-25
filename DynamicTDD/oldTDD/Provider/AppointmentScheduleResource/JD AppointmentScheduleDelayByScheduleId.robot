@@ -745,7 +745,7 @@ JD-TC-Appointment Schedule Delay By Scheduleid-5
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${PUSERNAME}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME}${\n}
 
     ${resp}=   Get jaldeeIntegration Settings
     Log   ${resp.json()}

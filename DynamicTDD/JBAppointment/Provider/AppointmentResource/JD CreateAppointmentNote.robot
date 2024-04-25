@@ -140,7 +140,7 @@ JD-TC-CreateAppointmentNote-1
     Set Suite Variable  ${cookie}
     ${msg}=  Fakerlibrary.sentence
     ${caption}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     
     ${resp}=  Imageupload.AppointmentNote   ${cookie}   ${apptid1}  ${msg}  ${caption}
     Log  ${resp.json()}
@@ -297,7 +297,7 @@ JD-TC-CreateAppointmentNote-2
     # Verify Response List   ${resp}  1  uId=${apptid1}  note=${note1}
 
     ${msg}=  Fakerlibrary.sentence
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${caption}=  Fakerlibrary.sentence
     
     ${resp}=  Imageupload.AppointmentNote   ${cookie}   ${apptid1}  ${msg}  ${caption}

@@ -45,7 +45,7 @@ JD-TC-Change Department Status-1
     ${resp}=  Encrypted Provider Login  ${MUSERNAME_G}  ${PASSWORD}
     Log  ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${MUSERNAME_G}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${MUSERNAME_G}${\n}
     Set Suite Variable  ${MUSERNAME_G}
     ${id}=  get_id  ${MUSERNAME_G}
     Set Suite Variable  ${id}

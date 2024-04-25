@@ -192,7 +192,7 @@ JD-TC-GetConsumerAppointments-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${SIGNUP_CONS1}=  Evaluate  ${CUSERPH}+100100203
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${SIGNUP_CONS1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${SIGNUP_CONS1}${\n}
     Set Suite Variable   ${SIGNUP_CONS1}
     ${CUSERPH_SECOND}=  Evaluate  ${SIGNUP_CONS1}+1000
     ${CUSERMAIL2}=   Set Variable  ${C_Email}ph203.${test_mail}
@@ -217,7 +217,7 @@ JD-TC-GetConsumerAppointments-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/consumernumbers.txt  ${SIGNUP_CONS1}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/consumernumbers.txt  ${SIGNUP_CONS1}${\n}
 
     # ${resp}=  Consumer Login  ${SIGNUP_CONS1}  ${PASSWORD}
     # Log  ${resp.json()}
@@ -894,7 +894,7 @@ JD-TC-GetConsumerAppointments-9
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable  ${p_id}  ${decrypted_data['id']}
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_D}${\n}
     Set Suite Variable  ${PUSERNAME_D}
 
     # ${resp}=  Encrypted Provider Login  ${PUSERNAME_D}  ${PASSWORD}
@@ -1514,7 +1514,7 @@ JD-TC-GetConsumerAppointments-15
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Provider Cancel Appointment  ${apptid2}  ${reason}  ${msg}  ${DAY1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -1564,7 +1564,7 @@ JD-TC-GetConsumerAppointments-16
 
     ${reason}=  Random Element  ${cancelReason}
     ${msg}=   FakerLibrary.word
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
+    Append To File  ${EXECDIR}/data/TDD_Logs/msgslog.txt  ${SUITE NAME} - ${TEST NAME} - ${msg}${\n}
     ${resp}=    Reject Appointment  ${apptid3}  ${reason}  ${msg}  ${DAY1}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200

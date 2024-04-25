@@ -28,7 +28,7 @@ JD-TC-GetOrderSetingsStoreContactInfo-1
     Set Test Variable   ${sector}        ${resp['domain']}
     Set Test Variable   ${sub_sector}    ${resp['subdomain']}
     ${PUSERNAME_A}=  Evaluate  ${PUSERNAME}+575552
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}   
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_A}${\n}   
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME_A}  ${pkg_id[0]}
     Log   ${resp.json()}
@@ -168,7 +168,7 @@ JD-TC-GetOrderSetingsStoreContactInfo-2
     Set Test Variable   ${sector}        ${resp['domain']}
     Set Test Variable   ${sub_sector}    ${resp['subdomain']}
     ${PUSERNAME_B}=  Evaluate  ${PUSERNAME}+575553
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}   
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_B}${\n}   
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME_B}  ${pkg_id[0]}
     Log   ${resp.json()}
@@ -295,7 +295,7 @@ JD-TC-GetOrderSetingsStoreContactInfo-3
     Set Test Variable   ${sector}        ${resp['domain']}
     Set Test Variable   ${sub_sector}    ${resp['subdomain']}
     ${PUSERNAME_C}=  Evaluate  ${PUSERNAME}+575557
-    Append To File  ${EXECDIR}/TDD/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}   
+    Append To File  ${EXECDIR}/data/TDD_Logs/numbers.txt  ${PUSERNAME_C}${\n}   
     ${pkg_id}=   get_highest_license_pkg
     ${resp}=   Account SignUp  ${f_name}  ${l_name}  ${None}   ${sector}   ${sub_sector}  ${PUSERNAME_C}  ${pkg_id[0]}
     Log   ${resp.json()}
