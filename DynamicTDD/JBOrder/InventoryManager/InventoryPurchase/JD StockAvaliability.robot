@@ -11,6 +11,7 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
+Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
@@ -23,6 +24,7 @@ ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${pngfile}      /ebs/TDD/upload.png
 ${fileSize}     0.00458
 ${order}        0
+${originFrom}       NONE
 
 *** Test Cases ***
 
@@ -42,6 +44,16 @@ JD-TC-StockAvaliability-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=  Create Sample Location
     Set Suite Variable    ${loc_id}   ${resp}
@@ -523,7 +535,7 @@ JD-TC-StockAvaliability-1
     Set Suite Variable          ${salesRate}
     Set Suite Variable          ${batchNo}
 
-    ${resp}=    Enable Disable Inventory  ${toggle[0]}
+    ${resp}=    Get Stock Avaliability  ${ic_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -533,11 +545,87 @@ JD-TC-StockAvaliability-1
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   200
+    Set Suite Variable              ${purchaseId}           ${resp.json()}
 
-    ${resp}=  Get Inventoryitem      ${ic_id}         
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[0]}
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[1]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[1]}
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[2]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
 
     ${resp}=    Get Stock Avaliability  ${ic_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${firstName}=           FakerLibrary.name
+    Set Suite Variable      ${firstName}
+    ${lastName}=            FakerLibrary.last_name
+    Set Suite Variable      ${lastName}
+    ${primaryMobileNo}      Generate random string    10    123456789
+    ${primaryMobileNo}      Convert To Integer  ${primaryMobileNo}
+    Set Suite Variable      ${primaryMobileNo}
+    Set Test Variable       ${email_id}  ${lastName}.${test_mail}
+
+    ${resp}=    Send Otp For Login    ${primaryMobileNo}    ${accountId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Verify Otp For Login   ${primaryMobileNo}   12
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${token}  ${resp.json()['token']}
+
+    ${resp}=    Customer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    ProviderConsumer SignUp    ${firstName}  ${lastName}  ${email_id}    ${primaryMobileNo}     ${accountId}
+    Log  ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}   200    
+   
+    ${resp}=    ProviderConsumer Login with token   ${primaryMobileNo}    ${accountId}  ${token} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable    ${cid}    ${resp.json()['providerConsumer']}
+
+    ${resp}=    Customer Logout 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+# ----------------------------- Provider take a Sales Order ------------------------------------------------
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${quantity}=    Random Int  min=2   max=5
+
+    ${Cg_encid}=  Create Dictionary   encId=${inv_order_encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+    Set Suite Variable  ${SO_Cata_Encid_List}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+    Set Suite Variable  ${store}
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid}  ${resp.json()}
