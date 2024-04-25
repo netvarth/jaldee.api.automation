@@ -22,6 +22,8 @@ ${SPASSWORD}              Netvarth1
 ${test_mail}              test@jaldee.com
 ${count}  ${1}
 
+*** Test Cases ***
+
 JD-TC-Provider_Signup-1
     [Documentation]   Provider Signup in Random Domain 
 
