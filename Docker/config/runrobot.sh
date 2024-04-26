@@ -18,6 +18,7 @@ DB_BACKUP_PATH="TDD/APreBackup"
 REDIS_HOST='127.0.0.1'
 tddpath="TDD/${SUITE}"
 var="$(cut -d'/' -f 1 <<< ${SUITE})"
+Log_DIR=${SUITE%%.*}
 # ssh-keyscan -H $IP_ADDRESS >> ~/.ssh/known_hosts
 # echo "===================================================================================================="
 # uname -vr
@@ -75,7 +76,7 @@ runAPre()
 runTDD()
 {
     echo "Running $2"
-    pabot --processes 5 --outputdir TDD_Output/tddlog --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable MUSERNAME:$NUM_BSERIES --variable branch_count:$BRANCH_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable B_Email:$B_EMAIL --variable B_SPEmail:$B_SPEMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
+    pabot --processes 5 --outputdir TDD_Output/tddlog/$Log_DIR --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable MUSERNAME:$NUM_BSERIES --variable branch_count:$BRANCH_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable B_Email:$B_EMAIL --variable B_SPEmail:$B_SPEMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
     # robot --outputdir TDD_Output/tddreport --variable PUSERNAME:$NUM_PSERIES --variable provider_count:$PUSER_COUNT --variable CUSERNAME:$NUM_CSERIES --variable consumer_count:$CUSER_COUNT --variable MUSERNAME:$NUM_BSERIES --variable branch_count:$BRANCH_COUNT --variable P_Email:$P_EMAIL --variable C_Email:$C_EMAIL --variable B_Email:$B_EMAIL --variable B_SPEmail:$B_SPEMAIL --variable Container_id:$CONTAINER_ID --variablefile $1 "$2"
 }
 
