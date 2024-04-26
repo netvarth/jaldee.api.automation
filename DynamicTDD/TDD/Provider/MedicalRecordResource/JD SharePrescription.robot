@@ -37,7 +37,7 @@ Check And Create MR Session
     ${resp}=     Run Keyword And Return Status   Get Request    MR    /
     # Run Keyword Unless  ${resp}   Create Session    MR    ${URL}
     IF  not ${resp}
-        Create Session    MR    ${URL}
+        Create Session    MR    ${URL}  verify=true
     END
 
 
@@ -355,7 +355,7 @@ JD-TC-Shareprescription-1
 
     ${filename}   Set Variable    1_prescription.pdf
     ${uri}   Set Variable    /100341/6250f98/1/1/prescription/${filename} 
-    Create Session   test    http://jaldeelocal.s3-website-us-west-1.amazonaws.com
+    Create Session   test    http://jaldeelocal.s3-website-us-west-1.amazonaws.com  verify=true
     # ${response}=  GET On Session   test   ${uri}
     # Log  ${response.json()}
     # Should Be Equal As Strings  ${response.status_code}  200

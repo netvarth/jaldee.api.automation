@@ -20,14 +20,14 @@ iphone App Login
     [Arguments]    ${usname}  ${passwrd}  ${countryCode}=+91
     ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}  countryCode=${countryCode}
     ${log}=    json.dumps    ${login}
-    Create Session    ynw    ${BASE_URL}  headers=${iphone_headers}
+    Create Session    ynw    ${BASE_URL}  headers=${iphone_headers}  verify=true
     RETURN  ${log}
 
 iphone App Check And Create YNW Session
     ${res}=   Session Exists    ynw
     # Run Keyword Unless  ${res}   Create Session    ynw    ${BASE_URL}  headers=${iphone_headers}
     IF  not ${res}
-        Create Session    ynw    ${BASE_URL}  headers=${iphone_headers}
+        Create Session    ynw    ${BASE_URL}  headers=${iphone_headers}  verify=true
     END
 
 iphone App Consumer SignUp

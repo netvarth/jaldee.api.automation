@@ -608,7 +608,7 @@ Provider Change Password
 
 SendProviderResetMail
    [Arguments]    ${email}
-   Create Session    ynw    ${BASE_URL}
+   Create Session    ynw    ${BASE_URL}  verify=true
    ${resp}=  POST On Session  ynw     /provider/login/reset/${email}  expected_status=any
    RETURN  ${resp}  
 

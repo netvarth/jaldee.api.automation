@@ -756,7 +756,7 @@ Provider Change Password
 
 SendProviderResetMail
    [Arguments]    ${email}  ${countryCode}=91
-   Create Session    ynw    ${BASE_URL}
+   Create Session    ynw    ${BASE_URL}  verify=true
 #    ${body}=     Create Dictionary   countryCode=${countryCode}
    ${data}=    json.dumps    ${countryCode}
    ${resp}=  POST On Session  ynw     /provider/login/reset/${email}   data=${data}  expected_status=any

@@ -171,7 +171,7 @@ Testing named arguments
 
     ${auth} =    Create List    Mark    SuperSecret
     ${params} =    Create Dictionary    type=Condos    filter=2Bedrooms
-    Create Session    testingapi    url=http://postman-echo.com    auth=${auth}
+    Create Session    testingapi    url=http://postman-echo.com    auth=${auth}  verify=true
     ${resp} =    GET On Session    testingapi   /get    params=${params}
     ${json} =  To JSON  ${resp.content}  pretty_print=True
     Log  \n${json}  console=yes

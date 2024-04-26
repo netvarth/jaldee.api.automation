@@ -261,10 +261,10 @@ JD-TC-AddToWL-1
         FOR   ${a}  IN RANGE   ${count}
         
             ${PH_Number}=  FakerLibrary.Numerify  %#####
-            # ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-            # Log  ${PH_Number}
-            # Set Test Variable  ${CUSERPH}  555${PH_Number}
-            ${CUSERPH}=  Evaluate  ${CUSERNAME}+${PH_Number}
+            ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+            Log  ${PH_Number}
+            Set Test Variable  ${CUSERPH}  555${PH_Number}
+            # ${CUSERPH}=  Evaluate  ${CUSERNAME}+${PH_Number}
             Set Test Variable  ${CUSERPH${a}}  ${CUSERPH}
             ${resp}=  GetCustomer  phoneNo-eq=${CUSERPH${a}}  
             Log  ${resp.content}

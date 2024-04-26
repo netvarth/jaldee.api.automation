@@ -122,6 +122,7 @@ JD-TC-Change Password-1
     ${fileType1}=  Get From Dictionary       ${type}    ${coverpic}
     ${path} 	${file} = 	Split String From Right 	${coverpic} 	/ 	1
     ${fileName}  ${file_ext}= 	Split String 	${file}  .
+    
     ${resp}=    Get Cover Picture
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200 

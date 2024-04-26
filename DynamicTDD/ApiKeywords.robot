@@ -31,7 +31,7 @@ Get SP Token
 Check And Create ApiYNW Session
     ${res}=   Session Exists    apiynw
     IF  not ${res}
-        Create Session    apiynw    ${API_BASE_URL}   headers=${headers}
+        Create Session    apiynw    ${API_BASE_URL}   headers=${headers}  verify=true
     END
 
 

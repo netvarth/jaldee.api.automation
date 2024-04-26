@@ -25,7 +25,7 @@ SuperAdmin Login
     ${pass2}=  Keywordspy.second_password
     ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}  secondPassword=${pass2}
     ${log}=    json.dumps    ${login}
-    Create Session    synw    ${SUPER_URL}  headers=${headers}  
+    Create Session    synw    ${SUPER_URL}  headers=${headers}   verify=true
     ${resp}=    POST On Session     synw    /login    data=${log}   expected_status=any   
     RETURN  ${resp}
 
@@ -34,14 +34,14 @@ Check And Create YNW SuperAdmin Session
     ${res}=   Session Exists    synw
     # Run Keyword Unless  ${res}   Create Session    synw    ${SUPER_URL}  headers=${headers}
     IF  not ${res}
-        Create Session    synw    ${SUPER_URL}  headers=${headers}
+        Create Session    synw    ${SUPER_URL}  headers=${headers}  verify=true
     END
 
 Check And Create YNW Support Session
     ${res}=     Session Exists    supportynw
     # Run Keyword Unless  ${res}   Create Session    supportynw    ${SUPPORT_URL}  headers=${headers}
     IF  not ${res}
-        Create Session    supportynw    ${SUPPORT_URL}  headers=${headers}
+        Create Session    supportynw    ${SUPPORT_URL}  headers=${headers}  verify=true
     END
     
 
@@ -49,7 +49,7 @@ Check And Create YNW Rest Session
     ${res}=     Session Exists    syn
     # Run Keyword Unless  ${res}   Create Session    syn    ${SUPER_URL1}   headers=${headers}
     IF  not ${res}
-        Create Session    syn    ${SUPER_URL1}  headers=${headers}
+        Create Session    syn    ${SUPER_URL1}  headers=${headers}  verify=true
     END
 
 
@@ -313,7 +313,7 @@ Support Login
    ${secondpass}=  support_secondpassword
    ${supportlogin}=  Create Dictionary  loginId=${usname}  password=${passwrd}  secondPassword=${secondpass}
    ${log}=  json.dumps  ${supportlogin}
-   Create Session    supportynw    ${SUPPORT_URL}  headers=${headers}    
+   Create Session    supportynw    ${SUPPORT_URL}  headers=${headers}    verify=true
    ${resp}=    POST On Session     supportynw    /login    data=${log}  expected_status=any
    RETURN  ${resp}
 

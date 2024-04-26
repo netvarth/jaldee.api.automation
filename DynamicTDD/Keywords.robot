@@ -270,7 +270,7 @@ Login
     [Arguments]    ${usname}  ${passwrd}  ${countryCode}=+91
     ${login}=    Create Dictionary    loginId=${usname}  password=${passwrd}  countryCode=${countryCode}
     ${log}=    json.dumps    ${login}
-    Create Session    ynw    ${BASE_URL}  headers=${headers}
+    Create Session    ynw    ${BASE_URL}  headers=${headers}  verify=true
     RETURN  ${log}
 
 Check And Create YNW Session
@@ -278,7 +278,7 @@ Check And Create YNW Session
     ${res}=   Session Exists    ynw
     # Run Keyword Unless  ${res}   Create Session    ynw    ${BASE_URL}  headers=${headers}
     IF  not ${res}
-        Create Session    ynw    ${BASE_URL}  headers=${headers}
+        Create Session    ynw    ${BASE_URL}  headers=${headers}  verify=true
     END
 
 Create And Verify Alert
@@ -318,7 +318,7 @@ Verify Response CloudSearch
 
 Cloud Search
     [Arguments]    &{kwargs}
-    Create Session  cs  ${SEARCH_END}
+    Create Session  cs  ${SEARCH_END}  verify=True
     ${resp}=    GET On Session  cs  /2013-01-01/search   params=${kwargs}   expected_status=any
     RETURN    ${resp}
 
