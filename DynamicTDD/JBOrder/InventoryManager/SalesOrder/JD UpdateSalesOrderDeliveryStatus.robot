@@ -27,7 +27,7 @@ ${invalidItem}     sprx-3250dr0-800
 ${originFrom}       NONE
 @{orderStatus}      ORDER_PENDING    ORDER_RECEIVED      ORDER_CONFIRMED      ORDER_COMPLETED     ORDER_CANCELED      ORDER_DISCARDED
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
-@{deliveryStatus}     NOT_DELIVERED        DELIVERED    READY_FOR_PICKUP    READY_FOR_SHIPMENT      READY_FOR_DELIVERY      SHIPPED     IN_TRANSIST
+@{deliveryStatus}     NOT_DELIVERED        ORDER_RECEIVED    PACKING    READY_FOR_PICKUP      IN_TRANSIST      DELIVERED     
 
 *** Test Cases ***
 
@@ -254,3 +254,55 @@ JD-TC-Update Sales Order Delivery Status-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[1]}
+
+
+JD-TC-Update Sales Order Delivery Status-2
+
+    [Documentation]    Update Sales Order Delivery Status ORDER_RECEIVED to PACKING .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update Sales Order Delivery Status    ${SO_Uid}      ${deliveryStatus[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[2]}
+
+JD-TC-Update Sales Order Delivery Status-3
+
+    [Documentation]    Update Sales Order Delivery Status PACKING to READY_FOR_PICKUP .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update Sales Order Delivery Status    ${SO_Uid}      ${deliveryStatus[3]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[3]}
+
+JD-TC-Update Sales Order Delivery Status-4
+
+    [Documentation]    Update Sales Order Delivery Status READY_FOR_PICKUP to IN_TRANSIST .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME23}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Update Sales Order Delivery Status    ${SO_Uid}      ${deliveryStatus[4]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[4]}
