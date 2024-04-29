@@ -22,9 +22,10 @@ ${invalidNum}        1245
 ${invalidEma}        asd122
 ${invalidstring}     _ad$.sa_
 
-
+comment   Dev Removed this url
 *** Test Cases ***
 
+*** Comments ***
 JD-TC-Get inventory catalog item by inventory catalog encoded id-1
 
     [Documentation]  Get inventory catalog item by inventory catalog encoded id.
