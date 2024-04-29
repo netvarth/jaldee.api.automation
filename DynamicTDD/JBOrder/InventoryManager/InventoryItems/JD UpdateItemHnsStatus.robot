@@ -30,6 +30,16 @@ JD-TC-UpdateItemHsnStatus-1
     Set Suite Variable  ${acc_id}       ${decrypted_data['id']}
     Set Suite Variable  ${userName}     ${decrypted_data['userName']}
 
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
     ${hsnCode}=     Random Int  min=1  max=9999
     Set Suite Variable  ${hsnCode}
 

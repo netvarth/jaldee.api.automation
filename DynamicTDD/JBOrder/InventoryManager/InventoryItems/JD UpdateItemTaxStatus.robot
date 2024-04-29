@@ -26,6 +26,16 @@ JD-TC-UpdateItemTaxStatus-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
     ${taxName}=    FakerLibrary.name
     ${taxPercentage}=     Random Int  min=0  max=200
     ${cgst}=     Random Int  min=0  max=200

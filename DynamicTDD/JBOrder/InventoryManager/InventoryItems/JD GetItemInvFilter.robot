@@ -37,6 +37,16 @@ JD-TC-GetItemInvFilter-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
     ${resp}=  Provider Logout
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
