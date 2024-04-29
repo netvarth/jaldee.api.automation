@@ -133,7 +133,7 @@ JD-TC-Get Catalog Batch Count Filter-1
     ${displayName}=     FakerLibrary.name
     Set Suite Variable  ${displayName}
 
-    ${resp}=    Create Item Inventory  ${displayName}    
+    ${resp}=    Create Item Inventory  ${displayName}    isBatchApplicable=${boolean[1]} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}

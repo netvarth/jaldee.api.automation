@@ -41,6 +41,18 @@ JD-TC-Create Catalog Item Batch-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+
     ${resp}=  Get Store Type By Filter     
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -139,7 +151,7 @@ JD-TC-Create Catalog Item Batch-1
 
     ${displayName}=     FakerLibrary.name
 
-    ${resp}=    Create Item Inventory  ${displayName}    
+    ${resp}=    Create Item Inventory  ${displayName}   isBatchApplicable=${boolean[1]} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
@@ -193,9 +205,9 @@ JD-TC-Create Catalog Item Batch-1
 
 
 
-JD-TC-Create Catalog Item Batch-2
+JD-TC-Create Catalog Item Batch-UH10
 
-    [Documentation]   create salesorder catalog items where inventory management is true then create catalog item batch where invmgnt is false
+    [Documentation]   When inventory manager is false,cant create batch for sales order catalog item
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME34}  ${PASSWORD}
     Log   ${resp.content}
@@ -206,9 +218,23 @@ JD-TC-Create Catalog Item Batch-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${inv_cat_encid}  ${resp.json()}
-    ${inv_cat_encid}=  Create List  ${inv_cat_encid}
+    ${inv_cat_encid1}=  Create List  ${inv_cat_encid}
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid}
+
+    ${displayName}=     FakerLibrary.name
+
+    ${resp}=    Create Item Inventory  ${displayName}   isBatchApplicable=${boolean[1]} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${itemEncId2}  ${resp.json()}
+
+
+    ${resp}=   Create Inventory Catalog Item  ${inv_cat_encid}   ${itemEncId2}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${Inv_Cata_Item_Encid}  ${resp.json()[0]}
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_Cata_Encid1}  ${resp.json()}
@@ -222,7 +248,7 @@ JD-TC-Create Catalog Item Batch-2
 
     ${resp}=  Create Catalog Item Batch-invMgmt False      ${SO_itemEncId1}     ${Name}     ${price}         
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
 
 JD-TC-Create Catalog Item Batch-3
 
@@ -388,6 +414,18 @@ JD-TC-Create Catalog Item Batch-4
     Log  ${decrypted_data}
     Set Suite Variable      ${pid}          ${decrypted_data['id']}
     Set Suite Variable      ${pdrname}      ${decrypted_data['userName']}
+
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}

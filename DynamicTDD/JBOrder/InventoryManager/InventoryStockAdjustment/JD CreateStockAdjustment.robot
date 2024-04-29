@@ -329,5 +329,36 @@ JD-TC-Create Stock Adjustment-UH8
     Should Be Equal As Strings   ${resp.json()}   ${INVALID_QUANTITY}
 
 
+JD-TC-Create Stock Adjustment-UH9
+
+    [Documentation]  Create stock adjustment with empty invCatalogItemId.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${data1}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${EMPTY}    qty=1
+    ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_INVENTORY_CATALOG_ITEM_ID}
+
+
+JD-TC-Create Stock Adjustment-UH10
+
+    [Documentation]  Create stock adjustment with empty stock adjustment dto list.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${data1}=  Create Dictionary   
+    ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    # Should Be Equal As Strings   ${resp.json()}   ${INVALID_QUANTITY}
+
+
+
 
 
