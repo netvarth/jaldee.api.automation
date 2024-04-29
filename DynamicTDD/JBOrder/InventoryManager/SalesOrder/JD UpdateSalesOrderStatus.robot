@@ -25,9 +25,7 @@ ${invalidstring}     _ad$.sa_
 ${invalidItem}     sprx-3250dr0-800
 @{spItemSource}      RX       Ayur
 ${originFrom}       NONE
-@{orderStatus}      ORDER_DRAFT        ORDER_CONFIRMED      ORDER_COMPLETED     ORDER_CANCELED      ORDER_DISCARDED
-@{deliveryType}     STORE_PICKUP        HOME_DELIVERY
-@{deliveryStatus}     NOT_DELIVERED        ORDER_RECEIVED    PACKING    READY_FOR_PICKUP      IN_TRANSIST      DELIVERED    
+@{deliveryType}     STORE_PICKUP        HOME_DELIVERY  
     
 *** Test Cases ***
 

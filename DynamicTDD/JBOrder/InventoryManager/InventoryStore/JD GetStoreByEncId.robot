@@ -21,24 +21,6 @@ Resource          /ebs/TDD/SuperAdminKeywords.robot
 ${invalidNum}        1245
 ${invalidEma}        asd122
 
-*** Keywords ***
-Create Store
-
-    [Arguments]  ${name}   ${storeTypeEncId}  ${locationId}  ${emails}  ${number}  ${countryCode}  
-    ${phoneNumber}=  Create Dictionary  number=${number}    countryCode=${countryCode} 
-    ${phoneNumbers}=  Create List  ${phoneNumber}
-    ${data}=  Create Dictionary  name=${name}   storeTypeEncId=${storeTypeEncId}    locationId=${locationId}    emails=${emails}    phoneNumbers=${phoneNumbers}    
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/store   data=${data}  expected_status=any
-    RETURN  ${resp} 
-
-Get Store ByEncId
-    [Arguments]   ${Encid}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    ynw   /provider/store/${Encid}      expected_status=any
-    RETURN  ${resp}
-
 *** Test Cases ***
 
 JD-TC-GetStoreByEncid-1

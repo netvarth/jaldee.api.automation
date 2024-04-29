@@ -264,6 +264,8 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{transactionTypeEnum}              OPENING  ADJUSTMENT  PURCHASE_ORDER  PURCHASE  PURCHASE_RETURN	SALES_ORDER  SALES_ORDER_CANCEL  SALES  SALES_RETURN  TRANSFER_IN  TRANSFER_OUT
 @{PurchaseStatus}                   DRAFT  IN_REVIEW  APPROVED
 @{InvStatus}                        DRAFT  SUBMITTED  PROCESSED
+@{orderStatus}                      ORDER_DRAFT        ORDER_CONFIRMED      ORDER_COMPLETED     ORDER_CANCELED      ORDER_DISCARDED
+@{deliveryStatus}                   NOT_DELIVERED        ORDER_RECEIVED    PACKING    READY_FOR_PICKUP      IN_TRANSIST      DELIVERED 
 
 *** Keywords ***
 Login

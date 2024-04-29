@@ -23,14 +23,6 @@ ${invalidEma}        asd122
 ${invalidstring}     _ad$.sa_
 @{spItemSource}      RX       Ayur
 
-*** Keywords ***
-Get SalesOrder Catalog Item Count
-    [Arguments]  &{param}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/count  params=${param}   expected_status=any
-    RETURN  ${resp} 
-
-
 *** Test Cases ***
 
 JD-TC-Get Sales Order Catalog Items Count-1

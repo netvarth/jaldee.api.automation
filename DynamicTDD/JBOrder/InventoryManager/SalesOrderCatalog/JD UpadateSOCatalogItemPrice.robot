@@ -23,31 +23,6 @@ ${invalidEma}        asd122
 ${invalidstring}     _ad$.sa_
 @{spItemSource}      RX       Ayur
 
-*** Keywords ***
-Get SalesOrder Catalog Item Count
-    [Arguments]  &{param}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/item/count  params=${param}   expected_status=any
-    RETURN  ${resp} 
-
-Get Item List By Catalog EncId
-    [Arguments]  ${SO_Catalog_Encid}    
-    Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/so/catalog/${SO_Catalog_Encid}/item/list     expected_status=any
-    RETURN  ${resp} 
-
-Update SO Catalog Item Price
-
-    [Arguments]  ${catalogEncId}   ${itemEncId}    ${price}   ${batchEncId}     ${batch_price}
-
-    ${batch}=   Create Dictionary  batchEncId=${batchEncId}    price=${batch_price}     
-    ${batches}=     Create List       ${batch}
-    ${data}=  Create Dictionary  price=${price}      Batches=${batches}
-    ${data}=  json.dumps  ${data}
-    Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/so/catalog/${catalogEncId}/item/${itemEncId}/price   data=${data}  expected_status=any
-    RETURN  ${resp} 
-
 *** Test Cases ***
 
 JD-TC-Update SO Catalog Item Price-1
