@@ -158,16 +158,16 @@ JD-TC-CreateItemInv-1
 
     ${taxName}=    FakerLibrary.name
     ${taxPercentage}=     Random Int  min=0  max=200
-    ${cgst}=     Random Int  min=0  max=200
-    ${sgst}=     Random Int  min=0  max=200
-    ${igst}=     Random Int  min=0  max=200
+    ${taxPercentage}=           Convert To Number  ${taxPercentage}  1
+    ${cgst}=     Evaluate   ${taxPercentage} / 2
+    ${sgst}=     Evaluate   ${taxPercentage} / 2
     Set Suite Variable      ${taxName}
     Set Suite Variable      ${taxPercentage}
     Set Suite Variable      ${cgst}
     Set Suite Variable      ${sgst}
-    Set Suite Variable      ${igst}
 
-    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  ${igst}
+
+    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  0
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${itemtax_id}  ${resp.json()}
@@ -728,16 +728,15 @@ JD-TC-CreateItemInv-27
 
     ${taxName2}=    FakerLibrary.name
     ${taxPercentage2}=     Random Int  min=0  max=200
-    ${cgst2}=     Random Int  min=0  max=200
-    ${sgst2}=     Random Int  min=0  max=200
-    ${igst2}=     Random Int  min=0  max=200
+    ${taxPercentage2}=           Convert To Number  ${taxPercentage}  1
+    ${cgst2}=     Evaluate   ${taxPercentage} / 2
+    ${sgst2}=     Evaluate   ${taxPercentage} / 2
     Set Suite Variable      ${taxName2}
     Set Suite Variable      ${taxPercentage2}
     Set Suite Variable      ${cgst2}
     Set Suite Variable      ${sgst2}
-    Set Suite Variable      ${igst2}
 
-    ${resp}=    Create Item Tax  ${taxName2}  ${taxtypeenum[0]}  ${taxPercentage2}  ${cgst2}  ${sgst2}  ${igst2}
+    ${resp}=    Create Item Tax  ${taxName2}  ${taxtypeenum[0]}  ${taxPercentage2}  ${cgst2}  ${sgst2}  0
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${itemtax_id2}  ${resp.json()}

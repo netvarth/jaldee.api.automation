@@ -38,17 +38,16 @@ JD-TC-CreateItemTax-1
 
     ${taxName}=    FakerLibrary.name
     ${taxPercentage}=     Random Int  min=0  max=200
-    ${cgst}=     Random Int  min=0  max=200
-    ${sgst}=     Random Int  min=0  max=200
-    ${igst}=     Random Int  min=0  max=200
+    ${taxPercentage}=           Convert To Number  ${taxPercentage}  1
+    ${cgst}=     Evaluate   ${taxPercentage} / 2
+    ${sgst}=     Evaluate   ${taxPercentage} / 2
     Set Suite Variable      ${taxName}
     Set Suite Variable      ${taxPercentage}
     Set Suite Variable      ${cgst}
     Set Suite Variable      ${sgst}
-    Set Suite Variable      ${igst}
 
 
-    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  ${igst}
+    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  0
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable   ${itemtax_id}  ${resp.json()}
@@ -65,7 +64,7 @@ JD-TC-CreateItemTax-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Create Item Tax  ${empty}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  ${igst}
+    ${resp}=    Create Item Tax  ${empty}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  0
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -105,7 +104,7 @@ JD-TC-CreateItemTax-UH3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${empty}  ${cgst}  ${sgst}  ${igst}
+    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${empty}  ${cgst}  ${sgst}  0
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}         ${INVALID_TAX_PERCENTAGE}
@@ -118,7 +117,7 @@ JD-TC-CreateItemTax-UH4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${empty}  ${sgst}  ${igst}
+    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${empty}  ${sgst}  0
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}         ${INVALID_CGST_PERCENTAGE}
@@ -131,7 +130,7 @@ JD-TC-CreateItemTax-UH5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${empty}  ${igst}
+    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${empty}  0
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}         ${INVALID_SGST_PERCENTAGE}
@@ -153,7 +152,7 @@ JD-TC-CreateItemTax-UH7
 
     [Documentation]  Create Item tax - without Login
 
-    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${cgst}  ${igst}
+    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${cgst}  0
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
     Should Be Equal As Strings    ${resp.json()}         ${SESSION_EXPIRED}
@@ -167,7 +166,7 @@ JD-TC-CreateItemTax-UH8
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  ${igst}
+    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  0
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    401
     Should Be Equal As Strings    ${resp.json()}         ${NoAccess}
@@ -180,6 +179,6 @@ JD-TC-CreateItemTax-UH9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  ${igst}
+    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  0
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
