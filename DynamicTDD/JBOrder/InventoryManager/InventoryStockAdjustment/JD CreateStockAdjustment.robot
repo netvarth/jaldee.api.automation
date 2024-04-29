@@ -29,9 +29,19 @@ JD-TC-Create Stock Adjustment-1
 
     [Documentation]  Create stock adjustment with valid details.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=  Get Store Type By Filter     
     Log   ${resp.content}
@@ -72,10 +82,10 @@ JD-TC-Create Stock Adjustment-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME1}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME6}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -166,7 +176,7 @@ JD-TC-Create Stock Adjustment-2
 
     [Documentation]  Create stock adjustment with multiple stockAdjustDetailsDtos.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -182,7 +192,7 @@ JD-TC-Create Stock Adjustment-3
 
     [Documentation]  Create stock adjustment thats already created.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -206,7 +216,7 @@ JD-TC-Create Stock Adjustment-UH2
 
     [Documentation]  Create stock adjustment with empty store id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -221,7 +231,7 @@ JD-TC-Create Stock Adjustment-UH3
 
     [Documentation]  Create stock adjustment with empty inventory_catalog_encid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -236,7 +246,7 @@ JD-TC-Create Stock Adjustment-UH4
 
     [Documentation]  Create stock adjustment with empty remarks_encid1.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -250,7 +260,7 @@ JD-TC-Create Stock Adjustment-UH5
 
     [Documentation]  Create stock adjustment with empty quantity.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -265,7 +275,7 @@ JD-TC-Create Stock Adjustment-UH6
 
     [Documentation]  Stock Adjustment Dto -invCatalogItemId not added in the invoice catalog id thats we are given.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -294,7 +304,7 @@ JD-TC-Create Stock Adjustment-UH7
 
     [Documentation]  Catalog Dto encid and Stock Adjustment Dto - invoice catalog id is different.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -308,7 +318,7 @@ JD-TC-Create Stock Adjustment-UH8
 
     [Documentation]  Create stock adjustment with zero quantity.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME6}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

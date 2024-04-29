@@ -35,6 +35,16 @@ JD-TC-GetItemRemarksFilter-1
     ${accountId}=  get_acc_id  ${HLMUSERNAME4}
     Set Suite Variable    ${accountId} 
 
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
     ${remarks}=    FakerLibrary.name
     Set Suite Variable  ${remarks}
 

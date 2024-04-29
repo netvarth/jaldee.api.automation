@@ -29,9 +29,19 @@ JD-TC-Get Item Stock adjust Count Filter-1
 
     [Documentation]  Get Item Stock adjust count Filter.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=  Get Store Type By Filter     
     Log   ${resp.content}
@@ -72,10 +82,10 @@ JD-TC-Get Item Stock adjust Count Filter-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME5}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME7}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -193,7 +203,7 @@ JD-TC-Get Item Stock adjust Count Filter-2
 
     [Documentation]  Get Item Stock adjust count Filter using location name.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -212,7 +222,7 @@ JD-TC-Get Item Stock adjust Count Filter-3
 
     [Documentation]  Get Item Stock adjust count Filter using storeId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -230,7 +240,7 @@ JD-TC-Get Item Stock adjust Count Filter-4
 
     [Documentation]  Get Item Stock adjust count Filter using storeEncId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -248,7 +258,7 @@ JD-TC-Get Item Stock adjust Count Filter-5
 
     [Documentation]  Get Item Stock adjust count Filter using storeName.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -266,7 +276,7 @@ JD-TC-Get Item Stock adjust Count Filter-6
 
     [Documentation]  Get Item Stock adjust count Filter using invCatalogId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -287,7 +297,7 @@ JD-TC-Get Item Stock adjust Count Filter-7
 
     [Documentation]  Get Item Stock adjust count Filter using status.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -305,7 +315,7 @@ JD-TC-Get Item Stock adjust Count Filter-8
 
     [Documentation]  Get Item Stock adjust count Filter using location.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -323,7 +333,7 @@ JD-TC-Get Item Stock adjust Count Filter-9
 
     [Documentation]  Get Item Stock adjust count Filter using invCatalogEncId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -341,7 +351,7 @@ JD-TC-Get Item Stock adjust Count Filter-10
 
     [Documentation]  Get Item Stock adjust count Filter using uid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -359,7 +369,7 @@ JD-TC-Get Item Stock adjust Count Filter-11
 
     [Documentation]  Get Item Stock adjust count Filter using remark.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -377,7 +387,7 @@ JD-TC-Get Item Stock adjust Count Filter-12
 
     [Documentation]  Get Item Stock adjust count Filter using remark.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -395,7 +405,7 @@ JD-TC-Get Item Stock adjust Count Filter-13
 
     [Documentation]  update stock adjustment by adding more  stockAdjustDetailsDtos then get stock adjustment by count flter
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -435,7 +445,7 @@ JD-TC-Get Item Stock adjust Count Filter-UH2
 
     [Documentation]  Get stock adjustment count filter with invalid remarks id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -456,7 +466,7 @@ JD-TC-Get Item Stock adjust Count Filter-UH3
 
     [Documentation]  Get stock adjustment count filter with invalid remark id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -475,7 +485,7 @@ JD-TC-Get Item Stock adjust Count Filter-UH4
 
     [Documentation]  Get stock adjustment count filter with invalid uid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -494,7 +504,7 @@ JD-TC-Get Item Stock adjust Count Filter-UH5
 
     [Documentation]  Get stock adjustment count filter with invalid location.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -514,7 +524,7 @@ JD-TC-Get Item Stock adjust Count Filter-UH6
 
     [Documentation]  Get stock adjustment count filter with invalid status.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -533,7 +543,7 @@ JD-TC-Get Item Stock adjust Count Filter-UH7
 
     [Documentation]  Get stock adjustment count filter with invalid locationName.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -552,7 +562,7 @@ JD-TC-Get Item Stock adjust Count Filter-UH8
 
     [Documentation]  Get stock adjustment count filter with invalid storeId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -571,7 +581,7 @@ JD-TC-Get Item Stock adjust Count Filter-UH9
 
     [Documentation]  Get stock adjustment count filter with invalid storeEncId.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -590,7 +600,7 @@ JD-TC-Get Item Stock adjust Count Filter-UH10
 
     [Documentation]  Get stock adjustment count filter with invalid storeName.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME5}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

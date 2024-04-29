@@ -29,9 +29,19 @@ JD-TC-UpdateItemRemarks-1
     [Documentation]  update item remarks with transaction type as opening . 
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${remarks}=    FakerLibrary.name
     Set Suite Variable  ${remarks}
@@ -67,7 +77,7 @@ JD-TC-UpdateItemRemarks-2
     [Documentation]  update item remarks with transaction type as ADJUSTMENT. 
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -100,7 +110,7 @@ JD-TC-UpdateItemRemarks-3
     [Documentation]  create item remarks with transaction type as PURCHASE_ORDER and update with same deatils.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -134,7 +144,7 @@ JD-TC-UpdateItemRemarks-4
     [Documentation]  update item remarks where remarks is different  transaction type as same.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -171,7 +181,7 @@ JD-TC-UpdateItemRemarks-5
     [Documentation]  update item remarks with transaction type as SALES_ORDER and Get Item Remark.
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -207,7 +217,7 @@ JD-TC-UpdateItemRemarks-UH1
     [Documentation]  Update Item Remarks with invalid encid
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -245,7 +255,7 @@ JD-TC-UpdateItemRemarks-UH4
     [Documentation]    Update Item Remarks with empty remarks
 
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

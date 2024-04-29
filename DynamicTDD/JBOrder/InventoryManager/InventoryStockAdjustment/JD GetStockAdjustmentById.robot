@@ -29,9 +29,19 @@ JD-TC-Get Stock Adjustment By Id-1
 
     [Documentation]  create stock adjustment and get stock adjustment by id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=  Get Store Type By Filter     
     Log   ${resp.content}
@@ -72,10 +82,10 @@ JD-TC-Get Stock Adjustment By Id-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME3}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME11}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -191,7 +201,7 @@ JD-TC-Get Stock Adjustment By Id-2
 
     [Documentation]  update stock adjustment by adding more  stockAdjustDetailsDtos then get stock adjustment by id
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -247,7 +257,7 @@ JD-TC-Get Stock Adjustment By Id-UH2
 
     [Documentation]  Get stock adjustment By Id with invalid id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME11}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

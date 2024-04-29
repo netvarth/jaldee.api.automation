@@ -29,9 +29,19 @@ JD-TC-Update Stock Adjustment-1
 
     [Documentation]  update stock adjustment with same details.
     comment  NOTE-------------UPDATE STOCK ADJUSTMENT ---WE CAN ONLY UPDATE REMARKS AND STOCK ADJUSTMENT DTO
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
 
     ${resp}=  Get Store Type By Filter     
     Log   ${resp.content}
@@ -72,10 +82,10 @@ JD-TC-Update Stock Adjustment-1
     Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    ${accountId}=  get_acc_id  ${HLMUSERNAME2}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME12}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -173,7 +183,7 @@ JD-TC-Update Stock Adjustment-2
 
     [Documentation]  Create stock adjustment with multiple stockAdjustDetailsDtos. then update stock adjustment by adding one more  stockAdjustDetailsDtos
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -203,7 +213,7 @@ JD-TC-Update Stock Adjustment-3
 
     [Documentation]  create one remarks and update stock adjustment
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -253,7 +263,7 @@ JD-TC-Update Stock Adjustment-UH2
 
     [Documentation]  update stock adjustment with empty store id.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -268,7 +278,7 @@ JD-TC-Update Stock Adjustment-UH3
 
     [Documentation]  Update stock adjustment with empty inventory_catalog_encid.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -282,7 +292,7 @@ JD-TC-Update Stock Adjustment-UH4
 
     [Documentation]  Update stock adjustment with empty remarks_encid1.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -296,7 +306,7 @@ JD-TC-Update Stock Adjustment-UH5
 
     [Documentation]  update stock adjustment with empty quantity.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME12}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
