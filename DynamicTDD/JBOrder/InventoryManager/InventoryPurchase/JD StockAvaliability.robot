@@ -570,6 +570,11 @@ JD-TC-StockAvaliability-1
     Should Be Equal As Strings      ${resp.status_code}                 200
     Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
 
+    ${resp}=  Get Inventoryitem      ${ic_id}         
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${batch_encid}  ${resp.json()[0]['uid']}
+
     ${resp}=    Get Stock Avaliability  ${ic_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -624,8 +629,15 @@ JD-TC-StockAvaliability-1
 
     ${store}=  Create Dictionary   encId=${store_id}  
     Set Suite Variable  ${store}
+                         
+    ${resp}=   Create Catalog Item Batch-invMgmt False   ${SO_itemEncIds}     ${Name}     ${price}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_Cata_Item_Batch_Encid}  ${resp.json()[0]}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_Cata_Item_Batch_Encid}
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}     store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid}  ${resp.json()}

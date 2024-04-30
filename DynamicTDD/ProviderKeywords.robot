@@ -14715,13 +14715,12 @@ Get Inventoryitem
 
 Create Sales Order
 
-    [Arguments]  ${SO_Catalog_Id}   ${Pro_Con}   ${OrderFor}   ${originFrom}    ${catItemEncId}   ${quantity}    @{vargs}    &{kwargs}
+    [Arguments]  ${SO_Catalog_Id}   ${Pro_Con}   ${OrderFor}   ${originFrom}    ${items}    @{vargs}    &{kwargs}
     # ${Cg_encid}=  Create Dictionary   encId=${SO_Catalog_Id}   
     ${PC}=  Create Dictionary   id=${Pro_Con}   
     ${OrderFor}=  Create Dictionary   id=${OrderFor}   
 
-    ${item}=  Create Dictionary   catItemEncId=${catItemEncId}    quantity=${quantity}
-    ${items}=   Create List    ${item} 
+    ${items}=   Create List    ${items} 
     ${len}=  Get Length  ${vargs}
     FOR    ${index}    IN RANGE    ${len}  
         Append To List  ${items}  ${vargs[${index}]}
