@@ -15037,3 +15037,41 @@ Update Sales Order
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/sorder/${uid}   data=${data}  expected_status=any
     RETURN  ${resp} 
+
+Add Details To Catalog
+
+    [Arguments]     ${purchaseUId}   @{vargs}
+
+    ${len}=  Get Length  ${vargs}
+    ${details}=  Create List  
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${details}  ${vargs[${index}]}
+
+    END
+    ${data}=    json.dumps    ${details}  
+    ${resp}=  POST On Session  ynw  /provider/inventory/purchase/items/${purchaseUId}   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Catalog Item Details
+
+    [Arguments]    ${purchaseUId}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  t/provider/inventory/purchase/items/${purchaseUId}  expected_status=any 
+    RETURN  ${resp}
+
+Update Details In Catalog 
+
+    [Arguments]   ${purchaseUId}   @{vargs}
+
+    ${len}=  Get Length  ${vargs}
+    ${details}=  Create List  
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${details}  ${vargs[${index}]}
+
+    END
+    ${data}=    json.dumps    ${details}  
+    ${resp}=  PUT On Session  ynw  /provider/inventory/purchase/items/${purchaseUId}   data=${data}  expected_status=any
+    RETURN  ${resp} 
