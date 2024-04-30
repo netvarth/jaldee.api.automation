@@ -29,7 +29,7 @@ ${originFrom}       NONE
 
 *** Test Cases ***
 
-JD-TC-Update Sales Order Item Item-1
+JD-TC-Update Sales Order Item -1
 
     [Documentation]   Create a sales Order with Valid Details then update order quantity(inventory manager is false).
 
@@ -221,8 +221,9 @@ JD-TC-Update Sales Order Item Item-1
     Set Suite Variable  ${SO_Cata_Encid_List}
 
     ${store}=  Create Dictionary   encId=${store_id}  
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}   ${items}   store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid}  ${resp.json()}
@@ -367,8 +368,9 @@ JD-TC-Update Sales Order Item-3
     Set Suite Variable  ${SO_Cata_Encid_List}
 
     ${store}=  Create Dictionary   encId=${store_id}  
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncId1}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncId1}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncId1}   ${quantity}     store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}     store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid}  ${resp.json()}

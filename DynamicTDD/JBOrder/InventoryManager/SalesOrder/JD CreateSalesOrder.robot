@@ -106,6 +106,11 @@ JD-TC-Create Sales Order-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    Set Suite Variable  ${address}
+    Set Suite Variable  ${postcode}
+    Set Suite Variable  ${city}
+
 # ------------------------ Create Store ----------------------------------------------------------
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -113,7 +118,7 @@ JD-TC-Create Sales Order-1
 
     ${Name}=    FakerLibrary.last name
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
-    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
+    Set Suite Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
     ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
@@ -222,7 +227,9 @@ JD-TC-Create Sales Order-1
     ${store}=  Create Dictionary   encId=${store_id}  
     Set Suite Variable  ${store}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}    store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid}  ${resp.json()}
@@ -366,7 +373,9 @@ JD-TC-Create Sales Order-2
 
     ${quantity}=    Random Int  min=0   max=0
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}      store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${QUANTITY_REQUIRED}
@@ -382,7 +391,9 @@ JD-TC-Create Sales Order-3
     ${quantity}=    Random Int  min=500000   max=9000000
     ${invalid}=    Random Int  min=5000   max=90000
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${invalid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${invalid}   ${cid}   ${originFrom}    ${items}      store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_CONS_ID}
@@ -396,8 +407,9 @@ JD-TC-Create Sales Order-4
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${quantity}=    Random Int  min=500000   max=9000000
+    ${items}=  Create Dictionary   catItemEncId=${EMPTY}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${EMPTY}   ${quantity}     store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}     store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_ITEMID}
@@ -409,7 +421,9 @@ JD-TC-Create Sales Order-5
 
     ${quantity}=    Random Int  min=2   max=5
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}        store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -423,8 +437,9 @@ JD-TC-Create Sales Order-6
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${quantity}=    Random Int  min=2   max=5
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}     store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
@@ -437,8 +452,9 @@ JD-TC-Create Sales Order-7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${quantity}=    Random Int  min=2   max=5
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${accountId}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}       store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${accountId}   ${cid}   ${originFrom}    ${items}    store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_CONS_ID}
@@ -452,10 +468,11 @@ JD-TC-Create Sales Order-8
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${quantity}=    Random Int  min=2   max=5
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
 
     ${item}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}   ${item}       store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}   ${item}       store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -468,10 +485,11 @@ JD-TC-Create Sales Order-9
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${quantity}=    Random Int  min=2   max=5
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
 
     ${item}=  Create Dictionary   catItemEncId=${invalidItem}   quantity=${quantity}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}   ${item}   store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}    ${item}   store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${INVALID_ITEMID}
@@ -485,14 +503,17 @@ JD-TC-Create Sales Order-10
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${quantity}=    Random Int  min=2   max=5
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
 
     ${item}=  Create Dictionary   catItemEncId=${SO_itemEncIds2}   quantity=${quantity}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}   ${item}   store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}   ${item}   store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid}  ${resp.json()}
 
-    ${resp}=    Get Sales Order    ${SO_Encid}   
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -514,19 +535,75 @@ JD-TC-Create Sales Order-11
     ${store}=  Create Dictionary   encId=${store_id}  
     Set Suite Variable  ${store}
 
-    ${prescribe}=  Create Dictionary   id=${accountId}  
+    ${prescribe}=  Create Dictionary   id=${accountId}
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
 
-
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${SO_itemEncIds}   ${quantity}     store=${store}   prescribedBy=${prescribe}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}    store=${store}   prescribedBy=${prescribe}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid1}  ${resp.json()}
-
-    ${netTotal}=  Evaluate  ${price}*${quantity}
-    ${netTotal}=  Convert To Number  ${netTotal}   1
 
 
     ${resp}=    Get Sales Order    ${SO_Uid1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     # Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
+
+JD-TC-Create Sales Order-12
+
+    [Documentation]   Create a sales Order with billingAddress , homeDeliveryAddress , notes , notesForCustomer details.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${quantity}=    Random Int  min=2   max=5
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${primaryMobileNo1}    Generate random string    10    123456789
+    Set Suite Variable  ${primaryMobileNo1}
+
+    ${bill_Phone1}=   Create Dictionary   countryCode=${countryCodes[0]}           number=${primaryMobileNo1}
+
+    ${contactInfo1}=   Create Dictionary    phone=${bill_Phone1}         email=${email_id}      
+    Set Suite Variable  ${contactInfo1}
+
+    ${homeDeliveryAddress1}=   Create Dictionary    phone=${bill_Phone1}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
+    Set Suite Variable  ${homeDeliveryAddress1}
+
+    ${billingAddress1}=   Create Dictionary    phone=${bill_Phone1}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
+
+    ${note}=  FakerLibrary.name
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}    store=${store}   billingAddress=${billingAddress1}     homeDeliveryAddress=${homeDeliveryAddress1}     notes=${note}      notesForCustomer=${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid}  ${resp.json()}
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['notes']}                                       ${note}
+    Should Be Equal As Strings    ${resp.json()['notesForCustomer']}                                  ${note}
+
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['firstName']}                                   ${firstName}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['lastName']}                                  ${lastName}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['email']}                                  ${email_id}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['address']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['city']}                                  ${city}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['postalCode']}                                  ${postcode}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['landMark']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['phone']['countryCode']}                                  ${countryCodes[0]} 
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['phone']['number']}                                  ${primaryMobileNo1} 
+
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['firstName']}                                   ${firstName}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['lastName']}                                  ${lastName}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['email']}                                  ${email_id}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['address']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['city']}                                  ${city}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['postalCode']}                                  ${postcode}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['landMark']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['phone']['countryCode']}                                  ${countryCodes[0]} 
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['phone']['number']}                                  ${primaryMobileNo1} 
