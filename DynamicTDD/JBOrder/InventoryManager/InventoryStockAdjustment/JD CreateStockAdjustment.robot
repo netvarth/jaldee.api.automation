@@ -165,7 +165,9 @@ JD-TC-Create Stock Adjustment-1
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
-    ${data}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity}    
+    ${invCatalog}=  Create Dictionary   encId=${inventory_catalog_encid} 
+    ${invCatalogItem}=  Create Dictionary   encId=${inventory_catalog_item_encid} 
+    ${data}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity}    
     Set Suite Variable  ${data}  
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data} 
     Log   ${resp.content}
@@ -182,7 +184,9 @@ JD-TC-Create Stock Adjustment-2
 
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
-    ${data1}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity}    
+    ${invCatalog}=  Create Dictionary   encId=${inventory_catalog_encid} 
+    ${invCatalogItem}=  Create Dictionary   encId=${inventory_catalog_item_encid} 
+    ${data1}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity}       
 
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data}   ${data1} 
     Log   ${resp.content}
@@ -264,7 +268,9 @@ JD-TC-Create Stock Adjustment-UH5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${data1}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${EMPTY}    
+    ${invCatalog}=  Create Dictionary   encId=${inventory_catalog_encid} 
+    ${invCatalogItem}=  Create Dictionary   encId=${inventory_catalog_item_encid} 
+    ${data1}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${EMPTY}        
 
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data1} 
     Log   ${resp.content}
@@ -291,7 +297,9 @@ JD-TC-Create Stock Adjustment-UH6
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
     Set Suite Variable  ${quantity}  
-    ${data3}=  Create Dictionary   invCatalogId=${inventory_catalog_encid1}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity}    
+    ${invCatalog}=  Create Dictionary   encId=${inventory_catalog_encid1} 
+    ${invCatalogItem}=  Create Dictionary   encId=${inventory_catalog_item_encid} 
+    ${data3}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity}  
     Set Suite Variable  ${data3}  
 
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid1}   ${remarks_encid1}    ${data3} 
@@ -322,7 +330,10 @@ JD-TC-Create Stock Adjustment-UH8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${data1}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=0
+    ${invCatalog}=  Create Dictionary   encId=${inventory_catalog_encid} 
+    ${invCatalogItem}=  Create Dictionary   encId=${inventory_catalog_item_encid} 
+    ${data1}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=0  
+
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
@@ -337,7 +348,10 @@ JD-TC-Create Stock Adjustment-UH9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${data1}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${EMPTY}    qty=1
+    ${invCatalog}=  Create Dictionary   encId=${inventory_catalog_encid} 
+    ${invCatalogItem}=  Create Dictionary   encId=${EMPTY} 
+    ${data1}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=1
+
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data1} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422

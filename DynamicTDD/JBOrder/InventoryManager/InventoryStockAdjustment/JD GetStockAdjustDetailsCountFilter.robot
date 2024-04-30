@@ -185,7 +185,9 @@ JD-TC-Get Item Stock adjust Details Counter Filter-1
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
     Set Suite Variable  ${quantity}  
-    ${data}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity}    
+    ${invCatalog}=  Create Dictionary   encId=${inventory_catalog_encid} 
+    ${invCatalogItem}=  Create Dictionary   encId=${inventory_catalog_item_encid} 
+    ${data}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity}     
     Set Suite Variable  ${data}  
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data} 
     Log   ${resp.content}
@@ -297,11 +299,13 @@ JD-TC-Get Item Stock adjust Details Counter Filter-6
 
     ${quantity1}=   Random Int  min=5  max=10
     ${quantity1}=  Convert To Number  ${quantity1}  1
-    ${data1}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity1}    
+    ${invCatalog}=  Create Dictionary   encId=${inventory_catalog_encid} 
+    ${invCatalogItem}=  Create Dictionary   encId=${inventory_catalog_item_encid} 
+    ${data1}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity1}      
 
     ${quantity2}=   Random Int  min=10  max=15
     ${quantity2}=  Convert To Number  ${quantity2}  1
-    ${data2}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity2}   
+    ${data2}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity2}     
 
     ${resp}=  Update Stock Adjustment  ${uid}   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data}   ${data1}   ${data2}
     Log   ${resp.content}
@@ -341,7 +345,9 @@ JD-TC-Get Item Stock adjust Details Counter Filter-7
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
     Set Suite Variable  ${quantity}  
-    ${data3}=  Create Dictionary   invCatalogId=${inventory_catalog_encid1}   invCatalogItemId=${inventory_catalog_item_encid1}    qty=${quantity}    
+    ${invCatalog}=  Create Dictionary   encId=${inventory_catalog_encid1} 
+    ${invCatalogItem}=  Create Dictionary   encId=${inventory_catalog_item_encid1} 
+    ${data3}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity}     
     Set Suite Variable  ${data3}  
 
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid1}   ${remarks_encid1}    ${data3} 
@@ -390,11 +396,13 @@ JD-TC-Get Item Stock adjust Details Counter Filter-UH2
 
     ${quantity1}=   Random Int  min=5  max=10
     ${quantity1}=  Convert To Number  ${quantity1}  1
-    ${data1}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity1}    
+    ${invCatalog}=  Create Dictionary   encId=${inventory_catalog_encid} 
+    ${invCatalogItem}=  Create Dictionary   encId=${inventory_catalog_item_encid} 
+    ${data1}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity1}     
 
     ${quantity2}=   Random Int  min=10  max=15
     ${quantity2}=  Convert To Number  ${quantity2}  1
-    ${data2}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity2}   
+    ${data2}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity2}    
 
     ${resp}=  Update Stock Adjustment  ${uid}   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data}   ${data1}   ${data2}
     Log   ${resp.content}
