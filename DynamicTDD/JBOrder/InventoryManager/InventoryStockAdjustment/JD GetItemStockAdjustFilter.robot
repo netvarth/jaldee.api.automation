@@ -145,6 +145,16 @@ JD-TC-Get Item Stock adjust Filter-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
 
+    ${resp}=    Get Item Inventory  ${itemEncId1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable         ${spitem_name}  ${resp.json()['name']}     
+    Set Suite Variable         ${spitem_id}  ${resp.json()['id']}     
+    Set Suite Variable         ${spitem_itemSourceEnum}  ${resp.json()['itemSourceEnum']}                                  
+    Set Suite Variable         ${spitem_isInventoryItem}  ${resp.json()['isInventoryItem']}      
+    Set Suite Variable         ${spitem_isBatchApplicable}  ${resp.json()['isBatchApplicable']}                                                                                           
+    Set Suite Variable         ${spitem_status}  ${resp.json()['status']} 
+
     ${categoryName}=    FakerLibrary.name
     Set Suite Variable  ${categoryName}
 
@@ -180,8 +190,10 @@ JD-TC-Get Item Stock adjust Filter-1
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
     Set Suite Variable  ${quantity}  
-    ${data}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity}    
-    Set Suite Variable  ${data}  
+    ${invCatalog}=  Create Dictionary   encId=${inventory_catalog_encid} 
+    ${invCatalogItem}=  Create Dictionary   encId=${inventory_catalog_item_encid} 
+    ${data}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity}    
+    Set Suite Variable  ${data} 
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -191,8 +203,8 @@ JD-TC-Get Item Stock adjust Filter-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()[0]['uid']}    ${uid} 
-    Should Be Equal As Strings    ${resp.json()[0]['location']}    ${locId1}     
-    Should Be Equal As Strings    ${resp.json()[0]['locationName']}   ${place}
+    Should Be Equal As Strings    ${resp.json()[0]['location']}    ${locId1}    
+    Should Be Equal As Strings    ${resp.json()[0]['locationName']}    ${place}   
     Should Be Equal As Strings    ${resp.json()[0]['remark']}     ${remarks}
     Should Be Equal As Strings    ${resp.json()[0]['invStatus']}     ${couponStatus[0]}
     Should Be Equal As Strings    ${resp.json()[0]['store']['name']}    ${Name}
@@ -245,6 +257,7 @@ JD-TC-Get Item Stock adjust Filter-3
     Should Be Equal As Strings    ${resp.json()[0]['catalogDto']['encId']}    ${inventory_catalog_encid}
     Should Be Equal As Strings    ${resp.json()[0]['catalogDto']['status']}    ${InventoryCatalogStatus[0]}
     Should Be Equal As Strings    ${resp.json()[0]['inventoryRemarkDto']['id']}    ${id}
+
 
 JD-TC-Get Item Stock adjust Filter-4
 
@@ -457,11 +470,13 @@ JD-TC-Get Item Stock adjust Filter-13
 
     ${quantity1}=   Random Int  min=5  max=10
     ${quantity1}=  Convert To Number  ${quantity1}  1
-    ${data1}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity1}    
+    ${invCatalog}=  Create Dictionary   encId=${inventory_catalog_encid} 
+    ${invCatalogItem}=  Create Dictionary   encId=${inventory_catalog_item_encid} 
+    ${data1}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity1}    
 
     ${quantity2}=   Random Int  min=10  max=15
     ${quantity2}=  Convert To Number  ${quantity2}  1
-    ${data2}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity2}   
+    ${data2}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity2}   
 
     ${resp}=  Update Stock Adjustment  ${uid}   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data}   ${data1}   ${data2}
     Log   ${resp.content}

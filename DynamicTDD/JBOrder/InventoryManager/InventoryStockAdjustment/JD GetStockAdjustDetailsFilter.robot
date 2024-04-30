@@ -145,6 +145,17 @@ JD-TC-Get Item Stock adjust Details Filter-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
 
+    ${resp}=    Get Item Inventory  ${itemEncId1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable         ${spitem_name}  ${resp.json()['name']}     
+    Set Suite Variable         ${spitem_id}  ${resp.json()['id']}     
+    Set Suite Variable         ${spitem_itemSourceEnum}  ${resp.json()['itemSourceEnum']}                                  
+    Set Suite Variable         ${spitem_isInventoryItem}  ${resp.json()['isInventoryItem']}      
+    Set Suite Variable         ${spitem_isBatchApplicable}  ${resp.json()['isBatchApplicable']}                                                                                           
+    Set Suite Variable         ${spitem_status}  ${resp.json()['status']} 
+
+
     ${categoryName}=    FakerLibrary.name
     Set Suite Variable  ${categoryName}
 
@@ -185,7 +196,9 @@ JD-TC-Get Item Stock adjust Details Filter-1
     ${quantity}=   Random Int  min=5  max=10
     ${quantity}=  Convert To Number  ${quantity}  1
     Set Suite Variable  ${quantity}  
-    ${data}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity}    
+    ${invCatalog}=  Create Dictionary   encId=${inventory_catalog_encid} 
+    ${invCatalogItem}=  Create Dictionary   encId=${inventory_catalog_item_encid} 
+    ${data}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity}    
     Set Suite Variable  ${data}  
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data} 
     Log   ${resp.content}
@@ -202,8 +215,20 @@ JD-TC-Get Item Stock adjust Details Filter-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['id']}    ${id_of_stockadjust} 
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['invCatalogId']}    ${inventory_catalog_encid}     
-    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['encId']}    ${inventory_catalog_encid}  
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['catalogName']}    ${Name}   
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['status']}    ${InventoryCatalogStatus[0]}      
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['encId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['status']}    ${InventoryCatalogStatus[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['batchApplicable']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['lotNumber']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['id']}    ${spitem_id}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['itemSourceEnum']}    ${spitem_itemSourceEnum}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['spCode']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${spitem_name}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity}
 
 JD-TC-Get Item Stock adjust Details Filter-2
@@ -219,8 +244,20 @@ JD-TC-Get Item Stock adjust Details Filter-2
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['id']}    ${id_of_stockadjust} 
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['invCatalogId']}    ${inventory_catalog_encid}     
-    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['encId']}    ${inventory_catalog_encid}  
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['catalogName']}    ${Name}   
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['status']}    ${InventoryCatalogStatus[0]}      
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['encId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['status']}    ${InventoryCatalogStatus[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['batchApplicable']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['lotNumber']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['id']}    ${spitem_id}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['itemSourceEnum']}    ${spitem_itemSourceEnum}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['spCode']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${spitem_name}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity}
 
 
@@ -237,8 +274,20 @@ JD-TC-Get Item Stock adjust Details Filter-3
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['id']}    ${id_of_stockadjust} 
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['invCatalogId']}    ${inventory_catalog_encid}     
-    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['encId']}    ${inventory_catalog_encid}  
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['catalogName']}    ${Name}   
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['status']}    ${InventoryCatalogStatus[0]}      
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['encId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['status']}    ${InventoryCatalogStatus[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['batchApplicable']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['lotNumber']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['id']}    ${spitem_id}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['itemSourceEnum']}    ${spitem_itemSourceEnum}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['spCode']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${spitem_name}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity}
 
 
@@ -257,10 +306,21 @@ JD-TC-Get Item Stock adjust Details Filter-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['id']}    ${id_of_stockadjust} 
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['invCatalogId']}    ${inventory_catalog_encid}     
-    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['encId']}    ${inventory_catalog_encid}  
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['catalogName']}    ${Name}   
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['status']}    ${InventoryCatalogStatus[0]}      
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['encId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['status']}    ${InventoryCatalogStatus[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['batchApplicable']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['lotNumber']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['id']}    ${spitem_id}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['itemSourceEnum']}    ${spitem_itemSourceEnum}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['spCode']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${spitem_name}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity}
-
 
 
 JD-TC-Get Item Stock adjust Details Filter-5
@@ -276,8 +336,20 @@ JD-TC-Get Item Stock adjust Details Filter-5
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['id']}    ${id_of_stockadjust} 
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['invCatalogId']}    ${inventory_catalog_encid}     
-    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['encId']}    ${inventory_catalog_encid}  
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['catalogName']}    ${Name}   
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['status']}    ${InventoryCatalogStatus[0]}      
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['encId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['status']}    ${InventoryCatalogStatus[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['batchApplicable']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['lotNumber']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['id']}    ${spitem_id}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['itemSourceEnum']}    ${spitem_itemSourceEnum}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['spCode']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${spitem_name}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity}
 
 JD-TC-Get Item Stock adjust Details Filter-6
@@ -291,12 +363,15 @@ JD-TC-Get Item Stock adjust Details Filter-6
     ${quantity1}=   Random Int  min=5  max=10
     ${quantity1}=  Convert To Number  ${quantity1}  1
     Set Suite Variable  ${quantity1}
-    ${data1}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity1}    
+    ${invCatalog}=  Create Dictionary   encId=${inventory_catalog_encid} 
+    ${invCatalogItem}=  Create Dictionary   encId=${inventory_catalog_item_encid} 
+    ${data1}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity1}    
+
 
     ${quantity2}=   Random Int  min=10  max=15
     ${quantity2}=  Convert To Number  ${quantity2}  1
     Set Suite Variable  ${quantity2}
-    ${data2}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity2}   
+    ${data2}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity2}      
 
     ${resp}=  Update Stock Adjustment  ${uid}   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data}   ${data1}   ${data2}
     Log   ${resp.content}
@@ -305,22 +380,76 @@ JD-TC-Get Item Stock adjust Details Filter-6
     ${resp}=  Get Item Stock adjust Details Filter    invCatalogId-eq=${inventory_catalog_encid}           
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['id']}    ${id_of_stockadjust} 
+    # Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['invStatus']}    ${InvStatus[0]}
+    # Should Be Equal As Strings    ${resp.json()[0]['invCatalogId']}    ${inventory_catalog_encid}     
+    # Should Be Equal As Strings    ${resp.json()[0]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    # Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity2}
+
+    # Should Be Equal As Strings    ${resp.json()[1]['stockAdjust']['id']}    ${id_of_stockadjust} 
+    # Should Be Equal As Strings    ${resp.json()[1]['stockAdjust']['invStatus']}    ${InvStatus[0]}
+    # Should Be Equal As Strings    ${resp.json()[1]['invCatalogId']}    ${inventory_catalog_encid}     
+    # Should Be Equal As Strings    ${resp.json()[1]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    # Should Be Equal As Strings    ${resp.json()[1]['qty']}     ${quantity1}
+
+    # Should Be Equal As Strings    ${resp.json()[2]['stockAdjust']['id']}    ${id_of_stockadjust} 
+    # Should Be Equal As Strings    ${resp.json()[2]['stockAdjust']['invStatus']}    ${InvStatus[0]}
+    # Should Be Equal As Strings    ${resp.json()[2]['invCatalogId']}    ${inventory_catalog_encid}     
+    # Should Be Equal As Strings    ${resp.json()[2]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    # Should Be Equal As Strings    ${resp.json()[2]['qty']}     ${quantity}
+
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['id']}    ${id_of_stockadjust} 
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['invCatalogId']}    ${inventory_catalog_encid}     
-    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['encId']}    ${inventory_catalog_encid}  
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['catalogName']}    ${Name}   
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['status']}    ${InventoryCatalogStatus[0]}      
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['encId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['status']}    ${InventoryCatalogStatus[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['batchApplicable']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['lotNumber']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['id']}    ${spitem_id}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['itemSourceEnum']}    ${spitem_itemSourceEnum}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['spCode']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${spitem_name}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity2}
 
     Should Be Equal As Strings    ${resp.json()[1]['stockAdjust']['id']}    ${id_of_stockadjust} 
     Should Be Equal As Strings    ${resp.json()[1]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[1]['invCatalogId']}    ${inventory_catalog_encid}     
-    Should Be Equal As Strings    ${resp.json()[1]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[1]['invCatalog']['encId']}    ${inventory_catalog_encid}  
+    Should Be Equal As Strings    ${resp.json()[1]['invCatalog']['catalogName']}    ${Name}   
+    Should Be Equal As Strings    ${resp.json()[1]['invCatalog']['status']}    ${InventoryCatalogStatus[1]}      
+    Should Be Equal As Strings    ${resp.json()[1]['invCatalogItem']['encId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[1]['invCatalogItem']['status']}    ${InventoryCatalogStatus[0]} 
+    Should Be Equal As Strings    ${resp.json()[1]['invCatalogItem']['batchApplicable']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[1]['invCatalogItem']['lotNumber']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[1]['spItem']['id']}    ${spitem_id}
+    Should Be Equal As Strings    ${resp.json()[1]['spItem']['itemSourceEnum']}    ${spitem_itemSourceEnum}
+    Should Be Equal As Strings    ${resp.json()[1]['spItem']['spCode']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[1]['spItem']['name']}    ${spitem_name}
+    Should Be Equal As Strings    ${resp.json()[1]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
+    Should Be Equal As Strings    ${resp.json()[1]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
+    Should Be Equal As Strings    ${resp.json()[1]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[1]['qty']}     ${quantity1}
 
     Should Be Equal As Strings    ${resp.json()[2]['stockAdjust']['id']}    ${id_of_stockadjust} 
     Should Be Equal As Strings    ${resp.json()[2]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[2]['invCatalogId']}    ${inventory_catalog_encid}     
-    Should Be Equal As Strings    ${resp.json()[2]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[2]['invCatalog']['encId']}    ${inventory_catalog_encid}  
+    Should Be Equal As Strings    ${resp.json()[2]['invCatalog']['catalogName']}    ${Name}   
+    Should Be Equal As Strings    ${resp.json()[2]['invCatalog']['status']}    ${InventoryCatalogStatus[1]}      
+    Should Be Equal As Strings    ${resp.json()[2]['invCatalogItem']['encId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[2]['invCatalogItem']['status']}    ${InventoryCatalogStatus[0]} 
+    Should Be Equal As Strings    ${resp.json()[2]['invCatalogItem']['batchApplicable']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[2]['invCatalogItem']['lotNumber']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[2]['spItem']['id']}    ${spitem_id}
+    Should Be Equal As Strings    ${resp.json()[2]['spItem']['itemSourceEnum']}    ${spitem_itemSourceEnum}
+    Should Be Equal As Strings    ${resp.json()[2]['spItem']['spCode']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[2]['spItem']['name']}    ${spitem_name}
+    Should Be Equal As Strings    ${resp.json()[2]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
+    Should Be Equal As Strings    ${resp.json()[2]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
+    Should Be Equal As Strings    ${resp.json()[2]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[2]['qty']}     ${quantity}
 
 JD-TC-Get Item Stock adjust Details Filter-7
@@ -347,7 +476,10 @@ JD-TC-Get Item Stock adjust Details Filter-7
     ${quantity3}=   Random Int  min=5  max=10
     ${quantity3}=  Convert To Number  ${quantity3}  1
     Set Suite Variable  ${quantity3}  
-    ${data3}=  Create Dictionary   invCatalogId=${inventory_catalog_encid1}   invCatalogItemId=${inventory_catalog_item_encid1}    qty=${quantity3}    
+
+    ${invCatalog3}=  Create Dictionary   encId=${inventory_catalog_encid1} 
+    ${invCatalogItem3}=  Create Dictionary   encId=${inventory_catalog_item_encid1} 
+    ${data3}=  Create Dictionary   invCatalog=${invCatalog3}   invCatalogItem=${invCatalogItem3}    qty=${quantity3}     
     Set Suite Variable  ${data3}  
 
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid1}   ${remarks_encid1}    ${data3} 
@@ -363,28 +495,100 @@ JD-TC-Get Item Stock adjust Details Filter-7
     ${resp}=  Get Item Stock adjust Details Filter    account-eq=${accountId}            
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['id']}    ${id_of_stockadjust1} 
+    # Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['invStatus']}    ${InvStatus[0]}
+    # Should Be Equal As Strings    ${resp.json()[0]['invCatalogId']}    ${inventory_catalog_encid1}     
+    # Should Be Equal As Strings    ${resp.json()[0]['invCatalogItemId']}   ${inventory_catalog_item_encid1}
+    # Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity3}
+
+    # Should Be Equal As Strings    ${resp.json()[1]['stockAdjust']['id']}    ${id_of_stockadjust} 
+    # Should Be Equal As Strings    ${resp.json()[1]['stockAdjust']['invStatus']}    ${InvStatus[0]}
+    # Should Be Equal As Strings    ${resp.json()[1]['invCatalogId']}    ${inventory_catalog_encid}     
+    # Should Be Equal As Strings    ${resp.json()[1]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    # Should Be Equal As Strings    ${resp.json()[1]['qty']}     ${quantity2}
+
+    # Should Be Equal As Strings    ${resp.json()[2]['stockAdjust']['id']}    ${id_of_stockadjust} 
+    # Should Be Equal As Strings    ${resp.json()[2]['stockAdjust']['invStatus']}    ${InvStatus[0]}
+    # Should Be Equal As Strings    ${resp.json()[2]['invCatalogId']}    ${inventory_catalog_encid}     
+    # Should Be Equal As Strings    ${resp.json()[2]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    # Should Be Equal As Strings    ${resp.json()[2]['qty']}     ${quantity1}
+
+    # Should Be Equal As Strings    ${resp.json()[3]['stockAdjust']['id']}    ${id_of_stockadjust} 
+    # Should Be Equal As Strings    ${resp.json()[3]['stockAdjust']['invStatus']}    ${InvStatus[0]}
+    # Should Be Equal As Strings    ${resp.json()[3]['invCatalogId']}    ${inventory_catalog_encid}     
+    # Should Be Equal As Strings    ${resp.json()[3]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    # Should Be Equal As Strings    ${resp.json()[3]['qty']}     ${quantity}
+
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['id']}    ${id_of_stockadjust1} 
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['invCatalogId']}    ${inventory_catalog_encid1}     
-    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItemId']}   ${inventory_catalog_item_encid1}
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['encId']}    ${inventory_catalog_encid1}  
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['catalogName']}    ${Name1}   
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalog']['status']}    ${InventoryCatalogStatus[0]}      
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['encId']}   ${inventory_catalog_item_encid1}
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['status']}    ${InventoryCatalogStatus[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['batchApplicable']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['invCatalogItem']['lotNumber']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['id']}    ${spitem_id}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['itemSourceEnum']}    ${spitem_itemSourceEnum}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['spCode']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${spitem_name}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
+    Should Be Equal As Strings    ${resp.json()[0]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity3}
 
     Should Be Equal As Strings    ${resp.json()[1]['stockAdjust']['id']}    ${id_of_stockadjust} 
     Should Be Equal As Strings    ${resp.json()[1]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[1]['invCatalogId']}    ${inventory_catalog_encid}     
-    Should Be Equal As Strings    ${resp.json()[1]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[1]['invCatalog']['encId']}    ${inventory_catalog_encid}  
+    Should Be Equal As Strings    ${resp.json()[1]['invCatalog']['catalogName']}    ${Name}   
+    Should Be Equal As Strings    ${resp.json()[1]['invCatalog']['status']}    ${InventoryCatalogStatus[0]}      
+    Should Be Equal As Strings    ${resp.json()[1]['invCatalogItem']['encId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[1]['invCatalogItem']['status']}    ${InventoryCatalogStatus[0]} 
+    Should Be Equal As Strings    ${resp.json()[1]['invCatalogItem']['batchApplicable']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[1]['invCatalogItem']['lotNumber']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[1]['spItem']['id']}    ${spitem_id}
+    Should Be Equal As Strings    ${resp.json()[1]['spItem']['itemSourceEnum']}    ${spitem_itemSourceEnum}
+    Should Be Equal As Strings    ${resp.json()[1]['spItem']['spCode']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[1]['spItem']['name']}    ${spitem_name}
+    Should Be Equal As Strings    ${resp.json()[1]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
+    Should Be Equal As Strings    ${resp.json()[1]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
+    Should Be Equal As Strings    ${resp.json()[1]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[1]['qty']}     ${quantity2}
 
     Should Be Equal As Strings    ${resp.json()[2]['stockAdjust']['id']}    ${id_of_stockadjust} 
     Should Be Equal As Strings    ${resp.json()[2]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[2]['invCatalogId']}    ${inventory_catalog_encid}     
-    Should Be Equal As Strings    ${resp.json()[2]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[2]['invCatalog']['encId']}    ${inventory_catalog_encid}  
+    Should Be Equal As Strings    ${resp.json()[2]['invCatalog']['catalogName']}    ${Name}   
+    Should Be Equal As Strings    ${resp.json()[2]['invCatalog']['status']}    ${InventoryCatalogStatus[0]}      
+    Should Be Equal As Strings    ${resp.json()[2]['invCatalogItem']['encId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[2]['invCatalogItem']['status']}    ${InventoryCatalogStatus[0]} 
+    Should Be Equal As Strings    ${resp.json()[2]['invCatalogItem']['batchApplicable']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[2]['invCatalogItem']['lotNumber']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[2]['spItem']['id']}    ${spitem_id}
+    Should Be Equal As Strings    ${resp.json()[2]['spItem']['itemSourceEnum']}    ${spitem_itemSourceEnum}
+    Should Be Equal As Strings    ${resp.json()[2]['spItem']['spCode']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[2]['spItem']['name']}    ${spitem_name}
+    Should Be Equal As Strings    ${resp.json()[2]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
+    Should Be Equal As Strings    ${resp.json()[2]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
+    Should Be Equal As Strings    ${resp.json()[2]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[2]['qty']}     ${quantity1}
 
     Should Be Equal As Strings    ${resp.json()[3]['stockAdjust']['id']}    ${id_of_stockadjust} 
     Should Be Equal As Strings    ${resp.json()[3]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    Should Be Equal As Strings    ${resp.json()[3]['invCatalogId']}    ${inventory_catalog_encid}     
-    Should Be Equal As Strings    ${resp.json()[3]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[3]['invCatalog']['encId']}    ${inventory_catalog_encid}  
+    Should Be Equal As Strings    ${resp.json()[3]['invCatalog']['catalogName']}    ${Name}   
+    Should Be Equal As Strings    ${resp.json()[3]['invCatalog']['status']}    ${InventoryCatalogStatus[0]}      
+    Should Be Equal As Strings    ${resp.json()[3]['invCatalogItem']['encId']}   ${inventory_catalog_item_encid}
+    Should Be Equal As Strings    ${resp.json()[3]['invCatalogItem']['status']}    ${InventoryCatalogStatus[0]} 
+    Should Be Equal As Strings    ${resp.json()[3]['invCatalogItem']['batchApplicable']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[3]['invCatalogItem']['lotNumber']}    ${bool[0]} 
+    Should Be Equal As Strings    ${resp.json()[3]['spItem']['id']}    ${spitem_id}
+    Should Be Equal As Strings    ${resp.json()[3]['spItem']['itemSourceEnum']}    ${spitem_itemSourceEnum}
+    Should Be Equal As Strings    ${resp.json()[3]['spItem']['spCode']}    ${itemEncId1}
+    Should Be Equal As Strings    ${resp.json()[3]['spItem']['name']}    ${spitem_name}
+    Should Be Equal As Strings    ${resp.json()[3]['spItem']['isInventoryItem']}    ${spitem_isInventoryItem}
+    Should Be Equal As Strings    ${resp.json()[3]['spItem']['isBatchApplicable']}    ${spitem_isBatchApplicable}
+    Should Be Equal As Strings    ${resp.json()[3]['spItem']['status']}    ${spitem_status}
     Should Be Equal As Strings    ${resp.json()[3]['qty']}     ${quantity}
 
 JD-TC-Get Item Stock adjust Details Filter-UH1
@@ -414,11 +618,13 @@ JD-TC-Get Item Stock adjust Details Filter-UH2
 
     ${quantity1}=   Random Int  min=5  max=10
     ${quantity1}=  Convert To Number  ${quantity1}  1
-    ${data1}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity1}    
+    ${invCatalog}=  Create Dictionary   encId=${inventory_catalog_encid} 
+    ${invCatalogItem}=  Create Dictionary   encId=${inventory_catalog_item_encid} 
+    ${data1}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity1}    
 
     ${quantity2}=   Random Int  min=10  max=15
     ${quantity2}=  Convert To Number  ${quantity2}  1
-    ${data2}=  Create Dictionary   invCatalogId=${inventory_catalog_encid}   invCatalogItemId=${inventory_catalog_item_encid}    qty=${quantity2}   
+    ${data2}=  Create Dictionary   invCatalog=${invCatalog}   invCatalogItem=${invCatalogItem}    qty=${quantity2}   
 
     ${resp}=  Update Stock Adjustment  ${uid}   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data}   ${data1}   ${data2}
     Log   ${resp.content}
