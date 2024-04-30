@@ -1467,12 +1467,12 @@ uploadGalleryImageMultiple
     RETURN  ${resp} 
    
 uploadLogoImages
-    [Arguments]  ${Cookie}
+    [Arguments]  ${Cookie}  ${image}=/ebs/TDD/images1.jpeg
     ${prop}=  Create Dictionary  caption=logo
     ${prop}=  json.dumps  ${prop}
     Create File  TDD/logo.json  ${prop}  
     # ${resp}=  uploadLogoImage  
-    ${resp}=  uploadProviderLogo   ${cookie}
+    ${resp}=  uploadProviderLogo   ${cookie}  ${image}
     RETURN  ${resp}
     
 uploadServiceImages

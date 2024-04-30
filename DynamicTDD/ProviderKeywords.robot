@@ -48,7 +48,6 @@ Claim SignUp
     ${resp}=    POST On Session   ynw    /provider    data=${data}  expected_status=any
     RETURN  ${resp}
 
-
 Account Activation
     [Arguments]  ${email}  ${purpose}
     Check And Create YNW Session
@@ -248,6 +247,18 @@ Update Business Profile without phone and email
     RETURN  ${resp}
 
 
+Update Business Profile with kwargs
+    [Arguments]  &{kwargs}
+    ${data}=  Create Dictionary
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+
 Get Business Profile
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/bProfile  expected_status=any
@@ -345,6 +356,7 @@ Get Location ById
     RETURN  ${resp}
 
 Get Locations
+    # No filters
     Check And Create YNW Session
     ${resp}=    GET On Session    ynw   /provider/locations  expected_status=any
     RETURN  ${resp}
@@ -1391,6 +1403,7 @@ Update Virtual Service
 
 
 Get Service
+    # Filters: id, name, status, account, serviceDuration, serviceType, serviceCategory, department, provider, notificationType, labels, channelRestricted
     [Arguments]  &{param}
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/services  params=${param}  expected_status=any
@@ -2112,22 +2125,22 @@ uploadGalleryImageMultiple
     RETURN  ${resp} 
    
 uploadLogoImages
-    [Arguments]  ${Cookie}
+    [Arguments]  ${Cookie}  ${image}=/ebs/TDD/images1.jpeg
     ${prop}=  Create Dictionary  caption=logo
     ${prop}=  json.dumps  ${prop}
     Create File  TDD/logo.json  ${prop}  
     # ${resp}=  uploadLogoImage
-    ${resp}=  uploadProviderLogo   ${cookie}  
+    ${resp}=  uploadProviderLogo   ${cookie}  ${image}
     RETURN  ${resp}
 
 
 uploadLogoImagesofUSER
-    [Arguments]  ${providerId}  ${cookie}
+    [Arguments]  ${providerId}  ${cookie}  ${image}=/ebs/TDD/images1.jpeg
     ${prop}=  Create Dictionary  caption=logo
     ${prop}=  json.dumps  ${prop}
     Create File  TDD/logo.json  ${prop}  
     # ${resp}=  uploadLogoImageofUSER   ${providerId} 
-    ${resp}=  uploadUserLogo  ${cookie}   ${providerId}
+    ${resp}=  uploadUserLogo  ${cookie}   ${providerId}  ${image}
     RETURN  ${resp}
 
     
@@ -10016,10 +10029,15 @@ Loan Application Branchapproval
 
 Add Business Logo
 
-    [Arguments]    ${owner}    ${fileName}    ${fileSize}    ${action}    ${caption}    ${fileType}    ${order}
+    [Arguments]    ${owner}    ${fileName}    ${fileSize}    ${action}    ${caption}    ${fileType}    ${order}  &{kwargs}
 
     ${AttachmentsUpload}=  Create List
     ${Attachment}=    Create Dictionary    owner=${owner}    fileName=${fileName}    fileSize=${fileSize}    action=${action}    caption=${caption}    fileType=${fileType}    order=${order}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        IF  '${key}' == 'driveId'
+            Set To Dictionary  ${Attachment}   ${key}=${value}
+        END
+    END
     Append To List  ${AttachmentsUpload}  ${Attachment}
     
     ${data}=    json.dumps    ${AttachmentsUpload}
