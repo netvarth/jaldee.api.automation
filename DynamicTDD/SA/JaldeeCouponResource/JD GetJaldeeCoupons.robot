@@ -16,7 +16,7 @@ Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 
 
-*** Variable ***
+*** Variables ***
 ${tz}   Asia/Kolkata
 
 *** Test Cases ***

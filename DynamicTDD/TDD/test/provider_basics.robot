@@ -23,11 +23,13 @@ ${test_mail}              test@jaldee.com
 ${count}                  ${1}
 ${var_file}               ${EXECDIR}/data/${ENVIRONMENT}_varfiles/providers.py
 ${data_file}              ${EXECDIR}/data/${ENVIRONMENT}data/${ENVIRONMENT}phnumbers.txt
-${jpgfile}                /ebs/TDD/uploadimage.jpg
+${jpgfile}                /ebs/TDD/images.jpeg
 ${order}                  0
 # ${coverpic}               /ebs/TDD/coverpic.jpg
 ${coverimg}               /ebs/TDD/cover.jpg
 ${coverpic}               /ebs/TDD/banner.jpg
+${logoimg}                /ebs/TDD/images1.jpeg
+@{salutations}                  MR  MRS
 
 *** Test Cases ***
 
@@ -47,7 +49,7 @@ JD-TC-Change Password-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Business Profile
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${createdDAY}  ${resp.json()['createdDate']}
 
@@ -85,71 +87,40 @@ JD-TC-Change Password-1
     ${resp}=  Encrypted Provider Login  ${number}  ${PASSWORD}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    comment  Upload business logo for provider
+    comment  change login id
 
+    ${PH_Number}=  FakerLibrary.Numerify  %#####
+    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
+    Log  ${PH_Number}
+    Set Test Variable  ${PUSERPH}  555${PH_Number}
+
+    ${resp}=  Send Verify Login   ${PUSERPH}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Verify Login   ${PUSERPH}  ${OtpPurpose['ProviderVerifyEmail']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Encrypted Provider Login  ${PUSERPH}  ${PASSWORD} 
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    comment  change login id back to original number
+
+    ${resp}=  Send Verify Login   ${number}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=  Verify Login   ${number}  ${OtpPurpose['ProviderVerifyEmail']}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    
+    ${resp}=   Encrypted Provider Login  ${number}  ${PASSWORD} 
+    Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data  ${resp.content}
     Log  ${decrypted_data}
     Set Test Variable  ${provider_id}  ${decrypted_data['id']}
+    Set Test Variable  ${firstname}  ${decrypted_data['firstName']}
+    Set Test Variable  ${lastname}  ${decrypted_data['lastName']}
     Set Test Variable   ${domain}  ${decrypted_data['sector']}
     Set Test Variable   ${subdomain}  ${decrypted_data['subSector']}
-
-    ${fileSize}=  OperatingSystem.Get File Size  ${jpgfile}
-    ${type}=  db.getType   ${jpgfile}
-    # Log  ${type}
-    ${fileType1}=  Get From Dictionary       ${type}    ${jpgfile}
-    ${caption1}=  Fakerlibrary.Sentence
-    ${path} 	${file} = 	Split String From Right 	${jpgfile} 	/ 	1
-    ${fileName}  ${file_ext}= 	Split String 	${file}  .
-
-    ${resp}=    Add Business Logo    ${provider_id}    ${fileName}    ${fileSize}    ${FileAction[0]}    ${caption1}    ${fileType1}    ${order}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=    Get Business Logo
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}              200
-    Should Be Equal As Strings    ${resp.json()[0]['owner']}       ${provider_id}
-    Should Be Equal As Strings    ${resp.json()[0]['fileName']}    ${fileName}
-    Should Be Equal As Strings    ${resp.json()[0]['fileSize']}    ${{float('${fileSize}')}}
-    # Should Be Equal As Strings    ${resp.json()[0]['caption']}     ${caption1}
-    Should Be Equal As Strings    ${resp.json()[0]['fileType']}    ${fileType1}
-    Should Be Equal As Strings    ${resp.json()[0]['action']}      ${FileAction[0]}
-
-
-    comment  Upload cover photo
-
-    ${cookie}  ${resp}=   Imageupload.spLogin  ${number}  ${PASSWORD}
-    # Log   ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200    
-    
-    ${caption1}=  Fakerlibrary.Sentence
-    ${resp}=    Upload Cover Picture  ${cookie}  ${caption1}  ${coverpic}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    
-    ${fileSize}=  OperatingSystem.Get File Size  ${coverpic}
-    # ${inMB}=  Evaluate  ${fileSize/1024*1024}
-    # ${inMB_rounded}=  Evaluate  round(${${fileSize/1024}/1024}, 3)
-    ${inMB_rounded}=  Evaluate  round(${fileSize} / (1024 * 1024), 3)
-
-    ${type}=  db.getType   ${coverpic}
-    # Log  ${type}
-    ${fileType}=  Get From Dictionary       ${type}    ${coverpic}
-    ${fileType1}=  Remove String    ${fileType}    .
-    # ${path} 	${file} = 	Split String From Right 	${coverpic} 	/ 	1
-    # ${fileName}  ${file_ext}= 	Split String 	${file}  .
-    ${filename}  ${ext}= 	Split String From Right 	${coverpic} 	. 	1
-    
-    ${resp}=    Get Cover Picture
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}  200 
-    Should Be Equal As Strings    ${resp.json()[0]['keyName']}       coverjpg
-    Should Be Equal As Strings    ${resp.json()[0]['caption']}     ${caption1}
-    Should Be Equal As Strings    ${resp.json()[0]['prefix']}    cover
-    Should Be Equal As Strings    ${resp.json()[0]['type']}    ${fileType1}
-    Should Be Equal As Strings    ${resp.json()[0]['originalName']}    ${filename}
-    Should Be Equal As Strings    ${resp.json()[0]['size']}    ${inMB_rounded}
-    Should Be Equal As Strings    ${resp.json()[0]['contentLength']}      ${fileSize}
+    Set Suite Variable    ${username}    ${decrypted_data['userName']}
 
     # ${resp}=  Get Locations
     # Should Be Equal As Strings  ${resp.status_code}  200
@@ -169,12 +140,12 @@ JD-TC-Change Password-1
     ${tz}=   db.get_Timezone_by_lat_long   ${latti}  ${longi}
     Set Test Variable  ${tz}
     ${DAY1}=  db.get_date_by_timezone  ${tz}
-    ${resp}=  Update Business Profile without schedule   ${bs}  ${bs} Description   ${companySuffix}  ${city}  ${longi}  ${latti}  www.${bs}.com  free  True  ${postcode}  ${address}  ${EMPTY}  ${EMPTY}  ${emails1}  ${EMPTY}
-    Log  ${resp.json()}
+    ${resp}=  Update Business Profile without schedule   ${bs}  ${bs} Description   ${companySuffix}  ${city}  ${longi}  ${latti}  ${url}  free  True  ${postcode}  ${address}  ${EMPTY}  ${EMPTY}  ${emails1}  ${EMPTY}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=  Get Business Profile
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response  ${resp}  businessName=${bs}  businessDesc=${bs} Description  shortName=${companySuffix}  status=ACTIVE  createdDate=${createdDAY}  updatedDate=${DAY1}
     Should Be Equal As Strings  ${resp.json()['serviceSector']['domain']}  ${domain}
@@ -216,38 +187,97 @@ JD-TC-Change Password-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    comment  change login id
+    comment  Upload business logo for provider
 
-    ${PH_Number}=  FakerLibrary.Numerify  %#####
-    ${PH_Number}=    Evaluate    f'{${PH_Number}:0>7d}'
-    Log  ${PH_Number}
-    Set Test Variable  ${PUSERPH}  555${PH_Number}
+    ${fileSize}=  OperatingSystem.Get File Size  ${jpgfile}
+    ${type}=  db.getType   ${jpgfile}
+    # Log  ${type}
+    ${fileType}=  Get From Dictionary       ${type}    ${jpgfile}
+    ${caption}=  Fakerlibrary.Sentence
+    ${path} 	${file} = 	Split String From Right 	${jpgfile} 	/ 	1
+    ${fileName}  ${file_ext}= 	Split String 	${file}  .
 
-    ${resp}=  Send Verify Login   ${PUSERPH}
+    # ${resp}    upload file to temporary location    ${file_action[0]}    ${provider_id}    ${ownerType[0]}    ${username}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings     ${resp.status_code}    200 
+    # Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+
+    # ${resp}    change status of the uploaded file    ${QnrStatus[1]}    ${driveId}
+    # Log  ${resp.content}
+    # Should Be Equal As Strings     ${resp.status_code}    200
+
+    # ${resp}=    Add Business Logo    ${provider_id}    ${fileName}    ${fileSize}    ${FileAction[0]}    ${caption}    ${fileType}    ${order}  driveId=${driveId}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${resp}=    Get Business Logo
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}              200
+    # Should Be Equal As Strings    ${resp.json()[0]['owner']}       ${provider_id}
+    # Should Be Equal As Strings    ${resp.json()[0]['fileName']}    ${fileName}
+    # Should Be Equal As Strings    ${resp.json()[0]['fileSize']}    ${{float('${fileSize}')}}
+    # # Should Be Equal As Strings    ${resp.json()[0]['caption']}     ${caption1}
+    # Should Be Equal As Strings    ${resp.json()[0]['fileType']}    ${fileType}
+    # Should Be Equal As Strings    ${resp.json()[0]['action']}      ${FileAction[0]}
+
+    comment  Upload business logo image
+
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${number}  ${PASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200  
+    
+    ${resp}=  uploadLogoImages   ${cookie}  ${jpgfile}
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Verify Login   ${PUSERPH}  ${OtpPurpose['ProviderVerifyEmail']}
+
+    ${resp}=  Get GalleryOrlogo image  logo
     Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   Encrypted Provider Login  ${PUSERPH}  ${PASSWORD} 
+    Should Be Equal As Strings  ${resp.json()[0]['prefix']}  logo
+
+    ${resp}=    Get Business Logo
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+
+    comment  Upload cover photo
+
+    ${cookie}  ${resp}=   Imageupload.spLogin  ${number}  ${PASSWORD}
+    # Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200    
+    
+    ${caption1}=  Fakerlibrary.Sentence
+    ${resp}=    Upload Cover Picture  ${cookie}  ${caption1}  ${coverpic}
+    Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    comment  change login id back to original number
+    
+    ${fileSize}=  OperatingSystem.Get File Size  ${coverpic}
+    # ${inMB}=  Evaluate  ${fileSize/1024*1024}
+    # ${inMB_rounded}=  Evaluate  round(${${fileSize/1024}/1024}, 3)
+    ${inMB_rounded}=  Evaluate  round(${fileSize} / (1024 * 1024), 3)
 
-    ${resp}=  Send Verify Login   ${number}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=  Verify Login   ${number}  ${OtpPurpose['ProviderVerifyEmail']}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    ${resp}=   Encrypted Provider Login  ${number}  ${PASSWORD} 
-    Should Be Equal As Strings    ${resp.status_code}    200
-    ${decrypted_data}=  db.decrypt_data  ${resp.content}
-    Log  ${decrypted_data}
-    Set Test Variable  ${provider_id}  ${decrypted_data['id']}
-    Set Test Variable  ${firstname}  ${decrypted_data['firstName']}
-    Set Test Variable  ${lastname}  ${decrypted_data['lastName']}
+    ${type}=  db.getType   ${coverpic}
+    # Log  ${type}
+    ${fileType}=  Get From Dictionary       ${type}    ${coverpic}
+    ${fileType1}=  Remove String    ${fileType}    .
+    # ${path} 	${file} = 	Split String From Right 	${coverpic} 	/ 	1
+    # ${fileName}  ${file_ext}= 	Split String 	${file}  .
+    ${filename}  ${ext}= 	Split String From Right 	${coverpic} 	. 	1
+    
+    ${resp}=    Get Cover Picture
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}  200 
+    Should Be Equal As Strings    ${resp.json()[0]['keyName']}       coverjpg
+    Should Be Equal As Strings    ${resp.json()[0]['caption']}     ${caption1}
+    Should Be Equal As Strings    ${resp.json()[0]['prefix']}    cover
+    Should Be Equal As Strings    ${resp.json()[0]['type']}    ${fileType1}
+    Should Be Equal As Strings    ${resp.json()[0]['originalName']}    ${filename}
+    Should Be Equal As Strings    ${resp.json()[0]['size']}    ${inMB_rounded}
+    Should Be Equal As Strings    ${resp.json()[0]['contentLength']}      ${fileSize}
 
     comment  change account details.
 
     ${resp}=  Get Provider Details    ${provider_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['basicInfo']['id']}          ${provider_id}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['firstName']}   ${firstname}
@@ -263,11 +293,11 @@ JD-TC-Change Password-1
     ${gender}=  Random Element    ${Genderlist}
     Set Test Variable  ${email}  ${firstName1}${number}.${test_mail}
     ${resp}=   Update Service Provider With Emailid    ${provider_id}  ${firstName1}  ${lastName1}  ${gender}  ${dob}  ${email}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${resp}=  Get Provider Details    ${provider_id}
-    Log  ${resp.json()}
+    Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings  ${resp.json()['basicInfo']['id']}          ${provider_id}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['firstName']}   ${firstname1}
@@ -277,7 +307,7 @@ JD-TC-Change Password-1
     Should Be Equal As Strings  ${resp.json()['basicInfo']['emailVerified']}   ${bool[1]} 
     Should Be Equal As Strings  ${resp.json()['basicInfo']['phoneVerified']}   ${bool[1]}
 
-    ${resp}=   Encrypted Provider Login  ${email}  ${PASSWORD} 
+    ${resp}=   Encrypted Provider Login  ${number}.${email}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200
     
     ${resp}=  Provider Logout
@@ -286,6 +316,32 @@ JD-TC-Change Password-1
     ${resp}=   Encrypted Provider Login  ${number}  ${PASSWORD} 
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Provider Logout
+    # ${resp}=  Provider Logout
+    # Should Be Equal As Strings  ${resp.status_code}  200
+
+    comment  check account contact informtion
+
+    ${resp}=  Get Account contact information
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    # ${resp}=  Get customer salutations
+    # Log  ${resp.content}
+    # Should Be Equal As Strings  ${resp.status_code}  200
+    # ${salutation}=  Random Element    ${resp.json()}
+    # Log  ${salutation['name']}
+    # ${salutation}=  Evaluate  random.choice($salutations)  random
+    ${salutation}=  Random Element    ${salutations}
+
+    ${resp}=  Update Account contact information   ${number}   ${number}.${email}  ${PUSERPH}   ${PUSERPH}  ${number}.${email}  ${salutation}  ${firstname}  ${lastname}  ${countryCodes[1]}  ${countryCodes[1]}  ${countryCodes[1]}
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Account contact information
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

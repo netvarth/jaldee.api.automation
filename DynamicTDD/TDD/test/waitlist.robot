@@ -98,7 +98,7 @@ JD-TC-AddToWL-1
         END
 
         ${s_id}=  Set Variable  ${NONE}
-        ${resp}=   Get Service
+        ${resp}=   Get Service  serviceType-neq=donationService
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         # IF   '${resp.content}' != '${emptylist}'

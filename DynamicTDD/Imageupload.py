@@ -45,10 +45,10 @@ SA_BASE_URL = "http://"+HOST+"/superadmin/rest/mgmt"
 # New Functions with Session and Request
 
 pic1='/ebs/TDD/upload.png'
-pic2='/ebs/TDD/uploadimage.jpg'
+pic2='/ebs/TDD/images2.jpg'
 pic3='/ebs/TDD/small.jpg'
 pic4='/ebs/TDD/large.jpeg'
-logoimg='/ebs/TDD/uploadlogo.jpg'
+logoimg='/ebs/TDD/images1.jpeg'
 profpic='/ebs/TDD/image.jpg'
 itempty='/ebs/TDD/proper.json'
 servicepty='/ebs/TDD/Service.json'
@@ -324,7 +324,7 @@ def galleryImgUpload(cookie_dict,img=pic2,img1=pic3,img2=pic4,ppty=gallerypty,fl
 
 
 #UPLOAD PROVIDER LOGO IMAGE
-def uploadProviderLogo(cookie_dict,ppty=logopty,img=logoimg):
+def uploadProviderLogo(cookie_dict,img,ppty=logopty,):
     url = BASE_URL + '/provider/logo'
     s = requests.Session()
     s.cookies.update(cookie_dict)      
@@ -349,7 +349,7 @@ def uploadProviderLogo(cookie_dict,ppty=logopty,img=logoimg):
         print ("Exception at line no:", e.__traceback__.tb_lineno)
 
 #UPLOAD USER LOGO IMAGE
-def uploadUserLogo(cookie_dict,providerId,ppty=logopty,img=logoimg):
+def uploadUserLogo(cookie_dict,providerId,img,ppty=logopty,):
     url = BASE_URL + '/provider/user/logo/'+str(providerId)
     s = requests.Session()
     s.cookies.update(cookie_dict)      

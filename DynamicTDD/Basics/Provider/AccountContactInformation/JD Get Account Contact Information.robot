@@ -32,7 +32,7 @@ JD-TC-Get Account Contact information-1
     ${resp}=  Account Activation  ${PUSERNAME}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     
-*** Comments ***
+# *** Comments ***
     ${resp}=  Account Set Credential  ${PUSERNAME}  ${PASSWORD}  0
     Should Be Equal As Strings    ${resp.status_code}    200
     ${resp}=  Encrypted Provider Login  ${PUSERNAME}  ${PASSWORD}
