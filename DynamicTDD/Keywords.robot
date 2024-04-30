@@ -266,6 +266,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{InvStatus}                        DRAFT  SUBMITTED  PROCESSED
 @{orderStatus}                      ORDER_DRAFT        ORDER_CONFIRMED      ORDER_COMPLETED     ORDER_CANCELED      ORDER_DISCARDED
 @{deliveryStatus}                   NOT_DELIVERED        ORDER_RECEIVED    PACKING    READY_FOR_PICKUP      IN_TRANSIST      DELIVERED 
+@{locationType}                     googleMap  automatic  manual
 
 *** Keywords ***
 Login

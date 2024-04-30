@@ -214,7 +214,12 @@ Update Business Profile with schedule
 
 Update Business Profile without schedule
     [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${pin}  ${adds}   ${ph1}  ${ph2}  ${email1}  ${lid}
-    ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    # ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    IF  '${ph1}' != '${EMPTY}' and '${ph1}' != '${NONE}' and '${ph2}' != '${EMPTY}' and '${ph2}' != '${NONE}'
+        ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    ELSE
+        ${ph_nos}=  Create List
+    END
     ${emails}=  Create List  ${email1}
     ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${None}  pinCode=${pin}  address=${adds}   id=${lid}
     ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}  phoneNumbers=${ph_nos}  emails=${emails}
@@ -241,6 +246,7 @@ Update Business Profile without phone and email
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/bProfile   data=${data}  expected_status=any
     RETURN  ${resp}
+
 
 Get Business Profile
     Check And Create YNW Session

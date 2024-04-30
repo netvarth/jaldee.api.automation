@@ -131,7 +131,7 @@ JD-TC-Update Catalog Item Batch Status-1
 
     ${displayName}=     FakerLibrary.name
 
-    ${resp}=    Create Item Inventory  ${displayName}    
+    ${resp}=    Create Item Inventory  ${displayName}    isBatchApplicable=${boolean[1]} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
@@ -144,7 +144,7 @@ JD-TC-Update Catalog Item Batch Status-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${Ca_item_Id}    ${resp.json()}
 
-    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id} 
+    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id}    isBatchApplicable=${boolean[1]} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncIds}  ${resp.json()}

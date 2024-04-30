@@ -39,6 +39,18 @@ JD-TC-Update Catalog Item Batch-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+
     ${resp}=  Get Store Type By Filter     
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -201,14 +213,50 @@ JD-TC-Update Catalog Item Batch-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    # ${Name}=    FakerLibrary.first name
+    # ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Test Variable  ${inv_cat_encid}  ${resp.json()}
+    # ${inv_cat_encid}=  Create List  ${inv_cat_encid}
+
+    # ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${SO_Cata_Encid1}  ${resp.json()}
+
+    # ${price}=    Random Int  min=2   max=40
+
+    # ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${SO_Cata_Encid1}    ${boolean[1]}     ${Inv_Cata_Item_Encid}     ${price}    ${boolean[1]}   
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${SO_itemEncId1}  ${resp.json()[0]}
+
+    # ${resp}=  Create Catalog Item Batch-invMgmt False      ${SO_itemEncId1}     ${Name}     ${price}         
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
     ${Name}=    FakerLibrary.first name
     ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${inv_cat_encid}  ${resp.json()}
-    ${inv_cat_encid}=  Create List  ${inv_cat_encid}
+    ${inv_cat_encid1}=  Create List  ${inv_cat_encid}
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid}
+
+    ${displayName}=     FakerLibrary.name
+
+    ${resp}=    Create Item Inventory  ${displayName}   isBatchApplicable=${boolean[1]} 
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${itemEncId2}  ${resp.json()}
+
+
+    ${resp}=   Create Inventory Catalog Item  ${inv_cat_encid}   ${itemEncId2}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${Inv_Cata_Item_Encid}  ${resp.json()[0]}
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_Cata_Encid1}  ${resp.json()}
@@ -326,13 +374,26 @@ JD-TC-Update Catalog Item Batch-4
 
     [Documentation]  update batch item when inventory manager is on
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
     Log  ${decrypted_data}
     Set Suite Variable      ${pid}          ${decrypted_data['id']}
     Set Suite Variable      ${pdrname}      ${decrypted_data['userName']}
+
+    #------------------Enable inventory-------------
+
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
 
     ${resp}=  Get Business Profile
     Log  ${resp.content}
@@ -398,7 +459,7 @@ JD-TC-Update Catalog Item Batch-4
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -433,13 +494,8 @@ JD-TC-Update Catalog Item Batch-4
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable            ${store_id}           ${resp.json()} 
 
-    #------------------Enable inventory-------------
 
     
-    ${resp}=  Enable Disable Inventory  ${toggle[0]}  
-    Log  ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
     # ............... Create Vendor ...............
 
     ${resp}=  Populate Url For Vendor   ${account_id}   
@@ -775,6 +831,27 @@ JD-TC-Update Catalog Item Batch-4
     Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
     Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
 
+
+#-----------------------For updation----------------------------------
+    ${Name2}=    FakerLibrary.last name
+    ${resp}=    Create Item Inventory  ${Name2}    isBatchApplicable=${boolean[1]} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable              ${itemEncId2}  ${resp.json()}
+
+    ${resp}=    Get Item Inventory  ${itemEncId2}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+
+    ${resp}=   Create Inventory Catalog Item  ${encid}   ${itemEncId2}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable   ${ic_id1}   ${resp.json()[0]}
+
+    ${inv_cat_encid_List1}=  Create List  ${encid}
+
+#--------------------------------------------------------------------
+
     # ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${name}  ${boolean[0]}
     # Log   ${resp.content}
     # Should Be Equal As Strings      ${resp.status_code}   200
@@ -865,7 +942,7 @@ JD-TC-Update Catalog Item Batch-4
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${batch_encid}  ${resp.json()[0]['uid']}
-    ${encid}=  Create Dictionary          encId=${batch_encid} 
+    ${encidd}=  Create Dictionary          encId=${batch_encid} 
 
     ${Name1}=    FakerLibrary.last name
     ${price1}=    Random Int  min=2   max=40
@@ -877,7 +954,7 @@ JD-TC-Update Catalog Item Batch-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${Inv_cat_id}  ${resp.json()}
 
-    ${catalog_details}=  Create Dictionary          name=${Name1}  price=${price1}   inventoryItemBatch=${encid}   
+    ${catalog_details}=  Create Dictionary          name=${Name1}  price=${price1}   inventoryItemBatch=${encidd}   
     Set Suite Variable  ${catalog_details}  
 
     # ${catalog_details1}=  Create Dictionary    inventoryItemBatch=${encid}   
@@ -888,6 +965,73 @@ JD-TC-Update Catalog Item Batch-4
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_Cata_Item_Batch_Encid}  ${resp.json()[0]}
 
-    ${resp}=   Update Catalog Item Batch-invMgmt True   ${SO_Cata_Item_Batch_Encid}  ${Name1}     ${price1}     inventoryItemBatch=${encid}   
+#----------------------------------------------------------------------------
+
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid_List1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${inv_order_encid1}  ${resp.json()}
+
+
+
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${inv_order_encid1}    ${boolean[1]}     ${ic_id1}     ${price}    ${boolean[1]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
+
+
+    ${expiryDate}=  db.add_timezone_date  ${tz}  50
+
+    ${salesRate}=   Evaluate        ${amount} / ${convertionQty}
+    ${invoiceDate}=  db.add_timezone_date  ${tz}  1
+    ${rate}=        Evaluate        int(${salesRate})
+    ${mrp}=         Random Int      min=${rate}  max=9999
+    ${batchNo}=     Random Int      min=1  max=9999
+    ${invoiceReferenceNo}=          Random Int  min=1  max=999
+    ${purchaseNote}=                FakerLibrary.Sentence
+    ${roundOff}=                    Random Int  min=1  max=99
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id1}  ${inv_order_encid1}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Set Suite Variable              ${purchaseId1}           ${resp.json()}
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[0]}
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[1]}  ${purchaseId1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[1]}
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[2]}  ${purchaseId1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId1} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
+
+    ${resp}=  Get Inventoryitem      ${ic_id1}         
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${batch_encid1}  ${resp.json()[0]['uid']}
+    ${encids}=  Create Dictionary          encId=${batch_encid1} 
+
+    ${Name2}=    FakerLibrary.last name
+    ${price2}=    Random Int  min=2   max=40
+    ${price2}=  Convert To Number  ${price2}    1
+
+    ${resp}=   Update Catalog Item Batch-invMgmt True   ${SO_Cata_Item_Batch_Encid}  ${Name2}     ${price2}     inventoryItemBatch=${encids}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
