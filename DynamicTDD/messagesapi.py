@@ -2334,3 +2334,5 @@ EXPIRY_DATE_REQ= "Expiry date of item {} needed"
 UNIT_REQ= "Unit of item {} needed"
 ITEM_BATCH_NEEDED = "Batch no of item {} needed"
 SALES_RATE_NOT_UPDATE = "Item sales rate can be updated only after approving the purchase"
+
+USER_ALREADY_ASSIGNED= "Already Assigned to the {}"

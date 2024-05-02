@@ -396,6 +396,11 @@ JD-TC-Assign User For Sales Order-UH1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get User By Id  ${us_id4}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['status']}  ${catalogStatus[1]}
+
     ${resp}=    Assign User For Sales Order    ${SO_Uid}     ${us_id4}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
@@ -449,11 +454,19 @@ JD-TC-Assign User For Sales Order-UH5
     ${resp}=    Assign User For Sales Order    ${SO_Uid}     ${us_id5}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    # Should Be Equal As Strings   ${resp.json()}   ${INVALID_FM_USER_ID}
+
+    ${resp}=  Get User By Id  ${us_id5}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable     ${firstName}    ${resp.json()['firstName']}  
+    Set Test Variable     ${lastName}    ${resp.json()['lastName']}  
+
+    ${USER_ALREADY_ASSIGNED}=  format String   ${USER_ALREADY_ASSIGNED}   ${firstName} ${lastName}
 
     ${resp}=    Assign User For Sales Order    ${SO_Uid}     ${us_id5}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings   ${resp.json()}   ${USER_ALREADY_ASSIGNED}
 
 JD-TC-Assign User For Sales Order-UH6
 

@@ -116,7 +116,7 @@ JD-TC-Create Sales Order-1
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
 
-    ${Name}=    FakerLibrary.last name
+    ${Name}=    FakerLibrary.first name
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Suite Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
