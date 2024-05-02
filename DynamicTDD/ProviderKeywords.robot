@@ -15093,3 +15093,15 @@ Update Details In Catalog
     ${data}=    json.dumps    ${details}  
     ${resp}=  PUT On Session  ynw  /provider/inventory/purchase/items/${purchaseUId}   data=${data}  expected_status=any
     RETURN  ${resp} 
+
+
+Create Batch
+
+    [Arguments]  ${Store_encid}   ${invCatalogItem_encid}    ${batch}   ${expiryDate}
+    ${store}=  Create Dictionary  encId=${Store_encid}     
+    ${invCatalogItem}=  Create Dictionary  encId=${invCatalogItem_encid}    
+    ${data}=  Create Dictionary  store=${store}    invCatalogItem=${invCatalogItem}   batch=${batch}   expiryDate=${expiryDate}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/inventory/inventoryitembatch   data=${data}  expected_status=any
+    RETURN  ${resp} 
