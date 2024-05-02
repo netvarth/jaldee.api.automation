@@ -28,9 +28,9 @@ ${originFrom}       NONE
 
 *** Test Cases ***
 
-JD-TC-StockAvaliability-1
+JD-TC-AddDetailsToCataolog-1
 
-    [Documentation]  Get Stock Avaliability
+    [Documentation]  Add Details To Catalog
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
     Log   ${resp.content}
@@ -553,10 +553,49 @@ JD-TC-StockAvaliability-1
     Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[0]}
     Set Suite Variable              ${purchaseItemEncId}      ${resp.json()['purchaseItemDtoList'][0]['encId']}
 
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[1]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[1]}
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[2]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
+
     ${sOrderCatalog}=   Create Dictionary    encId=${inv_order_encid}
 
     ${Details1}=  Create Dictionary     purchaseItemEncId=${purchaseItemEncId}  sOrderCatalog=${sOrderCatalog}  salesRate=${salesRate}
 
     ${resp}=    Add Details To Catalog  ${purchaseId}  ${Details1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+
+JD-TC-AddDetailsToCataolog-UH1
+
+    [Documentation]  Add Details To Catalog - where purchase status is not completed
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+    Set Suite Variable              ${purchaseId2}           ${resp.json()}
+
+    ${sOrderCatalog}=   Create Dictionary    encId=${inv_order_encid}
+
+    ${Details1}=  Create Dictionary     purchaseItemEncId=${purchaseItemEncId}  sOrderCatalog=${sOrderCatalog}  salesRate=${salesRate}
+
+    ${resp}=    Add Details To Catalog  ${purchaseId2}  ${Details1}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   200
