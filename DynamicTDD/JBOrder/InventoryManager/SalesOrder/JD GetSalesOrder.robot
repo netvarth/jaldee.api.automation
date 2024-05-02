@@ -106,6 +106,11 @@ JD-TC-Get Sales Order-1
         Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
     END
 
+    ${latti}  ${longi}  ${postcode}  ${city}  ${district}  ${state}  ${address}=  get_loc_details
+    Set Suite Variable  ${address}
+    Set Suite Variable  ${postcode}
+    Set Suite Variable  ${city}
+
 # ------------------------ Create Store ----------------------------------------------------------
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
@@ -113,7 +118,7 @@ JD-TC-Get Sales Order-1
 
     ${Name}=    FakerLibrary.last name
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
-    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
+    Set Suite Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
     ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
@@ -240,9 +245,9 @@ JD-TC-Get Sales Order-1
     Should Be Equal As Strings    ${resp.json()['store']['name']}                                   ${Name}
     Should Be Equal As Strings    ${resp.json()['store']['encId']}                                  ${store_id}
 
-    Should Be Equal As Strings    ${resp.json()['catalog']['name']}                                 ${Name}
-    Should Be Equal As Strings    ${resp.json()['catalog']['encId']}                                ${SO_Cata_Encid}
-    Should Be Equal As Strings    ${resp.json()['catalog']['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
 
     Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
     Should Be Equal As Strings    ${resp.json()['orderFor']['id']}                                  ${cid}
@@ -274,3 +279,63 @@ JD-TC-Get Sales Order-1
     Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 # -----------------------------------------------------------------------------------------------------------------------------------------
+
+JD-TC-Get Sales Order-2
+
+    [Documentation]   Create a sales Order with billingAddress , homeDeliveryAddress , notes , notesForCustomer details then verify all the detiles.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME7}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${quantity}=    Random Int  min=2   max=5
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${primaryMobileNo1}    Generate random string    10    123456789
+    Set Suite Variable  ${primaryMobileNo1}
+
+    ${bill_Phone1}=   Create Dictionary   countryCode=${countryCodes[0]}           number=${primaryMobileNo1}
+
+    ${contactInfo1}=   Create Dictionary    phone=${bill_Phone1}         email=${email_id}      
+    Set Suite Variable  ${contactInfo1}
+
+    ${homeDeliveryAddress1}=   Create Dictionary    phone=${bill_Phone1}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
+    Set Suite Variable  ${homeDeliveryAddress1}
+
+    ${billingAddress1}=   Create Dictionary    phone=${bill_Phone1}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
+
+    ${note}=  FakerLibrary.name
+    ${store}=  Create Dictionary   encId=${store_id}  
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}    store=${store}   billingAddress=${billingAddress1}     homeDeliveryAddress=${homeDeliveryAddress1}     notes=${note}      notesForCustomer=${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid}  ${resp.json()}
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['notes']}                                       ${note}
+    Should Be Equal As Strings    ${resp.json()['notesForCustomer']}                                  ${note}
+
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['firstName']}                                   ${firstName}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['lastName']}                                  ${lastName}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['email']}                                  ${email_id}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['address']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['city']}                                  ${city}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['postalCode']}                                  ${postcode}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['landMark']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['phone']['countryCode']}                                  ${countryCodes[0]} 
+    Should Be Equal As Strings    ${resp.json()['billingAddress']['phone']['number']}                                  ${primaryMobileNo1} 
+
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['firstName']}                                   ${firstName}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['lastName']}                                  ${lastName}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['email']}                                  ${email_id}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['address']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['city']}                                  ${city}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['postalCode']}                                  ${postcode}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['landMark']}                                  ${address}
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['phone']['countryCode']}                                  ${countryCodes[0]} 
+    Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['phone']['number']}                                  ${primaryMobileNo1} 

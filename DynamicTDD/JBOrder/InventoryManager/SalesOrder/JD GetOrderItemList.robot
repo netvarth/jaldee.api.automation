@@ -214,6 +214,7 @@ JD-TC-Get Order Item List-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${quantity}=    Random Int  min=2   max=5
+    ${quantity}=  Convert To Number  ${quantity}   1
 
     ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
     ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
@@ -230,6 +231,7 @@ JD-TC-Get Order Item List-1
     ${netTotal}=  Evaluate  ${price}*${quantity}
     ${netTotal}=  Convert To Number  ${netTotal}   1
 
+    ${price}=  Convert To Number  ${price}   1
 
     ${resp}=    Get Sales Order    ${SO_Uid}   
     Log   ${resp.content}
@@ -298,24 +300,24 @@ JD-TC-Get Order Item List-1
 
     # Should Be Equal As Strings    ${resp.json()[0]['encId']}                                       ${SO_Encid}
     Should Be Equal As Strings    ${resp.json()[0]['orderQuantity']}                                     ${quantity}
-    Should Be Equal As Strings    ${resp.json()[0]['fullfilledQuantity']}                                   0
+    Should Be Equal As Strings    ${resp.json()[0]['fullfilledQuantity']}                              0.0
     Should Be Equal As Strings    ${resp.json()[0]['dueQuantity']}                                  ${quantity}
     Should Be Equal As Strings    ${resp.json()[0]['status']}                                      ${toggle[0]}
 
     Should Be Equal As Strings    ${resp.json()[0]['itemAmount']}                                       ${price}
-    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                      0
-    Should Be Equal As Strings    ${resp.json()[0]['taxableAmount']}                                 0
+    Should Be Equal As Strings    ${resp.json()[0]['netTotal']}                                 0.0
+    Should Be Equal As Strings    ${resp.json()[0]['taxableAmount']}                            0.0
 
-    Should Be Equal As Strings    ${resp.json()[0]['taxAmount']}                                     0  
-    Should Be Equal As Strings    ${resp.json()[0]['discountedAmount']}                              0
+    Should Be Equal As Strings    ${resp.json()[0]['taxAmount']}                                0.0  
+    Should Be Equal As Strings    ${resp.json()[0]['discountedAmount']}                         0.0
 
-    Should Be Equal As Strings    ${resp.json()[0]['jaldeeCouponAmount']}                            0
-    Should Be Equal As Strings    ${resp.json()[0]['providerCouponAmount']}                          0
+    Should Be Equal As Strings    ${resp.json()[0]['jaldeeCouponAmount']}                       0.0
+    Should Be Equal As Strings    ${resp.json()[0]['providerCouponAmount']}                     0.0
     Should Be Equal As Strings    ${resp.json()[0]['netRate']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()[0]['cgst']}                                          0
-    Should Be Equal As Strings    ${resp.json()[0]['sgst']}                                          0
-    Should Be Equal As Strings    ${resp.json()[0]['igst']}                                          0
-    Should Be Equal As Strings    ${resp.json()[0]['cess']}                                          0
+    Should Be Equal As Strings    ${resp.json()[0]['cgst']}                                     0.0
+    Should Be Equal As Strings    ${resp.json()[0]['sgst']}                                     0.0
+    Should Be Equal As Strings    ${resp.json()[0]['igst']}                                     0.0
+    Should Be Equal As Strings    ${resp.json()[0]['cess']}                                     0.0
 
 
 JD-TC-Get Order Item List-2

@@ -112,6 +112,8 @@ JD-TC-Update Sales Order Item -1
     Set Suite Variable  ${DAY1} 
 
     ${Name}=    FakerLibrary.last name
+    Set Suite Variable  ${Name} 
+
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
@@ -330,8 +332,8 @@ JD-TC-Update Sales Order Item-3
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Name}=    FakerLibrary.first name
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    ${CatalogName}=    FakerLibrary.first name
+    ${resp}=  Create Inventory Catalog   ${CatalogName}  ${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${inv_cat_encid}  ${resp.json()}
@@ -349,7 +351,7 @@ JD-TC-Update Sales Order Item-3
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${Inv_Cata_Item_Encid}  ${resp.json()[0]}
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid_List}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${CatalogName}  ${boolean[1]}  ${inv_cat_encid_List}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_Cata_Encid1}  ${resp.json()}

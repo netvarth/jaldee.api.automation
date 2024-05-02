@@ -2336,3 +2336,5 @@ ITEM_BATCH_NEEDED = "Batch no of item {} needed"
 SALES_RATE_NOT_UPDATE = "Item sales rate can be updated only after approving the purchase"
 
 USER_ALREADY_ASSIGNED= "Already Assigned to the {}"
+CAN_NOT_UPDATE_STATUS= "Can't change this order status from {} to {}"
+ALREADY_IN="Already in {}"

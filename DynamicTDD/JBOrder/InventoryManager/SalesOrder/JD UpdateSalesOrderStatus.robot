@@ -26,7 +26,8 @@ ${invalidItem}     sprx-3250dr0-800
 @{spItemSource}      RX       Ayur
 ${originFrom}       NONE
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY  
-    
+@{Order_Enum}     Draft    Order Confirmed      Order Completed     Order Canceled   Order Discarded  
+
 *** Test Cases ***
 
 JD-TC-Update Sales Order Status-1
@@ -379,15 +380,13 @@ JD-TC-Update Sales Order Status-5
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${CAN_NOT_UPDATE_STATUS}=   format String   ${CAN_NOT_UPDATE_STATUS}   ${Order_Enum[2]}     ${Order_Enum[0]}
+
     ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[0]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_UPDATE_STATUS}
 
-    ${resp}=    Get Sales Order    ${SO_Uid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
 
 JD-TC-Update Sales Order Status-6
 
@@ -397,15 +396,12 @@ JD-TC-Update Sales Order Status-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${CAN_NOT_UPDATE_STATUS}=   format String   ${CAN_NOT_UPDATE_STATUS}   ${Order_Enum[2]}     ${Order_Enum[1]}
+
     ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Sales Order    ${SO_Uid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_UPDATE_STATUS}
 
 JD-TC-Update Sales Order Status-7
 
@@ -415,15 +411,12 @@ JD-TC-Update Sales Order Status-7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${CAN_NOT_UPDATE_STATUS}=   format String   ${CAN_NOT_UPDATE_STATUS}   ${Order_Enum[2]}     ${Order_Enum[3]}
+
     ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[3]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Sales Order    ${SO_Uid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[3]}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_UPDATE_STATUS}
 
 
 JD-TC-Update Sales Order Status-8
@@ -434,15 +427,12 @@ JD-TC-Update Sales Order Status-8
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${CAN_NOT_UPDATE_STATUS}=   format String   ${CAN_NOT_UPDATE_STATUS}   ${Order_Enum[2]}     ${Order_Enum[4]}
+
     ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[4]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Sales Order    ${SO_Uid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[4]}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_UPDATE_STATUS}
 
 JD-TC-Update Sales Order Status-9
 
@@ -452,15 +442,12 @@ JD-TC-Update Sales Order Status-9
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${ALREADY_IN}=   format String   ${ALREADY_IN}   ${Order_Enum[2]}     
+
     ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[2]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Sales Order    ${SO_Uid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[2]}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${ALREADY_IN}
 
 JD-TC-Update Sales Order Status-10
 
@@ -485,9 +472,12 @@ JD-TC-Update Sales Order Status-10
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid}  ${resp.json()}
 
+    ${CAN_NOT_UPDATE_STATUS}=   format String   ${CAN_NOT_UPDATE_STATUS}   ${Order_Enum[0]}     ${Order_Enum[2]}
+
     ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[2]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_UPDATE_STATUS}
 
 JD-TC-Update Sales Order Status-11
 
@@ -497,9 +487,12 @@ JD-TC-Update Sales Order Status-11
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${CAN_NOT_UPDATE_STATUS}=   format String   ${CAN_NOT_UPDATE_STATUS}   ${Order_Enum[0]}     ${Order_Enum[3]}
+
     ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[3]}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_UPDATE_STATUS}
 
 JD-TC-Update Sales Order Status-12
 
