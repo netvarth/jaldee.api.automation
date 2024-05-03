@@ -233,13 +233,13 @@ JD-TC-Get Item Stock adjust Details Filter-1
 
 JD-TC-Get Item Stock adjust Details Filter-2
 
-    [Documentation]  Get Item Stock adjust Details Filter  using invCatalogId.
+    [Documentation]  Get Item Stock adjust Details Filter  using invCatalogEncId.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Item Stock adjust Details Filter   invCatalogId-eq=${inventory_catalog_encid}       
+    ${resp}=  Get Item Stock adjust Details Filter   invCatalogEncId-eq=${inventory_catalog_encid}       
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['id']}    ${id_of_stockadjust} 
@@ -263,13 +263,13 @@ JD-TC-Get Item Stock adjust Details Filter-2
 
 JD-TC-Get Item Stock adjust Details Filter-3
 
-    [Documentation]  Get Item Stock adjust Details Filter  using invCatalogItemId.
+    [Documentation]  Get Item Stock adjust Details Filter  using invCatalogItemEncId.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Item Stock adjust Details Filter    invCatalogItemId-eq=${inventory_catalog_item_encid}       
+    ${resp}=  Get Item Stock adjust Details Filter    invCatalogItemEncId-eq=${inventory_catalog_item_encid}       
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['id']}    ${id_of_stockadjust} 
@@ -377,25 +377,25 @@ JD-TC-Get Item Stock adjust Details Filter-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${resp}=  Get Item Stock adjust Details Filter    invCatalogId-eq=${inventory_catalog_encid}           
+    ${resp}=  Get Item Stock adjust Details Filter    invCatalogEncId-eq=${inventory_catalog_encid}           
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     # Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['id']}    ${id_of_stockadjust} 
     # Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    # Should Be Equal As Strings    ${resp.json()[0]['invCatalogId']}    ${inventory_catalog_encid}     
-    # Should Be Equal As Strings    ${resp.json()[0]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    # Should Be Equal As Strings    ${resp.json()[0]['invCatalogEncId']}    ${inventory_catalog_encid}     
+    # Should Be Equal As Strings    ${resp.json()[0]['invCatalogItemEncId']}   ${inventory_catalog_item_encid}
     # Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity2}
 
     # Should Be Equal As Strings    ${resp.json()[1]['stockAdjust']['id']}    ${id_of_stockadjust} 
     # Should Be Equal As Strings    ${resp.json()[1]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    # Should Be Equal As Strings    ${resp.json()[1]['invCatalogId']}    ${inventory_catalog_encid}     
-    # Should Be Equal As Strings    ${resp.json()[1]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    # Should Be Equal As Strings    ${resp.json()[1]['invCatalogEncId']}    ${inventory_catalog_encid}     
+    # Should Be Equal As Strings    ${resp.json()[1]['invCatalogItemEncId']}   ${inventory_catalog_item_encid}
     # Should Be Equal As Strings    ${resp.json()[1]['qty']}     ${quantity1}
 
     # Should Be Equal As Strings    ${resp.json()[2]['stockAdjust']['id']}    ${id_of_stockadjust} 
     # Should Be Equal As Strings    ${resp.json()[2]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    # Should Be Equal As Strings    ${resp.json()[2]['invCatalogId']}    ${inventory_catalog_encid}     
-    # Should Be Equal As Strings    ${resp.json()[2]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    # Should Be Equal As Strings    ${resp.json()[2]['invCatalogEncId']}    ${inventory_catalog_encid}     
+    # Should Be Equal As Strings    ${resp.json()[2]['invCatalogItemEncId']}   ${inventory_catalog_item_encid}
     # Should Be Equal As Strings    ${resp.json()[2]['qty']}     ${quantity}
 
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['id']}    ${id_of_stockadjust} 
@@ -420,7 +420,7 @@ JD-TC-Get Item Stock adjust Details Filter-6
     Should Be Equal As Strings    ${resp.json()[1]['stockAdjust']['invStatus']}    ${InvStatus[0]}
     Should Be Equal As Strings    ${resp.json()[1]['invCatalog']['encId']}    ${inventory_catalog_encid}  
     Should Be Equal As Strings    ${resp.json()[1]['invCatalog']['catalogName']}    ${Name}   
-    Should Be Equal As Strings    ${resp.json()[1]['invCatalog']['status']}    ${InventoryCatalogStatus[1]}      
+    Should Be Equal As Strings    ${resp.json()[1]['invCatalog']['status']}    ${InventoryCatalogStatus[0]}      
     Should Be Equal As Strings    ${resp.json()[1]['invCatalogItem']['encId']}   ${inventory_catalog_item_encid}
     Should Be Equal As Strings    ${resp.json()[1]['invCatalogItem']['status']}    ${InventoryCatalogStatus[0]} 
     Should Be Equal As Strings    ${resp.json()[1]['invCatalogItem']['batchApplicable']}    ${bool[0]} 
@@ -438,7 +438,7 @@ JD-TC-Get Item Stock adjust Details Filter-6
     Should Be Equal As Strings    ${resp.json()[2]['stockAdjust']['invStatus']}    ${InvStatus[0]}
     Should Be Equal As Strings    ${resp.json()[2]['invCatalog']['encId']}    ${inventory_catalog_encid}  
     Should Be Equal As Strings    ${resp.json()[2]['invCatalog']['catalogName']}    ${Name}   
-    Should Be Equal As Strings    ${resp.json()[2]['invCatalog']['status']}    ${InventoryCatalogStatus[1]}      
+    Should Be Equal As Strings    ${resp.json()[2]['invCatalog']['status']}    ${InventoryCatalogStatus[0]}      
     Should Be Equal As Strings    ${resp.json()[2]['invCatalogItem']['encId']}   ${inventory_catalog_item_encid}
     Should Be Equal As Strings    ${resp.json()[2]['invCatalogItem']['status']}    ${InventoryCatalogStatus[0]} 
     Should Be Equal As Strings    ${resp.json()[2]['invCatalogItem']['batchApplicable']}    ${bool[0]} 
@@ -497,26 +497,26 @@ JD-TC-Get Item Stock adjust Details Filter-7
     Should Be Equal As Strings    ${resp.status_code}    200
     # Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['id']}    ${id_of_stockadjust1} 
     # Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    # Should Be Equal As Strings    ${resp.json()[0]['invCatalogId']}    ${inventory_catalog_encid1}     
-    # Should Be Equal As Strings    ${resp.json()[0]['invCatalogItemId']}   ${inventory_catalog_item_encid1}
+    # Should Be Equal As Strings    ${resp.json()[0]['invCatalogEncId']}    ${inventory_catalog_encid1}     
+    # Should Be Equal As Strings    ${resp.json()[0]['invCatalogItemEncId']}   ${inventory_catalog_item_encid1}
     # Should Be Equal As Strings    ${resp.json()[0]['qty']}     ${quantity3}
 
     # Should Be Equal As Strings    ${resp.json()[1]['stockAdjust']['id']}    ${id_of_stockadjust} 
     # Should Be Equal As Strings    ${resp.json()[1]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    # Should Be Equal As Strings    ${resp.json()[1]['invCatalogId']}    ${inventory_catalog_encid}     
-    # Should Be Equal As Strings    ${resp.json()[1]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    # Should Be Equal As Strings    ${resp.json()[1]['invCatalogEncId']}    ${inventory_catalog_encid}     
+    # Should Be Equal As Strings    ${resp.json()[1]['invCatalogItemEncId']}   ${inventory_catalog_item_encid}
     # Should Be Equal As Strings    ${resp.json()[1]['qty']}     ${quantity2}
 
     # Should Be Equal As Strings    ${resp.json()[2]['stockAdjust']['id']}    ${id_of_stockadjust} 
     # Should Be Equal As Strings    ${resp.json()[2]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    # Should Be Equal As Strings    ${resp.json()[2]['invCatalogId']}    ${inventory_catalog_encid}     
-    # Should Be Equal As Strings    ${resp.json()[2]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    # Should Be Equal As Strings    ${resp.json()[2]['invCatalogEncId']}    ${inventory_catalog_encid}     
+    # Should Be Equal As Strings    ${resp.json()[2]['invCatalogItemEncId']}   ${inventory_catalog_item_encid}
     # Should Be Equal As Strings    ${resp.json()[2]['qty']}     ${quantity1}
 
     # Should Be Equal As Strings    ${resp.json()[3]['stockAdjust']['id']}    ${id_of_stockadjust} 
     # Should Be Equal As Strings    ${resp.json()[3]['stockAdjust']['invStatus']}    ${InvStatus[0]}
-    # Should Be Equal As Strings    ${resp.json()[3]['invCatalogId']}    ${inventory_catalog_encid}     
-    # Should Be Equal As Strings    ${resp.json()[3]['invCatalogItemId']}   ${inventory_catalog_item_encid}
+    # Should Be Equal As Strings    ${resp.json()[3]['invCatalogEncId']}    ${inventory_catalog_encid}     
+    # Should Be Equal As Strings    ${resp.json()[3]['invCatalogItemEncId']}   ${inventory_catalog_item_encid}
     # Should Be Equal As Strings    ${resp.json()[3]['qty']}     ${quantity}
 
     Should Be Equal As Strings    ${resp.json()[0]['stockAdjust']['id']}    ${id_of_stockadjust1} 
@@ -603,14 +603,14 @@ JD-TC-Get Item Stock adjust Details Filter-UH1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${resp}=  Get Item Stock adjust Details Filter    invCatalogId-eq=${inventory_catalog_encid}           
+    ${resp}=  Get Item Stock adjust Details Filter    invCatalogEncId-eq=${inventory_catalog_encid}           
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}    [] 
 
 JD-TC-Get Item Stock adjust Details Filter-UH2
 
-    [Documentation]   Get Item Stock adjust Details Filter using invalid invCatalogId.
+    [Documentation]   Get Item Stock adjust Details Filter using invalid invCatalogEncId.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
@@ -630,7 +630,7 @@ JD-TC-Get Item Stock adjust Details Filter-UH2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200 
 
-    ${resp}=  Get Item Stock adjust Details Filter    invCatalogId-eq=${inventory_catalog_item_encid}           
+    ${resp}=  Get Item Stock adjust Details Filter    invCatalogEncId-eq=${inventory_catalog_item_encid}           
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}    [] 
@@ -666,13 +666,13 @@ JD-TC-Get Item Stock adjust Details Filter-UH4
 
 JD-TC-Get Item Stock adjust Details Filter-UH5
 
-    [Documentation]   Get Item Stock adjust Details Filter using invalid invCatalogItemId.
+    [Documentation]   Get Item Stock adjust Details Filter using invalid invCatalogItemEncId.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME10}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Item Stock adjust Details Filter    invCatalogItemId-eq=${inventory_catalog_encid}           
+    ${resp}=  Get Item Stock adjust Details Filter    invCatalogItemEncId-eq=${inventory_catalog_encid}           
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}    [] 
@@ -681,7 +681,7 @@ JD-TC-Get Item Stock adjust Details Filter-UH6
 
     [Documentation]   Get Item Stock adjust Details Filter without login.
 
-    ${resp}=  Get Item Stock adjust Details Filter    invCatalogItemId-eq=${inventory_catalog_item_encid}           
+    ${resp}=  Get Item Stock adjust Details Filter    invCatalogItemEncId-eq=${inventory_catalog_item_encid}           
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}

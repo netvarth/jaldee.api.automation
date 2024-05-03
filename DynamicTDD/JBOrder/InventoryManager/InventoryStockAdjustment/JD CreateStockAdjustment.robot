@@ -621,7 +621,7 @@ JD-TC-Create Stock Adjustment-UH6
     ${resp}=  Create Inventory Catalog   ${Name1}  ${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${inventory_catalog_encid1}  ${resp.json()}
+    Set Test Variable  ${inventory_catalog_encid1}  ${resp.json()}
 
 
     ${quantity}=   Random Int  min=5  max=10
@@ -713,7 +713,7 @@ JD-TC-Create Stock Adjustment-UH11
 
     ${displayName}=     FakerLibrary.name
 
-    ${resp}=    Create Item Inventory  ${displayName}    isBatchApplicable=${boolean[0]}
+    ${resp}=    Create Item Inventory  ${displayName}    isBatchApplicable=${boolean[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId6}  ${resp.json()}
@@ -740,6 +740,8 @@ JD-TC-Create Stock Adjustment-UH11
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_BATCH_ID}
+    
 
 
 
