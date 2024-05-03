@@ -2308,6 +2308,7 @@ INVALID_REMARKS_ID="Invalid remark Id"
 INVALID_QUANTITY="Invalid Quantity"
 CAP_Invalid_inventory_catalog_Id="Invalid Inventory Catalog Id"
 INVALID_BATCH_ID="Invalid Batch Id"
+CANT_CREATE_BATCH_INVMGMT_OFF="Can't create batch because inventory management is off for this item"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"
