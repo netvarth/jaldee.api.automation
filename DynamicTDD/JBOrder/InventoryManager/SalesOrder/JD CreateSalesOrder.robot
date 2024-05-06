@@ -607,3 +607,126 @@ JD-TC-Create Sales Order-12
     Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['landMark']}                                  ${address}
     Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['phone']['countryCode']}                                  ${countryCodes[0]} 
     Should Be Equal As Strings    ${resp.json()['homeDeliveryAddress']['phone']['number']}                                  ${primaryMobileNo1} 
+
+
+JD-TC-Create Sales Order-13
+
+    [Documentation]   Create a sales Order with Create SalesOrder Catalog Item-invMgmt True.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME16}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+# ------------------------ Create Store ----------------------------------------------------------
+
+    ${Store_Name2}=    FakerLibrary.first name
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
+    Set Suite Variable  ${email_id}  ${Store_Name2}${PhoneNumber}.${test_mail}
+    ${email}=  Create List  ${email_id}
+
+    ${resp}=  Create Store   ${Store_Name2}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${store_id2}  ${resp.json()}
+
+# ---------------------------------------------------------------------------------------------------
+
+# ----------------------------------------  Create Item ---------------------------------------------
+
+    ${displayName3}=     FakerLibrary.name
+
+    ${resp}=    Create Item Inventory  ${displayName3}    isInventoryItem=${bool[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${item3}  ${resp.json()}
+
+# ------------------------------------------------------------------------------------------------------
+# ----------------------------------------- create Inv Catalog -------------------------------------------------------
+    ${Name}=     FakerLibrary.name
+
+    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${Catalog_EncIds}  ${resp.json()}
+# ------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------
+
+    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${item3}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable   ${ic_Item_id}   ${resp.json()[0]}
+
+# --------------------------- Create SalesOrder Inventory Catalog-InvMgr False --------------------------
+    ${Store_note}=  FakerLibrary.name
+    ${inv_cat_encid_List}=  Create List  ${Catalog_EncIds}
+    ${price}=    Random Int  min=2   max=40
+    ${price}=  Convert To Number  ${price}    1
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id2}  ${Store_note}  ${boolean[1]}  ${inv_cat_encid_List}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${inv_order_encid}  ${resp.json()}
+# ---------------------------------------------------------------------------------------------------------
+# ------------------------------Create SalesOrder Catalog Item-invMgmt True-------------------------------
+
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${inv_order_encid}    ${boolean[1]}     ${ic_Item_id}     ${price}    ${boolean[1]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
+# ----------------------------------------- Take sales order ------------------------------------------------
+# ------------------------------------------- Check Stock ---------------------------------------------------
+    ${resp}=    Get Stock Avaliability  ${ic_Item_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+# -----------------------------------------------------------------------------------
+    ${Cg_encid}=  Create Dictionary   encId=${inv_order_encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+
+    ${store}=  Create Dictionary   encId=${store_id2}  
+
+
+    ${quantity}=    Random Int  min=2   max=5
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${primaryMobileNo1}    Generate random string    10    123456789
+    Set Suite Variable  ${primaryMobileNo1}
+
+    ${bill_Phone1}=   Create Dictionary   countryCode=${countryCodes[0]}           number=${primaryMobileNo1}
+
+    ${contactInfo1}=   Create Dictionary    phone=${bill_Phone1}         email=${email_id}      
+    Set Suite Variable  ${contactInfo1}
+
+    ${homeDeliveryAddress1}=   Create Dictionary    phone=${bill_Phone1}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
+    Set Suite Variable  ${homeDeliveryAddress1}
+
+    ${billingAddress1}=   Create Dictionary    phone=${bill_Phone1}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
+
+    ${note}=  FakerLibrary.name
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}    store=${store}   billingAddress=${billingAddress1}     homeDeliveryAddress=${homeDeliveryAddress1}     notes=${note}      notesForCustomer=${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid}  ${resp.json()}
+
+# ------------------------------------------- Check Stock ---------------------------------------------------
+    ${resp}=    Get Stock Avaliability  ${ic_Item_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+# -----------------------------------------------------------------------------------
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+# ------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------- Check Stock ---------------------------------------------------
+    ${resp}=    Get Stock Avaliability  ${ic_Item_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+# -----------------------------------------------------------------------------------
