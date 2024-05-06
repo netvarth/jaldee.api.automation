@@ -124,7 +124,7 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-1
 
     ${displayName}=     FakerLibrary.name
     Set Suite Variable  ${displayName}
-    ${resp}=    Create Item Inventory  ${displayName}    
+    ${resp}=    Create Item Inventory  ${displayName}     isInventoryItem=${bool[1]} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
@@ -142,7 +142,7 @@ JD-TC-Get inventory catalog item by inventory catalog encoded id-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${Ca_Id}    ${resp.json()}
 
-    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_Id} 
+    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_Id}    isInventoryItem=${bool[1]} 
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncIds}  ${resp.json()}

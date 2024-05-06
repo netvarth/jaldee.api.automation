@@ -173,7 +173,7 @@ JD-TC-Check SP Items In Catalog-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${Ca_Id}    ${resp.json()}
 
-    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_Id} 
+    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_Id}   isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncIds}  ${resp.json()}
@@ -184,10 +184,10 @@ JD-TC-Check SP Items In Catalog-1
     Set Suite Variable  ${itemSourceEnum}  ${resp.json()['itemSourceEnum']}
 
 
-    ${resp}=   Create Inventory Catalog Item  ${encid}   ${itemEncId1}  
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${inv_cat}  ${resp.json()[0]}
+    # ${resp}=   Create Inventory Catalog Item  ${encid}   ${itemEncId1}  
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${inv_cat}  ${resp.json()[0]}
 
 
     ${resp}=   Create Inventory Catalog Item  ${encid1}    ${itemEncIds}
@@ -211,7 +211,7 @@ JD-TC-Check SP Items In Catalog-1
     Should Be Equal As Strings    ${resp.json()[0]['storeId']}    ${id}
 
 
-JD-TC-Check SP Items In Catalog-2
+JD-TC-Check SP Items In Catalog-UH1
 
     [Documentation]  Check SP Items In Catalog
 
@@ -220,23 +220,15 @@ JD-TC-Check SP Items In Catalog-2
     Should Be Equal As Strings    ${resp.status_code}    200
 
 
-    ${resp}=   Check SP Items In Catalog     ${itemEncId1}   ${encid}   ${encid1}
+
+    ${resp}=   Check SP Items In Catalog     ${itemEncIds}      ${encid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Should Be Equal As Strings    ${resp.json()[0]['icEncId']}    ${encid}
-    Should Be Equal As Strings    ${resp.json()[0]['batchApplicable']}    ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['lotNumber']}    ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId}
-    Should Be Equal As Strings    ${resp.json()[0]['locationId']}    ${locId1}
-    Should Be Equal As Strings    ${resp.json()[0]['invCatalogName']}    ${Name}
-    Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${inv_cat}
-    Should Be Equal As Strings    ${resp.json()[0]['item']['spCode']}   ${itemEncId1}
-    Should Be Equal As Strings    ${resp.json()[0]['item']['name']}    ${displayName}
-    Should Be Equal As Strings    ${resp.json()[0]['item']['itemSourceEnum']}    ${itemSourceEnum}
-    Should Be Equal As Strings    ${resp.json()[0]['storeId']}    ${id}
+    Should Be Equal As Strings   ${resp.json()}  []
 
 
-JD-TC-Check SP Items In Catalog-UH1
+
+JD-TC-Check SP Items In Catalog-UH2
 
     [Documentation]  Check SP Items In Catalog without login.
 
@@ -246,9 +238,9 @@ JD-TC-Check SP Items In Catalog-UH1
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
 
-JD-TC-Check SP Items In Catalog-UH2
+JD-TC-Check SP Items In Catalog-UH3
 
-    [Documentation]  Check SP Items In Catalog without login.
+    [Documentation]  Check SP Items In Catalog with invalid catalog id.
 
     ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
     Log   ${resp.content}
@@ -258,4 +250,20 @@ JD-TC-Check SP Items In Catalog-UH2
     ${resp}=   Check SP Items In Catalog     ${itemEncId1}   ${inv_cat1}  
     Log   ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  422
-    # Should Be Equal As Strings   ${resp.json()}   ${Invalid_inventory_catalog_Id}
+    Should Be Equal As Strings   ${resp.json()}   ${Invalid_inventory_catalog_Id}
+
+
+JD-TC-Check SP Items In Catalog-UH4
+
+    [Documentation]  Item is not added in catalog then check sp item in catalog
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME20}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=   Check SP Items In Catalog     ${itemEncId1}      ${encid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings   ${resp.json()}   []
+

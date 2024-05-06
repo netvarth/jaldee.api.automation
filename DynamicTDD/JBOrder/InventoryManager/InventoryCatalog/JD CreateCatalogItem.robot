@@ -130,11 +130,12 @@ JD-TC-Create Inventory Catalog Item-1
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${displayName}=     FakerLibrary.name
+    Set Suite Variable  ${displayName} 
 
     ${resp}=    Create Item Inventory  ${displayName}    
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${itemEncId1}  ${resp.json()}
+    Set Suite Variable  ${iitemEncId}  ${resp.json()}
 
     ${categoryName}=    FakerLibrary.name
     Set Suite Variable  ${categoryName}
@@ -144,13 +145,21 @@ JD-TC-Create Inventory Catalog Item-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${Ca_Id}    ${resp.json()}
 
-    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_Id} 
+    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_Id}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncIds}  ${resp.json()}
 
+    ${inv_categoryName}=    FakerLibrary.name
+    Set Suite Variable  ${inv_categoryName}
 
-    ${resp}=   Create Inventory Catalog Item  ${encid}   ${itemEncId1}  
+    ${resp}=    Create Item Inventory  ${inv_categoryName}     isInventoryItem=${bool[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${itemEncIdss}  ${resp.json()}
+
+
+    ${resp}=   Create Inventory Catalog Item  ${encid}   ${itemEncIds}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -219,7 +228,7 @@ JD-TC-Create Inventory Catalog Item-2
     Should Be Equal As Strings  ${resp.status_code}  200
 
 
-    ${resp}=   Create Inventory Catalog Item  ${encid}    ${itemEncIds}
+    ${resp}=   Create Inventory Catalog Item  ${encid}    ${itemEncIdss}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -235,11 +244,11 @@ JD-TC-Create Inventory Catalog Item-3
     FOR   ${i}  IN RANGE   0   50
 
 
-        ${displayName}=     FakerLibrary.name
-        ${display}=  Evaluate    '${displayName}' + '${i}'
+        ${displayName1}=     FakerLibrary.name
+        ${display}=  Evaluate    '${displayName1}' + '${i}'
         Set Test Variable  ${display}
 
-        ${resp}=    Create Item Inventory  ${display}   
+        ${resp}=    Create Item Inventory  ${display}   isInventoryItem=${bool[1]}
         Log   ${resp.json()}
         Should Be Equal As Strings    ${resp.status_code}    200
         Set Suite Variable  ${itemEncId${i}}  ${resp.json()}
@@ -332,3 +341,20 @@ JD-TC-Create Inventory Catalog Item-UH6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${Invalid_inventory_catalog_Id}
+
+JD-TC-Create Inventory Catalog Item-UH7
+
+    [Documentation]  Create Inventory Catalog Item that item is not an inventory item
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME47}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Name}=    FakerLibrary.first name
+
+    ${NOT_AN_INNVENTORY_ITEM}=  Format String  ${NOT_AN_INNVENTORY_ITEM}    ${displayName}
+
+    ${resp}=   Create Inventory Catalog Item  ${encid}    ${iitemEncId}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${NOT_AN_INNVENTORY_ITEM}
