@@ -11,11 +11,11 @@ Library           FakerLibrary
 Library           /ebs/TDD/db.py
 Resource          /ebs/TDD/ProviderKeywords.robot
 Resource          /ebs/TDD/Keywords.robot
-Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Resource          /ebs/TDD/ConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/hl_musers.py
+Variables         /ebs/TDD/varfiles/musers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
@@ -28,11 +28,12 @@ ${originFrom}       NONE
 
 *** Test Cases ***
 
+
 JD-TC-AddDetailsToCataolog-1
 
     [Documentation]  Add Details To Catalog
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -40,10 +41,6 @@ JD-TC-AddDetailsToCataolog-1
     Set Suite Variable      ${pid}          ${decrypted_data['id']}
     Set Suite Variable      ${pdrname}      ${decrypted_data['userName']}
 
-    ${resp}=  Get Business Profile
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -54,6 +51,12 @@ JD-TC-AddDetailsToCataolog-1
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
+
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
     ${resp}=  Create Sample Location
     Set Suite Variable    ${loc_id}   ${resp}
@@ -114,7 +117,7 @@ JD-TC-AddDetailsToCataolog-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -368,14 +371,14 @@ JD-TC-AddDetailsToCataolog-1
     ${attachments}=  Create List    ${attachments}
     Set Suite Variable              ${attachments}
 
-    ${nameit}=                        FakerLibrary.name
+    ${name}=                        FakerLibrary.name
     ${shortDesc}=                   FakerLibrary.sentence
     ${internalDesc}=                FakerLibrary.sentence
-    Set Suite Variable              ${nameit}
+    Set Suite Variable              ${name}
     Set Suite Variable              ${shortDesc}
     Set Suite Variable              ${internalDesc}
 
-    ${resp}=    Create Item Inventory  ${nameit}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[1]}  isInventoryItem=${boolean[0]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}
+    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[1]}  isInventoryItem=${boolean[1]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable              ${itemEncId1}  ${resp.json()}
@@ -387,10 +390,10 @@ JD-TC-AddDetailsToCataolog-1
     Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemName']}                  ${itemName}
     Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['description']}               ${description}
     Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['sku']}                       ${sku}
-    Should Be Equal As Strings      ${resp.json()['name']}                                      ${nameit}
+    Should Be Equal As Strings      ${resp.json()['name']}                                      ${name}
     Should Be Equal As Strings      ${resp.json()['shortDesc']}                                 ${shortDesc}
     Should Be Equal As Strings      ${resp.json()['internalDesc']}                              ${internalDesc}
-    Should Be Equal As Strings      ${resp.json()['isInventoryItem']}                           ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['isInventoryItem']}                           ${bool[1]}
     Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryCode']}              ${categoryCode}
     Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryName']}              ${categoryName}
     Should Be Equal As Strings      ${resp.json()['itemCategory']['status']}                    ${toggle[0]}
@@ -416,7 +419,7 @@ JD-TC-AddDetailsToCataolog-1
     Should Be Equal As Strings      ${resp.json()['composition'][0]}                            ${compositionCode}
     Should Be Equal As Strings      ${resp.json()['sku']}                                       ${sku}
     Should Be Equal As Strings      ${resp.json()['itemUnits'][0]}                              ${iu_id}
-    Should Be Equal As Strings      ${resp.json()['isBatchApplicable']}                        ${bool[1]}
+    Should Be Equal As Strings      ${resp.json()['isBatchApplicable']}                         ${bool[1]}
     Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileName']}                ${jpgfile}
     Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileSize']}                ${fileSize}
     Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileType']}                ${fileType}
@@ -484,74 +487,59 @@ JD-TC-AddDetailsToCataolog-1
     Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
     Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${name}  ${boolean[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}   200
-    Set Suite Variable              ${inv_order_encid}    ${resp.json()}
-
+    # ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${name}  ${boolean[0]}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings      ${resp.status_code}   200
+    # Set Suite Variable              ${inv_order_encid}    ${resp.json()}
+    ${inv_cat_encid_List}=  Create List  ${encid}
     ${price}=    Random Int  min=2   max=40
     ${price}=  Convert To Number  ${price}    1
     Set Suite Variable  ${price}
+    # ${resp}=   Create Inventory Catalog Item  ${inv_cat_encid}   ${itemEncId1}  
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${Inv_Cata_Item_Encid}  ${resp.json()[0]}
 
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${inv_order_encid}     ${itemEncId1}     ${price}         
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid_List}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${inv_order_encid}  ${resp.json()}
+
+
+
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${inv_order_encid}    ${boolean[1]}     ${ic_id}     ${price}    ${boolean[1]}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
 
+    # ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${inv_order_encid}     ${itemEncId1}     ${price}         
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
+
     ${expiryDate}=  db.add_timezone_date  ${tz}  50
-    Set Suite Variable          ${expiryDate}
 
-    ${sRate}=                   Evaluate                 ${amount} / ${convertionQty}
-    ${salesRate}=               Evaluate                round(${sRate}, 2)
-    ${totalAmount}=             Evaluate                ${amount} * ${quantity}
-    ${invoiceDate}=             db.add_timezone_date    ${tz}  1
-    ${rate}=                    Evaluate                int(${salesRate})
-    ${mrp}=                     Random Int              min=${rate}  max=9999
-    ${mrp}=                     Convert To Number  ${mrp}  1
-    ${batchNo}=                 Random Int              min=1  max=9999
-    ${invoiceReferenceNo}=      Random Int              min=1  max=999
-    ${purchaseNote}=            FakerLibrary.Sentence
-    ${roundOff}=                Random Int              min=1  max=99
-    ${totalDiscountAmount}=     Evaluate                ${totalAmount} * ${discountPercentage} / 100
-    ${totaltaxable}=            Evaluate                ${totalAmount} - ${totalDiscountAmount}
-    ${totaltaxableamount}=      Evaluate                round(${totaltaxable}, 2)
-    ${tcgst}=                   Evaluate                ${totaltaxableamount} * ${cgst} / 100
-    ${totalcgst}=               Evaluate                round(${tcgst}, 2)
-    ${tsgst}=                   Evaluate                ${totaltaxableamount} * ${sgst} / 100
-    ${totalSgst}=               Evaluate                round(${tsgst}, 2)
-    ${taxAmount}=               Evaluate                round(${taxAmount}, 2)
-    Set Suite Variable          ${invoiceReferenceNo}
-    Set Suite Variable          ${purchaseNote}
-    Set Suite Variable          ${invoiceDate}
-    Set Suite Variable          ${totaltaxableamount}
-    Set Suite Variable          ${totalDiscountAmount}
-    Set Suite Variable          ${totalSgst}
-    Set Suite Variable          ${totalcgst}
-    Set Suite Variable          ${totaltaxable}
-    Set Suite Variable          ${totalAmount}
-    Set Suite Variable          ${roundOff}
-    Set Suite Variable          ${taxAmount}
-    Set Suite Variable          ${mrp}
-    Set Suite Variable          ${salesRate}
-    Set Suite Variable          ${batchNo}
+    ${salesRate}=   Evaluate        ${amount} / ${convertionQty}
+    ${invoiceDate}=  db.add_timezone_date  ${tz}  1
+    ${rate}=        Evaluate        int(${salesRate})
+    ${mrp}=         Random Int      min=${rate}  max=9999
+    ${batchNo}=     Random Int      min=1  max=9999
+    ${invoiceReferenceNo}=          Random Int  min=1  max=999
+    ${purchaseNote}=                FakerLibrary.Sentence
+    ${roundOff}=                    Random Int  min=1  max=99
 
-    ${resp}=    Get Stock Avaliability  ${ic_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
-    Set Suite Variable              ${purchaseItemDtoList1}
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}   200
+    Should Be Equal As Strings      ${resp.status_code}     200
     Set Suite Variable              ${purchaseId}           ${resp.json()}
 
     ${resp}=    Get Purchase By Uid  ${purchaseId} 
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                 200
     Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[0]}
-    Set Suite Variable              ${purchaseItemEncId}      ${resp.json()['purchaseItemDtoList'][0]['encId']}
+    Set Suite Variable              ${purchaseItemEncId}                ${resp.json()['purchaseItemDtoList'][0]['encId']}
 
     ${resp}=    Update Purchase Status  ${PurchaseStatus[1]}  ${purchaseId} 
     Log   ${resp.content}
@@ -571,13 +559,37 @@ JD-TC-AddDetailsToCataolog-1
     Should Be Equal As Strings      ${resp.status_code}                 200
     Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
 
+    ${resp}=  Get Inventoryitem      ${ic_id}         
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${batch_encid}  ${resp.json()[0]['uid']}
+    ${enccid}=  Create Dictionary          encId=${batch_encid} 
+    Set Suite Variable  ${enccid}
+
+    ${Name1}=    FakerLibrary.last name
+    ${price1}=    Random Int  min=2   max=40
+    ${price1}=  Convert To Number  ${price1}    1
+    ${catalog_details}=  Create Dictionary          name=${Name1}  price=${price1}   inventoryItemBatch=${enccid}   
+    Set Suite Variable  ${catalog_details}  
+
+    ${resp}=   Create Catalog Item Batch-invMgmt True   ${SO_itemEncIds}    ${catalog_details}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Stock Avaliability  ${ic_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
     ${sOrderCatalog}=   Create Dictionary    encId=${inv_order_encid}
+    Set Suite Variable      ${sOrderCatalog}
 
     ${Details1}=  Create Dictionary     purchaseItemEncId=${purchaseItemEncId}  sOrderCatalog=${sOrderCatalog}  salesRate=${salesRate}
 
     ${resp}=    Add Details To Catalog  ${purchaseId}  ${Details1}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   200
+
+*** Comments ***
 
 JD-TC-AddDetailsToCataolog-UH1
 
@@ -598,4 +610,135 @@ JD-TC-AddDetailsToCataolog-UH1
 
     ${resp}=    Add Details To Catalog  ${purchaseId2}  ${Details1}
     Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${SALES_RATE_NOT_UPDATE} 
+
+
+JD-TC-AddDetailsToCataolog-UH2
+
+    [Documentation]  Add Details To Catalog - where purchase uid is invalid 
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Details1}=  Create Dictionary     purchaseItemEncId=${purchaseItemEncId}  sOrderCatalog=${sOrderCatalog}  salesRate=${salesRate}
+
+    ${inv}=     Random Int  min=99  max=999
+
+    ${resp}=    Add Details To Catalog  ${inv}  ${Details1}
+    Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}   200
+
+JD-TC-AddDetailsToCataolog-UH3
+
+    [Documentation]  Add Details To Catalog - purchase item enc id is invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=99  max=999
+
+    ${Details1}=  Create Dictionary     purchaseItemEncId=${inv}  sOrderCatalog=${sOrderCatalog}  salesRate=${salesRate}
+
+    ${resp}=    Add Details To Catalog  ${purchaseId}  ${Details1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${SALES_RATE_NOT_UPDATE} 
+
+JD-TC-AddDetailsToCataolog-UH4
+
+    [Documentation]  Add Details To Catalog - purchase item enc id is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Details1}=  Create Dictionary     purchaseItemEncId=${empty}  sOrderCatalog=${sOrderCatalog}  salesRate=${salesRate}
+
+    ${resp}=    Add Details To Catalog  ${purchaseId}  ${Details1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${SALES_RATE_NOT_UPDATE} 
+
+JD-TC-AddDetailsToCataolog-UH5
+
+    [Documentation]  Add Details To Catalog - Sales order catalog is invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=99  max=999
+
+    ${sOrderCatalog2}=   Create Dictionary    encId=${inv}
+
+    ${Details1}=  Create Dictionary     purchaseItemEncId=${purchaseItemEncId}  sOrderCatalog=${sOrderCatalog2}  salesRate=${salesRate}
+
+    ${resp}=    Add Details To Catalog  ${purchaseId}  ${Details1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${SALES_RATE_NOT_UPDATE} 
+
+JD-TC-AddDetailsToCataolog-UH6
+
+    [Documentation]  Add Details To Catalog - Sales order catalog is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${sOrderCatalog2}=   Create Dictionary    encId=${empty}
+
+    ${Details1}=  Create Dictionary     purchaseItemEncId=${purchaseItemEncId}  sOrderCatalog=${sOrderCatalog2}  salesRate=${salesRate}
+
+    ${resp}=    Add Details To Catalog  ${purchaseId}  ${Details1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${SALES_RATE_NOT_UPDATE}
+
+JD-TC-AddDetailsToCataolog-UH7
+
+    [Documentation]  Add Details To Catalog - Sales rate is invalid
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=99  max=999
+
+    ${Details1}=  Create Dictionary     purchaseItemEncId=${purchaseItemEncId}  sOrderCatalog=${sOrderCatalog}  salesRate=${inv}
+
+    ${resp}=    Add Details To Catalog  ${purchaseId}  ${Details1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${SALES_RATE_NOT_UPDATE} 
+
+JD-TC-AddDetailsToCataolog-UH8
+
+    [Documentation]  Add Details To Catalog - Sales rate is empty
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME2}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=99  max=999
+
+    ${Details1}=  Create Dictionary     purchaseItemEncId=${purchaseItemEncId}  sOrderCatalog=${sOrderCatalog}  salesRate=${empty}
+
+    ${resp}=    Add Details To Catalog  ${purchaseId}  ${Details1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${SALES_RATE_NOT_UPDATE} 
+
+JD-TC-AddDetailsToCataolog-UH9
+
+    [Documentation]  Add Details To Catalog - witjout login
+
+    ${Details1}=  Create Dictionary     purchaseItemEncId=${purchaseItemEncId}  sOrderCatalog=${sOrderCatalog}  salesRate=${salesRate}
+
+    ${resp}=    Add Details To Catalog  ${purchaseId}  ${Details1}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${SALES_RATE_NOT_UPDATE} 

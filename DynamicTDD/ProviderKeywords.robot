@@ -14607,11 +14607,10 @@ Create purchaseItemDtoList
 
     # .....   discountPercentage or fixedDiscount as kwargs
 
-    [Arguments]  ${inv_cat_encid}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${taxableAmount}  ${taxAmount}  ${netAmount}  ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${unitCode}  
+    [Arguments]  ${inv_cat_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  ${fixedDiscount}  ${taxableAmount}  ${taxAmount}  ${netAmount}  ${expiryDate}  ${mrp}  ${batchNo}  ${cgst}  ${sgst}  ${unitCode}  
     
     ${inventoryCatalogItem}=    Create Dictionary  encId=${inv_cat_encid} 
-    ${invSOrderCatalog}=        Create Dictionary  encId=${inv_order_encid}
-    ${data}=                    Create Dictionary  inventoryCatalogItem=${inventoryCatalogItem}  invSOrderCatalog=${invSOrderCatalog}  quantity=${quantity}  freeQuantity=${freeQuantity}  totalQuantity=${totalQuantity}  amount=${amount}  discountAmount=${discountAmount}  discountPercentage=${discountPercentage}  fixedDiscount=${fixedDiscount}  taxableAmount=${taxableAmount}  taxAmount=${taxAmount}  netAmount=${netAmount}  expiryDate=${expiryDate}  mrp=${mrp}  salesRate=${salesRate}  batchNo=${batchNo}  cgst=${cgst}  sgst=${sgst}  unitCode=${unitCode}
+    ${data}=                    Create Dictionary  inventoryCatalogItem=${inventoryCatalogItem}  quantity=${quantity}  freeQuantity=${freeQuantity}  totalQuantity=${totalQuantity}  amount=${amount}  discountAmount=${discountAmount}  discountPercentage=${discountPercentage}  fixedDiscount=${fixedDiscount}  taxableAmount=${taxableAmount}  taxAmount=${taxAmount}  netAmount=${netAmount}  expiryDate=${expiryDate}  mrp=${mrp}  batchNo=${batchNo}  cgst=${cgst}  sgst=${sgst}  unitCode=${unitCode}
     RETURN  ${data}
 
 Create Purchase
