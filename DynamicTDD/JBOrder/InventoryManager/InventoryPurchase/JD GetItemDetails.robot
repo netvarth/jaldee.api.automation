@@ -38,10 +38,6 @@ JD-TC-GetItemDetails-1
     Set Suite Variable      ${pid}          ${decrypted_data['id']}
     Set Suite Variable      ${pdrname}      ${decrypted_data['userName']}
 
-    ${resp}=  Get Business Profile
-    Log  ${resp.content}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable  ${account_id}  ${resp.json()['id']}
 
     ${resp}=  Get Account Settings
     Log  ${resp.json()}
@@ -52,6 +48,20 @@ JD-TC-GetItemDetails-1
         Log  ${resp1.content}
         Should Be Equal As Strings  ${resp1.status_code}  200
     END
+
+
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${account_id}  ${resp.json()['id']}
+
+    ${resp}=  Create Sample Location
+    Set Suite Variable    ${loc_id}   ${resp}
+
+    ${resp}=   Get Location ById  ${loc_id}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
 
     ${resp}=  Provider Logout
     Log  ${resp.content}
@@ -70,14 +80,6 @@ JD-TC-GetItemDetails-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable    ${St_Id}    ${resp.json()}
-
-    # ${TypeName1}=    FakerLibrary.name
-    # Set Suite Variable  ${TypeName1}
-
-    # ${resp}=  Create Store Type   ${TypeName1}    ${storeNature[1]}
-    # Log   ${resp.content}
-    # Should Be Equal As Strings    ${resp.status_code}    200
-    # Set Suite Variable    ${St_Id1}    ${resp.json()}
 
     ${resp}=  Get Store Type By EncId   ${St_Id}    
     Log   ${resp.content}
@@ -331,52 +333,52 @@ JD-TC-GetItemDetails-1
 
     # ... Create itemUnits ....
 
-    ${unitName}=          FakerLibrary.name
-    ${convertionQty}=     Random Int  min=0  max=200
-    Set Suite Variable      ${unitName}
-    Set Suite Variable      ${convertionQty}
+    ${unitName}=                    FakerLibrary.name
+    ${convertionQty}=               Random Int  min=1  max=20
+    Set Suite Variable              ${unitName}
+    Set Suite Variable              ${convertionQty}
 
-    ${resp}=    Create Item Unit  ${unitName}  ${convertionQty}
+    ${resp}=    Create Item Unit    ${unitName}  ${convertionQty}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable   ${iu_id}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable   ${iu_id}   ${resp.json()}
 
-    ${itemUnits}=   Create List  ${iu_id}
+    ${itemUnits}=   Create List     ${iu_id}
 
     # .... Attachments ......
 
-    ${resp}=  db.getType   ${jpgfile} 
+    ${resp}=            db.getType  ${jpgfile} 
     Log  ${resp}
-    ${fileType}=  Get From Dictionary       ${resp}    ${jpgfile} 
-    Set Suite Variable    ${fileType}
-    ${caption}=  Fakerlibrary.Sentence
-    Set Suite Variable    ${caption}
+    ${fileType}=                    Get From Dictionary       ${resp}    ${jpgfile} 
+    Set Suite Variable              ${fileType}
+    ${caption}=                     Fakerlibrary.Sentence
+    Set Suite Variable              ${caption}
 
     ${resp}    upload file to temporary location    ${file_action[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200 
-    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+    Should Be Equal As Strings      ${resp.status_code}    200 
+    Set Suite Variable              ${driveId}    ${resp.json()[0]['driveId']}
 
     ${resp}    change status of the uploaded file    ${QnrStatus[1]}    ${driveId}
     Log  ${resp.content}
-    Should Be Equal As Strings     ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.status_code}    200
 
     ${attachments}=    Create Dictionary   action=${file_action[0]}  fileName=${jpgfile}  fileSize=${fileSize}  fileType=${fileType}  order=${order}    driveId=${driveId}
     Log  ${attachments}
-    ${attachments}=  Create List   ${attachments}
-    Set Suite Variable    ${attachments}
+    ${attachments}=  Create List    ${attachments}
+    Set Suite Variable              ${attachments}
 
-    ${name}=            FakerLibrary.name
-    ${shortDesc}=       FakerLibrary.sentence
-    ${internalDesc}=    FakerLibrary.sentence
-    Set Suite Variable  ${name}
-    Set Suite Variable  ${shortDesc}
-    Set Suite Variable  ${internalDesc}
+    ${nameit}=                        FakerLibrary.name
+    ${shortDesc}=                   FakerLibrary.sentence
+    ${internalDesc}=                FakerLibrary.sentence
+    Set Suite Variable              ${nameit}
+    Set Suite Variable              ${shortDesc}
+    Set Suite Variable              ${internalDesc}
 
-    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[0]}  isInventoryItem=${boolean[0]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}
+    ${resp}=    Create Item Inventory  ${nameit}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[1]}  isInventoryItem=${boolean[1]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable      ${itemEncId1}  ${resp.json()}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable              ${itemEncId1}  ${resp.json()}
 
     ${resp}=    Get Item Inventory  ${itemEncId1}
     Log   ${resp.content}
@@ -385,10 +387,10 @@ JD-TC-GetItemDetails-1
     Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemName']}                  ${itemName}
     Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['description']}               ${description}
     Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['sku']}                       ${sku}
-    Should Be Equal As Strings      ${resp.json()['name']}                                      ${name}
+    Should Be Equal As Strings      ${resp.json()['name']}                                      ${nameit}
     Should Be Equal As Strings      ${resp.json()['shortDesc']}                                 ${shortDesc}
     Should Be Equal As Strings      ${resp.json()['internalDesc']}                              ${internalDesc}
-    Should Be Equal As Strings      ${resp.json()['isInventoryItem']}                           ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['isInventoryItem']}                           ${bool[1]}
     Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryCode']}              ${categoryCode}
     Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryName']}              ${categoryName}
     Should Be Equal As Strings      ${resp.json()['itemCategory']['status']}                    ${toggle[0]}
@@ -414,7 +416,7 @@ JD-TC-GetItemDetails-1
     Should Be Equal As Strings      ${resp.json()['composition'][0]}                            ${compositionCode}
     Should Be Equal As Strings      ${resp.json()['sku']}                                       ${sku}
     Should Be Equal As Strings      ${resp.json()['itemUnits'][0]}                              ${iu_id}
-    Should Be Equal As Strings      ${resp.json()['isBatchApplicable']}                        ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['isBatchApplicable']}                        ${bool[1]}
     Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileName']}                ${jpgfile}
     Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileSize']}                ${fileSize}
     Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileType']}                ${fileType}
