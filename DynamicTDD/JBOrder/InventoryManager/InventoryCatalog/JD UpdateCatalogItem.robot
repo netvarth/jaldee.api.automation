@@ -131,7 +131,7 @@ JD-TC-Update Inventory Catalog Item-1
 
     ${displayName}=     FakerLibrary.name
 
-    ${resp}=    Create Item Inventory  ${displayName}    
+    ${resp}=    Create Item Inventory  ${displayName}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
@@ -144,10 +144,24 @@ JD-TC-Update Inventory Catalog Item-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${Ca_Id}    ${resp.json()}
 
-    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_Id} 
+    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_Id}   isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncIds}  ${resp.json()}
+
+    ${categoryName1}=    FakerLibrary.name
+    Set Suite Variable  ${categoryName1}
+
+
+    ${resp}=    Create Item Inventory  ${categoryName1}   categoryCode=${Ca_Id}   isInventoryItem=${bool[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${itemEncIds1}  ${resp.json()}
+
+
+    ${resp}=   Create Inventory Catalog Item  ${encid}   ${itemEncIds1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
 
 
     ${resp}=   Create Inventory Catalog Item  ${encid}   ${itemEncId1}  
