@@ -656,7 +656,7 @@ JD-TC-Create Sales Order-13
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable   ${ic_Item_id}   ${resp.json()[0]}
 
-# --------------------------- Create SalesOrder Inventory Catalog-InvMgr False --------------------------
+# --------------------------- Create SalesOrder Inventory Catalog-InvMgr True --------------------------
     ${Store_note}=  FakerLibrary.name
     ${inv_cat_encid_List}=  Create List  ${Catalog_EncIds}
     ${price}=    Random Int  min=2   max=40
@@ -673,12 +673,12 @@ JD-TC-Create Sales Order-13
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
-# ----------------------------------------- Take sales order ------------------------------------------------
 # ------------------------------------------- Check Stock ---------------------------------------------------
     ${resp}=    Get Stock Avaliability  ${ic_Item_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 # -----------------------------------------------------------------------------------
+# ----------------------------------------- Take sales order ------------------------------------------------
     ${Cg_encid}=  Create Dictionary   encId=${inv_order_encid}   
     ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
 
