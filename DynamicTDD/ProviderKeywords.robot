@@ -15104,3 +15104,52 @@ Create Batch
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/inventory/inventoryitembatch   data=${data}  expected_status=any
     RETURN  ${resp} 
+
+
+#---------------------------RX Push-----------------------------------------    
+
+Create Frequency
+
+    [Arguments]  ${frequency}  ${dosage}  &{kwargs}
+
+    ${data}=   Create Dictionary    frequency=${frequency}  dosage=${dosage}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/frequency   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get Frequency
+
+    [Arguments]  ${id}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/frequency/${id}     expected_status=any
+    RETURN  ${resp}
+
+Update Frequency
+
+    [Arguments]  ${id}  ${frequency}  ${dosage}  &{kwargs}
+
+    ${data}=   Create Dictionary    id=${id}  frequency=${frequency}  dosage=${dosage}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/medicalrecord/prescription/frequency   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Delete Frequency
+
+    [Arguments]   ${id}
+
+    Check And Create YNW Session
+    ${resp}=  DELETE On Session  ynw  /provider/medicalrecord/prescription/frequency/${id}     expected_status=any
+    RETURN  ${resp}
+
+Get Frequency By Account
+
+    [Arguments]  
