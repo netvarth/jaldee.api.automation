@@ -128,6 +128,8 @@ JD-TC-Update Inventory Catalog Item-1
     ${resp}=  Get Inventory Catalog By EncId   ${encid}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['catalogName']}     ${Name}
+    Should Be Equal As Strings    ${resp.json()['storeEncId']}     ${storeId}
 
     ${displayName}=     FakerLibrary.name
 
@@ -156,12 +158,13 @@ JD-TC-Update Inventory Catalog Item-1
     ${resp}=    Create Item Inventory  ${categoryName1}   categoryCode=${Ca_Id}   isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${itemEncIds1}  ${resp.json()}
+    Set Suite Variable  ${itemEncIds11}  ${resp.json()}
 
 
-    ${resp}=   Create Inventory Catalog Item  ${encid}   ${itemEncIds1}  
+    ${resp}=   Create Inventory Catalog Item  ${encid}   ${itemEncIds11}  
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${EncId2}  ${resp.json()[0]}
 
 
     ${resp}=   Create Inventory Catalog Item  ${encid}   ${itemEncId1}  

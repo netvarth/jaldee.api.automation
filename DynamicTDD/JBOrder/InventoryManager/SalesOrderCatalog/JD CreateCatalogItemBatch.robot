@@ -151,7 +151,7 @@ JD-TC-Create Catalog Item Batch-UH1
 
     ${displayName}=     FakerLibrary.name
 
-    ${resp}=    Create Item Inventory  ${displayName}   isBatchApplicable=${boolean[1]} 
+    ${resp}=    Create Item Inventory  ${displayName}   isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
@@ -168,7 +168,7 @@ JD-TC-Create Catalog Item Batch-UH1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${Ca_item_Id}    ${resp.json()}
 
-    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id} 
+    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id}   isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncIds}  ${resp.json()}
@@ -202,7 +202,7 @@ JD-TC-Create Catalog Item Batch-UH1
 
 
 
-JD-TC-Create Catalog Item Batch-1
+JD-TC-Create Catalog Item Batch-UH2
 
     [Documentation]   Item is Batch applicable,create sales order catalog and item where ivntry mgr is on.Then create batch invtry mgr is off
 
@@ -220,7 +220,7 @@ JD-TC-Create Catalog Item Batch-1
 
     ${displayName}=     FakerLibrary.name
 
-    ${resp}=    Create Item Inventory  ${displayName}   isBatchApplicable=${boolean[1]} 
+    ${resp}=    Create Item Inventory  ${displayName}   isBatchApplicable=${boolean[1]}   isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId2}  ${resp.json()}
@@ -245,12 +245,14 @@ JD-TC-Create Catalog Item Batch-1
 
     ${resp}=  Create Catalog Item Batch-invMgmt False      ${SO_itemEncId1}     ${Name}     ${price}         
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${INVENTORY_BATCH_ITEM_ID_REQUIRED}
 
 
 
 
-JD-TC-Create Catalog Item Batch-UH2
+
+JD-TC-Create Catalog Item Batch-UH3
 
     [Documentation]   create catalog item batch where invalid SO_itemEncid
 
@@ -266,7 +268,7 @@ JD-TC-Create Catalog Item Batch-UH2
     Should Be Equal As Strings    ${resp.json()}    ${CAP_INVALID_CATALOG_ITEM_Id}
     
 
-JD-TC-Create Catalog Item Batch-UH3
+JD-TC-Create Catalog Item Batch-UH4
 
     [Documentation]   create catalog item batch where name is empty
 
@@ -280,7 +282,7 @@ JD-TC-Create Catalog Item Batch-UH3
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}    ${BATCH_NAME_REQUIRED}
 
-JD-TC-Create Catalog Item Batch-UH4
+JD-TC-Create Catalog Item Batch-UH5
 
     [Documentation]   create catalog item batch where price is empty
 
@@ -294,7 +296,7 @@ JD-TC-Create Catalog Item Batch-UH4
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
 
-JD-TC-Create Catalog Item Batch-UH5
+JD-TC-Create Catalog Item Batch-UH6
 
     [Documentation]   create catalog item batch without login
 
@@ -304,7 +306,7 @@ JD-TC-Create Catalog Item Batch-UH5
     Should Be Equal As Strings  ${resp.status_code}  419
     Should Be Equal As Strings   ${resp.json()}   ${SESSION_EXPIRED}
 
-JD-TC-Create Catalog Item Batch-UH6
+JD-TC-Create Catalog Item Batch-UH7
 
     [Documentation]  create catalog item batch using sa login.(inventory manager is false)
 
@@ -321,7 +323,7 @@ JD-TC-Create Catalog Item Batch-UH6
 
 
 
-JD-TC-Create Catalog Item Batch-UH7
+JD-TC-Create Catalog Item Batch-UH8
 
     [Documentation]   create catalog item batch where price is zero
 
@@ -335,7 +337,7 @@ JD-TC-Create Catalog Item Batch-UH7
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
 
-JD-TC-Create Catalog Item Batch-UH8
+JD-TC-Create Catalog Item Batch-UH9
 
     [Documentation]   create catalog item batch where price is negative
 
@@ -349,7 +351,7 @@ JD-TC-Create Catalog Item Batch-UH8
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}    ${PRICE_REQUIRED}
 
-JD-TC-Create Catalog Item Batch-2
+JD-TC-Create Catalog Item Batch-1
 
     [Documentation]  creating batch item when inventory manager is on
 
@@ -698,7 +700,7 @@ JD-TC-Create Catalog Item Batch-2
     Set Suite Variable              ${shortDesc}
     Set Suite Variable              ${internalDesc}
 
-    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[1]}  isInventoryItem=${boolean[0]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}
+    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[1]}  isInventoryItem=${boolean[1]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}     
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable              ${itemEncId1}  ${resp.json()}
@@ -713,7 +715,7 @@ JD-TC-Create Catalog Item Batch-2
     Should Be Equal As Strings      ${resp.json()['name']}                                      ${name}
     Should Be Equal As Strings      ${resp.json()['shortDesc']}                                 ${shortDesc}
     Should Be Equal As Strings      ${resp.json()['internalDesc']}                              ${internalDesc}
-    Should Be Equal As Strings      ${resp.json()['isInventoryItem']}                           ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['isInventoryItem']}                           ${bool[1]}
     Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryCode']}              ${categoryCode}
     Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryName']}              ${categoryName}
     Should Be Equal As Strings      ${resp.json()['itemCategory']['status']}                    ${toggle[0]}
@@ -848,7 +850,7 @@ JD-TC-Create Catalog Item Batch-2
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=99
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}    ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
     Log   ${resp.content}
@@ -910,7 +912,7 @@ JD-TC-Create Catalog Item Batch-2
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-JD-TC-Create Catalog Item Batch-UH9
+JD-TC-Create Catalog Item Batch-UH10
 
     [Documentation]  creating same batch item when inventory manager is on
 
@@ -929,7 +931,7 @@ JD-TC-Create Catalog Item Batch-UH9
     Should Be Equal As Strings    ${resp.json()}    ${ITEM_BATCH_EXISTS_WITH_GIVEN_NAME}
 
 
-JD-TC-Create Catalog Item Batch-3
+JD-TC-Create Catalog Item Batch-2
 
     [Documentation]  creating multiple batch item for same catalog item batch when inventory manager is on
 
@@ -1023,7 +1025,7 @@ JD-TC-Create Catalog Item Batch-3
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=99
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id1}  ${inv_order_encid1}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
+    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id1}    ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}    ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid1}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
     Log   ${resp.content}
@@ -1124,3 +1126,191 @@ JD-TC-Create Catalog Item Batch-3
 #     Log   ${resp.content}
 #     Should Be Equal As Strings    ${resp.status_code}    422
 #     # Should Be Equal As Strings    ${resp.json()}    ${ITEM_BATCH_EXISTS_WITH_GIVEN_NAME}
+
+JD-TC-Create Catalog Item Batch-UH11
+
+    [Documentation]  Try to create batch where inventory manager is off.
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME32}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Store Type By Filter     
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${TypeName}=    FakerLibrary.name
+    Set Suite Variable  ${TypeName}
+
+    ${resp}=  Create Store Type   ${TypeName}    ${storeNature[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${St_Id}    ${resp.json()}
+    sleep  02s
+    ${TypeName1}=    FakerLibrary.name
+    Set Suite Variable  ${TypeName1}
+
+    ${resp}=  Create Store Type   ${TypeName1}    ${storeNature[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${St_Id1}    ${resp.json()}
+    sleep  02s
+    ${TypeName2}=    FakerLibrary.name
+    Set Suite Variable  ${TypeName2}
+
+    ${resp}=  Create Store Type   ${TypeName2}    ${storeNature[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable    ${St_Id2}    ${resp.json()}
+
+    ${resp}=  Get Store Type By EncId   ${St_Id}    
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
+    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME32}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()['name']}    ${TypeName}
+    Should Be Equal As Strings    ${resp.json()['storeNature']}    ${storeNature[0]}
+    Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
+
+    ${resp}=    Get Locations
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF   '${resp.content}' == '${emptylist}'
+        ${locId1}=  Create Sample Location
+        ${resp}=   Get Location ById  ${locId1}
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Set Suite Variable  ${tz}  ${resp.json()['bSchedule']['timespec'][0]['timezone']}
+    ELSE
+        Set Suite Variable  ${locId1}  ${resp.json()[0]['id']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['bSchedule']['timespec'][0]['timezone']}
+    END
+
+    ${Name}=    FakerLibrary.last name
+    Set Suite Variable  ${Name}
+    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
+    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
+    ${email}=  Create List  ${email_id}
+
+    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${store_id}  ${resp.json()}
+
+    # ${resp}=  Create SalesOrder Inventory Catalog   ${store_id}   ${Name}  ${boolean[1]}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${SO_Cata_Encid}  ${resp.json()}
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}   ${Name}  ${boolean[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_Cata_Encid}  ${resp.json()}
+
+    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${Inv_cat_id}  ${resp.json()}
+
+    ${resp}=  Get Inventory Catalog By EncId   ${Inv_cat_id}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${displayName}=     FakerLibrary.name
+    Set Suite Variable  ${displayName}
+
+    ${resp}=    Create Item Inventory  ${displayName}   isBatchApplicable=${boolean[1]}   isInventoryItem=${bool[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${itemEncId1}  ${resp.json()}
+
+    ${resp}=  Get Item Inventory  ${itemEncId1}    
+    Log   ${resp.json()}
+    Set Suite Variable  ${sp-item-id}  ${resp.json()['id']}
+
+    ${categoryName}=    FakerLibrary.name
+    Set Suite Variable  ${categoryName}
+
+    ${resp}=  Create Item Category   ${categoryName}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable    ${Ca_item_Id}    ${resp.json()}
+
+    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id}   isInventoryItem=${bool[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${itemEncIds}  ${resp.json()}
+
+    ${resp}=   Create Inventory Catalog Item  ${Inv_cat_id}   ${itemEncId1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${Inv_Cata_Item_Encid}  ${resp.json()[0]}
+
+    ${price}=    Random Int  min=2   max=40
+    ${price}=  Convert To Number  ${price}    1
+    Set Suite Variable  ${price}
+
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt False      ${SO_Cata_Encid}     ${itemEncId1}     ${price}         
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
+
+    ${spItem}=  Create Dictionary  encId=${itemEncId1}   
+    ${resp}=    Update SalesOrder Catalog Item      ${SO_itemEncIds}     ${boolean[1]}         ${price}    spItem=${spItem}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=   Create Catalog Item Batch-invMgmt False   ${SO_itemEncIds}     ${Name}     ${price}      
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${CANT_CREATE_BATCH_INVMGMT_OFF}
+
+
+
+
+JD-TC-Create Catalog Item Batch-UH12
+
+    [Documentation]   Given inventory catalog item is not an item of the inventory catalogs which are connected to this order catalog.
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME32}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Name}=    FakerLibrary.first name
+    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${inv_cat_encid}  ${resp.json()}
+    ${inv_cat_encid}=  Create List  ${inv_cat_encid}
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_Cata_Encid1}  ${resp.json()}
+
+    ${price}=    Random Int  min=2   max=40
+    ${price}=  Convert To Number  ${price}    1
+
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${SO_Cata_Encid1}    ${boolean[1]}     ${Inv_Cata_Item_Encid}     ${price}    ${boolean[1]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${NOT_CONNECTED_TO_ORDER_CATALOG}
+
+
+
+
+

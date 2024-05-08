@@ -196,7 +196,7 @@ JD-TC-Create Inventory Catalog-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Name}=    FakerLibrary.first name
+    ${Name}=    FakerLibrary.last name
     ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
