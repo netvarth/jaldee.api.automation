@@ -26,6 +26,11 @@ ${invalidItem}     sprx-3250dr0-800
 @{spItemSource}      RX       Ayur
 ${originFrom}       NONE
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
+
+${jpgfile}      /ebs/TDD/uploadimage.jpg
+${pngfile}      /ebs/TDD/upload.png
+${fileSize}     0.00458
+${order}        0
       
 *** Test Cases ***
 
@@ -456,12 +461,12 @@ JD-TC-Inventory Manager Work Flow-1
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${Store_note}=  FakerLibrary.name
+    ${Store_name}=  FakerLibrary.name
     ${inv_cat_encid_List}=  Create List  ${Catalog_EncIds}
     ${price}=    Random Int  min=2   max=40
     ${price}=  Convert To Number  ${price}    1
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Store_note}  ${boolean[1]}  ${inv_cat_encid_List}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Store_name}  ${boolean[1]}  ${inv_cat_encid_List}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${inv_order_encid}  ${resp.json()}
@@ -483,6 +488,8 @@ JD-TC-Inventory Manager Work Flow-1
 
 
     ${quantity}=    Random Int  min=2   max=5
+    ${quantity}=  Convert To Number  ${quantity}    1
+
     ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
 
     ${primaryMobileNo1}    Generate random string    10    123456789
@@ -521,3 +528,618 @@ JD-TC-Inventory Manager Work Flow-1
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+
+# ------------------------------------------- Check Stock ---------------------------------------------------
+    ${Available_Quantity}=   Evaluate    ${totalQuantity} - ${quantity} 
+    ${Available_Quantity}=  Convert To Number  ${Available_Quantity}    1
+
+    ${resp}=    Get Stock Avaliability  ${ic_Item_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
+    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
+    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          ${quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${Available_Quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${Available_Quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
+# -----------------------------------------------------------------------------------
+
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[2]}
+# ------------------------------------------- Check Stock ---------------------------------------------------
+    ${Available_Quantity}=   Evaluate    ${totalQuantity} - ${quantity} 
+    ${Available_Quantity}=  Convert To Number  ${Available_Quantity}    1
+
+    # ${total_Quantity}=   Evaluate    ${totalQuantity} - ${quantity} 
+    # ${total_Quantity}=  Convert To Number  ${total_Quantity}    1
+
+    ${resp}=    Get Stock Avaliability  ${ic_Item_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
+    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
+    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${Available_Quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${Available_Quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${Available_Quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
+
+# ------------------------------------------------Create Sales Order Invoice----------------------------------------------
+
+    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable      ${SO_Inv}    ${resp.json()}  
+# ------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Get Invoice By Invoice EncId -----------------------------------------------
+
+    ${netTotal}=   Evaluate    ${price} * ${quantity} 
+    ${netTotal}=  Convert To Number  ${netTotal}    1
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Store_name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${inv_order_encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[0]}
+
+# ------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Generate SO Payment Link -----------------------------------------------
+
+    ${resp}=    Generate SO Payment Link    ${SO_Inv}   ${primaryMobileNo}   ${countryCodes[0]}   ${email_id}    ${bool[1]}    ${bool[0]}    ${bool[0]}   ${primaryMobileNo}   ${countryCodes[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+# --------------------------------------------- Share SO Invoice -----------------------------------------------
+
+    ${PO_Number}    Generate random string    5    123456789
+    ${PO_Number}=  Evaluate  ${PUSERNAME}+${PO_Number}
+
+    ${phone}=   Create Dictionary       number=${PO_Number}      countryCode=${countryCodes[0]}  
+
+    ${resp}=    Share SO Invoice    ${SO_Inv}    ${email_id}   ${bool[1]}    ${bool[0]}  ${bool[0]}   ${bool[0]}    ${html}   phone=${phone}    whatsappPhNo=${phone}      telegramPhNo=${phone}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+# --------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Consumer do the payment via link -----------------------------------------------
+
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    SO Payment Via Link    ${SO_Inv}    ${netTotal}   ${purpose[7]}    ${accountId}    ${finance_payment_modes[8]}     ${bool[0]} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Store_name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${inv_order_encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+    # Should Be Equal As Strings    ${resp.json()['netRate']}                                       0.0
+    # Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                      ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[1]}
+
+JD-TC-Inventory Manager Work Flow-2
+    [Documentation]    create a sales order with inventory ON case and tax is true.
+    
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+# .... Create Hsn .....
+
+    ${hsnCode}=                 Random Int  min=1  max=999
+    Set Suite Variable          ${hsnCode}
+
+    ${resp}=    Create Item Hsn SA  ${account_id}  ${hsnCode}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable      ${hsn_id}      ${resp.json()}
+
+# .... Create Jrx Item ......
+
+    ${itemName}=        FakerLibrary.name
+    ${description}=     FakerLibrary.sentence
+    ${sku}=             FakerLibrary.name
+    Set Suite Variable  ${itemName}
+    Set Suite Variable  ${description}
+    Set Suite Variable  ${sku}
+
+    ${hsn}=     Create Dictionary    hsnCode=${hsnCode}
+
+    ${resp}=    Create Item Jrx   ${itemName}  description=${description}  sku=${sku}  hsnCode=${hsn}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable     ${itemjrx}   ${resp.json()}
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME44}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    ${decrypted_data}=  db.decrypt_data   ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable      ${pid}          ${decrypted_data['id']}
+    Set Suite Variable      ${pdrname}      ${decrypted_data['userName']}
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    # ...... Create Category .......
+
+    ${categoryName}=    FakerLibrary.name
+    Set Suite Variable  ${categoryName}
+
+    ${resp}=  Create Item Category   ${categoryName}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable      ${categoryCode}     ${resp.json()}
+
+    # ...... Create Type .........
+
+    ${TypeName}=    FakerLibrary.name
+    Set Suite Variable  ${TypeName}
+
+    ${resp}=  Create Item Type   ${TypeName}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable      ${typeCode}     ${resp.json()}
+
+    # ..... Create manufacturer .....
+
+    ${manufactureName}=    FakerLibrary.name
+    Set Suite Variable  ${manufactureName}
+
+    ${resp}=  Create Item Manufacture   ${manufactureName}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable      ${manufacturerCode}     ${resp.json()}
+
+    # .... Cretate Group 01 ........
+
+    ${groupName}=    FakerLibrary.name
+    Set Suite Variable      ${groupName}
+
+    ${groupDesc}=    FakerLibrary.name
+    Set Suite Variable  ${groupDesc}
+
+    ${groupCode}=   FakerLibrary.Sentence   nb_words=3
+    Set Suite Variable  ${groupCode}
+
+    ${resp}=    Create Item group Provider  ${groupName}  ${groupCode}  ${groupDesc}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${ig_id}   ${resp.json()}
+
+    # .... Cretate Group 02 ........
+
+    ${groupName2}=    FakerLibrary.name
+    Set Suite Variable      ${groupName2}
+
+    ${groupDesc2}=    FakerLibrary.name
+    Set Suite Variable  ${groupDesc2}
+
+    ${groupCode2}=   FakerLibrary.Sentence   nb_words=3
+    Set Suite Variable  ${groupCode2}
+
+    ${resp}=    Create Item group Provider  ${groupName2}  ${groupCode2}  ${groupDesc2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${ig_id2}   ${resp.json()}
+
+    ${itemGroups}=  Create List  ${ig_id}  ${ig_id2}
+
+    # ..... Create Tax ......
+
+    ${taxName}=    FakerLibrary.name
+    ${taxPercentage}=     Random Int  min=0  max=200
+    ${taxPercentage}=           Convert To Number  ${taxPercentage}  1
+    ${cgst}=     Evaluate   ${taxPercentage} / 2
+    ${sgst}=     Evaluate   ${taxPercentage} / 2
+    Set Suite Variable      ${taxName}
+    Set Suite Variable      ${taxPercentage}
+    Set Suite Variable      ${cgst}
+    Set Suite Variable      ${sgst}
+
+
+    ${resp}=    Create Item Tax  ${taxName}  ${taxtypeenum[0]}  ${taxPercentage}  ${cgst}  ${sgst}  0
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${itemtax_id}  ${resp.json()}
+
+    ${tax}=     Create List  ${itemtax_id}
+
+    # ....... Create composition ......
+
+    ${compositionName}=     FakerLibrary.name
+    Set Suite Variable  ${compositionName}
+
+    ${resp}=    Create Item Composition     ${compositionName} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable      ${compositionCode}    ${resp.json()}
+
+    ${composition}=     Create List  ${compositionCode}
+
+    # ... Create itemUnits ....
+
+    ${unitName}=          FakerLibrary.name
+    ${convertionQty}=     Random Int  min=0  max=200
+    Set Suite Variable      ${unitName}
+    Set Suite Variable      ${convertionQty}
+
+    ${resp}=    Create Item Unit  ${unitName}  ${convertionQty}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable   ${iu_id}  ${resp.json()}
+
+    ${itemUnits}=   Create List  ${iu_id}
+
+    # .... Attachments ......
+
+    ${resp}=  db.getType   ${jpgfile} 
+    Log  ${resp}
+    ${fileType}=  Get From Dictionary       ${resp}    ${jpgfile} 
+    Set Suite Variable    ${fileType}
+    ${caption}=  Fakerlibrary.Sentence
+    Set Suite Variable    ${caption}
+
+    ${resp}    upload file to temporary location    ${file_action[0]}    ${pid}    ${ownerType[0]}    ${pdrname}    ${jpgfile}    ${fileSize}    ${caption}    ${fileType}    ${EMPTY}    ${order}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200 
+    Set Suite Variable    ${driveId}    ${resp.json()[0]['driveId']}
+
+    ${resp}    change status of the uploaded file    ${QnrStatus[1]}    ${driveId}
+    Log  ${resp.content}
+    Should Be Equal As Strings     ${resp.status_code}    200
+
+    ${attachments}=    Create Dictionary   action=${file_action[0]}  fileName=${jpgfile}  fileSize=${fileSize}  fileType=${fileType}  order=${order}    driveId=${driveId}
+    Log  ${attachments}
+    ${attachments}=  Create List   ${attachments}
+    Set Suite Variable    ${attachments}
+
+    ${name}=            FakerLibrary.name
+    ${shortDesc}=       FakerLibrary.sentence
+    ${internalDesc}=    FakerLibrary.sentence
+    Set Suite Variable  ${name}
+    Set Suite Variable  ${shortDesc}
+    Set Suite Variable  ${internalDesc}
+
+    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[0]}  isInventoryItem=${boolean[0]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}     isInventoryItem=${bool[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable      ${TAX_item}  ${resp.json()}
+
+    ${resp}=    Get Item Inventory  ${TAX_item}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemCode']}                  ${itemjrx}
+    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['itemName']}                  ${itemName}
+    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['description']}               ${description}
+    Should Be Equal As Strings      ${resp.json()['jaldeeRxCode']['sku']}                       ${sku}
+    Should Be Equal As Strings      ${resp.json()['name']}                                      ${name}
+    Should Be Equal As Strings      ${resp.json()['shortDesc']}                                 ${shortDesc}
+    Should Be Equal As Strings      ${resp.json()['internalDesc']}                              ${internalDesc}
+    Should Be Equal As Strings      ${resp.json()['isInventoryItem']}                           ${bool[1]}
+    Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryCode']}              ${categoryCode}
+    Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryName']}              ${categoryName}
+    Should Be Equal As Strings      ${resp.json()['itemCategory']['status']}                    ${toggle[0]}
+    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['categoryCode']}           ${categoryCode}
+    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['categoryName']}           ${categoryName}
+    Should Be Equal As Strings      ${resp.json()['itemSubCategory']['status']}                 ${toggle[0]}
+    Should Be Equal As Strings      ${resp.json()['itemType']['typeCode']}                      ${typeCode}
+    Should Be Equal As Strings      ${resp.json()['itemType']['typeName']}                      ${TypeName}
+    Should Be Equal As Strings      ${resp.json()['itemType']['status']}                        ${toggle[0]}
+    Should Be Equal As Strings      ${resp.json()['itemSubType']['typeCode']}                   ${typeCode}
+    Should Be Equal As Strings      ${resp.json()['itemSubType']['typeName']}                   ${TypeName}
+    Should Be Equal As Strings      ${resp.json()['itemSubType']['status']}                     ${toggle[0]}
+    Should Be Equal As Strings      ${resp.json()['itemGroups'][0]}                             ${ig_id}
+    Should Be Equal As Strings      ${resp.json()['itemGroups'][1]}                             ${ig_id2}
+    Should Be Equal As Strings      ${resp.json()['itemSubGroups'][0]}                          ${ig_id}
+    Should Be Equal As Strings      ${resp.json()['itemSubGroups'][1]}                          ${ig_id2}
+    Should Be Equal As Strings      ${resp.json()['hsnCode']['hsnCode']}                        ${hsnCode}
+    Should Be Equal As Strings      ${resp.json()['hsnCode']['status']}                         ${toggle[0]}
+    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['manufacturerCode']}      ${manufacturerCode}
+    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['manufacturerName']}      ${manufactureName}
+    Should Be Equal As Strings      ${resp.json()['itemManufacturer']['status']}                ${toggle[0]}
+    Should Be Equal As Strings      ${resp.json()['tax'][0]}                                    ${itemtax_id}
+    # Should Be Equal As Strings      ${resp.json()['composition'][0]}                            ${compositionCode}
+    Should Be Equal As Strings      ${resp.json()['sku']}                                       ${sku}
+    # Should Be Equal As Strings      ${resp.json()['itemUnits'][0]}                              ${iu_id}
+    Should Be Equal As Strings      ${resp.json()['isBatchApplicable']}                         ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileName']}                ${jpgfile}
+    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileSize']}                ${fileSize}
+    Should Be Equal As Strings      ${resp.json()['attachments'][0]['fileType']}                ${fileType}
+    Should Be Equal As Strings      ${resp.json()['attachments'][0]['order']}                   ${order}
+    Should Be Equal As Strings      ${resp.json()['attachments'][0]['action']}                  ${file_action[0]}
+    Should Be Equal As Strings      ${resp.json()['attachments'][0]['driveId']}                 ${driveId}
+    Should Be Equal As Strings      ${resp.json()['status']}                                    ${toggle[0]}
+    Set Suite Variable              ${spCode}     ${resp.json()['spCode']}                               
+
+# ------------------------------------------------------------------------------------------------------
+
+# ----------------------------------------- create Inv Catalog -------------------------------------------------------
+    # ${INV_Cat_Name}=     FakerLibrary.name
+
+    # ${resp}=  Create Inventory Catalog   ${INV_Cat_Name}  ${store_id}   
+    # Log   ${resp.content}
+    # Should Be Equal As Strings    ${resp.status_code}    200
+    # Set Suite Variable  ${Catalog_EncIds1}  ${resp.json()}
+# ------------------------------------------------------------------------------------------------------------
+
+# ----------------------------------------Create Inventory Catalog Item----------------------------------
+
+    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${TAX_item}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+    Set Suite Variable   ${ic_TAX_Item_id}   ${resp.json()[0]}
+
+# -------------------------------------------------------------------------------------------------------------
+
+# ------------------------------Create SalesOrder Catalog Item-invMgmt True-------------------------------
+    ${price}=    Random Int  min=200   max=500
+
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${inv_order_encid}    ${boolean[1]}     ${ic_TAX_Item_id}     ${price}    ${boolean[0]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
+
+# ----------------------------------------------------------------------------------------------------------
+
+# ----------------------------------------- Take sales order ------------------------------------------------
+    ${Cg_encid}=  Create Dictionary   encId=${inv_order_encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+
+
+    ${quantity}=    Random Int  min=2   max=5
+    ${quantity}=  Convert To Number  ${quantity}    1
+
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${primaryMobileNo1}    Generate random string    10    123456789
+    Set Suite Variable  ${primaryMobileNo1}
+
+    # ${bill_Phone1}=   Create Dictionary   countryCode=${countryCodes[0]}           number=${primaryMobileNo1}
+
+    # ${contactInfo1}=   Create Dictionary    phone=${bill_Phone1}         email=${email_id}      
+    # Set Suite Variable  ${contactInfo1}
+
+    # ${homeDeliveryAddress1}=   Create Dictionary    phone=${bill_Phone1}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
+    # Set Suite Variable  ${homeDeliveryAddress1}
+
+    # ${billingAddress1}=   Create Dictionary    phone=${bill_Phone1}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
+
+    ${note}=  FakerLibrary.name
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}    store=${store}        notes=${note}      notesForCustomer=${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid}  ${resp.json()}
+
+# ------------------------------------------- Check Stock ---------------------------------------------------
+    ${resp}=    Get Stock Avaliability  ${ic_TAX_Item_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+# -----------------------------------------------------------------------------------
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+
+# ------------------------------------------- Check Stock ---------------------------------------------------
+    ${Available_Quantity}=   Evaluate    ${totalQuantity} - ${quantity} 
+    ${Available_Quantity}=  Convert To Number  ${Available_Quantity}    1
+
+    ${resp}=    Get Stock Avaliability  ${ic_TAX_Item_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
+    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
+    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          ${quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${Available_Quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${Available_Quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
+# -----------------------------------------------------------------------------------
+
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[2]}
+# ------------------------------------------- Check Stock ---------------------------------------------------
+    ${Available_Quantity}=   Evaluate    ${totalQuantity} - ${quantity} 
+    ${Available_Quantity}=  Convert To Number  ${Available_Quantity}    1
+
+    # ${total_Quantity}=   Evaluate    ${totalQuantity} - ${quantity} 
+    # ${total_Quantity}=  Convert To Number  ${total_Quantity}    1
+
+    ${resp}=    Get Stock Avaliability  ${ic_TAX_Item_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
+    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
+    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${Available_Quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${Available_Quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${Available_Quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
+
+# ------------------------------------------------Create Sales Order Invoice----------------------------------------------
+
+    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable      ${SO_Inv}    ${resp.json()}  
+# ------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Get Invoice By Invoice EncId -----------------------------------------------
+
+    ${netTotal}=   Evaluate    ${price} * ${quantity} 
+    ${netTotal}=  Convert To Number  ${netTotal}    1
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Store_name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${inv_order_encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[0]}
+
+# ------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Generate SO Payment Link -----------------------------------------------
+
+    ${resp}=    Generate SO Payment Link    ${SO_Inv}   ${primaryMobileNo}   ${countryCodes[0]}   ${email_id}    ${bool[1]}    ${bool[0]}    ${bool[0]}   ${primaryMobileNo}   ${countryCodes[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+# --------------------------------------------- Share SO Invoice -----------------------------------------------
+
+    ${PO_Number}    Generate random string    5    123456789
+    ${PO_Number}=  Evaluate  ${PUSERNAME}+${PO_Number}
+
+    ${phone}=   Create Dictionary       number=${PO_Number}      countryCode=${countryCodes[0]}  
+
+    ${resp}=    Share SO Invoice    ${SO_Inv}    ${email_id}   ${bool[1]}    ${bool[0]}  ${bool[0]}   ${bool[0]}    ${html}   phone=${phone}    whatsappPhNo=${phone}      telegramPhNo=${phone}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+# --------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Consumer do the payment via link -----------------------------------------------
+
+    ${resp}=  Provider Logout
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    SO Payment Via Link    ${SO_Inv}    ${netTotal}   ${purpose[7]}    ${accountId}    ${finance_payment_modes[8]}     ${bool[0]} 
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Store_name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${inv_order_encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+    # Should Be Equal As Strings    ${resp.json()['netRate']}                                       0.0
+    # Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                      ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[1]}
