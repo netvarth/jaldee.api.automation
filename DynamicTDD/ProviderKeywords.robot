@@ -15152,4 +15152,8 @@ Delete Frequency
 
 Get Frequency By Account
 
-    [Arguments]  
+    [Arguments]  ${account}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/frequency/account/${account}     expected_status=any
+    RETURN  ${resp}

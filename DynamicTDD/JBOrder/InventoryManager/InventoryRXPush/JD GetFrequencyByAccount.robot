@@ -29,9 +29,9 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 
-JD-TC-CreateFrequency-1
+JD-TC-GetFrequencyByAccount-1
 
-    [Documentation]  Create Frequency
+    [Documentation]  Get Frequency By Account
 
     ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}
@@ -47,11 +47,6 @@ JD-TC-CreateFrequency-1
     ${description0}=     FakerLibrary.sentence
     ${remark0}=          FakerLibrary.sentence
     ${dos0}=             Evaluate    float(${dosage0})
-    Set Suite Variable      ${frequency0}
-    Set Suite Variable      ${dosage0}
-    Set Suite Variable      ${description0}
-    Set Suite Variable      ${remark0}
-    Set Suite Variable      ${dos0}
 
     ${resp}=    Create Frequency  ${frequency0}  ${dosage0}  description=${description0}  remark=${remark0}
     Log   ${resp.content}
@@ -72,11 +67,6 @@ JD-TC-CreateFrequency-1
     ${description}=     FakerLibrary.sentence
     ${remark}=          FakerLibrary.sentence
     ${dos}=             Evaluate    float(${dosage})
-    Set Suite Variable      ${frequency}
-    Set Suite Variable      ${dosage}
-    Set Suite Variable      ${description}
-    Set Suite Variable      ${remark}
-    Set Suite Variable      ${dos}
 
     ${resp}=    Create Frequency  ${frequency}  ${dosage}  description=${description}  remark=${remark}
     Log   ${resp.content}
@@ -92,21 +82,16 @@ JD-TC-CreateFrequency-1
     Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
 
-
-JD-TC-CreateFrequency-2
-
-    [Documentation]  Create Frequency - description and remark not given
-
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    ${resp}=    Get Frequency By Account  ${account_id}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${frequency3}=       Random Int  min=1  max=10
-    ${dosage3}=          Random Int  min=1  max=3000
-    ${dos3}=             Evaluate    float(${dosage3})
-
-    ${resp}=    Create Frequency  ${frequency3}  ${dosage3}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-    Set Suite Variable              ${frequency_id3}         ${resp.json()}
-
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()[0]['id']}             ${frequency_id}
+    Should Be Equal As Strings      ${resp.json()[0]['frequency']}      ${frequency}
+    Should Be Equal As Strings      ${resp.json()[0]['description']}    ${description}
+    Should Be Equal As Strings      ${resp.json()[0]['remark']}         ${remark}
+    Should Be Equal As Strings      ${resp.json()[0]['dosage']}         ${dos}
+    Should Be Equal As Strings      ${resp.json()[1]['id']}             ${frequency_id0}
+    Should Be Equal As Strings      ${resp.json()[1]['frequency']}      ${frequency0}
+    Should Be Equal As Strings      ${resp.json()[1]['description']}    ${description0}
+    Should Be Equal As Strings      ${resp.json()[1]['remark']}         ${remark0}
+    Should Be Equal As Strings      ${resp.json()[1]['dosage']}         ${dos0}
