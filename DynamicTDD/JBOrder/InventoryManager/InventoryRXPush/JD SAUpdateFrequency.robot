@@ -25,9 +25,9 @@ ${fileSize}     0.00458
 ${order}        0
 *** Test Cases ***
 
-JD-TC-CreateFrequencySA-1
+JD-TC-UpdateFrequencySA-1
 
-    [Documentation]   Create Frequency SA
+    [Documentation]   Update Frequency SA
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}
@@ -67,6 +67,21 @@ JD-TC-CreateFrequencySA-1
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()['id']}            ${frequency_id}
     Should Be Equal As Strings      ${resp.json()['frequency']}     ${frequency}
+    Should Be Equal As Strings      ${resp.json()['description']}   ${description}
+    Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
+    Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
+
+    ${frequency2}=       Random Int  min=1  max=10
+
+    ${resp}=    SA Update Frequency  ${frequency_id}  ${frequency2}  ${dosage}  description=${description}  remark=${remark}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    SA Get Frequency  ${frequency_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()['id']}            ${frequency_id}
+    Should Be Equal As Strings      ${resp.json()['frequency']}     ${frequency2}
     Should Be Equal As Strings      ${resp.json()['description']}   ${description}
     Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}

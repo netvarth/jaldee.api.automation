@@ -15157,3 +15157,46 @@ Get Frequency By Account
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/frequency/account/${account}     expected_status=any
     RETURN  ${resp}
+
+RX Create Prescription
+
+    [Arguments]  ${providerConsumerId}  ${doctorId}  ${medicineName}  ${duration}  ${quantity}  ${description}  ${spItemCode}  ${dosage}  ${frequency_id}  ${html}
+
+    ${frequency}=   Create Dictionary  id=${frequency_id}
+    ${mrPrescriptionItemsDtos}=  Create Dictionary  medicineName=${medicineName}  duration=${duration}  quantity=${quantity}  description=${description}  spItemCode=${spItemCode}  dosage=${dosage}  frequency=${frequency}
+    ${Prescription}=  Create List  ${mrPrescriptionItemsDtos} 
+    ${data}=  Create Dictionary  providerConsumerId=${providerConsumerId}  doctorId=${doctorId}  mrPrescriptionItemsDtos=${Prescription}  html=${html}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get RX Prescription By Id
+
+    [Arguments]  ${id}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/uid/${id}     expected_status=any
+    RETURN  ${resp}
+
+RX Update Prescription
+
+    [Arguments]  ${prescription_id}  ${providerConsumerId}  ${doctorId}  ${medicineName}  ${duration}  ${quantity}  ${description}  ${spItemCode}  ${dosage}  ${frequency_id}  ${html}
+
+    ${frequency}=   Create Dictionary  id=${frequency_id}
+    ${mrPrescriptionItemsDtos}=  Create Dictionary  medicineName=${medicineName}  duration=${duration}  quantity=${quantity}  description=${description}  spItemCode=${spItemCode}  dosage=${dosage}  frequency=${frequency}
+    ${Prescription}=  Create List  ${mrPrescriptionItemsDtos} 
+    
+    ${data}=  Create Dictionary  providerConsumerId=${providerConsumerId}  doctorId=${doctorId}  mrPrescriptionItemsDtos=${Prescription}  html=${html}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/medicalrecord/prescription/${prescription_id}   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Enable/Disable Inventory Rx
+
+    [Arguments]  ${status}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/account/settings/inventoryrx/${status}     expected_status=any
+    RETURN  ${resp}

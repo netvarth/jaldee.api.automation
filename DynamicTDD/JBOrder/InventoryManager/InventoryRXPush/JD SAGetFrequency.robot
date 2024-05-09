@@ -25,9 +25,9 @@ ${fileSize}     0.00458
 ${order}        0
 *** Test Cases ***
 
-JD-TC-CreateFrequencySA-1
+JD-TC-GetFrequencySA-1
 
-    [Documentation]   Create Frequency SA
+    [Documentation]   Get Frequency SA
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME4}  ${PASSWORD}
     Log  ${resp.content}

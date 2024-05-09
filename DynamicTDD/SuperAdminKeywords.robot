@@ -2624,3 +2624,56 @@ Get Item Jrx Filter Count
     Check And Create YNW SuperAdmin Session
     ${resp}=    GET On Session    synw   /item/jrx/count   params=${param}   expected_status=any
     RETURN  ${resp}
+
+
+#---------------------------RX Push-----------------------------------------    
+
+SA Create Frequency
+
+    [Arguments]  ${frequency}  ${dosage}  &{kwargs}
+
+    ${data}=   Create Dictionary    frequency=${frequency}  dosage=${dosage}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW SuperAdmin Session
+    ${resp}=  POST On Session  synw  /provider/medicalrecord/frequency   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+SA Get Frequency
+
+    [Arguments]  ${id}
+
+    Check And Create YNW SuperAdmin Session
+    ${resp}=  GET On Session  synw  /provider/medicalrecord/frequency/${id}     expected_status=any
+    RETURN  ${resp}
+
+SA Update Frequency
+
+    [Arguments]  ${id}  ${frequency}  ${dosage}  &{kwargs}
+
+    ${data}=   Create Dictionary    id=${id}  frequency=${frequency}  dosage=${dosage}
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW SuperAdmin Session
+    ${resp}=  PUT On Session  synw  /provider/medicalrecord/frequency  data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+SA Delete Frequency
+
+    [Arguments]   ${id}
+
+    Check And Create YNW SuperAdmin Session
+    ${resp}=  DELETE On Session  synw  /provider/medicalrecord/frequency/${id}     expected_status=any
+    RETURN  ${resp}
+
+SA Get Frequency By Account
+
+    [Arguments]     ${account}
+
+    Check And Create YNW SuperAdmin Session
+    ${resp}=  GET On Session  synw  /provider/medicalrecord/frequency/account/${account}    expected_status=any
+    RETURN  ${resp}
