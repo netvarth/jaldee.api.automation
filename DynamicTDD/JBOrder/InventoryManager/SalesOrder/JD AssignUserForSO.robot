@@ -52,6 +52,16 @@ JD-TC-Assign User For Sales Order-1
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['enableInventory']}  ${bool[1]}
     END
+    IF  ${resp.json()['enableSalesOrder']}==${bool[0]}
+        ${resp1}=  Enable/Disable SalesOrder  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+        ${resp}=  Get Account Settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableSalesOrder']}  ${bool[1]}
+    END
 
     ${resp}=  Get Business Profile
     Log  ${resp.json()}
