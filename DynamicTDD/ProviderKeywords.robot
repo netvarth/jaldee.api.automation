@@ -15200,3 +15200,11 @@ Enable/Disable Inventory Rx
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/inventoryrx/${status}     expected_status=any
     RETURN  ${resp}
+
+Enable/Disable SalesOrder
+
+    [Arguments]  ${status}
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/account/settings/salesOrder/${status}     expected_status=any
+    RETURN  ${resp}

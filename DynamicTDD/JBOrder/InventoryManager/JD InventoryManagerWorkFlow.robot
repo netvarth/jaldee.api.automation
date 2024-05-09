@@ -180,6 +180,7 @@ JD-TC-Inventory Manager Work Flow-1
     Set Suite Variable  ${DAY1} 
 
     ${Store_Name1}=    FakerLibrary.first name
+    Set Suite Variable  ${Store_Name1}
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Suite Variable  ${email_id}  ${Store_Name1}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
@@ -315,17 +316,27 @@ JD-TC-Inventory Manager Work Flow-1
 
     ${quantity}=                    Random Int  min=0  max=999
     ${quantity}=                    Convert To Number  ${quantity}  1
+    Set Suite Variable  ${quantity}
+
     ${freeQuantity}=                Random Int  min=0  max=10
     ${freeQuantity}=                Convert To Number  ${freeQuantity}  1
+    Set Suite Variable  ${freeQuantity}
+
     ${amount}=                      Random Int  min=1  max=999
     ${amount}=                      Convert To Number  ${amount}  1
+    Set Suite Variable  ${amount}
+
     ${discountPercentage}=          Random Int  min=0  max=100
     ${discountPercentage}=          Convert To Number  ${discountPercentage}  1
+    Set Suite Variable  ${discountPercentage}
+
     ${fixedDiscount}=               Random Int  min=0  max=200
     ${fixedDiscount}=               Convert To Number  ${fixedDiscount}  1
+    Set Suite Variable  ${fixedDiscount}
 
     ${totalQuantity}=   Evaluate    ${quantity} + ${freeQuantity} 
     ${totalQuantity}=   Evaluate    ${totalQuantity} * ${convertionQty}
+    Set Suite Variable  ${totalQuantity}
 
     ${netTotal}=        Evaluate    ${quantity} * ${amount}
     ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
@@ -462,6 +473,7 @@ JD-TC-Inventory Manager Work Flow-1
     Should Be Equal As Strings            ${resp.status_code}    200
 
     ${Store_name}=  FakerLibrary.name
+    Set Suite Variable    ${Store_name}
     ${inv_cat_encid_List}=  Create List  ${Catalog_EncIds}
     ${price}=    Random Int  min=2   max=40
     ${price}=  Convert To Number  ${price}    1
@@ -932,20 +944,162 @@ JD-TC-Inventory Manager Work Flow-2
 
 # ----------------------------------------Create Inventory Catalog Item----------------------------------
 
-    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${TAX_item}  
+    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${TAX_item}   
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable   ${ic_TAX_Item_id}   ${resp.json()[0]}
 
 # -------------------------------------------------------------------------------------------------------------
+    ${inventoryCatalogItem}=        Create Dictionary   encId=${ic_TAX_Item_id}
+
+    # ${resp}=    Get Item Details Inventory  ${store_id}  ${vendorId}  ${inventoryCatalogItem}  ${quantity}  ${freeQuantity}   ${amount}  ${fixedDiscount}  ${discountPercentage}
+    # Log   ${resp.content}
+    # Should Be Equal As Strings      ${resp.status_code}                     200
+    # # Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity}
+    # # Should Be Equal As Strings      ${resp.json()['freeQuantity']}          ${freeQuantity}
+    # # Should Be Equal As Strings      ${resp.json()['totalQuantity']}         ${totalQuantity}
+    # # Should Be Equal As Strings      ${resp.json()['amount']}                ${amount}
+    # # Should Be Equal As Strings      ${resp.json()['discountPercentage']}    ${discountPercentage}
+    # # Should Be Equal As Strings      ${resp.json()['discountAmount']}        ${discountAmount}
+    # # Should Be Equal As Strings      ${resp.json()['taxableAmount']}         ${taxableAmount}
+    # # Should Be Equal As Strings      ${resp.json()['cgstPercentage']}        ${cgst}
+    # # Should Be Equal As Strings      ${resp.json()['sgstPercentage']}        ${sgst}
+    # # Should Be Equal As Strings      ${resp.json()['cgst']}                  ${cgstamount}
+    # # Should Be Equal As Strings      ${resp.json()['sgst']}                  ${sgstamount}
+    # # Should Be Equal As Strings      ${resp.json()['taxPercentage']}         ${taxPercentage}
+    # # Should Be Equal As Strings      ${resp.json()['taxAmount']}             ${taxAmount}
+    # # Should Be Equal As Strings      ${resp.json()['netTotal']}              ${netTotal}
+    # # Should Be Equal As Strings      ${resp.json()['netRate']}               ${netRate}
+
+# --------------------------------------- Do the Purchase--------------------------------------------------------------
+
+    ${quantity}=                    Random Int  min=0  max=999
+    ${quantity}=                    Convert To Number  ${quantity}  1
+    ${freeQuantity}=                Random Int  min=0  max=10
+    ${freeQuantity}=                Convert To Number  ${freeQuantity}  1
+    ${amount}=                      Random Int  min=1  max=999
+    ${amount}=                      Convert To Number  ${amount}  1
+    ${discountPercentage}=          Random Int  min=0  max=100
+    ${discountPercentage}=          Convert To Number  ${discountPercentage}  1
+    ${fixedDiscount}=               Random Int  min=0  max=200
+    ${fixedDiscount}=               Convert To Number  ${fixedDiscount}  1
+
+    ${totalQuantity}=   Evaluate    ${quantity} + ${freeQuantity} 
+    ${totalQuantity}=   Evaluate    ${totalQuantity} * ${convertionQty}
+
+    ${netTotal}=        Evaluate    ${quantity} * ${amount}
+    ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
+    ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
+    # ${cgstamount}=      Evaluate    ${taxableAmount} * ${cgst} / 100
+    # ${sgstamount}=      Evaluate    ${taxableAmount} * ${sgst} / 100
+    # ${taxAmount}=       Evaluate    ${cgstamount} + ${sgstamount}
+    # ${netRate}=         Evaluate    ${taxableAmount} + ${taxAmount}
+
+    ${expiryDate}=  db.add_timezone_date  ${tz}  50
+    ${convertionQty}=               Random Int  min=1  max=20
+
+    ${salesRate}=   Evaluate        ${amount} / ${convertionQty}
+    ${invoiceDate}=  db.add_timezone_date  ${tz}  1
+    ${rate}=        Evaluate        int(${salesRate})
+    ${mrp}=         Random Int      min=${rate}  max=9999
+    ${batchNo}=     Random Int      min=1  max=9999
+    ${invoiceReferenceNo}=          Random Int  min=1  max=999
+    ${purchaseNote}=                FakerLibrary.Sentence
+    ${roundOff}=                    Random Int  min=1  max=99
+
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList   ${ic_TAX_Item_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  0  ${netTotal}   ${expiryDate}  ${mrp}  ${EMPTY}  0   0   ${iu_id}
+    Set Suite Variable              ${purchaseItemDtoList2}
+
+    ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${Catalog_EncIds}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}   200
+    Set Suite Variable              ${purchaseId}           ${resp.json()}
+
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[0]}
+# -------------------------------------------  Update Purchase Status ------------------------------------------------
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[1]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    Update Purchase Status  ${PurchaseStatus[2]}  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+# ---------------------------------------------------------------------------------------------------------------------
+    ${resp}=    Get Purchase By Uid  ${purchaseId} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+    Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
+
+    ${resp}=  Get Inventoryitem      ${ic_TAX_Item_id}         
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings      ${resp.json()[0]['uid']}          ${purchaseId}
+    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
+    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
+    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
+
+    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
+    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
+    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
+    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
+    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
+    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
+    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
+
+
+# ------------------------------------------- Check Stock ---------------------------------------------------
+    ${resp}=    Get Stock Avaliability  ${ic_TAX_Item_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    # Should Be Equal As Strings      ${resp.json()[0]['uid']}          ${purchaseId}
+    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
+    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
+    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
+
+# -----------------------------------------------------------------------------------
 
 # ------------------------------Create SalesOrder Catalog Item-invMgmt True-------------------------------
     ${price}=    Random Int  min=200   max=500
 
-    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${inv_order_encid}    ${boolean[1]}     ${ic_TAX_Item_id}     ${price}    ${boolean[0]}   
+    ${resp}=    Get Item Tax by id  ${itemtax_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.json()['taxName']}         ${taxName}
+    Should Be Equal As Strings    ${resp.json()['status']}          ${toggle[0]}
+    Should Be Equal As Strings    ${resp.json()['taxTypeEnum']}     ${taxtypeenum[0]}
+    Should Be Equal As Strings    ${resp.json()['taxCode']}         ${itemtax_id}
+    Set Suite Variable              ${itemtax_id}           ${resp.json()['id']}
+
+    ${tax}=     Create List  ${itemtax_id}
+
+    ${resp}=  Create SalesOrder Catalog Item-invMgmt True     ${inv_order_encid}    ${boolean[1]}     ${ic_TAX_Item_id}     ${price}    ${boolean[0]}   taxInclude=${boolean[1]}    taxes=${tax}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${SO_itemEncIds}  ${resp.json()[0]}
+
+    ${resp}=  Get SalesOrder Catalog Item By Encid      ${SO_itemEncIds}         
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Get Inventoryitem      ${ic_TAX_Item_id}         
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
 # ----------------------------------------------------------------------------------------------------------
 
@@ -975,7 +1129,6 @@ JD-TC-Inventory Manager Work Flow-2
     # ${billingAddress1}=   Create Dictionary    phone=${bill_Phone1}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
 
     ${note}=  FakerLibrary.name
-
     ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}    store=${store}        notes=${note}      notesForCustomer=${note}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
