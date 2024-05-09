@@ -29,9 +29,9 @@ ${originFrom}       NONE
       
 *** Test Cases ***
 
-JD-TC-CreatePrescription-1
+JD-TC-UpdatePrescription-1
 
-    [Documentation]    Create Prescription
+    [Documentation]    Update Prescription
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
@@ -568,7 +568,3 @@ JD-TC-CreatePrescription-1
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['description']}         ${description}
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['quantity']}            ${quantity1}
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
-
-    ${resp}=    RX Push Prescription By EncId  ${prescription_id}  ${store_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200

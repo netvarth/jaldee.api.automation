@@ -29,9 +29,9 @@ ${originFrom}       NONE
       
 *** Test Cases ***
 
-JD-TC-CreatePrescription-1
+JD-TC-PushRXPrescription-1
 
-    [Documentation]    Create Prescription
+    [Documentation]    Push RX Prescription
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}

@@ -15208,3 +15208,20 @@ Enable/Disable SalesOrder
     Check And Create YNW Session
     ${resp}=  PUT On Session  ynw  /provider/account/settings/salesOrder/${status}     expected_status=any
     RETURN  ${resp}
+
+RX Push Prescription By EncId
+
+    [Arguments]  ${uid}  @{vargs}
+
+    ${len}=  Get Length  ${vargs}
+    ${storeList}=  Create List  
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${storeList}  ${vargs[${index}]}
+
+    END
+    ${data}=  Create Dictionary  uid=${uid}  storeList=${storeList}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/pushprescription   data=${data}  expected_status=any
+    RETURN  ${resp}
