@@ -144,7 +144,7 @@ JD-TC-Update Catalog Item Batch-1
 
     ${displayName}=     FakerLibrary.name
 
-    ${resp}=    Create Item Inventory  ${displayName}   isBatchApplicable=${boolean[1]}  
+    ${resp}=    Create Item Inventory  ${displayName}   isBatchApplicable=${boolean[1]}      isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
@@ -157,7 +157,7 @@ JD-TC-Update Catalog Item Batch-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${Ca_item_Id}    ${resp.json()}
 
-    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id} 
+    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id}    isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncIds}  ${resp.json()}
@@ -245,7 +245,7 @@ JD-TC-Update Catalog Item Batch-2
 
     ${displayName}=     FakerLibrary.name
 
-    ${resp}=    Create Item Inventory  ${displayName}   isBatchApplicable=${boolean[1]} 
+    ${resp}=    Create Item Inventory  ${displayName}   isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId2}  ${resp.json()}
@@ -722,7 +722,7 @@ JD-TC-Update Catalog Item Batch-4
     Set Suite Variable              ${shortDesc}
     Set Suite Variable              ${internalDesc}
 
-    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[1]}  isInventoryItem=${boolean[0]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}
+    ${resp}=    Create Item Inventory  ${name}  shortDesc=${shortDesc}   internalDesc=${internalDesc}   itemCode=${itemjrx}   categoryCode=${categoryCode}  categoryCode2=${categoryCode}  typeCode=${typeCode}  typeCode2=${typeCode}  hsnCode=${hsnCode}  manufacturerCode=${manufacturerCode}  sku=${sku}  isBatchApplicable=${boolean[1]}  isInventoryItem=${boolean[1]}  itemGroups=${itemGroups}  itemSubGroups=${itemGroups}  tax=${tax}  composition=${composition}  itemUnits=${itemUnits}  attachments=${attachments}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable              ${itemEncId1}  ${resp.json()}
@@ -737,7 +737,7 @@ JD-TC-Update Catalog Item Batch-4
     Should Be Equal As Strings      ${resp.json()['name']}                                      ${name}
     Should Be Equal As Strings      ${resp.json()['shortDesc']}                                 ${shortDesc}
     Should Be Equal As Strings      ${resp.json()['internalDesc']}                              ${internalDesc}
-    Should Be Equal As Strings      ${resp.json()['isInventoryItem']}                           ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()['isInventoryItem']}                           ${bool[1]}
     Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryCode']}              ${categoryCode}
     Should Be Equal As Strings      ${resp.json()['itemCategory']['categoryName']}              ${categoryName}
     Should Be Equal As Strings      ${resp.json()['itemCategory']['status']}                    ${toggle[0]}
@@ -834,7 +834,7 @@ JD-TC-Update Catalog Item Batch-4
 
 #-----------------------For updation----------------------------------
     ${Name2}=    FakerLibrary.last name
-    ${resp}=    Create Item Inventory  ${Name2}    isBatchApplicable=${boolean[1]} 
+    ${resp}=    Create Item Inventory  ${Name2}    isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable              ${itemEncId2}  ${resp.json()}
@@ -893,8 +893,7 @@ JD-TC-Update Catalog Item Batch-4
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=99
 
-    ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}  ${inv_order_encid}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
-
+   ${purchaseItemDtoList1}=        Create purchaseItemDtoList  ${ic_id}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}    ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
@@ -992,7 +991,7 @@ JD-TC-Update Catalog Item Batch-4
     ${purchaseNote}=                FakerLibrary.Sentence
     ${roundOff}=                    Random Int  min=1  max=99
 
-    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id1}  ${inv_order_encid1}  ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}  ${salesRate}  ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
+    ${purchaseItemDtoList2}=        Create purchaseItemDtoList  ${ic_id1}   ${quantity}  ${freeQuantity}  ${totalQuantity}  ${amount}  ${discountAmount}  ${discountPercentage}  500  ${taxableAmount}  ${taxAmount}  ${netTotal}   ${expiryDate}  ${mrp}    ${batchNo}  ${cgst}  ${sgst}  ${iu_id}    
 
     ${resp}=    Create Purchase  ${store_id}  ${invoiceReferenceNo}  ${invoiceDate}  ${vendorId}  ${encid}  ${purchaseNote}  ${roundOff}  ${purchaseItemDtoList2}  
     Log   ${resp.content}
