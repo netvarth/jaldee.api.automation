@@ -33,6 +33,17 @@ JD-TC-Update SO Catalog Item Price-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${resp}=  Get Account Settings
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    IF  ${resp.json()['enableInventory']}==${bool[0]}
+        ${resp1}=  Enable Disable Inventory  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+    END
+
+
     ${resp}=  Get Store Type By Filter     
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -130,7 +141,7 @@ JD-TC-Update SO Catalog Item Price-1
     ${displayName}=     FakerLibrary.name
     Set Suite Variable  ${displayName}
 
-    ${resp}=    Create Item Inventory  ${displayName}    
+    ${resp}=    Create Item Inventory  ${displayName}    isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
@@ -143,7 +154,7 @@ JD-TC-Update SO Catalog Item Price-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${Ca_item_Id}    ${resp.json()}
 
-    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id} 
+    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id}   isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncIds}  ${resp.json()}
@@ -167,7 +178,7 @@ JD-TC-Update SO Catalog Item Price-1
     Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}
     Should Be Equal As Strings    ${resp.json()['price']}    ${price}
     Should Be Equal As Strings    ${resp.json()['taxInclude']}    ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['batchPricing']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['batchPricing']}    ${bool[1]}
     Should Be Equal As Strings    ${resp.json()['allowNegativeAvial']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()['allowNegativeTrueAvial']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()['allowFutureNegativeAvial']}    ${bool[0]}
@@ -184,7 +195,21 @@ JD-TC-Update SO Catalog Item Price-1
     ${price1}=    Random Int  min=40   max=80
     ${price1}=   Convert To Number  ${price1}  1
 
-    ${resp}=  Update SO Catalog Item Price     ${SO_Cata_Encid}     ${SO_itemEncIds}        ${price1}       ${EMPTY}    ${EMPTY}
+    ${DAY2}=  db.add_timezone_date  ${tz}  10    
+    ${batch}=     FakerLibrary.name
+    ${resp}=   Create Batch  ${store_id}   ${Inv_Cata_Item_Encid}   ${batch}   ${DAY2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${batch_id}  ${resp.json()['id']}
+
+    ${resp}=  Get Inventoryitem      ${Inv_Cata_Item_Encid}         
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${batch_encid}  ${resp.json()[0]['uid']}
+    ${encidd}=  Create Dictionary          encId=${batch_encid} 
+
+
+    ${resp}=  Update SO Catalog Item Price     ${SO_Cata_Encid}     ${SO_itemEncIds}        ${price1}       ${batch_encid}    ${price1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -205,7 +230,7 @@ JD-TC-Update SO Catalog Item Price-2
     ${resp}=  Update SO Catalog Item Price     ${SO_Cata_Encid}     ${SO_itemEncIds}       0.0     ${EMPTY}    ${EMPTY}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${ITEM_PRICE_REQUIRED}
+    Should Be Equal As Strings   ${resp.json()}   ${ITEM_BATCH_WISE_PRICE_REQUIRED}
 
 JD-TC-Update SO Catalog Item Price-3
 
@@ -218,7 +243,7 @@ JD-TC-Update SO Catalog Item Price-3
     ${resp}=  Update SO Catalog Item Price     ${SO_Cata_Encid}     ${SO_itemEncIds}       -8     ${EMPTY}    ${EMPTY}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${ITEM_PRICE_REQUIRED}
+    Should Be Equal As Strings   ${resp.json()}   ${ITEM_BATCH_WISE_PRICE_REQUIRED}
 
 
 JD-TC-Update SO Catalog Item Price-UH1

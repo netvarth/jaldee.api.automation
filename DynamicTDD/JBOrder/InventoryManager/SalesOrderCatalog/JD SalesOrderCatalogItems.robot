@@ -133,7 +133,7 @@ JD-TC-Sales Order Catalog Items-1
 
     ${displayName}=     FakerLibrary.name
 
-    ${resp}=    Create Item Inventory  ${displayName}    
+    ${resp}=    Create Item Inventory  ${displayName}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
@@ -146,7 +146,7 @@ JD-TC-Sales Order Catalog Items-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${Ca_item_Id}    ${resp.json()}
 
-    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id} 
+    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id}   isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncIds}  ${resp.json()}
@@ -177,7 +177,7 @@ JD-TC-Sales Order Catalog Items-2
 
     ${displayName1}=     FakerLibrary.name
     Set Suite Variable  ${displayName1}
-    ${resp}=    Create Item Inventory  ${displayName1}    
+    ${resp}=    Create Item Inventory  ${displayName1}    isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId2}  ${resp.json()}
@@ -327,6 +327,7 @@ JD-TC-Sales Order Catalog Items-10
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${Name}=    FakerLibrary.last name
     ${resp}=  Create Store   ${Name}  ${St_Id1}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -348,7 +349,7 @@ JD-TC-Sales Order Catalog Items-10
 
     ${displayName}=     FakerLibrary.name
 
-    ${resp}=    Create Item Inventory  ${displayName}    
+    ${resp}=    Create Item Inventory  ${displayName}     isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId2}  ${resp.json()}
@@ -361,7 +362,7 @@ JD-TC-Sales Order Catalog Items-10
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${Ca_item_Id1}    ${resp.json()}
 
-    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id1} 
+    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id1}  isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncIds}  ${resp.json()}

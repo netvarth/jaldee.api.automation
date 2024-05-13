@@ -130,7 +130,7 @@ JD-TC-Get Sales Order Catalog Items List-1
     ${displayName}=     FakerLibrary.name
     Set Suite Variable  ${displayName}
 
-    ${resp}=    Create Item Inventory  ${displayName}    
+    ${resp}=    Create Item Inventory  ${displayName}    isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncId1}  ${resp.json()}
@@ -143,7 +143,7 @@ JD-TC-Get Sales Order Catalog Items List-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable    ${Ca_item_Id}    ${resp.json()}
 
-    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id} 
+    ${resp}=    Create Item Inventory  ${categoryName}   categoryCode=${Ca_item_Id}   isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${itemEncIds}  ${resp.json()}
@@ -167,7 +167,7 @@ JD-TC-Get Sales Order Catalog Items List-1
     Should Be Equal As Strings    ${resp.json()['accountId']}    ${accountId}
     Should Be Equal As Strings    ${resp.json()['price']}    ${price}
     Should Be Equal As Strings    ${resp.json()['taxInclude']}    ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()['batchPricing']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['batchPricing']}    ${bool[1]}
     Should Be Equal As Strings    ${resp.json()['allowNegativeAvial']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()['allowNegativeTrueAvial']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()['allowFutureNegativeAvial']}    ${bool[0]}
@@ -187,7 +187,7 @@ JD-TC-Get Sales Order Catalog Items List-1
     Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId}
     Should Be Equal As Strings    ${resp.json()[0]['price']}    ${price}
     Should Be Equal As Strings    ${resp.json()[0]['taxInclude']}    ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['batchPricing']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchPricing']}    ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['allowNegativeAvial']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['allowNegativeTrueAvial']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['allowFutureNegativeAvial']}    ${bool[0]}
@@ -215,7 +215,7 @@ JD-TC-Get Sales Order Catalog Items List-2
     Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId}
     Should Be Equal As Strings    ${resp.json()[0]['price']}    ${price}
     Should Be Equal As Strings    ${resp.json()[0]['taxInclude']}    ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['batchPricing']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchPricing']}    ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['allowNegativeAvial']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['allowNegativeTrueAvial']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['allowFutureNegativeAvial']}    ${bool[0]}
@@ -243,7 +243,7 @@ JD-TC-Get Sales Order Catalog Items List-3
     Should Be Equal As Strings    ${resp.json()[0]['accountId']}    ${accountId}
     Should Be Equal As Strings    ${resp.json()[0]['price']}    ${price}
     Should Be Equal As Strings    ${resp.json()[0]['taxInclude']}    ${bool[0]}
-    Should Be Equal As Strings    ${resp.json()[0]['batchPricing']}    ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()[0]['batchPricing']}    ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['allowNegativeAvial']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['allowNegativeTrueAvial']}    ${bool[0]}
     Should Be Equal As Strings    ${resp.json()[0]['allowFutureNegativeAvial']}    ${bool[0]}

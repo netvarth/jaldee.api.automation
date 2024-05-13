@@ -2312,6 +2312,8 @@ CANT_CREATE_BATCH_INVMGMT_OFF="Can't create batch because inventory management i
 NOT_AN_INNVENTORY_ITEM="{} is not a inventory item"
 INVENTORY_BATCH_ITEM_ID_REQUIRED="Inventory Item Batch Id required" 
 NOT_CONNECTED_TO_ORDER_CATALOG="Given inventory catalog item is not an item of the inventory catalogs which are connected to this order catalog"
+ALREADY_ADDED_IN_SORDER_CATALOG="Given Inventory catalog Item {} is already added in this Sales Order Catalog"
+ITEM_BATCH_WISE_PRICE_REQUIRED="Item Batch wise Price required"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"
