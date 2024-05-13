@@ -2343,3 +2343,4 @@ SALES_RATE_NOT_UPDATE = "Item sales rate can be updated only after approving the
 USER_ALREADY_ASSIGNED= "Already Assigned to the {}"
 CAN_NOT_UPDATE_STATUS= "Can't change this order status from {} to {}"
 ALREADY_IN="Already in {}"
+FIELD_REQUIRED = "{} required"
