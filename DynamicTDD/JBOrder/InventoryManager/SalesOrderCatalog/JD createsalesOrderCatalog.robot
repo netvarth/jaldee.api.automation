@@ -388,6 +388,32 @@ JD-TC-Create SalesOrder Inventory Catalog-UH7
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${SAME_NAME_EXIST}
+
+JD-TC-Create SalesOrder Inventory Catalog-UH8
+
+    [Documentation]  create  sales order catalog then try to disable inventory catalog
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${Name}=    FakerLibrary.first name
+    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${inv_cat_encid1}  ${resp.json()}
+    ${inv_cat_encid}=  Create List  ${inv_cat_encid1}
+
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id1}  ${invalidstring}  ${boolean[1]}  ${inv_cat_encid}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=  Update Inventory Catalog status   ${inv_cat_encid1}  ${InventoryCatalogStatus[1]}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${INVENTORY_CATALOG_CONNECTED_TO_ORDER_CATALOG}
+    
     
 
 

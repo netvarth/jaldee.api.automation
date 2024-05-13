@@ -2314,6 +2314,7 @@ INVENTORY_BATCH_ITEM_ID_REQUIRED="Inventory Item Batch Id required"
 NOT_CONNECTED_TO_ORDER_CATALOG="Given inventory catalog item is not an item of the inventory catalogs which are connected to this order catalog"
 ALREADY_ADDED_IN_SORDER_CATALOG="Given Inventory catalog Item {} is already added in this Sales Order Catalog"
 ITEM_BATCH_WISE_PRICE_REQUIRED="Item Batch wise Price required"
+INVENTORY_CATALOG_CONNECTED_TO_ORDER_CATALOG="This inventory catalog is connected to sales order catalog"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"
