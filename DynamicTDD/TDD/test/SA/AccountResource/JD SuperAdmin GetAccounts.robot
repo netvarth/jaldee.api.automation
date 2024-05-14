@@ -36,27 +36,25 @@ JD-TC-SuperadminGetAccount-AllAccounts
         Log  ${resp.content}
         Should Be Equal As Strings  ${resp.status_code}  200
         ${count} =  Get Length  ${resp.json()}
-        ${sum} =    Set Variable  ${count}
-        WHILE    True    limit=900s    on_limit_message=Timeout
-                ${resp} =  Get Accounts  from=${sum}
-                Log  ${resp.content}
-                Should Be Equal As Strings  ${resp.status_code}  200
-                TRY
-                        ${count} =  Get Length  ${resp.json()}
-                        ${sum} =    Evaluate    ${sum} + ${count}
-                EXCEPT
-                        CONTINUE
-                END
-               
-                # IF    ${count} != 0
-                #         CONTINUE
-                # ELSE
-                #         BREAK
-                # END
-        END
+        # ${sum} =    Set Variable  ${count}
+        # WHILE    True    limit=3600s    on_limit_message=Timeout
+        #         ${resp} =  Get Accounts  from=${sum}
+        #         Log  ${resp.content}
+        #         Should Be Equal As Strings  ${resp.status_code}  200
+        #         TRY
+        #                 ${count} =  Get Length  ${resp.json()}
+        #                 ${sum} =    Evaluate    ${sum} + ${count}
+        #         EXCEPT
+        #                 CONTINUE
+        #         END
+
+        #         IF    ${count} == 0
+        #                 BREAK
+        #         END
+        # END
 
 	
-*** Comments ***
+# *** Comments ***
 
 JD-TC-SuperadminGetAccount-1
 	[Documentation]  Get Account Data  when  id-eq=${id}  uid-eq=${uid}

@@ -90,17 +90,17 @@ JD-TC-CreateTeam-3
      Set Suite Variable  ${dep_id}  ${resp.json()['departments'][0]['departmentId']}
 
      ${resp}=  Get User
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF   not '${resp.content}' == '${emptylist}'
-        ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${HLMUSERNAME8}'
-            clear_users  ${user_phone}
-        END
-    END
+     Log  ${resp.content}
+     Should Be Equal As Strings    ${resp.status_code}    200
+     IF   not '${resp.content}' == '${emptylist}'
+          ${len}=  Get Length  ${resp.json()}
+          FOR   ${i}  IN RANGE   0   ${len}
+               Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+               IF   not '${user_phone}' == '${HLMUSERNAME8}'
+                    clear_users  ${user_phone}
+               END
+          END
+     END
 
      ${resp2}=   Get Business Profile
     Log  ${resp2.json()}

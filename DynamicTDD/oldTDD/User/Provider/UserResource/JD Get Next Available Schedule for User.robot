@@ -76,12 +76,12 @@ JD-TC-NextAvailableSchedule for User-1
 
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-       
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${MUSERNAME57}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+        
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${MUSERNAME57}'
+                clear_users  ${user_phone}
+            END
         END
     END
 

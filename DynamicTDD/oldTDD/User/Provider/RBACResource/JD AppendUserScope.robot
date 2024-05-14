@@ -121,11 +121,11 @@ JD-TC-AppendUserScope-1
     Should Be Equal As Strings    ${resp.status_code}    200
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${HLMUSERNAME19}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${HLMUSERNAME19}'
+                clear_users  ${user_phone}
+            END
         END
     END
 
@@ -565,11 +565,11 @@ JD-TC-AppendUserScope-9
     Should Be Equal As Strings    ${resp.status_code}    200
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${MUSERNAME125}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${MUSERNAME125}'
+                clear_users  ${user_phone}
+            END
         END
     END
 
@@ -811,11 +811,11 @@ JD-TC-AppendUserScope-10
     Should Be Equal As Strings    ${resp.status_code}    200
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${MUSERNAME127}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${MUSERNAME127}'
+                clear_users  ${user_phone}
+            END
         END
     END
 
@@ -1192,13 +1192,16 @@ JD-TC-AppendUserScope-11
     ${resp}=  Get User
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
+    ${resp}=  Get User
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${MUSERNAME129}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${MUSERNAME129}'
+                clear_users  ${user_phone}
+            END
         END
     END
 
@@ -1544,11 +1547,11 @@ JD-TC-AppendUserScope-UH3
     Should Be Equal As Strings    ${resp.status_code}    200
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${MUSERNAME64}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${MUSERNAME64}'
+                clear_users  ${user_phone}
+            END
         END
     END
 
@@ -1743,11 +1746,11 @@ JD-TC-AppendUserScope-UH8
     Should Be Equal As Strings    ${resp.status_code}    200
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${MUSERNAME126}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${MUSERNAME126}'
+                clear_users  ${user_phone}
+            END
         END
     END
 

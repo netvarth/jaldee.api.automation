@@ -204,11 +204,11 @@ JD-TC-CreateItemGroupforUser-6
     Should Be Equal As Strings    ${resp.status_code}    200
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${MUSERNAME12}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${MUSERNAME12}'
+                clear_users  ${user_phone}
+            END
         END
     END
 
@@ -299,11 +299,11 @@ JD-TC-CreateItemGroupforUser-7
     Should Be Equal As Strings    ${resp.status_code}    200
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${MUSERNAME13}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${MUSERNAME13}'
+                clear_users  ${user_phone}
+            END
         END
     END
 

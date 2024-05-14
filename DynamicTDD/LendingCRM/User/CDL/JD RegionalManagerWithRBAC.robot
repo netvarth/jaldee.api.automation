@@ -246,15 +246,7 @@ JD-TC-RegionalManager-1
     ${resp}=  CDLtype                     ${account_id1}
     ${resp}=  CDLEnqStatus                   ${account_id1}
 
-    ${resp}=  Get User
-    Log  ${resp.content}
-    Should Be Equal As Strings            ${resp.status_code}    200
-    IF   not '${resp.content}' == '${emptylist}'
-        ${len}=  Get Length               ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-        Set Test Variable                 ${user_phone}         ${resp.json()[${i}]['mobileNo']}
-    END
+    
 
     reset_user_metric  ${account_id1}
 

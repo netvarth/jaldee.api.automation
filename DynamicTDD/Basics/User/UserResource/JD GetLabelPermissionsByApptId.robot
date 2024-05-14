@@ -971,12 +971,12 @@ JD-TC-GetLabelPremissions-UH1
 
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-       
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${HLMUSERNAME12}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+        
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${HLMUSERNAME12}'
+                clear_users  ${user_phone}
+            END
         END
     END
 
@@ -1287,12 +1287,12 @@ JD-TC-GetLabelPremissions-UH2
 
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-       
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${HLMUSERNAME12}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+        
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${HLMUSERNAME12}'
+                clear_users  ${user_phone}
+            END
         END
     END
 
@@ -1584,12 +1584,12 @@ JD-TC-GetLabelPremissions-UH3
 
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-       
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${HLMUSERNAME22}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+        
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${HLMUSERNAME22}'
+                clear_users  ${user_phone}
+            END
         END
     END
 

@@ -206,11 +206,11 @@ JD-TC-BranchCreditOfficerWithRBAC-1
     Should Be Equal As Strings    ${resp.status_code}    200
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${HLMUSERNAME20}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${HLMUSERNAME20}'
+                clear_users  ${user_phone}
+            END
         END
     END
 
@@ -1455,16 +1455,13 @@ JD-TC-BranchCreditOfficerWithRBAC-5
     ${resp}=  loanProducts          ${account_id1}
     ${resp}=  loanScheme            ${account_id1}
 
-    ${resp}=  Get User
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${NBFCMUSERNAME1}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${NBFCMUSERNAME1}'
+                clear_users  ${user_phone}
+            END
         END
     END
 

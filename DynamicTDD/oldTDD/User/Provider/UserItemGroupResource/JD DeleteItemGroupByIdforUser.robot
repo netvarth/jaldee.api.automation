@@ -203,11 +203,11 @@ JD-TC-DeleteItemGroupByIdforUser-3
     Should Be Equal As Strings    ${resp.status_code}    200
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${HLMUSERNAME20}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${HLMUSERNAME20}'
+                clear_users  ${user_phone}
+            END
         END
     END
 
@@ -316,11 +316,11 @@ JD-TC-DeleteItemGroupByIdforUser-4
     Should Be Equal As Strings    ${resp.status_code}    200
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${MUSERNAME14}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${MUSERNAME14}'
+                clear_users  ${user_phone}
+            END
         END
     END
 
@@ -428,11 +428,11 @@ JD-TC-DeleteItemGroupByIdforUser-5
     Should Be Equal As Strings    ${resp.status_code}    200
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${HLMUSERNAME8}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${HLMUSERNAME8}'
+                clear_users  ${user_phone}
+            END
         END
     END
 
@@ -592,11 +592,11 @@ JD-TC-DeleteItemGroupByIdforUser-UH4
     Should Be Equal As Strings    ${resp.status_code}    200
     IF   not '${resp.content}' == '${emptylist}'
         ${len}=  Get Length  ${resp.json()}
-    END
-    FOR   ${i}  IN RANGE   0   ${len}
-        Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-        IF   not '${user_phone}' == '${HLMUSERNAME15}'
-            clear_users  ${user_phone}
+        FOR   ${i}  IN RANGE   0   ${len}
+            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
+            IF   not '${user_phone}' == '${HLMUSERNAME15}'
+                clear_users  ${user_phone}
+            END
         END
     END
 
