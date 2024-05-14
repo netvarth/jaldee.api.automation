@@ -33,7 +33,7 @@ JD-TC-CreatePrescription-1
 
     [Documentation]    Create Prescription
 
-    ${iscorp_subdomains}=  get_iscorp_subdomains  1
+        ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
     Set Suite Variable  ${iscorp_subdomains}
     Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
@@ -539,3 +539,11 @@ JD-TC-CreatePrescription-1
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['quantity']}            ${quantity1}
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
 
+    ${resp}=    RX Create Prescription Item  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Set Suite Variable              ${pitm_id}      ${resp.json()}
+
+    ${resp}=    Get RX Prescription Item By EncId  ${pitm_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200

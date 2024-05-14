@@ -61,3 +61,27 @@ JD-TC-GetFrequency-1
     Should Be Equal As Strings      ${resp.json()['description']}   ${description0}
     Should Be Equal As Strings      ${resp.json()['remark']}        ${remark0}
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos0}
+
+JD-TC-GetFrequency-2
+
+    [Documentation]  Get Frequency - where frequency id is invalid
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=1  max=999
+
+    ${resp}=    Get Frequency  ${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Empty  ${resp.content}
+    
+JD-TC-GetFrequency-3
+
+    [Documentation]  Get Frequency - without login
+
+    ${resp}=    Get Frequency  ${frequency_id0}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             419
+    Should Be Equal As Strings      ${resp.json()}          ${SESSION_EXPIRED}

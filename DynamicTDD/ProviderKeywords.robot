@@ -15142,12 +15142,12 @@ Update Frequency
     ${resp}=  PUT On Session  ynw  /provider/medicalrecord/prescription/frequency   data=${data}  expected_status=any
     RETURN  ${resp} 
 
-Delete Frequency
+Update Frequency Status
 
-    [Arguments]   ${id}
+    [Arguments]   ${prescriptionUid}  ${status}
 
     Check And Create YNW Session
-    ${resp}=  DELETE On Session  ynw  /provider/medicalrecord/prescription/frequency/${id}     expected_status=any
+    ${resp}=  DELETE On Session  ynw  /provider/medicalrecord/prescription/frequency/${prescriptionUid}/status/${status}     expected_status=any
     RETURN  ${resp}
 
 Get Frequency By Account

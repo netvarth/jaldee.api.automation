@@ -82,24 +82,9 @@ JD-TC-DeleteFrequency-1
     Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
 
-    ${frequency2}=       Random Int  min=1  max=10
-
-    ${resp}=    Update Frequency  ${frequency_id}  ${frequency2}  ${dosage}  description=${description}  remark=${remark}
+    ${resp}=    Update Frequency Status  ${frequency_id}  ${toggle[0]}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}     200
-
-    ${resp}=    Get Frequency  ${frequency_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()['id']}            ${frequency_id}
-    Should Be Equal As Strings      ${resp.json()['frequency']}     ${frequency2}
-    Should Be Equal As Strings      ${resp.json()['description']}   ${description}
-    Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
-    Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
-
-    ${resp}=    Delete Frequency  ${frequency_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
 
     ${resp}=    Get Frequency  ${frequency_id}
     Log   ${resp.content}

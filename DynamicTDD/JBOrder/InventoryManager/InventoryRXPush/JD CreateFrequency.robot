@@ -78,20 +78,6 @@ JD-TC-CreateFrequency-1
     Set Suite Variable      ${remark}
     Set Suite Variable      ${dos}
 
-    ${resp}=    Create Frequency  ${frequency}  ${dosage}  description=${description}  remark=${remark}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-    Set Suite Variable              ${frequency_id}         ${resp.json()}
-
-    ${resp}=    Get Frequency  ${frequency_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()['id']}            ${frequency_id}
-    Should Be Equal As Strings      ${resp.json()['frequency']}     ${frequency}
-    Should Be Equal As Strings      ${resp.json()['description']}   ${description}
-    Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
-    Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
-
 
 JD-TC-CreateFrequency-2
 
@@ -110,3 +96,83 @@ JD-TC-CreateFrequency-2
     Should Be Equal As Strings      ${resp.status_code}     200
     Set Suite Variable              ${frequency_id3}         ${resp.json()}
 
+JD-TC-CreateFrequency-3
+
+    [Documentation]  Create Frequency - where frequency is empty
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${dosage3}=          Random Int  min=1  max=3000
+    ${dos3}=             Evaluate    float(${dosage3})
+
+    ${FIELD_REQUIRED}=  format String   ${FIELD_REQUIRED}   Frequency
+
+    ${resp}=    Create Frequency  ${empty}  ${dosage3}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${FIELD_REQUIRED}${space}
+
+JD-TC-CreateFrequency-4
+
+    [Documentation]  Create Frequency - frequency is above 1000
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${frequency3}=       Random Int  min=1000  max=10000
+    ${dosage3}=          Random Int  min=1  max=3000
+    ${dos3}=             Evaluate    float(${dosage3})
+
+    ${resp}=    Create Frequency  ${frequency3}  ${dosage3}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Set Suite Variable              ${frequency_id3}         ${resp.json()}
+
+JD-TC-CreateFrequency-5
+
+    [Documentation]  Create Frequency - Dosage is empty
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${frequency3}=       Random Int  min=1  max=10
+    ${FIELD_REQUIRED}=  format String   ${FIELD_REQUIRED}   Dosage
+
+    ${resp}=    Create Frequency  ${frequency3}  ${empty}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${FIELD_REQUIRED}${space}
+
+JD-TC-CreateFrequency-6
+
+    [Documentation]  Create Frequency - dosage is above 1000
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${frequency3}=       Random Int  min=1  max=10
+    ${dosage3}=          Random Int  min=1000  max=3000
+    ${dos3}=             Evaluate    float(${dosage3})
+
+    ${resp}=    Create Frequency  ${frequency3}  ${dosage3}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+    Set Suite Variable              ${frequency_id3}         ${resp.json()}
+
+JD-TC-CreateFrequency-7
+
+    [Documentation]  Create Frequency - without login
+
+    ${frequency3}=       Random Int  min=1  max=10
+    ${dosage3}=          Random Int  min=1  max=3000
+    ${dos3}=             Evaluate    float(${dosage3})
+
+    ${resp}=    Create Frequency  ${frequency3}  ${dosage3}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     419
+    Should Be Equal As Strings      ${resp.json()}          ${SESSION_EXPIRED}

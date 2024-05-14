@@ -95,3 +95,27 @@ JD-TC-GetFrequencyByAccount-1
     Should Be Equal As Strings      ${resp.json()[1]['description']}    ${description0}
     Should Be Equal As Strings      ${resp.json()[1]['remark']}         ${remark0}
     Should Be Equal As Strings      ${resp.json()[1]['dosage']}         ${dos0}
+
+
+JD-TC-GetFrequencyByAccount-2
+
+    [Documentation]  Get Frequency By Account - where account id is invalid
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${inv}=     Random Int  min=500  max=600
+
+    ${resp}=    Get Frequency By Account  ${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                 200
+
+JD-TC-GetFrequencyByAccount-3
+
+    [Documentation]  Get Frequency By Account - without login 
+
+    ${resp}=    Get Frequency By Account  ${account_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     419
+    Should Be Equal As Strings      ${resp.json()}          ${SESSION_EXPIRED}
