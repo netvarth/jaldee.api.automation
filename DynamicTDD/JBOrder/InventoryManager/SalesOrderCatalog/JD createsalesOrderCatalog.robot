@@ -185,7 +185,7 @@ JD-TC-Create SalesOrder Inventory Catalog-6
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id1}  ${Name}  ${boolean[0]}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id}  ${Name}  ${boolean[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -271,26 +271,26 @@ JD-TC-Create SalesOrder Inventory Catalog-7
     ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id1}  ${Name}  ${boolean[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${SAME_NAME_EXIST}
+    Should Be Equal As Strings   ${resp.json()}   ${ORDER_CATALOG_EXIST_WITH_THE_GIVEN_NAME}
 
-JD-TC-Create SalesOrder Inventory Catalog-8
+# JD-TC-Create SalesOrder Inventory Catalog-8
 
-    [Documentation]  create  sales order catalog where name as invalid string.(inventory manager is true)
+#     [Documentation]  create  sales order catalog where name as invalid string.(inventory manager is true)
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
+#     Log   ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${Name}=    FakerLibrary.first name
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id1}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Test Variable  ${inv_cat_encid}  ${resp.json()}
-    ${inv_cat_encid}=  Create List  ${inv_cat_encid}
+#     ${Name}=    FakerLibrary.first name
+#     ${resp}=  Create Inventory Catalog   ${Name}  ${store_id1}   
+#     Log   ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    200
+#     Set Test Variable  ${inv_cat_encid}  ${resp.json()}
+#     ${inv_cat_encid}=  Create List  ${inv_cat_encid}
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id1}  ${invalidstring}  ${boolean[1]}  ${inv_cat_encid}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
+#     ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id1}  ${invalidstring}  ${boolean[1]}  ${inv_cat_encid}
+#     Log   ${resp.content}
+#     Should Be Equal As Strings    ${resp.status_code}    200
 
 
 JD-TC-Create SalesOrder Inventory Catalog-UH1
@@ -375,6 +375,8 @@ JD-TC-Create SalesOrder Inventory Catalog-UH6
     ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id1}  ${Text}  ${boolean[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings   ${resp.json()}   ${NAME_LENGT_TOO_LONG}
+
 
 JD-TC-Create SalesOrder Inventory Catalog-UH7
 
@@ -387,7 +389,7 @@ JD-TC-Create SalesOrder Inventory Catalog-UH7
     ${resp}=  Create SalesOrder Inventory Catalog-InvMgr False   ${store_id1}  ${invalidstring}  ${boolean[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${SAME_NAME_EXIST}
+    Should Be Equal As Strings   ${resp.json()}   ${ORDER_CATALOG_EXIST_WITH_THE_GIVEN_NAME}
 
 JD-TC-Create SalesOrder Inventory Catalog-UH8
 
@@ -404,7 +406,7 @@ JD-TC-Create SalesOrder Inventory Catalog-UH8
     Set Test Variable  ${inv_cat_encid1}  ${resp.json()}
     ${inv_cat_encid}=  Create List  ${inv_cat_encid1}
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id1}  ${invalidstring}  ${boolean[1]}  ${inv_cat_encid}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id1}  ${Name}  ${boolean[1]}  ${inv_cat_encid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 

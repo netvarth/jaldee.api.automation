@@ -1001,7 +1001,7 @@ JD-TC-Create Catalog Item Batch-2
 
 
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid_List}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name1}  ${boolean[1]}  ${inv_cat_encid_List}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${inv_order_encid1}  ${resp.json()}

@@ -627,8 +627,8 @@ JD-TC-Update Catalog Item Batch-1
 
 #----------------------------------------------------------------------------
 
-
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid_List1}
+    ${Name3}=    FakerLibrary.last name
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name3}  ${boolean[1]}  ${inv_cat_encid_List1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${inv_order_encid1}  ${resp.json()}

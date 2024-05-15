@@ -743,7 +743,7 @@ JD-TC-Create Stock Adjustment-UH11
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${BATCH_REQUIRED}
 
-JD-TC-Create Stock Adjustment-UH11
+JD-TC-Create Stock Adjustment-UH12
 
     [Documentation]  Inactive store and then try to Create stock adjustment using that disabled store.
 
@@ -758,7 +758,7 @@ JD-TC-Create Stock Adjustment-UH11
     ${resp}=  Create Stock Adjustment   ${locId1}  ${store_id}   ${inventory_catalog_encid}   ${remarks_encid1}      ${data}  
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${INVALID_REMARKS_ID}
+    Should Be Equal As Strings   ${resp.json()}   ${INVALID_STORE_ID}
     
 
 

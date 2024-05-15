@@ -247,7 +247,7 @@ JD-TC-Get SalesOrder Catalog Count-6
     Set Suite Variable  ${inv_cat_encid}  ${resp.json()}
     ${inv_cat_encid1}=  Create List  ${inv_cat_encid}
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id1}  ${invalidstring}  ${boolean[1]}  ${inv_cat_encid1}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id1}  ${Name}  ${boolean[1]}  ${inv_cat_encid1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${sa_catlog_id4}  ${resp.json()}

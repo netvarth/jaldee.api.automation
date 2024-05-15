@@ -699,7 +699,7 @@ JD-TC-Get Catalog Batch by Encid-2
 
 
 
-    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name}  ${boolean[1]}  ${inv_cat_encid_List}
+    ${resp}=  Create SalesOrder Inventory Catalog-InvMgr True   ${store_id}  ${Name1}  ${boolean[1]}  ${inv_cat_encid_List}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Test Variable  ${inv_order_encid1}  ${resp.json()}
@@ -783,7 +783,7 @@ JD-TC-Get Catalog Batch by Encid-2
     Should Be Equal As Strings    ${resp.json()['catalogItem']['encId']}    ${SO_itemEncIds1}    
     Should Be Equal As Strings    ${resp.json()['sorderCatalogItem']['accountId']}    ${accountId}    
     Should Be Equal As Strings    ${resp.json()['sorderCatalogItem']['catalog']['encId']}    ${inv_order_encid1}  
-    Should Be Equal As Strings    ${resp.json()['sorderCatalogItem']['catalog']['name']}    ${Name}   
+    Should Be Equal As Strings    ${resp.json()['sorderCatalogItem']['catalog']['name']}    ${Name1}   
     Should Be Equal As Strings    ${resp.json()['sorderCatalogItem']['catalog']['invMgmt']}    ${bool[0]}  
     Should Be Equal As Strings    ${sorderCatalogItem_price}    ${price}      
     Should Be Equal As Strings    ${resp.json()['sorderCatalogItem']['spItem']['id']}    ${sp-item-id} 
