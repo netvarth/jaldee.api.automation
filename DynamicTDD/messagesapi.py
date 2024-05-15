@@ -2316,6 +2316,8 @@ ALREADY_ADDED_IN_SORDER_CATALOG="Given Inventory catalog Item {} is already adde
 ITEM_BATCH_WISE_PRICE_REQUIRED="Item Batch wise Price required"
 INVENTORY_CATALOG_CONNECTED_TO_ORDER_CATALOG="This inventory catalog is connected to sales order catalog"
 BATCH_REQUIRED="Batch required for {}."
+ORDER_CATALOG_EXIST_WITH_THE_GIVEN_NAME="Order Catalog exists with given name in this store"
+NAME_LENGT_TOO_LONG="Name length too long"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"
