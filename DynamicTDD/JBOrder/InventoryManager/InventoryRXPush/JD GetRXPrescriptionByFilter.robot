@@ -29,9 +29,9 @@ ${originFrom}       NONE
       
 *** Test Cases ***
 
-JD-TC-CreatePrescription-1
+JD-TC-GetRXPrescriptionItemByFilter-1
 
-    [Documentation]    Create Prescription
+    [Documentation]    Get RX Prescription Item By Filter
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
@@ -43,7 +43,7 @@ JD-TC-CreatePrescription-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+45788121
+    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+45789754
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
@@ -207,6 +207,14 @@ JD-TC-CreatePrescription-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${item1}  ${resp.json()}
 
+    ${displayName2}=        FakerLibrary.name
+    Set Suite Variable      ${displayName2}
+
+    ${resp}=    Create Item Inventory  ${displayName2}    isInventoryItem=${bool[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${item2}  ${resp.json()}
+
 
 # ----------------------------------------- create Inv Catalog -------------------------------------------------------
     ${INV_Cat_Name}=     FakerLibrary.name
@@ -218,7 +226,7 @@ JD-TC-CreatePrescription-1
 
 # ----------------------------------------Create Inventory Catalog Item----------------------------------
 
-    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${item1}  
+    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${item1}  ${item2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable   ${ic_Item_id}   ${resp.json()[0]}
@@ -509,9 +517,8 @@ JD-TC-CreatePrescription-1
     ${qt}=        Random Int  min=1  max=10
     ${duration1}=             Evaluate    float(${dur})
     ${quantity1}=             Evaluate    float(${qt})
-    Set Suite Variable        ${duration1}
-    Set Suite Variable        ${quantity1}
-
+    Set Suite Variable      ${duration1}
+    Set Suite Variable      ${quantity1}
 
     ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
     Log   ${resp.content}
@@ -542,158 +549,73 @@ JD-TC-CreatePrescription-1
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['description']}         ${description}
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['quantity']}            ${quantity1}
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
+    Set Suite Variable              ${RDID1}      ${resp.json()['id']}
 
+    ${dur2}=        Random Int  min=1  max=100
+    ${qt2}=        Random Int  min=1  max=10
+    ${duration2}=             Evaluate    float(${dur2})
+    ${quantity2}=             Evaluate    float(${qt2})
+    Set Suite Variable      ${duration2}
+    Set Suite Variable      ${quantity2}
 
+    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Set Suite Variable              ${pitm_id}      ${resp.json()}
 
+    ${resp}=    Get RX Prescription Item By EncId  ${pitm_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}                         200
+    Should Be Equal As Strings      ${resp.json()['spItemCode']}                ${item2}
+    Should Be Equal As Strings      ${resp.json()['medicineName']}              ${displayName2}    
+    Should Be Equal As Strings      ${resp.json()['duration']}                  ${duration2}    
+    Should Be Equal As Strings      ${resp.json()['frequency']['id']}           ${frequency_id}    
+    Should Be Equal As Strings      ${resp.json()['dosage']}                    ${dos}    
+    Should Be Equal As Strings      ${resp.json()['description']}               ${description}  
+    Should Be Equal As Strings      ${resp.json()['quantity']}                  ${quantity2}  
+    Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}          ${prescription_id}   
+    Set Suite Variable              ${RDID2}      ${resp.json()['id']}
 
+    ${resp}=    Get RX Prescription By filter
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()[0]['id']}                     ${RDID2}
+    Should Be Equal As Strings      ${resp.json()[0]['spItemCode']}             ${item2}
+    Should Be Equal As Strings      ${resp.json()[0]['medicineName']}           ${displayName2}    
+    Should Be Equal As Strings      ${resp.json()[0]['duration']}               ${duration2}    
+    Should Be Equal As Strings      ${resp.json()[0]['frequency']['id']}        ${frequency_id}    
+    Should Be Equal As Strings      ${resp.json()[0]['dosage']}                 ${dos}    
+    Should Be Equal As Strings      ${resp.json()[0]['description']}            ${description}  
+    Should Be Equal As Strings      ${resp.json()[0]['quantity']}               ${quantity2}  
+    Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id}   
 
+    Should Be Equal As Strings      ${resp.json()[1]['id']}                     ${RDID1}
+    Should Be Equal As Strings      ${resp.json()[1]['spItemCode']}             ${item1}
+    Should Be Equal As Strings      ${resp.json()[1]['medicineName']}           ${displayName1}    
+    Should Be Equal As Strings      ${resp.json()[1]['duration']}               ${duration1}    
+    Should Be Equal As Strings      ${resp.json()[1]['frequency']['id']}        ${frequency_id}    
+    Should Be Equal As Strings      ${resp.json()[1]['dosage']}                 ${dos}    
+    Should Be Equal As Strings      ${resp.json()[1]['description']}            ${description}  
+    Should Be Equal As Strings      ${resp.json()[1]['quantity']}               ${quantity1}  
+    Should Be Equal As Strings      ${resp.json()[1]['prescriptioinUid']}       ${prescription_id}
 
+JD-TC-GetRXPrescriptionItemByFilter-2
 
-
-JD-TC-CreatePrescription-2
-
-    [Documentation]    Create Prescription -  with same details 
+    [Documentation]    Get RX Prescription Item By Filter - id
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
+    ${resp}=    Get RX Prescription By filter  id-eq=${RDID1}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-
-JD-TC-CreatePrescription-2
-
-    [Documentation]    Create Prescription -  where provider consumer id is empty 
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   ProviderConsumer
-
-    ${resp}=    RX Create Prescription  ${empty}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${INVALID_X_ID}
-
-JD-TC-CreatePrescription-2
-
-    [Documentation]    Create Prescription -  where doc id is empty
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${INVALID_X_ID}=   Replace String  ${INVALID_X_ID}  {}   Doctor
-
-    ${resp}=    RX Create Prescription  ${cid}  ${empty}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${INVALID_X_ID}
-
-JD-TC-CreatePrescription-2
-
-    [Documentation]    Create Prescription -  display name is empty
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${empty}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-
-JD-TC-CreatePrescription-2
-
-    [Documentation]    Create Prescription -  duration is empty
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${INVALID_FIELD}=   Replace String  ${INVALID_FIELD}  {}   Duration Value
-
-    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${empty}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
-
-JD-TC-CreatePrescription-2
-
-    [Documentation]    Create Prescription -  quantity is empty
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${empty}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${html}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-
-JD-TC-CreatePrescription-2
-
-    [Documentation]    Create Prescription -  description is empty 
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${empty}  ${item1}  ${dos}  ${frequency_id}  ${html}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-
-JD-TC-CreatePrescription-2
-
-    [Documentation]    Create Prescription -  item code is empty
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${empty}  ${dos}  ${frequency_id}  ${html}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
-
-JD-TC-CreatePrescription-2
-
-    [Documentation]    Create Prescription -  Dosage is empty
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${INVALID_FIELD}=   Replace String  ${INVALID_FIELD}  {}   Dosage Value
-
-    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${empty}  ${frequency_id}  ${html}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
-
-JD-TC-CreatePrescription-2
-
-    [Documentation]    Create Prescription -  frequency id is empty
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${INVALID_FIELD}=   Replace String  ${INVALID_FIELD}  {}   Frequency Value
-
-    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${empty}  ${html}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
-
-JD-TC-CreatePrescription-2
-
-    [Documentation]    Create Prescription -  html is empty
-
-    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
-    Log  ${resp.json()}         
-    Should Be Equal As Strings            ${resp.status_code}    200
-
-    ${resp}=    RX Create Prescription  ${cid}  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${empty}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     422
-    Should Be Equal As Strings      ${resp.json()}          ${HTML_REQUIRED_CREATION}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()[0]['id']}                     ${RDID1}
+    Should Be Equal As Strings      ${resp.json()[0]['spItemCode']}             ${item1}
+    Should Be Equal As Strings      ${resp.json()[0]['medicineName']}           ${displayName1}    
+    Should Be Equal As Strings      ${resp.json()[0]['duration']}               ${duration1}    
+    Should Be Equal As Strings      ${resp.json()[0]['frequency']['id']}        ${frequency_id}    
+    Should Be Equal As Strings      ${resp.json()[0]['dosage']}                 ${dos}    
+    Should Be Equal As Strings      ${resp.json()[0]['description']}            ${description}  
+    Should Be Equal As Strings      ${resp.json()[0]['quantity']}               ${quantity1}  
+    Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id}

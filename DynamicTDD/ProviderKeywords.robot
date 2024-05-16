@@ -15228,7 +15228,7 @@ RX Push Prescription By EncId
 
 RX Create Prescription Item
 
-    [Arguments]  ${doctorId}  ${medicineName}  ${duration}  ${quantity}  ${description}  ${spItemCode}  ${dosage}  ${frequency_id}  ${prescriptioinUid}
+    [Arguments]  ${medicineName}  ${duration}  ${quantity}  ${description}  ${spItemCode}  ${dosage}  ${frequency_id}  ${prescriptioinUid}
 
     ${frequency}=   Create Dictionary  id=${frequency_id}
     ${data}=  Create Dictionary  medicineName=${medicineName}  duration=${duration}  quantity=${quantity}  description=${description}  spItemCode=${spItemCode}  dosage=${dosage}  frequency=${frequency}  prescriptioinUid=${prescriptioinUid}
@@ -15245,5 +15245,26 @@ Get RX Prescription Item By EncId
     ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/item/${id}     expected_status=any
     RETURN  ${resp}
 
+RX Update Prescription Item
 
-    
+    [Arguments]  ${id}  ${medicineName}  ${duration}  ${quantity}  ${description}  ${spItemCode}  ${dosage}  ${frequency_id}  ${prescriptioinUid}
+
+    ${frequency}=   Create Dictionary  id=${frequency_id}
+    ${data}=  Create Dictionary  id=${id}  medicineName=${medicineName}  duration=${duration}  quantity=${quantity}  description=${description}  spItemCode=${spItemCode}  dosage=${dosage}  frequency=${frequency}  prescriptioinUid=${prescriptioinUid}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/medicalrecord/prescription/item   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Get RX Prescription count
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/item/count     expected_status=any
+    RETURN  ${resp}
+
+Get RX Prescription By filter
+
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/item   params=${param}  expected_status=any
+    RETURN  ${resp} 

@@ -29,11 +29,11 @@ ${originFrom}       NONE
       
 *** Test Cases ***
 
-JD-TC-CreatePrescription-1
+JD-TC-CreateRXPrescriptionItem-1
 
-    [Documentation]    Create Prescription
+    [Documentation]    Create RX Prescription Item
 
-        ${iscorp_subdomains}=  get_iscorp_subdomains  1
+    ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
     Set Suite Variable  ${iscorp_subdomains}
     Set Suite Variable  ${domains}  ${iscorp_subdomains[0]['domain']}
@@ -43,7 +43,7 @@ JD-TC-CreatePrescription-1
     Set Suite Variable  ${firstname_A}
     ${lastname_A}=  FakerLibrary.last_name
     Set Suite Variable  ${lastname_A}
-    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+45788121
+    ${MUSERNAME_E}=  Evaluate  ${MUSERNAME}+45789754
     ${highest_package}=  get_highest_license_pkg
     ${resp}=  Account SignUp  ${firstname_A}  ${lastname_A}  ${None}  ${domains}  ${sub_domains}  ${MUSERNAME_E}    ${highest_package[0]}
     Log  ${resp.json()}
@@ -206,6 +206,13 @@ JD-TC-CreatePrescription-1
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${item1}  ${resp.json()}
 
+    ${displayName2}=     FakerLibrary.name
+
+    ${resp}=    Create Item Inventory  ${displayName2}    isInventoryItem=${bool[1]}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Suite Variable  ${item2}  ${resp.json()}
+
 
 # ----------------------------------------- create Inv Catalog -------------------------------------------------------
     ${INV_Cat_Name}=     FakerLibrary.name
@@ -217,7 +224,7 @@ JD-TC-CreatePrescription-1
 
 # ----------------------------------------Create Inventory Catalog Item----------------------------------
 
-    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${item1}  
+    ${resp}=   Create Inventory Catalog Item  ${Catalog_EncIds}   ${item1}  ${item2}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable   ${ic_Item_id}   ${resp.json()[0]}
@@ -539,11 +546,24 @@ JD-TC-CreatePrescription-1
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['quantity']}            ${quantity1}
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
 
-    ${resp}=    RX Create Prescription Item  ${doc1}  ${displayName1}  ${duration1}  ${quantity1}  ${description}  ${item1}  ${dos}  ${frequency_id}  ${prescription_id}
+    ${dur2}=        Random Int  min=1  max=100
+    ${qt2}=        Random Int  min=1  max=10
+    ${duration2}=             Evaluate    float(${dur2})
+    ${quantity2}=             Evaluate    float(${qt2})
+
+    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Set Suite Variable              ${pitm_id}      ${resp.json()}
 
     ${resp}=    Get RX Prescription Item By EncId  ${pitm_id}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.status_code}                     200
+    Should Be Equal As Strings      ${resp.json()['spItemCode']}            ${item2}
+    Should Be Equal As Strings      ${resp.json()['medicineName']}          ${displayName2}    
+    Should Be Equal As Strings      ${resp.json()['duration']}              ${duration2}    
+    Should Be Equal As Strings      ${resp.json()['frequency']['id']}       ${frequency_id}    
+    Should Be Equal As Strings      ${resp.json()['dosage']}                ${dos}    
+    Should Be Equal As Strings      ${resp.json()['description']}           ${description}  
+    Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity2}  
+    Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}      ${prescription_id}  
