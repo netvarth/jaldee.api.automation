@@ -290,7 +290,7 @@ JD-TC-Get invoice filter-1
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
 
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 # -----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -322,7 +322,7 @@ JD-TC-Get invoice filter-1
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 
     ${resp}=    Get invoice filter    uid-eq=${SO_Inv}   
@@ -344,7 +344,7 @@ JD-TC-Get invoice filter-1
     Should Be Equal As Strings    ${resp.json()[0]['amountPaid']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()[0]['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 
@@ -375,7 +375,7 @@ JD-TC-Get invoice filter-2
     Should Be Equal As Strings    ${resp.json()[0]['amountPaid']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()[0]['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 JD-TC-Get invoice filter-3
@@ -405,7 +405,7 @@ JD-TC-Get invoice filter-3
     Should Be Equal As Strings    ${resp.json()[0]['amountPaid']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()[0]['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 JD-TC-Get invoice filter-4
@@ -435,7 +435,7 @@ JD-TC-Get invoice filter-4
     Should Be Equal As Strings    ${resp.json()[0]['amountPaid']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()[0]['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 JD-TC-Get invoice filter-5
@@ -465,7 +465,7 @@ JD-TC-Get invoice filter-5
     Should Be Equal As Strings    ${resp.json()[0]['amountPaid']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()[0]['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 JD-TC-Get invoice filter-6
@@ -495,7 +495,7 @@ JD-TC-Get invoice filter-6
     Should Be Equal As Strings    ${resp.json()[0]['amountPaid']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()[0]['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 JD-TC-Get invoice filter-7
@@ -525,7 +525,7 @@ JD-TC-Get invoice filter-7
     Should Be Equal As Strings    ${resp.json()[0]['amountPaid']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()[0]['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 JD-TC-Get invoice filter-8
@@ -555,5 +555,5 @@ JD-TC-Get invoice filter-8
     Should Be Equal As Strings    ${resp.json()[0]['amountPaid']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()[0]['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0

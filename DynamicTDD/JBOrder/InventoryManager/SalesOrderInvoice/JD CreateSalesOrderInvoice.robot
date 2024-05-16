@@ -282,9 +282,22 @@ JD-TC-Create Sales Order Invoice-1
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
 
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 # -----------------------------------------------------------------------------------------------------------------------------------------
+
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+# ------------------------------------------------------------------------------------------------------------------------------------
 
 # ------------------------------------------------Create Sales Order Invoice----------------------------------------------
 
@@ -435,3 +448,110 @@ JD-TC-Create Sales Order Invoice-
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   422
 
+JD-TC-Create Sales Order Invoice-
+
+    [Documentation]    Update sales order status as ORDER_CANCELED then Genarate invoice .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[3]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[3]}
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Create Sales Order Invoice-
+
+    [Documentation]    Update sales order status as ORDER_DISCARDED then Genarate invoice .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[4]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[4]}
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Create Sales Order Invoice-
+
+    [Documentation]    Update sales order status as ORDER_COMPLETED then Genarate invoice .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME29}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[2]}
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+    ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200

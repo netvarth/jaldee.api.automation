@@ -634,7 +634,7 @@ JD-TC-Inventory Manager Work Flow-1
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[0]}
 
@@ -694,7 +694,7 @@ JD-TC-Inventory Manager Work Flow-1
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                      ${netTotal}
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[1]}
 
@@ -1244,7 +1244,7 @@ JD-TC-Inventory Manager Work Flow-2
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[0]}
 
@@ -1304,7 +1304,7 @@ JD-TC-Inventory Manager Work Flow-2
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                      ${netTotal}
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[1]}
 
@@ -1603,7 +1603,7 @@ JD-TC-Inventory Manager Work Flow-3
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[0]}
 
@@ -1662,7 +1662,7 @@ JD-TC-Inventory Manager Work Flow-3
     # Should Be Equal As Strings    ${resp.json()['amountPaid']}                                      ${netTotal}
     # Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
     # Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
-    # Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    # Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     # Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
     # Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[1]}
 

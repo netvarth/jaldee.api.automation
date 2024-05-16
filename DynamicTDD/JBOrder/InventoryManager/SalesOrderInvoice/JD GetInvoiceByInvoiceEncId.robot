@@ -281,7 +281,7 @@ JD-TC-Get Sales Order Invoice-1
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
 
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 # -----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -313,6 +313,6 @@ JD-TC-Get Sales Order Invoice-1
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 

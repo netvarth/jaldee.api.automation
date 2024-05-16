@@ -122,6 +122,7 @@ JD-TC-Make Cash Payment For Sales Order-1
     Set Suite Variable  ${DAY1} 
 
     ${Name}=    FakerLibrary.last name
+    Set Suite Variable  ${Name}
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
     Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
@@ -232,13 +233,14 @@ JD-TC-Make Cash Payment For Sales Order-1
     ${store}=  Create Dictionary   encId=${store_id}  
     ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
 
-    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}  ${items} store=${store}
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}  ${items}    store=${store}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
     Set Suite Variable  ${SO_Uid}  ${resp.json()}
 
     ${netTotal}=  Evaluate  ${price}*${quantity}
     ${netTotal}=  Convert To Number  ${netTotal}   1
+    Set Suite Variable  ${netTotal}
 
 
     ${resp}=    Get Sales Order    ${SO_Uid}   
@@ -282,9 +284,23 @@ JD-TC-Make Cash Payment For Sales Order-1
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
 
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 # -----------------------------------------------------------------------------------------------------------------------------------------
+
+
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+# ------------------------------------------------------------------------------------------------------------------------------------
 
 # ------------------------------------------------Create Sales Order Invoice----------------------------------------------
 
@@ -314,10 +330,121 @@ JD-TC-Make Cash Payment For Sales Order-1
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 
 # ------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Make Cash Payment For SalesOrder -----------------------------------------------
+
+    ${note}=  FakerLibrary.name
+
+    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv}   ${acceptPaymentBy[0]}	${netTotal}     ${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       ${netTotal}
+
+
+JD-TC-Make Cash Payment For Sales Order-2
+
+    [Documentation]   sales Order Status is Complete then do the cash payment.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[2]}
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+# --------------------------------------------- Get Invoice By Invoice EncId -----------------------------------------------
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+
+# ------------------------------------------------------------------------------------------------------------------------
+
+# --------------------------------------------- Make Cash Payment For SalesOrder -----------------------------------------------
+
+    ${note}=  FakerLibrary.name
+
+    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv}   ${acceptPaymentBy[0]}	${netTotal}     ${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       ${netTotal}
+
+JD-TC-Make Cash Payment For Sales Order-3
+
+    [Documentation]   sales Order Status is Complete then do the cash payment.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[4]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[4]}
+# ------------------------------------------------------------------------------------------------------------------------------------
+
 # --------------------------------------------- Make Cash Payment For SalesOrder -----------------------------------------------
 
     ${note}=  FakerLibrary.name
