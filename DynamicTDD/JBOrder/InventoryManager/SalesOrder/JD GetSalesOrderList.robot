@@ -286,7 +286,7 @@ JD-TC-Get Sales Order List -1
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
 
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 # -----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -353,7 +353,7 @@ JD-TC-Get Sales Order List -1
     Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
 
     Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()[0]['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 # JD-TC-Get Sales Order List -2
@@ -405,7 +405,7 @@ JD-TC-Get Sales Order List -1
 #     Should Be Equal As Strings    ${resp.json()[0]['cgstTotal']}                                       0.0
 
 #     Should Be Equal As Strings    ${resp.json()[0]['sgstTotal']}                                       0.0
-#     Should Be Equal As Strings    ${resp.json()[0]['igstTotal']}                                       0.0
+#     Should Be Equal As Strings    ${resp.json()[0]['gst']}                                       0.0
 #     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
 JD-TC-Get Sales Order List -3

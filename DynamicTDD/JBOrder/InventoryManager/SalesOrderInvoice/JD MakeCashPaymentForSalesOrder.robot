@@ -370,7 +370,7 @@ JD-TC-Make Cash Payment For Sales Order-2
     Should Be Equal As Strings    ${resp.status_code}   200
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[2]}
-# ------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------------
 
 # --------------------------------------------- Get Invoice By Invoice EncId -----------------------------------------------
 
