@@ -268,6 +268,10 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{deliveryStatus}                   NOT_DELIVERED        ORDER_RECEIVED    PACKING    READY_FOR_PICKUP      IN_TRANSIST      DELIVERED 
 @{locationType}                     googleMap  automatic  manual
 @{prescriptionSharedStatus}         shared  notShared
+@{serviceCategory}                  SubService   MainService
+
+
+
 
 *** Keywords ***
 Login
