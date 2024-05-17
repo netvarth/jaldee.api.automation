@@ -13,7 +13,7 @@ Resource          /ebs/TDD/ConsumerKeywords.robot
 Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
-
+Variables         /ebs/TDD/varfiles/musers.py
 
 
 *** Keywords ***
@@ -40,10 +40,15 @@ JD-TC-AddSubServicesToAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    clear_service   ${MUSERNAME144}
-    clear_location  ${MUSERNAME144}
-    clear_customer   ${MUSERNAME144}
-    
+    ${resp}=  View Waitlist Settings
+    Log  ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    IF  ${resp.json()['filterByDept']}==${bool[0]}
+        ${resp}=  Toggle Department Enable
+        Log  ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+
+    END
     
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
