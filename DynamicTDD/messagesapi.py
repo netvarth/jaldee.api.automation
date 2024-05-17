@@ -2318,6 +2318,9 @@ INVENTORY_CATALOG_CONNECTED_TO_ORDER_CATALOG="This inventory catalog is connecte
 BATCH_REQUIRED="Batch required for {}."
 ORDER_CATALOG_EXIST_WITH_THE_GIVEN_NAME="Order Catalog exists with given name in this store"
 NAME_LENGT_TOO_LONG="Name length too long"
+INACTIVE_STORE="Inactive Store : {}"
+INACTIVE_INVNTRY_CATALOG="Inactive Inventory catalog : {}"
+INACTIVE_INVNTRY_CATALOG_ITEMS="Inactive Inventory catalog item"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"

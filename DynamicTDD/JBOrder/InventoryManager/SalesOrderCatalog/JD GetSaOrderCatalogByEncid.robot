@@ -419,7 +419,7 @@ JD-TC-Get SalesOrder Catalog By Encid-7
     Should Be Equal As Strings    ${resp.json()['location']['id']}    ${locId1}
     Should Be Equal As Strings    ${resp.json()['store']['name']}    ${Name2}
     Should Be Equal As Strings    ${resp.json()['store']['encId']}    ${store_id1}
-    Should Be Equal As Strings    ${resp.json()['name']}    ${invalidstring}    
+    Should Be Equal As Strings    ${resp.json()['name']}    ${Name}    
     Should Be Equal As Strings    ${resp.json()['status']}     ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()['invMgmt']}     ${bool[1]}
     Should Be Equal As Strings    ${resp.json()['onlineSelfOrder']}    ${bool[0]}

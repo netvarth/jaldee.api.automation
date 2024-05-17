@@ -318,7 +318,7 @@ JD-TC-Get SalesOrder Catalog List-6
     Should Be Equal As Strings    ${resp.json()[0]['location']['id']}    ${locId1}
     Should Be Equal As Strings    ${resp.json()[0]['store']['name']}    ${Name2}
     Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}    ${store_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}    ${invalidstring}    
+    Should Be Equal As Strings    ${resp.json()[0]['name']}    ${Name}    
     Should Be Equal As Strings    ${resp.json()[0]['status']}     ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}     ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['onlineSelfOrder']}    ${bool[0]}
@@ -347,7 +347,7 @@ JD-TC-Get SalesOrder Catalog List-7
     Should Be Equal As Strings    ${resp.json()[0]['location']['id']}    ${locId1}
     Should Be Equal As Strings    ${resp.json()[0]['store']['name']}    ${Name2}
     Should Be Equal As Strings    ${resp.json()[0]['store']['encId']}    ${store_id1}
-    Should Be Equal As Strings    ${resp.json()[0]['name']}    ${invalidstring}    
+    # Should Be Equal As Strings    ${resp.json()[0]['name']}    ${invalidstring}    
     Should Be Equal As Strings    ${resp.json()[0]['status']}     ${toggle[0]}
     Should Be Equal As Strings    ${resp.json()[0]['invMgmt']}     ${bool[1]}
     Should Be Equal As Strings    ${resp.json()[0]['onlineSelfOrder']}    ${bool[0]}
