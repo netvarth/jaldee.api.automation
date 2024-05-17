@@ -53,8 +53,8 @@ JD-TC-Get Account Contact information-1
     Should Be Equal As Strings  ${resp.json()['basicInfo']['firstName']}   ${firstname}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['lastName']}    ${lastname}
     Should Be Equal As Strings  ${resp.json()['basicInfo']['mobile']}       ${PUSERNAME}
-    # Should Be Equal As Strings  ${resp.json()['basicInfo']['emailVerified']}   ${bool[0]} 
-    # Should Be Equal As Strings  ${resp.json()['basicInfo']['phoneVerified']}   ${bool[1]} 
+    Should Be Equal As Strings  ${resp.json()['basicInfo']['emailVerified']}   ${bool[0]} 
+    Should Be Equal As Strings  ${resp.json()['basicInfo']['phoneVerified']}   ${bool[1]} 
 
     Set Suite Variable  ${countryCode_CC0}    ${countryCodes[0]}
     ${resp}=   Get Provider Notification Settings
