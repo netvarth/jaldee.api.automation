@@ -345,6 +345,10 @@ JD-TC-CreateSubService-6
     Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[1]}
 
 
+JD-TC-CreateSubService-
+
+    [Documentation]  Create sub services with same name. 
+    
 JD-TC-CreateSubService-UH1
 
     [Documentation]  Create a sub service without name. 

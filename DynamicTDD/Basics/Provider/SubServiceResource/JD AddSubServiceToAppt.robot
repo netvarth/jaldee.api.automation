@@ -19,13 +19,22 @@ Variables         /ebs/TDD/varfiles/musers.py
 *** Keywords ***
 
 
+Add SubService To Appointment  
+
+    [Arguments]   ${uuid}  @{lists}
+    ${data}=    json.dumps    ${lists}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session   ynw  provider/appointment/${uuid}/addsubservices  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+
 *** Test Cases ***
 
 JD-TC-AddSubServicesToAppt-1
 
     [Documentation]  Create a sub service and add that sub service to an appointment.
 
-    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${jdconID}   ${resp.json()['id']}
@@ -36,20 +45,10 @@ JD-TC-AddSubServicesToAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME144}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  View Waitlist Settings
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF  ${resp.json()['filterByDept']}==${bool[0]}
-        ${resp}=  Toggle Department Enable
-        Log  ${resp.content}
-        Should Be Equal As Strings  ${resp.status_code}  200
-
-    END
-    
     ${resp}=   Get Appointment Settings
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
@@ -91,7 +90,7 @@ JD-TC-AddSubServicesToAppt-1
         ${locId}=  Create Sample Location
     ELSE
         Set Suite Variable  ${locId}  ${resp.json()[0]['id']}
-        Set Suite Variable  ${tz}  ${resp.json()[0]['place']}
+        Set Suite Variable  ${tz}  ${resp.json()[0]['timezone']}
     END
 
     ${resp}=  Get Departments
@@ -116,7 +115,7 @@ JD-TC-AddSubServicesToAppt-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME171}'
+            IF   not '${user_phone}' == '${MUSERNAME172}'
                 clear_users  ${user_phone}
             END
         END
@@ -136,8 +135,6 @@ JD-TC-AddSubServicesToAppt-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]} 
 
-    clear_appt_schedule   ${MUSERNAME144}
-    
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
     ${list}=  Create List  1  2  3  4  5  6  7
@@ -146,7 +143,7 @@ JD-TC-AddSubServicesToAppt-1
     ${eTime1}=  add_two   ${sTime1}  ${delta}
 
     ${SERVICE1}=    FakerLibrary.word
-    ${s_id}=  Create Sample Service  ${SERVICE1}
+    ${s_id}=  Create Sample Service  ${SERVICE1}   department=${dep_id}
 
     ${schedule_name}=  FakerLibrary.bs
     ${parallel}=  FakerLibrary.Random Int  min=1  max=10
@@ -154,7 +151,7 @@ JD-TC-AddSubServicesToAppt-1
     ${duration}=  FakerLibrary.Random Int  min=1  max=${maxval}
     ${bool1}=  Random Element  ${bool}
 
-    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${lid}  ${duration}  ${bool1}  ${s_id}
+    ${resp}=  Create Appointment Schedule  ${schedule_name}  ${recurringtype[1]}  ${list}  ${DAY1}  ${DAY2}  ${EMPTY}  ${sTime1}  ${eTime1}  ${parallel}  ${parallel}  ${locId}  ${duration}  ${bool1}  ${s_id}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${sch_id}  ${resp.json()}
@@ -170,7 +167,7 @@ JD-TC-AddSubServicesToAppt-1
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-    ${resp}=  AddCustomer  ${CUSERNAME8}  firstName=${fname}   lastName=${lname}
+    ${resp}=  AddCustomer  ${CUSERNAME11}  firstName=${fname}   lastName=${lname}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${cid}   ${resp.json()}
@@ -195,7 +192,7 @@ JD-TC-AddSubServicesToAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['service']['id']}    ${s_id}
-    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${lid}
+    Should Be Equal As Strings  ${resp.json()['location']['id']}   ${locId}
 
     ${desc}=  FakerLibrary.sentence
     ${subser_dur}=   Random Int   min=5   max=10
@@ -219,15 +216,27 @@ JD-TC-AddSubServicesToAppt-1
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Consumer Login  ${CUSERNAME8}  ${PASSWORD}
+    ${resp}=  Consumer Login  ${CUSERNAME11}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=   Get consumer Appointment By Id   ${pid}  ${apptid1}
+    ${resp}=   Get consumer Appointment By Id   ${account_id}  ${apptid1}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Verify Response   ${resp}    appmtTime=${slot1}  apptStatus=${apptStatus[1]}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['firstName']}  ${fname}
     Should Be Equal As Strings  ${resp.json()['appmtFor'][0]['lastName']}   ${lname}
 
+    ${resp}=  Consumer Logout
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME172}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}  
+    
+    ${resp}=   Add SubService To Appointment    ${apptid1}   ${subser_list1}
+    Log   ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
