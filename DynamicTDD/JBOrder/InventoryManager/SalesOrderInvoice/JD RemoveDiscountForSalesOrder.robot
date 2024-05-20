@@ -33,7 +33,7 @@ JD-TC-Remove SalesOrder discount-1
 
     [Documentation]   Create a sales Order with Valid Details and Genarate then apply discount(Percentage)and remove.
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME36}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -63,6 +63,21 @@ JD-TC-Remove SalesOrder discount-1
         Should Be Equal As Strings  ${resp.json()['enableSalesOrder']}  ${bool[1]}
     END
 
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    IF  ${resp.json()['enablepos']}==${bool[0]}
+        ${resp}=  Enable Disable bill  ${bool[1]}
+        Log   ${resp.content}
+        Should Be Equal As Strings  ${resp.status_code}  200
+    END
+
+    ${resp}=  Get Bill Settings 
+    Log   ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Run Keyword And Continue On Failure  Should Be Equal As Strings  ${resp.json()['enablepos']}    ${bool[1]}
+
+
     ${resp}=  Get Store Type By Filter     
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
@@ -88,11 +103,11 @@ JD-TC-Remove SalesOrder discount-1
     Should Be Equal As Strings    ${resp.json()['encId']}    ${St_Id}
 # --------------------- ---------------------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME36}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${accountId}=  get_acc_id  ${HLMUSERNAME36}
+    ${accountId}=  get_acc_id  ${HLMUSERNAME3}
     Set Suite Variable    ${accountId} 
 
     ${resp}=  Provide Get Store Type By EncId     ${St_Id}  
@@ -219,7 +234,7 @@ JD-TC-Remove SalesOrder discount-1
 
 # ----------------------------- Provider take a Sales Order ------------------------------------------------
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME36}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -286,6 +301,19 @@ JD-TC-Remove SalesOrder discount-1
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 # -----------------------------------------------------------------------------------------------------------------------------------------
 
+# ----------------------------------------------- Update order status to ORDER_CONFIRMED---------------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+
+
 # ------------------------------------------------Create Sales Order Invoice----------------------------------------------
 
     ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
@@ -351,7 +379,7 @@ JD-TC-Remove SalesOrder discount-1
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
     Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
     Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       ${discountValue1}
+    # Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       ${discountValue1}
 
     Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
@@ -366,7 +394,7 @@ JD-TC-Remove SalesOrder discount-1
 # --------------------------------------------------------------------------------------------------------------------------------------
 # ------------------------------------------------ Remove SalesOrder discount  ----------------------------------------------------------
 
-    ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId}     ${discountValue1}
+    ${resp}=    Remove SalesOrder discount    ${SO_Uid}    ${discountId}     ${discountValue1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 

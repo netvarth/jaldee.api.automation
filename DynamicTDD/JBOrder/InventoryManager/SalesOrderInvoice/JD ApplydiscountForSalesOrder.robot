@@ -31,7 +31,7 @@ ${originFrom}       NONE
 
 JD-TC-Apply SalesOrder discount-1
 
-    [Documentation]   Create a sales Order with Valid Details and Genarate then apply discount(Percentage).
+    [Documentation]   Create a sales Order with Valid Details and Genarate invoice then apply discount(calculationType is Percentage and discType is Predefine).
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME28}  ${PASSWORD}
     Log   ${resp.content}
@@ -345,8 +345,67 @@ JD-TC-Apply SalesOrder discount-1
     ${displayNote}=   FakerLibrary.word
     ${discountValue1}=     Random Int   min=50   max=100
     ${discountValue1}=  Convert To Number  ${discountValue1}  1
+    Set Suite Variable   ${discountValue1}
 
     ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId}   ${privateNote}    ${displayNote}   ${discountValue1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${bal_Total}=  Evaluate  ${netTotal}/${discountprice}
+    ${bal_Total}=  Convert To Number  ${bal_Total}   1
+    ${bal_Total}=  Evaluate  ${bal_Total}* 100
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       ${discountprice}
+
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${bal_Total}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${bal_Total}
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+
+JD-TC-Apply SalesOrder discount-2
+
+    [Documentation]   Create a sales Order with Valid Details and Genarate invoice then apply discount(calculationType is Percentage and discType is OnDemand).
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME28}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Remove SalesOrder discount     ${SO_Uid}    ${discountId}    ${discountValue1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${discount1}=     FakerLibrary.word
+    ${desc}=   FakerLibrary.word
+    ${discountprice2}=     Random Int   min=5   max=10
+    ${discountprice2}=  Convert To Number  ${discountprice2}  1
+    Set Suite Variable   ${discountprice2}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice2}   ${calctype[0]}  ${disctype[1]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${discountId1}   ${resp.json()}   
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${discountValue1}=     Random Int   min=50   max=100
+    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+
+    ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId1}   ${privateNote}    ${displayNote}   ${discountValue1}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
@@ -374,4 +433,192 @@ JD-TC-Apply SalesOrder discount-1
     Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
-    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+
+JD-TC-Apply SalesOrder discount-3
+
+    [Documentation]   Create a sales Order with Valid Details and Genarate invoice then apply discount(calculationType is Fixed and discType is Predifine).
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME28}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Remove SalesOrder discount     ${SO_Uid}    ${discountId1}    ${discountprice2}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${discount1}=     FakerLibrary.word
+    ${desc}=   FakerLibrary.word
+    ${discountprice3}=     Random Int   min=5   max=10
+    ${discountprice3}=  Convert To Number  ${discountprice3}  1
+    Set Suite Variable   ${discountprice3}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice3}   ${calctype[1]}  ${disctype[0]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${discountId2}   ${resp.json()}   
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${discountValue1}=     Random Int   min=50   max=100
+    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+
+    ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId2}   ${privateNote}    ${displayNote}   ${discountValue1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${bal_Total}=  Evaluate  ${netTotal}-${discountValue1}
+    ${bal_Total}=  Convert To Number  ${bal_Total}   1
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       ${discountValue1}
+
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${bal_Total}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${bal_Total}
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
+
+JD-TC-Apply SalesOrder discount-4
+
+    [Documentation]   Create a sales Order with Valid Details and Genarate invoice then apply discount(calculationType is Fixed and discType is OnDemand).
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME28}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Remove SalesOrder discount     ${SO_Uid}    ${discountId2}    ${discountprice3}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${discount1}=     FakerLibrary.word
+    ${desc}=   FakerLibrary.word
+    ${discountprice4}=     Random Int   min=5   max=10
+    ${discountprice4}=  Convert To Number  ${discountprice4}  1
+    Set Suite Variable   ${discountprice4}
+    ${resp}=   Create Discount  ${discount1}   ${desc}    ${discountprice4}   ${calctype[1]}  ${disctype[1]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${discountId3}   ${resp.json()}   
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${discountValue1}=     Random Int   min=50   max=100
+    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+
+    ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId3}   ${privateNote}    ${displayNote}   ${discountValue1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${bal_Total}=  Evaluate  ${netTotal}-${discountValue1}
+    ${bal_Total}=  Convert To Number  ${bal_Total}   1
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       ${discountValue1}
+
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${bal_Total}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${bal_Total}
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
+
+JD-TC-Apply SalesOrder discount-UH
+
+    [Documentation]   Apply Discount with EMPTY discoutID.
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME28}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${discountValue1}=     Random Int   min=50   max=100
+    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+
+    ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${EMPTY}   ${privateNote}    ${displayNote}   ${discountValue1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Apply SalesOrder discount-UH
+
+    [Documentation]   Apply Discount with EMPTY privateNote.
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME28}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${discountValue1}=     Random Int   min=50   max=100
+    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+
+    ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId3}   ${EMPTY}    ${displayNote}   ${discountValue1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Apply SalesOrder discount-UH
+
+    [Documentation]   Apply Discount with EMPTY privateNote.
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME28}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${discountValue1}=     Random Int   min=50   max=100
+    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+
+    ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId3}   ${privateNote}    ${EMPTY}   ${discountValue1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Apply SalesOrder discount-UH
+
+    [Documentation]   Apply Discount with EMPTY discountValue.
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME28}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${discountValue1}=     Random Int   min=50   max=100
+    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+
+    ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId3}   ${privateNote}    ${displayNote}   ${EMPTY}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Apply SalesOrder discount-UH
+
+    [Documentation]    Try Apply Discount without login.
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${discountValue1}=     Random Int   min=50   max=100
+    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+
+    ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId3}   ${privateNote}    ${displayNote}   ${discountValue1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
