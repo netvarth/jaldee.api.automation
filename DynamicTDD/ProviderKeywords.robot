@@ -15105,6 +15105,13 @@ Create Batch
     ${resp}=  POST On Session  ynw  /provider/inventory/inventoryitembatch   data=${data}  expected_status=any
     RETURN  ${resp} 
 
+Get Inventory Item Count
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/store/inventorycatalog/summary/count   params=${param}  expected_status=any
+    RETURN  ${resp} 
+
+
 
 #---------------------------RX Push-----------------------------------------    
 
