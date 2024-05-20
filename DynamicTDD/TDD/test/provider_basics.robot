@@ -345,6 +345,13 @@ JD-TC-Change Password-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${view}=  Evaluate  random.choice($Views)  random
+    ${ph_nos1}=  Phone Numbers  ${username}  PhoneNo  ${ph1}  ${view}
+    ${emails1}=  Emails  ${username}  Email  ${P_Email}${ph}.${test_mail}  ${view}
+    ${resp}=  Update Business Profile with kwargs
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     # {"phoneNumbers":[{"label":"Mobile","resource":"Phoneno","instance":"+915550046478","permission":"self"}]}
     # {"emails":[{"label":"personal","resource":"Email","instance":"5550046478.Amanda5550046478.test@jaldee.com","permission":"self"}]}
 

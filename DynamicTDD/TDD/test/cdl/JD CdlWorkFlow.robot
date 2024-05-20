@@ -248,7 +248,7 @@ JD-TC-CdlWorkFlow-1
     ${resp}=  loanScheme                  ${account_id1}
     ${resp}=  CDLcategorytype             ${account_id1}
     ${resp}=  CDLtype                     ${account_id1}
-    ${resp}=  CDLEnqStatus                   ${account_id1}
+    ${resp}=  CDLEnqStatus                ${account_id1}
 
     
 
