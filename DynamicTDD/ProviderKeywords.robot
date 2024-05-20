@@ -15284,7 +15284,7 @@ Convert To Order
 
     [Arguments]     ${encId}  ${uid}
 
-    ${store}=   Create Dictionary  id=${encId}
+    ${store}=   Create Dictionary  encId=${encId}
     ${data}=  Create Dictionary  store=${store}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
