@@ -2321,6 +2321,7 @@ NAME_LENGT_TOO_LONG="Name length too long"
 INACTIVE_STORE="Inactive Store : {}"
 INACTIVE_INVNTRY_CATALOG="Inactive Inventory catalog : {}"
 INACTIVE_INVNTRY_CATALOG_ITEMS="Inactive Inventory catalog item"
+DISABLE_INVTRY_ITEM="Disable Item : {}"
 # Vendor
 INVALID_NAME="Invalid Name"
 CATEGORY_EXIST="Category exists with given name"
