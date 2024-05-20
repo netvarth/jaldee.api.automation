@@ -130,6 +130,7 @@ JD-TC-Create Batch-1
     Should Be Equal As Strings    ${resp.json()['catalogName']}    ${Name}
 
     ${displayName}=     FakerLibrary.name
+    Set Suite Variable  ${displayName}
 
     ${resp}=    Create Item Inventory  ${displayName}       isBatchApplicable=${boolean[1]}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
@@ -260,10 +261,12 @@ JD-TC-Create Batch-UH4
     Should Be Equal As Strings      ${resp.status_code}    200
     Should Be Equal As Strings      ${resp.json()['status']}         ${toggle[1]}
 
+    ${DISABLE_INVTRY_ITEM}=  Format String  ${DISABLE_INVTRY_ITEM}    ${displayName}
+
     ${DAY2}=  db.add_timezone_date  ${tz}  10    
     ${batch}=     FakerLibrary.name
     ${resp}=   Create Batch  ${store_id}   ${inventory_catalog_item_encid1}   ${batch}   ${DAY2}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings   ${resp.json()}   ${INACTIVE_STORE}
+    Should Be Equal As Strings   ${resp.json()}   ${DISABLE_INVTRY_ITEM}
 
