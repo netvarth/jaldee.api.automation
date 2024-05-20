@@ -2355,3 +2355,7 @@ CAN_NOT_UPDATE_STATUS= "Can't change this order status from {} to {}"
 ALREADY_IN="Already in {}"
 FIELD_REQUIRED = "{} required"
 HTML_REQUIRED_CREATION = "Prescription html required for creation"
+
+# SubService
+
+STATUS_DISABLED = "{} disabled"
