@@ -15268,3 +15268,24 @@ Get RX Prescription By filter
     Check And Create YNW Session
     ${resp}=  GET On Session  ynw  /provider/medicalrecord/prescription/item   params=${param}  expected_status=any
     RETURN  ${resp} 
+
+Get RX Prescription Item Qnty By EncId
+
+    [Arguments]  ${medicineName}  ${duration}  ${quantity}  ${description}  ${spItemCode}  ${dosage}  ${frequency_id}  ${prescriptioinUid}
+
+    ${frequency}=   Create Dictionary  id=${frequency_id}
+    ${data}=  Create Dictionary  medicineName=${medicineName}  duration=${duration}  quantity=${quantity}  description=${description}  spItemCode=${spItemCode}  dosage=${dosage}  frequency=${frequency}  prescriptioinUid=${prescriptioinUid}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/item/quantity   data=${data}  expected_status=any
+    RETURN  ${resp} 
+
+Convert To Order
+
+    [Arguments]     ${encId}  ${uid}
+
+    ${store}=   Create Dictionary  id=${encId}
+    ${data}=  Create Dictionary  store=${store}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/sorder/push/${uid}  data=${data}  expected_status=any
+    RETURN  ${resp}
