@@ -26,7 +26,7 @@ ${jpgfile}      /ebs/TDD/uploadimage.jpg
 ${pngfile}      /ebs/TDD/upload.png
 ${fileSize}     0.00458
 ${order}        0
-
+${originFrom}       NONE
 
 
 *** Test Cases ***
