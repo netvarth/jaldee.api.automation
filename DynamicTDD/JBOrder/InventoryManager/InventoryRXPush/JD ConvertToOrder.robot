@@ -583,4 +583,6 @@ JD-TC-ConvertToOrder-1
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()}          ${itemqty}
 
-    
+    ${resp}=    Convert To Order    ${St_Id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200

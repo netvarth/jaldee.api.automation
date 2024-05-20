@@ -15286,6 +15286,7 @@ Convert To Order
 
     ${store}=   Create Dictionary  id=${encId}
     ${data}=  Create Dictionary  store=${store}
+    ${data}=  json.dumps  ${data}
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/sorder/push/${uid}  data=${data}  expected_status=any
     RETURN  ${resp}
