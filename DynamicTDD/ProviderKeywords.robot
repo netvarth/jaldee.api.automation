@@ -15297,3 +15297,15 @@ Convert To Order
     Check And Create YNW Session
     ${resp}=  POST On Session  ynw  /provider/sorder/push/${uid}  data=${data}  expected_status=any
     RETURN  ${resp}
+
+
+#.............subservice..................
+
+
+Add SubService To Appointment  
+
+    [Arguments]   ${uuid}  @{lists}
+    ${data}=    json.dumps    ${lists}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session   ynw  provider/appointment/${uuid}/addsubservices  data=${data}  expected_status=any
+    RETURN  ${resp}
