@@ -161,7 +161,7 @@ JD-TC-Change Password-1
     Should Be Equal As Strings  ${resp.json()['baseLocation']['pinCode']}  ${postcode}
     Should Be Equal As Strings  ${resp.json()['baseLocation']['longitude']}  ${longi}
     Should Be Equal As Strings  ${resp.json()['baseLocation']['lattitude']}  ${latti}
-    Should Be Equal As Strings  ${resp.json()['baseLocation']['googleMapUrl']}  www.${bs}.com
+    Should Be Equal As Strings  ${resp.json()['baseLocation']['googleMapUrl']}  ${url}
     Should Be Equal As Strings  ${resp.json()['baseLocation']['parkingType']}  free
     Should Be Equal As Strings  ${resp.json()['baseLocation']['open24hours']}  True
 

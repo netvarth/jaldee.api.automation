@@ -17,7 +17,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 ${Email}     email
 ${countryCode}   +91
 
-*** Test Case ***
+*** Test Cases ***
 
 JD-TC-GetOrderSettingsByAccountid-1
     [Documentation]   Get Order Settings after signup

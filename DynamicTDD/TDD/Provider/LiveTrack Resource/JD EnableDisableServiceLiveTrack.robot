@@ -49,7 +49,7 @@ Get provider by license
     END
     RETURN  ${Provider_PH}
 
-*** Test Case ***
+*** Test Cases ***
 
 JD-TC-EnableDisableServiceLiveTrack-1
     [Documentation]  Enable live tracking for a service

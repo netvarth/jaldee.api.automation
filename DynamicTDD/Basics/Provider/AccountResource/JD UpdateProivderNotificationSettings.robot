@@ -25,7 +25,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 
 
 
-*** Test Case ***
+*** Test Cases ***
 
 JD-TC-UpdateProviderNotificationSettings-1
     [Documentation]  Getting Provider Notification  Settings without Update Provider Notification Settings

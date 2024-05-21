@@ -50,7 +50,7 @@ Get Non Billable Subdomain
 
 
 
-*** Test Case ***
+*** Test Cases ***
 
 
 JD-TC-GetVirtualCallingMode-(Billable Subdomain)-1

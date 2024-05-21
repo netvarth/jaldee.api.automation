@@ -18,7 +18,7 @@ ${Email}     email
 ${countryCode}   +91
 
 
-*** Test Case ***
+*** Test Cases ***
 
 JD-TC-EnableOrderSettings-1
     [Documentation]   Enable Order Settings

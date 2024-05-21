@@ -18,7 +18,7 @@ ${prefix}                   serviceBatch
 ${suffix}                   serving
 
 
-*** Test Case ***
+*** Test Cases ***
 
 JD-TC-EnableDisableBatch-1
     [Documentation]  Create queue and enable batch

@@ -16,7 +16,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 *** Variables ***
 ${countryCode}   +91
 
-*** Test Case ***
+*** Test Cases ***
 
 JD-TC-UpdateOrderSettings-1
     [Documentation]   Enable order settings using Updation

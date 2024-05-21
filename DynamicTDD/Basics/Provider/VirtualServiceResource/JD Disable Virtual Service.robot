@@ -48,7 +48,7 @@ Get Non Billable Subdomain
 
 # Consumer Add To WL With Virtual Service
 
-*** Test Case ***
+*** Test Cases ***
 
 
 JD-TC-DisableVirtualService-(Billable Subdomain)-1

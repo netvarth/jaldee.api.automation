@@ -19,7 +19,7 @@ ${lastName}    lastName
 ${Email}       email
 ${countryCode}   +91
 
-*** Test Case ***
+*** Test Cases ***
 JD-TC-GetOrderSettingsStatus-1
     [Documentation]   Get Order Settings Status after signup
 

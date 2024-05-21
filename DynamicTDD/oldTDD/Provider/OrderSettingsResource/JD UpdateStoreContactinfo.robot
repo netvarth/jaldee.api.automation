@@ -16,7 +16,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 *** Variables ***
 ${Email}     email
 
-*** Test Case ***
+*** Test Cases ***
 JD-TC-UpdateStoreContactinfo-1
     [Documentation]   Update Store_Contact_info after signup
 

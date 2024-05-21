@@ -54,7 +54,7 @@ Get Non Billable Subdomain
 
 
 
-*** Test Case ***
+*** Test Cases ***
 JD-TC-VirtualService_Add To WaitlistByProvider-1
     [Documentation]  Provider add Consumer and his family member to waitlist (Non billable Subdomain)
 

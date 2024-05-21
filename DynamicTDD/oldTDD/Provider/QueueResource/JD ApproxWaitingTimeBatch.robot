@@ -17,7 +17,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 ${prefix}                   serviceBatch
 ${suffix}                   serving
 
-*** Test Case ***
+*** Test Cases ***
 JD-TC-Approx Waiting Time-1
     [Documentation]   Check approximate waiting time when calculation mode is ML and batch is enabled
     

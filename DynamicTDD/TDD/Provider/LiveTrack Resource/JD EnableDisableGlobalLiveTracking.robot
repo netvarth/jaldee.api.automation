@@ -44,7 +44,7 @@ Get provider by license
     END
     RETURN  ${Provider_PH}
 
-*** Test Case ***
+*** Test Cases ***
 
 JD-TC-EnableDisableGlobalLiveTrack-1
     [Documentation]  Enable Global live tracking

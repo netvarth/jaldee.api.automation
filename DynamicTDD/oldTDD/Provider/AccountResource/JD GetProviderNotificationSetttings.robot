@@ -19,7 +19,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 @{EMPTY_List}
 @{CC_countryCode}   +91   91 
 
-*** Test Case ***
+*** Test Cases ***
 
 JD-TC-GetProviderNotificationSettings-1
     [Documentation]  Getting Provider Notification  Settings without Update Provider Notification Settings

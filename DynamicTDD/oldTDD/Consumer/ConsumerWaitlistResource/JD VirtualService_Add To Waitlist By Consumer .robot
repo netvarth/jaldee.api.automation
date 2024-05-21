@@ -44,7 +44,7 @@ Get Non Billable Subdomain
     END
     RETURN  ${subdomain}  ${resp.json()['serviceBillable']}
 
-*** Test Case ***
+*** Test Cases ***
 JD-TC-VirtualService_Add To WaitlistByConsumer-1
     [Documentation]  Consumer joins to waitlist of a valid provider (Virtual service without prepayment)
     ${PUSERPH0}=  Evaluate  ${PUSERNAME}+22334455

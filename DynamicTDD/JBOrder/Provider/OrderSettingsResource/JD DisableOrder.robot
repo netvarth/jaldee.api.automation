@@ -17,7 +17,7 @@ Variables         /ebs/TDD/varfiles/consumerlist.py
 ${countryCode}   +91
 
 
-*** Test Case ***
+*** Test Cases ***
 
 JD-TC-DisableOrderSettings-1
     [Documentation]   Disable Order Settings and verify
