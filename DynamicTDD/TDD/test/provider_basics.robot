@@ -346,9 +346,11 @@ JD-TC-Change Password-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${view}=  Evaluate  random.choice($Views)  random
-    ${ph_nos1}=  Phone Numbers  ${username}  PhoneNo  ${ph1}  ${view}
-    ${emails1}=  Emails  ${username}  Email  ${P_Email}${ph}.${test_mail}  ${view}
-    ${resp}=  Update Business Profile with kwargs
+    ${ph_nos1}=  Phone Numbers  ${username}  PhoneNo  ${number}  ${view}
+    ${ph_nos}=  Create List  ${ph_nos1}
+    ${emails1}=  Emails  ${username}  Email  ${P_Email}${number}.${test_mail}  ${view}
+    ${emails}=  Create List  ${emails1}
+    ${resp}=  Update Business Profile with kwargs  phoneNumbers=${ph_nos}  emails=${emails}
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 

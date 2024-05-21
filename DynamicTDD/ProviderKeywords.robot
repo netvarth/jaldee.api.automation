@@ -98,7 +98,7 @@ Business Profile
     ${bs}=  Create Dictionary  timespec=${bs}
     ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${bs}  pinCode=${pin}  address=${adds}
     # ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    IF  '${ph1}' != '${EMPTY}' and '${ph1}' != '${NONE}' and '${ph2}' != '${EMPTY}' and '${ph2}' != '${NONE}'
+    IF  '$ph1' != '${EMPTY}' and '$ph1' != '${NONE}' and '$ph2' != '${EMPTY}' and '$ph2' != '${NONE}'
         ${ph_nos}=  Create List  ${ph1}  ${ph2}
     ELSE
         ${ph_nos}=  Create List
@@ -191,7 +191,7 @@ Business Profile with schedule
     ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${bs}  pinCode=${pin}  address=${adds}  id=${lid}
     
     # ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    IF  '${ph1}' != '${EMPTY}' and '${ph1}' != '${NONE}' and '${ph2}' != '${EMPTY}' and '${ph2}' != '${NONE}'
+    IF  '$ph1' != '${EMPTY}' and '$ph1' != '${NONE}' and '$ph2' != '${EMPTY}' and '$ph2' != '${NONE}'
         ${ph_nos}=  Create List  ${ph1}  ${ph2}
     ELSE
         ${ph_nos}=  Create List
@@ -214,7 +214,7 @@ Update Business Profile with schedule
 Update Business Profile without schedule
     [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${pin}  ${adds}   ${ph1}  ${ph2}  ${email1}  ${lid}
     # ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    IF  '${ph1}' != '${EMPTY}' and '${ph1}' != '${NONE}' and '${ph2}' != '${EMPTY}' and '${ph2}' != '${NONE}'
+    IF  '$ph1' != '${EMPTY}' and '$ph1' != '${NONE}' and '$ph2' != '${EMPTY}' and '$ph2' != '${NONE}'
         ${ph_nos}=  Create List  ${ph1}  ${ph2}
     ELSE
         ${ph_nos}=  Create List
@@ -307,6 +307,7 @@ Create Sample Location
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     RETURN  ${resp.json()}
+    
 
 Check Location Exists
     [Arguments]   ${city}
