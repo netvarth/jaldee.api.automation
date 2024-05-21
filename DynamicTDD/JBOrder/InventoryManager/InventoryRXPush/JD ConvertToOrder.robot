@@ -231,6 +231,9 @@ JD-TC-ConvertToOrder-1
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable   ${ic_Item_id}   ${resp.json()[0]}
 
+    ${resp}=   Get Inventory Catalog item By EncId  ${ic_Item_id} 
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
 
 # ............... Create Vendor ...............
 
@@ -511,6 +514,18 @@ JD-TC-ConvertToOrder-1
         Log  ${resp.json()}
         Should Be Equal As Strings  ${resp.status_code}  200
         Should Be Equal As Strings  ${resp.json()['enableInventoryRx']}  ${bool[1]}
+    END
+
+    IF  ${resp.json()['enableSalesOrder']}==${bool[0]}
+        
+        ${resp1}=  Enable/Disable SalesOrder  ${toggle[0]}
+        Log  ${resp1.content}
+        Should Be Equal As Strings  ${resp1.status_code}  200
+
+        ${resp}=  Get Account Settings
+        Log  ${resp.json()}
+        Should Be Equal As Strings  ${resp.status_code}  200
+        Should Be Equal As Strings  ${resp.json()['enableSalesOrder']}  ${bool[1]}
     END
 
     ${dur}=        Random Int  min=1  max=100

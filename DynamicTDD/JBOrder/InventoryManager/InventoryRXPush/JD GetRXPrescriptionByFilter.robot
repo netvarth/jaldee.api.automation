@@ -740,24 +740,15 @@ JD-TC-GetRXPrescriptionItemByFilter-7
     Should Be Equal As Strings      ${resp.json()[1]['quantity']}               ${quantity1}  
     Should Be Equal As Strings      ${resp.json()[1]['prescriptioinUid']}       ${prescription_id}
 
-
-
-
-
-
-
-
-
-
 JD-TC-GetRXPrescriptionItemByFilter-8
 
-    [Documentation]    Get RX Prescription Item By Filter - duration
+    [Documentation]    Get RX Prescription Item By Filter - dosage
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Get RX Prescription By filter  duration-eq=${duration2}
+    ${resp}=    Get RX Prescription By filter  dosage-eq=${dos}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()[0]['id']}                     ${RDID2}
@@ -768,17 +759,27 @@ JD-TC-GetRXPrescriptionItemByFilter-8
     Should Be Equal As Strings      ${resp.json()[0]['dosage']}                 ${dos}    
     Should Be Equal As Strings      ${resp.json()[0]['description']}            ${description}  
     Should Be Equal As Strings      ${resp.json()[0]['quantity']}               ${quantity2}  
-    Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
+    Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id}   
 
-JD-TC-GetRXPrescriptionItemByFilter-5
+    Should Be Equal As Strings      ${resp.json()[1]['id']}                     ${RDID1}
+    Should Be Equal As Strings      ${resp.json()[1]['spItemCode']}             ${item1}
+    Should Be Equal As Strings      ${resp.json()[1]['medicineName']}           ${displayName1}    
+    Should Be Equal As Strings      ${resp.json()[1]['duration']}               ${duration1}    
+    Should Be Equal As Strings      ${resp.json()[1]['frequency']['id']}        ${frequency_id}    
+    Should Be Equal As Strings      ${resp.json()[1]['dosage']}                 ${dos}    
+    Should Be Equal As Strings      ${resp.json()[1]['description']}            ${description}  
+    Should Be Equal As Strings      ${resp.json()[1]['quantity']}               ${quantity1}  
+    Should Be Equal As Strings      ${resp.json()[1]['prescriptioinUid']}       ${prescription_id}
 
-    [Documentation]    Get RX Prescription Item By Filter - duration
+JD-TC-GetRXPrescriptionItemByFilter-9
+
+    [Documentation]    Get RX Prescription Item By Filter - description
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Get RX Prescription By filter  duration-eq=${duration2}
+    ${resp}=    Get RX Prescription By filter  description-eq=${description}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
     Should Be Equal As Strings      ${resp.json()[0]['id']}                     ${RDID2}
@@ -789,28 +790,47 @@ JD-TC-GetRXPrescriptionItemByFilter-5
     Should Be Equal As Strings      ${resp.json()[0]['dosage']}                 ${dos}    
     Should Be Equal As Strings      ${resp.json()[0]['description']}            ${description}  
     Should Be Equal As Strings      ${resp.json()[0]['quantity']}               ${quantity2}  
-    Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
+    Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id}   
 
-JD-TC-GetRXPrescriptionItemByFilter-5
+    Should Be Equal As Strings      ${resp.json()[1]['id']}                     ${RDID1}
+    Should Be Equal As Strings      ${resp.json()[1]['spItemCode']}             ${item1}
+    Should Be Equal As Strings      ${resp.json()[1]['medicineName']}           ${displayName1}    
+    Should Be Equal As Strings      ${resp.json()[1]['duration']}               ${duration1}    
+    Should Be Equal As Strings      ${resp.json()[1]['frequency']['id']}        ${frequency_id}    
+    Should Be Equal As Strings      ${resp.json()[1]['dosage']}                 ${dos}    
+    Should Be Equal As Strings      ${resp.json()[1]['description']}            ${description}  
+    Should Be Equal As Strings      ${resp.json()[1]['quantity']}               ${quantity1}  
+    Should Be Equal As Strings      ${resp.json()[1]['prescriptioinUid']}       ${prescription_id}
 
-    [Documentation]    Get RX Prescription Item By Filter - duration
+
+JD-TC-GetRXPrescriptionItemByFilter-10
+
+    [Documentation]    Get RX Prescription Item By Filter - quantity
 
     ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
-    ${resp}=    Get RX Prescription By filter  duration-eq=${duration2}
+    ${resp}=    Get RX Prescription By filter  quantity-eq=${quantity1}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
-    Should Be Equal As Strings      ${resp.json()[0]['id']}                     ${RDID2}
-    Should Be Equal As Strings      ${resp.json()[0]['spItemCode']}             ${item2}
-    Should Be Equal As Strings      ${resp.json()[0]['medicineName']}           ${displayName2}    
-    Should Be Equal As Strings      ${resp.json()[0]['duration']}               ${duration2}    
+    Should Be Equal As Strings      ${resp.json()[0]['id']}                     ${RDID1}
+    Should Be Equal As Strings      ${resp.json()[0]['spItemCode']}             ${item1}
+    Should Be Equal As Strings      ${resp.json()[0]['medicineName']}           ${displayName1}    
+    Should Be Equal As Strings      ${resp.json()[0]['duration']}               ${duration1}    
     Should Be Equal As Strings      ${resp.json()[0]['frequency']['id']}        ${frequency_id}    
     Should Be Equal As Strings      ${resp.json()[0]['dosage']}                 ${dos}    
     Should Be Equal As Strings      ${resp.json()[0]['description']}            ${description}  
-    Should Be Equal As Strings      ${resp.json()[0]['quantity']}               ${quantity2}  
-    Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id} 
+    Should Be Equal As Strings      ${resp.json()[0]['quantity']}               ${quantity1}  
+    Should Be Equal As Strings      ${resp.json()[0]['prescriptioinUid']}       ${prescription_id}
+
+
+
+
+
+
+
+
 
 JD-TC-GetRXPrescriptionItemByFilter-5
 

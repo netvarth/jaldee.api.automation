@@ -2361,3 +2361,4 @@ HTML_REQUIRED_CREATION = "Prescription html required for creation"
 # SubService
 
 STATUS_DISABLED = "{} disabled"
+NOT_FOUND_WITH_ID = "{} not found with ID {}"

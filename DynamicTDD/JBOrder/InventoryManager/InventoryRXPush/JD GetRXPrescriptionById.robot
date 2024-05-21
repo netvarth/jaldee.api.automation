@@ -538,3 +538,27 @@ JD-TC-GetPrescription-1
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['description']}         ${description}
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['quantity']}            ${quantity1}
     Should Be Equal As Strings      ${resp.json()['mrPrescriptionItemsDtos'][0]['prescriptioinUid']}    ${prescription_id}
+
+
+JD-TC-GetPrescription-2
+
+    [Documentation]    Get Prescription - prescription is invalid 
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+    
+    ${inv}=     Random Int  min=1  max=100
+
+    ${resp}=    Get RX Prescription By Id  ${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-GetPrescription-3
+
+    [Documentation]    Get Prescription - without login
+
+    ${resp}=    Get RX Prescription By Id  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     419
+    Should Be Equal As Strings      ${resp.json()}          ${SESSION_EXPIRED}

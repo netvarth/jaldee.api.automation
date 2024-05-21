@@ -207,6 +207,7 @@ JD-TC-CreateRXPrescriptionItem-1
     Set Suite Variable  ${item1}  ${resp.json()}
 
     ${displayName2}=     FakerLibrary.name
+    Set Suite Variable      ${displayName2}
 
     ${resp}=    Create Item Inventory  ${displayName2}    isInventoryItem=${bool[1]}
     Log   ${resp.json()}
@@ -550,6 +551,8 @@ JD-TC-CreateRXPrescriptionItem-1
     ${qt2}=        Random Int  min=1  max=10
     ${duration2}=             Evaluate    float(${dur2})
     ${quantity2}=             Evaluate    float(${qt2})
+    Set Suite Variable      ${duration2}
+    Set Suite Variable      ${quantity2}
 
     ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
     Log   ${resp.content}
@@ -567,3 +570,133 @@ JD-TC-CreateRXPrescriptionItem-1
     Should Be Equal As Strings      ${resp.json()['description']}           ${description}  
     Should Be Equal As Strings      ${resp.json()['quantity']}              ${quantity2}  
     Should Be Equal As Strings      ${resp.json()['prescriptioinUid']}      ${prescription_id}  
+
+JD-TC-CreateRXPrescriptionItem-2
+
+    [Documentation]    Create RX Prescription Item - adding same item
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+JD-TC-CreateRXPrescriptionItem-3
+
+    [Documentation]    Create RX Prescription Item - where Display name is empty
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    RX Create Prescription Item  ${empty}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+JD-TC-CreateRXPrescriptionItem-4
+
+    [Documentation]    Create RX Prescription Item - where duration is empty
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Duration Value
+
+    ${resp}=    RX Create Prescription Item  ${displayName2}  ${empty}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}         422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
+
+JD-TC-CreateRXPrescriptionItem-5
+
+    [Documentation]    Create RX Prescription Item - where quantity is empty
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${empty}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+JD-TC-CreateRXPrescriptionItem-6
+
+    [Documentation]    Create RX Prescription Item - description is empty
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${empty}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+JD-TC-CreateRXPrescriptionItem-7
+
+    [Documentation]    Create RX Prescription Item - empty item
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${empty}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+
+JD-TC-CreateRXPrescriptionItem-8
+
+    [Documentation]    Create RX Prescription Item - dosage is empty
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Dosage Value
+
+    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${empty}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}        422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
+
+JD-TC-CreateRXPrescriptionItem-9
+
+    [Documentation]    Create RX Prescription Item - frequency is empty
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   Frequency Value
+
+    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${empty}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}            422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
+
+
+JD-TC-CreateRXPrescriptionItem-10
+
+    [Documentation]    Create RX Prescription Item - prescription is empty
+
+    ${resp}=  Encrypted Provider Login    ${MUSERNAME_E}  ${PASSWORD}
+    Log  ${resp.json()}         
+    Should Be Equal As Strings            ${resp.status_code}    200
+
+    ${INVALID_FIELD}=  format String   ${INVALID_FIELD}   UID
+
+    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${empty}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${INVALID_FIELD}
+
+JD-TC-CreateRXPrescriptionItem-11
+
+    [Documentation]    Create RX Prescription Item - without login
+
+    ${resp}=    RX Create Prescription Item  ${displayName2}  ${duration2}  ${quantity2}  ${description}  ${item2}  ${dos}  ${frequency_id}  ${prescription_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     419
+    Should Be Equal As Strings      ${resp.json()}          ${SESSION_EXPIRED}
