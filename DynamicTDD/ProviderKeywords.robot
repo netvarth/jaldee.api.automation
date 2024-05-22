@@ -15310,3 +15310,21 @@ Add SubService To Appointment
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  provider/appointment/${uuid}/addsubservices  data=${data}  expected_status=any
     RETURN  ${resp}
+
+
+Update SubService To Appointment  
+
+    [Arguments]   ${uuid}  @{lists}
+    ${data}=    json.dumps    ${lists}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session   ynw  provider/appointment/${uuid}/updatesubservices  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+
+Remove SubService From Appointment  
+
+    [Arguments]   ${uuid}  @{lists}
+    ${data}=    json.dumps    ${lists}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session   ynw  provider/appointment/${uuid}/removesubservices  data=${data}  expected_status=any
+    RETURN  ${resp}
