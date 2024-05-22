@@ -345,9 +345,36 @@ JD-TC-CreateSubService-6
     Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[1]}
 
 
-JD-TC-CreateSubService-
+JD-TC-CreateSubService-7
 
     [Documentation]  Create sub services with same name. 
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME170}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${desc}=  FakerLibrary.sentence
+    ${subser_dur}=   Random Int   min=5   max=10
+    ${subser_price}=   Random Int   min=100   max=500
+    ${subser_price}=  Convert To Number  ${subser_price}  1
+    ${ser_name}=    FakerLibrary.firstname
+    
+    ${resp}=  Create Service    ${ser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
+    ...    ${bool[0]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
+    Log   ${resp.json()}  
+    Should Be Equal As Strings    ${resp.status_code}    200
+   
+    ${desc1}=  FakerLibrary.sentence
+    ${subser_dur1}=   Random Int   min=5   max=10
+    ${subser_price1}=   Random Int   min=100   max=500
+    ${subser_price1}=  Convert To Number  ${subser_price1}  1
+
+    ${resp}=  Create Service    ${ser_name}  ${desc1}  ${subser_dur1}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price1}
+    ...    ${bool[0]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
+    Log   ${resp.json()}  
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${SERVICE_NAME_REQUIRED}
+
     
 JD-TC-CreateSubService-UH1
 
@@ -361,10 +388,28 @@ JD-TC-CreateSubService-UH1
     ${subser_dur}=   Random Int   min=5   max=10
     ${subser_price}=   Random Int   min=100   max=500
     ${subser_price}=  Convert To Number  ${subser_price}  1
-    ${subser_name}=    FakerLibrary.firstname
-
+    
     ${resp}=  Create Service    ${EMPTY}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
     ...    ${bool[0]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
     Log   ${resp.json()}  
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings    ${resp.json()}    ${SERVICE_NAME_REQUIRED}
+
+   
+JD-TC-CreateSubService-UH2
+
+    [Documentation]  Create a sub service without price. 
+    
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME170}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${desc}=  FakerLibrary.sentence
+    ${subser_dur}=   Random Int   min=5   max=10
+    ${subser_name}=    FakerLibrary.firstname
+
+    ${resp}=  Create Service    ${ser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${EMPTY}
+    ...    ${bool[0]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
+    Log   ${resp.json()}  
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${SERVICE_PRICE_REQUIRED}
