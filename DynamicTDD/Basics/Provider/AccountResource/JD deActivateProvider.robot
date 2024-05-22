@@ -17,13 +17,6 @@ ${parallel}           1
 ${self}               0
 @{emptylist}
 
-*** Keywords ***
-DeActivate Service Provider  
-    
-    Check And Create YNW Session
-    ${resp}=  DELETE On Session  ynw   provider/login/deActivate   expected_status=any
-    RETURN  ${resp}
-
 *** Test Cases ***
 
 JD-TC-DeActivate Service Provider -1
