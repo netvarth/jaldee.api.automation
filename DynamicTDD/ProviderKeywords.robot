@@ -74,7 +74,12 @@ Provider Logout
     ${resp}=  DELETE On Session  ynw  /provider/login  expected_status=any
     RETURN  ${resp}       
 
+DeActivate Service Provider  
     
+    Check And Create YNW Session
+    ${resp}=  DELETE On Session  ynw   provider/login/deActivate   expected_status=any
+    RETURN  ${resp}
+
 Phone Numbers
     [Arguments]  ${lbl}  ${res}  ${inst}  ${perm}
     ${ph}=  Create Dictionary  label=${lbl}  resource=${res}  instance=${inst}  permission=${perm}
