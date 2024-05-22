@@ -29,13 +29,16 @@ ${order}        0
 ${originFrom}       NONE
 
 
+
+
+
 *** Test Cases ***
 
-JD-TC-Get Inventory Item Count-1
+JD-TC-Get Inventory Item Summary-1
 
-    [Documentation]  Get Inventory Item Count
+    [Documentation]  Get Inventory Item Summary
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME319}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME317}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     ${decrypted_data}=  db.decrypt_data   ${resp.content}
@@ -119,7 +122,7 @@ JD-TC-Get Inventory Item Count-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable     ${itemjrx}   ${resp.json()}
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME319}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME317}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -588,34 +591,39 @@ JD-TC-Get Inventory Item Count-1
     # Log   ${resp.content}
     # Should Be Equal As Strings    ${resp.status_code}    200
 
-
     ${resp}=  Get Inventory Item Count   storeEncId-eq=${store_id}   invCatalogEncId-eq=${encid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings    ${resp.json()}    1
 
-JD-TC-Get Inventory Item Count-UH1
 
-    [Documentation]  Get Inventory Item Count
+    ${resp}=  Get Inventory Item Summary   storeEncId-eq=${store_id}   invCatalogEncId-eq=${encid}   from=0  count=10
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Should Be Equal As Strings    ${resp.json()}    1
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME319}  ${PASSWORD}
+JD-TC-Get Inventory Item Summary-UH1
+
+    [Documentation]  Get Inventory Item Summary
+
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME317}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Inventory Item Count   invCatalogEncId-eq=${encid}
+    ${resp}=  Get Inventory Item Summary   invCatalogEncId-eq=${encid}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${STORE_REQUIRED}
 
-JD-TC-Get Inventory Item Count-UH2
+JD-TC-Get Inventory Item Summary-UH2
 
-    [Documentation]  Get Inventory Item Count
+    [Documentation]  Get Inventory Item Summary
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME319}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME317}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Get Inventory Item Count   storeEncId-eq=${store_id}
+    ${resp}=  Get Inventory Item Summary   storeEncId-eq=${store_id}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    422
     Should Be Equal As Strings   ${resp.json()}   ${INVENTORY_CATALOG_REQUIRED}
@@ -896,84 +904,7 @@ JD-TC-Create Sales Order-13
     Should Be Equal As Strings    ${resp.status_code}    200
 # -----------------------------------------------------------------------------------
 
-    ${resp}=  Get Inventory Item Count   storeEncId-eq=${store_id2}   invCatalogEncId-eq=${Catalog_EncIds}
+    ${resp}=  Get Inventory Item Summary   storeEncId-eq=${store_id2}   invCatalogEncId-eq=${Catalog_EncIds}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-*** Comments ***
-JD-TC-Create Inventory Catalog-2
-
-    [Documentation]  create multiple inventory catalog with same store id.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${Name}=    FakerLibrary.first name
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-Create Inventory Catalog-3
-
-    [Documentation]  create inventory catalog using store nature as lab.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${Name}=    FakerLibrary.last name
-    ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
-    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
-    ${email}=  Create List  ${email_id}
-
-    ${resp}=  Create Store   ${Name}  ${St_Id1}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    Set Suite Variable  ${store_id1}  ${resp.json()}
-
-    ${Name}=    FakerLibrary.first name
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id1}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-Create Inventory Catalog-4
-
-    [Documentation]  create  inventory catalog where name as number.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Create Inventory Catalog   ${invalidNum}  ${store_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-Create Inventory Catalog-5
-
-    [Documentation]  create  inventory catalog where name as invalid string.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Create Inventory Catalog   ${invalidstring}  ${store_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-JD-TC-Create Inventory Catalog-6
-
-    [Documentation]  create  inventory catalog with same  name with different store id.
-
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME53}  ${PASSWORD}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${Name}=    FakerLibrary.last name
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id1}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
