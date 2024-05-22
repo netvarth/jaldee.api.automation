@@ -15123,6 +15123,13 @@ Get Inventory Item Summary
     ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/store/inventorycatalog/summary   params=${param}  expected_status=any
     RETURN  ${resp} 
 
+Get NonExpired Inventory Item 
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/ordercatalogitem/batch/nonexpired   params=${param}  expected_status=any
+    RETURN  ${resp} 
+
+
 
 
 #---------------------------RX Push-----------------------------------------    
