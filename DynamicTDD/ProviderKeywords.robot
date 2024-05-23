@@ -15119,7 +15119,13 @@ Get NonExpired Inventory Item
     RETURN  ${resp} 
 
 
+Get Item Batch By InvCatItem
 
+    [Arguments]     ${invCatItemEncId}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/batch/invcatalogitem/${invCatItemEncId}  expected_status=any 
+    RETURN  ${resp}
 
 #---------------------------RX Push-----------------------------------------    
 
