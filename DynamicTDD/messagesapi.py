@@ -2362,3 +2362,4 @@ HTML_REQUIRED_CREATION = "Prescription html required for creation"
 
 STATUS_DISABLED = "{} disabled"
 NOT_FOUND_WITH_ID = "{} not found with ID {}"
+INVALID_ORDER = "Invalid Order"

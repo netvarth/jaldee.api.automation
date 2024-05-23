@@ -561,15 +561,7 @@ JD-TC-Get Sales Order Invoice-2
     Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
     Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
 
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-    # Should Be Equal As Strings      ${resp.json()[0]}          ${PURCHASE_ALREADY_IN_STATUS}
-
-
+ 
 # ------------------------------------------- Check Stock ---------------------------------------------------
     ${resp}=    Get Stock Avaliability  ${ic_Item_id}
     Log   ${resp.content}
@@ -668,18 +660,7 @@ JD-TC-Get Sales Order Invoice-2
 
     ${primaryMobileNo1}    Generate random string    10    123456789
     Set Suite Variable  ${primaryMobileNo1}
-
-    # ${bill_Phone1}=   Create Dictionary   countryCode=${countryCodes[0]}           number=${primaryMobileNo1}
-
-    # ${contactInfo1}=   Create Dictionary    phone=${bill_Phone1}         email=${email_id}      
-    # Set Suite Variable  ${contactInfo1}
-
-    # ${homeDeliveryAddress1}=   Create Dictionary    phone=${bill_Phone1}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
-    # Set Suite Variable  ${homeDeliveryAddress1}
-
-    # ${billingAddress1}=   Create Dictionary    phone=${bill_Phone1}   firstName=${firstName}      lastName=${lastName}       email=${email_id}      address=${address}    city=${city}   postalCode=${postcode}     landMark=${address}
-
-    ${note}=  FakerLibrary.name
+   ${note}=  FakerLibrary.name
 
     ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}    ${items}    store=${store}        notes=${note}      notesForCustomer=${note}
     Log   ${resp.content}
@@ -765,7 +746,8 @@ JD-TC-Get Sales Order Invoice-2
 
     ${netTotal}=   Evaluate    ${price} * ${quantity} 
     ${netTotal}=  Convert To Number  ${netTotal}    1
-
+    Set Suite Variable      ${netTotal}
+    
     ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
@@ -790,3 +772,51 @@ JD-TC-Get Sales Order Invoice-2
     Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[0]}
 
 # ----------------------------------------------------------------------------------------------
+JD-TC-Get Sales Order Invoice-3
+
+    [Documentation]   After generation of invoice update the invoice status then try to get invoice.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+# --------------------------------------------- Update Sales Order Invoice Status -----------------------------------------------
+
+    ${resp}=    Update Sales Order Invoice Status    ${SO_Inv}    ${billStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200   
+    Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[1]}
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Store_name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${inv_order_encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+
+JD-TC-Get Sales Order Invoice-UH
+
+    [Documentation]   Get Sales order invoice with invalid sales order invoice id.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME31}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${invalidEma}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422

@@ -286,6 +286,18 @@ JD-TC-Get Sales Order Invoice By Order Encid-1
     Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 # -----------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+# ------------------------------------------------------------------------------------------------------------------------------------
 
 # ------------------------------------------------Create Sales Order Invoice----------------------------------------------
 
@@ -342,3 +354,41 @@ JD-TC-Get Sales Order Invoice By Order Encid-1
     Should Be Equal As Strings    ${resp.json()[0]['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()[0]['cessTotal']}                                       0.0
 
+JD-TC-Get Sales Order Invoice By Order Encid-UH1
+
+    [Documentation]   Another povider login and try to Get order encid.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Invoice By Order Uid    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${INVALID_ORDER}
+
+JD-TC-Get Sales Order Invoice By Order Encid-UH2
+
+    [Documentation]   Get sales order invoice with invalid order encid.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Invoice By Order Uid    ${invalidEma}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${INVALID_ORDER}
+
+JD-TC-Get Sales Order Invoice By Order Encid-UH3
+
+    [Documentation]   Get sales order invoice with EMPTY order encid.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME32}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Get Invoice By Order Uid    ${EMPTY}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${INVALID_FM_INVOICE_ID}
