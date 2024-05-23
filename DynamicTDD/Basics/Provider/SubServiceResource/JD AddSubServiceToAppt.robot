@@ -136,19 +136,6 @@ JD-TC-AddSubServicesToAppt-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['walkinConsumerBecomesJdCons']}   ${bool[1]} 
 
-    ${resp}=  Get User
-    Log  ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}    200
-    IF   not '${resp.content}' == '${emptylist}'
-        ${len}=  Get Length  ${resp.json()}
-        FOR   ${i}  IN RANGE   0   ${len}
-            Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME172}'
-                clear_users  ${user_phone}
-            END
-        END
-    END
-
     ${u_id1}=  Create Sample User
     Set Suite Variable   ${u_id1}
    

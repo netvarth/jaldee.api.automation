@@ -261,7 +261,7 @@ JD-TC-RemoveSubServicesToAppt-1
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceCategory']}  ${serviceCategory[1]}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['assigneeUsers']}    ${empty_list}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['teamIds']}          ${empty_list}
-    Should Not Contain   ${resp.json()}   ${subser_id1}
+    Should Not Contain          ${resp.json()['subServiceData']}                        ${subser_id1}
 
     ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}  
     
@@ -297,10 +297,12 @@ JD-TC-RemoveSubServicesToAppt-1
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceCategory']}  ${serviceCategory[0]}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['assigneeUsers']}    ${empty_list}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['teamIds']}          ${empty_list}
+
+    Set Test Variable   ${seq_id}      ${resp.json()['subServiceData'][1]['sequenceId']}
     
-    ${subser_list}=  Create Dictionary  serviceId=${subser_id1}  
+    ${subser_list}=  Create Dictionary  serviceId=${subser_id1}   sequenceId=${seq_id}
     
-    ${resp}=   Remove SubService From Appointment    ${apptid1}   ${subser_list}
+    ${resp}=   Remove SubService From Appointment    ${apptid1}   ${subser_list}  
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
 
@@ -319,17 +321,19 @@ JD-TC-RemoveSubServicesToAppt-1
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceCategory']}  ${serviceCategory[1]}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['assigneeUsers']}    ${empty_list}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['teamIds']}          ${empty_list}
-    Should Not Contain   ${resp.json()}   ${subser_id1}
+    Should Not Contain   ${resp.json()['subServiceData']}                               ${subser_id1}
 
 JD-TC-RemoveSubServicesToAppt-2
 
-    [Documentation]  remove one assigned user from an appointments subservice.
+    [Documentation]  remove the subservice with one assigned user.
     
     ${resp}=  Encrypted Provider Login  ${MUSERNAME230}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${asgn_users}=   Create List  ${u_id1}
+    ${subser_qnty}=   Random Int   min=1   max=5
+    ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
     ${subser_list2}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}    quantity=${subser_qnty}   assigneeUsers=${asgn_users}
     
     ${resp}=   Add SubService To Appointment    ${apptid1}   ${subser_list2}
@@ -367,27 +371,51 @@ JD-TC-RemoveSubServicesToAppt-2
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['assigneeUsers']}    ${asgn_users}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['teamIds']}          ${empty_list}
 
+    Set Test Variable   ${seq_id}      ${resp.json()['subServiceData'][1]['sequenceId']}
+    
     ${asgn_users}=   Create List  ${u_id1}
+    ${subser_list2}=  Create Dictionary     serviceId=${subser_id1}   sequenceId=${seq_id}  assigneeUsers=${asgn_users}
+    
+    ${resp}=   Remove SubService From Appointment    ${apptid1}   ${subser_list2}
+    Log   ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceName']}      ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceDate']}      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceAmount']}    ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['quantity']}         1.0
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['taxable']}          ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['taxPercentage']}    0.0
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['totalPrice']}       ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['netRate']}          ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceCategory']}  ${serviceCategory[1]}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['assigneeUsers']}    ${empty_list}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['teamIds']}          ${empty_list}
+    Should Not Contain   ${resp.json()['subServiceData']}                               ${subser_id1}
+
+
+JD-TC-RemoveSubServicesToAppt-3
+
+    [Documentation]  add a subservice and change the price then try to remove the subservice .
+    
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME230}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${asgn_users}=   Create List  ${u_id1}
+    ${subser_qnty}=   Random Int   min=1   max=5
+    ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
     ${subser_list2}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}    quantity=${subser_qnty}   assigneeUsers=${asgn_users}
     
     ${resp}=   Add SubService To Appointment    ${apptid1}   ${subser_list2}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
 
-JD-TC-RemoveSubServicesToAppt-3
-
-    [Documentation]  update the subservice with more than one user as assignee.
-    
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME230}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${asgn_users}=   Create List  ${u_id2}   ${u_id3}
-    ${subser_list2}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}    quantity=${subser_qnty}   assigneeUsers=${asgn_users}
-    
-    ${resp}=   Update SubService To Appointment    ${apptid1}   ${subser_list2}
-    Log   ${resp.json()}  
-    Should Be Equal As Strings  ${resp.status_code}  200
+    ${total}=    Evaluate    ${subser_qnty}*${subser_price}
 
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
@@ -416,22 +444,19 @@ JD-TC-RemoveSubServicesToAppt-3
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['netRate']}          ${total}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceCategory']}  ${serviceCategory[0]}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['assigneeUsers']}    ${asgn_users}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['teamIds']}          ${empty_list}
 
-  
-JD-TC-RemoveSubServicesToAppt-4
-
-    [Documentation]  update the subservice with assignee conflicting with the existing one.
+    Set Test Variable   ${seq_id}      ${resp.json()['subServiceData'][1]['sequenceId']}
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME230}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${asgn_users}=   Create List  ${u_id2}   ${u_id3}
-    ${subser_list2}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}    quantity=${subser_qnty}   assigneeUsers=${asgn_users}
+    ${subser_price1}=   Random Int   min=10   max=50
+    ${subser_price1}=  Convert To Number  ${subser_price1}  1
+    ${subser_list}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price1}   quantity=${subser_qnty}   assigneeUsers=${asgn_users}
     
-    ${resp}=   Update SubService To Appointment    ${apptid1}   ${subser_list2}
+    ${resp}=   Update SubService To Appointment    ${apptid1}   ${subser_list}
     Log   ${resp.json()}  
     Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${total1}=    Evaluate    ${subser_qnty}*${subser_price1}
 
     ${resp}=  Get Appointment By Id   ${apptid1}
     Log   ${resp.json()}
@@ -452,38 +477,62 @@ JD-TC-RemoveSubServicesToAppt-4
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceId']}        ${subser_id1}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceName']}      ${subser_name}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceDate']}      ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceAmount']}    ${subser_price}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceAmount']}    ${subser_price1}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['quantity']}         ${subser_qnty}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['taxable']}          ${bool[0]}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['taxPercentage']}    0.0
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['totalPrice']}       ${total}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['netRate']}          ${total}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['totalPrice']}       ${total1}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['netRate']}          ${total1}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceCategory']}  ${serviceCategory[0]}
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['assigneeUsers']}    ${asgn_users}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['teamIds']}          ${empty_list}
 
-  
+    ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}   sequenceId=${seq_id}
+
+    ${resp}=   Remove SubService From Appointment    ${apptid1}   ${subser_list1}
+    Log   ${resp.json()}  
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceName']}      ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceDate']}      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceAmount']}    ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['quantity']}         1.0
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['taxable']}          ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['taxPercentage']}    0.0
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['totalPrice']}       ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['netRate']}          ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceCategory']}  ${serviceCategory[1]}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['assigneeUsers']}    ${empty_list}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['teamIds']}          ${empty_list}
+    Should Not Contain   ${resp.json()['subServiceData']}                               ${subser_id1}
+
+
 JD-TC-RemoveSubServicesToAppt-UH1
 
-    [Documentation]  update a subservice to an appointment without Login
+    [Documentation]  Remove a subservice from an appointment without Login
 
-    ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}   
+    ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}  
 
-    ${resp}=   Update SubService To Appointment    ${apptid1}   ${subser_list1}
+    ${resp}=   Remove SubService From Appointment    ${apptid1}   ${subser_list1}
     Log   ${resp.json()}  
     Should Be Equal As Strings    ${resp.status_code}   419
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
  
 JD-TC-RemoveSubServicesToAppt-UH2
 
-    [Documentation]  consumer tries to update a subservice to an appointment.
+    [Documentation]  consumer tries to remove a subservice from an appointment.
     
     ${resp}=  Consumer Login  ${CUSERNAME12}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}   
+    ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}   
 
-    ${resp}=   Update SubService To Appointment    ${apptid1}   ${subser_list1}
+    ${resp}=   Remove SubService From Appointment    ${apptid1}   ${subser_list1}
     Log   ${resp.json()}  
     Should Be Equal As Strings    ${resp.status_code}   401
     Should Be Equal As Strings  ${resp.json()}   ${LOGIN_NO_ACCESS_FOR_URL}
@@ -491,7 +540,7 @@ JD-TC-RemoveSubServicesToAppt-UH2
 
 JD-TC-RemoveSubServicesToAppt-UH3
 
-    [Documentation]  update an inactive subservice to an appointment
+    [Documentation]  remove an inactive subservice from an appointment
     
     ${resp}=  Encrypted Provider Login  ${MUSERNAME230}  ${PASSWORD}
     Log   ${resp.json()}
@@ -506,11 +555,11 @@ JD-TC-RemoveSubServicesToAppt-UH3
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['status']}   ${status[1]}
     
-    ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}   
+    ${subser_list1}=  Create Dictionary  serviceId=${subser_id1}  
 
     ${STATUS_DISABLED}=  format String   ${STATUS_DISABLED}   ${serviceCategory[0]} : ${subser_id1}
 
-    ${resp}=   Update SubService To Appointment    ${apptid1}   ${subser_list1}
+    ${resp}=   Remove SubService From Appointment    ${apptid1}   ${subser_list1}
     Log   ${resp.json()}  
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings  ${resp.json()}   ${STATUS_DISABLED}
@@ -518,28 +567,84 @@ JD-TC-RemoveSubServicesToAppt-UH3
     ${resp}=  Enable service  ${subser_id1} 
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-
-
+ 
 JD-TC-RemoveSubServicesToAppt-UH4
 
-    [Documentation]  update the subservice with inactive user.
-    
+    [Documentation]  Remove a subservice from an appointment that has already been canceled.
+
     ${resp}=  Encrypted Provider Login  ${MUSERNAME230}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  EnableDisable User  ${u_id1}  ${toggle[1]}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-
-    ${resp}=  Get User By Id  ${u_id1}
-    Log   ${resp.json()}
-    Should Be Equal As Strings  ${resp.status_code}  200
-    Verify Response  ${resp}  id=${u_id1}   status=${status[1]} 
-
-    ${asgn_users}=   Create List  ${u_id1}  
+    ${asgn_users}=   Create List  ${u_id1}
+    ${subser_qnty}=   Random Int   min=1   max=5
+    ${subser_qnty}=  Convert To Number  ${subser_qnty}  1
     ${subser_list2}=  Create Dictionary  serviceId=${subser_id1}  serviceAmount=${subser_price}    quantity=${subser_qnty}   assigneeUsers=${asgn_users}
     
-    ${resp}=   Update SubService To Appointment    ${apptid1}   ${subser_list2}
+    ${resp}=   Add SubService To Appointment    ${apptid1}   ${subser_list2}
     Log   ${resp.json()}  
-    Should Be Equal As Strings  ${resp.status_code}  422
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${total}=    Evaluate    ${subser_qnty}*${subser_price}
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceName']}      ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceDate']}      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceAmount']}    ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['quantity']}         1.0
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['taxable']}          ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['taxPercentage']}    0.0
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['totalPrice']}       ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['netRate']}          ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceCategory']}  ${serviceCategory[1]}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['assigneeUsers']}    ${empty_list}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['teamIds']}          ${empty_list}
+   
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceId']}        ${subser_id1}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceName']}      ${subser_name}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceDate']}      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceAmount']}    ${subser_price}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['quantity']}         ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['taxable']}          ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['taxPercentage']}    0.0
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['totalPrice']}       ${total}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['netRate']}          ${total}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceCategory']}  ${serviceCategory[0]}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['assigneeUsers']}    ${asgn_users}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['teamIds']}          ${empty_list}
+
+    Set Test Variable   ${seq_id}      ${resp.json()['subServiceData'][1]['sequenceId']}
+    
+    ${asgn_users}=   Create List  ${u_id1}
+    ${subser_list2}=  Create Dictionary     serviceId=${subser_id1}   sequenceId=${seq_id}  assigneeUsers=${asgn_users}
+    
+    ${resp}=   Remove SubService From Appointment    ${apptid1}   ${subser_list2}
+    Log   ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=  Get Appointment By Id   ${apptid1}
+    Log   ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceName']}      ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceDate']}      ${DAY1}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceAmount']}    ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['quantity']}         1.0
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['taxable']}          ${bool[0]}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['taxPercentage']}    0.0
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['totalPrice']}       ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['netRate']}          ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceCategory']}  ${serviceCategory[1]}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['assigneeUsers']}    ${empty_list}
+    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['teamIds']}          ${empty_list}
+    Should Not Contain   ${resp.json()['subServiceData']}                               ${subser_id1}
+
+
+    ${resp}=   Remove SubService From Appointment    ${apptid1}   ${subser_list1}
+    Log   ${resp.json()}  
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
+ 
