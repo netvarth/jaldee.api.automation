@@ -103,11 +103,7 @@ Business Profile
     ${bs}=  Create Dictionary  timespec=${bs}
     ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${bs}  pinCode=${pin}  address=${adds}
     # ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    IF  '$ph1' != '${EMPTY}' and '$ph1' != '${NONE}' and '$ph2' != '${EMPTY}' and '$ph2' != '${NONE}'
-        ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    ELSE
-        ${ph_nos}=  Create List
-    END
+    ${ph_nos}=  db.bus_prof_ph  ${ph1}  ${ph2}
     ${emails}=  Create List  ${email1}
     ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}  phoneNumbers=${ph_nos}  emails=${emails}
     ${data}=  json.dumps  ${data}
@@ -141,7 +137,8 @@ Create Business Profile without details
 
 Create Business Profile without schedule
     [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${pin}  ${adds}   ${ph1}  ${ph2}  ${email1}  ${lid}
-    ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    # ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    ${ph_nos}=  db.bus_prof_ph  ${ph1}  ${ph2}
     ${emails}=  Create List  ${email1}
     ${b_loc}=  Create Dictionary   id=${lid}  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${None}  pinCode=${pin}  address=${adds}
     ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}  phoneNumbers=${ph_nos}  emails=${emails}
@@ -196,11 +193,7 @@ Business Profile with schedule
     ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${bs}  pinCode=${pin}  address=${adds}  id=${lid}
     
     # ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    IF  '$ph1' != '${EMPTY}' and '$ph1' != '${NONE}' and '$ph2' != '${EMPTY}' and '$ph2' != '${NONE}'
-        ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    ELSE
-        ${ph_nos}=  Create List
-    END
+    ${ph_nos}=  db.bus_prof_ph  ${ph1}  ${ph2}
     ${emails}=  Create List  ${email1}
     ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}  phoneNumbers=${ph_nos}  emails=${emails}
     FOR    ${key}    ${value}    IN    &{kwargs}
@@ -219,11 +212,7 @@ Update Business Profile with schedule
 Update Business Profile without schedule
     [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${pin}  ${adds}   ${ph1}  ${ph2}  ${email1}  ${lid}
     # ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    IF  '$ph1' != '${EMPTY}' and '$ph1' != '${NONE}' and '$ph2' != '${EMPTY}' and '$ph2' != '${NONE}'
-        ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    ELSE
-        ${ph_nos}=  Create List
-    END
+    ${ph_nos}=  db.bus_prof_ph  ${ph1}  ${ph2}
     ${emails}=  Create List  ${email1}
     ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${None}  pinCode=${pin}  address=${adds}   id=${lid}
     ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}  phoneNumbers=${ph_nos}  emails=${emails}
