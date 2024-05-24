@@ -48,7 +48,7 @@ ${bType}                  Waitlist
 @{age_group}			  CHILDREN    STUDENT  SENIORCITIZENS
 @{statusboard_type}       SERVICE  QUEUE  DEPARTMENT
 @{cupnpaymentStatus}      SUCCESS  REQUESTED  PAID  PAYMENTPENDING  INCOMPLETE   PENDING  PARTIALLYPAID
-@{acceptPaymentBy}		  cash  CHEQUE
+@{acceptPaymentBy}		  cash  other   self_pay
 @{couponState}			  NEW  ENABLED  EXPIRED  DISABLED  DISABLED_BY_JALDEE  DISABLED_PROVIDER_LIMIT_REACHED
 @{Reimburse_invoice}	  CASH	CHEQUE  INDISPUTE  NOTPAID
 @{jaldee_reimburse_for}	  JBANK  JC  JCASH  TOTAL  

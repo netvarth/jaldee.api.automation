@@ -124,7 +124,7 @@ JD-TC-Make Cash Payment For Sales Order-1
     ${Name}=    FakerLibrary.last name
     Set Suite Variable  ${Name}
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
-    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
+    Set Suite Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
     ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
@@ -351,7 +351,7 @@ JD-TC-Make Cash Payment For Sales Order-1
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       ${netTotal}
 
 
-JD-TC-Make Cash Payment For Sales Order-2
+JD-TC-Make Cash Payment For Sales Order-UH1
 
     [Documentation]   sales Order Status is Complete then do the cash payment.
 
@@ -404,59 +404,399 @@ JD-TC-Make Cash Payment For Sales Order-2
 
     ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv}   ${acceptPaymentBy[0]}	${netTotal}     ${note}
     Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
-    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
-    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${CAN_NOT_ACCEPT_PAYMENT}
 
 JD-TC-Make Cash Payment For Sales Order-3
 
-    [Documentation]   sales Order Status is Complete then do the cash payment.
+    [Documentation]   do half of the amount for cash payment.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
+    ${quantity}=    Random Int  min=20   max=50
+
+    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+    Set Suite Variable  ${SO_Cata_Encid_List}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}  ${items}    store=${store}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid1}  ${resp.json()}
+    ${price}=    Random Int  min=20   max=40
+
+    ${netTotal}=  Evaluate  ${price}*${quantity}
+    ${netTotal}=  Convert To Number  ${netTotal}   1
+    Set Suite Variable  ${netTotal}
+
+
+    ${resp}=    Get Sales Order    ${SO_Uid1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid1}
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['location']['id']}                                  ${locId1}
+    Should Be Equal As Strings    ${resp.json()['store']['name']}                                   ${Name}
+    Should Be Equal As Strings    ${resp.json()['store']['encId']}                                  ${store_id}
+
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['orderFor']['id']}                                  ${cid}
+    Should Be Equal As Strings    ${resp.json()['orderFor']['name']}                                ${firstName} ${lastName}
+
+    Should Be Equal As Strings    ${resp.json()['orderType']}                                       ${bookingChannel[0]}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['deliveryType']}                                    ${deliveryType[0]}
+    Should Be Equal As Strings    ${resp.json()['deliveryStatus']}                                  ${deliveryStatus[0]}
+    Should Be Equal As Strings    ${resp.json()['originFrom']}                                      ${originFrom}
+
+    Should Be Equal As Strings    ${resp.json()['orderNum']}                                        2
+    Should Be Equal As Strings    ${resp.json()['orderRef']}                                        2
+    Should Be Equal As Strings    ${resp.json()['deliveryDate']}                                    ${DAY1}
+
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['phone']['number']}                  ${primaryMobileNo}
+    Should Be Equal As Strings    ${resp.json()['contactInfo']['email']}                            ${email_id}
+
+    Should Be Equal As Strings    ${resp.json()['itemCount']}                                       1
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                        ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                        0.0
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                   0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                               0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                             0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                         ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+
+
 # --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
 
-    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[0]}
+    ${resp}=    Update SalesOrder Status    ${SO_Uid1}     ${orderStatus[1]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Sales Order    ${SO_Uid}   
+    ${resp}=    Get Sales Order    ${SO_Uid1}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[0]}
-
-    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[4]}
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-
-    ${resp}=    Get Sales Order    ${SO_Uid}   
-    Log   ${resp.content}
-    Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
-    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[4]}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid1}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
 # ------------------------------------------------------------------------------------------------------------------------------------
 
+# ------------------------------------------------Create Sales Order Invoice----------------------------------------------
+
+    ${resp}=    Create Sales Order Invoice    ${SO_Uid1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable      ${SO_Inv}    ${resp.json()}  
+# ------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Get Invoice By Invoice EncId -----------------------------------------------
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid1}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${SO_Cata_Encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+
+# ------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------- Make Cash Payment For SalesOrder -----------------------------------------------
 
     ${note}=  FakerLibrary.name
 
-    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv}   ${acceptPaymentBy[0]}	${netTotal}     ${note}
+    ${half_amt}=  Evaluate  ${netTotal}/2
+    ${half_amt}=  Convert To Number  ${half_amt}   1
+    Set Suite Variable  ${half_amt}
+    
+
+    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv}   ${acceptPaymentBy[0]}	${half_amt}     ${note}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
     ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
-    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    # Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${half_amt}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${half_amt}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       ${half_amt}
+
+JD-TC-Make Cash Payment For Sales Order-4
+
+    [Documentation]   Do the balence payment using "other" acceptPayment Method.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv}   ${acceptPaymentBy[1]}	${half_amt}     ${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Should Be Equal As Strings    ${resp.json()['half_amt']}                                       ${half_amt}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${half_amt}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       ${half_amt}
+
+JD-TC-Make Cash Payment For Sales Order-5
+
+    [Documentation]   Do the half od the payment using "other" acceptPayment Method then try to pay full amount using cash payment.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${quantity1}=    Random Int  min=20   max=50
+
+    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+    Set Suite Variable  ${SO_Cata_Encid_List}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity1}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}  ${items}    store=${store}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid2}  ${resp.json()}
+    ${price1}=    Random Int  min=20   max=40
+
+    ${netTotal}=  Evaluate  ${price1}*${quantity1}
+    ${netTotal}=  Convert To Number  ${netTotal}   1
+    Set Suite Variable  ${netTotal}
+
+
+    ${resp}=    Get Sales Order    ${SO_Uid2}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid2}
+
+
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid1}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid1}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+# ------------------------------------------------Create Sales Order Invoice----------------------------------------------
+
+    ${resp}=    Create Sales Order Invoice    ${SO_Uid1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable      ${SO_Inv}    ${resp.json()}  
+# ------------------------------------------------------------------------------------------------------------------------
+    ${note}=  FakerLibrary.name
+
+    ${half_amt}=  Evaluate  ${netTotal}/2
+    ${half_amt}=  Convert To Number  ${half_amt}   1
+
+    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv}   ${acceptPaymentBy[1]}	${half_amt}     ${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Should Be Equal As Strings    ${resp.json()['half_amt']}                                       ${half_amt}
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${half_amt}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       ${half_amt}
+
+    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv}   ${acceptPaymentBy[0]}	${netTotal}     ${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Make Cash Payment For Sales Order-
+
+    [Documentation]   Make Cash Payment For SalesOrder with Self pay  payment method.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${quantity1}=    Random Int  min=20   max=50
+
+    ${Cg_encid}=  Create Dictionary   encId=${SO_Cata_Encid}   
+    ${SO_Cata_Encid_List}=  Create List       ${Cg_encid}
+    Set Suite Variable  ${SO_Cata_Encid_List}
+
+    ${store}=  Create Dictionary   encId=${store_id}  
+    ${items}=  Create Dictionary   catItemEncId=${SO_itemEncIds}    quantity=${quantity1}   catItemBatchEncId=${SO_itemEncIds}
+
+    ${resp}=    Create Sales Order    ${SO_Cata_Encid_List}   ${cid}   ${cid}   ${originFrom}  ${items}    store=${store}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable  ${SO_Uid2}  ${resp.json()}
+    ${price1}=    Random Int  min=20   max=40
+
+    ${netTotal}=  Evaluate  ${price1}*${quantity1}
+    ${netTotal}=  Convert To Number  ${netTotal}   1
+    Set Suite Variable  ${netTotal}
+
+
+    ${resp}=    Get Sales Order    ${SO_Uid2}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable   ${SO_Encid}     ${resp.json()['encId']}
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid2}
+
+
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid1}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid1}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+# ------------------------------------------------------------------------------------------------------------------------------------
+
+# ------------------------------------------------Create Sales Order Invoice----------------------------------------------
+
+    ${resp}=    Create Sales Order Invoice    ${SO_Uid1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Set Suite Variable      ${SO_Inv}    ${resp.json()}  
+# ------------------------------------------------------------------------------------------------------------------------
+    ${note}=  FakerLibrary.name
+
+    ${half_amt}=  Evaluate  ${netTotal}/2
+    ${half_amt}=  Convert To Number  ${half_amt}   1
+
+    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv}   ${acceptPaymentBy[2]}	${netTotal}     ${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    # Should Be Equal As Strings    ${resp.json()['half_amt']}                                       ${half_amt}
     Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
     Should Be Equal As Strings    ${resp.json()['amountDue']}                                      0.0
     Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       ${netTotal}
+
+JD-TC-Make Cash Payment For Sales Order-6
+
+    [Documentation]   Make Cash Payment For SalesOrder with wrong netTotal.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${note}=  FakerLibrary.name
+    ${INVALID_NetTotal}=    Random Int  min=20000   max=400000
+
+
+    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv}   ${acceptPaymentBy[0]}	${INVALID_NetTotal}     ${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Make Cash Payment For Sales Order-7
+
+    [Documentation]   Make Cash Payment For SalesOrder with Zero netToal.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${note}=  FakerLibrary.name
+
+    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv}   ${acceptPaymentBy[0]}	0    ${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Make Cash Payment For Sales Order-8
+
+    [Documentation]   Make Cash Payment For SalesOrder with EMPTY netToal.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${note}=  FakerLibrary.name
+
+    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv}   ${acceptPaymentBy[0]}	${EMPTY}    ${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Make Cash Payment For Sales Order-9
+
+    [Documentation]   Make Cash Payment For SalesOrder with EMPTY invoice id.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${note}=  FakerLibrary.name
+
+    ${resp}=    Make Cash Payment For SalesOrder    ${EMPTY}   ${acceptPaymentBy[0]}	${netTotal}    ${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${INVALID_FM_INVOICE_ID}
+
+JD-TC-Make Cash Payment For Sales Order-10
+
+    [Documentation]   Make Cash Payment For SalesOrder with EMPTY note.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME35}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+
+    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv}   ${acceptPaymentBy[0]}	${netTotal}    ${EMPTY}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Make Cash Payment For Sales Order-11
+
+    [Documentation]   Make Cash Payment For SalesOrder without login.
+
+    ${note}=  FakerLibrary.name
+
+    ${resp}=    Make Cash Payment For SalesOrder    ${SO_Inv}   ${acceptPaymentBy[0]}	${netTotal}    ${note}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
