@@ -6630,3 +6630,14 @@ def find_last(file):
             print("Exception:", e)
             print("Exception at line no:", e.__traceback__.tb_lineno)
             return 0
+
+def bus_prof_ph(ph1, ph2):
+    print(ph1, ph2)
+    if ph1 and ph2:
+        return  [ph1, ph2]
+    elif ph1 and not ph2:
+        return  [ph1]
+    elif not ph1 and ph2:
+        return  [ph2]
+    else:
+        return []

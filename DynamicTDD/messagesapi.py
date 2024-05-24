@@ -2362,3 +2362,5 @@ HTML_REQUIRED_CREATION = "Prescription html required for creation"
 
 STATUS_DISABLED = "{} disabled"
 NOT_FOUND_WITH_ID = "{} not found with ID {}"
+INVALID_ORDER = "Invalid Order"
+CAN_NOT_ACCEPT_PAYMENT="Cannot accept payment since the due amount is zero, and status is fully paid"

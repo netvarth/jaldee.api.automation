@@ -29,9 +29,9 @@ ${originFrom}       NONE
 
 *** Test Cases ***
 
-JD-TC-Update Sales Order Invoice Status-1
+JD-TC-Generate SalesOrder Payment Link-1
 
-    [Documentation]   Create a sales Order with Valid Details then Update sales order invoice Status New to Settled.
+    [Documentation]   Create a sales Order with Valid Details then Generate SalesOrder Payment Link.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
     Log   ${resp.content}
@@ -124,7 +124,7 @@ JD-TC-Update Sales Order Invoice Status-1
 
     ${Name}=    FakerLibrary.last name
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
-    Set Test Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
+    Set Suite Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
     ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
@@ -286,6 +286,18 @@ JD-TC-Update Sales Order Invoice Status-1
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 # -----------------------------------------------------------------------------------------------------------------------------------------
 
+# ----------------------------------------------- Update order status to ORDER_CONFIRMED---------------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}       ${orderStatus[1]}
+
 # ------------------------------------------------Create Sales Order Invoice----------------------------------------------
 
     ${resp}=    Create Sales Order Invoice    ${SO_Uid}   
@@ -328,3 +340,119 @@ JD-TC-Update Sales Order Invoice Status-1
     ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Generate SalesOrder Payment Link-2
+
+    [Documentation]   Try to Generate SalesOrder Payment Link second time .
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Generate SO Payment Link    ${SO_Inv}   ${primaryMobileNo}   ${countryCodes[0]}   ${email_id}    ${bool[1]}    ${bool[0]}    ${bool[0]}   ${primaryMobileNo}   ${countryCodes[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Generate SalesOrder Payment Link-3
+
+    [Documentation]   Try to Generate SalesOrder Payment Link with EMPTY primaryMobileNo.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Generate SO Payment Link    ${SO_Inv}   ${EMPTY}   ${countryCodes[0]}   ${email_id}    ${bool[1]}    ${bool[0]}    ${bool[0]}   ${primaryMobileNo}   ${countryCodes[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Generate SalesOrder Payment Link-4
+
+    [Documentation]   Try to Generate SalesOrder Payment Link with countryCodes is 91.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Generate SO Payment Link    ${SO_Inv}   ${primaryMobileNo}   ${countryCodes[1]}   ${email_id}    ${bool[1]}    ${bool[0]}    ${bool[0]}   ${primaryMobileNo}   ${countryCodes[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Generate SalesOrder Payment Link-5
+
+    [Documentation]   Try to Generate SalesOrder Payment Link with EMPTY email_id.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Generate SO Payment Link    ${SO_Inv}   ${primaryMobileNo}   ${countryCodes[0]}   ${EMPTY}    ${bool[1]}    ${bool[0]}    ${bool[0]}   ${primaryMobileNo}   ${countryCodes[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+JD-TC-Generate SalesOrder Payment Link-UH1
+
+    [Documentation]   Try to Generate SalesOrder Payment Link with enable whatsapp notification but number is empty.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Generate SO Payment Link    ${SO_Inv}   ${primaryMobileNo}   ${countryCodes[0]}   ${email_id}    ${bool[0]}    ${bool[0]}    ${bool[1]}   ${EMPTY}   ${countryCodes[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${INVALID_WHATSAPP}
+
+JD-TC-Generate SalesOrder Payment Link-UH2
+
+    [Documentation]   Try to Generate SalesOrder Payment Link with enable whatsapp notification but number is empty and countryCodes is 48.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Generate SO Payment Link    ${SO_Inv}   ${primaryMobileNo}   ${countryCodes[0]}   ${email_id}    ${bool[0]}    ${bool[0]}    ${bool[1]}   ${EMPTY}   ${countryCodes[2]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${INVALID_WHATSAPP}
+
+JD-TC-Generate SalesOrder Payment Link-UH3
+
+    [Documentation]   Try to Generate SalesOrder Payment Link with all the notification are enabled  but numbers are empty.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Generate SO Payment Link    ${SO_Inv}   ${EMPTY}   ${countryCodes[0]}   ${EMPTY}    ${bool[1]}    ${bool[1]}    ${bool[1]}   ${EMPTY}   ${countryCodes[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${INVAID_USER_PHONE_NUMBER}
+
+JD-TC-Generate SalesOrder Payment Link-UH4
+
+    [Documentation]   Try to Generate SalesOrder Payment Link with smsNotification is enabled  but number empty.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME30}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Generate SO Payment Link    ${SO_Inv}   ${EMPTY}   ${countryCodes[0]}   ${email_id}    ${bool[0]}    ${bool[1]}    ${bool[0]}   ${primaryMobileNo}   ${countryCodes[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${INVAID_USER_PHONE_NUMBER}

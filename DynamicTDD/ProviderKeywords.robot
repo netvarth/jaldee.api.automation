@@ -74,7 +74,12 @@ Provider Logout
     ${resp}=  DELETE On Session  ynw  /provider/login  expected_status=any
     RETURN  ${resp}       
 
+DeActivate Service Provider  
     
+    Check And Create YNW Session
+    ${resp}=  DELETE On Session  ynw   provider/login/deActivate   expected_status=any
+    RETURN  ${resp}
+
 Phone Numbers
     [Arguments]  ${lbl}  ${res}  ${inst}  ${perm}
     ${ph}=  Create Dictionary  label=${lbl}  resource=${res}  instance=${inst}  permission=${perm}
@@ -98,11 +103,7 @@ Business Profile
     ${bs}=  Create Dictionary  timespec=${bs}
     ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${bs}  pinCode=${pin}  address=${adds}
     # ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    IF  '$ph1' != '${EMPTY}' and '$ph1' != '${NONE}' and '$ph2' != '${EMPTY}' and '$ph2' != '${NONE}'
-        ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    ELSE
-        ${ph_nos}=  Create List
-    END
+    ${ph_nos}=  db.bus_prof_ph  ${ph1}  ${ph2}
     ${emails}=  Create List  ${email1}
     ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}  phoneNumbers=${ph_nos}  emails=${emails}
     ${data}=  json.dumps  ${data}
@@ -136,7 +137,8 @@ Create Business Profile without details
 
 Create Business Profile without schedule
     [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${pin}  ${adds}   ${ph1}  ${ph2}  ${email1}  ${lid}
-    ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    # ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    ${ph_nos}=  db.bus_prof_ph  ${ph1}  ${ph2}
     ${emails}=  Create List  ${email1}
     ${b_loc}=  Create Dictionary   id=${lid}  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${None}  pinCode=${pin}  address=${adds}
     ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}  phoneNumbers=${ph_nos}  emails=${emails}
@@ -191,11 +193,7 @@ Business Profile with schedule
     ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${bs}  pinCode=${pin}  address=${adds}  id=${lid}
     
     # ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    IF  '$ph1' != '${EMPTY}' and '$ph1' != '${NONE}' and '$ph2' != '${EMPTY}' and '$ph2' != '${NONE}'
-        ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    ELSE
-        ${ph_nos}=  Create List
-    END
+    ${ph_nos}=  db.bus_prof_ph  ${ph1}  ${ph2}
     ${emails}=  Create List  ${email1}
     ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}  phoneNumbers=${ph_nos}  emails=${emails}
     FOR    ${key}    ${value}    IN    &{kwargs}
@@ -214,11 +212,7 @@ Update Business Profile with schedule
 Update Business Profile without schedule
     [Arguments]  ${bName}  ${bDesc}  ${shname}  ${place}  ${longi}  ${latti}  ${g_url}  ${pt}  ${oh}  ${pin}  ${adds}   ${ph1}  ${ph2}  ${email1}  ${lid}
     # ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    IF  '$ph1' != '${EMPTY}' and '$ph1' != '${NONE}' and '$ph2' != '${EMPTY}' and '$ph2' != '${NONE}'
-        ${ph_nos}=  Create List  ${ph1}  ${ph2}
-    ELSE
-        ${ph_nos}=  Create List
-    END
+    ${ph_nos}=  db.bus_prof_ph  ${ph1}  ${ph2}
     ${emails}=  Create List  ${email1}
     ${b_loc}=  Create Dictionary  place=${place}  longitude=${longi}  lattitude=${latti}  googleMapUrl=${g_url}  parkingType=${pt}  open24hours=${oh}   bSchedule=${None}  pinCode=${pin}  address=${adds}   id=${lid}
     ${data}=  Create Dictionary  businessName=${bName}  businessDesc=${bDesc}  shortName=${shname}  baseLocation=${b_loc}  phoneNumbers=${ph_nos}  emails=${emails}
@@ -15112,7 +15106,26 @@ Get Inventory Item Count
     ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/store/inventorycatalog/summary/count   params=${param}  expected_status=any
     RETURN  ${resp} 
 
+Get Inventory Item Summary
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/store/inventorycatalog/summary   params=${param}  expected_status=any
+    RETURN  ${resp} 
 
+Get NonExpired Inventory Item 
+    [Arguments]  &{param}    
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/ordercatalogitem/batch/nonexpired   params=${param}  expected_status=any
+    RETURN  ${resp} 
+
+
+Get Item Batch By InvCatItem
+
+    [Arguments]     ${invCatItemEncId}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/batch/invcatalogitem/${invCatItemEncId}  expected_status=any 
+    RETURN  ${resp}
 
 #---------------------------RX Push-----------------------------------------    
 
@@ -15309,4 +15322,22 @@ Add SubService To Appointment
     ${data}=    json.dumps    ${lists}
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  provider/appointment/${uuid}/addsubservices  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+
+Update SubService To Appointment  
+
+    [Arguments]   ${uuid}  @{lists}
+    ${data}=    json.dumps    ${lists}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session   ynw  provider/appointment/${uuid}/updatesubservices  data=${data}  expected_status=any
+    RETURN  ${resp}
+
+
+Remove SubService From Appointment  
+
+    [Arguments]   ${uuid}  @{lists}
+    ${data}=    json.dumps    ${lists}
+    Check And Create YNW Session
+    ${resp}=  PUT On Session   ynw  provider/appointment/${uuid}/removesubservices  data=${data}  expected_status=any
     RETURN  ${resp}

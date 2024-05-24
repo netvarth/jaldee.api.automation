@@ -48,7 +48,7 @@ ${bType}                  Waitlist
 @{age_group}			  CHILDREN    STUDENT  SENIORCITIZENS
 @{statusboard_type}       SERVICE  QUEUE  DEPARTMENT
 @{cupnpaymentStatus}      SUCCESS  REQUESTED  PAID  PAYMENTPENDING  INCOMPLETE   PENDING  PARTIALLYPAID
-@{acceptPaymentBy}		  cash  CHEQUE
+@{acceptPaymentBy}		  cash  other   self_pay
 @{couponState}			  NEW  ENABLED  EXPIRED  DISABLED  DISABLED_BY_JALDEE  DISABLED_PROVIDER_LIMIT_REACHED
 @{Reimburse_invoice}	  CASH	CHEQUE  INDISPUTE  NOTPAID
 @{jaldee_reimburse_for}	  JBANK  JC  JCASH  TOTAL  
@@ -146,7 +146,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{parentSize}               Small   Medium   Large
 @{partnerTrade}             Wholesale   Retail
 @{CrmSchemeType}            Weekly  Monthly  Quarterly  HalfYearly  Yearly
-@{reportType}               TOKEN  APPOINTMENT  ORDER  DONATION  PAYMENT
+@{reportType}               TOKEN  APPOINTMENT  ORDER  DONATION  PAYMENT  USER_REPORT  SUB_SERVICE_REPORT
  
 @{analyticsFrequency}       DAILY  HOURLY  MONTHLY  YEARLY  NONE
 @{invoicebooking}                  appointment  waitlist  orders  

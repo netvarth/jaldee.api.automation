@@ -12,6 +12,7 @@ Library     DateTime
 # Library    FakerLibrary    locale=en_IN
 # Library   FakerLibrary   WITH NAME   faker
 Library     /ebs/TDD/db.py
+Library     if.py
 # Resource    /ebs/TDD/ProviderKeywords.robot
 # Resource    /ebs/TDD/ConsumerKeywords.robot
 # Resource    /ebs/TDD/SuperAdminKeywords.robot
@@ -32,14 +33,53 @@ ${word3}        python
 @{cancelReason}             noshowup  blocked  closingSoon  tooFull  self  prePaymentPending  QueueDisabled  holiday
 
 *** Keywords ***
-Check kwargs
-    [Arguments]   &{DICT}
-    FOR    ${item}    IN    &{DICT}
-        Log  ${item}
-        Log    Key is '${item}[0]' and value is '${item}[1]'.
+pass var values
+    [Arguments]   ${ph1}  ${ph2}
+
+    ${ph1}=  Set Variable  ${ph1.strip()}
+    ${ph2}=  Set Variable  ${ph2.strip()}
+    
+    IF    '$ph1' != '${NONE}' AND '$ph2' != '${NONE}'
+        ${ph_nos}=  Create List  ${ph1}  ${ph2}
+    ELSE IF    '${ph1}' != ''
+        ${ph_nos}=  Create List  ${ph1}
+    ELSE IF    '${ph2}' != ''
+        ${ph_nos}=  Create List  ${ph2}
+    ELSE
+        ${ph_nos}=  Create List
     END
+    Log   ${ph_nos}
+
+
 
 *** Test Cases ***  
+
+cheking if variable is empty
+
+    # pass var values  ${EMPTY}  ${EMPTY}
+    # pass var values  ${NONE}  ${NONE}
+    ${phoneNumbers}=  if.is_string_empty  ${EMPTY}  ${EMPTY}
+    Log  ${phoneNumbers}
+    ${phoneNumbers}=  if.is_string_empty  ${NONE}  ${NONE}
+    Log  ${phoneNumbers}
+    ${ph_nos1} =  Create Dictionary  label= Nicole Miller  resource= PhoneNo  instance= 1180668165  permission= customersOnly
+    ${ph_nos2} =  Create Dictionary  label= Lauren Gibson  resource= PhoneNo  instance= 1190668169  permission= customersOnly
+    # pass var values  ${ph_nos1}  ${ph_nos2}
+    ${phoneNumbers}=  if.is_string_empty  ${ph_nos1}  ${ph_nos2}
+    Log  ${phoneNumbers}
+
+    
+
+
+*** Comments ***
+
+# *** Keywords ***
+# Check kwargs
+#     [Arguments]   &{DICT}
+#     FOR    ${item}    IN    &{DICT}
+#         Log  ${item}
+#         Log    Key is '${item}[0]' and value is '${item}[1]'.
+#     END
 
 Cheking files exists
 
@@ -171,7 +211,7 @@ Testing named arguments
 
     ${auth} =    Create List    Mark    SuperSecret
     ${params} =    Create Dictionary    type=Condos    filter=2Bedrooms
-    Create Session    testingapi    url=http://postman-echo.com    auth=${auth}  verify=true
+    Create Session    testingapi    url=http=//postman-echo.com    auth=${auth}  verify=true
     ${resp} =    GET On Session    testingapi   /get    params=${params}
     ${json} =  To JSON  ${resp.content}  pretty_print=True
     Log  \n${json}  console=yes
@@ -264,8 +304,8 @@ country_locale
     ${Language_code} =  FakerLibrary.Language_code
     ${Locale} =  FakerLibrary.Locale
     # ${output} =  catenate
-    # ...             ${\n}Language_code: ${Language_code}
-    # ...             ${\n}Locale: ${Locale}
+    # ...             ${\n}Language_code= ${Language_code}
+    # ...             ${\n}Locale= ${Locale}
     # log   ${output}
     ${state}=  FakerLibrary.State
     ${loc}=  FakerLibrary.Location On Land

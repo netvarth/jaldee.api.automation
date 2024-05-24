@@ -293,6 +293,18 @@ JD-TC-Get invoice filter-1
     Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
 # -----------------------------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------- Update SalesOrder Status --------------------------------------------------------
+
+    ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Sales Order    ${SO_Uid}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
+# ------------------------------------------------------------------------------------------------------------------------------------
 
 # ------------------------------------------------Create Sales Order Invoice----------------------------------------------
 
