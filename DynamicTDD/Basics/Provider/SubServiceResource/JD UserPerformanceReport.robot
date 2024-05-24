@@ -28,8 +28,9 @@ ${self}         0
 JD-TC-UserPerformanceReport-1
 
     [Documentation]  Create a sub service and add that sub service to an appointment(walkin) for a provider consumer.
+                ...   assign that subservice to a user and verify user performance report.
     
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -106,7 +107,7 @@ JD-TC-UserPerformanceReport-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${HLMUSERNAME45}'
+            IF   not '${user_phone}' == '${HLMUSERNAME40}'
                 clear_users  ${user_phone}
             END
         END
@@ -119,6 +120,8 @@ JD-TC-UserPerformanceReport-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Test Variable  ${BUSER_U1}  ${resp.json()['mobileNo']}
+    Set Test Variable  ${userf_name}  ${resp.json()['firstName']}
+    Set Test Variable  ${userl_name}  ${resp.json()['lastName']}
 
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     ${DAY2}=  db.add_timezone_date  ${tz}  10        
@@ -180,13 +183,14 @@ JD-TC-UserPerformanceReport-1
     Verify Response  ${resp}  scheduleName=${schedule_name}  scheduleId=${sch_id}
     Set Test Variable   ${slot1}   ${resp.json()['availableSlots'][0]['time']}
 
-
     #............provider consumer creation..........
 
     ${NewCustomer}    Generate random string    10    123456789
     ${NewCustomer}    Convert To Integer  ${NewCustomer}
 
-    ${resp}=  AddCustomer  ${NewCustomer}  
+    ${custf_name}=  FakerLibrary.name    
+    ${custl_name}=  FakerLibrary.last_name
+    ${resp}=  AddCustomer  ${NewCustomer}    firstName=${custf_name}   lastName=${custl_name}
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     
@@ -212,7 +216,7 @@ JD-TC-UserPerformanceReport-1
     Log  ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
 
-    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME45}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME40}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -236,18 +240,7 @@ JD-TC-UserPerformanceReport-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceName']}      ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceDate']}      ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceAmount']}    ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['quantity']}         1.0
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['taxable']}          ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['taxPercentage']}    0.0
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['totalPrice']}       ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['netRate']}          ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceCategory']}  ${serviceCategory[1]}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['assigneeUsers']}    ${empty_list}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['teamIds']}          ${empty_list}
-    Should Not Contain   ${resp.json()}   ${subser_id1}
+    Should Not Contain   ${resp.json()['subServiceData']}                               ${subser_id1}
 
     ${asgn_users}=   Create List  ${u_id1}
     ${subser_qnty}=   Random Int   min=1   max=5
@@ -265,46 +258,43 @@ JD-TC-UserPerformanceReport-1
     Log   ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
     Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceId']}        ${s_id}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceName']}      ${SERVICE1}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceDate']}      ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceAmount']}    ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['quantity']}         1.0
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['taxable']}          ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['taxPercentage']}    0.0
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['totalPrice']}       ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['netRate']}          ${ser_amount}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['serviceCategory']}  ${serviceCategory[1]}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['assigneeUsers']}    ${empty_list}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][0]['teamIds']}          ${empty_list}
-   
     Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceId']}        ${subser_id1}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceName']}      ${subser_name}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceDate']}      ${DAY1}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceAmount']}    ${subser_price}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['quantity']}         ${subser_qnty}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['taxable']}          ${bool[0]}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['taxPercentage']}    0.0
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['totalPrice']}       ${total}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['netRate']}          ${total}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['serviceCategory']}  ${serviceCategory[0]}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['assigneeUsers']}    ${asgn_users}
-    Should Be Equal As Strings  ${resp.json()['subServiceData'][1]['teamIds']}          ${empty_list}
     
     ${resp}=   Get Appointment level Bill Details      ${apptid1} 
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
 
-    Set Test Variable  ${status-eq}               SUCCESS
-    Set Test Variable  ${reportType}              APPOINTMENT
-    Set Test Variable  ${reportDateCategory}      TODAY
-
     ${filter}=  Create Dictionary      
-    ${resp}=  Generate Report REST details  ${reportType}  ${reportDateCategory}  ${filter}
+    ${resp}=  Generate Report REST details  ${reportType[6]}  ${Report_Date_Category[4]}  ${filter}
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Set Suite Variable   ${token_id1}   ${resp.json()}
+    Set Test Variable   ${token_id1}   ${resp.json()}
     sleep  1s
     ${resp}=  Get Report Status By Token Id  ${token_id1}  
     Log  ${resp.json()}
     Should Be Equal As Strings  ${resp.status_code}  200
-    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}  1
+
+    ${total_amt}=    Evaluate    ${ser_amount}+${subser_price}
+    ${ser_date} =	Convert Date	${DAY1}	result_format=%d-%m-%Y
+
+    Should Be Equal As Strings  ${resp.json()['status']}                            ${Report_Status[0]}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['1']}     ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['2']}     ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}     ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['5']}     ${SERVICE1}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['6']}     1.0
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][0]['7']}     ${ser_amount}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['1']}     ${ser_date}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['2']}     ${encId}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['3']}     ${custf_name} ${custl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['4']}     ${userf_name} ${userl_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['5']}     ${subser_name}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['6']}     ${subser_qnty}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['data'][1]['7']}     ${subser_price}
+    Should Be Equal As Strings  ${resp.json()['reportContent']['count']}            2
+    Should Be Equal As Strings  ${resp.json()['dataHeader']['Grand Total']}         ${total_amt}
+    Should Be Equal As Strings  ${resp.json()['reportName']}                        User Performance Report
+    Should Be Equal As Strings  ${resp.json()['reportType']}                        ${reportType[6]}
+    Should Be Equal As Strings  ${resp.json()['reportResponseType']}                ${ReportResponseType[0]}
+    Should Be Equal As Strings  ${resp.json()['reportTokenID']}                     ${token_id1}
+    Should Be Equal As Strings  ${resp.json()['reportHeader']['Time Period']}       ${Report_Date_Category[4]}
