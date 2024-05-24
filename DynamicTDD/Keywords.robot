@@ -146,7 +146,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{parentSize}               Small   Medium   Large
 @{partnerTrade}             Wholesale   Retail
 @{CrmSchemeType}            Weekly  Monthly  Quarterly  HalfYearly  Yearly
-@{reportType}               TOKEN  APPOINTMENT  ORDER  DONATION  PAYMENT  USER_PERFORMANCE_REPORT
+@{reportType}               TOKEN  APPOINTMENT  ORDER  DONATION  PAYMENT  USER_REPORT  SUB_SERVICE_REPORT
  
 @{analyticsFrequency}       DAILY  HOURLY  MONTHLY  YEARLY  NONE
 @{invoicebooking}                  appointment  waitlist  orders  
