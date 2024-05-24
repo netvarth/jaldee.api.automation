@@ -354,6 +354,10 @@ JD-TC-Change Password-1
     Log  ${resp.content}
     Should Be Equal As Strings  ${resp.status_code}  200
 
+    ${resp}=  Get Business Profile
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
     # {"phoneNumbers":[{"label":"Mobile","resource":"Phoneno","instance":"+915550046478","permission":"self"}]}
     # {"emails":[{"label":"personal","resource":"Email","instance":"5550046478.Amanda5550046478.test@jaldee.com","permission":"self"}]}
 
