@@ -14970,7 +14970,7 @@ Remove SalesOrder discount
     ${data}=  Create Dictionary    id=${id}    discountValue=${discountValue}    
     ${data}=  json.dumps  ${data}  
     Check And Create YNW Session
-    ${resp}=  PUT On Session  ynw  /provider/sorder/${SO_uid}/apply/discount        data=${data}     expected_status=any
+    ${resp}=  PUT On Session  ynw  /provider/sorder/${SO_uid}/remove/discount        data=${data}     expected_status=any
     RETURN  ${resp} 
 
 Update Sales Order Invoice Status
