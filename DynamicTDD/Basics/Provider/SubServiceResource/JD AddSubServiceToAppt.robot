@@ -2700,6 +2700,25 @@ JD-TC-AddSubServicesToAppt-UH10
 
 *** comments ***
 
+JD-TC-AddSubServicesToAppt-11
+
+    [Documentation]  Create multiple sub services and add that subservice to an appointment(online) for provider consumer
+
+
+JD-TC-AddSubServicesToAppt-12
+
+    [Documentation]  Create a sub service and add that subservice to a future appointment(online) for provider consumer
+
+
+JD-TC-AddSubServicesToAppt-13
+
+    [Documentation]  Create a sub service and add that subservice to a future appointment(walkin) for provider consumer
+
+
+JD-TC-AddSubServicesToAppt-14
+
+    [Documentation]  Create a sub service and add that subservice to a future appointment(online) for provider consumer
+
 
 JD-TC-AddSubServicesToAppt-5
 

@@ -511,6 +511,10 @@ JD-TC-RemoveSubServicesToAppt-3
     Should Not Contain   ${resp.json()['subServiceData']}                               ${subser_id1}
 
 
+JD-TC-RemoveSubServicesToAppt-4
+
+    [Documentation]  add sub service to an appointment(online) then remove that sub service then again add that sub service.
+
 JD-TC-RemoveSubServicesToAppt-UH1
 
     [Documentation]  Remove a subservice from an appointment without Login
@@ -647,4 +651,18 @@ JD-TC-RemoveSubServicesToAppt-UH4
     Log   ${resp.json()}  
     Should Be Equal As Strings    ${resp.status_code}   422
     Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
- 
+
+
+JD-TC-RemoveSubServicesToAppt-UH5
+
+    [Documentation]  add sub service to an appointment(walkin) then remove that sub service after settle the payment.
+
+
+JD-TC-RemoveSubServicesToAppt-UH6
+
+    [Documentation]  add sub service to an appointment(online) then remove that sub service after settle the payment.
+
+
+JD-TC-RemoveSubServicesToAppt-UH6
+
+    [Documentation]  add sub service to an appointment(online) then remove that sub service after settle the payment.
