@@ -29,9 +29,9 @@ ${originFrom}       NONE
 *** Test Cases ***
 
 
-JD-TC-DeleteFrequency-1
+JD-TC-UpdateFrequencyStatus-1
 
-    [Documentation]  Delete Frequency
+    [Documentation]  Update Frequency Status
 
     ${resp}=  Encrypted Provider Login  ${MUSERNAME1}  ${PASSWORD}
     Log   ${resp.content}

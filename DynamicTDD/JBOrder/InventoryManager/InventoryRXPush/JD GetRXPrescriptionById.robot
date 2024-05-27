@@ -550,9 +550,12 @@ JD-TC-GetPrescription-2
     
     ${inv}=     Random Int  min=1  max=100
 
+    ${NOT_FOUND_WITH_ID}=   format String   ${NOT_FOUND_WITH_ID}   Prescription     ${inv}
+
     ${resp}=    Get RX Prescription By Id  ${inv}
     Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}     200
+    Should Be Equal As Strings      ${resp.status_code}     422
+    Should Be Equal As Strings      ${resp.json()}          ${NOT_FOUND_WITH_ID}
 
 JD-TC-GetPrescription-3
 

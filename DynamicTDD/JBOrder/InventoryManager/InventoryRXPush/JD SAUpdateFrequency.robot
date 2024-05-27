@@ -85,3 +85,27 @@ JD-TC-UpdateFrequencySA-1
     Should Be Equal As Strings      ${resp.json()['description']}   ${description}
     Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
+
+JD-TC-UpdateFrequencySA-2
+
+    [Documentation]   Update Frequency SA - updated dosage
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${dosage2}=          Random Int  min=1  max=3000
+    ${dos2}=             Evaluate    float(${dosage2})
+
+    ${resp}=    SA Update Frequency  ${frequency_id}  ${frequency2}  ${dosage2}  description=${description}  remark=${remark}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+    ${resp}=    SA Get Frequency  ${frequency_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Equal As Strings      ${resp.json()['id']}            ${frequency_id}
+    Should Be Equal As Strings      ${resp.json()['frequency']}     ${frequency}
+    Should Be Equal As Strings      ${resp.json()['description']}   ${description}
+    Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
+    Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos2}

@@ -70,3 +70,71 @@ JD-TC-CreateFrequencySA-1
     Should Be Equal As Strings      ${resp.json()['description']}   ${description}
     Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
+
+JD-TC-CreateFrequencySA-2
+
+    [Documentation]   Create Frequency SA - create with same details
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    SA Create Frequency  ${frequency}  ${dosage}  description=${description}  remark=${remark}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreateFrequencySA-3
+
+    [Documentation]   Create Frequency SA - frequency is empty
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    SA Create Frequency  ${empty}  ${dosage}  description=${description}  remark=${remark}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreateFrequencySA-4
+
+    [Documentation]   Create Frequency SA - dosage is empty
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    SA Create Frequency  ${frequency}  ${empty}  description=${description}  remark=${remark}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreateFrequencySA-5
+
+    [Documentation]   Create Frequency SA - description is empty
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    SA Create Frequency  ${frequency}  ${dosage}  description=${empty}  remark=${remark}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreateFrequencySA-6
+
+    [Documentation]   Create Frequency SA - remark is empty
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    SA Create Frequency  ${frequency}  ${dosage}  description=${description}  remark=${empty}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200
+
+JD-TC-CreateFrequencySA-7
+
+    [Documentation]   Create Frequency SA - without login
+
+    ${resp}=    SA Create Frequency  ${frequency}  ${dosage}  description=${description}  remark=${remark}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}     200

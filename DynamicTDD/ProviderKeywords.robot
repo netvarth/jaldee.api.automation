@@ -14687,6 +14687,22 @@ Update Purchase Status
     ${resp}=  PUT On Session  ynw  /provider/inventory/purchase/${uid}/status/${status}   expected_status=any
     RETURN  ${resp} 
 
+Add Purchase Attachment
+
+    [Arguments]     ${purchaseUId}   @{vargs}
+
+    ${len}=  Get Length  ${vargs}
+    ${details}=  Create List  
+    FOR    ${index}    IN RANGE    ${len}   
+        Exit For Loop If  ${len}==0
+        Append To List  ${details}  ${vargs[${index}]}
+
+    END
+    ${data}=    json.dumps    ${details} 
+
+    Check And Create YNW Session
+    ${resp}=  PUT On Session  ynw  /provider/inventory/purchase/${purchaseUId}/attachments  data=${data}   expected_status=any
+    RETURN  ${resp}
 
 #----------------------Remarks----------------------------------------
 Create Item Remarks

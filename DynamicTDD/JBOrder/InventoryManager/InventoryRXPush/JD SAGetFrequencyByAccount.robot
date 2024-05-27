@@ -82,7 +82,7 @@ JD-TC-GetAllAccountFrequency-1
     Should Be Equal As Strings  ${resp.status_code}  200
     Set Suite Variable  ${account_id2}  ${resp.json()['id']}
 
-    ${frequency2}=       Random Int  min=1  max=10
+    ${frequency2}=       Random Int  min=10  max=20
     ${dosage2}=          Random Int  min=1  max=3000
     ${description2}=     FakerLibrary.sentence
     ${remark2}=          FakerLibrary.sentence
@@ -116,6 +116,28 @@ JD-TC-GetAllAccountFrequency-1
     Should Be Equal As Strings  ${resp.status_code}  200
 
     ${resp}=    SA Get Frequency By Account  0
+    Log  ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}  200
+    Should Be Equal As Strings      ${resp.json()[0]['id']}            ${frequency_id2}
+    Should Be Equal As Strings      ${resp.json()[0]['frequency']}     ${frequency2}
+    Should Be Equal As Strings      ${resp.json()[0]['description']}   ${description2}
+    Should Be Equal As Strings      ${resp.json()[0]['remark']}        ${remark2}
+    Should Be Equal As Strings      ${resp.json()[0]['dosage']}        ${dos2}
+    Should Be Equal As Strings      ${resp.json()[1]['id']}            ${frequency_id}
+    Should Be Equal As Strings      ${resp.json()[1]['frequency']}     ${frequency}
+    Should Be Equal As Strings      ${resp.json()[1]['description']}   ${description}
+    Should Be Equal As Strings      ${resp.json()[1]['remark']}        ${remark}
+    Should Be Equal As Strings      ${resp.json()[1]['dosage']}        ${dos}
+
+JD-TC-GetAllAccountFrequency-2
+
+    [Documentation]  Get Frequency by account 
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${resp}=    SA Get Frequency By Account  ${account_id2}
     Log  ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}  200
     Should Be Equal As Strings      ${resp.json()[0]['id']}            ${frequency_id2}

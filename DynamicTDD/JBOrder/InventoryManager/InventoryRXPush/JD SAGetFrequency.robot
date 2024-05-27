@@ -70,3 +70,27 @@ JD-TC-GetFrequencySA-1
     Should Be Equal As Strings      ${resp.json()['description']}   ${description}
     Should Be Equal As Strings      ${resp.json()['remark']}        ${remark}
     Should Be Equal As Strings      ${resp.json()['dosage']}        ${dos}
+
+JD-TC-GetFrequencySA-2
+
+    [Documentation]   Get Frequency SA - where frequency id is invalid 
+
+    ${resp}=  SuperAdmin Login  ${SUSERNAME}  ${SPASSWORD}
+    Log  ${resp.content}
+    Should Be Equal As Strings  ${resp.status_code}  200
+
+    ${inv}=     Random Int  min=1  max=100
+
+    ${resp}=    SA Get Frequency  ${inv}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Should Be Empty     ${resp.content}
+
+JD-TC-GetFrequencySA-3
+
+    [Documentation]   Get Frequency SA - without login
+
+    ${resp}=    SA Get Frequency  ${frequency_id}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}       419
+    Should Be Equal As Strings      ${resp.json()}            ${SA_SESSION_EXPIRED}
