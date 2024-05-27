@@ -15357,3 +15357,15 @@ Remove SubService From Appointment
     Check And Create YNW Session
     ${resp}=  PUT On Session   ynw  provider/appointment/${uuid}/removesubservices  data=${data}  expected_status=any
     RETURN  ${resp}
+
+Update cash payment- Sales Order
+
+    [Arguments]    ${uuid}     ${acceptPaymentBy}    ${amount}     ${paymentNote}     ${paymentRefId}  &{kwargs}
+    ${data}=  Create Dictionary  uuid=${uuid}     acceptPaymentBy=${acceptPaymentBy}     amount=${amount}     paymentNote=${paymentNote}     
+    FOR  ${key}  ${value}  IN  &{kwargs}
+        Set To Dictionary  ${data}   ${key}=${value}
+    END
+    ${data}=    json.dumps    ${data}   
+    Check And Create YNW Session
+    ${resp}=     PUT On Session    ynw    /provider/so/payment/acceptPayment/update/${paymentRefId}    data=${data}  expected_status=any    headers=${headers}
+    RETURN  ${resp}

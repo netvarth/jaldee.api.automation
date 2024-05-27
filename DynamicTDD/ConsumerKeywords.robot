@@ -3616,3 +3616,8 @@ Customer Take Appointment
     ${resp}=  POST On Session  ynw   url=/consumer/appointment/add  params=${cons_params}  data=${data}  expected_status=any   headers=${cons_headers}
     RETURN  ${resp}
 
+Consumer Get Invoice By Invoice Uid
+    [Arguments]  ${accountId}      ${SO_Inv}
+    Check And Create YNW Session
+    ${resp}=    GET On Session    synw   /consumer/so/invoice/${accountId}/${SO_Inv}  expected_status=any
+    RETURN  ${resp}

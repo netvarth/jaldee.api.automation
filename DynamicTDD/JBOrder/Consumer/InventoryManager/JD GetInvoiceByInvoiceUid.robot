@@ -27,12 +27,7 @@ ${invalidItem}     sprx-3250dr0-800
 ${originFrom}       NONE
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
 
-**** Keywords ***
-Get Invoice By Invoice Uid
-    [Arguments]  ${accountId}      ${SO_Inv}
-    Check And Create YNW Session
-    ${resp}=    GET On Session    synw   /consumer/so/invoice/${accountId}/${SO_Inv}  expected_status=any
-    RETURN  ${resp}
+
 
 
 *** Test Cases ***
@@ -341,6 +336,6 @@ JD-TC-Consumer Get Invoice By Invoice uid-1
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
 
-    ${resp}=    Get Invoice By Invoice Uid      ${accountId}  ${SO_Inv} 
+    ${resp}=    Consumer Get Invoice By Invoice Uid      ${accountId}  ${SO_Inv} 
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}   200
