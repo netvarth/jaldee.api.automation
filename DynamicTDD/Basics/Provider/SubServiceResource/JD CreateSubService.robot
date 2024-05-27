@@ -14,6 +14,7 @@ Resource          /ebs/TDD/ProviderConsumerKeywords.robot
 Variables         /ebs/TDD/varfiles/providers.py
 Variables         /ebs/TDD/varfiles/consumerlist.py
 Variables         /ebs/TDD/varfiles/musers.py
+Variables         /ebs/TDD/varfiles/hl_musers.py
 
 
 *** Test Cases ***
@@ -23,7 +24,7 @@ JD-TC-CreateSubService-1
 
     [Documentation]  Create a sub service in account level. 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -79,7 +80,7 @@ JD-TC-CreateSubService-1
         ${len}=  Get Length  ${resp.json()}
         FOR   ${i}  IN RANGE   0   ${len}
             Set Test Variable   ${user_phone}   ${resp.json()[${i}]['mobileNo']}
-            IF   not '${user_phone}' == '${MUSERNAME170}'
+            IF   not '${user_phone}' == '${HLMUSERNAME25}'
                 clear_users  ${user_phone}
             END
         END
@@ -252,7 +253,7 @@ JD-TC-CreateSubService-5
 
     [Documentation]  Create a service and sub service in account level. 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -344,12 +345,104 @@ JD-TC-CreateSubService-6
     Should Be Equal As Strings  ${resp.json()['name']}                  ${ser_name} 
     Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[1]}
 
-
 JD-TC-CreateSubService-7
+
+    [Documentation]  Create a sub service with zero as the service price. 
+    
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME25}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${desc}=  FakerLibrary.sentence
+    ${subser_dur}=   Random Int   min=5   max=10
+    ${subser_name}=    FakerLibrary.word
+    ${subser_price}=   Random Int   min=0   max=0
+
+    ${resp}=  Create Service    ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
+    ...    ${bool[0]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
+    Log   ${resp.json()}  
+    Should Be Equal As Strings    ${resp.status_code}    200
+    Set Test Variable  ${subser_id1}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${subser_id1}
+    Log   ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['name']}                  ${subser_name} 
+    Should Be Equal As Numbers  ${resp.json()['totalAmount']}           ${subser_price} 
+    Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[0]}
+
+JD-TC-CreateSubService-8
+
+    [Documentation]  Create a sub service with pre payment. 
+    
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${desc}=  FakerLibrary.sentence
+    ${subser_dur}=   Random Int   min=5   max=10
+    ${prepay_price}=   Random Int   min=10   max=50
+    ${prepay_price}=  Convert To Number  ${prepay_price}  1
+    ${subser_price}=   Random Int   min=100   max=500
+    ${subser_price}=  Convert To Number  ${subser_price}  1
+    ${subser_name}=    FakerLibrary.firstname
+
+    ${resp}=  Create Service    ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${prepay_price}   ${subser_price}
+    ...    ${bool[1]}   ${bool[0]}   serviceCategory=${serviceCategory[0]}
+    Log   ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Test Variable  ${subser_id1}  ${resp.json()}
+
+    ${resp}=   Get Service By Id  ${subser_id1}
+    Log   ${resp.json()}  
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Should Be Equal As Strings  ${resp.json()['name']}                  ${subser_name} 
+    # Should Be Equal As Strings  ${resp.json()['name']}                  ${subser_name} 
+    Should Be Equal As Strings  ${resp.json()['serviceCategory']}       ${serviceCategory[0]}
+
+JD-TC-CreateSubService-UH1
+
+    [Documentation]  Create a sub service without name. 
+    
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME25}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${desc}=  FakerLibrary.sentence
+    ${subser_dur}=   Random Int   min=5   max=10
+    ${subser_price}=   Random Int   min=100   max=500
+    ${subser_price}=  Convert To Number  ${subser_price}  1
+    
+    ${resp}=  Create Service    ${EMPTY}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
+    ...    ${bool[0]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
+    Log   ${resp.json()}  
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${SERVICE_NAME_REQUIRED}
+
+   
+JD-TC-CreateSubService-UH2
+
+    [Documentation]  Create a sub service without price. 
+    
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME25}  ${PASSWORD}
+    Log   ${resp.json()}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${desc}=  FakerLibrary.sentence
+    ${subser_dur}=   Random Int   min=5   max=10
+    ${subser_name}=    FakerLibrary.firstname
+
+    ${resp}=  Create Service    ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${EMPTY}
+    ...    ${bool[0]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
+    Log   ${resp.json()}  
+    Should Be Equal As Strings    ${resp.status_code}    422
+    Should Be Equal As Strings    ${resp.json()}    ${SERVICE_AMOUNT_CANT_BE_NULL}
+
+JD-TC-CreateSubService-UH3
 
     [Documentation]  Create sub services with same name. 
 
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
@@ -373,43 +466,27 @@ JD-TC-CreateSubService-7
     ...    ${bool[0]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
     Log   ${resp.json()}  
     Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${SERVICE_NAME_REQUIRED}
+    Should Be Equal As Strings    ${resp.json()}    ${SERVICE_CANT_BE_SAME}
 
-    
-JD-TC-CreateSubService-UH1
 
-    [Documentation]  Create a sub service without name. 
+JD-TC-CreateSubService-UH4
+
+    [Documentation]  Create a sub service with pre payment greater than the sub service amount. 
     
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME170}  ${PASSWORD}
+    ${resp}=  Encrypted Provider Login  ${MUSERNAME25}  ${PASSWORD}
     Log   ${resp.json()}
     Should Be Equal As Strings    ${resp.status_code}    200
 
     ${desc}=  FakerLibrary.sentence
     ${subser_dur}=   Random Int   min=5   max=10
-    ${subser_price}=   Random Int   min=100   max=500
+    ${prepay_price}=   Random Int   min=100   max=500
+    ${prepay_price}=  Convert To Number  ${prepay_price}  1
+    ${subser_price}=   Random Int   min=10  max=50
     ${subser_price}=  Convert To Number  ${subser_price}  1
-    
-    ${resp}=  Create Service    ${EMPTY}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${subser_price}
-    ...    ${bool[0]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
-    Log   ${resp.json()}  
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${SERVICE_NAME_REQUIRED}
-
-   
-JD-TC-CreateSubService-UH2
-
-    [Documentation]  Create a sub service without price. 
-    
-    ${resp}=  Encrypted Provider Login  ${MUSERNAME170}  ${PASSWORD}
-    Log   ${resp.json()}
-    Should Be Equal As Strings    ${resp.status_code}    200
-
-    ${desc}=  FakerLibrary.sentence
-    ${subser_dur}=   Random Int   min=5   max=10
     ${subser_name}=    FakerLibrary.firstname
 
-    ${resp}=  Create Service    ${ser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${EMPTY}   ${EMPTY}
-    ...    ${bool[0]}   ${bool[0]}   department=${dep_id}  serviceCategory=${serviceCategory[0]}
+    ${resp}=  Create Service    ${subser_name}  ${desc}  ${subser_dur}   ${status[0]}    ${btype}  ${bool[1]}    ${notifytype[2]}   ${prepay_price}   ${subser_price}
+    ...    ${bool[1]}   ${bool[0]}   serviceCategory=${serviceCategory[1]}
     Log   ${resp.json()}  
-    Should Be Equal As Strings    ${resp.status_code}    422
-    Should Be Equal As Strings    ${resp.json()}    ${SERVICE_PRICE_REQUIRED}
+    Should Be Equal As Strings  ${resp.status_code}  422
+    
