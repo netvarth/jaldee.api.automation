@@ -15143,6 +15143,18 @@ Get Item Batch By InvCatItem
     ${resp}=  GET On Session  ynw  /provider/inventory/inventoryitem/batch/invcatalogitem/${invCatItemEncId}  expected_status=any 
     RETURN  ${resp}
 
+Get Item Transaction By Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /provider/inventory/transaction  params=${param}  expected_status=any
+    RETURN  ${resp}
+
+Get Item Transaction Count Filter
+    [Arguments]  &{param}
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw   /provider/inventory/transaction/count  params=${param}  expected_status=any
+    RETURN  ${resp}
+
 #---------------------------RX Push-----------------------------------------    
 
 Create Frequency
