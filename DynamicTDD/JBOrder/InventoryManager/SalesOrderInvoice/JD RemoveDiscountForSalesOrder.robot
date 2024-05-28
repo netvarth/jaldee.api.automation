@@ -404,7 +404,7 @@ JD-TC-Remove SalesOrder discount-1
 
 JD-TC-Remove SalesOrder discount-2
 
-    [Documentation]   Create a sales Order with Inventory manager is ON and Genarate then apply discount(Percentage)and remove.
+    [Documentation]   Create a sales Order with Inventory manager is ON and Genarate then apply discount(Fixed)and remove.
 
     ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
     Log   ${resp.content}
@@ -575,6 +575,7 @@ JD-TC-Remove SalesOrder discount-2
     Set Suite Variable  ${totalQuantity}
 
     ${netTotal}=        Evaluate    ${quantity} * ${amount}
+
     ${discountAmount}=  Evaluate    ${netTotal} * ${discountPercentage} / 100
     ${taxableAmount}=   Evaluate    ${netTotal} - ${discountAmount}
 
@@ -835,6 +836,7 @@ JD-TC-Remove SalesOrder discount-2
 
     ${netTotal}=   Evaluate    ${price} * ${quantity} 
     ${netTotal}=  Convert To Number  ${netTotal}    1
+    Set Suite Variable  ${netTotal}
 
     ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
     Log   ${resp.content}
@@ -936,3 +938,164 @@ JD-TC-Remove SalesOrder discount-2
     Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
     Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[0]}
+
+
+JD-TC-Remove SalesOrder discount-UH1
+
+    [Documentation]   Apply one discount then remove two time.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+# --------------------------------------------- Apply discount For SalesOrder -----------------------------------------------
+
+    ${discount3}=     FakerLibrary.word
+    ${desc}=   FakerLibrary.word
+    ${discountprice3}=     Random Int   min=5   max=10
+    ${discountprice3}=  Convert To Number  ${discountprice3}  1
+    Set Suite Variable   ${discountprice3}
+    ${resp}=   Create Discount  ${discount3}   ${desc}    ${discountprice3}   ${calctype[1]}  ${disctype[1]}
+    Log  ${resp.json()}
+    Should Be Equal As Strings  ${resp.status_code}  200
+    Set Suite Variable   ${discountId3}   ${resp.json()}   
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    ${discountValue1}=     Random Int   min=5   max=10
+    ${discountValue1}=  Convert To Number  ${discountValue1}  1
+    Set Suite Variable   ${discountValue1}
+
+    ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId3}   ${privateNote}    ${displayNote}   ${discountValue1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${bal_Total}=  Evaluate  ${netTotal}-${discountValue1}
+    ${bal_Total}=  Convert To Number  ${bal_Total}   1
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Store_name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${inv_order_encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    # Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       ${discountValue1}
+
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${bal_Total}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${bal_Total}
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+# --------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------ Remove SalesOrder discount  ----------------------------------------------------------
+
+    ${resp}=    Remove SalesOrder discount    ${SO_Uid}    ${discountId3}     ${discountValue1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Store_name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${inv_order_encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${netTotal}
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['status']}                                      ${billStatus[0]}
+
+    ${resp}=    Remove SalesOrder discount    ${SO_Uid}    ${discountId3}     ${discountValue1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
+
+JD-TC-Remove SalesOrder discount-UH2
+
+    [Documentation]   Remove Discount with Invalid DiscountId.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${privateNote}=     FakerLibrary.word
+    ${displayNote}=   FakerLibrary.word
+    
+
+    ${resp}=    Apply discount For SalesOrder    ${SO_Uid}    ${discountId3}   ${privateNote}    ${displayNote}   ${discountValue1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+
+    ${bal_Total}=  Evaluate  ${netTotal}-${discountValue1}
+    ${bal_Total}=  Convert To Number  ${bal_Total}   1
+
+    ${resp}=    Get Invoice By Invoice Uid    ${SO_Inv}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   200
+    Should Be Equal As Strings    ${resp.json()['accountId']}                                       ${accountId}
+    Should Be Equal As Strings    ${resp.json()['order']['uid']}                                       ${SO_Uid}
+    Should Be Equal As Strings    ${resp.json()['providerConsumer']['id']}                          ${cid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['name']}                                 ${Store_name}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['encId']}                                ${inv_order_encid}
+    Should Be Equal As Strings    ${resp.json()['catalog'][0]['invMgmt']}                              ${bool[0]}
+    Should Be Equal As Strings    ${resp.json()['netTotal']}                                       ${netTotal}
+    # Should Be Equal As Strings    ${resp.json()['discountTotal']}                                       ${discountValue1}
+
+    Should Be Equal As Strings    ${resp.json()['taxTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['jaldeeCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['providerCouponTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['netRate']}                                       ${bal_Total}
+    Should Be Equal As Strings    ${resp.json()['amountDue']}                                      ${bal_Total}
+    Should Be Equal As Strings    ${resp.json()['amountPaid']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['sgstTotal']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['gst']}                                       0.0
+    Should Be Equal As Strings    ${resp.json()['cessTotal']}                                       0.0
+# --------------------------------------------------------------------------------------------------------------------------------------
+
+    ${resp}=    Remove SalesOrder discount    ${SO_Uid}    ${invalidNum}     ${discountValue1}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
+
+JD-TC-Remove SalesOrder discount-UH3
+
+    [Documentation]   Remove Discount with Invalid discountValue.
+
+    ${resp}=  Encrypted Provider Login  ${HLMUSERNAME3}  ${PASSWORD}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200
+
+    ${resp}=    Remove SalesOrder discount    ${SO_Uid}    ${discountId3}     ${invalidNum}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   422
+    Should Be Equal As Strings    ${resp.json()}   ${INCORRECT_DISCOUNT_ID}
+
+JD-TC-Remove SalesOrder discount-UH4
+
+    [Documentation]   Remove Discount without login.
+
+    ${resp}=    Remove SalesOrder discount    ${SO_Uid}    ${discountId3}     ${invalidEma}
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}   419
+    Should Be Equal As Strings    ${resp.json()}   ${SESSION_EXPIRED}
