@@ -604,3 +604,8 @@ JD-TC-OrderRequest-1
     ${resp}=    Order Request    ${store_id}  ${prescription_id}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
+
+    ${resp}=    Get Sorder By Filter  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Set Suite Variable      ${sorder_uid}   ${resp.json()[0]['uid']}

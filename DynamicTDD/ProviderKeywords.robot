@@ -15363,7 +15363,7 @@ Get Sorder By Uid
     [Arguments]  ${uid}
 
     Check And Create YNW Session
-    ${resp}=  GET On Session  ynw  /provider/sorder/request/${uid}   params=${param}  expected_status=any
+    ${resp}=  GET On Session  ynw  /provider/sorder/request/${uid}  expected_status=any
     RETURN  ${resp}
 
 Get Sorder Count By Filter
