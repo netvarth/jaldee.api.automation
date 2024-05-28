@@ -15317,17 +15317,50 @@ Get RX Prescription Item Qnty By EncId
     ${resp}=  POST On Session  ynw  /provider/medicalrecord/prescription/item/quantity   data=${data}  expected_status=any
     RETURN  ${resp} 
 
-Convert To Order
+Order Request
 
     [Arguments]     ${encId}  ${uid}
 
-    ${store}=   Create Dictionary  encId=${encId}
-    ${data}=  Create Dictionary  store=${store}
+    ${store}=  Create List  ${encId}
+    ${data}=  Create Dictionary  uid=${uid}  storeList=${store}
     ${data}=  json.dumps  ${data}
     Check And Create YNW Session
-    ${resp}=  POST On Session  ynw  /provider/sorder/push/${uid}  data=${data}  expected_status=any
+    ${resp}=  POST On Session  ynw  /provider/sorder/request/generate  data=${data}  expected_status=any
     RETURN  ${resp}
 
+Convert to order
+
+    [Arguments]  ${uid}  ${orderStatus}
+
+    ${data}=  Create Dictionary  orderStatus=${orderStatus}
+    ${data}=  json.dumps  ${data}
+    Check And Create YNW Session
+    ${resp}=  POST On Session  ynw  /provider/sorder/convert/request/${uid}   data=${data}  expected_status=any
+    RETURN  ${resp}
+
+Get Sorder By Filter
+
+    [Arguments]   &{param}  
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/sorder/request   params=${param}  expected_status=any
+    RETURN  ${resp} 
+
+Get Sorder By Uid
+
+    [Arguments]  ${uid}
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/sorder/request/${uid}   params=${param}  expected_status=any
+    RETURN  ${resp}
+
+Get Sorder Count By Filter
+
+    [Arguments]  &{param}  
+
+    Check And Create YNW Session
+    ${resp}=  GET On Session  ynw  /provider/sorder/request/count   params=${param}  expected_status=any
+    RETURN  ${resp}
 
 #.............subservice..................
 

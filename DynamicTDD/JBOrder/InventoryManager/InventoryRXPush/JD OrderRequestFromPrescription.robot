@@ -19,19 +19,19 @@ Variables         /ebs/TDD/varfiles/hl_musers.py
 Resource          /ebs/TDD/SuperAdminKeywords.robot
 
 *** Variables ***
-${invalidNum}       1245
-${invalidEma}       asd122
-${invalidstring}    _ad$.sa_
-${invalidItem}      sprx-3250dr0-800
-@{spItemSource}     RX       Ayur
+${invalidNum}        1245
+${invalidEma}        asd122
+${invalidstring}     _ad$.sa_
+${invalidItem}     sprx-3250dr0-800
+@{spItemSource}      RX       Ayur
 ${originFrom}       NONE
 @{deliveryType}     STORE_PICKUP        HOME_DELIVERY
       
 *** Test Cases ***
 
-JD-TC-ConvertToOrder-1
+JD-TC-OrderRequest-1
 
-    [Documentation]    Convert to Order
+    [Documentation]    Order Request
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
@@ -602,9 +602,5 @@ JD-TC-ConvertToOrder-1
     Should Be Equal As Strings      ${resp.json()}          ${itemqty}
 
     ${resp}=    Order Request    ${store_id}  ${prescription_id}
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}             200
-
-    ${resp}=    Convert to order  ${prescription_id}  ${orderStatus[0]}
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200

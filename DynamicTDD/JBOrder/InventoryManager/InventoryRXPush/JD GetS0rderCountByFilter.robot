@@ -29,9 +29,9 @@ ${originFrom}       NONE
       
 *** Test Cases ***
 
-JD-TC-ConvertToOrder-1
+JD-TC-GetOrderByFilter-1
 
-    [Documentation]    Convert to Order
+    [Documentation]    Get Order By Filter
 
     ${iscorp_subdomains}=  get_iscorp_subdomains  1
     Log  ${iscorp_subdomains}
@@ -606,5 +606,10 @@ JD-TC-ConvertToOrder-1
     Should Be Equal As Strings      ${resp.status_code}             200
 
     ${resp}=    Convert to order  ${prescription_id}  ${orderStatus[0]}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}             200
+    Set Suite Variable      ${COrder_Id}    ${resp.json()}
+
+    ${resp}=    Get Sorder Count By Filter
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}             200
