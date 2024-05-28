@@ -269,6 +269,7 @@ ${bookinglink}              <a href='http://localhost:8080/jaldee/status/{}' tar
 @{locationType}                     googleMap  automatic  manual
 @{prescriptionSharedStatus}         shared  notShared
 @{serviceCategory}                  SubService   MainService
+@{updateType}                       ADD  SUBTRACT
 
 
 

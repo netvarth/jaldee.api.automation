@@ -77,6 +77,11 @@ JD-TC-Inventory Manager Work Flow-3
     Log  ${resp.json()}         
     Should Be Equal As Strings            ${resp.status_code}    200
 
+    ${decrypted_data}=  db.decrypt_data  ${resp.content}
+    Log  ${decrypted_data}
+    Set Suite Variable  ${user_id}  ${decrypted_data['id']}
+    Set Suite Variable  ${user_name}  ${decrypted_data['userName']}
+
    ${accountId}=  get_acc_id  ${MUSERNAME50}
     Set Suite Variable    ${accountId} 
 
@@ -138,12 +143,12 @@ JD-TC-Inventory Manager Work Flow-3
     ${DAY1}=  db.get_date_by_timezone  ${tz}
     Set Suite Variable  ${DAY1} 
 
-    ${Name}=    FakerLibrary.first name
+    ${Name_store}=    FakerLibrary.first name
     ${PhoneNumber}=  Evaluate  ${PUSERNAME}+100187748
-    Set Suite Variable  ${email_id}  ${Name}${PhoneNumber}.${test_mail}
+    Set Suite Variable  ${email_id}  ${Name_store}${PhoneNumber}.${test_mail}
     ${email}=  Create List  ${email_id}
 
-    ${resp}=  Create Store   ${Name}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
+    ${resp}=  Create Store   ${Name_store}  ${St_Id}    ${locId1}  ${email}     ${PhoneNumber}  ${countryCodes[0]}
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${store_id}  ${resp.json()}
@@ -158,11 +163,18 @@ JD-TC-Inventory Manager Work Flow-3
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${Batch_item1}  ${resp.json()}
 
+
+# ----------------------------------------  Get Item ---------------------------------------------
+
+    ${resp}=   Get Item Inventory  ${Batch_item1}   
+    Log   ${resp.content}
+    Should Be Equal As Strings    ${resp.status_code}    200 
+    Set Suite Variable  ${itemPropertyType}  ${resp.json()['itemPropertyType']}
+
 # ------------------------------------------------------------------------------------------------------
 # ----------------------------------------- create Inv Catalog -------------------------------------------------------
-    ${Name}=     FakerLibrary.name
 
-    ${resp}=  Create Inventory Catalog   ${Name}  ${store_id}   
+    ${resp}=  Create Inventory Catalog   ${Name_store}  ${store_id}   
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
     Set Suite Variable  ${Catalog_EncIds}  ${resp.json()}
@@ -175,12 +187,13 @@ JD-TC-Inventory Manager Work Flow-3
     Should Be Equal As Strings      ${resp.status_code}    200
     Set Suite Variable   ${ic_Batch_Item_id}   ${resp.json()[0]}
 
-# ------------------------------------------------------------------------------------------------------------
-# ------------------------------------Get Item Transaction By Filter (After adding the item to inventory catalog)------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------Get Item Transaction By Filter (After adding the item to inventory catalog).Should be []------------------------------------------------------------------------
 
     ${resp}=   Get Item Transaction By Filter  storeEncId-eq=${store_id}   itemCode-eq=${Batch_item1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
+    Should Be Equal As Strings      ${resp.json()}       []
 
 
     # ... Create itemUnits ....
@@ -286,7 +299,7 @@ JD-TC-Inventory Manager Work Flow-3
     ${discountPercentage}=          Convert To Number  ${discountPercentage}  1
     ${fixedDiscount}=               Random Int  min=0  max=200
     ${fixedDiscount}=               Convert To Number  ${fixedDiscount}  1
-    ${convertionQty}=               Random Int  min=1  max=20
+    # ${convertionQty}=               Random Int  min=1  max=20
 
     ${totalQuantity}=   Evaluate    ${quantity} + ${freeQuantity} 
     ${totalQuantity}=   Evaluate    ${totalQuantity} * ${convertionQty}
@@ -336,21 +349,22 @@ JD-TC-Inventory Manager Work Flow-3
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}                 200
     Should Be Equal As Strings      ${resp.json()['purchaseStatus']}    ${PurchaseStatus[2]}
+    Set Suite Variable              ${totalConvertedQuantity}           ${resp.json()['totalConvertedQuantity']}
 
     ${resp}=  Get Inventoryitem      ${ic_Batch_Item_id}         
     Log   ${resp.content}
     Should Be Equal As Strings    ${resp.status_code}    200
-    # Should Be Equal As Strings      ${resp.json()[0]['uid']}          ${purchaseId}
-    # Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
-    # Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    # Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    # Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
-    # Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    # Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    # Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
+    Set Suite Variable            ${batch}       ${resp.json()[0]['batch']}  
+    Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
+    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
+    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Name_store}
 
 
 # ------------------------------------------------------------------------------------------------------------
@@ -359,7 +373,26 @@ JD-TC-Inventory Manager Work Flow-3
     ${resp}=   Get Item Transaction By Filter  storeEncId-eq=${store_id}   itemCode-eq=${Batch_item1}  
     Log   ${resp.content}
     Should Be Equal As Strings      ${resp.status_code}    200
-
+    Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Name_store}
+    Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalog']['encId']}          ${Catalog_EncIds}
+    Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalog']['catalogName']}          ${Name_store}
+    Should Be Equal As Strings      ${resp.json()[0]['inventoryCatalogItem']['encId']}          ${ic_Batch_Item_id}
+    Should Be Equal As Strings      ${resp.json()[0]['spItem']['itemSourceEnum']}          RX
+    Should Be Equal As Strings      ${resp.json()[0]['spItem']['spCode']}          ${Batch_item1}
+    Should Be Equal As Strings      ${resp.json()[0]['spItem']['name']}          ${itemName1}
+    Should Be Equal As Strings      ${resp.json()[0]['spItem']['itemPropertyType']}          ${itemPropertyType}
+    Should Be Equal As Strings      ${resp.json()[0]['batch']}          ${batch}
+    Should Be Equal As Strings      ${resp.json()[0]['updateType']}          ADD
+    Should Be Equal As Strings      ${resp.json()[0]['updateTypeString']}          Add
+    Should Be Equal As Strings      ${resp.json()[0]['updateQty']}          ${totalConvertedQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['transactionTypeEnum']}          ${transactionTypeEnum[3]}
+    Should Be Equal As Strings      ${resp.json()[0]['referenceNo']}          ${invoiceReferenceNo}
+    Should Be Equal As Strings      ${resp.json()[0]['referenceDate']}          ${DAY1}
+    Should Be Equal As Strings      ${resp.json()[0]['referenceUid']}          ${purchaseId}
+    Should Be Equal As Strings      ${resp.json()[0]['createdBy']}          ${user_id}
+    Should Be Equal As Strings      ${resp.json()[0]['createdDate']}          ${DAY1}
 # ------------------------------------------- Check Stock ---------------------------------------------------
     ${resp}=    Get Stock Avaliability  ${ic_Batch_Item_id}
     Log   ${resp.content}
@@ -368,13 +401,13 @@ JD-TC-Inventory Manager Work Flow-3
     Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
     Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
     Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    # Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
-    # Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    # Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    # Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
+    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Name_store}
 
 
 # --------------------------- Create SalesOrder Inventory Catalog-InvMgr True --------------------------
@@ -431,6 +464,15 @@ JD-TC-Inventory Manager Work Flow-3
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['encId']}    ${Batch_item1} 
     Should Be Equal As Strings    ${resp.json()[0]['spItem']['name']}    ${itemName1}
     Should Be Equal As Strings    ${resp.json()[0]['encId']}    ${SO_Cata_Item_Batch_Encid} 
+
+
+
+# ------------------------------------------------------------------------------------------------------------
+# ------------------------------------Get Item Transaction By Filter (After adding sales order catalog item)------------------------------------------------------------------------
+
+    ${resp}=   Get Item Transaction By Filter  storeEncId-eq=${store_id}   itemCode-eq=${Batch_item1}  
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
 # -------------------------------- Add a provider Consumer -----------------------------------
 
     ${firstName}=  FakerLibrary.name
@@ -523,12 +565,6 @@ JD-TC-Inventory Manager Work Flow-3
     Should Be Equal As Strings    ${resp.json()['uid']}                                           ${SO_Uid}
     Should Be Equal As Strings    ${resp.json()['orderStatus']}                                     ${orderStatus[1]}
 
-# ------------------------------------------------------------------------------------------------------------
-# ------------------------------------Get Item Transaction By Filter (After took sales order------------------------------------------------------------------------
-
-    ${resp}=   Get Item Transaction By Filter  storeEncId-eq=${store_id}   itemCode-eq=${Batch_item1}  
-    Log   ${resp.content}
-    Should Be Equal As Strings      ${resp.status_code}    200
 
 # ------------------------------------------- Check Stock ---------------------------------------------------
     ${Available_Quantity}=   Evaluate    ${totalQuantity} - ${quantity} 
@@ -540,13 +576,23 @@ JD-TC-Inventory Manager Work Flow-3
     Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
     Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
     Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    # Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          ${quantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    # Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${Available_Quantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${Available_Quantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    # Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
+    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          ${quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${Available_Quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${Available_Quantity}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Name_store}
+
+
+
+# ------------------------------------------------------------------------------------------------------------
+# ------------------------------------Get Item Transaction By Filter (After took sales order------------------------------------------------------------------------
+
+    ${resp}=   Get Item Transaction By Filter     transactionTypeEnum-eq=${transactionTypeEnum[7]}   updateType-eq=${updateType[1]}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
+
 # -----------------------------------------------------------------------------------
 
     ${resp}=    Update SalesOrder Status    ${SO_Uid}     ${orderStatus[3]}
@@ -564,11 +610,19 @@ JD-TC-Inventory Manager Work Flow-3
     Should Be Equal As Strings    ${resp.status_code}    200
     Should Be Equal As Strings      ${resp.json()[0]['account']}          ${account_id}
     Should Be Equal As Strings      ${resp.json()[0]['locationId']}          ${locId1}
-    # Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
-    # Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
-    # Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
-    # Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
-    # Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
-    # Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Store_Name1}
+    Should Be Equal As Strings      ${resp.json()[0]['isBatchInv']}          ${bool[0]}
+    Should Be Equal As Strings      ${resp.json()[0]['availableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['onHoldQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['onArrivalQty']}          0.0
+    Should Be Equal As Strings      ${resp.json()[0]['trueAvailableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['futureAvailableQty']}          ${totalQuantity}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['encId']}          ${store_id}
+    Should Be Equal As Strings      ${resp.json()[0]['store']['name']}          ${Name_store}
+
+
+# ------------------------------------------------------------------------------------------------------------
+# ------------------------------------Get Item Transaction By Filter (After took sales order------------------------------------------------------------------------
+
+    ${resp}=   Get Item Transaction By Filter  storeEncId-eq=${store_id}   itemCode-eq=${Batch_item1}   transactionTypeEnum-eq=${transactionTypeEnum[7]}
+    Log   ${resp.content}
+    Should Be Equal As Strings      ${resp.status_code}    200
